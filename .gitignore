@@ -39,4 +39,4 @@ out/
 .DS_Store
 
 ### gradle ###
-gradle/**
+gradle/
