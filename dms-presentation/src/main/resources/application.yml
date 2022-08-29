@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: "60s"
+
+  datasource:
+    url: jdbc:mysql://${DB_URL:localhost}:3306/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL:validate}
+    properties:
+      hibernate:
+        format_sql: ${FORMAT_SQL:true}
+        show_sql: ${SHOW_SQL:true}
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+  redis:
+    port: ${REDIS_PORT:6379}
+    host: ${REDIS_HOST:localhost}
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

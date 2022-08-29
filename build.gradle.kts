@@ -1,41 +1,58 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("org.springframework.boot") version "2.7.3"
-    id("io.spring.dependency-management") version "1.0.13.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
+    kotlin("jvm") version PluginVersions.JVM_VERSION
 }
 
-group = "team.aliens"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+subprojects {
+    apply {
+        plugin("org.jetbrains.kotlin.jvm")
+        version = PluginVersions.JVM_VERSION
+    }
 
-repositories {
-    mavenCentral()
-}
+    apply {
+        plugin("org.jetbrains.kotlin.kapt")
+        version = PluginVersions.KAPT_VERSION
+    }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    runtimeOnly("mysql:mysql-connector-java")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
-}
+    dependencies {
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        // kotlin
+        implementation(Dependencies.KOTLIN_REFLECT)
+        implementation(Dependencies.KOTLIN_JDK)
+
+        // java servlet
+        implementation(Dependencies.JAVA_SERVLET)
+
+        // test
+        implementation(Dependencies.SPRING_TEST)
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+allprojects {
+    group = "team.aliens"
+    version = "0.0.1-SNAPSHOT"
+
+    tasks {
+        compileKotlin {
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+                jvmTarget = "17"
+            }
+        }
+
+        compileJava {
+            sourceCompatibility = JavaVersion.VERSION_17.majorVersion
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = false
 }
