@@ -28,7 +28,4 @@ data class ErrorResponse(
         }
 
     }
-
-    override fun toString() =
-        "{\n\t\"status\": $status,\n\t\"message\": \"$message\"\n}"
 }

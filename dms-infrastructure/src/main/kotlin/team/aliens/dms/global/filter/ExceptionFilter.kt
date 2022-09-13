@@ -1,5 +1,6 @@
 package team.aliens.dms.global.filter
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.global.error.DmsException
@@ -10,7 +11,9 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ExceptionFilter : OncePerRequestFilter() {
+class ExceptionFilter(
+    private val objectMapper: ObjectMapper
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -31,10 +34,8 @@ class ExceptionFilter : OncePerRequestFilter() {
     }
 
     private fun errorToJson(errorProperty: ErrorProperty, response: HttpServletResponse) {
-        val errorResponse = ErrorResponse.of(errorProperty)
-
-        response.status = errorResponse.status
+        response.status = errorProperty.status()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.writer.write(ErrorResponse(errorProperty.status(), errorProperty.message()).toString())
+        response.writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorProperty)))
     }
 }
