@@ -7,6 +7,13 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
+/**
+*
+* Security 설정하는 SecurityConfiguration
+*
+* @author jeongyoon
+* @date 2022-09-15
+*/
 @Configuration
 class SecurityConfiguration {
 
