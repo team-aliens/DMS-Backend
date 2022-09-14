@@ -14,12 +14,13 @@ class SecurityConfiguration {
     protected fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf().disable()
-            .cors()
+            .cors().and()
 
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-            .and()
+        http
             .authorizeRequests()
             .antMatchers("*").permitAll()
 
