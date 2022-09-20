@@ -14,18 +14,22 @@ data class ErrorResponse(
             errorProperty.message()
         )
 
-        fun of(e: BindException): ErrorResponse {
+        fun of(e: BindException): BindErrorResponse {
             val errorMap = HashMap<String, String?>()
 
             for (error: FieldError in e.fieldErrors) {
                 errorMap[error.field] = error.defaultMessage
             }
 
-            return ErrorResponse(
+            return BindErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
-                message = errorMap.toString()
+                fieldError = listOf(errorMap)
             )
         }
-
     }
 }
+
+data class BindErrorResponse(
+    val status: Int,
+    val fieldError: List<Map<String, String?>>
+)
