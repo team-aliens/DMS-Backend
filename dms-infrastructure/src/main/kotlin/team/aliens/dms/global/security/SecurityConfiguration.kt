@@ -8,12 +8,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
 /**
-*
-* Security 설정하는 SecurityConfiguration
-*
-* @author jeongyoon
-* @date 2022-09-15
-*/
+ *
+ * Security 설정하는 SecurityConfiguration
+ *
+ * @author leejeongyoon
+ * @date 2022/09/22
+ * @version 1.0.0
+ **/
 @Configuration
 class SecurityConfiguration {
 
