@@ -6,6 +6,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
+/**
+ *
+ * 전역에 발생하는 Error 를 핸들링 해주는 GlobalErrorHandler
+ *
+ * @author leejeongyoon
+ * @date 2022/09/22
+ * @version 1.0.0
+ **/
 @RestControllerAdvice
 class GlobalErrorHandler {
 
