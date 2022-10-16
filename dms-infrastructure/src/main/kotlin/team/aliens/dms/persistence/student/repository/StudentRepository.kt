@@ -1,4 +1,4 @@
-package team.aliens.dms.persistence.student.entity.repository
+package team.aliens.dms.persistence.student.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
