@@ -4,7 +4,6 @@ import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
 import team.aliens.dms.global.DefaultImage
 import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolEntity
 import java.time.LocalDateTime
 import java.util.UUID

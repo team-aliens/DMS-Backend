@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.meal.entity
 
 import team.aliens.dms.persistence.school.entity.SchoolEntity
-import java.time.LocalDate
 import javax.persistence.*
 
 @Entity

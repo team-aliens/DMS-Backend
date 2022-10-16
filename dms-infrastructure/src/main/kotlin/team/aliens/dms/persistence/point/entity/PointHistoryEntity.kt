@@ -1,8 +1,6 @@
 package team.aliens.dms.persistence.point.entity
 
 import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.BaseTimeEntity
-import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.student.entity.StudentEntity
 import java.time.LocalDateTime
 import java.util.*
