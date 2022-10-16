@@ -7,7 +7,11 @@ import java.util.UUID
 import javax.persistence.*
 
 @Entity
-@Table(name = "tbl_student")
+@Table(name = "tbl_student",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["grade", "class_room", "number"])
+    ]
+)
 class StudentEntity(
 
     @Id

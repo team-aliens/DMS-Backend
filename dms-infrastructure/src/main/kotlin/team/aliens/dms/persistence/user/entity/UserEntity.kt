@@ -11,18 +11,22 @@ import javax.persistence.*
 
 @DynamicInsert
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tbl_user",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["account_id", "email"])
+    ]
+)
 class UserEntity(
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val accountId: String,
 
     @Column(columnDefinition = "CHAR(60)", nullable = false)
     val password: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     val email: String,
 
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)

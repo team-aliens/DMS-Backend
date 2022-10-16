@@ -6,17 +6,22 @@ import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_school")
+@Table(name = "tbl_school",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = ["name", "code"])
+    ]
+)
 class SchoolEntity(
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "CHAR(6)", nullable = false, unique = true)
+    @Column(columnDefinition = "CHAR(6)", nullable = false)
     val code: String,
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
