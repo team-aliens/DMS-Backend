@@ -6,5 +6,5 @@ import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import java.util.UUID
 
 @Repository
-interface ManagerRepository : CrudRepository<ManagerJpaEntity, UUID> {
+interface ManagerJpaRepository : CrudRepository<ManagerJpaEntity, UUID> {
 }

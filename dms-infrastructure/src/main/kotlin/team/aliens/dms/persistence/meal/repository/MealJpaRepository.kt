@@ -6,5 +6,5 @@ import team.aliens.dms.persistence.meal.entity.MealJpaEntity
 import team.aliens.dms.persistence.meal.entity.MealJpaEntityId
 
 @Repository
-interface MealRepository : CrudRepository<MealJpaEntity, MealJpaEntityId> {
+interface MealJpaRepository : CrudRepository<MealJpaEntity, MealJpaEntityId> {
 }

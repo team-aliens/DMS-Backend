@@ -6,5 +6,5 @@ import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.util.UUID
 
 @Repository
-interface StudentRepository : CrudRepository<StudentJpaEntity, UUID> {
+interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
 }

@@ -6,5 +6,5 @@ import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
 
 @Repository
-interface RoomRepository : CrudRepository<RoomJpaEntity, RoomJpaEntityId> {
+interface RoomJpaRepository : CrudRepository<RoomJpaEntity, RoomJpaEntityId> {
 }
