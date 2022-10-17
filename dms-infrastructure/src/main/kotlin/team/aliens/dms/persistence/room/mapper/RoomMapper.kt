@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.room.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.room.model.Room
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
@@ -21,7 +22,7 @@ class RoomMapper(
     }
 
     override fun toEntity(d: Room): RoomJpaEntity {
-        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw RuntimeException()
+        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw SchoolNotFoundException
 
         return RoomJpaEntity(
             id = RoomJpaEntityId(d.roomNumber, d.schoolId),

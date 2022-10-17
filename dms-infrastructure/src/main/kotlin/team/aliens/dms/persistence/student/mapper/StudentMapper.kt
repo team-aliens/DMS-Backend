@@ -2,7 +2,9 @@ package team.aliens.dms.persistence.student.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
 import team.aliens.dms.persistence.room.repository.RoomRepository
@@ -18,7 +20,7 @@ class StudentMapper(
     override fun toDomain(e: StudentJpaEntity): Student {
         val room = e.roomJpaEntity?.let {
             roomRepository.findByIdOrNull(it.id)
-        } ?: throw RuntimeException()
+        } ?: throw RoomNotFoundException
 
         return Student(
             studentId = e.studentId,
@@ -31,8 +33,11 @@ class StudentMapper(
     }
 
     override fun toEntity(d: Student): StudentJpaEntity {
-        val user = userRepository.findByIdOrNull(d.studentId) ?: throw RuntimeException()
-        val room =  roomRepository.findByIdOrNull(RoomJpaEntityId(d.roomNumber, d.studentId)) ?: throw RuntimeException()
+        val user = userRepository.findByIdOrNull(d.studentId) ?: throw UserNotFoundException
+
+        val room =  roomRepository.findByIdOrNull(
+            RoomJpaEntityId(d.roomNumber, d.studentId)
+        ) ?: throw RoomNotFoundException
 
         return StudentJpaEntity(
             studentId = d.studentId,

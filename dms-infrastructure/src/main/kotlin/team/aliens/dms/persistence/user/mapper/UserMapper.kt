@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.user.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolRepository
@@ -15,7 +16,7 @@ class UserMapper(
     override fun toDomain(e: UserJpaEntity): User {
         val school = e.schoolJpaEntity?.let {
             schoolRepository.findByIdOrNull(it.id)
-        } ?: throw RuntimeException()
+        } ?: throw SchoolNotFoundException
 
         return User(
             id = e.id,
@@ -31,7 +32,7 @@ class UserMapper(
     }
 
     override fun toEntity(d: User): UserJpaEntity {
-        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw RuntimeException()
+        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw SchoolNotFoundException
 
         return UserJpaEntity(
             id = d.id,

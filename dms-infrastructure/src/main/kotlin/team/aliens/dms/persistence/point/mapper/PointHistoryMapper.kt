@@ -2,7 +2,9 @@ package team.aliens.dms.persistence.point.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.point.entity.PointHistoryJpaEntity
 import team.aliens.dms.persistence.point.repository.PointOptionRepository
@@ -17,11 +19,11 @@ class PointHistoryMapper(
     override fun toDomain(e: PointHistoryJpaEntity): PointHistory {
         val pointOption = e.pointOptionJpaEntity?.let {
             pointOptionRepository.findByIdOrNull(it.id)
-        } ?: throw RuntimeException()
+        } ?: throw PointOptionNotFoundException
 
         val student = e.studentJpaEntity?.let {
             studentRepository.findByIdOrNull(it.studentId)
-        } ?: throw RuntimeException()
+        } ?: throw StudentNotFoundException
 
         return PointHistory(
             id = e.id,
@@ -32,8 +34,8 @@ class PointHistoryMapper(
     }
 
     override fun toEntity(d: PointHistory): PointHistoryJpaEntity {
-        val pointOption = pointOptionRepository.findByIdOrNull(d.pointOptionId) ?: throw RuntimeException()
-        val student = studentRepository.findByIdOrNull(d.studentId) ?: throw RuntimeException()
+        val pointOption = pointOptionRepository.findByIdOrNull(d.pointOptionId) ?: throw PointOptionNotFoundException
+        val student = studentRepository.findByIdOrNull(d.studentId) ?: throw StudentNotFoundException
 
         return PointHistoryJpaEntity(
             id = d.id,

@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.manager.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import team.aliens.dms.persistence.user.repository.UserRepository
@@ -19,7 +20,7 @@ class ManagerMapper(
     }
 
     override fun toEntity(d: Manager): ManagerJpaEntity {
-        val user = userRepository.findByIdOrNull(d.managerId) ?: throw RuntimeException()
+        val user = userRepository.findByIdOrNull(d.managerId) ?: throw UserNotFoundException
 
         return ManagerJpaEntity(
             managerId = d.managerId,
