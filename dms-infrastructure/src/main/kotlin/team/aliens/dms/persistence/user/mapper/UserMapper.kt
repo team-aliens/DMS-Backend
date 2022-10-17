@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.user.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
@@ -35,14 +36,14 @@ class UserMapper(
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
 
         return UserJpaEntity(
-            id = domain.id,
+            id = domain.id ?: throw UserNotFoundException,
             schoolJpaEntity = school,
             accountId = domain.accountId,
             password = domain.password,
             email = domain.email,
             name = domain.name,
             profileImageUrl = domain.profileImageUrl,
-            createdAt = domain.createdAt,
+            createdAt = domain.createdAt ?: throw UserNotFoundException,
             deletedAt = domain.deletedAt
         )
     }

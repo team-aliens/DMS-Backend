@@ -7,7 +7,7 @@ import java.util.UUID
 @Aggregate
 data class User(
 
-    val id: UUID,
+    val id: UUID?,
 
     val schoolId: UUID,
 
@@ -21,7 +21,7 @@ data class User(
 
     val profileImageUrl: String,
 
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime?,
 
     val deletedAt: LocalDateTime?
 ) {
