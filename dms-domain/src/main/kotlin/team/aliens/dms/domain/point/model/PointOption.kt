@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 data class PointOption(
 
-    val id: UUID,
+    val id: UUID?,
 
     val name: String,
 

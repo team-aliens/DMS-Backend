@@ -7,11 +7,11 @@ import java.util.UUID
 @Aggregate
 data class PointHistory(
 
-    val id: UUID,
+    val id: UUID?,
 
     val pointOptionId: UUID,
 
     val studentId: UUID,
 
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime?
 )
