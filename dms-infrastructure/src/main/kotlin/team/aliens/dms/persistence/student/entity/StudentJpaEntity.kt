@@ -23,8 +23,8 @@ class StudentJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(
-        JoinColumn(name = "room_number", nullable = false),
-        JoinColumn(name = "school_id", nullable = false)
+        JoinColumn(name = "room_number", columnDefinition = "INT UNSIGNED", nullable = false),
+        JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     )
     val room: RoomJpaEntity?,
 
