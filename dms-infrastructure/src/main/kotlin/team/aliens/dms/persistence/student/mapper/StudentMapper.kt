@@ -17,9 +17,9 @@ class StudentMapper(
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
         return Student(
-            studentId = entity!!.studentId,
+            studentId = entity!!.userId,
             roomNumber = entity.room!!.id.roomNumber,
-            schoolId = entity.studentId,
+            schoolId = entity.userId,
             grade = entity.grade,
             classRoom = entity.classRoom,
             number = entity.number
@@ -34,7 +34,7 @@ class StudentMapper(
         )!!
 
         return StudentJpaEntity(
-            studentId = domain.studentId,
+            userId = domain.studentId,
             user = user,
             room = room,
             grade = domain.grade,

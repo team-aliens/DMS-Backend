@@ -13,14 +13,14 @@ class ManagerMapper(
 ) : GenericMapper<Manager, ManagerJpaEntity> {
 
     override fun toDomain(entity: ManagerJpaEntity?): Manager? {
-        return Manager(managerId = entity!!.managerId)
+        return Manager(managerId = entity!!.userId)
     }
 
     override fun toEntity(domain: Manager): ManagerJpaEntity {
         val user = userJpaRepository.findByIdOrNull(domain.managerId)!!
 
         return ManagerJpaEntity(
-            managerId = domain.managerId,
+            userId = domain.managerId,
             user = user
         )
     }

@@ -18,7 +18,7 @@ class PointHistoryMapper(
         return PointHistory(
             id = entity!!.id,
             pointOptionId = entity.pointOption!!.id,
-            studentId = entity.student!!.studentId,
+            studentId = entity.student!!.userId,
             createdAt = entity.createdAt
         )
     }

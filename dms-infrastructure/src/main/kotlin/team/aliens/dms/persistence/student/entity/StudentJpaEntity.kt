@@ -14,11 +14,11 @@ import javax.persistence.*
 class StudentJpaEntity(
 
     @Id
-    val studentId: UUID,
+    val userId: UUID,
 
-    @MapsId("studentId")
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
     val user: UserJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
