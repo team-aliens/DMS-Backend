@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.school.mapper
 
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
@@ -8,29 +9,31 @@ import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 @Component
 class SchoolMapper : GenericMapper<School, SchoolJpaEntity> {
 
-    override fun toDomain(e: SchoolJpaEntity): School {
-        return School(
-            id = e.id,
-            name = e.name,
-            code = e.code,
-            question = e.question,
-            answer = e.answer,
-            address = e.address,
-            contractStartedAt = e.contractStartedAt,
-            contractEndedAt = e.contractEndedAt
-        )
+    override fun toDomain(entity: SchoolJpaEntity?): School? {
+        return entity?.let {
+            School(
+                id = it.id,
+                name = it.name,
+                code = it.code,
+                question = it.question,
+                answer = it.answer,
+                address = it.address,
+                contractStartedAt = it.contractStartedAt,
+                contractEndedAt = it.contractEndedAt
+            )
+        }
     }
 
-    override fun toEntity(d: School): SchoolJpaEntity {
+    override fun toEntity(domain: School): SchoolJpaEntity {
         return SchoolJpaEntity(
-            id = d.id,
-            name = d.name,
-            code = d.code,
-            question = d.question,
-            answer = d.answer,
-            address = d.address,
-            contractStartedAt = d.contractStartedAt,
-            contractEndedAt = d.contractEndedAt
+                id = domain.id ?: throw SchoolNotFoundException,
+                name = domain.name,
+                code = domain.code,
+                question = domain.question,
+                answer = domain.answer,
+                address = domain.address,
+                contractStartedAt = domain.contractStartedAt,
+                contractEndedAt = domain.contractEndedAt
         )
     }
 }

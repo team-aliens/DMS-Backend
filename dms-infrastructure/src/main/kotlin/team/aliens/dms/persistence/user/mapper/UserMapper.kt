@@ -5,45 +5,45 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.school.repository.SchoolRepository
+import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Component
 class UserMapper(
-    private val schoolRepository: SchoolRepository
+    private val schoolJpaRepository: SchoolJpaRepository
 ) : GenericMapper<User, UserJpaEntity> {
 
-    override fun toDomain(e: UserJpaEntity): User {
-        val school = e.schoolJpaEntity?.let {
-            schoolRepository.findByIdOrNull(it.id)
+    override fun toDomain(entity: UserJpaEntity?): User? {
+        val school = entity?.schoolJpaEntity?.let {
+            schoolJpaRepository.findByIdOrNull(it.id)
         } ?: throw SchoolNotFoundException
 
         return User(
-            id = e.id,
+            id = entity.id,
             schoolId = school.id,
-            accountId = e.accountId,
-            password = e.password,
-            email = e.email,
-            name = e.name,
-            profileImageUrl = e.profileImageUrl,
-            createdAt = e.createdAt,
-            deletedAt = e.deletedAt
+            accountId = entity.accountId,
+            password = entity.password,
+            email = entity.email,
+            name = entity.name,
+            profileImageUrl = entity.profileImageUrl,
+            createdAt = entity.createdAt,
+            deletedAt = entity.deletedAt
         )
     }
 
-    override fun toEntity(d: User): UserJpaEntity {
-        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw SchoolNotFoundException
+    override fun toEntity(domain: User): UserJpaEntity {
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
 
         return UserJpaEntity(
-            id = d.id,
+            id = domain.id,
             schoolJpaEntity = school,
-            accountId = d.accountId,
-            password = d.password,
-            email = d.email,
-            name = d.name,
-            profileImageUrl = d.profileImageUrl,
-            createdAt = d.createdAt,
-            deletedAt = d.deletedAt
+            accountId = domain.accountId,
+            password = domain.password,
+            email = domain.email,
+            name = domain.name,
+            profileImageUrl = domain.profileImageUrl,
+            createdAt = domain.createdAt,
+            deletedAt = domain.deletedAt
         )
     }
 }

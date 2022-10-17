@@ -7,45 +7,45 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
-import team.aliens.dms.persistence.room.repository.RoomRepository
+import team.aliens.dms.persistence.room.repository.RoomJpaRepository
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
-import team.aliens.dms.persistence.user.repository.UserRepository
+import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
 class StudentMapper(
-    private val roomRepository: RoomRepository,
-    private val userRepository: UserRepository
+    private val roomJpaRepository: RoomJpaRepository,
+    private val userJpaRepository: UserJpaRepository
 ) : GenericMapper<Student, StudentJpaEntity> {
 
-    override fun toDomain(e: StudentJpaEntity): Student {
-        val room = e.roomJpaEntity?.let {
-            roomRepository.findByIdOrNull(it.id)
+    override fun toDomain(entity: StudentJpaEntity?): Student? {
+        val room = entity?.roomJpaEntity?.let {
+            roomJpaRepository.findByIdOrNull(it.id)
         } ?: throw RoomNotFoundException
 
         return Student(
-            studentId = e.studentId,
+            studentId = entity.studentId,
             roomNumber = room.id.roomNumber,
             schoolId = room.id.schoolId,
-            grade = e.grade,
-            classRoom = e.classRoom,
-            number = e.number
+            grade = entity.grade,
+            classRoom = entity.classRoom,
+            number = entity.number
         )
     }
 
-    override fun toEntity(d: Student): StudentJpaEntity {
-        val user = userRepository.findByIdOrNull(d.studentId) ?: throw UserNotFoundException
+    override fun toEntity(domain: Student): StudentJpaEntity {
+        val user = userJpaRepository.findByIdOrNull(domain.studentId) ?: throw UserNotFoundException
 
-        val room =  roomRepository.findByIdOrNull(
-            RoomJpaEntityId(d.roomNumber, d.studentId)
+        val room =  roomJpaRepository.findByIdOrNull(
+            RoomJpaEntityId(domain.roomNumber, domain.studentId)
         ) ?: throw RoomNotFoundException
 
         return StudentJpaEntity(
-            studentId = d.studentId,
+            studentId = domain.studentId,
             userJpaEntity = user,
             roomJpaEntity = room,
-            grade = d.grade,
-            classRoom = d.classRoom,
-            number = d.number
+            grade = domain.grade,
+            classRoom = domain.classRoom,
+            number = domain.number
         )
     }
 }

@@ -2,46 +2,50 @@ package team.aliens.dms.persistence.point.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.point.entity.PointHistoryJpaEntity
-import team.aliens.dms.persistence.point.repository.PointOptionRepository
-import team.aliens.dms.persistence.student.repository.StudentRepository
+import team.aliens.dms.persistence.point.repository.PointOptionJpaRepository
+import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 
 @Component
 class PointHistoryMapper(
-    private val pointOptionRepository: PointOptionRepository,
-    private val studentRepository: StudentRepository
+    private val pointOptionJpaRepository: PointOptionJpaRepository,
+    private val studentJpaRepository: StudentJpaRepository
 ) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
 
-    override fun toDomain(e: PointHistoryJpaEntity): PointHistory {
-        val pointOption = e.pointOptionJpaEntity?.let {
-            pointOptionRepository.findByIdOrNull(it.id)
+    override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
+        val pointOption = entity?.pointOptionJpaEntity?.let {
+            pointOptionJpaRepository.findByIdOrNull(it.id)
         } ?: throw PointOptionNotFoundException
 
-        val student = e.studentJpaEntity?.let {
-            studentRepository.findByIdOrNull(it.studentId)
+        val student = entity.studentJpaEntity?.let {
+            studentJpaRepository.findByIdOrNull(it.studentId)
         } ?: throw StudentNotFoundException
 
-        return PointHistory(
-            id = e.id,
-            pointOptionId = pointOption.id,
-            studentId = student.studentId,
-            createdAt = e.createdAt
-        )
+        return entity.let {
+            PointHistory(
+                id = it.id,
+                pointOptionId = pointOption.id,
+                studentId = student.studentId,
+                createdAt = it.createdAt
+            )
+        }
     }
 
-    override fun toEntity(d: PointHistory): PointHistoryJpaEntity {
-        val pointOption = pointOptionRepository.findByIdOrNull(d.pointOptionId) ?: throw PointOptionNotFoundException
-        val student = studentRepository.findByIdOrNull(d.studentId) ?: throw StudentNotFoundException
+    override fun toEntity(domain: PointHistory): PointHistoryJpaEntity {
+        val pointOption = pointOptionJpaRepository.findByIdOrNull(domain.pointOptionId) ?: throw PointOptionNotFoundException
+        val student = studentJpaRepository.findByIdOrNull(domain.studentId) ?: throw StudentNotFoundException
+
 
         return PointHistoryJpaEntity(
-            id = d.id,
+            id = domain.id ?: throw PointHistoryNotFoundException,
             pointOptionJpaEntity = pointOption,
             studentJpaEntity = student,
-            createdAt = d.createdAt
+            createdAt = domain.createdAt ?: throw PointHistoryNotFoundException
         )
     }
 }

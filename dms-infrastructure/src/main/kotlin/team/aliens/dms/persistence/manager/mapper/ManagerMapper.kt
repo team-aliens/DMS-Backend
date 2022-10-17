@@ -6,24 +6,24 @@ import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
-import team.aliens.dms.persistence.user.repository.UserRepository
+import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
 class ManagerMapper(
-    private val userRepository: UserRepository
+    private val userJpaRepository: UserJpaRepository
 ) : GenericMapper<Manager, ManagerJpaEntity> {
 
-    override fun toDomain(e: ManagerJpaEntity): Manager {
-        return Manager(
-            managerId = e.managerId
-        )
+    override fun toDomain(entity: ManagerJpaEntity?): Manager? {
+        return entity?.let {
+            Manager(managerId = it.managerId)
+        }
     }
 
-    override fun toEntity(d: Manager): ManagerJpaEntity {
-        val user = userRepository.findByIdOrNull(d.managerId) ?: throw UserNotFoundException
+    override fun toEntity(domain: Manager): ManagerJpaEntity {
+        val user = userJpaRepository.findByIdOrNull(domain.managerId) ?: throw UserNotFoundException
 
         return ManagerJpaEntity(
-            managerId = d.managerId,
+            managerId = domain.managerId,
             userJpaEntity = user
         )
     }

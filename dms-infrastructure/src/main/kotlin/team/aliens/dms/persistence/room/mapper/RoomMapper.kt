@@ -7,25 +7,27 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
-import team.aliens.dms.persistence.school.repository.SchoolRepository
+import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class RoomMapper(
-    private val schoolRepository: SchoolRepository
+    private val schoolJpaRepository: SchoolJpaRepository
 ) : GenericMapper<Room, RoomJpaEntity> {
 
-    override fun toDomain(e: RoomJpaEntity): Room {
-        return Room(
-            roomNumber = e.id.roomNumber,
-            schoolId = e.id.schoolId
-        )
+    override fun toDomain(entity: RoomJpaEntity?): Room? {
+        return entity?.let {
+            Room(
+                roomNumber = it.id.roomNumber,
+                schoolId = it.id.schoolId
+            )
+        }
     }
 
-    override fun toEntity(d: Room): RoomJpaEntity {
-        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw SchoolNotFoundException
+    override fun toEntity(domain: Room): RoomJpaEntity {
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
 
         return RoomJpaEntity(
-            id = RoomJpaEntityId(d.roomNumber, d.schoolId),
+            id = RoomJpaEntityId(domain.roomNumber, domain.schoolId),
             schoolJpaEntity = school
         )
     }
