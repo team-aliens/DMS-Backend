@@ -13,7 +13,9 @@ class ManagerMapper(
 ) : GenericMapper<Manager, ManagerJpaEntity> {
 
     override fun toDomain(entity: ManagerJpaEntity?): Manager? {
-        return Manager(managerId = entity!!.userId)
+        return entity?.let {
+            Manager(it.userId)
+        }
     }
 
     override fun toEntity(domain: Manager): ManagerJpaEntity {

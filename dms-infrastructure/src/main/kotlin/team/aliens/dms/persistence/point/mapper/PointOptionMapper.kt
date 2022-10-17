@@ -9,11 +9,13 @@ import team.aliens.dms.persistence.point.entity.PointOptionJpaEntity
 class PointOptionMapper : GenericMapper<PointOption, PointOptionJpaEntity> {
 
     override fun toDomain(entity: PointOptionJpaEntity?): PointOption? {
-        return PointOption(
-            id = entity!!.id,
-            name = entity.name,
-            score = entity.score
-        )
+        return entity?.let {
+            PointOption(
+                id = it.id,
+                name = it.name,
+                score = it.score
+            )
+        }
     }
 
     override fun toEntity(domain: PointOption): PointOptionJpaEntity {

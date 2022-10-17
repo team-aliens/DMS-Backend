@@ -15,12 +15,14 @@ class PointHistoryMapper(
 ) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
 
     override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
-        return PointHistory(
-            id = entity!!.id,
-            pointOptionId = entity.pointOption!!.id,
-            studentId = entity.student!!.userId,
-            createdAt = entity.createdAt
-        )
+        return entity?.let {
+            PointHistory(
+                id = it.id,
+                pointOptionId = it.pointOption!!.id,
+                studentId = it.student!!.userId,
+                createdAt = it.createdAt
+            )
+        }
     }
 
     override fun toEntity(domain: PointHistory): PointHistoryJpaEntity {

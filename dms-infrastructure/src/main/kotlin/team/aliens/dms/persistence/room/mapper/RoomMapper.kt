@@ -14,10 +14,12 @@ class RoomMapper(
 ) : GenericMapper<Room, RoomJpaEntity> {
 
     override fun toDomain(entity: RoomJpaEntity?): Room? {
-        return Room(
-            roomNumber = entity!!.id.roomNumber,
-            schoolId = entity.id.schoolId
-        )
+        return entity?.let {
+            Room(
+                roomNumber = it.id.roomNumber,
+                schoolId = it.id.schoolId
+            )
+        }
     }
 
     override fun toEntity(domain: Room): RoomJpaEntity {

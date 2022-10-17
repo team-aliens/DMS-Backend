@@ -9,16 +9,18 @@ import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 class SchoolMapper : GenericMapper<School, SchoolJpaEntity> {
 
     override fun toDomain(entity: SchoolJpaEntity?): School? {
-        return School(
-            id = entity!!.id,
-            name = entity.name,
-            code = entity.code,
-            question = entity.question,
-            answer = entity.answer,
-            address = entity.address,
-            contractStartedAt = entity.contractStartedAt,
-            contractEndedAt = entity.contractEndedAt
-        )
+        return entity?.let {
+            School(
+                id = it.id,
+                name = it.name,
+                code = it.code,
+                question = it.question,
+                answer = it.answer,
+                address = it.address,
+                contractStartedAt = it.contractStartedAt,
+                contractEndedAt = it.contractEndedAt
+            )
+        }
     }
 
     override fun toEntity(domain: School): SchoolJpaEntity {

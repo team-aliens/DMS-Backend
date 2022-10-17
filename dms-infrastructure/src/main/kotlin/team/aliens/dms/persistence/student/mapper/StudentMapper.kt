@@ -16,14 +16,16 @@ class StudentMapper(
 ) : GenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
-        return Student(
-            studentId = entity!!.userId,
-            roomNumber = entity.room!!.id.roomNumber,
-            schoolId = entity.room!!.school!!.id,
-            grade = entity.grade,
-            classRoom = entity.classRoom,
-            number = entity.number
-        )
+        return entity?.let {
+            Student(
+                studentId = it.userId,
+                roomNumber = it.room!!.id.roomNumber,
+                schoolId = it.room!!.school!!.id,
+                grade = it.grade,
+                classRoom = it.classRoom,
+                number = it.number
+            )
+        }
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
