@@ -1,19 +1,31 @@
 package team.aliens.dms.persistence.room.mapper
 
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Component
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomEntity
+import team.aliens.dms.persistence.room.entity.RoomEntityId
+import team.aliens.dms.persistence.school.repository.SchoolRepository
 
-@Mapper
-interface RoomMapper : GenericMapper<Room, RoomEntity> {
+@Component
+class RoomMapper(
+    private val schoolRepository: SchoolRepository
+) : GenericMapper<Room, RoomEntity> {
 
-    @Mapping(source = "id.roomNumber", target = "roomNumber")
-    @Mapping(source = "schoolEntity.id", target = "schoolId")
-    override fun toDomain(e: RoomEntity): Room
+    override fun toDomain(e: RoomEntity): Room {
+        return Room(
+            roomNumber = e.id.roomNumber,
+            schoolId = e.id.schoolId
+        )
+    }
 
-    @Mapping(source = "roomNumber", target = "id.roomNumber")
-    @Mapping(source = "schoolId", target = "id.schoolId")
-    override fun toEntity(d: Room): RoomEntity
+    override fun toEntity(d: Room): RoomEntity {
+        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw RuntimeException()
+        
+        return RoomEntity(
+            id = RoomEntityId(d.roomNumber, d.schoolId),
+            schoolEntity = school
+        )
+    }
 }
