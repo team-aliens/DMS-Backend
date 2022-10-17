@@ -2,9 +2,7 @@ package team.aliens.dms.persistence.student.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
 import team.aliens.dms.persistence.room.repository.RoomJpaRepository
@@ -18,14 +16,10 @@ class StudentMapper(
 ) : GenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
-        val room = entity?.room?.let {
-            roomJpaRepository.findByIdOrNull(it.id)
-        } ?: throw RoomNotFoundException
-
         return Student(
-            studentId = entity.studentId,
-            roomNumber = room.id.roomNumber,
-            schoolId = room.id.schoolId,
+            studentId = entity!!.studentId,
+            roomNumber = entity.room!!.id.roomNumber,
+            schoolId = entity.studentId,
             grade = entity.grade,
             classRoom = entity.classRoom,
             number = entity.number
@@ -33,11 +27,11 @@ class StudentMapper(
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.studentId) ?: throw UserNotFoundException
+        val user = userJpaRepository.findByIdOrNull(domain.studentId)!!
 
         val room =  roomJpaRepository.findByIdOrNull(
             RoomJpaEntityId(domain.roomNumber, domain.studentId)
-        ) ?: throw RoomNotFoundException
+        )!!
 
         return StudentJpaEntity(
             studentId = domain.studentId,

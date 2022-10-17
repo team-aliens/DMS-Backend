@@ -3,7 +3,6 @@ package team.aliens.dms.persistence.meal.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.meal.model.Meal
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.meal.entity.MealJpaEntity
 import team.aliens.dms.persistence.meal.entity.MealJpaEntityId
@@ -15,19 +14,17 @@ class MealMapper(
 ) : GenericMapper<Meal, MealJpaEntity> {
 
     override fun toDomain(entity: MealJpaEntity?): Meal? {
-        return entity?.let {
-            Meal(
-                mealDate = it.id.mealDate,
-                schoolId = it.id.schoolId,
-                breakfast = it.breakfast,
-                lunch = it.lunch,
-                dinner = it.dinner
-            )
-        }
+        return Meal(
+            mealDate = entity!!.id.mealDate,
+            schoolId = entity.id.schoolId,
+            breakfast = entity.breakfast,
+            lunch = entity.lunch,
+            dinner = entity.dinner
+        )
     }
 
     override fun toEntity(domain: Meal): MealJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)!!
 
         return MealJpaEntity(
             id = MealJpaEntityId(domain.mealDate, domain.schoolId),
