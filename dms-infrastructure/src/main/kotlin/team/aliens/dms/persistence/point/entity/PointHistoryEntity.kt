@@ -10,16 +10,15 @@ import javax.persistence.*
 @Table(name = "tbl_point_history")
 class PointHistoryEntity(
 
-    @Column(insertable = false, updatable = false)
     override val id: UUID,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "point_option_id", columnDefinition = "BINARY(16)")
-    val pointOptionEntity: PointOptionEntity,
+    val pointOptionEntity: PointOptionEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)")
-    val studentEntity: StudentEntity,
+    val studentEntity: StudentEntity?,
 
     override val createdAt: LocalDateTime
 
