@@ -5,6 +5,7 @@ import java.util.*
 
 @Aggregate
 data class AuthCodeLimit(
+
     val id: UUID,
 
     val userId: UUID,

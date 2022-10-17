@@ -5,6 +5,7 @@ import java.util.*
 
 @Aggregate
 data class RefreshToken(
+
     val token: String,
 
     val userId: UUID,

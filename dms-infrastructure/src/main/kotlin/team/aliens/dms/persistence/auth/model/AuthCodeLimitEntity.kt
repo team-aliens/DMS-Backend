@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull
 
 @RedisHash("tbl_authcode_limit")
 data class AuthCodeLimitEntity(
+
     @Id
     val id: UUID,
 

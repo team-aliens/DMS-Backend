@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull
 
 @RedisHash("tbl_refresh_token")
 data class RefreshTokenEntity(
+    
     @Id
     val token: String,
 

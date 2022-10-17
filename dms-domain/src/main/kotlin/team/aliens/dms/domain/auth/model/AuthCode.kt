@@ -5,6 +5,7 @@ import java.util.*
 
 @Aggregate
 data class AuthCode(
+
     val code: String,
 
     val userId: UUID,
