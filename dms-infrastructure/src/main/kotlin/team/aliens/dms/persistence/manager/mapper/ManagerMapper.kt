@@ -1,17 +1,29 @@
 package team.aliens.dms.persistence.manager.mapper
 
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.manager.entity.ManagerEntity
+import team.aliens.dms.persistence.user.repository.UserRepository
 
-@Mapper
-interface ManagerMapper : GenericMapper<Manager, ManagerEntity> {
+@Component
+class ManagerMapper(
+    private val userRepository: UserRepository
+) : GenericMapper<Manager, ManagerEntity> {
 
-    @Mapping(source = "userEntity.id", target = "managerId")
-    override fun toDomain(e: ManagerEntity): Manager
+    override fun toDomain(e: ManagerEntity): Manager {
+        return Manager(
+            managerId = e.managerId
+        )
+    }
 
-    @Mapping(source = "managerId", target = "userEntity.id")
-    override fun toEntity(d: Manager): ManagerEntity
+    override fun toEntity(d: Manager): ManagerEntity {
+        val user = userRepository.findByIdOrNull(d.managerId) ?: throw RuntimeException()
+
+        return ManagerEntity(
+            managerId = d.managerId,
+            userEntity = user
+        )
+    }
 }
