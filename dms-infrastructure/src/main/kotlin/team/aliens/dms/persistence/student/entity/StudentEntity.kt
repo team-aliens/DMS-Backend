@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "tbl_student",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = ["grade", "class_room", "number"])
+        UniqueConstraint(columnNames = arrayOf("grade", "class_room", "number"))
     ]
 )
 class StudentEntity(
@@ -17,24 +17,28 @@ class StudentEntity(
     @Id
     val studentId: UUID,
 
-    @Column(columnDefinition = "TINYINT")
-    val grade: Int,
-
-    @Column(columnDefinition = "TINYINT")
-    val classRoom: Int,
-
-    @Column(columnDefinition = "TINYINT")
-    val studentNumber: Int,
-
     @MapsId("studentId")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)")
-    val userEntity: UserEntity,
+    val userEntity: UserEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val roomEntity: RoomEntity,
+    @JoinColumns(
+        JoinColumn(name = "room_number"),
+        JoinColumn(name = "school_id")
+    )
+    val roomEntity: RoomEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)")
-    val schoolEntity: SchoolEntity
+    val schoolEntity: SchoolEntity?,
+
+    @Column(columnDefinition = "TINYINT", nullable = false)
+    val grade: Int,
+
+    @Column(name = "class_room", columnDefinition = "TINYINT", nullable = false)
+    val classRoom: Int,
+
+    @Column(columnDefinition = "TINYINT", nullable = false)
+    val number: Int
 )

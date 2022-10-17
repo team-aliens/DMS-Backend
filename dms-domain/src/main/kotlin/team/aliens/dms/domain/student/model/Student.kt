@@ -8,13 +8,13 @@ data class Student(
 
     val studentId: UUID,
 
+    val roomNumber: Int,
+
+    val schoolId: UUID,
+
     val grade: Int,
 
     val classRoom: Int,
 
-    val studentNumber: Int,
-
-    val roomNumber: Int,
-
-    val schoolId: UUID
+    val number: Int,
 )
