@@ -19,7 +19,7 @@ class StudentMapper(
         return Student(
             studentId = entity!!.userId,
             roomNumber = entity.room!!.id.roomNumber,
-            schoolId = entity.userId,
+            schoolId = entity.room!!.school!!.id,
             grade = entity.grade,
             classRoom = entity.classRoom,
             number = entity.number
