@@ -14,7 +14,7 @@ class UserJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
-    val schoolJpaEntity: SchoolJpaEntity?,
+    val school: SchoolJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
     val accountId: String,

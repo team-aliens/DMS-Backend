@@ -31,7 +31,7 @@ class MealMapper(
 
         return MealJpaEntity(
             id = MealJpaEntityId(domain.mealDate, domain.schoolId),
-            schoolJpaEntity = school,
+            school = school,
             breakfast = domain.breakfast,
             lunch = domain.lunch,
             dinner = domain.dinner

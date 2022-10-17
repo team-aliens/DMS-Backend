@@ -24,7 +24,7 @@ class ManagerMapper(
 
         return ManagerJpaEntity(
             managerId = domain.managerId,
-            userJpaEntity = user
+            user = user
         )
     }
 }

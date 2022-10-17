@@ -28,7 +28,7 @@ class RoomMapper(
 
         return RoomJpaEntity(
             id = RoomJpaEntityId(domain.roomNumber, domain.schoolId),
-            schoolJpaEntity = school
+            school = school
         )
     }
 }

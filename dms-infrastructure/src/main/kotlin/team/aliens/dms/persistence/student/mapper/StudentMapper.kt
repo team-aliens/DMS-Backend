@@ -18,7 +18,7 @@ class StudentMapper(
 ) : GenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
-        val room = entity?.roomJpaEntity?.let {
+        val room = entity?.room?.let {
             roomJpaRepository.findByIdOrNull(it.id)
         } ?: throw RoomNotFoundException
 
@@ -41,8 +41,8 @@ class StudentMapper(
 
         return StudentJpaEntity(
             studentId = domain.studentId,
-            userJpaEntity = user,
-            roomJpaEntity = room,
+            user = user,
+            room = room,
             grade = domain.grade,
             classRoom = domain.classRoom,
             number = domain.number

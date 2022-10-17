@@ -18,11 +18,11 @@ class PointHistoryMapper(
 ) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
 
     override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
-        val pointOption = entity?.pointOptionJpaEntity?.let {
+        val pointOption = entity?.pointOption?.let {
             pointOptionJpaRepository.findByIdOrNull(it.id)
         } ?: throw PointOptionNotFoundException
 
-        val student = entity.studentJpaEntity?.let {
+        val student = entity.student?.let {
             studentJpaRepository.findByIdOrNull(it.studentId)
         } ?: throw StudentNotFoundException
 
@@ -43,8 +43,8 @@ class PointHistoryMapper(
 
         return PointHistoryJpaEntity(
             id = domain.id ?: throw PointHistoryNotFoundException,
-            pointOptionJpaEntity = pointOption,
-            studentJpaEntity = student,
+            pointOption = pointOption,
+            student = student,
             createdAt = domain.createdAt ?: throw PointHistoryNotFoundException
         )
     }

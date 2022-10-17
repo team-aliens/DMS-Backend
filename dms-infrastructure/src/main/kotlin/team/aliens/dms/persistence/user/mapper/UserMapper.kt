@@ -15,7 +15,7 @@ class UserMapper(
 ) : GenericMapper<User, UserJpaEntity> {
 
     override fun toDomain(entity: UserJpaEntity?): User? {
-        val school = entity?.schoolJpaEntity?.let {
+        val school = entity?.school?.let {
             schoolJpaRepository.findByIdOrNull(it.id)
         } ?: throw SchoolNotFoundException
 
@@ -37,7 +37,7 @@ class UserMapper(
 
         return UserJpaEntity(
             id = domain.id ?: throw UserNotFoundException,
-            schoolJpaEntity = school,
+            school = school,
             accountId = domain.accountId,
             password = domain.password,
             email = domain.email,
