@@ -22,9 +22,8 @@ dependencies {
     implementation(Dependencies.REDIS)
     implementation(Dependencies.SPRING_REDIS)
 
-    // mapstruct
-    implementation(Dependencies.MAPSTRUCT)
-    kapt(Dependencies.MAPSTRUCT_PROCESSER)
+    // time based uuid
+    implementation(Dependencies.UUID_TIME)
 
     // api project
     api(project(":dms-application"))
