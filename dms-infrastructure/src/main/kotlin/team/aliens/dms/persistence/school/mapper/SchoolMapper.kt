@@ -23,7 +23,7 @@ class SchoolMapper : GenericMapper<School, SchoolJpaEntity> {
 
     override fun toEntity(domain: School): SchoolJpaEntity {
         return SchoolJpaEntity(
-            id = domain.id!!,
+            id = domain.id,
             name = domain.name,
             code = domain.code,
             question = domain.question,

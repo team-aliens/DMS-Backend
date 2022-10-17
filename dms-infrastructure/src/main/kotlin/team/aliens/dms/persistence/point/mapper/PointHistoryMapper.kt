@@ -24,11 +24,11 @@ class PointHistoryMapper(
     }
 
     override fun toEntity(domain: PointHistory): PointHistoryJpaEntity {
-        val pointOption = pointOptionJpaRepository.findByIdOrNull(domain.pointOptionId)!!
-        val student = studentJpaRepository.findByIdOrNull(domain.studentId)!!
+        val pointOption = pointOptionJpaRepository.findByIdOrNull(domain.pointOptionId)
+        val student = studentJpaRepository.findByIdOrNull(domain.studentId)
 
         return PointHistoryJpaEntity(
-            id = domain.id!!,
+            id = domain.id,
             pointOption = pointOption,
             student = student,
             createdAt = domain.createdAt!!

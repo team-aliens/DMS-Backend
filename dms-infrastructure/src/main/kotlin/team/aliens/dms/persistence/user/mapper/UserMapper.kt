@@ -27,10 +27,10 @@ class UserMapper(
     }
 
     override fun toEntity(domain: User): UserJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)!!
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return UserJpaEntity(
-            id = domain.id!!,
+            id = domain.id,
             school = school,
             accountId = domain.accountId,
             password = domain.password,

@@ -27,11 +27,8 @@ class StudentMapper(
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.studentId)!!
-
-        val room =  roomJpaRepository.findByIdOrNull(
-            RoomJpaEntityId(domain.roomNumber, domain.studentId)
-        )!!
+        val user = userJpaRepository.findByIdOrNull(domain.studentId)
+        val room =  roomJpaRepository.findByIdOrNull(RoomJpaEntityId(domain.roomNumber, domain.studentId))
 
         return StudentJpaEntity(
             userId = domain.studentId,

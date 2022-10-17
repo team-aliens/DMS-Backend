@@ -17,7 +17,7 @@ class ManagerMapper(
     }
 
     override fun toEntity(domain: Manager): ManagerJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.managerId)!!
+        val user = userJpaRepository.findByIdOrNull(domain.managerId)
 
         return ManagerJpaEntity(
             userId = domain.managerId,

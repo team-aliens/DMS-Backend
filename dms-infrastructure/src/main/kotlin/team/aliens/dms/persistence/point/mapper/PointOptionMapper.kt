@@ -18,7 +18,7 @@ class PointOptionMapper : GenericMapper<PointOption, PointOptionJpaEntity> {
 
     override fun toEntity(domain: PointOption): PointOptionJpaEntity {
         return PointOptionJpaEntity(
-            id = domain.id!!,
+            id = domain.id,
             name = domain.name,
             score = domain.score
         )

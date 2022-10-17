@@ -21,7 +21,7 @@ class RoomMapper(
     }
 
     override fun toEntity(domain: Room): RoomJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)!!
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return RoomJpaEntity(
             id = RoomJpaEntityId(domain.roomNumber, domain.schoolId),

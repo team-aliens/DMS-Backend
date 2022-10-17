@@ -24,7 +24,7 @@ class MealMapper(
     }
 
     override fun toEntity(domain: Meal): MealJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)!!
+        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return MealJpaEntity(
             id = MealJpaEntityId(domain.mealDate, domain.schoolId),
