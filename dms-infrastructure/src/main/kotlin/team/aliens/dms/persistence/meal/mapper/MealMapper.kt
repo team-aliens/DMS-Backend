@@ -1,18 +1,37 @@
 package team.aliens.dms.persistence.meal.mapper
 
-import org.mapstruct.Mapper
-import org.mapstruct.Mapping
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Component
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.meal.entity.MealEntity
+import team.aliens.dms.persistence.meal.entity.MealEntityId
+import team.aliens.dms.persistence.school.repository.SchoolRepository
 
-@Mapper
-interface MealMapper : GenericMapper<Meal, MealEntity> {
+@Component
+class MealMapper(
+    private val schoolRepository: SchoolRepository
+) : GenericMapper<Meal, MealEntity> {
 
-    @Mapping(source = "id.mealDate", target = "mealDate")
-    @Mapping(source = "id.schoolId", target = "schoolId")
-    override fun toDomain(e: MealEntity): Meal
+    override fun toDomain(e: MealEntity): Meal {
+        return Meal(
+            mealDate = e.id.mealDate,
+            schoolId = e.id.schoolId,
+            breakfast = e.breakfast,
+            lunch = e.lunch,
+            dinner = e.dinner
+        )
+    }
 
-    @Mapping(source = "schoolId", target = "schoolEntity.id")
-    override fun toEntity(d: Meal): MealEntity
+    override fun toEntity(d: Meal): MealEntity {
+        val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw RuntimeException()
+
+        return MealEntity(
+            id = MealEntityId(d.mealDate, d.schoolId),
+            schoolEntity = school,
+            breakfast = d.breakfast,
+            lunch = d.lunch,
+            dinner = d.dinner
+        )
+    }
 }

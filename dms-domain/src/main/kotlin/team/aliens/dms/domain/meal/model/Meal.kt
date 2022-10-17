@@ -11,9 +11,9 @@ data class Meal(
 
     val schoolId: UUID,
 
-    val breakfast: String,
+    val breakfast: String?,
 
-    val lunch: String,
+    val lunch: String?,
 
-    val dinner: String
+    val dinner: String?
 )
