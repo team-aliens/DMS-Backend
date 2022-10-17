@@ -8,6 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.global.filter.FilterConfig
+import team.aliens.dms.global.security.token.JwtParser
 
 /**
  *
@@ -19,6 +20,7 @@ import team.aliens.dms.global.filter.FilterConfig
  **/
 @Configuration
 class SecurityConfiguration(
+    private val jwtParser: JwtParser,
     private val objectMapper: ObjectMapper
 ) {
 
@@ -37,7 +39,7 @@ class SecurityConfiguration(
             .antMatchers("*").permitAll()
 
         http
-            .apply(FilterConfig(objectMapper))
+            .apply(FilterConfig(jwtParser, objectMapper))
 
         return http.build()
     }
