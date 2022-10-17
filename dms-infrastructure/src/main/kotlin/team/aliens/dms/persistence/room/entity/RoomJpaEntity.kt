@@ -1,25 +1,25 @@
 package team.aliens.dms.persistence.room.entity
 
-import team.aliens.dms.persistence.school.entity.SchoolEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "tbl_room")
-class RoomEntity(
+class RoomJpaEntity(
 
     @EmbeddedId
-    val id: RoomEntityId,
+    val id: RoomJpaEntityId,
 
     @MapsId("schoolId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)")
-    val schoolEntity: SchoolEntity?
+    val schoolJpaEntity: SchoolJpaEntity?
 )
 
 @Embeddable
-data class RoomEntityId(
+data class RoomJpaEntityId(
 
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val roomNumber: Int,

@@ -5,15 +5,15 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolRepository
-import team.aliens.dms.persistence.user.entity.UserEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Component
 class UserMapper(
     private val schoolRepository: SchoolRepository
-) : GenericMapper<User, UserEntity> {
+) : GenericMapper<User, UserJpaEntity> {
 
-    override fun toDomain(e: UserEntity): User {
-        val school = e.schoolEntity?.let {
+    override fun toDomain(e: UserJpaEntity): User {
+        val school = e.schoolJpaEntity?.let {
             schoolRepository.findByIdOrNull(it.id)
         } ?: throw RuntimeException()
 
@@ -30,12 +30,12 @@ class UserMapper(
         )
     }
 
-    override fun toEntity(d: User): UserEntity {
+    override fun toEntity(d: User): UserJpaEntity {
         val school = schoolRepository.findByIdOrNull(d.schoolId) ?: throw RuntimeException()
 
-        return UserEntity(
+        return UserJpaEntity(
             id = d.id,
-            schoolEntity = school,
+            schoolJpaEntity = school,
             accountId = d.accountId,
             password = d.password,
             email = d.email,

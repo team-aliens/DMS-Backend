@@ -1,6 +1,6 @@
 package team.aliens.dms.persistence.meal.entity
 
-import team.aliens.dms.persistence.school.entity.SchoolEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.io.Serializable
 import java.time.LocalDate
 import java.util.*
@@ -8,15 +8,15 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tbl_meal")
-class MealEntity(
+class MealJpaEntity(
 
     @EmbeddedId
-    val id: MealEntityId,
+    val id: MealJpaEntityId,
 
     @MapsId("schoolId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)")
-    val schoolEntity: SchoolEntity?,
+    val schoolJpaEntity: SchoolJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(255)")
     val breakfast: String?,
@@ -29,7 +29,7 @@ class MealEntity(
 )
 
 @Embeddable
-data class MealEntityId(
+data class MealJpaEntityId(
 
     @Column(columnDefinition = "DATE", nullable = false)
     val mealDate: LocalDate,

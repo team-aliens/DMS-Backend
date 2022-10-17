@@ -1,6 +1,6 @@
 package team.aliens.dms.persistence.manager.entity
 
-import team.aliens.dms.persistence.user.entity.UserEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -12,7 +12,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_manager")
-class ManagerEntity(
+class ManagerJpaEntity(
 
     @Id
     val managerId: UUID,
@@ -20,5 +20,5 @@ class ManagerEntity(
     @MapsId("managerId")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)")
-    val userEntity: UserEntity?
+    val userJpaEntity: UserJpaEntity?
 )

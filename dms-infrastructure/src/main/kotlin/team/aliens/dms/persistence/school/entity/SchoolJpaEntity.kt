@@ -9,7 +9,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_school")
-class SchoolEntity(
+class SchoolJpaEntity(
 
     override val id: UUID,
 

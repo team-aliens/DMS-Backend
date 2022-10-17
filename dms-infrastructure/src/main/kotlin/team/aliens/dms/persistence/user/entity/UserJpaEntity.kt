@@ -1,20 +1,20 @@
 package team.aliens.dms.persistence.user.entity
 
 import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.school.entity.SchoolEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.*
 
 @Entity
 @Table(name = "tbl_user")
-class UserEntity(
+class UserJpaEntity(
 
     override val id: UUID,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
-    val schoolEntity: SchoolEntity?,
+    val schoolJpaEntity: SchoolJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
     val accountId: String,

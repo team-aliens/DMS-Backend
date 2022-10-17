@@ -1,8 +1,7 @@
 package team.aliens.dms.persistence.student.entity
 
-import team.aliens.dms.persistence.room.entity.RoomEntity
-import team.aliens.dms.persistence.school.entity.SchoolEntity
-import team.aliens.dms.persistence.user.entity.UserEntity
+import team.aliens.dms.persistence.room.entity.RoomJpaEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
 import javax.persistence.*
 
@@ -12,7 +11,7 @@ import javax.persistence.*
         UniqueConstraint(columnNames = arrayOf("grade", "class_room", "number"))
     ]
 )
-class StudentEntity(
+class StudentJpaEntity(
 
     @Id
     val studentId: UUID,
@@ -20,14 +19,14 @@ class StudentEntity(
     @MapsId("studentId")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)")
-    val userEntity: UserEntity?,
+    val userJpaEntity: UserJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(
         JoinColumn(name = "room_number"),
         JoinColumn(name = "school_id")
     )
-    val roomEntity: RoomEntity?,
+    val roomJpaEntity: RoomJpaEntity?,
 
     @Column(columnDefinition = "TINYINT", nullable = false)
     val grade: Int,

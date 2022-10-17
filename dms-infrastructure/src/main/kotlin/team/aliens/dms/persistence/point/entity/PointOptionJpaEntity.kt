@@ -8,7 +8,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_point_option")
-class PointOptionEntity(
+class PointOptionJpaEntity(
 
     override val id: UUID,
 

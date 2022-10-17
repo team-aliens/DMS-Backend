@@ -4,23 +4,22 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.point.entity.PointHistoryEntity
+import team.aliens.dms.persistence.point.entity.PointHistoryJpaEntity
 import team.aliens.dms.persistence.point.repository.PointOptionRepository
-import team.aliens.dms.persistence.student.entity.StudentEntity
 import team.aliens.dms.persistence.student.repository.StudentRepository
 
 @Component
 class PointHistoryMapper(
     private val pointOptionRepository: PointOptionRepository,
     private val studentRepository: StudentRepository
-) : GenericMapper<PointHistory, PointHistoryEntity> {
+) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
 
-    override fun toDomain(e: PointHistoryEntity): PointHistory {
-        val pointOption = e.pointOptionEntity?.let {
+    override fun toDomain(e: PointHistoryJpaEntity): PointHistory {
+        val pointOption = e.pointOptionJpaEntity?.let {
             pointOptionRepository.findByIdOrNull(it.id)
         } ?: throw RuntimeException()
 
-        val student = e.studentEntity?.let {
+        val student = e.studentJpaEntity?.let {
             studentRepository.findByIdOrNull(it.studentId)
         } ?: throw RuntimeException()
 
@@ -32,14 +31,14 @@ class PointHistoryMapper(
         )
     }
 
-    override fun toEntity(d: PointHistory): PointHistoryEntity {
+    override fun toEntity(d: PointHistory): PointHistoryJpaEntity {
         val pointOption = pointOptionRepository.findByIdOrNull(d.pointOptionId) ?: throw RuntimeException()
         val student = studentRepository.findByIdOrNull(d.studentId) ?: throw RuntimeException()
 
-        return PointHistoryEntity(
+        return PointHistoryJpaEntity(
             id = d.id,
-            pointOptionEntity = pointOption,
-            studentEntity = student,
+            pointOptionJpaEntity = pointOption,
+            studentJpaEntity = student,
             createdAt = d.createdAt
         )
     }
