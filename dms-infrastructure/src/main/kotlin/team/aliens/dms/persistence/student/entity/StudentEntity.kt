@@ -29,10 +29,6 @@ class StudentEntity(
     )
     val roomEntity: RoomEntity?,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)")
-    val schoolEntity: SchoolEntity?,
-
     @Column(columnDefinition = "TINYINT", nullable = false)
     val grade: Int,
 

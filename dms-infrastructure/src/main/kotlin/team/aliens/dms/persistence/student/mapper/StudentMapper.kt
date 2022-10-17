@@ -38,7 +38,6 @@ class StudentMapper(
             studentId = d.studentId,
             userEntity = user,
             roomEntity = room,
-            schoolEntity = room.schoolEntity,
             grade = d.grade,
             classRoom = d.classRoom,
             number = d.number
