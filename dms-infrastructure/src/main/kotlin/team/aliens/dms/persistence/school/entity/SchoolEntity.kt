@@ -6,22 +6,17 @@ import java.util.*
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
-import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_school",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["name", "code"])
-    ]
-)
+@Table(name = "tbl_school")
 class SchoolEntity(
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
     val name: String,
 
-    @Column(columnDefinition = "CHAR(6)", nullable = false)
+    @Column(columnDefinition = "CHAR(6)", nullable = false, unique = true)
     val code: String,
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
@@ -37,6 +32,6 @@ class SchoolEntity(
     val contractStartedAt: LocalDate,
 
     @Column(columnDefinition = "DATE")
-    val contractEndedAt: LocalDate,
+    val contractEndedAt: LocalDate?,
 
 ) : BaseUUIDEntity()
