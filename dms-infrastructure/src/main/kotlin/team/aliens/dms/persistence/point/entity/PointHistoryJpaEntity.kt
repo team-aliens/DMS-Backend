@@ -13,11 +13,11 @@ class PointHistoryJpaEntity(
     override val id: UUID,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "point_option_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "point_option_id", columnDefinition = "BINARY(16)", nullable = false)
     val pointOptionJpaEntity: PointOptionJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val studentJpaEntity: StudentJpaEntity?,
 
     override val createdAt: LocalDateTime

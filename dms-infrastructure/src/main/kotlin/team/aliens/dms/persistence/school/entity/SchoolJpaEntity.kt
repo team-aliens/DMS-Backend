@@ -32,6 +32,6 @@ class SchoolJpaEntity(
     val contractStartedAt: LocalDate,
 
     @Column(columnDefinition = "DATE")
-    val contractEndedAt: LocalDate?,
+    val contractEndedAt: LocalDate?
 
 ) : BaseUUIDEntity()

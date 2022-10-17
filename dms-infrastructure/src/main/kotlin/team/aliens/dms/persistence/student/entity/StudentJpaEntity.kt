@@ -18,13 +18,13 @@ class StudentJpaEntity(
 
     @MapsId("studentId")
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val userJpaEntity: UserJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(
-        JoinColumn(name = "room_number"),
-        JoinColumn(name = "school_id")
+        JoinColumn(name = "room_number", nullable = false),
+        JoinColumn(name = "school_id", nullable = false)
     )
     val roomJpaEntity: RoomJpaEntity?,
 

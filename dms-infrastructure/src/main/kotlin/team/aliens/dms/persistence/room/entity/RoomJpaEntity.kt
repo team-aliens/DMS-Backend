@@ -14,7 +14,7 @@ class RoomJpaEntity(
 
     @MapsId("schoolId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val schoolJpaEntity: SchoolJpaEntity?
 )
 

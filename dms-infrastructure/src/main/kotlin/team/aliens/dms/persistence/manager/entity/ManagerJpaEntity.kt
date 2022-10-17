@@ -19,6 +19,6 @@ class ManagerJpaEntity(
 
     @MapsId("managerId")
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)
     val userJpaEntity: UserJpaEntity?
 )
