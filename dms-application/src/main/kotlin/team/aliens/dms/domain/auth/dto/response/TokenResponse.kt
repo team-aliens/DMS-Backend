@@ -6,7 +6,7 @@ data class TokenResponse(
 
     val accessToken: String,
 
-    val refreshToken: String,
+    val expiredAt: Date,
 
-    val expiredAt: Date
+    val refreshToken: String
 )
