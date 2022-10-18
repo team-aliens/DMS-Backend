@@ -1,21 +1,22 @@
 package team.aliens.dms.global.security.principle
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
+import team.aliens.dms.global.security.exception.InvalidTokenException
+import team.aliens.dms.persistence.manager.repository.ManagerJpaRepository
+import java.util.*
 
-/**
- *
- * 관리자 정보를 관리하는 서비스 ManagerDetailsService
- *
- * @author leejeongyoon
- * @date 2022/09/22
- * @version 1.0.0
- **/
 @Component
-class ManagerDetailsService : UserDetailsService {
+class ManagerDetailsService(
+    private val managerRepository: ManagerJpaRepository
+) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        TODO("Not yet implemented")
+        val managerId = UUID.fromString(username)
+        return managerRepository.findByIdOrNull(managerId)?.let {
+            ManagerDetails(managerId)
+        } ?: throw InvalidTokenException
     }
 }

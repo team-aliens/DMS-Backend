@@ -2,6 +2,7 @@ package team.aliens.dms.global.security.token
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Header
 import io.jsonwebtoken.InvalidClaimException
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.JwtException
@@ -29,6 +30,11 @@ class JwtParser(
 
     fun getAuthentication(token: String): Authentication {
         val claims = getClaims(token)
+
+        if (claims.header[Header.JWT_TYPE] != JwtProperties.ACCESS) {
+            throw InvalidTokenException
+        }
+
         val userDetails = getDetails(claims.body)
 
         return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
@@ -40,7 +46,7 @@ class JwtParser(
                 .setSigningKey(securityProperties.secretKey)
                 .parseClaimsJws(token)
         } catch (e: Exception) {
-            when(e) {
+            when (e) {
                 is InvalidClaimException -> throw InvalidTokenException
                 is ExpiredJwtException -> throw ExpiredTokenException
                 is JwtException -> throw UnexpectedTokenException
@@ -52,7 +58,7 @@ class JwtParser(
     private fun getDetails(body: Claims): UserDetails {
         val authority = body.get("authority", Authority::class.java)
 
-        return when(authority) {
+        return when (authority) {
             Authority.STUDENT -> studentDetailsService.loadUserByUsername(body.id)
             Authority.MANAGER -> managerDetailsService.loadUserByUsername(body.id)
             else -> throw InvalidRoleException

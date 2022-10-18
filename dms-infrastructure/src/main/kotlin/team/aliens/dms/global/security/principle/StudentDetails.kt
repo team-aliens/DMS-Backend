@@ -3,24 +3,20 @@ package team.aliens.dms.global.security.principle
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import team.aliens.dms.domain.auth.model.Authority
+import java.util.*
 
-/**
- *
- * 학생의 정보를 담는 객체 StudentDetails
- *
- * @author leejeongyoon
- * @date 2022/09/22
- * @version 1.0.0
- **/
-class StudentDetails : UserDetails {
+class StudentDetails(
+    private val studentId: UUID
+) : UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(TODO("ROLE")))
+        return mutableListOf(SimpleGrantedAuthority(Authority.STUDENT.name))
     }
 
     override fun getPassword(): String? = null
 
-    override fun getUsername(): String = TODO("STUDENT_ID")
+    override fun getUsername(): String = studentId.toString()
 
     override fun isAccountNonExpired(): Boolean = true
 
