@@ -117,7 +117,7 @@ class FindAccountIdUseCaseTest {
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(null)
 
-        // when then
+        // when & then
         assertThrows<SchoolNotFoundException> {
             findAccountIdUseCase.execute(id, answer)
         }
@@ -131,7 +131,7 @@ class FindAccountIdUseCaseTest {
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
 
-        // when then
+        // when & then
         assertThrows<ManagerNotFoundException> {
             findAccountIdUseCase.execute(id, answer)
         }
