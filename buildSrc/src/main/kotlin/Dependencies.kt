@@ -6,7 +6,7 @@ object Dependencies {
     const val JACKSON = "com.fasterxml.jackson.module:jackson-module-kotlin"
 
     // java servlet
-    const val JAVA_SERVLET = "javax.servlet:javax.servlet-api:${DependencyVersions.SERVLET}"
+    const val JAVA_SERVLET = "javax.servlet:javax.servlet-api:${DependencyVersions.SERVLET_VERSION}"
 
     // web
     const val SPRING_WEB = "org.springframework.boot:spring-boot-starter-web"
@@ -40,5 +40,5 @@ object Dependencies {
     const val SPRING_TEST = "org.springframework.boot:spring-boot-starter-test:${PluginVersions.SPRING_BOOT_VERSION}"
 
     // time based uuid
-    const val UUID_TIME = "com.fasterxml.uuid:java-uuid-generator:${DependencyVersions.UUID_TIME}"
+    const val UUID_TIME = "com.fasterxml.uuid:java-uuid-generator:${DependencyVersions.UUID_TIME_VERSION}"
 }

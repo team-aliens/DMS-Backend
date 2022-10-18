@@ -34,7 +34,7 @@ class ExceptionFilter(
             when(e) {
                 is DmsException -> errorToJson((e.cause as DmsException).errorProperty, response)
                 else -> {
-                    errorToJson(InternalServerErrorException.EXCEPTION.errorProperty, response)
+                    errorToJson(InternalServerErrorException.errorProperty, response)
                     e.printStackTrace()
                 }
             }

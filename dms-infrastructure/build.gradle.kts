@@ -25,6 +25,9 @@ dependencies {
     // time based uuid
     implementation(Dependencies.UUID_TIME)
 
+    // jwt
+    implementation(Dependencies.JWT)
+
     // api project
     api(project(":dms-application"))
 }

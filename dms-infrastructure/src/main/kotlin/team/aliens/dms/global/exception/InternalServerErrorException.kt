@@ -13,8 +13,4 @@ import team.aliens.dms.global.error.GlobalErrorCode
  **/
 object InternalServerErrorException : DmsException(
     GlobalErrorCode.INTERNAL_SERVER_ERROR
-) {
-
-    @JvmField
-    val EXCEPTION = InternalServerErrorException
-}
+)
