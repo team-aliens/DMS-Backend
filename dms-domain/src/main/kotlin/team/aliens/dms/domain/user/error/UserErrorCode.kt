@@ -8,7 +8,7 @@ enum class UserErrorCode(
 ) : ErrorProperty {
 
     USER_NOT_FOUND(404, "User Not Found"),
-    STUDENT_EMAIL_EXISTS(409, "User Email Exists")
+    USER_EMAIL_EXISTS(409, "User Email Exists")
     ;
 
     override fun status(): Int = status
