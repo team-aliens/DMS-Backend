@@ -1,5 +1,6 @@
 package team.aliens.dms.manager
 
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
 import team.aliens.dms.user.dto.response.FindAccountIdResponse
 import java.util.UUID
+import javax.validation.constraints.NotBlank
 
+@Validated
 @RestController
 @RequestMapping("/managers")
 private class WebManagerAdapter(
@@ -16,7 +19,7 @@ private class WebManagerAdapter(
 ) {
 
     @GetMapping("/account-id/{school-id}")
-    fun findAccountId(@PathVariable("school-id") schoolId: UUID, @RequestParam answer: String) : FindAccountIdResponse {
+    fun findAccountId(@PathVariable("school-id") schoolId: UUID, @RequestParam @NotBlank answer: String) : FindAccountIdResponse {
         val result = findAccountIdUseCase.execute(schoolId, answer)
         return FindAccountIdResponse(result);
     }
