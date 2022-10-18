@@ -5,7 +5,7 @@ import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.global.annotation.ReadOnlyUseCase
 
 @ReadOnlyUseCase
-class CheckEmailDuplicateUseCase(
+class CheckDuplicatedEmailUseCase(
     private val studentQueryUserPort: StudentQueryUserPort
 ) {
 
