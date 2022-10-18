@@ -30,6 +30,7 @@ class SecurityConfiguration(
             .authorizeRequests()
             .antMatchers("/managers/account-id/{school-id}").permitAll()
             .antMatchers("*").permitAll()
+            .antMatchers("/students/email/duplication").permitAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
