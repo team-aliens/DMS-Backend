@@ -13,12 +13,12 @@ import team.aliens.dms.domain.file.spi.UploadFilePort
 import java.io.File
 
 @ExtendWith(SpringExtension::class)
-class UploadImageUseCaseTests {
+class UploadFileUseCaseTests {
 
     @MockBean
     private lateinit var uploadFilePort: UploadFilePort
 
-    private lateinit var uploadImageUseCase: UploadImageUseCase
+    private lateinit var uploadFileUseCase: UploadFileUseCase
 
     private val filePathStub = "test path"
 
@@ -42,7 +42,7 @@ class UploadImageUseCaseTests {
 
     @BeforeEach
     fun setUp() {
-        uploadImageUseCase = UploadImageUseCase(uploadFilePort)
+        uploadFileUseCase = UploadFileUseCase(uploadFilePort)
     }
 
     @Test
@@ -52,7 +52,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(jpgFileStub)
+        val response = uploadFileUseCase.execute(jpgFileStub)
 
         // then
         assertEquals(response, filePathStub)
@@ -65,7 +65,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(jpgFileStub2)
+        val response = uploadFileUseCase.execute(jpgFileStub2)
 
         // then
         assertEquals(response, filePathStub)
@@ -78,7 +78,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(jpegFileStub)
+        val response = uploadFileUseCase.execute(jpegFileStub)
 
         // then
         assertEquals(response, filePathStub)
@@ -91,7 +91,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(jpegFileStub2)
+        val response = uploadFileUseCase.execute(jpegFileStub2)
 
         // then
         assertEquals(response, filePathStub)
@@ -104,7 +104,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(pngFileStub)
+        val response = uploadFileUseCase.execute(pngFileStub)
 
         // then
         assertEquals(response, filePathStub)
@@ -117,7 +117,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(pngFileStub2)
+        val response = uploadFileUseCase.execute(pngFileStub2)
 
         // then
         assertEquals(response, filePathStub)
@@ -130,7 +130,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(heicFileStub)
+        val response = uploadFileUseCase.execute(heicFileStub)
 
         // then
         assertEquals(response, filePathStub)
@@ -143,7 +143,7 @@ class UploadImageUseCaseTests {
             .willReturn(filePathStub)
 
         // when
-        val response = uploadImageUseCase.execute(heicFileStub2)
+        val response = uploadFileUseCase.execute(heicFileStub2)
 
         // then
         assertEquals(response, filePathStub)
@@ -153,7 +153,7 @@ class UploadImageUseCaseTests {
     @Test
     fun `파일 확장자 잘못됨`() {
         assertThrows<FileInvalidExtensionException> {
-            uploadImageUseCase.execute(svgFileStub)
+            uploadFileUseCase.execute(svgFileStub)
         }
     }
 

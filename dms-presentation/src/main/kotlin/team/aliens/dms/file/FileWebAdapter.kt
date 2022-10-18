@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import team.aliens.dms.domain.file.usecase.UploadImageUseCase
+import team.aliens.dms.domain.file.usecase.UploadFileUseCase
 import team.aliens.dms.file.dto.response.UploadImageResponse
 import java.io.File
 import java.io.FileOutputStream
@@ -14,12 +14,12 @@ import java.util.*
 @RequestMapping("/files")
 @RestController
 class FileWebAdapter(
-    private val uploadImageUseCase: UploadImageUseCase
+    private val uploadFileUseCase: UploadFileUseCase
 ) {
 
     @PostMapping
     fun uploadFile(@RequestPart file: MultipartFile): UploadImageResponse {
-        val result = uploadImageUseCase.execute(file.let(transferFile))
+        val result = uploadFileUseCase.execute(file.let(transferFile))
 
         return UploadImageResponse(result)
     }

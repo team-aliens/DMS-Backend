@@ -6,7 +6,7 @@ import team.aliens.dms.global.annotation.UseCase
 import java.io.File
 
 @UseCase
-class UploadImageUseCase(
+class UploadFileUseCase(
     private val uploadFilePort: UploadFilePort
 ) {
 
