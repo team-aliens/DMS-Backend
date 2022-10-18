@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 
-@RestController
 @RequestMapping("/schools")
+@RestController
 class SchoolController(
     private val querySchoolsUseCase: QuerySchoolsUseCase
 ) {
