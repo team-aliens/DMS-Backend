@@ -14,7 +14,9 @@ class UserPersistenceAdapter(
 ) : UserPort {
 
     override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
-    
+
+    override fun existsByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
+
     override fun queryUserById(id: UUID) = userMapper.toDomain(
         userRepository.findByIdOrNull(id)
     )
