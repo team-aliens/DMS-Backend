@@ -1,5 +1,7 @@
 dependencies {
-    api(project(":dms-domain"))
+    // impl project
+    implementation(project(":dms-domain"))
 
+    // transaction
     implementation(Dependencies.SPRING_TRANSACTION)
 }

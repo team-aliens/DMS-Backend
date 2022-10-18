@@ -5,17 +5,16 @@ plugins {
 }
 
 dependencies {
+    // impl project
+    implementation(project(":dms-application"))
 
     // web
     implementation(Dependencies.SPRING_WEB)
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
-
-    // impl project
-    implementation(project(":dms-infrastructure"))
 }
 
-tasks.getByName<Jar>("jar") {
+tasks.getByName<Jar>("bootJar") {
     enabled = false
 }
