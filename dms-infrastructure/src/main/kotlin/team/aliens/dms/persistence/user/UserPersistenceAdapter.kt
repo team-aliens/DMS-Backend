@@ -2,7 +2,6 @@ package team.aliens.dms.persistence.user
 
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.user.spi.UserPort
-import team.aliens.dms.persistence.user.mapper.UserMapper
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
