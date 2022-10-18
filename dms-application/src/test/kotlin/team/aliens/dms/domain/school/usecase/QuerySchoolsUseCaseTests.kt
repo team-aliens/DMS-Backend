@@ -1,4 +1,4 @@
-package team.aliens.dms.school.usecase
+package team.aliens.dms.domain.school.usecase
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

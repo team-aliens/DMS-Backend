@@ -1,4 +1,4 @@
-package team.aliens.dms.student.usecase
+package team.aliens.dms.domain.student.usecase
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -10,21 +10,20 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.student.usecase.CheckEmailDuplicateUseCase
 
 @ExtendWith(SpringExtension::class)
-class CheckEmailDuplicateUseCaseTest {
+class CheckDuplicatedEmailUseCaseTest {
 
     @MockBean
     private lateinit var studentQueryUserPort: StudentQueryUserPort
 
-    private lateinit var checkEmailDuplicateUseCase: CheckEmailDuplicateUseCase
+    private lateinit var checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase
 
     private val email = "test123@dsm.hs.kr"
 
     @BeforeEach
     fun setUp() {
-        checkEmailDuplicateUseCase = CheckEmailDuplicateUseCase(studentQueryUserPort)
+        checkDuplicatedEmailUseCase = CheckDuplicatedEmailUseCase(studentQueryUserPort)
     }
 
     @Test
@@ -35,7 +34,7 @@ class CheckEmailDuplicateUseCaseTest {
 
         // when & then
         assertDoesNotThrow {
-            checkEmailDuplicateUseCase.execute(email)
+            checkDuplicatedEmailUseCase.execute(email)
         }
     }
 
@@ -47,7 +46,7 @@ class CheckEmailDuplicateUseCaseTest {
 
         // when & then
         assertThrows<UserEmailExistsException> {
-            checkEmailDuplicateUseCase.execute(email)
+            checkDuplicatedEmailUseCase.execute(email)
         }
     }
 }
