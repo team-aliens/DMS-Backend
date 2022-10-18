@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: codecov gradle
+        run: ./gradlew test jacocoRootReport
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./build/reports/jacoco/test/jacocoTestReport.xml
