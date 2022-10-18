@@ -10,14 +10,6 @@ import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
-/**
- *
- * Security 설정하는 SecurityConfiguration
- *
- * @author leejeongyoon
- * @date 2022/09/22
- * @version 1.0.0
- **/
 @Configuration
 class SecurityConfiguration(
     private val jwtParser: JwtParser,

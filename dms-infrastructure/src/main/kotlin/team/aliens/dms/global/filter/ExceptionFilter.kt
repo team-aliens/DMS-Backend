@@ -11,14 +11,6 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-/**
- *
- * 발생하는 예외를 처리하기 위한 ExceptionFilter
- *
- * @author leejeongyoon
- * @date 2022/09/22
- * @version 1.0.0
- **/
 class ExceptionFilter(
     private val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
