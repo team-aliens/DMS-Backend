@@ -17,4 +17,8 @@ class UserPersistenceAdapter(
     override fun queryUserById(id: UUID) = userMapper.toDomain(
         userJpaRepository.findByIdOrNull(id)
     )
+
+    override fun queryUserBySchoolId(schoolId: UUID) = userMapper.toDomain(
+        userJpaRepository.findBySchoolId(schoolId)
+    )
 }
