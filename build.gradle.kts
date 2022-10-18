@@ -31,6 +31,8 @@ allprojects {
     group = "team.aliens"
     version = "0.0.1-SNAPSHOT"
 
+    apply(plugin = "jacoco")
+
     tasks {
         compileKotlin {
             kotlinOptions {
