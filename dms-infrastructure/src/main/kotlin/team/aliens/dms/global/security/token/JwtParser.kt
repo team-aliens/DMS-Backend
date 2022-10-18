@@ -1,10 +1,16 @@
 package team.aliens.dms.global.security.token
 
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.InvalidClaimException
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.Jwts
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.global.exception.InternalServerErrorException
 import team.aliens.dms.global.security.SecurityProperties
 import team.aliens.dms.global.security.exception.ExpiredTokenException
@@ -44,11 +50,11 @@ class JwtParser(
     }
 
     private fun getDetails(body: Claims): UserDetails {
-        val authority = body.get("authority", String::class.java)
+        val authority = body.get("authority", Authority::class.java)
 
         return when(authority) {
-            "STUDENT" -> studentDetailsService.loadUserByUsername(body.id)
-            "MANAGER" -> managerDetailsService.loadUserByUsername(body.id)
+            Authority.STUDENT -> studentDetailsService.loadUserByUsername(body.id)
+            Authority.MANAGER -> managerDetailsService.loadUserByUsername(body.id)
             else -> throw InvalidRoleException
         }
     }
