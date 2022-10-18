@@ -9,10 +9,12 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.global.spi.CoveredEmailPort
@@ -30,9 +32,6 @@ class FindAccountIdUseCaseTest {
     private lateinit var managerQueryUserPort: ManagerQueryUserPort
 
     @MockBean
-    private lateinit var managerSecurityPort: ManagerSecurityPort
-
-    @MockBean
     private lateinit var coveredEmailPort: CoveredEmailPort
 
     private lateinit var findAccountIdUseCase: FindAccountIdUseCase
@@ -42,7 +41,6 @@ class FindAccountIdUseCaseTest {
         findAccountIdUseCase = FindAccountIdUseCase(
             managerQuerySchoolPort,
             managerQueryUserPort,
-            managerSecurityPort,
             coveredEmailPort
         )
     }
@@ -80,9 +78,7 @@ class FindAccountIdUseCaseTest {
         //given
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
-        given(managerSecurityPort.getCurrentUserId())
-            .willReturn(id)
-        given(managerQueryUserPort.queryUserById(id))
+        given(managerQueryUserPort.queryUserBySchoolId(id))
             .willReturn(user)
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn(coveredEmail)
@@ -102,15 +98,37 @@ class FindAccountIdUseCaseTest {
         //given
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
-        given(managerSecurityPort.getCurrentUserId())
-            .willReturn(id)
-        given(managerQueryUserPort.queryUserById(id))
+        given(managerQueryUserPort.queryUserBySchoolId(id))
             .willReturn(user)
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn(coveredEmail)
 
         //when then
         assertThrows<AnswerNotMatchedException> {
+            findAccountIdUseCase.execute(id, answer)
+        }
+    }
+
+    @Test
+    fun `학교를 찾을 수 없음`() {
+        val answer = "김범진"
+
+        //given
+        //when then
+        assertThrows<SchoolNotFoundException> {
+            findAccountIdUseCase.execute(id, answer)
+        }
+    }
+
+    @Test
+    fun `유저를 찾을 수 없음`() {
+        val answer = "안희명"
+
+        //given
+        given(managerQuerySchoolPort.querySchoolById(id))
+            .willReturn(school)
+
+        assertThrows<ManagerNotFoundException> {
             findAccountIdUseCase.execute(id, answer)
         }
     }
