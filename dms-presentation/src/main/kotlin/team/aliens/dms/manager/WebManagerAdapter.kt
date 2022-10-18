@@ -14,8 +14,8 @@ import javax.validation.constraints.NotBlank
 @Validated
 @RestController
 @RequestMapping("/managers")
-private class WebManagerAdapter(
-    val findAccountIdUseCase: FindAccountIdUseCase
+class WebManagerAdapter(
+    private val findAccountIdUseCase: FindAccountIdUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
