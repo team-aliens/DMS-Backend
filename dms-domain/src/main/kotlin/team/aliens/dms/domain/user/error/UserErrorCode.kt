@@ -7,7 +7,9 @@ enum class UserErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    USER_NOT_FOUND(404, "User Not Found");
+    USER_NOT_FOUND(404, "User Not Found"),
+    USER_EMAIL_EXISTS(409, "User Email Exists")
+    ;
 
     override fun status(): Int = status
     override fun message(): String = message

@@ -7,7 +7,8 @@ enum class StudentErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    STUDENT_NOT_FOUND(404, "Student Not Found");
+    STUDENT_NOT_FOUND(404, "Student Not Found")
+    ;
 
     override fun status(): Int = status
     override fun message(): String = message
