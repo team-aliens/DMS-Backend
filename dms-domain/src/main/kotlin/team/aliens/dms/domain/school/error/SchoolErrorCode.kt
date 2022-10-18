@@ -7,6 +7,8 @@ enum class SchoolErrorCode(
     private val message: String
 ) : ErrorProperty {
 
+    ANSWER_NOT_MATCHED(401, "Answer Not Matched"),
+
     SCHOOL_NOT_FOUND(404, "School Not Found");
 
     override fun status(): Int = status
