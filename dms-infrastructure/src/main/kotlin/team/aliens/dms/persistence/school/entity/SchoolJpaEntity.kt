@@ -16,7 +16,7 @@ class SchoolJpaEntity(
     @Column(columnDefinition = "VARCHAR(10)", nullable = false, unique = true)
     val name: String,
 
-    @Column(columnDefinition = "CHAR(6)", nullable = false, unique = true)
+    @Column(columnDefinition = "CHAR(8)", nullable = false, unique = true)
     val code: String,
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = false)
