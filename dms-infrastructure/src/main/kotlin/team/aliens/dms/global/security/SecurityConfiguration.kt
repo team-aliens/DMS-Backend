@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
@@ -28,6 +29,7 @@ class SecurityConfiguration(
 
         http
             .authorizeRequests()
+            .antMatchers("/managers/account-id/{school-id}").hasAuthority(Authority.MANAGER.name)
             .antMatchers("*").permitAll()
 
         http
