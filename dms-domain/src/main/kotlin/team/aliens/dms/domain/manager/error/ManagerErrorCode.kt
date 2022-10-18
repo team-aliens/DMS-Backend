@@ -7,7 +7,9 @@ enum class ManagerErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    ANSWER_NOT_MATCHED(401, "Answer Not Matched");
+    ANSWER_NOT_MATCHED(401, "Answer Not Matched"),
+
+    MANAGER_NOT_FOUND(404, "Manager Not Found");
 
     override fun status(): Int = status
     override fun message(): String = message
