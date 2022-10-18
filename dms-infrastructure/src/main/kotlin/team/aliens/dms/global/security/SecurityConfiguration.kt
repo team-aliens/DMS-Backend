@@ -39,6 +39,7 @@ class SecurityConfiguration(
 
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
+            .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
