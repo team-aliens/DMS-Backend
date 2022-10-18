@@ -4,7 +4,7 @@ import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.auth.dto.response.TokenResponse
+import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.global.security.SecurityProperties

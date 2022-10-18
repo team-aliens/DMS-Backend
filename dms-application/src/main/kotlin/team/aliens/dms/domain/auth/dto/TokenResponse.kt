@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.auth.dto.response
+package team.aliens.dms.domain.auth.dto
 
 import java.util.Date
 
