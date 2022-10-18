@@ -1,25 +1,26 @@
-package team.aliens.dms.school.usecase
+package team.aliens.dms.domain.school.usecase
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class QuerySchoolsUseCaseTests {
+class QuerySchoolQuestionUseCaseTests {
 
     @MockBean
     private lateinit var querySchoolPort: QuerySchoolPort
 
-    private lateinit var querySchoolsUseCase: QuerySchoolsUseCase
+    private lateinit var querySchoolQuestionUseCase: QuerySchoolQuestionUseCase
 
     private val schoolStub by lazy {
         School(
@@ -34,37 +35,38 @@ class QuerySchoolsUseCaseTests {
         )
     }
 
-    private val schoolStub2 by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "test name2",
-            code = "test code2",
-            question = "test question2",
-            answer = "test answer2",
-            address = "test address2",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
-    }
-
     @BeforeEach
     fun setUp() {
-        querySchoolsUseCase = QuerySchoolsUseCase(querySchoolPort)
+        querySchoolQuestionUseCase = QuerySchoolQuestionUseCase(querySchoolPort)
     }
 
     @Test
-    fun `학교 목록 조회 성공`() {
+    fun `학교 질문 조회 성공`() {
+        val schoolId = UUID.randomUUID()
+
         // given
-        given(querySchoolPort.queryAllSchool())
-            .willReturn(
-                listOf(schoolStub, schoolStub2)
-            )
+        given(querySchoolPort.querySchoolById(schoolId))
+            .willReturn(schoolStub)
 
         // when
-        val response = querySchoolsUseCase.execute()
+        val response = querySchoolQuestionUseCase.execute(schoolId)
 
         // then
-        assertThat(response).isNotNull
+        assertThat(response).isEqualTo("test question")
+    }
+
+    @Test
+    fun `학교가 존재하지 않음`() {
+        val schoolId = UUID.randomUUID()
+
+        // given
+        given(querySchoolPort.querySchoolById(schoolId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<SchoolNotFoundException> {
+            querySchoolQuestionUseCase.execute(schoolId)
+        }
     }
 
 }
