@@ -6,6 +6,10 @@ plugins {
 }
 
 dependencies {
+    // impl project
+    implementation(project(":dms-domain"))
+    implementation(project(":dms-application"))
+    implementation(project(":dms-presentation"))
 
     // kotlin
     implementation(Dependencies.JACKSON)
@@ -27,9 +31,6 @@ dependencies {
 
     // jwt
     implementation(Dependencies.JWT)
-
-    // api project
-    api(project(":dms-application"))
 }
 
 kapt {
@@ -51,6 +52,6 @@ noArg {
     annotation("javax.persistence.Embeddable")
 }
 
-tasks.getByName<Jar>("bootJar") {
+tasks.getByName<Jar>("jar") {
     enabled = false
 }
