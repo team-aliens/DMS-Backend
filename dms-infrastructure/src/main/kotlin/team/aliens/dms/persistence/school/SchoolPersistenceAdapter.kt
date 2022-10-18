@@ -9,11 +9,15 @@ import java.util.*
 
 @Component
 class SchoolPersistenceAdapter(
-    val schoolJpaRepository: SchoolJpaRepository,
-    val schoolMapper: SchoolMapper
+    private val schoolMapper: SchoolMapper,
+    private val schoolRepository: SchoolJpaRepository
 ) : SchoolPort {
 
+    override fun queryAllSchool() = schoolRepository.findAll().map {
+        schoolMapper.toDomain(it)!!
+    }
+
     override fun querySchoolById(id: UUID) = schoolMapper.toDomain(
-        schoolJpaRepository.findByIdOrNull(id)
+        schoolRepository.findByIdOrNull(id)
     )
 }
