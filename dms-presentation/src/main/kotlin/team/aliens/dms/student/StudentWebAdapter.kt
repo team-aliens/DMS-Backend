@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.usecase.CheckEmailDuplicateUseCase
 import javax.validation.constraints.NotBlank
 
+@Validated
 @RequestMapping("/students")
 @RestController
 class StudentWebAdapter(
@@ -15,7 +16,7 @@ class StudentWebAdapter(
 ) {
 
     @GetMapping("/email/duplication")
-    fun checkDuplicateEmail(@RequestParam @Validated @NotBlank email: String) {
+    fun checkDuplicateEmail(@RequestParam @NotBlank email: String) {
         checkEmailDuplicateUseCase.execute(email)
     }
 }
