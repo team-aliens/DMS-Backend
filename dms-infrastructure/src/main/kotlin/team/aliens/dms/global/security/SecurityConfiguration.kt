@@ -3,6 +3,7 @@ package team.aliens.dms.global.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -28,7 +29,15 @@ class SecurityConfiguration(
 
         http
             .authorizeRequests()
-            .antMatchers("*").permitAll()
+            
+            // students
+            .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
+
+            // /managers
+            .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
+
+            // /schools
+            .antMatchers(HttpMethod.GET, "/schools").permitAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
