@@ -1,4 +1,4 @@
-package team.aliens.dms.school.usecase
+package team.aliens.dms.domain.school.usecase
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 import java.time.LocalDate
 import java.util.*
 
