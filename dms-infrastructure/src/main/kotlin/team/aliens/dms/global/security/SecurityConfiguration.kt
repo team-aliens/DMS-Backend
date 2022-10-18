@@ -30,7 +30,7 @@ class SecurityConfiguration(
         http
             .authorizeRequests()
             .antMatchers("*").permitAll()
-            .antMatchers("/students/email/duplication").hasAuthority(Authority.STUDENT.name)
+            .antMatchers("/students/email/duplication").permitAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
