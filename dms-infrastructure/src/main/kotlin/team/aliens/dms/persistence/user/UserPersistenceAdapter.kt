@@ -9,7 +9,7 @@ import java.util.*
 
 @Component
 class UserPersistenceAdapter(
-    private val userMapper: UserMapper
+    private val userMapper: UserMapper,
     private val userJpaRepository: UserJpaRepository
 ) : UserPort {
 
