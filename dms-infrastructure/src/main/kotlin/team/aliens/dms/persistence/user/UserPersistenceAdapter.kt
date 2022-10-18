@@ -10,17 +10,17 @@ import java.util.*
 @Component
 class UserPersistenceAdapter(
     private val userMapper: UserMapper,
-    private val userJpaRepository: UserJpaRepository
+    private val userRepository: UserJpaRepository
 ) : UserPort {
 
-    override fun existsByEmail(email: String) = userJpaRepository.existsByEmail(email)
+    override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
     
     override fun queryUserById(id: UUID) = userMapper.toDomain(
-        userJpaRepository.findByIdOrNull(id)
+        userRepository.findByIdOrNull(id)
     )
     
     override fun queryUserBySchoolId(schoolId: UUID) = userMapper.toDomain(
-        userJpaRepository.findBySchoolId(schoolId)
+        userRepository.findBySchoolId(schoolId)
     )
 }
  
