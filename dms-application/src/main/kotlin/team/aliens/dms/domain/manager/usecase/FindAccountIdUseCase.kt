@@ -4,7 +4,6 @@ import team.aliens.dms.domain.manager.exception.AnswerNotMatchedException
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.global.annotation.UseCase
 import team.aliens.dms.global.spi.CoveredEmailPort
