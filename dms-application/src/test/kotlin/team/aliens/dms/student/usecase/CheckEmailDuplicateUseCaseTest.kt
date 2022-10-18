@@ -1,5 +1,6 @@
 package team.aliens.dms.student.usecase
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -17,18 +18,21 @@ class CheckEmailDuplicateUseCaseTest {
     @MockBean
     private lateinit var studentQueryUserPort: StudentQueryUserPort
 
-    @MockBean
     private lateinit var checkEmailDuplicateUseCase: CheckEmailDuplicateUseCase
 
     private val email = "test123@dsm.hs.kr"
+
+    @BeforeEach
+    fun setUp() {
+        checkEmailDuplicateUseCase = CheckEmailDuplicateUseCase(studentQueryUserPort)
+    }
 
     @Test
     fun `이메일 중복`() {
         given(studentQueryUserPort.existsByEmail(email))
             .willReturn(true)
 
-        //이거 좀 이상
-        assertDoesNotThrow {
+        assertThrows<StudentEmailExistsException> {
             checkEmailDuplicateUseCase.execute(email)
         }
     }
