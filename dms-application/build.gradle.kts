@@ -12,5 +12,5 @@ dependencies {
 
 allOpen {
     annotation("team.aliens.dms.global.annotation.UseCase")
-    annotation("team.aliens.dms.global.annotation.UseCase")
+    annotation("team.aliens.dms.global.annotation.ReadOnlyUseCase")
 }

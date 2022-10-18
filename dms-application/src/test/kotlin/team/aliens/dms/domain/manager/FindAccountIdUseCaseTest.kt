@@ -15,7 +15,7 @@ import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.util.CoveredEmailPort
+import team.aliens.dms.global.spi.CoveredEmailPort
 import java.time.LocalDate
 import java.util.UUID
 
@@ -39,7 +39,12 @@ class FindAccountIdUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        findAccountIdUseCase = FindAccountIdUseCase(managerQuerySchoolPort, managerQueryUserPort, managerSecurityPort, coveredEmailPort)
+        findAccountIdUseCase = FindAccountIdUseCase(
+            managerQuerySchoolPort,
+            managerQueryUserPort,
+            managerSecurityPort,
+            coveredEmailPort
+        )
     }
 
     private val id = UUID.randomUUID()
@@ -73,7 +78,7 @@ class FindAccountIdUseCaseTest {
         val coveredEmail = "e****@dsm.hs.kr"
 
         //given
-        given(managerQuerySchoolPort.queryById(id))
+        given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
         given(managerSecurityPort.getCurrentUserId())
             .willReturn(id)
@@ -95,7 +100,7 @@ class FindAccountIdUseCaseTest {
         val coveredEmail = "e****@dsm.hs.kr"
 
         //given
-        given(managerQuerySchoolPort.queryById(id))
+        given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
         given(managerSecurityPort.getCurrentUserId())
             .willReturn(id)

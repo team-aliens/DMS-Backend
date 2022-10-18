@@ -1,17 +1,17 @@
-package team.aliens.dms.global.utils
+package team.aliens.dms.global.util
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.global.util.CoveredEmailPort
+import team.aliens.dms.global.spi.CoveredEmailPort
 import java.lang.StringBuilder
 
 @Component
-class StingUtils : CoveredEmailPort {
+class StingUtil : CoveredEmailPort {
 
-    override fun coveredEmail(email: String) : String {
+    override fun coveredEmail(email: String): String {
         val index = email.indexOf('@')
 
         val sb = StringBuilder(email).also {
-            for (i in (index/3) until index) {
+            for (i in (index / 3) until index) {
                 it.setCharAt(i, '*')
             }
         }

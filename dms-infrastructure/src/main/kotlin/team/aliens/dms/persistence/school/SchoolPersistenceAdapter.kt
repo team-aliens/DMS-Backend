@@ -14,7 +14,7 @@ class SchoolPersistenceAdapter(
     val schoolMapper: SchoolMapper
 ) : SchoolPort{
 
-    override fun queryById(id: UUID): School? {
-        return schoolMapper.toDomain(schoolJpaRepository.findByIdOrNull(id))
-    }
+    override fun querySchoolById(id: UUID) = schoolMapper.toDomain(
+        schoolJpaRepository.findByIdOrNull(id)
+    )
 }

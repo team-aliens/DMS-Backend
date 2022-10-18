@@ -11,12 +11,13 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/managers")
-class WebManagerAdapter(
+private class WebManagerAdapter(
     val findAccountIdUseCase: FindAccountIdUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(@PathVariable("school-id") schoolId: UUID, @RequestParam answer: String) : FindAccountIdResponse {
-        return FindAccountIdResponse(findAccountIdUseCase.execute(schoolId, answer));
+        val result = findAccountIdUseCase.execute(schoolId, answer)
+        return FindAccountIdResponse(result);
     }
 }

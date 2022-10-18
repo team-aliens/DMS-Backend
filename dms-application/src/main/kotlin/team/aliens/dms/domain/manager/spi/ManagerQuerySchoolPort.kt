@@ -4,5 +4,5 @@ import team.aliens.dms.domain.school.model.School
 import java.util.UUID
 
 interface ManagerQuerySchoolPort {
-    fun queryById(id: UUID): School?
+    fun querySchoolById(id: UUID): School?
 }

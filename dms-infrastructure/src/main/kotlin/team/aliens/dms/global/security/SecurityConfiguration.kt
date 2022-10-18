@@ -29,7 +29,7 @@ class SecurityConfiguration(
 
         http
             .authorizeRequests()
-            .antMatchers("/managers/account-id/{school-id}").hasAuthority(Authority.MANAGER.name)
+            .antMatchers("/managers/account-id/{school-id}").permitAll()
             .antMatchers("*").permitAll()
 
         http

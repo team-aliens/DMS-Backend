@@ -7,7 +7,7 @@ import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.global.annotation.UseCase
-import team.aliens.dms.global.util.CoveredEmailPort
+import team.aliens.dms.global.spi.CoveredEmailPort
 import java.util.UUID
 
 @UseCase
@@ -17,14 +17,16 @@ class FindAccountIdUseCase(
     val managerSecurityPort: ManagerSecurityPort,
     val coveredEmailPort: CoveredEmailPort
 ) {
-    fun execute(schoolId: UUID, answer: String) : String {
-        val school = managerQuerySchoolPort.queryById(schoolId) ?: throw SchoolNotFoundException
+    fun execute(schoolId: UUID, answer: String): String {
+        val school =
+            managerQuerySchoolPort.querySchoolById(schoolId) ?: throw SchoolNotFoundException
 
         if (school.answer != answer) {
             throw AnswerNotMatchedException
         }
 
-        val user = managerQueryUserPort.queryUserById(managerSecurityPort.getCurrentUserId()) ?: throw UserNotFoundException
+        val user = managerQueryUserPort.queryUserById(managerSecurityPort.getCurrentUserId())
+            ?: throw UserNotFoundException
 
         return coveredEmailPort.coveredEmail(user.email)
     }
