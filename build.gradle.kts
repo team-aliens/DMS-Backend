@@ -53,6 +53,26 @@ allprojects {
     }
 }
 
+tasks.register<JacocoReport>("jacocoRootReport") {
+    subprojects {
+        this@subprojects.plugins.withType<JacocoPlugin>().configureEach {
+            this@subprojects.tasks.matching {
+                it.extensions.findByType<JacocoTaskExtension>() != null
+            }
+                .configureEach {
+                    sourceSets(this@subprojects.the<SourceSetContainer>().named("main").get())
+                    executionData(this)
+                }
+        }
+    }
+
+    reports {
+        xml.outputLocation.set(File("${buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
+        xml.required.set(true)
+        html.required.set(false)
+    }
+}
+
 tasks.getByName<Jar>("jar") {
     enabled = false
 }
