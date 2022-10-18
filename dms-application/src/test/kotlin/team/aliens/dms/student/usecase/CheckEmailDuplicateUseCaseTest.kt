@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.user.exception.StudentEmailExistsException
+import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.usecase.CheckEmailDuplicateUseCase
 
@@ -42,7 +42,7 @@ class CheckEmailDuplicateUseCaseTest {
         given(studentQueryUserPort.existsByEmail(email))
             .willReturn(true)
 
-        assertThrows<StudentEmailExistsException> {
+        assertThrows<UserEmailExistsException> {
             checkEmailDuplicateUseCase.execute(email)
         }
     }
