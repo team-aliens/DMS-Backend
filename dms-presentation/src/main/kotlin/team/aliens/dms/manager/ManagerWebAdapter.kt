@@ -8,19 +8,26 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
 import team.aliens.dms.user.dto.response.FindAccountIdResponse
-import java.util.UUID
+import java.util.*
 import javax.validation.constraints.NotBlank
 
 @Validated
 @RequestMapping("/managers")
 @RestController
-class WebManagerAdapter(
+class ManagerWebAdapter(
     private val findAccountIdUseCase: FindAccountIdUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
-    fun findAccountId(@PathVariable("school-id") schoolId: UUID, @RequestParam @NotBlank answer: String) : FindAccountIdResponse {
-        val result = findAccountIdUseCase.execute(schoolId, answer)
+    fun findAccountId(
+        @PathVariable("school-id") schoolId: UUID,
+        @RequestParam @NotBlank answer: String
+    ): FindAccountIdResponse {
+        val result = findAccountIdUseCase.execute(
+            schoolId = schoolId,
+            answer = answer
+        )
+
         return FindAccountIdResponse(result);
     }
 }
