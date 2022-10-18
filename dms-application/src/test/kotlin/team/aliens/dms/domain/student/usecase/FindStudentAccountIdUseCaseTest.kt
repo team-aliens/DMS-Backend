@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class FindAccountIdUseCaseTest {
+class FindStudentAccountIdUseCaseTest {
 
     @MockBean
     private lateinit var queryStudentPort: QueryStudentPort
@@ -31,7 +31,7 @@ class FindAccountIdUseCaseTest {
     @MockBean
     private lateinit var coveredEmailPort: CoveredEmailPort
 
-    private lateinit var findAccountIdUseCase: FindAccountIdUseCase
+    private lateinit var findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 
     private val schoolId = UUID.randomUUID()
     private val name = "이정윤"
@@ -66,7 +66,7 @@ class FindAccountIdUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        findAccountIdUseCase = FindAccountIdUseCase(queryStudentPort, queryUserPort, coveredEmailPort)
+        findStudentAccountIdUseCase = FindStudentAccountIdUseCase(queryStudentPort, queryUserPort, coveredEmailPort)
     }
 
     @Test
@@ -85,7 +85,7 @@ class FindAccountIdUseCaseTest {
             .willReturn("dlw********")
 
         // when
-        val response = findAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+        val response = findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
 
         // then
         assertEquals(response, "dlw********")
@@ -99,7 +99,7 @@ class FindAccountIdUseCaseTest {
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            findAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
         }
     }
 
@@ -114,7 +114,7 @@ class FindAccountIdUseCaseTest {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            findAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
         }
     }
 
@@ -132,7 +132,7 @@ class FindAccountIdUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            findAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
         }
     }
 }

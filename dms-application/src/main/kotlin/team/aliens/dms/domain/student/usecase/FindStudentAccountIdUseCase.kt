@@ -11,14 +11,14 @@ import java.util.UUID
 
 /**
  *
- * 학교, 학번의 정보가 옳다면 블록처리된 이메일을 반환하는 FindAccountIdUseCase
+ * 학교, 학번의 정보가 옳다면 블록처리된 이메일을 반환하는 FindStudentAccountIdUseCase
  *
  * @author leejeongyoon
  * @date 2022/10/19
  * @version 1.0.0
  **/
 @ReadOnlyUseCase
-class FindAccountIdUseCase(
+class FindStudentAccountIdUseCase(
     private val queryStudentPort: QueryStudentPort,
     private val queryUserPort: StudentQueryUserPort,
     private val coveredEmailPort: CoveredEmailPort

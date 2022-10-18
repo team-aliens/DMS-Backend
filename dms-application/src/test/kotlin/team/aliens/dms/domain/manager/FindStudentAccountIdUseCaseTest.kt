@@ -22,7 +22,7 @@ import java.util.UUID
 
 
 @ExtendWith(SpringExtension::class)
-class FindAccountIdUseCaseTest {
+class FindStudentAccountIdUseCaseTest {
 
     @MockBean
     private lateinit var managerQuerySchoolPort: ManagerQuerySchoolPort

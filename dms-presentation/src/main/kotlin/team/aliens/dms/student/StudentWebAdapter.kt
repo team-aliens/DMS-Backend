@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
-import team.aliens.dms.domain.student.usecase.FindAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
 import team.aliens.dms.student.dto.response.CoveredEmailResponse
 import java.util.UUID
 import javax.validation.constraints.NotBlank
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotBlank
 class StudentWebAdapter(
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
-    private val findAccountIdUseCase: FindAccountIdUseCase
+    private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 ) {
 
     @GetMapping("/email/duplication")
@@ -40,7 +40,7 @@ class StudentWebAdapter(
         @RequestParam @NotBlank classRoom: Int,
         @RequestParam @NotBlank number: Int
     ): CoveredEmailResponse {
-        val result = findAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+        val result = findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
 
         return CoveredEmailResponse(result)
     }
