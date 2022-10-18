@@ -12,8 +12,8 @@ import java.util.UUID
 import javax.validation.constraints.NotBlank
 
 @Validated
-@RestController
 @RequestMapping("/managers")
+@RestController
 class WebManagerAdapter(
     private val findAccountIdUseCase: FindAccountIdUseCase
 ) {
