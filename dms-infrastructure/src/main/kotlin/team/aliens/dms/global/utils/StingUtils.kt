@@ -7,7 +7,7 @@ import java.lang.StringBuilder
 @Component
 class StingUtils : CoveredEmailPort {
 
-    fun coveredEmail(email: String) : String {
+    override fun coveredEmail(email: String) : String {
         val index = email.indexOf('@')
 
         val sb = StringBuilder(email).also {
