@@ -28,6 +28,7 @@ class SecurityConfiguration(
 
         http
             .authorizeRequests()
+            .antMatchers("/managers/account-id/{school-id}").permitAll()
             .antMatchers("*").permitAll()
 
         http
