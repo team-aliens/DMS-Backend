@@ -9,12 +9,5 @@ class UserPersistenceAdapter(
     private val userJpaRepository: UserJpaRepository
 ) : UserPort {
 
-    override fun existsByEmail(email: String): Boolean {
-        val user = userJpaRepository.existsByEmail(email)
-
-        user?.let {
-            return true
-        }
-        return false
-    }
+    override fun existsByEmail(email: String) = userJpaRepository.existsByEmail(email)
 }
