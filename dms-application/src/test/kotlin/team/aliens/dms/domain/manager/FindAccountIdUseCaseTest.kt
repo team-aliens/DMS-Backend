@@ -75,7 +75,7 @@ class FindAccountIdUseCaseTest {
         val answer = "안희명"
         val coveredEmail = "e****@dsm.hs.kr"
 
-        //given
+        // given
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
         given(managerQueryUserPort.queryUserBySchoolId(id))
@@ -83,19 +83,19 @@ class FindAccountIdUseCaseTest {
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn(coveredEmail)
 
-        //when
+        // when
         val response = findAccountIdUseCase.execute(id, answer)
 
-        //then
+        // then
         assertThat(response).isNotNull()
     }
 
     @Test
-    fun `아이디 찾기 실패`() {
-        val answer = "김범진"
+    fun `답변이 틀림`() {
+        val answer = "김범진탈모새"
         val coveredEmail = "e****@dsm.hs.kr"
 
-        //given
+        // given
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
         given(managerQueryUserPort.queryUserBySchoolId(id))
@@ -103,7 +103,7 @@ class FindAccountIdUseCaseTest {
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn(coveredEmail)
 
-        //when then
+        // when then
         assertThrows<AnswerNotMatchedException> {
             findAccountIdUseCase.execute(id, answer)
         }
@@ -111,10 +111,13 @@ class FindAccountIdUseCaseTest {
 
     @Test
     fun `학교를 찾을 수 없음`() {
-        val answer = "김범진"
+        val answer = "끼"
 
-        //given
-        //when then
+        // given
+        given(managerQuerySchoolPort.querySchoolById(id))
+            .willReturn(null)
+
+        // when then
         assertThrows<SchoolNotFoundException> {
             findAccountIdUseCase.execute(id, answer)
         }
@@ -124,10 +127,11 @@ class FindAccountIdUseCaseTest {
     fun `유저를 찾을 수 없음`() {
         val answer = "안희명"
 
-        //given
+        // given
         given(managerQuerySchoolPort.querySchoolById(id))
             .willReturn(school)
 
+        // when then
         assertThrows<ManagerNotFoundException> {
             findAccountIdUseCase.execute(id, answer)
         }
