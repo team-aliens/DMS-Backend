@@ -21,6 +21,7 @@ import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.StudentPasswordInitializationWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
+import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
 @Validated
@@ -62,7 +63,7 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password/initialization")
-    fun passwordInitialization(@RequestBody webRequest: StudentPasswordInitializationWebRequest) {
+    fun passwordInitialization(@RequestBody @Valid webRequest: StudentPasswordInitializationWebRequest) {
         val request = StudentPasswordInitializationRequest(
             accountId = webRequest.accountId,
             name = webRequest.name,
