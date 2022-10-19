@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.student.dto.FindAccountIdRequest
+import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
@@ -40,7 +40,7 @@ class StudentWebAdapter(
         @PathVariable(name = "school-id") schoolId: UUID,
         @ModelAttribute webRequest: FindStudentAccountIdWebRequest
     ): FindStudentAccountIdResponse {
-        val request = FindAccountIdRequest(
+        val request = FindStudentAccountIdRequest(
             name = webRequest.name,
             grade = webRequest.grade,
             classRoom = webRequest.classRoom,

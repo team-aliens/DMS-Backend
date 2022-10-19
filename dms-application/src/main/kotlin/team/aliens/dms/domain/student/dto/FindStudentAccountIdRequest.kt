@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.student.dto
 
-data class FindAccountIdRequest(
+data class FindStudentAccountIdRequest(
 
     val name: String,
 

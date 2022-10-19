@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.student.dto.FindAccountIdRequest
+import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
@@ -38,7 +38,7 @@ class FindStudentAccountIdUseCaseTest {
 
 
     private val request by lazy {
-        FindAccountIdRequest(
+        FindStudentAccountIdRequest(
             name = "이정윤",
             grade = 2,
             classRoom = 3,

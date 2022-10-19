@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
-import team.aliens.dms.domain.student.dto.FindAccountIdRequest
+import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -25,7 +25,7 @@ class FindStudentAccountIdUseCase(
     private val coveredEmailPort: CoveredEmailPort
 ) {
 
-    fun execute(schoolId: UUID, request: FindAccountIdRequest): String {
+    fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
         val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
             schoolId, request.grade, request.classRoom, request.number
         ) ?: throw StudentNotFoundException
