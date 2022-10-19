@@ -4,7 +4,7 @@ data class FindAccountIdRequest(
 
     val name: String,
 
-   val grade: Int,
+    val grade: Int,
 
     val classRoom: Int,
 
