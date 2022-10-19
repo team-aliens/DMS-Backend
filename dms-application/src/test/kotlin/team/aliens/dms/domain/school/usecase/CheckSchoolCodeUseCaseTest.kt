@@ -50,7 +50,7 @@ class CheckSchoolCodeUseCaseTest {
             .willReturn(school)
 
         // when
-        val response = checkSchoolCodeUseCase.execute(schoolId, schoolCode)
+        val response = checkSchoolCodeUseCase.execute(schoolId, "AUTH1234")
 
         // then
         assertEquals(response, schoolId)
