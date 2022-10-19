@@ -31,7 +31,7 @@ class StudentWebAdapter(
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
-    private val passwordInitializationUseCase: StudentPasswordInitializationUseCase
+    private val studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
 ) {
 
     @GetMapping("/email/duplication")
@@ -72,6 +72,6 @@ class StudentWebAdapter(
             newPassword = webRequest.newPassword
         )
 
-        passwordInitializationUseCase.execute(request)
+        studentPasswordInitializationUseCase.execute(request)
     }
 }
