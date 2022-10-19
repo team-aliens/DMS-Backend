@@ -129,7 +129,7 @@ class FindStudentAccountIdUseCaseTest {
     }
 
     @Test
-    fun `학생 존재하지 않음`() {
+    fun `학생 정보 불일치`() {
 
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
@@ -138,7 +138,7 @@ class FindStudentAccountIdUseCaseTest {
         given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(user.name == request.name && !queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
+        given(!queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
             .willReturn(false)
 
         // when & then
