@@ -71,9 +71,13 @@ class CheckSchoolCodeUseCaseTest {
 
     @Test
     fun `학교 인증코드 불일치`() {
+        // given
+        given(querySchoolPort.querySchoolById(schoolId))
+            .willReturn(school)
+
         // when & then
         assertThrows<CodeNotMatchedException> {
-            checkSchoolCodeUseCase.execute(schoolId, "AUTH1234")
+            checkSchoolCodeUseCase.execute(schoolId, "AUTH123")
         }
     }
 }
