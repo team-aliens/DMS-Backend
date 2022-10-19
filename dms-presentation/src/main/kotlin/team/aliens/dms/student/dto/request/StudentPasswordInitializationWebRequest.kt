@@ -21,7 +21,7 @@ data class StudentPasswordInitializationWebRequest(
 
     @field:NotBlank
     @field:Pattern(
-        regexp = "/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,25}$/",
+        regexp = "/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,20}$/",
         message = "영문, 숫자, 기호를 포함한 8~20자이어야 합니다."
     )
     val newPassword: String
