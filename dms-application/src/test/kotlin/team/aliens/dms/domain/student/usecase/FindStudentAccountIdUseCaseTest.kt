@@ -57,7 +57,7 @@ class FindStudentAccountIdUseCaseTest {
             accountId = "이정윤123",
             password = "이정윤123!",
             email = "이정윤14@naver.com",
-            name = name,
+            name = "이정윤",
             profileImageUrl = "http~",
             createdAt = LocalDateTime.now(),
             deletedAt = LocalDateTime.now()
@@ -71,11 +71,12 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `아이디 찾기 성공`() {
+
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
             .willReturn(student)
 
-        given(queryUserPort.queryByStudentId(student.studentId))
+        given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
         given(!queryStudentPort.existsByGcn(grade, classRoom, number))
@@ -93,6 +94,7 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `학생 조회 실패`() {
+
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
             .willReturn(null)
@@ -105,11 +107,12 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `유저 조회 실패`() {
+
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
             .willReturn(student)
 
-        given(queryUserPort.queryByStudentId(student.studentId))
+        given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(null)
 
         // when & then
@@ -120,14 +123,15 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `학생 존재하지 않음`() {
+        
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
             .willReturn(student)
 
-        given(queryUserPort.queryByStudentId(student.studentId))
+        given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(!queryStudentPort.existsByGcn(grade, classRoom, number))
+        given(user.name == name && !queryStudentPort.existsByGcn(grade, classRoom, number))
             .willReturn(false)
 
         // when & then
