@@ -1,5 +1,6 @@
 package team.aliens.dms.student
 
+import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
@@ -33,6 +35,7 @@ class StudentWebAdapter(
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 ) {
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
     fun signup(@RequestBody @Valid signupWebRequest: SignupWebRequest): TokenAndFeaturesResponse {
         val signupRequest = SignupRequest(
