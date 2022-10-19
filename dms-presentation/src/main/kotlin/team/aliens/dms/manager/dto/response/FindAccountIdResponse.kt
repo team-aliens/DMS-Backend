@@ -1,4 +1,4 @@
-package team.aliens.dms.user.dto.response
+package team.aliens.dms.manager.dto.response
 
 data class FindAccountIdResponse (
     val email: String
