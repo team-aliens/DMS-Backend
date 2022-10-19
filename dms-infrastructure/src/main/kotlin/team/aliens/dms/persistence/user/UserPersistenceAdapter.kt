@@ -2,7 +2,6 @@ package team.aliens.dms.persistence.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.persistence.user.mapper.UserMapper
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
@@ -17,11 +16,9 @@ class UserPersistenceAdapter(
     override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
 
     override fun existsByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
-    override fun queryByStudentId(studentId: UUID): User? {
-        val user = userRepository.findByIdOrNull(studentId)
-
-        return userMapper.toDomain(user)
-    }
+    override fun queryByUserId(id: UUID) = userMapper.toDomain(
+        userRepository.findByIdOrNull(id)
+    )
 
     override fun queryUserById(id: UUID) = userMapper.toDomain(
         userRepository.findByIdOrNull(id)
