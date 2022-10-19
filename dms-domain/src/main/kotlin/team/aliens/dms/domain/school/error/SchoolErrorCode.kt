@@ -8,7 +8,7 @@ enum class SchoolErrorCode(
 ) : ErrorProperty {
 
     ANSWER_NOT_MATCHED(401, "Answer Not Matched"),
-
+    CODE_NOT_MATCHED(401, "Code Not Matched"),
     SCHOOL_NOT_FOUND(404, "School Not Found");
 
     override fun status(): Int = status

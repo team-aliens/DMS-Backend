@@ -42,6 +42,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
+            .antMatchers(HttpMethod.GET, "/schools/code/{school-id}").permitAll()
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
