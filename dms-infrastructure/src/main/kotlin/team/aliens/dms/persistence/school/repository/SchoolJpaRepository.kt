@@ -7,4 +7,7 @@ import java.util.UUID
 
 @Repository
 interface SchoolJpaRepository : CrudRepository<SchoolJpaEntity, UUID> {
+
+    fun findByCode(code: String): SchoolJpaEntity?
+
 }

@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.school
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.SchoolPort
 import team.aliens.dms.persistence.school.mapper.SchoolMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
@@ -19,5 +20,9 @@ class SchoolPersistenceAdapter(
 
     override fun querySchoolById(id: UUID) = schoolMapper.toDomain(
         schoolRepository.findByIdOrNull(id)
+    )
+
+    override fun querySchoolByCode(code: String) = schoolMapper.toDomain(
+        schoolRepository.findByCode(code)
     )
 }
