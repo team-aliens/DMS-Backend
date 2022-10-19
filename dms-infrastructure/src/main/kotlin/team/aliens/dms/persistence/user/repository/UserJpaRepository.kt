@@ -10,4 +10,5 @@ interface UserJpaRepository : CrudRepository<UserJpaEntity, UUID> {
     fun existsByEmail(email: String): Boolean
     fun existsByAccountId(accountId: String): Boolean
     fun findBySchoolId(schoolId: UUID) : UserJpaEntity?
+    fun findByAccountId(accountId: String): UserJpaEntity?
 }

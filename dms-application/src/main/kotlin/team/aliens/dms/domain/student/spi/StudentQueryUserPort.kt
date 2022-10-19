@@ -7,4 +7,5 @@ interface StudentQueryUserPort {
     fun existsByEmail(email: String): Boolean
     fun existsByAccountId(accountId: String): Boolean
     fun queryByUserId(id: UUID): User?
+    fun queryByAccountId(accountId: String): User?
 }
