@@ -7,9 +7,9 @@ enum class FileErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    INVALID_EXTENSION(400, "제한된 확장자(jpg, jpeg, png)"),
+    INVALID_EXTENSION(400, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)"),
 
-    IO_INTERRUPTED(500, "파일 입출력 처리 중단");
+    IO_INTERRUPTED(500, "Interrupted File IO");
 
     override fun status(): Int = status
     override fun message(): String = message
