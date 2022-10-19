@@ -122,7 +122,7 @@ class StudentPasswordInitializationUseCaseTest {
             .willReturn(user)
 
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
+            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님"))
         }
     }
 
