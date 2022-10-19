@@ -2,13 +2,16 @@ package team.aliens.dms.student
 
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.student.dto.FindAccountIdRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.student.dto.request.FindAccountIdWebRequest
 import team.aliens.dms.student.dto.response.FindAccountIdResponse
 import java.util.UUID
 import javax.validation.constraints.NotBlank
@@ -35,12 +38,16 @@ class StudentWebAdapter(
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
         @PathVariable(name = "school-id") schoolId: UUID,
-        @RequestParam @NotBlank name: String,
-        @RequestParam @NotBlank grade: Int,
-        @RequestParam @NotBlank classRoom: Int,
-        @RequestParam @NotBlank number: Int
+        @ModelAttribute webRequest: FindAccountIdWebRequest
     ): FindAccountIdResponse {
-        val result = findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+        val request = FindAccountIdRequest(
+            name = webRequest.name,
+            grade = webRequest.grade,
+            classRoom = webRequest.classRoom,
+            number = webRequest.number
+        )
+
+        val result = findStudentAccountIdUseCase.execute(schoolId, request)
 
         return FindAccountIdResponse(result)
     }

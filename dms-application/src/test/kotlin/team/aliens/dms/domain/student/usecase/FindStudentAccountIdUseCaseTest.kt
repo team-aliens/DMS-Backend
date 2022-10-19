@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.student.dto.FindAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
@@ -34,19 +35,25 @@ class FindStudentAccountIdUseCaseTest {
     private lateinit var findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 
     private val schoolId = UUID.randomUUID()
-    private val name = "이정윤"
-    private val grade = 2
-    private val classRoom = 3
-    private val number = 10
+
+
+    private val request by lazy {
+        FindAccountIdRequest(
+            name = "이정윤",
+            grade = 2,
+            classRoom = 3,
+            number = 10
+        )
+    }
 
     private val student by lazy {
         Student(
             studentId = UUID.randomUUID(),
             roomNumber = 318,
             schoolId = schoolId,
-            grade = grade,
-            classRoom = classRoom,
-            number = number
+            grade = request.grade,
+            classRoom = request.classRoom,
+            number = request.number
         )
     }
 
@@ -73,20 +80,20 @@ class FindStudentAccountIdUseCaseTest {
     fun `아이디 찾기 성공`() {
 
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
 
         given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(!queryStudentPort.existsByGcn(grade, classRoom, number))
+        given(!queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
             .willReturn(true)
 
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn("dlw********")
 
         // when
-        val response = findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+        val response = findStudentAccountIdUseCase.execute(schoolId, request)
 
         // then
         assertEquals(response, "dlw********")
@@ -96,12 +103,12 @@ class FindStudentAccountIdUseCaseTest {
     fun `학생 조회 실패`() {
 
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(null)
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, request)
         }
     }
 
@@ -109,7 +116,7 @@ class FindStudentAccountIdUseCaseTest {
     fun `유저 조회 실패`() {
 
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
 
         given(queryUserPort.queryByUserId(student.studentId))
@@ -117,26 +124,26 @@ class FindStudentAccountIdUseCaseTest {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, request)
         }
     }
 
     @Test
     fun `학생 존재하지 않음`() {
-        
+
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number))
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
 
         given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(user.name == name && !queryStudentPort.existsByGcn(grade, classRoom, number))
+        given(user.name == request.name && !queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
             .willReturn(false)
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
+            findStudentAccountIdUseCase.execute(schoolId, request)
         }
     }
 }
