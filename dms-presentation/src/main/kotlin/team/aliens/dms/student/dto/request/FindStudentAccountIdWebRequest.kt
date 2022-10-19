@@ -7,12 +7,9 @@ data class FindStudentAccountIdWebRequest(
     @field:NotBlank
     val name: String,
 
-    @field:NotBlank
     val grade: Int,
 
-    @field:NotBlank
     val classRoom: Int,
 
-    @field:NotBlank
     val number: Int,
 )
