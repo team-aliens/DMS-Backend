@@ -85,9 +85,6 @@ class FindStudentAccountIdUseCaseTest {
         given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(!queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
-            .willReturn(true)
-
         given(coveredEmailPort.coveredEmail(user.email))
             .willReturn("dlw********")
 
