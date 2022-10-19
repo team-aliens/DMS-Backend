@@ -3,14 +3,6 @@ package team.aliens.dms.global.error
 import org.springframework.validation.BindException
 import org.springframework.validation.FieldError
 
-/**
- *
- * Error 를 반환하는 ErrorResponse 
- *
- * @author leejeongyoon
- * @date 2022/09/22
- * @version 1.0.0
- **/
 data class ErrorResponse(
     val status: Int,
     val message: String
