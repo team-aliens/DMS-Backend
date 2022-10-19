@@ -18,7 +18,6 @@ class CertifyEmailCodeUseCase(
 ) {
 
     fun execute(request: CertifyEmailCodeRequest) {
-
         val user = queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
         val authCode = queryAuthCodePort.queryAuthCodeByUserIdAndType(
             userId = user.id,
