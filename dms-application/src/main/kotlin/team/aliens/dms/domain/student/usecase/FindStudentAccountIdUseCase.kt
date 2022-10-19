@@ -11,7 +11,7 @@ import java.util.UUID
 
 /**
  *
- * 학교, 학번의 정보가 옳다면 블록처리된 이메일을 반환하는 FindStudentAccountIdUseCase
+ * 이름과 학번의 정보가 소속된 학교의 학생 정보와 일치한다면 블록처리된 이메일을 반환하는 FindStudentAccountIdUseCase
  *
  * @author leejeongyoon
  * @date 2022/10/19
@@ -29,9 +29,9 @@ class FindStudentAccountIdUseCase(
             schoolId, grade, classRoom, number
         ) ?: throw StudentNotFoundException
         
-        val user = queryUserPort.queryByStudentId(student.studentId) ?: throw UserNotFoundException
+        val user = queryUserPort.queryByUserId(student.studentId) ?: throw UserNotFoundException
 
-        if (!queryStudentPort.existsByGcn(grade, classRoom, number)) {
+        if (user.name == name && !queryStudentPort.existsByGcn(grade, classRoom, number)) {
             throw StudentInfoNotMatchedException
         }
 
