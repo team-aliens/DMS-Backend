@@ -1,17 +1,24 @@
 package team.aliens.dms.student
 
+import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
+import team.aliens.dms.domain.student.dto.StudentPasswordInitializationRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.StudentPasswordInitializationUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
+import team.aliens.dms.student.dto.request.StudentPasswordInitializationWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
 import javax.validation.constraints.NotBlank
@@ -22,7 +29,8 @@ import javax.validation.constraints.NotBlank
 class StudentWebAdapter(
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
-    private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase
+    private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
+    private val passwordInitializationUseCase: StudentPasswordInitializationUseCase
 ) {
 
     @GetMapping("/email/duplication")
@@ -50,5 +58,19 @@ class StudentWebAdapter(
         val result = findStudentAccountIdUseCase.execute(schoolId, request)
 
         return FindStudentAccountIdResponse(result)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/password/initialization")
+    fun passwordInitialization(@RequestBody webRequest: StudentPasswordInitializationWebRequest) {
+        val request = StudentPasswordInitializationRequest(
+            accountId = webRequest.accountId,
+            name = webRequest.name,
+            email = webRequest.email,
+            authCode = webRequest.authCode,
+            newPassword = webRequest.newPassword
+        )
+
+        passwordInitializationUseCase.execute(request)
     }
 }
