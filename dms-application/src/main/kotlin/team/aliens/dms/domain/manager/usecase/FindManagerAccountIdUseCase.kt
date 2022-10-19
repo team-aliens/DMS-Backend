@@ -10,7 +10,7 @@ import team.aliens.dms.global.spi.CoveredEmailPort
 import java.util.*
 
 @ReadOnlyUseCase
-class FindAccountIdUseCase(
+class FindManagerAccountIdUseCase(
     private val managerQuerySchoolPort: ManagerQuerySchoolPort,
     private val managerQueryUserPort: ManagerQueryUserPort,
     private val coveredEmailPort: CoveredEmailPort

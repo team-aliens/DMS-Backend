@@ -1,5 +1,5 @@
 package team.aliens.dms.student.dto.response
 
-data class FindAccountIdResponse(
+data class FindStudentAccountIdResponse(
     val email: String
 )
