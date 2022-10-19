@@ -11,7 +11,7 @@ import team.aliens.dms.global.exception.SendEmailRejectedException
 
 @Component
 class AwsSESAdapter(
-    private val amazonSimpleEmailServiceAsync : AmazonSimpleEmailServiceAsync
+    private val amazonSimpleEmailServiceAsync : AmazonSimpleEmailServiceAsync,
     private val awsSESProperties: AwsSESProperties
 ) : SendEmailPort {
 
