@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.student
 
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
@@ -15,4 +16,10 @@ class StudentPersistenceAdapter(
     override fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) = studentMapper.toDomain(
         studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
     )
+    
+    override fun saveStudent(student: Student) {
+        studentJpaRepository.save(
+            studentMapper.toEntity(student)
+        )
+    }
 }

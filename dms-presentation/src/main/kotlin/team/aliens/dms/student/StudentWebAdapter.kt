@@ -1,15 +1,22 @@
 package team.aliens.dms.student
 
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.student.dto.SignupRequest
+import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
+import team.aliens.dms.domain.student.usecase.SignupUseCase
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
+import team.aliens.dms.student.dto.request.SignupWebRequest
+import javax.validation.Valid
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
@@ -20,10 +27,29 @@ import javax.validation.constraints.NotBlank
 @RequestMapping("/students")
 @RestController
 class StudentWebAdapter(
+    private val signupUseCase: SignupUseCase,
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 ) {
+
+    @PostMapping("/signup")
+    fun signup(@RequestBody @Valid signupWebRequest: SignupWebRequest): TokenAndFeaturesResponse {
+        val signupRequest = SignupRequest(
+            schoolCode = signupWebRequest.schoolCode,
+            schoolAnswer = signupWebRequest.schoolAnswer,
+            email = signupWebRequest.email,
+            authCode = signupWebRequest.authCode,
+            grade = signupWebRequest.grade,
+            classRoom = signupWebRequest.classRoom,
+            number = signupWebRequest.number,
+            accountId = signupWebRequest.accountId,
+            password = signupWebRequest.password,
+            profileImageUrl = signupWebRequest.profileImageUrl
+        )
+
+        return signupUseCase.execute(signupRequest)
+    }
 
     @GetMapping("/email/duplication")
     fun checkDuplicatedEmail(@RequestParam @NotBlank email: String) {
@@ -52,3 +78,4 @@ class StudentWebAdapter(
         return FindStudentAccountIdResponse(result)
     }
 }
+   
