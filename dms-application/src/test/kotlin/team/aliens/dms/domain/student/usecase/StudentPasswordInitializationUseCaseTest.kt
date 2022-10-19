@@ -12,11 +12,11 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.QueryAuthPort
 import team.aliens.dms.domain.student.dto.StudentPasswordInitializationRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserSecurityPort
@@ -30,7 +30,7 @@ class StudentPasswordInitializationUseCaseTest {
     private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
-    private lateinit var queryAuthPort: QueryAuthPort
+    private lateinit var studentQueryAuthPort: StudentQueryAuthPort
 
     @MockBean
     private lateinit var studentCommandUserPort: StudentCommandUserPort
@@ -86,7 +86,7 @@ class StudentPasswordInitializationUseCaseTest {
     @BeforeEach
     fun setUp() {
         studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
-            queryUserPort, queryAuthPort, studentCommandUserPort, userSecurityPort
+            queryUserPort, studentQueryAuthPort, studentCommandUserPort, userSecurityPort
         )
     }
 
@@ -96,7 +96,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+        given(studentQueryAuthPort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
         given(userSecurityPort.encode(request.newPassword))
@@ -138,7 +138,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+        given(studentQueryAuthPort.queryAuthCodeByUserId(user.id))
             .willReturn(null)
 
         // when & then
@@ -153,7 +153,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+        given(studentQueryAuthPort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
         // when & then
