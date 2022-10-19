@@ -13,13 +13,14 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository
 ) : StudentPort {
 
-    override fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) = studentMapper.toDomain(
-        studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
-    )
-    
-    override fun saveStudent(student: Student) {
-        studentJpaRepository.save(
+    override fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) =
+        studentMapper.toDomain(
+            studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
+        )
+
+    override fun saveStudent(student: Student) = studentMapper.toDomain(
+        studentRepository.save(
             studentMapper.toEntity(student)
         )
-    }
+    )!!
 }
