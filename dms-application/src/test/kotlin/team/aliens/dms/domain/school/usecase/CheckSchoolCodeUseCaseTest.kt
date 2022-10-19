@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.school.exception.CodeNotMatchedException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
@@ -71,7 +72,7 @@ class CheckSchoolCodeUseCaseTest {
     @Test
     fun `학교 인증코드 불일치`() {
         // when & then
-        assertThrows<SchoolNotFoundException> {
+        assertThrows<CodeNotMatchedException> {
             checkSchoolCodeUseCase.execute(schoolId, "AUTH1234")
         }
     }
