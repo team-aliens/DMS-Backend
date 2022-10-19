@@ -78,7 +78,6 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `아이디 찾기 성공`() {
-
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
@@ -101,7 +100,6 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `학생 조회 실패`() {
-
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(null)
@@ -114,7 +112,6 @@ class FindStudentAccountIdUseCaseTest {
 
     @Test
     fun `유저 조회 실패`() {
-
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
@@ -129,8 +126,7 @@ class FindStudentAccountIdUseCaseTest {
     }
 
     @Test
-    fun `학생 정보 불일치`() {
-
+    fun `학생 이름 불일치`() {
         // given
         given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
             .willReturn(student)
@@ -138,12 +134,9 @@ class FindStudentAccountIdUseCaseTest {
         given(queryUserPort.queryByUserId(student.studentId))
             .willReturn(user)
 
-        given(!queryStudentPort.existsByGcn(request.grade, request.classRoom, request.number))
-            .willReturn(false)
-
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            findStudentAccountIdUseCase.execute(schoolId, request)
+            findStudentAccountIdUseCase.execute(schoolId, request.copy(name = "이준서"))
         }
     }
 }
