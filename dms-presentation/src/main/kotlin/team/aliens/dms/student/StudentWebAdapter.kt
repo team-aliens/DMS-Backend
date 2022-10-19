@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.student.dto.response.CoveredEmailResponse
+import team.aliens.dms.student.dto.response.FindAccountIdResponse
 import java.util.UUID
 import javax.validation.constraints.NotBlank
 
@@ -39,9 +39,9 @@ class StudentWebAdapter(
         @RequestParam @NotBlank grade: Int,
         @RequestParam @NotBlank classRoom: Int,
         @RequestParam @NotBlank number: Int
-    ): CoveredEmailResponse {
+    ): FindAccountIdResponse {
         val result = findStudentAccountIdUseCase.execute(schoolId, name, grade, classRoom, number)
 
-        return CoveredEmailResponse(result)
+        return FindAccountIdResponse(result)
     }
 }

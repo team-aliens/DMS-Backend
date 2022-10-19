@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
-import team.aliens.dms.user.dto.response.FindAccountIdResponse
+import team.aliens.dms.manager.dto.response.FindAccountIdResponse
 import java.util.*
 import javax.validation.constraints.NotBlank
 
