@@ -1,0 +1,154 @@
+package team.aliens.dms.domain.student.usecase
+
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito.given
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
+import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
+import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.auth.spi.QueryAuthPort
+import team.aliens.dms.domain.student.dto.StudentPasswordInitializationRequest
+import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.StudentCommandUserPort
+import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.spi.UserSecurityPort
+import java.time.LocalDateTime
+import java.util.*
+
+@ExtendWith(SpringExtension::class)
+class StudentPasswordInitializationUseCaseTest {
+
+    @MockBean
+    private lateinit var queryUserPort: StudentQueryUserPort
+
+    @MockBean
+    private lateinit var queryAuthPort: QueryAuthPort
+
+    @MockBean
+    private lateinit var studentCommandUserPort: StudentCommandUserPort
+
+    @MockBean
+    private lateinit var userSecurityPort: UserSecurityPort
+
+    private lateinit var studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
+
+    private val accountId = "dlwjddbs13"
+
+    private val email = "dlwjddbs13@naver.com"
+
+    private val name = "이정윤"
+
+    private val code = "AUTH12"
+
+    private val password = "이정윤비번"
+
+    private val user by lazy {
+        User(
+            id = UUID.randomUUID(),
+            schoolId = UUID.randomUUID(),
+            accountId = "111111",
+            password = password,
+            email = email,
+            name = name,
+            profileImageUrl = "http",
+            createdAt = LocalDateTime.now(),
+            deletedAt = null
+        )
+    }
+
+    private val authCode by lazy {
+        AuthCode(
+            code = code,
+            userId = UUID.randomUUID(),
+            type = EmailType.PASSWORD,
+            expirationTime = 123
+        )
+    }
+
+    private val request by lazy {
+        StudentPasswordInitializationRequest(
+            accountId = accountId,
+            name = name,
+            email = email,
+            authCode = code,
+            newPassword = password
+        )
+    }
+
+    @BeforeEach
+    fun setUp() {
+        studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
+            queryUserPort, queryAuthPort, studentCommandUserPort, userSecurityPort
+        )
+    }
+
+    @Test
+    fun `인증코드 일치`() {
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(user)
+
+        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+            .willReturn(authCode)
+
+        given(userSecurityPort.encode(request.newPassword))
+            .willReturn(password)
+
+        assertDoesNotThrow {
+            studentPasswordInitializationUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `유저 존재하지 않음`() {
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(null)
+
+        assertThrows<StudentNotFoundException> {
+            studentPasswordInitializationUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `학생 정보 불일치`() {
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(user)
+
+        assertThrows<StudentInfoNotMatchedException> {
+            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
+        }
+    }
+
+    @Test
+    fun `인증코드 존재하지 않음`() {
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(user)
+
+        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+            .willReturn(null)
+
+        assertThrows<AuthCodeNotFoundException> {
+            studentPasswordInitializationUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `인증코드 불일치`() {
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(user)
+
+        given(queryAuthPort.queryAuthCodeByUserId(user.id))
+            .willReturn(authCode)
+
+        assertThrows<AuthCodeNotMatchedException> {
+            studentPasswordInitializationUseCase.execute(request.copy(authCode = "222222"))
+        }
+    }
+}
