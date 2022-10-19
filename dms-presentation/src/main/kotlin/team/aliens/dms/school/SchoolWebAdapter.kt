@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.usecase.CheckSchoolAnswerUseCase
+import team.aliens.dms.domain.school.usecase.CheckSchoolCodeUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolQuestionUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
+import team.aliens.dms.school.dto.response.SchoolIdResponse
 import team.aliens.dms.school.dto.response.SchoolQuestionResponse
 import java.util.*
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
 
 @Validated
 @RequestMapping("/schools")
@@ -20,7 +23,8 @@ import javax.validation.constraints.NotBlank
 class SchoolWebAdapter(
     private val querySchoolsUseCase: QuerySchoolsUseCase,
     private val querySchoolQuestionUseCase: QuerySchoolQuestionUseCase,
-    private val checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase
+    private val checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase,
+    private val checkSchoolCodeUseCase: CheckSchoolCodeUseCase
 ) {
 
     @GetMapping
@@ -46,4 +50,13 @@ class SchoolWebAdapter(
         )
     }
 
+    @GetMapping("/code/{school-id}")
+    fun checkCode(
+        @PathVariable(name = "school-id") schoolId: UUID,
+        @RequestParam @NotBlank @Size(max = 8) schoolCode: String
+    ): SchoolIdResponse {
+        val result = checkSchoolCodeUseCase.execute(schoolId, schoolCode)
+
+        return SchoolIdResponse(result)
+    }
 }
