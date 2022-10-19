@@ -1,4 +1,6 @@
 package team.aliens.dms.domain.auth.spi
 
-interface AuthPort : QueryAuthPort {
+import team.aliens.dms.domain.student.spi.StudentQueryAuthPort
+
+interface AuthPort : QueryAuthPort, StudentQueryAuthPort {
 }
