@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.auth.dto
 
-import java.util.Date
+import java.time.LocalDateTime
 
 data class TokenResponse(
 
     val accessToken: String,
 
-    val expiredAt: Date,
+    val expiredAt: LocalDateTime,
 
     val refreshToken: String
 )
