@@ -16,6 +16,9 @@ class UserPersistenceAdapter(
     override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
 
     override fun existsByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
+    override fun queryByUserId(id: UUID) = userMapper.toDomain(
+        userRepository.findByIdOrNull(id)
+    )
 
     override fun queryUserById(id: UUID) = userMapper.toDomain(
         userRepository.findByIdOrNull(id)

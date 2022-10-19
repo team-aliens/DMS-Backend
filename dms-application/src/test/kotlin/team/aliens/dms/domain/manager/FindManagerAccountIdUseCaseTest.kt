@@ -12,7 +12,7 @@ import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.manager.usecase.FindAccountIdUseCase
+import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
@@ -22,7 +22,7 @@ import java.util.UUID
 
 
 @ExtendWith(SpringExtension::class)
-class FindAccountIdUseCaseTest {
+class FindManagerAccountIdUseCaseTest {
 
     @MockBean
     private lateinit var managerQuerySchoolPort: ManagerQuerySchoolPort
@@ -33,11 +33,11 @@ class FindAccountIdUseCaseTest {
     @MockBean
     private lateinit var coveredEmailPort: CoveredEmailPort
 
-    private lateinit var findAccountIdUseCase: FindAccountIdUseCase
+    private lateinit var findManagerAccountIdUseCase: FindManagerAccountIdUseCase
 
     @BeforeEach
     fun setUp() {
-        findAccountIdUseCase = FindAccountIdUseCase(
+        findManagerAccountIdUseCase = FindManagerAccountIdUseCase(
             managerQuerySchoolPort,
             managerQueryUserPort,
             coveredEmailPort
@@ -83,7 +83,7 @@ class FindAccountIdUseCaseTest {
             .willReturn(coveredEmail)
 
         // when
-        val response = findAccountIdUseCase.execute(id, answer)
+        val response = findManagerAccountIdUseCase.execute(id, answer)
 
         // then
         assertThat(response).isNotNull()
@@ -104,7 +104,7 @@ class FindAccountIdUseCaseTest {
 
         // when then
         assertThrows<AnswerNotMatchedException> {
-            findAccountIdUseCase.execute(id, answer)
+            findManagerAccountIdUseCase.execute(id, answer)
         }
     }
 
@@ -118,7 +118,7 @@ class FindAccountIdUseCaseTest {
 
         // when & then
         assertThrows<SchoolNotFoundException> {
-            findAccountIdUseCase.execute(id, answer)
+            findManagerAccountIdUseCase.execute(id, answer)
         }
     }
 
@@ -132,7 +132,7 @@ class FindAccountIdUseCaseTest {
 
         // when & then
         assertThrows<ManagerNotFoundException> {
-            findAccountIdUseCase.execute(id, answer)
+            findManagerAccountIdUseCase.execute(id, answer)
         }
     }
 }
