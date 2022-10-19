@@ -11,8 +11,8 @@ import team.aliens.dms.domain.student.dto.FindAccountIdRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.student.dto.request.FindAccountIdWebRequest
-import team.aliens.dms.student.dto.response.FindAccountIdResponse
+import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
+import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
 import javax.validation.constraints.NotBlank
 
@@ -38,8 +38,8 @@ class StudentWebAdapter(
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
         @PathVariable(name = "school-id") schoolId: UUID,
-        @ModelAttribute webRequest: FindAccountIdWebRequest
-    ): FindAccountIdResponse {
+        @ModelAttribute webRequest: FindStudentAccountIdWebRequest
+    ): FindStudentAccountIdResponse {
         val request = FindAccountIdRequest(
             name = webRequest.name,
             grade = webRequest.grade,
@@ -49,6 +49,6 @@ class StudentWebAdapter(
 
         val result = findStudentAccountIdUseCase.execute(schoolId, request)
 
-        return FindAccountIdResponse(result)
+        return FindStudentAccountIdResponse(result)
     }
 }
