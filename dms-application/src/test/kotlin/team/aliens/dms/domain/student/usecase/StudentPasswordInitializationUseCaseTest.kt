@@ -92,6 +92,7 @@ class StudentPasswordInitializationUseCaseTest {
 
     @Test
     fun `인증코드 일치`() {
+        // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
@@ -101,6 +102,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(userSecurityPort.encode(request.newPassword))
             .willReturn(password)
 
+        // when & then
         assertDoesNotThrow {
             studentPasswordInitializationUseCase.execute(request)
         }
@@ -108,9 +110,11 @@ class StudentPasswordInitializationUseCaseTest {
 
     @Test
     fun `유저 존재하지 않음`() {
+        // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(null)
 
+        // when & then
         assertThrows<StudentNotFoundException> {
             studentPasswordInitializationUseCase.execute(request)
         }
@@ -118,22 +122,26 @@ class StudentPasswordInitializationUseCaseTest {
 
     @Test
     fun `학생 정보 불일치`() {
+        // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
+        // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님"))
+            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
         }
     }
 
     @Test
     fun `인증코드 존재하지 않음`() {
+        // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
         given(queryAuthPort.queryAuthCodeByUserId(user.id))
             .willReturn(null)
 
+        // when & then
         assertThrows<AuthCodeNotFoundException> {
             studentPasswordInitializationUseCase.execute(request)
         }
@@ -141,12 +149,14 @@ class StudentPasswordInitializationUseCaseTest {
 
     @Test
     fun `인증코드 불일치`() {
+        // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
         given(queryAuthPort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
+        // when & then
         assertThrows<AuthCodeNotMatchedException> {
             studentPasswordInitializationUseCase.execute(request.copy(authCode = "222222"))
         }
