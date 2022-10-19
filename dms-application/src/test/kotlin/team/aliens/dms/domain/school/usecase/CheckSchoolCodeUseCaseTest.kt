@@ -46,7 +46,7 @@ class CheckSchoolCodeUseCaseTest {
 
     @Test
     fun `학교 인증코드 일치`() {
-        //given
+        // given
         given(querySchoolPort.querySchoolById(schoolId))
             .willReturn(school)
 
