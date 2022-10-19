@@ -1,15 +1,15 @@
-package team.aliens.dms.domain.student.error
+package team.aliens.dms.domain.file.error
 
 import team.aliens.dms.global.error.ErrorProperty
 
-enum class StudentErrorCode(
+enum class FileErrorCode(
     private val status: Int,
     private val message: String
 ) : ErrorProperty {
 
-    STUDENT_NOT_FOUND(404, "Student Not Found"),
-    STUDENT_INFO_NOT_MATCHED(401, "Student Info Not Matched")
-    ;
+    INVALID_EXTENSION(400, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)"),
+
+    IO_INTERRUPTED(500, "Interrupted File IO");
 
     override fun status(): Int = status
     override fun message(): String = message

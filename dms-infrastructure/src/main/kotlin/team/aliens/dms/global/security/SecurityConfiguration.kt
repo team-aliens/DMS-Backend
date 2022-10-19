@@ -29,10 +29,11 @@ class SecurityConfiguration(
 
         http
             .authorizeRequests()
-            
+
             // students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
+            .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
@@ -41,6 +42,10 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
+            .antMatchers(HttpMethod.GET, "/schools/code/{school-id}").permitAll()
+
+            // /files
+            .antMatchers(HttpMethod.POST, "/files").permitAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
