@@ -53,3 +53,8 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+cloud:
+  aws:
+    ses:
+      source: ${SES_SENDER}
