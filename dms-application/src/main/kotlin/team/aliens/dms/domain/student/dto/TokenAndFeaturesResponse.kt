@@ -1,18 +1,16 @@
 package team.aliens.dms.domain.student.dto
 
-import java.util.Date
+import java.time.LocalDateTime
 
 data class TokenAndFeaturesResponse(
     val accessToken: String,
-    val expiredAt: Date,
+    val expiredAt: LocalDateTime,
     val refreshToken: String,
     val features: Features
 ) {
-
-    inner class Features(
-        val noticeService: Boolean,
-        val menuService: Boolean,
+    data class Features(
         val mealService: Boolean,
-        val lostService: Boolean
+        val noticeService: Boolean,
+        val pointService: Boolean
     )
 }
