@@ -67,4 +67,12 @@ class CheckSchoolCodeUseCaseTest {
             checkSchoolCodeUseCase.execute(schoolId, schoolCode)
         }
     }
+
+    @Test
+    fun `학교 인증코드 불일치`() {
+        // when & then
+        assertThrows<SchoolNotFoundException> {
+            checkSchoolCodeUseCase.execute(schoolId, "AUTH1234")
+        }
+    }
 }
