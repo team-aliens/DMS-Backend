@@ -21,7 +21,7 @@ class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
         return sb.toString();
     }
 
-    override fun getRandomNumberString(number: Int): String {
+    override fun randomNumber(number: Int): String {
 
         val random = SecureRandom()
         var codeList: List<Char> = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
