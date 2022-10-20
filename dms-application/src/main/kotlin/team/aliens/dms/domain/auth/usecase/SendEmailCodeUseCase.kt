@@ -39,7 +39,7 @@ class SendEmailCodeUseCase(
         )
         commandAuthCodePort.saveAuthCode(authCode)
 
-        sendEmailPort.sendEmailCode(request.email, request.type, code)
+        sendEmailPort.sendAuthCode(request.email, request.type, code)
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
     }
