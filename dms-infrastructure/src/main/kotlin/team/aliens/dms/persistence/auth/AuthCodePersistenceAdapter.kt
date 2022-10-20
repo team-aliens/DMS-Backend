@@ -18,7 +18,7 @@ class AuthCodePersistenceAdapter(
         authCodeRepository.save(authCodeMapper.toEntity(authCode))
     )!!
 
-    override fun queryAuthCodeByUserIdAndType(
+    override fun queryAuthCodeByUserIdAndEmailType(
         userId: UUID,
         type: EmailType
     ) = authCodeMapper.toDomain(

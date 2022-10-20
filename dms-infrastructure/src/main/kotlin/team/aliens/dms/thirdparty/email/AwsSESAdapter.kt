@@ -6,14 +6,14 @@ import com.amazonaws.services.simpleemail.model.MessageRejectedException
 import com.amazonaws.services.simpleemail.model.SendTemplatedEmailRequest
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.SendEmailPort
-import team.aliens.dms.global.exception.SendEmailRejectedException
+import team.aliens.dms.domain.auth.spi.SendAuthPort
+import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
 
 @Component
 class AwsSESAdapter(
     private val amazonSimpleEmailServiceAsync : AmazonSimpleEmailServiceAsync,
     private val awsSESProperties: AwsSESProperties
-) : SendEmailPort {
+) : SendAuthPort {
 
     override fun sendEmailCode(email: String, type: EmailType, code: String) {
         val templateName = type.templateName

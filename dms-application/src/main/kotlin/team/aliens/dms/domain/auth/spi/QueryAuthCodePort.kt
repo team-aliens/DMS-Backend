@@ -5,5 +5,5 @@ import team.aliens.dms.domain.auth.model.EmailType
 import java.util.UUID
 
 interface QueryAuthCodePort {
-    fun queryAuthCodeByUserIdAndType(userId: UUID, type: EmailType) : AuthCode?
+    fun queryAuthCodeByUserIdAndEmailType(userId: UUID, type: EmailType) : AuthCode?
 }

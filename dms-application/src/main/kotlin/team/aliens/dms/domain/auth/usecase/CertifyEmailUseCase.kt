@@ -13,7 +13,7 @@ class CertifyEmailUseCase(
 
     fun execute(request: CertifyEmailRequest) {
         val user = queryUserPort.queryUserByAccountId(request.accountId)
-            ?: throw UserNotFoundException;
+            ?: throw UserNotFoundException
 
         if (user.email != request.email) {
             throw EmailMismatchException

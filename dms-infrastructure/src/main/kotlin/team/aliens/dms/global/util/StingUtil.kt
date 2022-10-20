@@ -2,12 +2,12 @@ package team.aliens.dms.global.util
 
 import org.springframework.stereotype.Component
 import team.aliens.dms.global.spi.CoveredEmailPort
-import team.aliens.dms.global.spi.GenerateRandomNumberStringPort
+import team.aliens.dms.global.spi.ReceiveRandomStringPort
 import java.lang.StringBuilder
 import java.security.SecureRandom
 
 @Component
-class StingUtil : CoveredEmailPort, GenerateRandomNumberStringPort {
+class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
 
     override fun coveredEmail(email: String): String {
         val index = email.indexOf('@')
