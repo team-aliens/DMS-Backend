@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.manager
+package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -12,14 +12,12 @@ import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.global.spi.CoveredEmailPort
 import java.time.LocalDate
 import java.util.UUID
-
 
 @ExtendWith(SpringExtension::class)
 class FindManagerAccountIdUseCaseTest {

@@ -1,7 +1,9 @@
 package team.aliens.dms.domain.auth.model
 
-enum class EmailType {
+enum class EmailType(
+    val templateName: String
+) {
 
-    SIGNUP, PASSWORD
-
+    //TODO 템플릿 이름 추가
+    SIGNUP(""), PASSWORD("")
 }

@@ -32,11 +32,13 @@ dependencies {
     // jwt
     implementation(Dependencies.JWT)
 
+    // aws
+    implementation(Dependencies.AWS_SES)
+    implementation(Dependencies.SPRING_AWS)
+
     // configuration
     implementation(Dependencies.CONFIGURATION_PROCESSOR)
 
-    // aws
-    implementation(Dependencies.SPRING_AWS)
 }
 
 kapt {
