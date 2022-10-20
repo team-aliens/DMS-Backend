@@ -14,9 +14,9 @@ import team.aliens.dms.global.annotation.UseCase
 @UseCase
 class StudentPasswordInitializationUseCase(
     private val queryUserPort: StudentQueryUserPort,
-    private val studentQueryAuthCodePort: StudentQueryAuthCodePort,
-    private val studentCommandUserPort: StudentCommandUserPort,
-    private val studentSecurityPort: StudentSecurityPort
+    private val queryAuthCodePort: StudentQueryAuthCodePort,
+    private val commandUserPort: StudentCommandUserPort,
+    private val securityPort: StudentSecurityPort
 ) {
 
     fun execute(request: StudentPasswordInitializationRequest) {
@@ -26,14 +26,14 @@ class StudentPasswordInitializationUseCase(
             throw StudentInfoNotMatchedException
         }
 
-        val authCode = studentQueryAuthCodePort.queryAuthCodeByUserId(user.id) ?: throw AuthCodeNotFoundException
+        val authCode = queryAuthCodePort.queryAuthCodeByUserId(user.id) ?: throw AuthCodeNotFoundException
 
         if (request.authCode != authCode.code) {
             throw AuthCodeNotMatchedException
         }
 
-        studentCommandUserPort.saveUser(
-            user.copy(password = studentSecurityPort.encode(request.newPassword))
+        commandUserPort.saveUser(
+            user.copy(password = securityPort.encode(request.newPassword))
         )
     }
 }

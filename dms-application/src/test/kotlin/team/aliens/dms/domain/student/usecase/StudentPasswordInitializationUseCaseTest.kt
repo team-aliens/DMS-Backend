@@ -30,13 +30,13 @@ class StudentPasswordInitializationUseCaseTest {
     private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
-    private lateinit var studentQueryAuthCodePort: StudentQueryAuthCodePort
+    private lateinit var queryAuthCodePort: StudentQueryAuthCodePort
 
     @MockBean
-    private lateinit var studentCommandUserPort: StudentCommandUserPort
+    private lateinit var commandUserPort: StudentCommandUserPort
 
     @MockBean
-    private lateinit var studentSecurityPort: StudentSecurityPort
+    private lateinit var securityPort: StudentSecurityPort
 
     private lateinit var studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
 
@@ -106,7 +106,7 @@ class StudentPasswordInitializationUseCaseTest {
     @BeforeEach
     fun setUp() {
         studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
-            queryUserPort, studentQueryAuthCodePort, studentCommandUserPort, studentSecurityPort
+            queryUserPort, queryAuthCodePort, commandUserPort, securityPort
         )
     }
 
@@ -116,10 +116,10 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(studentQueryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
-        given(studentSecurityPort.encode(request.newPassword))
+        given(securityPort.encode(request.newPassword))
             .willReturn(password)
 
         // when & then
@@ -184,7 +184,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(studentQueryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
             .willReturn(null)
 
         // when & then
@@ -199,7 +199,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(studentQueryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
         // when & then
