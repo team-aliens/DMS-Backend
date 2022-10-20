@@ -2,6 +2,7 @@ package team.aliens.dms.domain.auth.usecase
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -14,14 +15,14 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.*
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.spi.GenerateRandomNumberStringPort
+import team.aliens.dms.global.spi.ReceiveRandomStringPort
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class SendEmailCodeUseCaseTest {
 
     @MockBean
-    private lateinit var sendEmailPort: SendEmailPort
+    private lateinit var sendEmailPort: SendAuthPort
 
     @MockBean
     private lateinit var queryUserPort: AuthQueryUserPort
@@ -30,7 +31,7 @@ class SendEmailCodeUseCaseTest {
     private lateinit var commandAuthCodePort: CommandAuthCodePort
 
     @MockBean
-    private lateinit var getEmailCodePort: GenerateRandomNumberStringPort
+    private lateinit var getEmailCodePort: ReceiveRandomStringPort
 
     @MockBean
     private lateinit var queryAuthCodeLimitPort: QueryAuthCodeLimitPort
@@ -60,17 +61,19 @@ class SendEmailCodeUseCaseTest {
 
     private val email = "email@dsm.hs.kr"
 
-    private val user = User(
-        id = id,
-        schoolId = id,
-        accountId = "accountId",
-        password = "password",
-        email = email,
-        name = "김범지인",
-        profileImageUrl = "https://~~",
-        createdAt = null,
-        deletedAt = null
-    )
+    private val user by lazy {
+        User(
+            id = id,
+            schoolId = id,
+            accountId = "accountId",
+            password = "password",
+            email = email,
+            name = "김범지인",
+            profileImageUrl = "https://~~",
+            createdAt = null,
+            deletedAt = null
+        )
+    }
 
     val request = SendEmailCodeRequest(
         email, type
@@ -90,13 +93,17 @@ class SendEmailCodeUseCaseTest {
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
-        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndType(id, type))
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndEmailType(id, type))
             .willReturn(authCodeLimit)
-        given(getEmailCodePort.getRandomNumberString(6))
+
+        given(getEmailCodePort.randomNumber(6))
             .willReturn(code)
 
         // when & then
-        sendEmailCodeUseCase.execute(request)
+        assertDoesNotThrow {
+            sendEmailCodeUseCase.execute(request)
+        }
     }
 
     @Test
@@ -105,11 +112,14 @@ class SendEmailCodeUseCaseTest {
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
-        given(getEmailCodePort.getRandomNumberString(6))
+
+        given(getEmailCodePort.randomNumber(6))
             .willReturn(code)
 
         // when & then
-        sendEmailCodeUseCase.execute(request)
+        assertDoesNotThrow {
+            sendEmailCodeUseCase.execute(request)
+        }
     }
 
     @Test
@@ -139,7 +149,8 @@ class SendEmailCodeUseCaseTest {
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
-        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndType(id, type))
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndEmailType(id, type))
             .willReturn(authCodeLimit)
 
         assertThrows<EmailAlreadyCertifiedException> {

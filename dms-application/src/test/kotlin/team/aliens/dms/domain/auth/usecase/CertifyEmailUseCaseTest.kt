@@ -2,6 +2,7 @@ package team.aliens.dms.domain.auth.usecase
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -33,17 +34,19 @@ class CertifyEmailUseCaseTest {
 
     private val accountId = "accountId"
 
-    private val user = User(
-        id = id,
-        schoolId = id,
-        accountId = accountId,
-        password = "password",
-        email = email,
-        name = "김범지인",
-        profileImageUrl = "https://~~",
-        createdAt = null,
-        deletedAt = null
-    )
+    private val user by lazy {
+        User(
+            id = id,
+            schoolId = id,
+            accountId = accountId,
+            password = "password",
+            email = email,
+            name = "김범지인",
+            profileImageUrl = "https://~~",
+            createdAt = null,
+            deletedAt = null
+        )
+    }
 
     @Test
     fun `이메일 검증 성공`() {
@@ -56,7 +59,9 @@ class CertifyEmailUseCaseTest {
             .willReturn(user)
 
         //when then
-        certifyEmailUseCase.execute(request)
+        assertDoesNotThrow {
+            certifyEmailUseCase.execute(request)
+        }
     }
 
     @Test
