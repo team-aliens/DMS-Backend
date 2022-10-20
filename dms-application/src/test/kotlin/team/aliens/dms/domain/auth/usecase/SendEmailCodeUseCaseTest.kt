@@ -22,7 +22,7 @@ import java.util.*
 class SendEmailCodeUseCaseTest {
 
     @MockBean
-    private lateinit var sendEmailPort: SendAuthPort
+    private lateinit var sendEmailPort: SendEmailPort
 
     @MockBean
     private lateinit var queryUserPort: AuthQueryUserPort

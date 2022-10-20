@@ -11,7 +11,7 @@ import team.aliens.dms.global.spi.ReceiveRandomStringPort
 
 @UseCase
 class SendEmailCodeUseCase(
-    private val sendAuthPort: SendAuthPort,
+    private val sendEmailPort: SendEmailPort,
     private val queryUserPort: AuthQueryUserPort,
     private val commandAuthCodePort: CommandAuthCodePort,
     private val receiveRandomStringPort: ReceiveRandomStringPort,
@@ -39,7 +39,7 @@ class SendEmailCodeUseCase(
         )
         commandAuthCodePort.saveAuthCode(authCode)
 
-        sendAuthPort.sendEmailCode(request.email, request.type, code)
+        sendEmailPort.sendEmailCode(request.email, request.type, code)
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
     }
