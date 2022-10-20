@@ -12,7 +12,7 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.student.dto.ResetPasswordStudentRequest
+import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class ResetPasswordStudentUseCaseTest {
+class ResetStudentPasswordUseCaseTest {
 
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
@@ -38,7 +38,7 @@ class ResetPasswordStudentUseCaseTest {
     @MockBean
     private lateinit var securityPort: StudentSecurityPort
 
-    private lateinit var resetPasswordStudentUseCase: ResetPasswordStudentUseCase
+    private lateinit var resetStudentPasswordUseCase: ResetStudentPasswordUseCase
 
     private val accountId = "dlwjddbs13"
 
@@ -74,7 +74,7 @@ class ResetPasswordStudentUseCaseTest {
     }
 
     private val request by lazy {
-        ResetPasswordStudentRequest(
+        ResetStudentPasswordRequest(
             accountId = accountId,
             name = name,
             email = email,
@@ -84,7 +84,7 @@ class ResetPasswordStudentUseCaseTest {
     }
 
     private val notMatchedNameRequest by lazy {
-        ResetPasswordStudentRequest(
+        ResetStudentPasswordRequest(
             accountId = accountId,
             name = "이정윤아님",
             email = email,
@@ -94,7 +94,7 @@ class ResetPasswordStudentUseCaseTest {
     }
 
     private val notMatchedEmailRequest by lazy {
-        ResetPasswordStudentRequest(
+        ResetStudentPasswordRequest(
             accountId = accountId,
             name = name,
             email = "이정윤아님@naver.com",
@@ -105,7 +105,7 @@ class ResetPasswordStudentUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        resetPasswordStudentUseCase = ResetPasswordStudentUseCase(
+        resetStudentPasswordUseCase = ResetStudentPasswordUseCase(
             queryUserPort, queryAuthCodePort, commandUserPort, securityPort
         )
     }
@@ -124,7 +124,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertDoesNotThrow {
-            resetPasswordStudentUseCase.execute(request)
+            resetStudentPasswordUseCase.execute(request)
         }
     }
 
@@ -136,7 +136,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            resetPasswordStudentUseCase.execute(request)
+            resetStudentPasswordUseCase.execute(request)
         }
     }
 
@@ -150,7 +150,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            resetPasswordStudentUseCase.execute(notMatchedNameRequest)
+            resetStudentPasswordUseCase.execute(notMatchedNameRequest)
         }
     }
 
@@ -162,7 +162,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            resetPasswordStudentUseCase.execute(notMatchedEmailRequest)
+            resetStudentPasswordUseCase.execute(notMatchedEmailRequest)
         }
     }
 
@@ -174,7 +174,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            resetPasswordStudentUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
+            resetStudentPasswordUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
         }
     }
 
@@ -189,7 +189,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<AuthCodeNotFoundException> {
-            resetPasswordStudentUseCase.execute(request)
+            resetStudentPasswordUseCase.execute(request)
         }
     }
 
@@ -204,7 +204,7 @@ class ResetPasswordStudentUseCaseTest {
 
         // when & then
         assertThrows<AuthCodeNotMatchedException> {
-            resetPasswordStudentUseCase.execute(request.copy(authCode = "222222"))
+            resetStudentPasswordUseCase.execute(request.copy(authCode = "222222"))
         }
     }
 }

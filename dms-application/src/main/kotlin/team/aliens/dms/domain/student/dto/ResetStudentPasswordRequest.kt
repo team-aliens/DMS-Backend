@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.student.dto
 
-data class ResetPasswordStudentRequest(
+data class ResetStudentPasswordRequest(
 
     val accountId: String,
 

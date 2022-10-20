@@ -4,7 +4,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 
-data class ResetPasswordStudentWebRequest(
+data class ResetStudentPasswordWebRequest(
 
     @field:NotBlank
     val accountId: String,
