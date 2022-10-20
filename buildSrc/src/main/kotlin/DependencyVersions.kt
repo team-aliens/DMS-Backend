@@ -1,6 +1,7 @@
 object DependencyVersions {
     const val JWT_VERSION = "0.9.1"
     const val AWS_VERSION = "2.2.6.RELEASE"
+    const val SES_VERSION = "1.11.852"
     const val REDIS_VERSION = "2.7.2"
     const val SERVLET_VERSION = "4.0.1"
     const val UUID_TIME_VERSION = "3.1.4"

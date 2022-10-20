@@ -36,5 +36,13 @@ class UserPersistenceAdapter(
     override fun saveUser(user: User) = userMapper.toDomain(
         userRepository.save(userMapper.toEntity(user))
     )!!
+
+    override fun queryUserByEmail(email: String) = userMapper.toDomain(
+        userRepository.findByEmail(email)
+    )
+
+    override fun queryUserByAccountId(accountId: String) = userMapper.toDomain(
+        userRepository.findByAccountId(accountId)
+    )
 }
  
