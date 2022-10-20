@@ -8,7 +8,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.user.spi.UserSecurityPort
+import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.global.annotation.UseCase
 
 @UseCase
@@ -16,7 +16,7 @@ class StudentPasswordInitializationUseCase(
     private val queryUserPort: StudentQueryUserPort,
     private val studentQueryAuthCodePort: StudentQueryAuthCodePort,
     private val studentCommandUserPort: StudentCommandUserPort,
-    private val userSecurityPort: UserSecurityPort
+    private val studentSecurityPort: StudentSecurityPort
 ) {
 
     fun execute(request: StudentPasswordInitializationRequest) {
@@ -33,7 +33,7 @@ class StudentPasswordInitializationUseCase(
         }
 
         studentCommandUserPort.saveUser(
-            user.copy(password = userSecurityPort.encode(request.newPassword))
+            user.copy(password = studentSecurityPort.encode(request.newPassword))
         )
     }
 }

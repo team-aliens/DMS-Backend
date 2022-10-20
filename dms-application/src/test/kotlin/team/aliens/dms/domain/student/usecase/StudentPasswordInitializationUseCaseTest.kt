@@ -18,8 +18,8 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.spi.UserSecurityPort
 import java.time.LocalDateTime
 import java.util.*
 
@@ -36,7 +36,7 @@ class StudentPasswordInitializationUseCaseTest {
     private lateinit var studentCommandUserPort: StudentCommandUserPort
 
     @MockBean
-    private lateinit var userSecurityPort: UserSecurityPort
+    private lateinit var studentSecurityPort: StudentSecurityPort
 
     private lateinit var studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
 
@@ -106,7 +106,7 @@ class StudentPasswordInitializationUseCaseTest {
     @BeforeEach
     fun setUp() {
         studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
-            queryUserPort, studentQueryAuthCodePort, studentCommandUserPort, userSecurityPort
+            queryUserPort, studentQueryAuthCodePort, studentCommandUserPort, studentSecurityPort
         )
     }
 
@@ -119,7 +119,7 @@ class StudentPasswordInitializationUseCaseTest {
         given(studentQueryAuthCodePort.queryAuthCodeByUserId(user.id))
             .willReturn(authCode)
 
-        given(userSecurityPort.encode(request.newPassword))
+        given(studentSecurityPort.encode(request.newPassword))
             .willReturn(password)
 
         // when & then
