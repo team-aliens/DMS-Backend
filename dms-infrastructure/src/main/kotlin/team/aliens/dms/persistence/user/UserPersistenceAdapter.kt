@@ -33,8 +33,8 @@ class UserPersistenceAdapter(
         userRepository.findBySchoolId(schoolId)
     )
 
-    override fun saveUser(user: User) {
+    override fun saveUser(user: User) = userMapper.toDomain(
         userRepository.save(userMapper.toEntity(user))
-    }
+    )!!
 }
  
