@@ -12,7 +12,8 @@ enum class AuthErrorCode(
     AUTH_CODE_NOT_FOUND(404, "Auth Code Not Found"),
     AUTH_CODE_NOT_MATCHED(401, "Auth Code Not Matched"),
     EMAIL_ALREADY_CERTIFIED(409, "Email Already Certified"),
-    AUTH_CODE_OVER_LIMITED(429, "Auth Code Over Limited")
+    AUTH_CODE_OVER_LIMITED(429, "Auth Code Over Limited"),
+    AUTH_CODE_NOT_MATCHED(401, "Auth Code Not Matched")
     ;
 
     override fun status(): Int = status

@@ -10,4 +10,5 @@ import java.util.*
 interface AuthCodeEntityRepository : CrudRepository<AuthCodeEntity, String> {
     fun findByUserId(userId: UUID): AuthCodeEntity?
     fun findByUserIdAndType(userId: UUID, type: EmailType) : AuthCodeEntity?
+    fun findByUserId(userId: UUID): AuthCodeEntity?
 }
