@@ -19,7 +19,7 @@ class CertifyEmailCodeUseCase(
 
     fun execute(request: CertifyEmailCodeRequest) {
         val user = queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
-        val authCode = queryAuthCodePort.queryAuthCodeByUserIdAndType(
+        val authCode = queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
             userId = user.id,
             type = request.type
         ) ?: throw AuthCodeNotFoundException
@@ -29,7 +29,10 @@ class CertifyEmailCodeUseCase(
         }
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(
-            AuthCodeLimit.certified(user.id, request.type)
+            AuthCodeLimit.certified(
+                userId = user.id,
+                type = request.type
+            )
         )
     }
 }
