@@ -3,6 +3,6 @@ package team.aliens.dms.domain.student.spi
 import team.aliens.dms.domain.auth.model.AuthCode
 import java.util.*
 
-interface StudentQueryAuthPort {
+interface StudentQueryAuthCodePort {
     fun queryAuthCodeByUserId(userId: UUID): AuthCode?
 }
