@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
-import team.aliens.dms.domain.student.dto.StudentPasswordInitializationRequest
+import team.aliens.dms.domain.student.dto.ResetPasswordStudentRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.StudentPasswordInitializationUseCase
+import team.aliens.dms.domain.student.usecase.ResetPasswordStudentUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
-import team.aliens.dms.student.dto.request.StudentPasswordInitializationWebRequest
+import team.aliens.dms.student.dto.request.ResetPasswordStudentWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
 import javax.validation.Valid
@@ -31,7 +31,7 @@ class StudentWebAdapter(
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
-    private val studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
+    private val resetPasswordStudentUseCase: ResetPasswordStudentUseCase
 ) {
 
     @GetMapping("/email/duplication")
@@ -63,8 +63,8 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password/initialization")
-    fun passwordInitialization(@RequestBody @Valid webRequest: StudentPasswordInitializationWebRequest) {
-        val request = StudentPasswordInitializationRequest(
+    fun resetPassword(@RequestBody @Valid webRequest: ResetPasswordStudentWebRequest) {
+        val request = ResetPasswordStudentRequest(
             accountId = webRequest.accountId,
             name = webRequest.name,
             email = webRequest.email,
@@ -72,6 +72,6 @@ class StudentWebAdapter(
             newPassword = webRequest.newPassword
         )
 
-        studentPasswordInitializationUseCase.execute(request)
+        resetPasswordStudentUseCase.execute(request)
     }
 }
