@@ -83,6 +83,26 @@ class StudentPasswordInitializationUseCaseTest {
         )
     }
 
+    private val notMatchedNameRequest by lazy {
+        StudentPasswordInitializationRequest(
+            accountId = accountId,
+            name = "이정윤아님",
+            email = email,
+            authCode = code,
+            newPassword = password
+        )
+    }
+
+    private val notMatchedEmailRequest by lazy {
+        StudentPasswordInitializationRequest(
+            accountId = accountId,
+            name = name,
+            email = "이정윤아님@naver.com",
+            authCode = code,
+            newPassword = password
+        )
+    }
+
     @BeforeEach
     fun setUp() {
         studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
@@ -120,17 +140,7 @@ class StudentPasswordInitializationUseCaseTest {
         }
     }
 
-    @Test
-    fun `학생 정보 전부 불일치`() {
-        // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
 
-        // when & then
-        assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
-        }
-    }
 
     @Test
     fun `학생 정보 이름 불일치`() {
@@ -140,7 +150,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님"))
+            studentPasswordInitializationUseCase.execute(notMatchedNameRequest)
         }
     }
 
@@ -152,7 +162,19 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(email = "이정윤아님@naver.com"))
+            studentPasswordInitializationUseCase.execute(notMatchedEmailRequest)
+        }
+    }
+
+    @Test
+    fun `학생 정보 전부 불일치`() {
+        // given
+        given(queryUserPort.queryByAccountId(request.accountId))
+            .willReturn(user)
+
+        // when & then
+        assertThrows<StudentInfoNotMatchedException> {
+            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
         }
     }
 
