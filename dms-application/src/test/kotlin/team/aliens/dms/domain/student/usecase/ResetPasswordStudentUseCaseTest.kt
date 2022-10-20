@@ -12,7 +12,7 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.student.dto.StudentPasswordInitializationRequest
+import team.aliens.dms.domain.student.dto.ResetPasswordStudentRequest
 import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class StudentPasswordInitializationUseCaseTest {
+class ResetPasswordStudentUseCaseTest {
 
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
@@ -38,7 +38,7 @@ class StudentPasswordInitializationUseCaseTest {
     @MockBean
     private lateinit var securityPort: StudentSecurityPort
 
-    private lateinit var studentPasswordInitializationUseCase: StudentPasswordInitializationUseCase
+    private lateinit var resetPasswordStudentUseCase: ResetPasswordStudentUseCase
 
     private val accountId = "dlwjddbs13"
 
@@ -74,7 +74,7 @@ class StudentPasswordInitializationUseCaseTest {
     }
 
     private val request by lazy {
-        StudentPasswordInitializationRequest(
+        ResetPasswordStudentRequest(
             accountId = accountId,
             name = name,
             email = email,
@@ -84,7 +84,7 @@ class StudentPasswordInitializationUseCaseTest {
     }
 
     private val notMatchedNameRequest by lazy {
-        StudentPasswordInitializationRequest(
+        ResetPasswordStudentRequest(
             accountId = accountId,
             name = "이정윤아님",
             email = email,
@@ -94,7 +94,7 @@ class StudentPasswordInitializationUseCaseTest {
     }
 
     private val notMatchedEmailRequest by lazy {
-        StudentPasswordInitializationRequest(
+        ResetPasswordStudentRequest(
             accountId = accountId,
             name = name,
             email = "이정윤아님@naver.com",
@@ -105,7 +105,7 @@ class StudentPasswordInitializationUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        studentPasswordInitializationUseCase = StudentPasswordInitializationUseCase(
+        resetPasswordStudentUseCase = ResetPasswordStudentUseCase(
             queryUserPort, queryAuthCodePort, commandUserPort, securityPort
         )
     }
@@ -124,7 +124,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertDoesNotThrow {
-            studentPasswordInitializationUseCase.execute(request)
+            resetPasswordStudentUseCase.execute(request)
         }
     }
 
@@ -136,7 +136,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            studentPasswordInitializationUseCase.execute(request)
+            resetPasswordStudentUseCase.execute(request)
         }
     }
 
@@ -150,7 +150,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(notMatchedNameRequest)
+            resetPasswordStudentUseCase.execute(notMatchedNameRequest)
         }
     }
 
@@ -162,7 +162,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(notMatchedEmailRequest)
+            resetPasswordStudentUseCase.execute(notMatchedEmailRequest)
         }
     }
 
@@ -174,7 +174,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<StudentInfoNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
+            resetPasswordStudentUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
         }
     }
 
@@ -189,7 +189,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<AuthCodeNotFoundException> {
-            studentPasswordInitializationUseCase.execute(request)
+            resetPasswordStudentUseCase.execute(request)
         }
     }
 
@@ -204,7 +204,7 @@ class StudentPasswordInitializationUseCaseTest {
 
         // when & then
         assertThrows<AuthCodeNotMatchedException> {
-            studentPasswordInitializationUseCase.execute(request.copy(authCode = "222222"))
+            resetPasswordStudentUseCase.execute(request.copy(authCode = "222222"))
         }
     }
 }
