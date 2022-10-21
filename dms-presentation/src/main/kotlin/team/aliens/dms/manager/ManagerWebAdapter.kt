@@ -3,9 +3,9 @@ package team.aliens.dms.manager
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import team.aliens.dms.domain.manager.dto.ResetPasswordManagerRequest
+import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
-import team.aliens.dms.domain.manager.usecase.ResetPasswordManagerUseCase
+import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.manager.dto.request.ResetPasswordManagerWebRequest
 import team.aliens.dms.manager.dto.response.FindManagerAccountIdResponse
 import java.util.*
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotBlank
 @RestController
 class ManagerWebAdapter(
     private val findManagerAccountIdUseCase: FindManagerAccountIdUseCase,
-    private val resetPasswordManagerUseCase: ResetPasswordManagerUseCase
+    private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -36,13 +36,13 @@ class ManagerWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password/initialization")
     fun resetPassword(@RequestBody @Valid webRequest: ResetPasswordManagerWebRequest) {
-        val request = ResetPasswordManagerRequest(
+        val request = ResetManagerPasswordRequest(
             accountId = webRequest.accountId,
             email = webRequest.email,
             authCode = webRequest.authCode,
             newPassword = webRequest.newPassword
         )
 
-        resetPasswordManagerUseCase.execute(request)
+        resetManagerPasswordUseCase.execute(request)
     }
 }
