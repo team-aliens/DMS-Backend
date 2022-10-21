@@ -10,5 +10,5 @@ interface ManagerQueryUserPort {
 
     fun queryByAccountId(accountId: String): User?
 
-    fun queryByEmail(email: String): User?
+    fun queryUserByEmail(email: String): User?
 }

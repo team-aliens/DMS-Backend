@@ -44,9 +44,5 @@ class UserPersistenceAdapter(
     override fun queryUserByAccountId(accountId: String) = userMapper.toDomain(
         userRepository.findByAccountId(accountId)
     )
-
-    override fun saveUser(user: User): User {
-        TODO("Not yet implemented")
-    }
 }
  
