@@ -1,5 +1,6 @@
 package team.aliens.dms.manager.dto.request
 
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 
@@ -9,6 +10,7 @@ data class ResetPasswordManagerWebRequest(
     val accountId: String,
 
     @field:NotBlank
+    @field:Email
     val email: String,
 
     @field:NotBlank
