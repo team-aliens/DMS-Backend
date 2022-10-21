@@ -10,7 +10,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.global.annotation.UseCase
 
 @UseCase
-class ResetPasswordManagerUseCase(
+class ResetManagerPasswordUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryAuthCodePort: ManagerQueryAuthCodePort,
     private val
