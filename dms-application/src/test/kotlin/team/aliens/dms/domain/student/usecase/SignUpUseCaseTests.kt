@@ -90,7 +90,7 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val savedUserStub: User by lazy {
+    private val savedUserStub by lazy {
         User(
             id = UUID.randomUUID(),
             schoolId = schoolStub.id,
