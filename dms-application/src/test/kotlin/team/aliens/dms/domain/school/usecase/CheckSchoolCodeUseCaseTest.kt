@@ -9,11 +9,10 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.CodeNotMatchedException
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class CheckSchoolCodeUseCaseTest {
@@ -26,7 +25,7 @@ class CheckSchoolCodeUseCaseTest {
     private val schoolId = UUID.randomUUID()
     private val schoolCode = "AUTH1234"
 
-    private val school by lazy {
+    private val schoolStub by lazy {
         School(
             id = schoolId,
             name = "이정윤",
@@ -47,37 +46,25 @@ class CheckSchoolCodeUseCaseTest {
     @Test
     fun `학교 인증코드 일치`() {
         // given
-        given(querySchoolPort.querySchoolById(schoolId))
-            .willReturn(school)
+        given(querySchoolPort.querySchoolByCode(schoolCode))
+            .willReturn(schoolStub)
 
         // when
-        val response = checkSchoolCodeUseCase.execute(schoolId, "AUTH1234")
+        val response = checkSchoolCodeUseCase.execute(schoolCode)
 
         // then
         assertEquals(response, schoolId)
     }
 
     @Test
-    fun `학교 존재하지 않음`() {
+    fun `학교 인증코드 불일치`() {
         // given
-        given(querySchoolPort.querySchoolById(schoolId))
+        given(querySchoolPort.querySchoolByCode(schoolCode))
             .willReturn(null)
 
         // when & then
-        assertThrows<SchoolNotFoundException> {
-            checkSchoolCodeUseCase.execute(schoolId, schoolCode)
-        }
-    }
-
-    @Test
-    fun `학교 인증코드 불일치`() {
-        // given
-        given(querySchoolPort.querySchoolById(schoolId))
-            .willReturn(school)
-
-        // when & then
         assertThrows<CodeNotMatchedException> {
-            checkSchoolCodeUseCase.execute(schoolId, "AUTH123")
+            checkSchoolCodeUseCase.execute(schoolCode)
         }
     }
 }

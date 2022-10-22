@@ -4,6 +4,7 @@ import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
+import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
@@ -18,11 +19,12 @@ class CertifyEmailCodeUseCase(
 ) {
 
     fun execute(request: CertifyEmailCodeRequest) {
-        val user = queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
-        val authCode = queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-            userId = user.id,
-            type = request.type
-        ) ?: throw AuthCodeNotFoundException
+        if (EmailType.PASSWORD == request.type) {
+            queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
+        }
+
+        val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)
+            ?: throw AuthCodeNotFoundException
 
         if (authCode.code != request.authCode) {
             throw AuthCodeMismatchException
@@ -30,7 +32,7 @@ class CertifyEmailCodeUseCase(
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(
             AuthCodeLimit.certified(
-                userId = user.id,
+                email = request.email,
                 type = request.type
             )
         )

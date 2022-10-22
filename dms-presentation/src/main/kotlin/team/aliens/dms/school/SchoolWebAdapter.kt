@@ -50,12 +50,11 @@ class SchoolWebAdapter(
         )
     }
 
-    @GetMapping("/code/{school-id}")
+    @GetMapping("/code")
     fun checkCode(
-        @PathVariable(name = "school-id") schoolId: UUID,
         @RequestParam @NotBlank @Size(max = 8) schoolCode: String
     ): SchoolIdResponse {
-        val result = checkSchoolCodeUseCase.execute(schoolId, schoolCode)
+        val result = checkSchoolCodeUseCase.execute(schoolCode)
 
         return SchoolIdResponse(result)
     }
