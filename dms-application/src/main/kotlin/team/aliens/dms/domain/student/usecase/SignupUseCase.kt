@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
+import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
+import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.dto.SignupRequest
@@ -8,6 +10,7 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
@@ -31,6 +34,7 @@ class SignupUseCase(
     private val commandUserPort: StudentCommandUserPort,
     private val querySchoolPort: StudentQuerySchoolPort,
     private val queryUserPort: StudentQueryUserPort,
+    private val queryAuthCodePort: StudentQueryAuthCodePort,
     private val securityPort: StudentSecurityPort,
     private val jwtPort: StudentJwtPort
 ) {
@@ -56,7 +60,14 @@ class SignupUseCase(
             throw UserEmailExistsException
         }
 
-        // TODO 이메일 인증코드 비교
+        /*
+        이메일 인증코드 검사
+         */
+        val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
+
+        if (authCode != authCodeEntity.code) {
+            throw AuthCodeNotMatchedException
+        }
 
         // TODO 학번으로 이름, 호실 조회
 

@@ -9,7 +9,9 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
@@ -33,6 +35,9 @@ class SignUpUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
+    private lateinit var queryAuthCodePort: StudentQueryAuthCodePort
+
+    @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
@@ -50,6 +55,7 @@ class SignUpUseCaseTests {
             commandUserPort,
             querySchoolPort,
             queryUserPort,
+            queryAuthCodePort,
             securityPort,
             jwtPort
         )
@@ -74,6 +80,14 @@ class SignUpUseCaseTests {
             address = "주소",
             contractStartedAt = LocalDate.now(),
             contractEndedAt = null
+        )
+    }
+
+    private val authCodeStub by lazy {
+        AuthCode(
+            code = "123412",
+            email = email,
+            type = EmailType.SIGNUP
         )
     }
 
@@ -173,6 +187,9 @@ class SignUpUseCaseTests {
 
         given(queryUserPort.existsByAccountId(accountId))
             .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
 
         given(securityPort.encode(requestStub.password))
             .willReturn(userStub.password)
