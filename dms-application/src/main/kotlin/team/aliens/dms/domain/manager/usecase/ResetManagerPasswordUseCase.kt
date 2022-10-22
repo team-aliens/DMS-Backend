@@ -20,21 +20,20 @@ class ResetManagerPasswordUseCase(
 ) {
 
     fun execute(request: ResetManagerPasswordRequest) {
-        val userByAccountId = queryUserPort.queryByAccountId(request.accountId) ?: throw ManagerNotFoundException
-        val userByEmail = queryUserPort.queryUserByEmail(request.email) ?: throw ManagerNotFoundException
+        val user = queryUserPort.queryByAccountId(request.accountId) ?: throw ManagerNotFoundException
 
-        if (userByAccountId.id != userByEmail.id) {
+        if (user.email != request.email) {
             throw ManagerInfoNotMatchedException
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByUserId(userByEmail.id) ?: throw AuthCodeNotFoundException
+        val authCode = queryAuthCodePort.queryAuthCodeByUserId(user.id) ?: throw AuthCodeNotFoundException
 
         if (request.authCode != authCode.code) {
             throw AuthCodeNotMatchedException
         }
 
         commandUserPort.saveUser(
-            userByEmail.copy(password = securityPort.encode(request.newPassword))
+            user.copy(password = securityPort.encode(request.newPassword))
         )
     }
 }

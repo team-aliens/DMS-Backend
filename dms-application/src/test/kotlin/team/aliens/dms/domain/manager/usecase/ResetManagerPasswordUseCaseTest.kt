@@ -82,31 +82,12 @@ class ResetManagerPasswordUseCaseTest {
         )
     }
 
-    private val accountIdUser by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            accountId = "111111",
-            password = password,
-            email = email,
-            name = "이정윤",
-            profileImageUrl = "http",
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
-    }
-
-    private val emailUser by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            accountId = "111111",
-            password = password,
-            email = email,
-            name = "이정윤",
-            profileImageUrl = "http",
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+    private val emailErrorRequest by lazy {
+        ResetManagerPasswordRequest(
+            accountId = accountId,
+            email = "이상한이메일",
+            authCode = code,
+            newPassword = password
         )
     }
 
@@ -121,9 +102,6 @@ class ResetManagerPasswordUseCaseTest {
     fun `인증코드 일치`() {
         // given
         given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
-
-        given(queryUserPort.queryUserByEmail(request.email))
             .willReturn(user)
 
         given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
@@ -151,32 +129,14 @@ class ResetManagerPasswordUseCaseTest {
     }
 
     @Test
-    fun `이메일의 유저 존재하지 않음`() {
+    fun `이메일 불일치`() {
         // given
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryUserPort.queryUserByEmail(request.email))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<ManagerNotFoundException> {
-            resetManagerPasswordUseCase.execute(request)
-        }
-    }
-
-    @Test
-    fun `관리자 정보 불일치`() {
-        // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(accountIdUser)
-
-        given(queryUserPort.queryUserByEmail(request.email))
-            .willReturn(emailUser)
-
         // when & then
         assertThrows<ManagerInfoNotMatchedException> {
-            resetManagerPasswordUseCase.execute(request)
+            resetManagerPasswordUseCase.execute(emailErrorRequest)
         }
     }
 
@@ -184,9 +144,6 @@ class ResetManagerPasswordUseCaseTest {
     fun `인증코드 존재하지 않음`() {
         // given
         given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
-
-        given(queryUserPort.queryUserByEmail(request.email))
             .willReturn(user)
 
         given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
@@ -202,9 +159,6 @@ class ResetManagerPasswordUseCaseTest {
     fun `관리자 인증코드 불일치`() {
         // given
         given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
-
-        given(queryUserPort.queryUserByEmail(request.email))
             .willReturn(user)
 
         given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
