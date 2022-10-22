@@ -1,23 +1,18 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.domain.school.exception.CodeNotMatchedException
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.global.annotation.ReadOnlyUseCase
-import java.util.UUID
+import java.util.*
 
 @ReadOnlyUseCase
 class CheckSchoolCodeUseCase(
     private val querySchoolPort: QuerySchoolPort
 ) {
 
-    fun execute(schoolId: UUID, schoolCode: String): UUID {
-        val school = querySchoolPort.querySchoolById(schoolId) ?: throw SchoolNotFoundException
+    fun execute(schoolCode: String): UUID {
+        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw CodeNotMatchedException
 
-        if (schoolCode != school.code) {
-            throw CodeNotMatchedException
-        }
-
-        return schoolId
+        return school.id
     }
 }

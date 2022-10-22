@@ -8,5 +8,5 @@ import java.util.*
 
 @Repository
 interface AuthCodeLimitRepository : CrudRepository<AuthCodeLimitEntity, UUID> {
-    fun findByUserIdAndType(userId: UUID, type: EmailType) : AuthCodeLimitEntity?
+    fun findByEmailAndType(email: String, type: EmailType): AuthCodeLimitEntity?
 }

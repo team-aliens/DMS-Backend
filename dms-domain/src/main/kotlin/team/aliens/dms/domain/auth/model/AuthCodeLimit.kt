@@ -9,7 +9,7 @@ data class AuthCodeLimit(
 
     val id: UUID,
 
-    val userId: UUID,
+    val email: String,
 
     val type: EmailType,
 
@@ -19,9 +19,9 @@ data class AuthCodeLimit(
 
     val expirationTime: Int
 ) {
-    constructor(userId: UUID, type: EmailType) : this(
+    constructor(email: String, type: EmailType) : this(
         id = UUID.randomUUID(),
-        userId = userId,
+        email = email,
         type = type,
         attemptCount = 0,
         isVerified = false,
@@ -33,10 +33,10 @@ data class AuthCodeLimit(
         const val EXPIRED = 1800
         const val VERIFIED_EXPIRED = 2700
 
-        fun certified(userId: UUID, type: EmailType): AuthCodeLimit {
+        fun certified(email: String, type: EmailType): AuthCodeLimit {
             return AuthCodeLimit(
                 id = UUID.randomUUID(),
-                userId = userId,
+                email = email,
                 type = type,
                 attemptCount = MAX_ATTEMPT_COUNT,
                 isVerified = true,
@@ -52,7 +52,7 @@ data class AuthCodeLimit(
 
         return AuthCodeLimit(
             id = id,
-            userId = userId,
+            email = email,
             type = type,
             attemptCount = attemptCount.inc(),
             isVerified = false,

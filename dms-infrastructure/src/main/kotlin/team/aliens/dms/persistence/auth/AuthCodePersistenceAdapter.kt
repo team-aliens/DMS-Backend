@@ -6,7 +6,6 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthCodePort
 import team.aliens.dms.persistence.auth.mapper.AuthCodeMapper
 import team.aliens.dms.persistence.auth.repository.AuthCodeEntityRepository
-import java.util.UUID
 
 @Component
 class AuthCodePersistenceAdapter(
@@ -15,17 +14,16 @@ class AuthCodePersistenceAdapter(
 ) : AuthCodePort {
 
     override fun saveAuthCode(authCode: AuthCode) = authCodeMapper.toDomain(
-        authCodeRepository.save(authCodeMapper.toEntity(authCode))
+        authCodeRepository.save(
+            authCodeMapper.toEntity(authCode)
+        )
     )!!
 
-    override fun queryAuthCodeByUserIdAndEmailType(
-        userId: UUID,
-        type: EmailType
-    ) = authCodeMapper.toDomain(
-        authCodeRepository.findByUserIdAndType(userId, type)
+    override fun queryAuthCodeByEmailAndEmailType(email: String, type: EmailType) = authCodeMapper.toDomain(
+        authCodeRepository.findByEmailAndType(email, type)
     )
 
-    override fun queryAuthCodeByUserId(userId: UUID) = authCodeMapper.toDomain(
-        authCodeRepository.findByUserId(userId)
+    override fun queryAuthCodeByEmail(email: String) = authCodeMapper.toDomain(
+        authCodeRepository.findByEmail(email)
     )
 }
