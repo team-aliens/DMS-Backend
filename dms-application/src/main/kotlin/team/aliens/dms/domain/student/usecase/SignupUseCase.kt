@@ -16,6 +16,14 @@ import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.global.annotation.UseCase
 
+/**
+ *
+ * 학생이 회원가입을 하는 SignupUseCase
+ *
+ * @author kimbeomjin
+ * @date 2022/10/22
+ * @version 1.0.0
+ **/
 @UseCase
 class SignupUseCase(
     private val commandStudentPort: CommandStudentPort,
@@ -33,10 +41,16 @@ class SignupUseCase(
 
         val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolNotFoundException
 
+        /*
+        학교 확인 질문 답변 검사
+         */
         if (school.answer != schoolAnswer) {
             throw SchoolNotFoundException
         }
 
+        /*
+        이메일 중복 검사
+         */
         if (queryUserPort.existsByEmail(email)) {
             throw UserEmailExistsException
         }
@@ -45,6 +59,9 @@ class SignupUseCase(
 
         // TODO 학번으로 이름, 호실 조회
 
+        /*
+        아이디 중복 검사
+         */
         if (queryUserPort.existsByAccountId(accountId)) {
             throw UserAccountIdExistsException
         }
