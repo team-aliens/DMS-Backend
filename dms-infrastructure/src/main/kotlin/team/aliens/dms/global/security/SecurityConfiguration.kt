@@ -30,6 +30,9 @@ class SecurityConfiguration(
         http
             .authorizeRequests()
 
+            // auth
+            .antMatchers("/auth/**").permitAll()
+
             // students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
