@@ -9,4 +9,6 @@ interface QuerySchoolPort {
 
     fun querySchoolById(id: UUID): School?
 
+    fun querySchoolByCode(code: String): School?
+
 }
