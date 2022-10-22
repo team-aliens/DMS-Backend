@@ -79,6 +79,10 @@ class SendEmailCodeUseCaseTest {
         email, type
     )
 
+    val request2 = SendEmailCodeRequest(
+        email, EmailType.SIGNUP
+    )
+
     @Test
     fun `인증번호 발송 성공 case1`() {
         val authCodeLimit = AuthCodeLimit(
@@ -118,6 +122,21 @@ class SendEmailCodeUseCaseTest {
         // when & then
         assertDoesNotThrow {
             sendEmailCodeUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `유저를 찾을 수 없지만 예외 발생 X`() {
+        // given
+        given(queryUserPort.queryUserByEmail(email))
+            .willReturn(null)
+
+        given(getEmailCodePort.randomNumber(6))
+            .willReturn(code)
+
+        // when & then
+        assertDoesNotThrow {
+            sendEmailCodeUseCase.execute(request2)
         }
     }
 
