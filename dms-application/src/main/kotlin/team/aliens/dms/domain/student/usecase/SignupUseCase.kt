@@ -15,6 +15,8 @@ import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.global.annotation.UseCase
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  *
@@ -67,15 +69,12 @@ class SignupUseCase(
         }
 
         val user = commandUserPort.saveUser(
-            User(
+            createUser(
                 schoolId = school.id,
                 accountId = accountId,
-                password = securityPort.encode(password),
+                password = password,
                 email = email,
-                name = "", // TODO 학번으로 조회한 이름
-                profileImageUrl = profileImageUrl,
-                createdAt = null,
-                deletedAt = null
+                profileImageUrl = profileImageUrl
             )
         )
 
@@ -95,11 +94,29 @@ class SignupUseCase(
             accessToken = accessToken,
             expiredAt = expiredAt,
             refreshToken = refreshToken,
-            features = TokenAndFeaturesResponse.Features( // TODO 서비스 관리 테이블 필요
+            features = TokenAndFeaturesResponse.Features(
+                // TODO 서비스 관리 테이블 필요
                 mealService = true,
                 noticeService = true,
                 pointService = true,
             )
         )
     }
+
+    private fun createUser(
+        schoolId: UUID,
+        accountId: String,
+        password: String,
+        email: String,
+        profileImageUrl: String?
+    ) = User(
+        schoolId = schoolId,
+        accountId = accountId,
+        password = securityPort.encode(password),
+        email = email,
+        name = "", // TODO 학번으로 조회한 이름
+        profileImageUrl = profileImageUrl,
+        createdAt = null,
+        deletedAt = null
+    )
 }
