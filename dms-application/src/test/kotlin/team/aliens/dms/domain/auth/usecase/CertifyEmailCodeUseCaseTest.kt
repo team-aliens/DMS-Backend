@@ -68,7 +68,7 @@ class CertifyEmailCodeUseCaseTest {
     private val authCode by lazy {
         AuthCode(
             code = code,
-            userId = id,
+            email = email,
             type = type,
             expirationTime = 0
         )
@@ -85,8 +85,8 @@ class CertifyEmailCodeUseCaseTest {
             .willReturn(user)
 
         given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
+                email,
                 type
             )
         ).willReturn(authCode)
@@ -124,8 +124,8 @@ class CertifyEmailCodeUseCaseTest {
             .willReturn(user)
 
         given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
+                email,
                 type
             )
         ).willReturn(null)
@@ -148,8 +148,8 @@ class CertifyEmailCodeUseCaseTest {
             .willReturn(user)
 
         given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
+                email,
                 type
             )
         ).willReturn(authCode)

@@ -83,7 +83,7 @@ class SendEmailCodeUseCaseTest {
     fun `인증번호 발송 성공 case1`() {
         val authCodeLimit = AuthCodeLimit(
             id = id,
-            userId = id,
+            email = email,
             type = type,
             attemptCount = 0,
             isVerified = false,
@@ -94,7 +94,7 @@ class SendEmailCodeUseCaseTest {
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
 
-        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndEmailType(id, type))
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
             .willReturn(authCodeLimit)
 
         given(getEmailCodePort.randomNumber(6))
@@ -108,7 +108,6 @@ class SendEmailCodeUseCaseTest {
 
     @Test
     fun `인증번호 발송 성공 case2`() {
-
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
@@ -124,7 +123,6 @@ class SendEmailCodeUseCaseTest {
 
     @Test
     fun `유저를 찾을 수 없음`() {
-
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(null)
@@ -139,7 +137,7 @@ class SendEmailCodeUseCaseTest {
     fun `이미 인증됨`() {
         val authCodeLimit = AuthCodeLimit(
             id = id,
-            userId = id,
+            email = email,
             type = type,
             attemptCount = 0,
             isVerified = true,
@@ -150,7 +148,7 @@ class SendEmailCodeUseCaseTest {
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(user)
 
-        given(queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndEmailType(id, type))
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
             .willReturn(authCodeLimit)
 
         assertThrows<EmailAlreadyCertifiedException> {
