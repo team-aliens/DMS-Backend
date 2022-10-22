@@ -26,7 +26,7 @@ class ResetManagerPasswordUseCase(
             throw ManagerInfoNotMatchedException
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByUserId(user.id) ?: throw AuthCodeNotFoundException
+        val authCode = queryAuthCodePort.queryAuthCodeByEmail(request.email) ?: throw AuthCodeNotFoundException
 
         if (request.authCode != authCode.code) {
             throw AuthCodeNotMatchedException

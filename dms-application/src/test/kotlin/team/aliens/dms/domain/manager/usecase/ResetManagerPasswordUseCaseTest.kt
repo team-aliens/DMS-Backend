@@ -67,7 +67,7 @@ class ResetManagerPasswordUseCaseTest {
     private val authCode by lazy {
         AuthCode(
             code = code,
-            userId = userId,
+            email = email,
             type = EmailType.PASSWORD,
             expirationTime = 123
         )
@@ -104,7 +104,7 @@ class ResetManagerPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
             .willReturn(authCode)
 
         given(securityPort.encode(request.newPassword))
@@ -146,7 +146,7 @@ class ResetManagerPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
             .willReturn(null)
 
         // when & then
@@ -161,7 +161,7 @@ class ResetManagerPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
             .willReturn(authCode.copy(code = "이상한코드임"))
 
         // when & then
