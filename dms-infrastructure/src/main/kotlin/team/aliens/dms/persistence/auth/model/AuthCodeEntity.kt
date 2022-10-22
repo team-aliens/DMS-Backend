@@ -16,7 +16,7 @@ data class AuthCodeEntity(
 
     @Indexed
     @field:NotNull
-    val userId: UUID,
+    val email: String,
 
     @field:NotNull
     val type: EmailType,

@@ -5,5 +5,5 @@ import team.aliens.dms.domain.auth.model.EmailType
 import java.util.UUID
 
 interface QueryAuthCodeLimitPort {
-    fun queryAuthCodeLimitByUserIdAndEmailType(userId: UUID, type: EmailType) : AuthCodeLimit?
+    fun queryAuthCodeLimitByEmailAndEmailType(email: String, type: EmailType) : AuthCodeLimit?
 }

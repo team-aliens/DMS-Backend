@@ -8,6 +8,6 @@ import java.util.*
 
 @Repository
 interface AuthCodeEntityRepository : CrudRepository<AuthCodeEntity, String> {
-    fun findByUserId(userId: UUID): AuthCodeEntity?
-    fun findByUserIdAndType(userId: UUID, type: EmailType) : AuthCodeEntity?
+    fun findByEmail(email: String): AuthCodeEntity?
+    fun findByEmailAndType(email: String, type: EmailType) : AuthCodeEntity?
 }
