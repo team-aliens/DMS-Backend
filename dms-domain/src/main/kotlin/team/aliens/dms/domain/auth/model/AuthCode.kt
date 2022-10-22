@@ -1,22 +1,21 @@
 package team.aliens.dms.domain.auth.model
 
 import team.aliens.dms.global.annotation.Aggregate
-import java.util.*
 
 @Aggregate
 data class AuthCode(
 
     val code: String,
 
-    val userId: UUID,
+    val email: String,
 
     val type: EmailType,
 
     val expirationTime: Int,
 ) {
-    constructor(code: String, userId: UUID, type: EmailType) : this(
+    constructor(code: String, email: String, type: EmailType) : this(
         code = code,
-        userId = userId,
+        email = email,
         type = type,
         expirationTime = EXPIRED
     )
