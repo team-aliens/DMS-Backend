@@ -10,5 +10,7 @@ data class RefreshToken(
 
     val userId: UUID,
 
+    val authority: Authority,
+
     val expirationTime: Int
 )
