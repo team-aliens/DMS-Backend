@@ -67,7 +67,7 @@ class ResetStudentPasswordUseCaseTest {
     private val authCode by lazy {
         AuthCode(
             code = code,
-            userId = UUID.randomUUID(),
+            email = "test email",
             type = EmailType.PASSWORD,
             expirationTime = 123
         )
@@ -116,7 +116,7 @@ class ResetStudentPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(user.email))
             .willReturn(authCode)
 
         given(securityPort.encode(request.newPassword))
@@ -184,7 +184,7 @@ class ResetStudentPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(user.email))
             .willReturn(null)
 
         // when & then
@@ -199,7 +199,7 @@ class ResetStudentPasswordUseCaseTest {
         given(queryUserPort.queryByAccountId(request.accountId))
             .willReturn(user)
 
-        given(queryAuthCodePort.queryAuthCodeByUserId(user.id))
+        given(queryAuthCodePort.queryAuthCodeByEmail(user.email))
             .willReturn(authCode)
 
         // when & then

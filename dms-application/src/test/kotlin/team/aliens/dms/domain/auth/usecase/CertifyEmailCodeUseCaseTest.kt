@@ -18,7 +18,7 @@ import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.util.UUID
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 class CertifyEmailCodeUseCaseTest {
@@ -68,7 +68,7 @@ class CertifyEmailCodeUseCaseTest {
     private val authCode by lazy {
         AuthCode(
             code = code,
-            userId = id,
+            email = email,
             type = type,
             expirationTime = 0
         )
@@ -84,12 +84,34 @@ class CertifyEmailCodeUseCaseTest {
         given(queryUserPot.queryUserByEmail(email))
             .willReturn(user)
 
-        given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
-                type
-            )
-        ).willReturn(authCode)
+        given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type))
+            .willReturn(authCode)
+
+        // when & then
+        assertDoesNotThrow {
+            certifyEmailCodeUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `유저를 찾을 수 없지만 예외 발생 X`() {
+        val request = CertifyEmailCodeRequest(
+            email, code, EmailType.SIGNUP
+        )
+
+        val authCode = AuthCode(
+            code = code,
+            email = email,
+            type = EmailType.SIGNUP,
+            expirationTime = 0
+        )
+
+        // given
+        given(queryUserPot.queryUserByEmail(email))
+            .willReturn(null)
+
+        given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, EmailType.SIGNUP))
+            .willReturn(authCode)
 
         // when & then
         assertDoesNotThrow {
@@ -124,8 +146,8 @@ class CertifyEmailCodeUseCaseTest {
             .willReturn(user)
 
         given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
+                email,
                 type
             )
         ).willReturn(null)
@@ -148,8 +170,8 @@ class CertifyEmailCodeUseCaseTest {
             .willReturn(user)
 
         given(
-            queryAuthCodePort.queryAuthCodeByUserIdAndEmailType(
-                id,
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
+                email,
                 type
             )
         ).willReturn(authCode)
