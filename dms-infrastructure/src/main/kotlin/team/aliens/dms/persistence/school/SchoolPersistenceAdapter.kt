@@ -20,4 +20,8 @@ class SchoolPersistenceAdapter(
     override fun querySchoolById(id: UUID) = schoolMapper.toDomain(
         schoolRepository.findByIdOrNull(id)
     )
+
+    override fun querySchoolByCode(code: String) = schoolMapper.toDomain(
+        schoolRepository.findByCode(code)
+    )
 }
