@@ -46,6 +46,8 @@ cloud:
       auto: false
     s3:
       bucket: ${BUCKET_NAME:dms}
+    ses:
+      source: ${SES_SENDER}
 
 logging:
   level:
