@@ -24,7 +24,7 @@ class GenerateJwtAdapter(
         refreshToken = generateRefreshToken(userId)
     )
 
-    private fun generateAccessToken(userId: UUID, authority: Authority) =
+    override fun generateAccessToken(userId: UUID, authority: Authority) =
         Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
@@ -34,7 +34,7 @@ class GenerateJwtAdapter(
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp))
             .compact()
 
-    private fun generateRefreshToken(userId: UUID): String {
+     override fun generateRefreshToken(userId: UUID): String {
         val token = Jwts.builder()
             .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
