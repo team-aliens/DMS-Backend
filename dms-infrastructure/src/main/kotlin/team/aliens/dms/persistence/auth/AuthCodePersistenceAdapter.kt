@@ -25,4 +25,7 @@ class AuthCodePersistenceAdapter(
         authCodeRepository.findByUserIdAndType(userId, type)
     )
 
+    override fun queryAuthCodeByUserId(userId: UUID) = authCodeMapper.toDomain(
+        authCodeRepository.findByUserId(userId)
+    )
 }

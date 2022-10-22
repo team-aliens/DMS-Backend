@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -15,14 +17,18 @@ import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
 import team.aliens.dms.domain.student.usecase.SignupUseCase
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
+import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.student.dto.request.SignupWebRequest
 import javax.validation.Valid
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
+import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
+import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
 @Validated
@@ -32,7 +38,8 @@ class StudentWebAdapter(
     private val signupUseCase: SignupUseCase,
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
-    private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase
+    private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
+    private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -79,6 +86,20 @@ class StudentWebAdapter(
         val result = findStudentAccountIdUseCase.execute(schoolId, request)
 
         return FindStudentAccountIdResponse(result)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/password/initialization")
+    fun resetPassword(@RequestBody @Valid webRequest: ResetStudentPasswordWebRequest) {
+        val request = ResetStudentPasswordRequest(
+            accountId = webRequest.accountId,
+            name = webRequest.name,
+            email = webRequest.email,
+            authCode = webRequest.authCode,
+            newPassword = webRequest.newPassword
+        )
+
+        resetStudentPasswordUseCase.execute(request)
     }
 }
    

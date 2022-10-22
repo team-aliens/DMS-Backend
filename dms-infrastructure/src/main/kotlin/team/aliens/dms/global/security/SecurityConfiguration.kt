@@ -35,6 +35,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
