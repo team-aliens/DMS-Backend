@@ -32,6 +32,11 @@ class SecurityConfiguration(
 
             // auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
+            .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
+            .antMatchers(HttpMethod.GET, "/auth/code").permitAll()
+            .antMatchers(HttpMethod.POST, "/auth/code").permitAll()
+            .antMatchers(HttpMethod.POST, "/auth/tokens").permitAll()
+            .antMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
 
             // students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
