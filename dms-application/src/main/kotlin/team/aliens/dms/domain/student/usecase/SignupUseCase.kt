@@ -3,7 +3,8 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.school.exception.CodeNotMatchedException
 import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
 import team.aliens.dms.domain.student.model.Student
@@ -44,13 +45,13 @@ class SignupUseCase(
             grade, classRoom, number,
             accountId, password, profileImageUrl) = request
 
-        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolNotFoundException
+        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw CodeNotMatchedException
 
         /*
         학교 확인 질문 답변 검사
          */
         if (school.answer != schoolAnswer) {
-            throw SchoolNotFoundException
+            throw AnswerNotMatchedException
         }
 
         /*
