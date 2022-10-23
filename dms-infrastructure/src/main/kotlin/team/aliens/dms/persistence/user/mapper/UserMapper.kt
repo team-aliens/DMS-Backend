@@ -38,7 +38,7 @@ class UserMapper(
             password = domain.password,
             email = domain.email,
             name = domain.name,
-            profileImageUrl = domain.profileImageUrl,
+            profileImageUrl = domain.profileImageUrl!!,
             createdAt = domain.createdAt!!,
             deletedAt = domain.deletedAt
         )
