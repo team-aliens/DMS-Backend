@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import team.aliens.dms.auth.dto.request.CertifyEmailCodeWebRequest
 import team.aliens.dms.auth.dto.request.CertifyEmailWebRequest
 import team.aliens.dms.auth.dto.request.SendEmailCodeWebRequest
+import team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
@@ -12,17 +13,20 @@ import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
 import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
+import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
 import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import javax.validation.Valid
+import javax.validation.constraints.NotBlank
 
 @Validated
 @RequestMapping("/auth")
 @RestController
 class AuthWebAdapter(
-        private val sendEmailCodeUseCase: SendEmailCodeUseCase,
-        private val certifyEmailCodeUseCase: CertifyEmailCodeUseCase,
-        private val certifyEmailUseCase: CertifyEmailUseCase,
-        private val reissueTokenUseCase: ReissueTokenUseCase
+    private val sendEmailCodeUseCase: SendEmailCodeUseCase,
+    private val certifyEmailCodeUseCase: CertifyEmailCodeUseCase,
+    private val certifyEmailUseCase: CertifyEmailUseCase,
+    private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase,
+    private val reissueTokenUseCase: ReissueTokenUseCase
 ) {
 
     @GetMapping("/code")
@@ -59,5 +63,10 @@ class AuthWebAdapter(
     @PutMapping("/reissue")
     fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenResponse {
         return reissueTokenUseCase.execute(refreshToken)
+    }
+    
+    @GetMapping("/account-id")
+    fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): CheckAccountIdExistenceResponse {
+        return CheckAccountIdExistenceResponse(checkAccountIdExistenceUseCase.execute(accountId))
     }
 }

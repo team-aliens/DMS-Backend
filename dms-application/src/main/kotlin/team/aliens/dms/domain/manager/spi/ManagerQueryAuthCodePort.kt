@@ -1,7 +1,7 @@
-package team.aliens.dms.domain.student.spi
+package team.aliens.dms.domain.manager.spi
 
 import team.aliens.dms.domain.auth.model.AuthCode
 
-interface StudentQueryAuthCodePort {
+interface ManagerQueryAuthCodePort {
     fun queryAuthCodeByEmail(email: String): AuthCode?
 }

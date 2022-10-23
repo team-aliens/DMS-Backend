@@ -2,7 +2,7 @@ package team.aliens.dms.domain.user.model
 
 import team.aliens.dms.global.annotation.Aggregate
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Aggregate
 data class User(
@@ -19,7 +19,7 @@ data class User(
 
     val name: String,
 
-    val profileImageUrl: String,
+    val profileImageUrl: String? = PROFILE_IMAGE,
 
     val createdAt: LocalDateTime?,
 

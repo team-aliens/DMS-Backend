@@ -4,4 +4,5 @@ import java.util.UUID
 
 interface ManagerSecurityPort {
     fun getCurrentUserId(): UUID
+    fun encode(password: String): String
 }

@@ -4,7 +4,12 @@ import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
-import team.aliens.dms.domain.auth.spi.*
+import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
+import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
+import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
+import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
+import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.global.annotation.UseCase
 import team.aliens.dms.global.spi.ReceiveRandomStringPort
@@ -20,11 +25,12 @@ class SendEmailCodeUseCase(
 ) {
 
     fun execute(request: SendEmailCodeRequest) {
-        val user = queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
+        if (EmailType.PASSWORD == request.type) {
+            queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
+        }
 
-        val authCodeLimit =
-            queryAuthCodeLimitPort.queryAuthCodeLimitByUserIdAndEmailType(user.id, request.type)
-                ?: AuthCodeLimit(user.id, request.type)
+        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
+            ?: AuthCodeLimit(request.email, request.type)
 
         if (authCodeLimit.isVerified) {
             throw EmailAlreadyCertifiedException
@@ -34,7 +40,7 @@ class SendEmailCodeUseCase(
 
         val authCode = AuthCode(
             code = code,
-            userId = user.id,
+            email = request.email,
             type = request.type
         )
         commandAuthCodePort.saveAuthCode(authCode)

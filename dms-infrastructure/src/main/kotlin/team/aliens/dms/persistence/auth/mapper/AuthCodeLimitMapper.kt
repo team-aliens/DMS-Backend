@@ -12,7 +12,7 @@ class AuthCodeLimitMapper : GenericMapper<AuthCodeLimit, AuthCodeLimitEntity> {
         return entity?.let {
             AuthCodeLimit(
                 id = it.id,
-                userId = it.userId,
+                email = it.email,
                 type = it.type,
                 attemptCount = it.attemptCount,
                 isVerified = it.isVerified,
@@ -24,7 +24,7 @@ class AuthCodeLimitMapper : GenericMapper<AuthCodeLimit, AuthCodeLimitEntity> {
     override fun toEntity(domain: AuthCodeLimit): AuthCodeLimitEntity {
         return AuthCodeLimitEntity(
             id = domain.id,
-            userId = domain.userId,
+            email = domain.email,
             type = domain.type,
             attemptCount = domain.attemptCount,
             isVerified = domain.isVerified,

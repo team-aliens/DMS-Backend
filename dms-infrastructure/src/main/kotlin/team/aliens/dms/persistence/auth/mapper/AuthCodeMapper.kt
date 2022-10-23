@@ -12,7 +12,7 @@ class AuthCodeMapper : GenericMapper<AuthCode, AuthCodeEntity> {
         return entity?.let {
             AuthCode(
                 code = it.code,
-                userId = it.userId,
+                email = it.email,
                 type = it.type,
                 expirationTime = it.expirationTime,
             )
@@ -22,7 +22,7 @@ class AuthCodeMapper : GenericMapper<AuthCode, AuthCodeEntity> {
     override fun toEntity(domain: AuthCode): AuthCodeEntity {
         return AuthCodeEntity(
             code = domain.code,
-            userId = domain.userId,
+            email = domain.email,
             type = domain.type,
             expirationTime = domain.expirationTime,
         )

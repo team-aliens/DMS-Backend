@@ -26,7 +26,7 @@ class ResetStudentPasswordUseCase(
             throw StudentInfoNotMatchedException
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByUserId(user.id) ?: throw AuthCodeNotFoundException
+        val authCode = queryAuthCodePort.queryAuthCodeByEmail(user.email) ?: throw AuthCodeNotFoundException
 
         if (request.authCode != authCode.code) {
             throw AuthCodeNotMatchedException

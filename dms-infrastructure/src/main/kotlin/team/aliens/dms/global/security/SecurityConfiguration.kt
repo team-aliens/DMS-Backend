@@ -31,22 +31,24 @@ class SecurityConfiguration(
             .authorizeRequests()
 
             // auth
-            .antMatchers("/auth/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
 
             // students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
+            .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
+            .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
 
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
-            .antMatchers(HttpMethod.GET, "/schools/code/{school-id}").permitAll()
+            .antMatchers(HttpMethod.GET, "/schools/code").permitAll()
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
