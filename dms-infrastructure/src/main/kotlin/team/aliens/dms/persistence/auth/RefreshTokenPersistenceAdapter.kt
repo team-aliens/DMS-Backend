@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.auth
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.domain.auth.spi.RefreshTokenPort
 import team.aliens.dms.persistence.auth.mapper.RefreshTokenMapper
 import team.aliens.dms.persistence.auth.repository.RefreshTokenRepository
