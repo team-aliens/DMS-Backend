@@ -4,14 +4,14 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.spi.SecurityPort
-import java.util.UUID
+import java.util.*
 
 @Component
 class SecurityAdapter(
     private val passwordEncoder: PasswordEncoder
 ) : SecurityPort {
 
-    override fun getCurrentUserId() : UUID {
+    override fun getCurrentUserId(): UUID {
         return UUID.fromString(SecurityContextHolder.getContext().authentication.name);
     }
 
