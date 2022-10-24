@@ -4,8 +4,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.meal.spi.MealQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 
-interface UserPort : StudentQueryUserPort, StudentCommandUserPort, ManagerQueryUserPort, ManagerCommandUserPort, AuthQueryUserPort, MealQueryUserPort {
+interface UserPort : StudentQueryUserPort, StudentCommandUserPort, ManagerQueryUserPort, ManagerCommandUserPort, AuthQueryUserPort {
 }
