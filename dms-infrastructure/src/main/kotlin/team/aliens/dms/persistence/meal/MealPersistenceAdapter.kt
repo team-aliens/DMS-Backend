@@ -15,7 +15,7 @@ class MealPersistenceAdapter(
     private val mealRepository: MealJpaRepository
 ) : MealPort {
 
-    override fun queryAllById(mealDate: LocalDate, schoolId: UUID): List<Meal> {
+    override fun queryAllByMealDateAndSchoolId(mealDate: LocalDate, schoolId: UUID): List<Meal> {
         val mealId = MealJpaEntityId(mealDate, schoolId)
 
         return mealRepository.findAllById(mealId).map {

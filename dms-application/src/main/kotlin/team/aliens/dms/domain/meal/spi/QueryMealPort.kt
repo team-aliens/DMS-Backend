@@ -5,5 +5,5 @@ import java.time.LocalDate
 import java.util.UUID
 
 interface QueryMealPort {
-    fun queryAllById(mealDate: LocalDate, schoolId: UUID): List<Meal>
+    fun queryAllByMealDateAndSchoolId(mealDate: LocalDate, schoolId: UUID): List<Meal>
 }
