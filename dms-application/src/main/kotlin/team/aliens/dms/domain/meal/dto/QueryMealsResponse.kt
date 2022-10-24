@@ -2,11 +2,11 @@ package team.aliens.dms.domain.meal.dto
 
 import java.time.LocalDate
 
-data class MealDetailsResponse(
-    val meals: List<Meal>
+data class QueryMealsResponse(
+    val meals: List<MealDetail>
 ) {
 
-    data class Meal(
+    data class MealDetail(
         val date: LocalDate,
         val breakfast: List<String>,
         val lunch: List<String>,

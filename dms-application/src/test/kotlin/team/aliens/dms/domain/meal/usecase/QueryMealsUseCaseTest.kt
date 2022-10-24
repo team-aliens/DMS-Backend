@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.meal.exception.MealNotFoundException
 import team.aliens.dms.domain.meal.model.Meal
-import team.aliens.dms.domain.meal.spi.MealQueryStudentSecurityPort
+import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.meal.spi.MealQueryUserPort
 import team.aliens.dms.domain.meal.spi.QueryMealPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -20,10 +20,10 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class MealDetailsUseCaseTest {
+class QueryMealsUseCaseTest {
 
     @MockBean
-    private lateinit var queryStudentSecurityPort: MealQueryStudentSecurityPort
+    private lateinit var securityPort: MealSecurityPort
 
     @MockBean
     private lateinit var queryUserPort: MealQueryUserPort
@@ -31,7 +31,7 @@ class MealDetailsUseCaseTest {
     @MockBean
     private lateinit var queryMealPort: QueryMealPort
 
-    private lateinit var mealDetailsUseCase: MealDetailsUseCase
+    private lateinit var queryMealsUseCase: QueryMealsUseCase
 
     private val mealDate = LocalDate.now()
 
@@ -39,7 +39,7 @@ class MealDetailsUseCaseTest {
 
     private val schoolId = UUID.randomUUID()
 
-    private val student by lazy {
+    private val user by lazy {
         User(
             id = userId,
             schoolId = schoolId,
@@ -95,83 +95,83 @@ class MealDetailsUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        mealDetailsUseCase = MealDetailsUseCase(queryStudentSecurityPort, queryUserPort, queryMealPort)
+        queryMealsUseCase = QueryMealsUseCase(securityPort, queryUserPort, queryMealPort)
     }
 
     @Test
     fun `급식 조회 성공`() {
-        given(queryStudentSecurityPort.getCurrentUserId())
+        given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
         given(queryUserPort.queryByUserId(userId))
-            .willReturn(student)
+            .willReturn(user)
 
-        given(queryMealPort.queryAllById(mealDate, schoolId))
+        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(meal))
 
-        val response = mealDetailsUseCase.execute(mealDate)
+        val response = queryMealsUseCase.execute(mealDate)
 
         assertThat(response)
     }
 
     @Test
     fun `학생 존재하지 않음`() {
-        given(queryStudentSecurityPort.getCurrentUserId())
+        given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
         given(queryUserPort.queryByUserId(userId))
             .willReturn(null)
 
         assertThrows<StudentNotFoundException> {
-            mealDetailsUseCase.execute(mealDate)
+            queryMealsUseCase.execute(mealDate)
         }
     }
 
     @Test
     fun `아침 존재하지 않음`() {
-        given(queryStudentSecurityPort.getCurrentUserId())
+        given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
         given(queryUserPort.queryByUserId(userId))
-            .willReturn(student)
+            .willReturn(user)
 
-        given(queryMealPort.queryAllById(mealDate, schoolId))
+        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(mealBreakfastError))
 
         assertThrows<MealNotFoundException> {
-            mealDetailsUseCase.execute(mealDate)
+            queryMealsUseCase.execute(mealDate)
         }
     }
 
     @Test
     fun `점심 존재하지 않음`() {
-        given(queryStudentSecurityPort.getCurrentUserId())
+        given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
         given(queryUserPort.queryByUserId(userId))
-            .willReturn(student)
+            .willReturn(user)
 
-        given(queryMealPort.queryAllById(mealDate, schoolId))
+        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(mealLunchError))
 
         assertThrows<MealNotFoundException> {
-            mealDetailsUseCase.execute(mealDate)
+            queryMealsUseCase.execute(mealDate)
         }
     }
 
     @Test
     fun `저녁 존재하지 않음`() {
-        given(queryStudentSecurityPort.getCurrentUserId())
+        given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
         given(queryUserPort.queryByUserId(userId))
-            .willReturn(student)
+            .willReturn(user)
 
-        given(queryMealPort.queryAllById(mealDate, schoolId))
+        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(mealDinnerError))
 
         assertThrows<MealNotFoundException> {
-            mealDetailsUseCase.execute(mealDate)
+            queryMealsUseCase.execute(mealDate)
         }
     }
 }
