@@ -32,31 +32,31 @@ class AuthWebAdapter(
     @GetMapping("/code")
     fun certifyEmailCode(@ModelAttribute request: CertifyEmailCodeWebRequest) {
         certifyEmailCodeUseCase.execute(
-                CertifyEmailCodeRequest(
-                        email = request.email,
-                        authCode = request.authCode,
-                        type = request.type.toString()
-                )
+            CertifyEmailCodeRequest(
+                email = request.email,
+                authCode = request.authCode,
+                type = request.type.toString()
+            )
         )
     }
 
     @PostMapping("/code")
     fun sendEmailCode(@RequestBody @Valid request: SendEmailCodeWebRequest) {
         sendEmailCodeUseCase.execute(
-                SendEmailCodeRequest(
-                        email = request.email,
-                        type = request.type.toString()
-                )
+            SendEmailCodeRequest(
+                email = request.email,
+                type = request.type.toString()
+            )
         )
     }
 
     @GetMapping("/email")
     fun certifyEmail(@ModelAttribute request: CertifyEmailWebRequest) {
         certifyEmailUseCase.execute(
-                CertifyEmailRequest(
-                        accountId = request.accountId,
-                        email = request.email
-                )
+            CertifyEmailRequest(
+                accountId = request.accountId,
+                email = request.email
+            )
         )
     }
 
@@ -64,7 +64,7 @@ class AuthWebAdapter(
     fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
-    
+
     @GetMapping("/account-id")
     fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): CheckAccountIdExistenceResponse {
         return CheckAccountIdExistenceResponse(checkAccountIdExistenceUseCase.execute(accountId))

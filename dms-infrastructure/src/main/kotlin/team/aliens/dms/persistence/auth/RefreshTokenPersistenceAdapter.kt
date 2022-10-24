@@ -7,11 +7,11 @@ import team.aliens.dms.persistence.auth.repository.RefreshTokenRepository
 
 @Component
 class RefreshTokenPersistenceAdapter(
-        private val refreshTokenMapper: RefreshTokenMapper,
-        private val refreshTokenRepository: RefreshTokenRepository
+    private val refreshTokenMapper: RefreshTokenMapper,
+    private val refreshTokenRepository: RefreshTokenRepository
 ) : RefreshTokenPort {
 
     override fun queryRefreshTokenByToken(token: String) = refreshTokenMapper.toDomain(
-            refreshTokenRepository.findByToken(token)
+        refreshTokenRepository.findByToken(token)
     )
 }

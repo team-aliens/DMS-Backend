@@ -4,9 +4,9 @@ import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.RefreshTokenNotFoundException
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
+import team.aliens.dms.global.annotation.UseCase
 
-@ReadOnlyUseCase
+@UseCase
 class ReissueTokenUseCase(
         private val queryRefreshTokenPort: QueryRefreshTokenPort,
         private val jwtPort: JwtPort
