@@ -6,11 +6,10 @@ import team.aliens.dms.auth.dto.request.CertifyEmailCodeWebRequest
 import team.aliens.dms.auth.dto.request.CertifyEmailWebRequest
 import team.aliens.dms.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse
-import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
-import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
-import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
+import team.aliens.dms.domain.auth.dto.*
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
+import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
 import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
 import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import javax.validation.Valid
@@ -23,7 +22,8 @@ class AuthWebAdapter(
     private val sendEmailCodeUseCase: SendEmailCodeUseCase,
     private val certifyEmailCodeUseCase: CertifyEmailCodeUseCase,
     private val certifyEmailUseCase: CertifyEmailUseCase,
-    private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase
+    private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase,
+    private val reissueTokenUseCase: ReissueTokenUseCase
 ) {
 
     @GetMapping("/code")
@@ -55,6 +55,11 @@ class AuthWebAdapter(
                 email = request.email
             )
         )
+    }
+
+    @PutMapping("/reissue")
+    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueTokenResponse {
+        return reissueTokenUseCase.execute(refreshToken)
     }
 
     @GetMapping("/account-id")

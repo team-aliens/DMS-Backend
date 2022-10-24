@@ -6,4 +6,5 @@ import team.aliens.dms.persistence.auth.model.RefreshTokenEntity
 
 @Repository
 interface RefreshTokenRepository : CrudRepository<RefreshTokenEntity, String> {
+    fun findByToken(token: String): RefreshTokenEntity
 }
