@@ -24,7 +24,7 @@ class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
     override fun randomNumber(number: Int): String {
         val random = SecureRandom()
         val codeList: List<Char> = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-        val authCodeList: MutableList<String> = ArrayList()
+        val authCodeList: MutableList<String> = mutableListOf()
 
         for (i: Int in 0..number) {
             authCodeList.add(i, codeList[random.nextInt(10)].toString());
