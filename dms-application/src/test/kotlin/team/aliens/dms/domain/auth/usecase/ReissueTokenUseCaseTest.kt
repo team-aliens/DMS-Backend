@@ -56,7 +56,7 @@ class ReissueTokenUseCaseTest {
     @Test
     fun `토큰 재발급 성공`() {
         //given
-        given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
+        given(queryRefreshTokenPort.queryRefreshTokenById(request))
             .willReturn(refreshToken)
         given(jwtPort.receiveToken(refreshToken.userId, refreshToken.authority))
             .willReturn(tokenResponse)
