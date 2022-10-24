@@ -16,6 +16,7 @@ class NoticeWebAdapter(
     @GetMapping("/status")
     fun getNoticeStatus(): GetNoticeStatusResponse {
         val result = queryNoticeStatusUseCase.execute()
+
         return GetNoticeStatusResponse(result)
     }
 
