@@ -6,10 +6,7 @@ import team.aliens.dms.auth.dto.request.CertifyEmailCodeWebRequest
 import team.aliens.dms.auth.dto.request.CertifyEmailWebRequest
 import team.aliens.dms.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse
-import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
-import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
-import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
-import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.dto.*
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
 import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
@@ -61,7 +58,7 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenResponse {
+    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueTokenResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 
