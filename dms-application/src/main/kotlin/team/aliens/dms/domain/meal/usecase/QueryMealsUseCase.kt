@@ -18,22 +18,22 @@ class QueryMealsUseCase(
 
     fun execute(mealDate: LocalDate): QueryMealsResponse {
         val userId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryById(userId) ?: throw StudentNotFoundException
-        val meal = queryMealPort.queryAllByMealDateAndSchoolId(mealDate, student.schoolId)
+        val student = queryStudentPort.queryByUserId(userId) ?: throw StudentNotFoundException
+        val meals = queryMealPort.queryAllByMealDateAndSchoolId(mealDate, student.schoolId)
 
-        val meals = meal.map {
-            val breakfast = it.breakfast?.replace("||", "\",\"")
-            val lunch = it.lunch?.replace("||", "\",\"")
-            val dinner = it.dinner?.replace("||", "\",\"")
+        val mealDetails = meals.map {
+            val breakfast = it.breakfast?.split("||")
+            val lunch = it.lunch?.split("||")
+            val dinner = it.dinner?.split("||")
 
             MealDetail(
                 date = it.mealDate,
-                breakfast = listOf(breakfast!!),
-                lunch = listOf(lunch!!),
-                dinner = listOf(dinner!!)
+                breakfast = breakfast.orEmpty(),
+                lunch = lunch.orEmpty(),
+                dinner = dinner.orEmpty()
             )
         }
 
-        return QueryMealsResponse(meals)
+        return QueryMealsResponse(mealDetails)
     }
 }

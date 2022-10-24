@@ -8,8 +8,8 @@ data class QueryMealsResponse(
 
     data class MealDetail(
         val date: LocalDate,
-        val breakfast: List<String>,
-        val lunch: List<String>,
-        val dinner: List<String>
+        val breakfast: List<String?>,
+        val lunch: List<String?>,
+        val dinner: List<String?>
     )
 }
