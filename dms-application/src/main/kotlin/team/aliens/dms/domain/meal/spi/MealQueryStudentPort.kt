@@ -4,5 +4,5 @@ import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 
 interface MealQueryStudentPort {
-    fun queryById(id: UUID): Student?
+    fun queryByUserId(userId: UUID): Student?
 }
