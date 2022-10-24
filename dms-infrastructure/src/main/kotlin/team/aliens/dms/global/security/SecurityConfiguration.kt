@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.model.Authority.STUDENT
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
@@ -51,11 +51,14 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/code").permitAll()
 
+            // /notices
+            .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
+
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
 
             // /meals
-            .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(Authority.STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
