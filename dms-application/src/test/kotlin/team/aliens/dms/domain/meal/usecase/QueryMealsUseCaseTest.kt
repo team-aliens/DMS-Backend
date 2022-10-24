@@ -68,7 +68,7 @@ class QueryMealsUseCaseTest {
         given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
-        given(queryStudentPort.queryById(userId))
+        given(queryStudentPort.queryByUserId(userId))
             .willReturn(student)
 
         given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
@@ -84,7 +84,7 @@ class QueryMealsUseCaseTest {
         given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
-        given(queryStudentPort.queryById(userId))
+        given(queryStudentPort.queryByUserId(userId))
             .willReturn(null)
 
         assertThrows<StudentNotFoundException> {
