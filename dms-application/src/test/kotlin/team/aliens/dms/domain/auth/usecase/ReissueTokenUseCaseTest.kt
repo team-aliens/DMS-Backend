@@ -8,11 +8,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.RefreshTokenNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
+import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -36,10 +38,18 @@ class ReissueTokenUseCaseTest {
 
     private val refreshToken by lazy {
         RefreshToken(
-                token = request,
-                userId = userId,
-                authority = Authority.MANAGER,
-                expirationTime = 1800
+            token = request,
+            userId = userId,
+            authority = Authority.MANAGER,
+            expirationTime = 1800
+        )
+    }
+
+    private val tokenResponse by lazy {
+        TokenResponse(
+            accessToken = "bearer dalkmas",
+            expiredAt = LocalDateTime.now(),
+            refreshToken = "bearer akldsgmaslkdgmadk"
         )
     }
 
@@ -48,10 +58,12 @@ class ReissueTokenUseCaseTest {
 
         //given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
-                .willReturn(refreshToken)
+            .willReturn(refreshToken)
+        given(jwtPort.receiveToken(refreshToken.userId, refreshToken.authority))
+            .willReturn(tokenResponse)
 
         //when & then
-        assertDoesNotThrow {reissueTokenUseCase.execute(request)}
+        assertDoesNotThrow { reissueTokenUseCase.execute(request) }
     }
 
     @Test
@@ -59,7 +71,7 @@ class ReissueTokenUseCaseTest {
 
         //given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
-                .willReturn(null)
+            .willReturn(null)
 
         //when & then
         assertThrows<RefreshTokenNotFoundException> {
