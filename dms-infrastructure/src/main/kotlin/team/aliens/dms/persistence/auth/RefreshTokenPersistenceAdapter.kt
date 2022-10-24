@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.auth
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.spi.RefreshTokenPort
 import team.aliens.dms.persistence.auth.mapper.RefreshTokenMapper
@@ -11,7 +12,7 @@ class RefreshTokenPersistenceAdapter(
     private val refreshTokenRepository: RefreshTokenRepository
 ) : RefreshTokenPort {
 
-    override fun queryRefreshTokenByToken(token: String) = refreshTokenMapper.toDomain(
-        refreshTokenRepository.findByToken(token)
+    override fun queryRefreshTokenById(id: String) = refreshTokenMapper.toDomain(
+        refreshTokenRepository.findByIdOrNull(id)
     )
 }

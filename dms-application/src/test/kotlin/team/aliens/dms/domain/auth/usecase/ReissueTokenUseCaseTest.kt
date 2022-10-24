@@ -55,7 +55,6 @@ class ReissueTokenUseCaseTest {
 
     @Test
     fun `토큰 재발급 성공`() {
-
         //given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
             .willReturn(refreshToken)
@@ -68,9 +67,8 @@ class ReissueTokenUseCaseTest {
 
     @Test
     fun `리프레시 토큰을 찾을 수 없음`() {
-
         //given
-        given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
+        given(queryRefreshTokenPort.queryRefreshTokenById(request))
             .willReturn(null)
 
         //when & then
