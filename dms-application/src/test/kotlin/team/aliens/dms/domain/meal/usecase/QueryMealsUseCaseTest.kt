@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
@@ -58,6 +59,16 @@ class QueryMealsUseCaseTest {
         )
     }
 
+    private val breakfastNullMeal by lazy {
+        Meal(
+            mealDate = LocalDate.now(),
+            schoolId = schoolId,
+            breakfast = null,
+            lunch = "점심",
+            dinner = "저녁"
+        )
+    }
+
     @BeforeEach
     fun setUp() {
         queryMealsUseCase = QueryMealsUseCase(securityPort, queryStudentPort, queryMealPort)
@@ -65,6 +76,21 @@ class QueryMealsUseCaseTest {
 
     @Test
     fun `급식 조회 성공`() {
+        val mealDetails by lazy {
+            QueryMealsResponse.MealDetail(
+                date = mealDate,
+                breakfast = listOf(meal.breakfast),
+                lunch = listOf(meal.lunch),
+                dinner = listOf(meal.dinner)
+            )
+        }
+
+        val result by lazy {
+            QueryMealsResponse(
+                meals = listOf(mealDetails)
+            )
+        }
+
         given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
@@ -76,7 +102,7 @@ class QueryMealsUseCaseTest {
 
         val response = queryMealsUseCase.execute(mealDate)
 
-        assertThat(response)
+        assertThat(response).isEqualTo(result)
     }
 
     @Test
@@ -90,5 +116,36 @@ class QueryMealsUseCaseTest {
         assertThrows<StudentNotFoundException> {
             queryMealsUseCase.execute(mealDate)
         }
+    }
+
+    @Test
+    fun `급식 값 없음`() {
+        val breakfastNullMealDetails by lazy {
+            QueryMealsResponse.MealDetail(
+                date = mealDate,
+                breakfast = listOf(),
+                lunch = listOf(meal.lunch),
+                dinner = listOf(meal.dinner)
+            )
+        }
+
+        val result by lazy {
+            QueryMealsResponse(
+                meals = listOf(breakfastNullMealDetails)
+            )
+        }
+
+        given(securityPort.getCurrentUserId())
+            .willReturn(userId)
+
+        given(queryStudentPort.queryByUserId(userId))
+            .willReturn(student)
+
+        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
+            .willReturn(listOf(breakfastNullMeal))
+
+        val response = queryMealsUseCase.execute(mealDate)
+
+        assertThat(response).isEqualTo(result)
     }
 }
