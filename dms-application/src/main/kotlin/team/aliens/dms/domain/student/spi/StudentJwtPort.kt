@@ -7,5 +7,4 @@ import java.util.*
 interface StudentJwtPort {
 
     fun receiveToken(userId: UUID, authority: Authority): TokenResponse
-
 }
