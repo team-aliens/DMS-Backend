@@ -16,6 +16,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryStudentPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.SecurityPort
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -81,7 +82,7 @@ class SignInUseCaseTest {
 
 
     @Test
-    fun `로그인 성공`() {
+    fun `매니저일때 로그인 성공`() {
         // given
         given(queryUserPort.queryUserByAccountId(request.accountId))
             .willReturn(user)
@@ -90,6 +91,31 @@ class SignInUseCaseTest {
         given(queryStudentPort.queryStudentById(user.id))
             .willReturn(null)
         given(jwtPort.receiveToken(user.id, Authority.MANAGER))
+            .willReturn(tokenResponse)
+
+        // when then
+        assertDoesNotThrow {
+            signInUseCase.execute(request)
+        }
+    }
+
+    @Test
+    fun `학생일때 로그인 성공`() {
+        // given
+        given(queryUserPort.queryUserByAccountId(request.accountId))
+            .willReturn(user)
+        given(securityPort.isPasswordMatch(request.password, user.password))
+            .willReturn(true)
+        given(queryStudentPort.queryStudentById(user.id))
+            .willReturn(Student(
+                studentId = user.id,
+                roomNumber = 1,
+                schoolId = UUID.randomUUID(),
+                grade = 2,
+                classRoom = 1,
+                number = 17
+            ))
+        given(jwtPort.receiveToken(user.id, Authority.STUDENT))
             .willReturn(tokenResponse)
 
         // when then
