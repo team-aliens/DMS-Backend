@@ -9,6 +9,7 @@ enum class AuthErrorCode(
 
     AUTH_CODE_MISMATCH(401, "Auth Code Mismatch"),
     EMAIL_MISMATCH(401, "Email Mismatch"),
+    PASSWORD_MISMATCH(401, "Password Mismatch"),
     AUTH_CODE_NOT_MATCHED(401, "Auth Code Not Matched"),
     REFRESH_TOKEN_NOT_FOUND(404, "Refresh Token Not Found"),
     AUTH_CODE_NOT_FOUND(404, "Auth Code Not Found"),
