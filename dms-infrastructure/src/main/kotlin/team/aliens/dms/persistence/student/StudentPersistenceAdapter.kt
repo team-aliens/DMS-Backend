@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.student
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
@@ -23,4 +24,8 @@ class StudentPersistenceAdapter(
             studentMapper.toEntity(student)
         )
     )!!
+
+    override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
+        studentRepository.findByIdOrNull(studentId)
+    )
 }
