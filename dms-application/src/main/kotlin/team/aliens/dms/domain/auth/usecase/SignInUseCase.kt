@@ -20,7 +20,6 @@ class SignInUseCase(
 ) {
 
     fun execute(request: SignInRequest): TokenAndFeaturesResponse {
-
         val user =
             queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
         var authority = Authority.STUDENT
