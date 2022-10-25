@@ -22,15 +22,11 @@ class QueryMealsUseCase(
         val meals = queryMealPort.queryAllByMealDateAndSchoolId(mealDate, student.schoolId)
 
         val mealDetails = meals.map {
-            val breakfast = it.breakfast?.split("||")
-            val lunch = it.lunch?.split("||")
-            val dinner = it.dinner?.split("||")
-
             MealDetail(
                 date = it.mealDate,
-                breakfast = breakfast.orEmpty(),
-                lunch = lunch.orEmpty(),
-                dinner = dinner.orEmpty()
+                breakfast = it.breakfast?.split("||").orEmpty(),
+                lunch = it.lunch?.split("||").orEmpty(),
+                dinner = it.dinner?.split("||").orEmpty()
             )
         }
 
