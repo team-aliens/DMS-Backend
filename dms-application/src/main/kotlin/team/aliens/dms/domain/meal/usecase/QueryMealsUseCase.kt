@@ -25,9 +25,9 @@ class QueryMealsUseCase(
         val mealDetails = meals.map {
             MealDetail(
                 date = it.mealDate,
-                breakfast = it.split(it.breakfast),
-                lunch = it.split(it.lunch),
-                dinner = it.split(it.dinner)
+                breakfast = toSplit(it.breakfast),
+                lunch = toSplit(it.lunch),
+                dinner = toSplit(it.dinner)
             )
         }
 
@@ -37,6 +37,5 @@ class QueryMealsUseCase(
     /**
      * '||' 를 기준으로 급식 구분
      **/
-    private fun Meal.split(meal: String?) = meal?.split("||").orEmpty()
-
+    private fun toSplit(meal: String?) = meal?.split("||").orEmpty()
 }
