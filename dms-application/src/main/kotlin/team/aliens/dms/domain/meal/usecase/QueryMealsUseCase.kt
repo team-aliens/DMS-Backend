@@ -2,6 +2,7 @@ package team.aliens.dms.domain.meal.usecase
 
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetail
+import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.meal.spi.QueryMealPort
@@ -24,12 +25,18 @@ class QueryMealsUseCase(
         val mealDetails = meals.map {
             MealDetail(
                 date = it.mealDate,
-                breakfast = it.breakfast?.split("||").orEmpty(),
-                lunch = it.lunch?.split("||").orEmpty(),
-                dinner = it.dinner?.split("||").orEmpty()
+                breakfast = it.split(it.breakfast),
+                lunch = it.split(it.lunch),
+                dinner = it.split(it.dinner)
             )
         }
 
         return QueryMealsResponse(mealDetails)
     }
+
+    /**
+     * '||' 를 기준으로 급식 구분
+     **/
+    fun Meal.split(meal: String?) = meal?.split("||").orEmpty()
+
 }
