@@ -37,6 +37,6 @@ class QueryMealsUseCase(
     /**
      * '||' 를 기준으로 급식 구분
      **/
-    fun Meal.split(meal: String?) = meal?.split("||").orEmpty()
+    private fun Meal.split(meal: String?) = meal?.split("||").orEmpty()
 
 }
