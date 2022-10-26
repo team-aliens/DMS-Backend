@@ -1,4 +1,6 @@
 package team.aliens.dms.domain.student.spi
 
-interface StudentPort : QueryStudentPort, CommandStudentPort {
+import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
+
+interface StudentPort : QueryStudentPort, CommandStudentPort, MealQueryStudentPort {
 }

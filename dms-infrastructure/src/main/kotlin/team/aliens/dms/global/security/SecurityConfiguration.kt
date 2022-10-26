@@ -31,7 +31,7 @@ class SecurityConfiguration(
         http
             .authorizeRequests()
 
-            // auth
+            // /auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/code").permitAll()
@@ -39,7 +39,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/auth/tokens").permitAll()
             .antMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
 
-            // students
+            // /students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
@@ -61,6 +61,9 @@ class SecurityConfiguration(
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
+
+            // /meals
+            .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
