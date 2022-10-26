@@ -3,20 +3,26 @@ package team.aliens.dms.domain.student.usecase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
+import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.school.exception.CodeNotMatchedException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.*
+import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
+import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -46,11 +52,11 @@ class SignUpUseCaseTests {
     @MockBean
     private lateinit var jwtPort: StudentJwtPort
 
-    private lateinit var singUpUseCase: SignUpUseCase
+    private lateinit var signUpUseCase: SignUpUseCase
 
     @BeforeEach
     fun setUp() {
-        singUpUseCase = SignUpUseCase(
+        signUpUseCase = SignUpUseCase(
             commandStudentPort,
             commandUserPort,
             querySchoolPort,
@@ -97,7 +103,7 @@ class SignUpUseCaseTests {
             accountId = accountId,
             password = "encoded password",
             email = email,
-            name = name,
+            name = "",
             profileImageUrl = profileImageUrl,
             createdAt = null,
             deletedAt = null
@@ -106,7 +112,7 @@ class SignUpUseCaseTests {
 
     private val savedUserStub by lazy {
         User(
-            id = UUID.randomUUID(),
+            id = id,
             schoolId = schoolStub.id,
             accountId = accountId,
             password = "encoded password",
@@ -151,7 +157,7 @@ class SignUpUseCaseTests {
             number = 17,
             accountId = accountId,
             password = "test password",
-            profileImageUrl = null
+            profileImageUrl = profileImageUrl
         )
     }
 
@@ -185,11 +191,11 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsByEmail(email))
             .willReturn(false)
 
-        given(queryUserPort.existsByAccountId(accountId))
-            .willReturn(false)
-
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
+
+        given(queryUserPort.existsByAccountId(accountId))
+            .willReturn(false)
 
         given(securityPort.encode(requestStub.password))
             .willReturn(userStub.password)
@@ -204,13 +210,110 @@ class SignUpUseCaseTests {
             .willReturn(tokenResponseStub)
 
         // when
-        val response = singUpUseCase.execute(requestStub)
+        val response = signUpUseCase.execute(requestStub)
 
         // then
-        assertDoesNotThrow {
-            singUpUseCase.execute(requestStub)
-        }
         assertThat(response).isEqualTo(tokenAndFeaturesResponseStub)
+    }
+
+    @Test
+    fun `학교 인증코드에 해당하는 학교가 존재하지 않음`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<CodeNotMatchedException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `학교 확인 질문에 대한 답변이 일치하지 않음`() {
+        val wrongAnswerSchool = schoolStub.copy(answer = "wrong answer")
+
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(wrongAnswerSchool)
+
+        // when & then
+        assertThrows<AnswerNotMatchedException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `이메일이 이미 존재함`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsByEmail(email))
+            .willReturn(true)
+
+        // when & then
+        assertThrows<UserEmailExistsException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `이메일 인증코드가 존재하지 않음`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<AuthCodeNotFoundException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `이메일 인증코드가 일치하지 않음`() {
+        val wrongCodeAuthCode = authCodeStub.copy(code = "wrong code")
+
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(wrongCodeAuthCode)
+
+        // when & then
+        assertThrows<AuthCodeNotMatchedException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `아이디가 이미 존재함`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
+        given(queryUserPort.existsByAccountId(accountId))
+            .willReturn(true)
+
+        // when & then
+        assertThrows<UserAccountIdExistsException> {
+            signUpUseCase.execute(requestStub)
+        }
     }
 
 }
