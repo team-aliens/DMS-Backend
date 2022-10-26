@@ -5,13 +5,10 @@ import org.springframework.web.bind.annotation.*
 import team.aliens.dms.auth.dto.request.CertifyEmailCodeWebRequest
 import team.aliens.dms.auth.dto.request.CertifyEmailWebRequest
 import team.aliens.dms.auth.dto.request.SendEmailCodeWebRequest
+import team.aliens.dms.auth.dto.request.SignInWebRequest
 import team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse
 import team.aliens.dms.domain.auth.dto.*
-import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
-import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
-import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
-import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
-import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
+import team.aliens.dms.domain.auth.usecase.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
@@ -23,8 +20,19 @@ class AuthWebAdapter(
     private val certifyEmailCodeUseCase: CertifyEmailCodeUseCase,
     private val certifyEmailUseCase: CertifyEmailUseCase,
     private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase,
-    private val reissueTokenUseCase: ReissueTokenUseCase
+    private val reissueTokenUseCase: ReissueTokenUseCase,
+    private val signInUseCase: SignInUseCase
 ) {
+
+    @PostMapping("/tokens")
+    fun singIn(@RequestBody @Valid request: SignInWebRequest): TokenAndFeaturesResponse {
+        return signInUseCase.execute(
+            SignInRequest(
+                accountId = request.accountId,
+                password = request.password
+            )
+        )
+    }
 
     @GetMapping("/code")
     fun certifyEmailCode(@ModelAttribute request: CertifyEmailCodeWebRequest) {
@@ -58,7 +66,7 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueTokenResponse {
+    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenAndFeaturesResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 
