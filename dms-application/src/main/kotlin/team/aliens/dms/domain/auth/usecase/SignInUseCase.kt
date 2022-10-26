@@ -8,6 +8,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryStudentPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.SecurityPort
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.global.annotation.UseCase
 
@@ -20,16 +21,15 @@ class SignInUseCase(
 ) {
 
     fun execute(request: SignInRequest): TokenAndFeaturesResponse {
-        val user =
-            queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
-        var authority = Authority.STUDENT
+        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
 
         if (!securityPort.isPasswordMatch(request.password, user.password)) {
             throw PasswordMismatchException
         }
 
-        if (queryStudentPort.queryStudentById(user.id) == null) {
-            authority = Authority.MANAGER
+        val authority = when(queryStudentPort.queryStudentById(user.id)) {
+            is Student -> Authority.STUDENT
+            else -> Authority.MANAGER
         }
 
         val tokenResponse = jwtPort.receiveToken(user.id, authority)
