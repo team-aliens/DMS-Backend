@@ -30,7 +30,7 @@ import java.util.*
  * @version 1.0.0
  **/
 @UseCase
-class SignupUseCase(
+class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
     private val commandUserPort: StudentCommandUserPort,
     private val querySchoolPort: StudentQuerySchoolPort,
