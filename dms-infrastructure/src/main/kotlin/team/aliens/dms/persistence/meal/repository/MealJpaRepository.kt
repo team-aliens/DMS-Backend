@@ -7,4 +7,5 @@ import team.aliens.dms.persistence.meal.entity.MealJpaEntityId
 
 @Repository
 interface MealJpaRepository : CrudRepository<MealJpaEntity, MealJpaEntityId> {
+    fun findAllById(id: MealJpaEntityId): List<MealJpaEntity>
 }

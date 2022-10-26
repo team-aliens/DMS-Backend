@@ -28,4 +28,8 @@ class StudentPersistenceAdapter(
     override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
         studentRepository.findByIdOrNull(studentId)
     )
+    
+    override fun queryByUserId(userId: UUID) = studentMapper.toDomain(
+        studentRepository.findByIdOrNull(userId)
+    )
 }
