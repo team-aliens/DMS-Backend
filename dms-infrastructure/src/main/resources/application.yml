@@ -7,9 +7,9 @@ spring:
     timeout-per-shutdown-phase: "60s"
 
   datasource:
-    url: jdbc:mysql://${DB_URL:localhost}:3306/${DB_NAME}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${DB_URL:localhost}:3306/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -30,15 +30,15 @@ spring:
     host: ${REDIS_HOST:localhost}
 
 secret:
-  secret-key: ${SECRET_KEY}
-  access-exp: ${ACCESS_EXP}
-  refresh-exp: ${REFRESH_EXP}
+  secret-key: ${SECRET_KEY:asdfghgfds}
+  access-exp: ${ACCESS_EXP:1800}
+  refresh-exp: ${REFRESH_EXP:7200}
 
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS}
-      secret-key: ${AWS_SECRET}
+      access-key: ${AWS_ACCESS:access}
+      secret-key: ${AWS_SECRET:secret}
     region:
       static: ${AWS_REGION:ap-northeast-2}
       auto: false
