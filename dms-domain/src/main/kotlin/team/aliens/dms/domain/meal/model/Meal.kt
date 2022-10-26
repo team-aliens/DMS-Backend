@@ -16,4 +16,10 @@ data class Meal(
     val lunch: String?,
 
     val dinner: String?
-)
+) {
+
+    /**
+     * '||' 를 기준으로 급식 구분
+     **/
+    fun toSplit(meal: String?) = meal?.split("||").orEmpty()
+}
