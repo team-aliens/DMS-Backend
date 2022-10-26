@@ -12,8 +12,11 @@ class SecurityAdapter(
 ) : SecurityPort {
 
     override fun getCurrentUserId(): UUID {
-        return UUID.fromString(SecurityContextHolder.getContext().authentication.name);
+        return UUID.fromString(SecurityContextHolder.getContext().authentication.name)
     }
+
+    override fun isPasswordMatch(rawPassword: String, encodedPassword: String) =
+        passwordEncoder.matches(rawPassword, encodedPassword)
 
     override fun encode(password: String): String = passwordEncoder.encode(password)
 }

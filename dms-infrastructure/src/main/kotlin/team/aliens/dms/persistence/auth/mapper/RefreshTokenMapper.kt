@@ -13,6 +13,7 @@ class RefreshTokenMapper : GenericMapper<RefreshToken, RefreshTokenEntity> {
             RefreshToken(
                 token = it.token,
                 userId = it.userId,
+                authority = it.authority,
                 expirationTime = it.expirationTime
             )
         }
@@ -22,6 +23,7 @@ class RefreshTokenMapper : GenericMapper<RefreshToken, RefreshTokenEntity> {
         return RefreshTokenEntity(
             token = domain.token,
             userId = domain.userId,
+            authority = domain.authority,
             expirationTime = domain.expirationTime
         )
     }
