@@ -17,7 +17,6 @@ object Dependencies {
     // transaction
     const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION}"
 
-
     // configuration
     const val CONFIGURATION_PROCESSOR = "org.springframework.boot:spring-boot-configuration-processor"
 
@@ -34,7 +33,6 @@ object Dependencies {
     const val JWT = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
 
     // aws
-    const val AWS_AUTO_CONFIGURE = "org.springframework.cloud:spring-cloud-aws-autoconfigure:${DependencyVersions.AWS_VERSION}"
     const val SPRING_AWS = "org.springframework.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
     const val AWS_SES = "com.amazonaws:aws-java-sdk-ses:${DependencyVersions.SES_VERSION}"
 

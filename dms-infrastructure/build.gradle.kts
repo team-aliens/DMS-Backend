@@ -33,7 +33,6 @@ dependencies {
     implementation(Dependencies.JWT)
 
     // aws
-    implementation(Dependencies.AWS_AUTO_CONFIGURE)
     implementation(Dependencies.AWS_SES)
     implementation(Dependencies.SPRING_AWS)
 
