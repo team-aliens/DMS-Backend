@@ -10,7 +10,8 @@ import team.aliens.dms.thirdparty.email.AwsSESProperties
     basePackageClasses = [
         SecurityProperties::class,
         AwsS3Properties::class,
-        AwsSESProperties::class
+        AwsSESProperties::class,
+        AwsProperties::class
     ]
 )
 @Configuration
