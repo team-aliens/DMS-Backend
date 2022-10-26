@@ -20,7 +20,7 @@ import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
-import team.aliens.dms.domain.student.usecase.SignupUseCase
+import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.student.dto.request.SignupWebRequest
@@ -33,7 +33,7 @@ import javax.validation.constraints.NotBlank
 @RequestMapping("/students")
 @RestController
 class StudentWebAdapter(
-    private val signupUseCase: SignupUseCase,
+    private val signUpUseCase: SignUpUseCase,
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
@@ -42,21 +42,21 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    fun signup(@RequestBody @Valid signupWebRequest: SignupWebRequest): TokenAndFeaturesResponse {
+    fun signup(@RequestBody @Valid request: SignupWebRequest): TokenAndFeaturesResponse {
         val signupRequest = SignupRequest(
-            schoolCode = signupWebRequest.schoolCode,
-            schoolAnswer = signupWebRequest.schoolAnswer,
-            email = signupWebRequest.email,
-            authCode = signupWebRequest.authCode,
-            grade = signupWebRequest.grade,
-            classRoom = signupWebRequest.classRoom,
-            number = signupWebRequest.number,
-            accountId = signupWebRequest.accountId,
-            password = signupWebRequest.password,
-            profileImageUrl = signupWebRequest.profileImageUrl
+            schoolCode = request.schoolCode,
+            schoolAnswer = request.schoolAnswer,
+            email = request.email,
+            authCode = request.authCode,
+            grade = request.grade,
+            classRoom = request.classRoom,
+            number = request.number,
+            accountId = request.accountId,
+            password = request.password,
+            profileImageUrl = request.profileImageUrl
         )
 
-        return signupUseCase.execute(signupRequest)
+        return signUpUseCase.execute(signupRequest)
     }
 
     @GetMapping("/email/duplication")
