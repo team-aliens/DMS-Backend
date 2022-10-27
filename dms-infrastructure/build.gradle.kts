@@ -26,6 +26,10 @@ dependencies {
     implementation(Dependencies.REDIS)
     implementation(Dependencies.SPRING_REDIS)
 
+    // querydsl
+    implementation(Dependencies.QUERYDSL)
+    kapt(Dependencies.QUERYDSL_PROCESSOR)
+
     // time based uuid
     implementation(Dependencies.UUID_TIME)
 
@@ -37,7 +41,7 @@ dependencies {
     implementation(Dependencies.SPRING_AWS)
 
     // configuration
-    implementation(Dependencies.CONFIGURATION_PROCESSOR)
+    annotationProcessor(Dependencies.CONFIGURATION_PROCESSOR)
 
 }
 
