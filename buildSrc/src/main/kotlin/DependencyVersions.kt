@@ -6,4 +6,5 @@ object DependencyVersions {
     const val SERVLET_VERSION = "4.0.1"
     const val UUID_TIME_VERSION = "3.1.4"
     const val SPRING_TRANSACTION = "5.3.22"
+    const val QUERYDSL = "5.0.0"
 }
