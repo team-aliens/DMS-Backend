@@ -20,8 +20,6 @@ class GetStudentDetailsUseCase(
         val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryByUserId(studentId) ?: throw StudentNotFoundException
 
-        val gcn = student.grade.toString().plus(student.classRoom).plus(student.number)
-
         val roomMateResponse = queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId)
         val roomMates = roomMateResponse.map {
             GetStudentDetailsResponse.RoomMate(
@@ -33,7 +31,7 @@ class GetStudentDetailsUseCase(
 
         return GetStudentDetailsResponse(
             name = user.name,
-            gcn = gcn,
+            gcn = student.grade.toString().plus(student.classRoom).plus(student.number),
             profileImageUrl = user.profileImageUrl!!,
             bonusPoint = queryPointHistoryPort.getPointScore(studentId = studentId, isBonus = true),
             minusPoint = queryPointHistoryPort.getPointScore(studentId = studentId, isBonus = false),
