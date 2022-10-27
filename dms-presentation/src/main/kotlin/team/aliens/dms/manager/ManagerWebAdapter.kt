@@ -3,8 +3,10 @@ package team.aliens.dms.manager
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
+import team.aliens.dms.domain.manager.usecase.GetStudentDetailsUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.manager.dto.request.ResetPasswordManagerWebRequest
 import team.aliens.dms.manager.dto.response.FindManagerAccountIdResponse
@@ -17,7 +19,8 @@ import javax.validation.constraints.NotBlank
 @RestController
 class ManagerWebAdapter(
     private val findManagerAccountIdUseCase: FindManagerAccountIdUseCase,
-    private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase
+    private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase,
+    private val getStudentDetailsUseCase: GetStudentDetailsUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -47,7 +50,7 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students/{student-id}")
-    fun getStudentDetails(@PathVariable("student-id") studentId: UUID) {
-
+    fun getStudentDetails(@PathVariable("student-id") studentId: UUID): GetStudentDetailsResponse {
+        return getStudentDetailsUseCase.execute(studentId)
     }
 }
