@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.persistence.user.mapper.UserMapper
@@ -11,7 +12,7 @@ import java.util.*
 @Component
 class UserPersistenceAdapter(
     private val userMapper: UserMapper,
-    private val userRepository: UserJpaRepository
+    private val userRepository: UserJpaRepository,
 ) : UserPort {
 
     override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
@@ -47,5 +48,9 @@ class UserPersistenceAdapter(
     override fun queryUserByAccountId(accountId: String) = userMapper.toDomain(
         userRepository.findByAccountId(accountId)
     )
+
+    override fun searchStudent(name: String, sort: Sort): List<User> {
+        //TODO #71머지이후 querydsl 이용
+    }
 }
  
