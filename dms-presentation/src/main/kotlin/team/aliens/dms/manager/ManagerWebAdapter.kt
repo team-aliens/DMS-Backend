@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
+import team.aliens.dms.manager.dto.request.GetStudentListWebRequest
 import team.aliens.dms.manager.dto.request.ResetPasswordManagerWebRequest
 import team.aliens.dms.manager.dto.response.FindManagerAccountIdResponse
 import java.util.*
@@ -44,5 +45,10 @@ class ManagerWebAdapter(
         )
 
         resetManagerPasswordUseCase.execute(request)
+    }
+
+    @GetMapping("/students")
+    fun getStudentList(@RequestBody @Valid webRequest: GetStudentListWebRequest) {
+
     }
 }
