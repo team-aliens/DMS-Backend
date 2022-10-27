@@ -45,4 +45,9 @@ class ManagerWebAdapter(
 
         resetManagerPasswordUseCase.execute(request)
     }
+
+    @GetMapping("/students/{student-id}")
+    fun getStudentDetails(@PathVariable("student-id") studentId: UUID) {
+
+    }
 }
