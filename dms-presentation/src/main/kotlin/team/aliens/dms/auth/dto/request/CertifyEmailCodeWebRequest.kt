@@ -16,6 +16,6 @@ data class CertifyEmailCodeWebRequest(
     val authCode: String,
 
     @field:NotNull
-    val type: team.aliens.dms.auth.dto.request.EmailType
+    val type: EmailType
 
 )
