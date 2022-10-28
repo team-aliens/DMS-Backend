@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class CheckAccountIdExistenceUseCaseTest {
+class CheckAccountIdExistenceUseCaseTests {
 
     @MockBean
     private lateinit var authQueryUserPort: AuthQueryUserPort

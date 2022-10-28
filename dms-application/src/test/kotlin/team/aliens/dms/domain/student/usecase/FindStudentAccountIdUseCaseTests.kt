@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class FindStudentAccountIdUseCaseTest {
+class FindStudentAccountIdUseCaseTests {
 
     @MockBean
     private lateinit var queryStudentPort: QueryStudentPort

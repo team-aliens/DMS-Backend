@@ -19,7 +19,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class QueryMealsUseCaseTest {
+class QueryMealsUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: MealSecurityPort

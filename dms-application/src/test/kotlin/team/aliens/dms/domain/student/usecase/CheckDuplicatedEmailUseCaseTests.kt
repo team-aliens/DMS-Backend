@@ -8,47 +8,45 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 
 @ExtendWith(SpringExtension::class)
-class CheckDuplicatedAccountIdUseCaseTest {
+class CheckDuplicatedEmailUseCaseTests {
 
     @MockBean
     private lateinit var studentQueryUserPort: StudentQueryUserPort
 
-    private lateinit var checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase
+    private lateinit var checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase
 
-    private val accountId = "계정아이디입니다하하하"
+    private val email = "test123@dsm.hs.kr"
 
     @BeforeEach
     fun setUp() {
-        checkDuplicatedAccountIdUseCase = CheckDuplicatedAccountIdUseCase(studentQueryUserPort)
+        checkDuplicatedEmailUseCase = CheckDuplicatedEmailUseCase(studentQueryUserPort)
     }
 
     @Test
-    fun `계정 아이디 중복 없음`() {
-
+    fun `이메일 중복 없음`() {
         // given
-        given(studentQueryUserPort.existsUserByAccountId(accountId))
+        given(studentQueryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         // when & then
         assertDoesNotThrow {
-            checkDuplicatedAccountIdUseCase.execute(accountId)
+            checkDuplicatedEmailUseCase.execute(email)
         }
     }
 
     @Test
-    fun `계정 아이디 중복`() {
-
+    fun `이메일 중복`() {
         // given
-        given(studentQueryUserPort.existsUserByAccountId(accountId))
+        given(studentQueryUserPort.existsUserByEmail(email))
             .willReturn(true)
 
         // when & then
-        assertThrows<UserAccountIdExistsException> {
-            checkDuplicatedAccountIdUseCase.execute(accountId)
+        assertThrows<UserEmailExistsException> {
+            checkDuplicatedEmailUseCase.execute(email)
         }
     }
- }
+}

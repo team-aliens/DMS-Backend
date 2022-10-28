@@ -23,6 +23,7 @@ class CheckSchoolCodeUseCaseTest {
     private lateinit var checkSchoolCodeUseCase: CheckSchoolCodeUseCase
 
     private val schoolId = UUID.randomUUID()
+
     private val schoolCode = "AUTH1234"
 
     private val schoolStub by lazy {

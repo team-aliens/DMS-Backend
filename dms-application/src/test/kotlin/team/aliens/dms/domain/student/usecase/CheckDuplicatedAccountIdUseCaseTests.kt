@@ -8,45 +8,47 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 
 @ExtendWith(SpringExtension::class)
-class CheckDuplicatedEmailUseCaseTest {
+class CheckDuplicatedAccountIdUseCaseTests {
 
     @MockBean
     private lateinit var studentQueryUserPort: StudentQueryUserPort
 
-    private lateinit var checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase
+    private lateinit var checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase
 
-    private val email = "test123@dsm.hs.kr"
+    private val accountId = "계정아이디입니다하하하"
 
     @BeforeEach
     fun setUp() {
-        checkDuplicatedEmailUseCase = CheckDuplicatedEmailUseCase(studentQueryUserPort)
+        checkDuplicatedAccountIdUseCase = CheckDuplicatedAccountIdUseCase(studentQueryUserPort)
     }
 
     @Test
-    fun `이메일 중복 없음`() {
+    fun `계정 아이디 중복 없음`() {
+
         // given
-        given(studentQueryUserPort.existsUserByEmail(email))
+        given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)
 
         // when & then
         assertDoesNotThrow {
-            checkDuplicatedEmailUseCase.execute(email)
+            checkDuplicatedAccountIdUseCase.execute(accountId)
         }
     }
 
     @Test
-    fun `이메일 중복`() {
+    fun `계정 아이디 중복`() {
+
         // given
-        given(studentQueryUserPort.existsUserByEmail(email))
+        given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(true)
 
         // when & then
-        assertThrows<UserEmailExistsException> {
-            checkDuplicatedEmailUseCase.execute(email)
+        assertThrows<UserAccountIdExistsException> {
+            checkDuplicatedAccountIdUseCase.execute(accountId)
         }
     }
-}
+ }
