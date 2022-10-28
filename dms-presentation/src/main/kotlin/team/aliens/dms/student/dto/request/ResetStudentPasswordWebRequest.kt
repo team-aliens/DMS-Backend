@@ -1,5 +1,7 @@
 package team.aliens.dms.student.dto.request
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import team.aliens.dms.manager.dto.request.Password
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
@@ -19,10 +21,12 @@ data class ResetStudentPasswordWebRequest(
     @field:NotBlank
     val authCode: String,
 
+    @field:JsonFormat(shape = JsonFormat.Shape.STRING)
     @field:NotBlank
     @field:Pattern(
-        regexp = "/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{8,20}$/",
-        message = "영문, 숫자, 기호를 포함한 8~20자이어야 합니다."
+        regexp = Password.PATTERN,
+        message = Password.MESSAGE
     )
-    val newPassword: String
+    val newPassword: Password
+
 )
