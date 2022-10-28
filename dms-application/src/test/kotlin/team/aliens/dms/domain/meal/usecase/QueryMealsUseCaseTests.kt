@@ -32,15 +32,22 @@ class QueryMealsUseCaseTests {
 
     private lateinit var queryMealsUseCase: QueryMealsUseCase
 
+    @BeforeEach
+    fun setUp() {
+        queryMealsUseCase = QueryMealsUseCase(
+            securityPort,
+            queryStudentPort,
+            queryMealPort
+        )
+    }
+
     private val mealDate = LocalDate.now()
-
-    private val userId = UUID.randomUUID()
-
+    private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
 
-    private val student by lazy {
+    private val studentStub by lazy {
         Student(
-            studentId = userId,
+            studentId = currentUserId,
             roomNumber = 318,
             schoolId = schoolId,
             grade = 2,
@@ -49,7 +56,7 @@ class QueryMealsUseCaseTests {
         )
     }
 
-    private val meal by lazy {
+    private val mealStub by lazy {
         Meal(
             mealDate = LocalDate.now(),
             schoolId = schoolId,
@@ -59,7 +66,7 @@ class QueryMealsUseCaseTests {
         )
     }
 
-    private val breakfastNullMeal by lazy {
+    private val breakfastNullMealStub by lazy {
         Meal(
             mealDate = LocalDate.now(),
             schoolId = schoolId,
@@ -69,19 +76,14 @@ class QueryMealsUseCaseTests {
         )
     }
 
-    @BeforeEach
-    fun setUp() {
-        queryMealsUseCase = QueryMealsUseCase(securityPort, queryStudentPort, queryMealPort)
-    }
-
     @Test
     fun `급식 조회 성공`() {
         val mealDetails by lazy {
             QueryMealsResponse.MealDetail(
                 date = mealDate,
-                breakfast = listOf(meal.breakfast),
-                lunch = listOf(meal.lunch),
-                dinner = listOf(meal.dinner)
+                breakfast = listOf(mealStub.breakfast),
+                lunch = listOf(mealStub.lunch),
+                dinner = listOf(mealStub.dinner)
             )
         }
 
@@ -92,13 +94,13 @@ class QueryMealsUseCaseTests {
         }
 
         given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+            .willReturn(currentUserId)
 
-        given(queryStudentPort.queryByUserId(userId))
-            .willReturn(student)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
 
         given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
-            .willReturn(listOf(meal))
+            .willReturn(listOf(mealStub))
 
         val response = queryMealsUseCase.execute(mealDate)
 
@@ -108,9 +110,9 @@ class QueryMealsUseCaseTests {
     @Test
     fun `학생 존재하지 않음`() {
         given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+            .willReturn(currentUserId)
 
-        given(queryStudentPort.queryByUserId(userId))
+        given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(null)
 
         assertThrows<StudentNotFoundException> {
@@ -124,8 +126,8 @@ class QueryMealsUseCaseTests {
             QueryMealsResponse.MealDetail(
                 date = mealDate,
                 breakfast = listOf(),
-                lunch = listOf(meal.lunch),
-                dinner = listOf(meal.dinner)
+                lunch = listOf(mealStub.lunch),
+                dinner = listOf(mealStub.dinner)
             )
         }
 
@@ -136,13 +138,13 @@ class QueryMealsUseCaseTests {
         }
 
         given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+            .willReturn(currentUserId)
 
-        given(queryStudentPort.queryByUserId(userId))
-            .willReturn(student)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
 
         given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
-            .willReturn(listOf(breakfastNullMeal))
+            .willReturn(listOf(breakfastNullMealStub))
 
         val response = queryMealsUseCase.execute(mealDate)
 

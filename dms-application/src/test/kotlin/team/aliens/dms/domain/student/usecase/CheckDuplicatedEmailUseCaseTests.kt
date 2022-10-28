@@ -19,12 +19,12 @@ class CheckDuplicatedEmailUseCaseTests {
 
     private lateinit var checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase
 
-    private val email = "test123@dsm.hs.kr"
-
     @BeforeEach
     fun setUp() {
         checkDuplicatedEmailUseCase = CheckDuplicatedEmailUseCase(studentQueryUserPort)
     }
+
+    private val email = "test123@dsm.hs.kr"
 
     @Test
     fun `이메일 중복 없음`() {

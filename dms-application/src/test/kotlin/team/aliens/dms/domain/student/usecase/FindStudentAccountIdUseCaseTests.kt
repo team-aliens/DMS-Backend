@@ -34,10 +34,18 @@ class FindStudentAccountIdUseCaseTests {
 
     private lateinit var findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 
+    @BeforeEach
+    fun setUp() {
+        findStudentAccountIdUseCase = FindStudentAccountIdUseCase(
+            queryStudentPort,
+            queryUserPort,
+            coveredEmailPort
+        )
+    }
+
     private val schoolId = UUID.randomUUID()
 
-
-    private val request by lazy {
+    private val requestStub by lazy {
         FindStudentAccountIdRequest(
             name = "이정윤",
             grade = 2,
@@ -46,18 +54,18 @@ class FindStudentAccountIdUseCaseTests {
         )
     }
 
-    private val student by lazy {
+    private val studentStub by lazy {
         Student(
             studentId = UUID.randomUUID(),
             roomNumber = 318,
             schoolId = schoolId,
-            grade = request.grade,
-            classRoom = request.classRoom,
-            number = request.number
+            grade = requestStub.grade,
+            classRoom = requestStub.classRoom,
+            number = requestStub.number
         )
     }
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = UUID.randomUUID(),
             schoolId = schoolId,
@@ -71,25 +79,20 @@ class FindStudentAccountIdUseCaseTests {
         )
     }
 
-    @BeforeEach
-    fun setUp() {
-        findStudentAccountIdUseCase = FindStudentAccountIdUseCase(queryStudentPort, queryUserPort, coveredEmailPort)
-    }
-
     @Test
     fun `아이디 찾기 성공`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
-            .willReturn(student)
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+            .willReturn(studentStub)
 
-        given(queryUserPort.queryByUserId(student.studentId))
-            .willReturn(user)
+        given(queryUserPort.queryUserById(studentStub.studentId))
+            .willReturn(userStub)
 
-        given(coveredEmailPort.coveredEmail(user.email))
+        given(coveredEmailPort.coveredEmail(userStub.email))
             .willReturn("dlw********")
 
         // when
-        val response = findStudentAccountIdUseCase.execute(schoolId, request)
+        val response = findStudentAccountIdUseCase.execute(schoolId, requestStub)
 
         // then
         assertEquals(response, "dlw********")
@@ -98,42 +101,42 @@ class FindStudentAccountIdUseCaseTests {
     @Test
     fun `학생 조회 실패`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
             .willReturn(null)
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            findStudentAccountIdUseCase.execute(schoolId, request)
+            findStudentAccountIdUseCase.execute(schoolId, requestStub)
         }
     }
 
     @Test
     fun `유저 조회 실패`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
-            .willReturn(student)
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+            .willReturn(studentStub)
 
-        given(queryUserPort.queryByUserId(student.studentId))
+        given(queryUserPort.queryUserById(studentStub.studentId))
             .willReturn(null)
 
         // when & then
         assertThrows<UserNotFoundException> {
-            findStudentAccountIdUseCase.execute(schoolId, request)
+            findStudentAccountIdUseCase.execute(schoolId, requestStub)
         }
     }
 
     @Test
     fun `학생 이름 불일치`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, request.grade, request.classRoom, request.number))
-            .willReturn(student)
+        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+            .willReturn(studentStub)
 
-        given(queryUserPort.queryByUserId(student.studentId))
-            .willReturn(user)
+        given(queryUserPort.queryUserById(studentStub.studentId))
+            .willReturn(userStub)
 
         // when & then
         assertThrows<StudentInfoMismatchException> {
-            findStudentAccountIdUseCase.execute(schoolId, request.copy(name = "이준서"))
+            findStudentAccountIdUseCase.execute(schoolId, requestStub.copy(name = "이준서"))
         }
     }
 }

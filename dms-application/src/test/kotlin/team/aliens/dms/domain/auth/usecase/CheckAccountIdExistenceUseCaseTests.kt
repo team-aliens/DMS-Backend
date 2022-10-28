@@ -29,13 +29,14 @@ class CheckAccountIdExistenceUseCaseTests {
     @BeforeEach
     fun setUp() {
         checkAccountIdExistenceUseCase = CheckAccountIdExistenceUseCase(
-            authQueryUserPort, coveredEmailPort
+            authQueryUserPort,
+            coveredEmailPort
         )
     }
 
     private val accountId = "계정 아이디임"
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = UUID.randomUUID(),
             schoolId = UUID.randomUUID(),
@@ -53,9 +54,9 @@ class CheckAccountIdExistenceUseCaseTests {
     fun `유저 존재함`() {
         // given
         given(authQueryUserPort.queryUserByAccountId(accountId))
-            .willReturn(user)
+            .willReturn(userStub)
 
-        given(coveredEmailPort.coveredEmail(user.email))
+        given(coveredEmailPort.coveredEmail(userStub.email))
             .willReturn("이메일***")
 
         // when

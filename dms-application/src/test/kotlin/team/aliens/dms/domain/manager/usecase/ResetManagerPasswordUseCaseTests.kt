@@ -8,8 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
@@ -18,12 +20,14 @@ import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class ResetManagerPasswordUseCaseTest {
+class ResetManagerPasswordUseCaseTests {
 
     @MockBean
     private lateinit var queryUserPort: ManagerQueryUserPort
@@ -37,19 +41,29 @@ class ResetManagerPasswordUseCaseTest {
     @MockBean
     private lateinit var securityPort: ManagerSecurityPort
 
+    @MockBean
+    private lateinit var checkUserAuthority: CheckUserAuthority
+
     private lateinit var resetManagerPasswordUseCase: ResetManagerPasswordUseCase
 
+    @BeforeEach
+    fun setUp() {
+        resetManagerPasswordUseCase = ResetManagerPasswordUseCase(
+            queryUserPort,
+            queryAuthCodePort,
+            commandUserPort,
+            securityPort,
+            checkUserAuthority
+        )
+    }
+
     private val accountId = "dlwjddbs13"
-
     private val email = "dlwjddbs13@naver.com"
-
     private val code = "AUTH12"
-
     private val password = "이정윤비번"
-
     private val userId = UUID.randomUUID()
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = userId,
             schoolId = UUID.randomUUID(),
@@ -63,7 +77,7 @@ class ResetManagerPasswordUseCaseTest {
         )
     }
 
-    private val authCode by lazy {
+    private val authCodeStub by lazy {
         AuthCode(
             code = code,
             email = email,
@@ -72,7 +86,7 @@ class ResetManagerPasswordUseCaseTest {
         )
     }
 
-    private val request by lazy {
+    private val requestStub by lazy {
         ResetManagerPasswordRequest(
             accountId = accountId,
             email = email,
@@ -81,7 +95,7 @@ class ResetManagerPasswordUseCaseTest {
         )
     }
 
-    private val emailErrorRequest by lazy {
+    private val emailErrorRequestStub by lazy {
         ResetManagerPasswordRequest(
             accountId = accountId,
             email = "이상한이메일",
@@ -90,82 +104,102 @@ class ResetManagerPasswordUseCaseTest {
         )
     }
 
-    @BeforeEach
-    fun setUp() {
-        resetManagerPasswordUseCase = ResetManagerPasswordUseCase(
-            queryUserPort, queryAuthCodePort, commandUserPort, securityPort
-        )
-    }
-
     @Test
     fun `인증코드 일치`() {
         // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
-            .willReturn(authCode)
+        given(checkUserAuthority.execute(userId))
+            .willReturn(Authority.MANAGER)
 
-        given(securityPort.encodePassword(request.newPassword))
+        given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
+            .willReturn(authCodeStub)
+
+        given(securityPort.encodePassword(requestStub.newPassword))
             .willReturn(password)
 
         // when & then
         assertDoesNotThrow {
-            resetManagerPasswordUseCase.execute(request)
+            resetManagerPasswordUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `아이디의 유저 존재하지 않음`() {
         // given
-        given(queryUserPort.queryByAccountId(request.accountId))
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(null)
 
         // when & then
+        assertThrows<UserNotFoundException> {
+            resetManagerPasswordUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `유저 권한 불일치`() {
+        // given
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(checkUserAuthority.execute(userId))
+            .willReturn(Authority.STUDENT)
+
+        // when & then
         assertThrows<ManagerNotFoundException> {
-            resetManagerPasswordUseCase.execute(request)
+            resetManagerPasswordUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `이메일 불일치`() {
         // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(checkUserAuthority.execute(userId))
+            .willReturn(Authority.MANAGER)
 
         // when & then
         assertThrows<ManagerInfoMismatchException> {
-            resetManagerPasswordUseCase.execute(emailErrorRequest)
+            resetManagerPasswordUseCase.execute(emailErrorRequestStub)
         }
     }
 
     @Test
     fun `인증코드 존재하지 않음`() {
         // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
+        given(checkUserAuthority.execute(userId))
+            .willReturn(Authority.STUDENT)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
             .willReturn(null)
 
         // when & then
         assertThrows<AuthCodeNotFoundException> {
-            resetManagerPasswordUseCase.execute(request)
+            resetManagerPasswordUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `관리자 인증코드 불일치`() {
         // given
-        given(queryUserPort.queryByAccountId(request.accountId))
-            .willReturn(user)
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
-            .willReturn(authCode.copy(code = "이상한코드임"))
+        given(checkUserAuthority.execute(userId))
+            .willReturn(Authority.STUDENT)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
+            .willReturn(authCodeStub.copy(code = "이상한코드임"))
 
         // when & then
-        assertThrows<AuthCodeNotMatchedException> {
-            resetManagerPasswordUseCase.execute(request)
+        assertThrows<AuthCodeMismatchException> {
+            resetManagerPasswordUseCase.execute(requestStub)
         }
     }
 }

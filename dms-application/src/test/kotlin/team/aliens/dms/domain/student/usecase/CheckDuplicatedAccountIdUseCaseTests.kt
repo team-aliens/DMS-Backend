@@ -19,16 +19,15 @@ class CheckDuplicatedAccountIdUseCaseTests {
 
     private lateinit var checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase
 
-    private val accountId = "계정아이디입니다하하하"
-
     @BeforeEach
     fun setUp() {
         checkDuplicatedAccountIdUseCase = CheckDuplicatedAccountIdUseCase(studentQueryUserPort)
     }
 
+    private val accountId = "계정아이디입니다하하하"
+
     @Test
     fun `계정 아이디 중복 없음`() {
-
         // given
         given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)
@@ -41,7 +40,6 @@ class CheckDuplicatedAccountIdUseCaseTests {
 
     @Test
     fun `계정 아이디 중복`() {
-
         // given
         given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(true)

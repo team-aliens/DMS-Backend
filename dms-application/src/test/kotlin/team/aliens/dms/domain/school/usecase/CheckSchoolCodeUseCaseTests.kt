@@ -15,15 +15,19 @@ import java.time.LocalDate
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class CheckSchoolCodeUseCaseTest {
+class CheckSchoolCodeUseCaseTests {
 
     @MockBean
     private lateinit var querySchoolPort: QuerySchoolPort
 
     private lateinit var checkSchoolCodeUseCase: CheckSchoolCodeUseCase
 
-    private val schoolId = UUID.randomUUID()
+    @BeforeEach
+    fun setUp() {
+        checkSchoolCodeUseCase = CheckSchoolCodeUseCase(querySchoolPort)
+    }
 
+    private val schoolId = UUID.randomUUID()
     private val schoolCode = "AUTH1234"
 
     private val schoolStub by lazy {
@@ -37,11 +41,6 @@ class CheckSchoolCodeUseCaseTest {
             contractStartedAt = LocalDate.now(),
             contractEndedAt = LocalDate.now()
         )
-    }
-
-    @BeforeEach
-    fun setUp() {
-        checkSchoolCodeUseCase = CheckSchoolCodeUseCase(querySchoolPort)
     }
 
     @Test
