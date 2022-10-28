@@ -17,8 +17,8 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.dto.SignupRequest
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.*
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
@@ -26,7 +26,7 @@ import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class SignUpUseCaseTests {
@@ -315,5 +315,4 @@ class SignUpUseCaseTests {
             signUpUseCase.execute(requestStub)
         }
     }
-
 }

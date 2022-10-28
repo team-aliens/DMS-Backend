@@ -156,5 +156,4 @@ class UploadFileUseCaseTests {
             uploadFileUseCase.execute(svgFileStub)
         }
     }
-
 }

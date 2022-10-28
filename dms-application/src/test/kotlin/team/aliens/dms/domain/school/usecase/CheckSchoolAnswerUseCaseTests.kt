@@ -13,7 +13,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CheckSchoolAnswerUseCaseTests {
@@ -82,5 +82,4 @@ class CheckSchoolAnswerUseCaseTests {
             checkSchoolAnswerUseCase.execute(schoolId, "wrong answer")
         }
     }
-
 }

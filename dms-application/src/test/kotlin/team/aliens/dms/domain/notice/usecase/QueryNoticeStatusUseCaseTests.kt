@@ -18,13 +18,8 @@ class QueryNoticeStatusUseCaseTests {
 
     private lateinit var queryNoticeStatusUseCase: QueryNoticeStatusUseCase
 
-    private val to by lazy {
-        LocalDate.now()
-    }
-
-    private val from by lazy {
-        to.plusDays(7)
-    }
+    private val to = LocalDate.now()
+    private val from = to.plusDays(7)
 
     @BeforeEach
     fun setUp() {
@@ -56,5 +51,4 @@ class QueryNoticeStatusUseCaseTests {
         // then
         assertThat(response).isFalse
     }
-
 }
