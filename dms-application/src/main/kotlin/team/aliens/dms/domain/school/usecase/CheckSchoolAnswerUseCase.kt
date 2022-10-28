@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.school.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import java.util.*
+import java.util.UUID
 
 @ReadOnlyUseCase
 class CheckSchoolAnswerUseCase(
@@ -18,5 +18,4 @@ class CheckSchoolAnswerUseCase(
             throw AnswerMismatchException
         }
     }
-
 }

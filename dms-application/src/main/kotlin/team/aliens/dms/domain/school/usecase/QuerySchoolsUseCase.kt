@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.school.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.common.annotation.ReadOnlyUseCase
 
 @ReadOnlyUseCase
 class QuerySchoolsUseCase(
@@ -22,5 +22,4 @@ class QuerySchoolsUseCase(
 
         return SchoolsResponse(result)
     }
-
 }
