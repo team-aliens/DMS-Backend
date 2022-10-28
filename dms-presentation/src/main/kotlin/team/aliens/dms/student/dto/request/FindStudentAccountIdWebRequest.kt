@@ -15,5 +15,6 @@ data class FindStudentAccountIdWebRequest(
     val classRoom: Int,
 
     @field:NotNull
-    val number: Int,
+    val number: Int
+
 )

@@ -4,12 +4,13 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-data class SendEmailCodeWebRequest (
+data class SendEmailCodeWebRequest(
 
     @field:Email
     @field:NotBlank
     val email: String,
 
     @field:NotNull
-    val type: EmailType
+    val type: team.aliens.dms.auth.dto.request.EmailType
+
 )

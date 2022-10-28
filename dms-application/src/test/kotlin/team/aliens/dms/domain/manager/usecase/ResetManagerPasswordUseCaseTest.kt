@@ -12,8 +12,7 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
-import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
-import team.aliens.dms.domain.manager.exception.ManagerInfoNotMatchedException
+import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
@@ -107,7 +106,7 @@ class ResetManagerPasswordUseCaseTest {
         given(queryAuthCodePort.queryAuthCodeByEmail(request.email))
             .willReturn(authCode)
 
-        given(securityPort.encode(request.newPassword))
+        given(securityPort.encodePassword(request.newPassword))
             .willReturn(password)
 
         // when & then
@@ -135,7 +134,7 @@ class ResetManagerPasswordUseCaseTest {
             .willReturn(user)
 
         // when & then
-        assertThrows<ManagerInfoNotMatchedException> {
+        assertThrows<ManagerInfoMismatchException> {
             resetManagerPasswordUseCase.execute(emailErrorRequest)
         }
     }

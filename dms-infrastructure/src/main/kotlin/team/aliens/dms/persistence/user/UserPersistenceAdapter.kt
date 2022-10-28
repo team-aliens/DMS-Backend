@@ -6,7 +6,7 @@ import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.persistence.user.mapper.UserMapper
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class UserPersistenceAdapter(
@@ -14,17 +14,9 @@ class UserPersistenceAdapter(
     private val userRepository: UserJpaRepository
 ) : UserPort {
 
-    override fun existsByEmail(email: String) = userRepository.existsByEmail(email)
+    override fun existsUserByEmail(email: String) = userRepository.existsByEmail(email)
 
-    override fun existsByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
-
-    override fun queryByUserId(id: UUID) = userMapper.toDomain(
-        userRepository.findByIdOrNull(id)
-    )
-
-    override fun queryByAccountId(accountId: String) = userMapper.toDomain(
-        userRepository.findByAccountId(accountId)
-    )
+    override fun existsUserByAccountId(accountId: String): Boolean = userRepository.existsByAccountId(accountId)
 
     override fun saveUser(user: User) = userMapper.toDomain(
         userRepository.save(
@@ -32,8 +24,8 @@ class UserPersistenceAdapter(
         )
     )!!
 
-    override fun queryUserById(id: UUID) = userMapper.toDomain(
-        userRepository.findByIdOrNull(id)
+    override fun queryUserById(userId: UUID) = userMapper.toDomain(
+        userRepository.findByIdOrNull(userId)
     )
 
     override fun queryUserBySchoolId(schoolId: UUID) = userMapper.toDomain(

@@ -15,7 +15,7 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.*
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.spi.ReceiveRandomStringPort
+import team.aliens.dms.common.spi.ReceiveRandomStringPort
 import java.util.*
 
 @ExtendWith(SpringExtension::class)

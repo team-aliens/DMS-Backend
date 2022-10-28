@@ -25,7 +25,7 @@ class AuthWebAdapter(
 ) {
 
     @PostMapping("/tokens")
-    fun singIn(@RequestBody @Valid request: SignInWebRequest): TokenAndFeaturesResponse {
+    fun singIn(@RequestBody @Valid request: team.aliens.dms.auth.dto.request.SignInWebRequest): SignInResponse {
         return signInUseCase.execute(
             SignInRequest(
                 accountId = request.accountId,
@@ -35,7 +35,7 @@ class AuthWebAdapter(
     }
 
     @GetMapping("/code")
-    fun certifyEmailCode(@ModelAttribute request: CertifyEmailCodeWebRequest) {
+    fun certifyEmailCode(@ModelAttribute request: team.aliens.dms.auth.dto.request.CertifyEmailCodeWebRequest) {
         certifyEmailCodeUseCase.execute(
             CertifyEmailCodeRequest(
                 email = request.email,
@@ -46,7 +46,7 @@ class AuthWebAdapter(
     }
 
     @PostMapping("/code")
-    fun sendEmailCode(@RequestBody @Valid request: SendEmailCodeWebRequest) {
+    fun sendEmailCode(@RequestBody @Valid request: team.aliens.dms.auth.dto.request.SendEmailCodeWebRequest) {
         sendEmailCodeUseCase.execute(
             SendEmailCodeRequest(
                 email = request.email,
@@ -56,7 +56,7 @@ class AuthWebAdapter(
     }
 
     @GetMapping("/email")
-    fun certifyEmail(@ModelAttribute request: CertifyEmailWebRequest) {
+    fun certifyEmail(@ModelAttribute request: team.aliens.dms.auth.dto.request.CertifyEmailWebRequest) {
         certifyEmailUseCase.execute(
             CertifyEmailRequest(
                 accountId = request.accountId,
@@ -66,12 +66,16 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenAndFeaturesResponse {
+    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 
     @GetMapping("/account-id")
-    fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): CheckAccountIdExistenceResponse {
-        return CheckAccountIdExistenceResponse(checkAccountIdExistenceUseCase.execute(accountId))
+    fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse {
+        return team.aliens.dms.auth.dto.response.CheckAccountIdExistenceResponse(
+            checkAccountIdExistenceUseCase.execute(
+                accountId
+            )
+        )
     }
 }

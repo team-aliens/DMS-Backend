@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.user.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @Aggregate
 data class User(
@@ -24,8 +24,8 @@ data class User(
     val createdAt: LocalDateTime?,
 
     val deletedAt: LocalDateTime?
-) {
 
+) {
     companion object {
         const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
     }

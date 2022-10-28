@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.spi.CoveredEmailPort
+import team.aliens.dms.common.spi.CoveredEmailPort
 import java.time.LocalDateTime
 import java.util.UUID
 

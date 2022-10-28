@@ -1,7 +1,7 @@
 package team.aliens.dms.persistence.point.entity
 
 import team.aliens.dms.persistence.BaseUUIDEntity
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table

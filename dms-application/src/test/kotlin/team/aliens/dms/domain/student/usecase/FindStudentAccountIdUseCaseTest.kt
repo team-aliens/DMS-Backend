@@ -9,14 +9,14 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
-import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
+import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.spi.CoveredEmailPort
+import team.aliens.dms.common.spi.CoveredEmailPort
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -132,7 +132,7 @@ class FindStudentAccountIdUseCaseTest {
             .willReturn(user)
 
         // when & then
-        assertThrows<StudentInfoNotMatchedException> {
+        assertThrows<StudentInfoMismatchException> {
             findStudentAccountIdUseCase.execute(schoolId, request.copy(name = "이준서"))
         }
     }

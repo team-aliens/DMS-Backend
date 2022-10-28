@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.meal.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDate
 import java.util.UUID
 
@@ -16,6 +16,7 @@ data class Meal(
     val lunch: String?,
 
     val dinner: String?
+
 ) {
 
     /**

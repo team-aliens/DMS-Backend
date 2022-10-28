@@ -8,14 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.spi.CoveredEmailPort
+import team.aliens.dms.common.spi.CoveredEmailPort
 import java.time.LocalDate
 import java.util.UUID
 
@@ -101,7 +101,7 @@ class FindManagerAccountIdUseCaseTest {
             .willReturn(coveredEmail)
 
         // when then
-        assertThrows<AnswerNotMatchedException> {
+        assertThrows<AnswerMismatchException> {
             findManagerAccountIdUseCase.execute(id, answer)
         }
     }

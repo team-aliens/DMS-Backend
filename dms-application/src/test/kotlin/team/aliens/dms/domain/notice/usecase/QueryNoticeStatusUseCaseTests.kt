@@ -34,7 +34,7 @@ class QueryNoticeStatusUseCaseTests {
     @Test
     fun `7일 이내의 공지사항 존재함`() {
         // given
-        given(queryNoticePort.existsByDateBetween(to, from))
+        given(queryNoticePort.existsNoticeByDateBetween(to, from))
             .willReturn(true)
 
         // when
@@ -47,7 +47,7 @@ class QueryNoticeStatusUseCaseTests {
     @Test
     fun `7일 이내의 공지사항 존재하지 않음`() {
         // given
-        given(queryNoticePort.existsByDateBetween(to, from))
+        given(queryNoticePort.existsNoticeByDateBetween(to, from))
             .willReturn(false)
 
         // when

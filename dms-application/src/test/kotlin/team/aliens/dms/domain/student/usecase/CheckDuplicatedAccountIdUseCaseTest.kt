@@ -30,7 +30,7 @@ class CheckDuplicatedAccountIdUseCaseTest {
     fun `계정 아이디 중복 없음`() {
 
         // given
-        given(studentQueryUserPort.existsByAccountId(accountId))
+        given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)
 
         // when & then
@@ -43,7 +43,7 @@ class CheckDuplicatedAccountIdUseCaseTest {
     fun `계정 아이디 중복`() {
 
         // given
-        given(studentQueryUserPort.existsByAccountId(accountId))
+        given(studentQueryUserPort.existsUserByAccountId(accountId))
             .willReturn(true)
 
         // when & then

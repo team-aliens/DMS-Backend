@@ -9,11 +9,10 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
-import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
+import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
@@ -119,7 +118,7 @@ class ResetStudentPasswordUseCaseTest {
         given(queryAuthCodePort.queryAuthCodeByEmail(user.email))
             .willReturn(authCode)
 
-        given(securityPort.encode(request.newPassword))
+        given(securityPort.encodePassword(request.newPassword))
             .willReturn(password)
 
         // when & then
@@ -149,7 +148,7 @@ class ResetStudentPasswordUseCaseTest {
             .willReturn(user)
 
         // when & then
-        assertThrows<StudentInfoNotMatchedException> {
+        assertThrows<StudentInfoMismatchException> {
             resetStudentPasswordUseCase.execute(notMatchedNameRequest)
         }
     }
@@ -161,7 +160,7 @@ class ResetStudentPasswordUseCaseTest {
             .willReturn(user)
 
         // when & then
-        assertThrows<StudentInfoNotMatchedException> {
+        assertThrows<StudentInfoMismatchException> {
             resetStudentPasswordUseCase.execute(notMatchedEmailRequest)
         }
     }
@@ -173,7 +172,7 @@ class ResetStudentPasswordUseCaseTest {
             .willReturn(user)
 
         // when & then
-        assertThrows<StudentInfoNotMatchedException> {
+        assertThrows<StudentInfoMismatchException> {
             resetStudentPasswordUseCase.execute(request.copy(name = "이정윤아님", email = "이정윤아님@naver.com"))
         }
     }

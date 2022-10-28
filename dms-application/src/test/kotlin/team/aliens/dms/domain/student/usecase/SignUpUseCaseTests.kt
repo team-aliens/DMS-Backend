@@ -9,16 +9,16 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
-import team.aliens.dms.domain.school.exception.CodeNotMatchedException
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
+import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignupRequest
-import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
+import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.*
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
@@ -169,12 +169,12 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val tokenAndFeaturesResponseStub by lazy {
-        TokenAndFeaturesResponse(
+    private val signUpResponseStub by lazy {
+        SignUpResponse(
             accessToken = tokenResponseStub.accessToken,
             expiredAt = tokenResponseStub.expiredAt,
             refreshToken = tokenResponseStub.refreshToken,
-            features = TokenAndFeaturesResponse.Features(
+            features = SignUpResponse.Features(
                 mealService = true,
                 noticeService = true,
                 pointService = true,
@@ -188,16 +188,16 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryUserPort.existsByEmail(email))
+        given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
 
-        given(queryUserPort.existsByAccountId(accountId))
+        given(queryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)
 
-        given(securityPort.encode(requestStub.password))
+        given(securityPort.encodePassword(requestStub.password))
             .willReturn(userStub.password)
 
         given(commandUserPort.saveUser(userStub))
@@ -213,7 +213,7 @@ class SignUpUseCaseTests {
         val response = signUpUseCase.execute(requestStub)
 
         // then
-        assertThat(response).isEqualTo(tokenAndFeaturesResponseStub)
+        assertThat(response).isEqualTo(signUpResponseStub)
     }
 
     @Test
@@ -223,7 +223,7 @@ class SignUpUseCaseTests {
             .willReturn(null)
 
         // when & then
-        assertThrows<CodeNotMatchedException> {
+        assertThrows<SchoolCodeMismatchException> {
             signUpUseCase.execute(requestStub)
         }
     }
@@ -237,7 +237,7 @@ class SignUpUseCaseTests {
             .willReturn(wrongAnswerSchool)
 
         // when & then
-        assertThrows<AnswerNotMatchedException> {
+        assertThrows<AnswerMismatchException> {
             signUpUseCase.execute(requestStub)
         }
     }
@@ -248,7 +248,7 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryUserPort.existsByEmail(email))
+        given(queryUserPort.existsUserByEmail(email))
             .willReturn(true)
 
         // when & then
@@ -263,7 +263,7 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryUserPort.existsByEmail(email))
+        given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
@@ -283,14 +283,14 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryUserPort.existsByEmail(email))
+        given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(wrongCodeAuthCode)
 
         // when & then
-        assertThrows<AuthCodeNotMatchedException> {
+        assertThrows<AuthCodeMismatchException> {
             signUpUseCase.execute(requestStub)
         }
     }
@@ -301,13 +301,13 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryUserPort.existsByEmail(email))
+        given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
 
-        given(queryUserPort.existsByAccountId(accountId))
+        given(queryUserPort.existsUserByAccountId(accountId))
             .willReturn(true)
 
         // when & then

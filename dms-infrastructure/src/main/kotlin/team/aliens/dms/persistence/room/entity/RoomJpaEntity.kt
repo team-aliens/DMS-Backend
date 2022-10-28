@@ -16,6 +16,7 @@ class RoomJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?
+
 )
 
 @Embeddable

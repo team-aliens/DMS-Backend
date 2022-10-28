@@ -54,7 +54,7 @@ class QuerySchoolsUseCaseTests {
     @Test
     fun `학교 목록 조회 성공`() {
         // given
-        given(querySchoolPort.queryAllSchool())
+        given(querySchoolPort.queryAllSchools())
             .willReturn(
                 listOf(schoolStub, schoolStub2)
             )

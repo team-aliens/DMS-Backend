@@ -19,13 +19,15 @@ class FileWebAdapter(
 
     @PostMapping
     fun uploadFile(@RequestPart file: MultipartFile): UploadFileResponse {
-        val result = uploadFileUseCase.execute(file.let(transferFile))
+        val result = uploadFileUseCase.execute(
+            file.let(transferFile)
+        )
 
         return UploadFileResponse(result)
     }
 
     private val transferFile = { multipartFile: MultipartFile ->
-        File("${UUID.randomUUID()}@${multipartFile.originalFilename}").let {
+        File("${UUID.randomUUID()}||${multipartFile.originalFilename}").let {
             FileOutputStream(it).run {
                 this.write(multipartFile.bytes)
                 this.close()
@@ -33,5 +35,4 @@ class FileWebAdapter(
             it
         }
     }
-
 }

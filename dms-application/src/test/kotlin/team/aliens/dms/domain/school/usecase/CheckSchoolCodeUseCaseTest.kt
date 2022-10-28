@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.school.exception.CodeNotMatchedException
+import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
@@ -63,7 +63,7 @@ class CheckSchoolCodeUseCaseTest {
             .willReturn(null)
 
         // when & then
-        assertThrows<CodeNotMatchedException> {
+        assertThrows<SchoolCodeMismatchException> {
             checkSchoolCodeUseCase.execute(schoolCode)
         }
     }

@@ -14,8 +14,8 @@ import team.aliens.dms.domain.auth.exception.PasswordMismatchException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.AuthQueryStudentPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
+import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.auth.spi.SecurityPort
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
@@ -26,7 +26,7 @@ import java.util.*
 class SignInUseCaseTest {
 
     @MockBean
-    private lateinit var securityPort: SecurityPort
+    private lateinit var securityPort: AuthSecurityPort
 
     @MockBean
     private lateinit var queryUserPort: AuthQueryUserPort
@@ -107,14 +107,16 @@ class SignInUseCaseTest {
         given(securityPort.isPasswordMatch(request.password, user.password))
             .willReturn(true)
         given(queryStudentPort.queryStudentById(user.id))
-            .willReturn(Student(
-                studentId = user.id,
-                roomNumber = 1,
-                schoolId = UUID.randomUUID(),
-                grade = 2,
-                classRoom = 1,
-                number = 17
-            ))
+            .willReturn(
+                Student(
+                    studentId = user.id,
+                    roomNumber = 1,
+                    schoolId = UUID.randomUUID(),
+                    grade = 2,
+                    classRoom = 1,
+                    number = 17
+                )
+            )
         given(jwtPort.receiveToken(user.id, Authority.STUDENT))
             .willReturn(tokenResponse)
 

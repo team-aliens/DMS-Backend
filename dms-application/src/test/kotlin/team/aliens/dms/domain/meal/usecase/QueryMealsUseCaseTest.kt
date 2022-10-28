@@ -97,7 +97,7 @@ class QueryMealsUseCaseTest {
         given(queryStudentPort.queryByUserId(userId))
             .willReturn(student)
 
-        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
+        given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(meal))
 
         val response = queryMealsUseCase.execute(mealDate)
@@ -141,7 +141,7 @@ class QueryMealsUseCaseTest {
         given(queryStudentPort.queryByUserId(userId))
             .willReturn(student)
 
-        given(queryMealPort.queryAllByMealDateAndSchoolId(mealDate, schoolId))
+        given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
             .willReturn(listOf(breakfastNullMeal))
 
         val response = queryMealsUseCase.execute(mealDate)

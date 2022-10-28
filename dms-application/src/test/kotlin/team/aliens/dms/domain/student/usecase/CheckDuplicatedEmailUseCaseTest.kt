@@ -29,7 +29,7 @@ class CheckDuplicatedEmailUseCaseTest {
     @Test
     fun `이메일 중복 없음`() {
         // given
-        given(studentQueryUserPort.existsByEmail(email))
+        given(studentQueryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
         // when & then
@@ -41,7 +41,7 @@ class CheckDuplicatedEmailUseCaseTest {
     @Test
     fun `이메일 중복`() {
         // given
-        given(studentQueryUserPort.existsByEmail(email))
+        given(studentQueryUserPort.existsUserByEmail(email))
             .willReturn(true)
 
         // when & then

@@ -2,7 +2,7 @@ package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 
 @ReadOnlyUseCase
 class QuerySchoolsUseCase(
@@ -10,7 +10,7 @@ class QuerySchoolsUseCase(
 ) {
 
     fun execute(): SchoolsResponse {
-        val schools = querySchoolPort.queryAllSchool()
+        val schools = querySchoolPort.queryAllSchools()
 
         val result = schools.map {
             SchoolsResponse.SchoolElement(
