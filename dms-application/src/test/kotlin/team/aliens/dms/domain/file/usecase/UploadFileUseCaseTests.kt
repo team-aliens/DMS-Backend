@@ -20,6 +20,11 @@ class UploadFileUseCaseTests {
 
     private lateinit var uploadFileUseCase: UploadFileUseCase
 
+    @BeforeEach
+    fun setUp() {
+        uploadFileUseCase = UploadFileUseCase(uploadFilePort)
+    }
+
     private val filePathStub = "test path"
 
     private val jpgFileStub by lazy { File("test.jpg") }
@@ -39,11 +44,6 @@ class UploadFileUseCaseTests {
     private val heicFileStub2 by lazy { File("test.HEIC") }
 
     private val svgFileStub by lazy { File("test.svg") }
-
-    @BeforeEach
-    fun setUp() {
-        uploadFileUseCase = UploadFileUseCase(uploadFilePort)
-    }
 
     @Test
     fun `jpg 파일 업로드 성공`() {

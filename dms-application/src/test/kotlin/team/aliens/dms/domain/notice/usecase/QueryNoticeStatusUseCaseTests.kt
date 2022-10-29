@@ -18,13 +18,13 @@ class QueryNoticeStatusUseCaseTests {
 
     private lateinit var queryNoticeStatusUseCase: QueryNoticeStatusUseCase
 
-    private val to = LocalDate.now()
-    private val from = to.plusDays(7)
-
     @BeforeEach
     fun setUp() {
         queryNoticeStatusUseCase = QueryNoticeStatusUseCase(queryNoticePort)
     }
+
+    private val to = LocalDate.now()
+    private val from = to.plusDays(7)
 
     @Test
     fun `7일 이내의 공지사항 존재함`() {

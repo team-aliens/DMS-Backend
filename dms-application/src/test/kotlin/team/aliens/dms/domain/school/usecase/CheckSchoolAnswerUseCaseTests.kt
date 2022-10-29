@@ -23,6 +23,11 @@ class CheckSchoolAnswerUseCaseTests {
 
     private lateinit var checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase
 
+    @BeforeEach
+    fun setUp() {
+        checkSchoolAnswerUseCase = CheckSchoolAnswerUseCase(querySchoolPort)
+    }
+
     private val schoolStub by lazy {
         School(
             id = UUID.randomUUID(),
@@ -34,11 +39,6 @@ class CheckSchoolAnswerUseCaseTests {
             contractStartedAt = LocalDate.now(),
             contractEndedAt = LocalDate.now(),
         )
-    }
-
-    @BeforeEach
-    fun setUp() {
-        checkSchoolAnswerUseCase = CheckSchoolAnswerUseCase(querySchoolPort)
     }
 
     @Test
