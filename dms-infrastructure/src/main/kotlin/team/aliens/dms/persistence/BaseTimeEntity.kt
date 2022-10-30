@@ -9,4 +9,5 @@ abstract class BaseTimeEntity(
 
     @Column(nullable = false, updatable = false, columnDefinition = "DATETIME")
     val createdAt: LocalDateTime = LocalDateTime.now()
+
 )

@@ -9,5 +9,5 @@ data class SignInWebRequest(
 
     @field:NotBlank
     val password: String
-) {
-}
+
+)

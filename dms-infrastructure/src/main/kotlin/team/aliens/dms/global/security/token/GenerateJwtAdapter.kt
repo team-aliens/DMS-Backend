@@ -11,7 +11,8 @@ import team.aliens.dms.global.security.SecurityProperties
 import team.aliens.dms.persistence.auth.model.RefreshTokenEntity
 import team.aliens.dms.persistence.auth.repository.RefreshTokenRepository
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 @Component
 class GenerateJwtAdapter(
@@ -43,14 +44,13 @@ class GenerateJwtAdapter(
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp))
             .compact()
 
-        refreshTokenRepository.save(
-            RefreshTokenEntity(
-                token = token,
-                userId = userId,
-                authority = authority,
-                expirationTime = securityProperties.refreshExp / 1000
-            )
+        val refreshToken = RefreshTokenEntity(
+            token = token,
+            userId = userId,
+            authority = authority,
+            expirationTime = securityProperties.refreshExp / 1000
         )
+        refreshTokenRepository.save(refreshToken)
 
         return token
     }

@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.notice.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -18,4 +18,5 @@ data class Notice(
     val createdAt: LocalDateTime?,
 
     val updatedAt: LocalDateTime?
+
 )

@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.school.dto
 
-import java.util.*
+import java.util.UUID
 
 data class SchoolsResponse(
     val schools: List<SchoolElement>

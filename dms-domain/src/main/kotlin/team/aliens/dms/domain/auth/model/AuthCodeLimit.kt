@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.auth.model
 
 import team.aliens.dms.domain.auth.exception.AuthCodeOverLimitException
-import team.aliens.dms.global.annotation.Aggregate
-import java.util.*
+import team.aliens.dms.common.annotation.Aggregate
+import java.util.UUID
 
 @Aggregate
 data class AuthCodeLimit(
@@ -18,6 +18,7 @@ data class AuthCodeLimit(
     val isVerified: Boolean,
 
     val expirationTime: Int
+
 ) {
     constructor(email: String, type: EmailType) : this(
         id = UUID.randomUUID(),
@@ -29,9 +30,9 @@ data class AuthCodeLimit(
     )
 
     companion object {
-        const val MAX_ATTEMPT_COUNT: Int = 5
+        const val MAX_ATTEMPT_COUNT = 5
         const val EXPIRED = 1800
-        const val VERIFIED_EXPIRED = 2700
+        private const val VERIFIED_EXPIRED = 2700
 
         fun certified(email: String, type: EmailType): AuthCodeLimit {
             return AuthCodeLimit(

@@ -28,4 +28,5 @@ data class AuthCodeLimitEntity(
     @field:NotNull
     @TimeToLive
     val expirationTime: Int
+
 )

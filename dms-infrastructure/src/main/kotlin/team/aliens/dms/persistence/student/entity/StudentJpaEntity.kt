@@ -3,10 +3,21 @@ package team.aliens.dms.persistence.student.entity
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.JoinColumns
+import javax.persistence.ManyToOne
+import javax.persistence.MapsId
+import javax.persistence.OneToOne
+import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_student",
+@Table(
+    name = "tbl_student",
     uniqueConstraints = [
         UniqueConstraint(columnNames = arrayOf("grade", "class_room", "number"))
     ]
@@ -36,4 +47,5 @@ class StudentJpaEntity(
 
     @Column(columnDefinition = "TINYINT", nullable = false)
     val number: Int
+
 )

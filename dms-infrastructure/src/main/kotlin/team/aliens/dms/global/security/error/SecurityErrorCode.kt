@@ -1,6 +1,6 @@
 package team.aliens.dms.global.security.error
 
-import team.aliens.dms.global.error.ErrorProperty
+import team.aliens.dms.common.error.ErrorProperty
 
 enum class SecurityErrorCode(
     private val status: Int,
