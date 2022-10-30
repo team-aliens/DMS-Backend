@@ -7,7 +7,7 @@ import team.aliens.dms.persistence.meal.entity.MealJpaEntityId
 import team.aliens.dms.persistence.meal.mapper.MealMapper
 import team.aliens.dms.persistence.meal.repository.MealJpaRepository
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Component
 class MealPersistenceAdapter(
@@ -15,7 +15,7 @@ class MealPersistenceAdapter(
     private val mealRepository: MealJpaRepository
 ) : MealPort {
 
-    override fun queryAllByMealDateAndSchoolId(mealDate: LocalDate, schoolId: UUID): List<Meal> {
+    override fun queryAllMealsByMealDateAndSchoolId(mealDate: LocalDate, schoolId: UUID): List<Meal> {
         val mealId = MealJpaEntityId(mealDate, schoolId)
 
         return mealRepository.findAllById(mealId).map {

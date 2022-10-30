@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.school.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
-import java.util.*
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QuerySchoolQuestionUseCase(
@@ -15,5 +15,4 @@ class QuerySchoolQuestionUseCase(
 
         return school.question
     }
-
 }

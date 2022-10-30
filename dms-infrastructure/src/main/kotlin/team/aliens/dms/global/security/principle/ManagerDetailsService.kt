@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.persistence.manager.repository.ManagerJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class ManagerDetailsService(
@@ -14,9 +14,8 @@ class ManagerDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        val managerId = UUID.fromString(username)
-        return managerRepository.findByIdOrNull(managerId)?.let {
-            ManagerDetails(managerId)
-        } ?: throw InvalidTokenException
+        val manager = managerRepository.findByIdOrNull(UUID.fromString(username)) ?: throw InvalidTokenException
+
+        return ManagerDetails(manager.userId)
     }
 }

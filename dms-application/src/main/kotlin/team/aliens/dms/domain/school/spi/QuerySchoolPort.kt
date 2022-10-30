@@ -5,9 +5,9 @@ import java.util.UUID
 
 interface QuerySchoolPort {
 
-    fun queryAllSchool(): List<School>
+    fun queryAllSchools(): List<School>
 
-    fun querySchoolById(id: UUID): School?
+    fun querySchoolById(schoolId: UUID): School?
 
     fun querySchoolByCode(code: String): School?
 

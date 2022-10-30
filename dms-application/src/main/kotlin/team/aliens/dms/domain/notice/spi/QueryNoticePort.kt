@@ -4,6 +4,6 @@ import java.time.LocalDate
 
 interface QueryNoticePort {
 
-    fun existsByDateBetween(to: LocalDate, from: LocalDate): Boolean
+    fun existsNoticeByDateBetween(to: LocalDate, from: LocalDate): Boolean
 
 }

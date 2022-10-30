@@ -19,5 +19,4 @@ class NoticeWebAdapter(
 
         return GetNoticeStatusResponse(result)
     }
-
 }

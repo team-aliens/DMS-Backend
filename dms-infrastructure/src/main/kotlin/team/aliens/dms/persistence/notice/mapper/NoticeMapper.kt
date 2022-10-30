@@ -37,5 +37,4 @@ class NoticeMapper(
             updatedAt = domain.updatedAt!!
         )
     }
-
 }

@@ -12,4 +12,5 @@ abstract class BaseUUIDEntity(
     @Id
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     val id: UUID = Generators.timeBasedGenerator().generate()
+
 )

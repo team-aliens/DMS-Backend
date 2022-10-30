@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QuerySchoolsUseCaseTests {
@@ -19,6 +19,11 @@ class QuerySchoolsUseCaseTests {
     private lateinit var querySchoolPort: QuerySchoolPort
 
     private lateinit var querySchoolsUseCase: QuerySchoolsUseCase
+
+    @BeforeEach
+    fun setUp() {
+        querySchoolsUseCase = QuerySchoolsUseCase(querySchoolPort)
+    }
 
     private val schoolStub by lazy {
         School(
@@ -46,15 +51,10 @@ class QuerySchoolsUseCaseTests {
         )
     }
 
-    @BeforeEach
-    fun setUp() {
-        querySchoolsUseCase = QuerySchoolsUseCase(querySchoolPort)
-    }
-
     @Test
     fun `학교 목록 조회 성공`() {
         // given
-        given(querySchoolPort.queryAllSchool())
+        given(querySchoolPort.queryAllSchools())
             .willReturn(
                 listOf(schoolStub, schoolStub2)
             )

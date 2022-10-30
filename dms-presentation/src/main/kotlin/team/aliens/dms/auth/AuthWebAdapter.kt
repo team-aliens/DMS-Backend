@@ -25,7 +25,7 @@ class AuthWebAdapter(
 ) {
 
     @PostMapping("/tokens")
-    fun singIn(@RequestBody @Valid request: SignInWebRequest): TokenAndFeaturesResponse {
+    fun singIn(@RequestBody @Valid request: SignInWebRequest): SignInResponse {
         return signInUseCase.execute(
             SignInRequest(
                 accountId = request.accountId,
@@ -66,12 +66,16 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): TokenAndFeaturesResponse {
+    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 
     @GetMapping("/account-id")
     fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): CheckAccountIdExistenceResponse {
-        return CheckAccountIdExistenceResponse(checkAccountIdExistenceUseCase.execute(accountId))
+        return CheckAccountIdExistenceResponse(
+            checkAccountIdExistenceUseCase.execute(
+                accountId
+            )
+        )
     }
 }

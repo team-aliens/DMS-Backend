@@ -11,24 +11,21 @@ import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
 
 @Component
 class AwsSESAdapter(
-    private val amazonSimpleEmailServiceAsync : AmazonSimpleEmailServiceAsync,
+    private val amazonSimpleEmailServiceAsync: AmazonSimpleEmailServiceAsync,
     private val awsSESProperties: AwsSESProperties
 ) : SendEmailPort {
 
     override fun sendAuthCode(email: String, type: EmailType, code: String) {
-        val templateName = type.templateName
-
-        val request = SendTemplatedEmailRequest()
+        val templatedEmailRequest = SendTemplatedEmailRequest()
             .withDestination(Destination().withToAddresses(email))
-            .withTemplate(templateName)
+            .withTemplate(type.templateName)
             .withTemplateData(code)
             .withSource(awsSESProperties.source)
 
         try {
-            amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(request)
-        } catch (e : MessageRejectedException) {
+            amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(templatedEmailRequest)
+        } catch (e: MessageRejectedException) {
             throw SendEmailRejectedException
         }
     }
-
 }
