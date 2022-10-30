@@ -12,13 +12,12 @@ import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.auth.spi.AuthQueryStudentPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
 import java.util.*
 
@@ -32,34 +31,31 @@ class SignInUseCaseTests {
     private lateinit var queryUserPort: AuthQueryUserPort
 
     @MockBean
-    private lateinit var queryStudentPort: AuthQueryStudentPort
+    private lateinit var jwtPort: JwtPort
 
     @MockBean
-    private lateinit var jwtPort: JwtPort
+    private lateinit var checkUserAuthority: CheckUserAuthority
 
     private lateinit var signInUseCase: SignInUseCase
 
     @BeforeEach
     fun setUp() {
         signInUseCase = SignInUseCase(
-            securityPort,
-            queryUserPort,
-            queryStudentPort,
-            jwtPort
+            securityPort, queryUserPort, jwtPort, checkUserAuthority
         )
     }
 
     private val accountId = "accountId"
     private val password = "password"
 
-    private val request by lazy {
+    private val requestStub by lazy {
         SignInRequest(
             accountId = accountId,
             password = password
         )
     }
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = UUID.randomUUID(),
             schoolId = UUID.randomUUID(),
@@ -73,82 +69,78 @@ class SignInUseCaseTests {
         )
     }
 
-    private val tokenResponse =
-        TokenResponse(
-            accessToken = "bearer dga",
+    private val tokenResponse = TokenResponse(
+            accessToken = "Bearer dga",
             expiredAt = LocalDateTime.now(),
-            refreshToken = "bearer sdalkgmsalkgmsa"
-        )
-
+            refreshToken = "Bearer sdalkgmsalkgmsa"
+    )
 
     @Test
     fun `매니저일때 로그인 성공`() {
         // given
-        given(queryUserPort.queryUserByAccountId(request.accountId))
-            .willReturn(user)
-        given(securityPort.isPasswordMatch(request.password, user.password))
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(true)
-        given(queryStudentPort.queryStudentById(user.id))
-            .willReturn(null)
-        given(jwtPort.receiveToken(user.id, Authority.MANAGER))
+
+        given(checkUserAuthority.execute(userStub.id))
+            .willReturn(Authority.MANAGER)
+
+        given(jwtPort.receiveToken(userStub.id, Authority.MANAGER))
             .willReturn(tokenResponse)
 
         // when then
         assertDoesNotThrow {
-            signInUseCase.execute(request)
+            signInUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `학생일때 로그인 성공`() {
         // given
-        given(queryUserPort.queryUserByAccountId(request.accountId))
-            .willReturn(user)
-        given(securityPort.isPasswordMatch(request.password, user.password))
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(true)
-        given(queryStudentPort.queryStudentById(user.id))
-            .willReturn(
-                Student(
-                    studentId = user.id,
-                    roomNumber = 1,
-                    schoolId = UUID.randomUUID(),
-                    grade = 2,
-                    classRoom = 1,
-                    number = 17
-                )
-            )
-        given(jwtPort.receiveToken(user.id, Authority.STUDENT))
+
+        given(checkUserAuthority.execute(userStub.id))
+            .willReturn(Authority.STUDENT)
+
+        given(jwtPort.receiveToken(userStub.id, Authority.STUDENT))
             .willReturn(tokenResponse)
 
         // when then
         assertDoesNotThrow {
-            signInUseCase.execute(request)
+            signInUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `유저를 찾을 수 없음`() {
         // given
-        given(queryUserPort.queryUserByAccountId(request.accountId))
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(null)
 
         // when then
         assertThrows<UserNotFoundException> {
-            signInUseCase.execute(request)
+            signInUseCase.execute(requestStub)
         }
     }
 
     @Test
     fun `비밀번호가 틀림`() {
         // given
-        given(queryUserPort.queryUserByAccountId(request.accountId))
-            .willReturn(user)
-        given(securityPort.isPasswordMatch(request.password, user.password))
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(false)
 
         // when then
         assertThrows<PasswordMismatchException> {
-            signInUseCase.execute(request)
+            signInUseCase.execute(requestStub)
         }
     }
 }

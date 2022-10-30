@@ -19,7 +19,7 @@ import team.aliens.dms.common.spi.ReceiveRandomStringPort
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class SendEmailCodeUseCaseTest {
+class SendEmailCodeUseCaseTests {
 
     @MockBean
     private lateinit var sendEmailPort: SendEmailPort
@@ -31,7 +31,7 @@ class SendEmailCodeUseCaseTest {
     private lateinit var commandAuthCodePort: CommandAuthCodePort
 
     @MockBean
-    private lateinit var getEmailCodePort: ReceiveRandomStringPort
+    private lateinit var receiveRandomStringPort: ReceiveRandomStringPort
 
     @MockBean
     private lateinit var queryAuthCodeLimitPort: QueryAuthCodeLimitPort
@@ -47,21 +47,20 @@ class SendEmailCodeUseCaseTest {
             sendEmailPort,
             queryUserPort,
             commandAuthCodePort,
-            getEmailCodePort,
+            receiveRandomStringPort,
             queryAuthCodeLimitPort,
             commandAuthCodeLimitPort
         )
     }
 
     private val id = UUID.randomUUID()
-
     private val code = "@SF^%L"
-
     private val type = EmailType.PASSWORD
-
     private val email = "email@dsm.hs.kr"
+    private val request = SendEmailCodeRequest(email, type)
+    private val request2 = SendEmailCodeRequest(email, EmailType.SIGNUP)
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = id,
             schoolId = id,
@@ -74,14 +73,6 @@ class SendEmailCodeUseCaseTest {
             deletedAt = null
         )
     }
-
-    val request = SendEmailCodeRequest(
-        email, type
-    )
-
-    val request2 = SendEmailCodeRequest(
-        email, EmailType.SIGNUP
-    )
 
     @Test
     fun `인증번호 발송 성공 case1`() {
@@ -96,12 +87,12 @@ class SendEmailCodeUseCaseTest {
 
         // given
         given(queryUserPort.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
         given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
             .willReturn(authCodeLimit)
 
-        given(getEmailCodePort.randomNumber(6))
+        given(receiveRandomStringPort.randomNumber(6))
             .willReturn(code)
 
         // when & then
@@ -114,9 +105,9 @@ class SendEmailCodeUseCaseTest {
     fun `인증번호 발송 성공 case2`() {
         // given
         given(queryUserPort.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
-        given(getEmailCodePort.randomNumber(6))
+        given(receiveRandomStringPort.randomNumber(6))
             .willReturn(code)
 
         // when & then
@@ -131,7 +122,7 @@ class SendEmailCodeUseCaseTest {
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(null)
 
-        given(getEmailCodePort.randomNumber(6))
+        given(receiveRandomStringPort.randomNumber(6))
             .willReturn(code)
 
         // when & then
@@ -165,7 +156,7 @@ class SendEmailCodeUseCaseTest {
 
         // given
         given(queryUserPort.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
         given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
             .willReturn(authCodeLimit)

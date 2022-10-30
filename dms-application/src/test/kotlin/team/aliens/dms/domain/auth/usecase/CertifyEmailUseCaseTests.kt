@@ -16,7 +16,7 @@ import team.aliens.dms.domain.user.model.User
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class CertifyEmailUseCaseTest {
+class CertifyEmailUseCaseTests {
 
     @MockBean
     private lateinit var queryUserPort: AuthQueryUserPort
@@ -29,12 +29,10 @@ class CertifyEmailUseCaseTest {
     }
 
     private val id = UUID.randomUUID()
-
     private val email = "email@dsm.hs.kr"
-
     private val accountId = "accountId"
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = id,
             schoolId = id,
@@ -50,13 +48,11 @@ class CertifyEmailUseCaseTest {
 
     @Test
     fun `이메일 검증 성공`() {
-        val request = CertifyEmailRequest(
-            accountId, email
-        )
+        val request = CertifyEmailRequest(accountId, email)
 
         //given
         given(queryUserPort.queryUserByAccountId(request.accountId))
-            .willReturn(user)
+            .willReturn(userStub)
 
         //when then
         assertDoesNotThrow {
@@ -66,9 +62,7 @@ class CertifyEmailUseCaseTest {
 
     @Test
     fun `유저를 찾을 수 없음`() {
-        val request = CertifyEmailRequest(
-            accountId, email
-        )
+        val request = CertifyEmailRequest(accountId, email)
 
         //given
         given(queryUserPort.queryUserByAccountId(request.accountId))
@@ -83,13 +77,11 @@ class CertifyEmailUseCaseTest {
     @Test
     fun `이메일이 일치하지 않음`() {
         val mismatchEmail = "mis@match.com"
-        val request = CertifyEmailRequest(
-            accountId, mismatchEmail
-        )
+        val request = CertifyEmailRequest(accountId, mismatchEmail)
 
         //given
         given(queryUserPort.queryUserByAccountId(request.accountId))
-            .willReturn(user)
+            .willReturn(userStub)
 
         //when then
         assertThrows<EmailMismatchException> {

@@ -21,22 +21,24 @@ import java.util.UUID
 class ReissueTokenUseCaseTests {
 
     @MockBean
-    private lateinit var queryRefreshTokenPort: QueryRefreshTokenPort
+    private lateinit var jwtPort: JwtPort
 
     @MockBean
-    private lateinit var jwtPort: JwtPort
+    private lateinit var queryRefreshTokenPort: QueryRefreshTokenPort
 
     private lateinit var reissueTokenUseCase: ReissueTokenUseCase
 
     @BeforeEach
     fun setUp() {
-        reissueTokenUseCase = ReissueTokenUseCase(queryRefreshTokenPort, jwtPort)
+        reissueTokenUseCase = ReissueTokenUseCase(
+            jwtPort, queryRefreshTokenPort
+        )
     }
 
-    private val request = "bearer rlkemagkldamgl"
+    private val request = "Bearer rlkemagkldamgl"
     private val userId = UUID.randomUUID()
 
-    private val refreshToken by lazy {
+    private val refreshTokenStub by lazy {
         RefreshToken(
             token = request,
             userId = userId,
@@ -45,11 +47,11 @@ class ReissueTokenUseCaseTests {
         )
     }
 
-    private val tokenResponse by lazy {
+    private val tokenResponseStub by lazy {
         TokenResponse(
-            accessToken = "bearer dalkmas",
+            accessToken = "Bearer dalkmas",
             expiredAt = LocalDateTime.now(),
-            refreshToken = "bearer akldsgmaslkdgmadk"
+            refreshToken = "Bearer akldsgmaslkdgmadk"
         )
     }
 
@@ -57,12 +59,15 @@ class ReissueTokenUseCaseTests {
     fun `토큰 재발급 성공`() {
         //given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(request))
-            .willReturn(refreshToken)
-        given(jwtPort.receiveToken(refreshToken.userId, refreshToken.authority))
-            .willReturn(tokenResponse)
+            .willReturn(refreshTokenStub)
+
+        given(jwtPort.receiveToken(refreshTokenStub.userId, refreshTokenStub.authority))
+            .willReturn(tokenResponseStub)
 
         //when & then
-        assertDoesNotThrow { reissueTokenUseCase.execute(request) }
+        assertDoesNotThrow {
+            reissueTokenUseCase.execute(request)
+        }
     }
 
     @Test

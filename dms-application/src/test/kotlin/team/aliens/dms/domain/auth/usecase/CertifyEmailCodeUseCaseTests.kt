@@ -37,21 +37,16 @@ class CertifyEmailCodeUseCaseTests {
     @BeforeEach
     fun setUp() {
         certifyEmailCodeUseCase = CertifyEmailCodeUseCase(
-            queryAuthCodePort,
-            queryUserPot,
-            commandAuthCodeLimitPort
+            queryAuthCodePort, queryUserPot, commandAuthCodeLimitPort
         )
     }
 
     private val id = UUID.randomUUID()
-
     private val code = "123546"
-
     private val type = EmailType.PASSWORD
-
     private val email = "email@dsm.hs.kr"
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = id,
             schoolId = id,
@@ -65,7 +60,7 @@ class CertifyEmailCodeUseCaseTests {
         )
     }
 
-    private val authCode by lazy {
+    private val authCodeStub by lazy {
         AuthCode(
             code = code,
             email = email,
@@ -76,16 +71,14 @@ class CertifyEmailCodeUseCaseTests {
 
     @Test
     fun `이메일코드 확인 성공`() {
-        val request = CertifyEmailCodeRequest(
-            email, code, type
-        )
+        val request = CertifyEmailCodeRequest(email, code, type)
 
         // given
         given(queryUserPot.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
         given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type))
-            .willReturn(authCode)
+            .willReturn(authCodeStub)
 
         // when & then
         assertDoesNotThrow {
@@ -95,9 +88,7 @@ class CertifyEmailCodeUseCaseTests {
 
     @Test
     fun `유저를 찾을 수 없지만 예외 발생 X`() {
-        val request = CertifyEmailCodeRequest(
-            email, code, EmailType.SIGNUP
-        )
+        val request = CertifyEmailCodeRequest(email, code, EmailType.SIGNUP)
 
         val authCode = AuthCode(
             code = code,
@@ -121,9 +112,7 @@ class CertifyEmailCodeUseCaseTests {
 
     @Test
     fun `유저를 찾을 수 없음`() {
-        val request = CertifyEmailCodeRequest(
-            email, code, type
-        )
+        val request = CertifyEmailCodeRequest(email, code, type)
 
         // given
         given(queryUserPot.queryUserByEmail(email))
@@ -137,20 +126,14 @@ class CertifyEmailCodeUseCaseTests {
 
     @Test
     fun `인증코드를 찾을 수 없음`() {
-        val request = CertifyEmailCodeRequest(
-            email, code, type
-        )
+        val request = CertifyEmailCodeRequest(email, code, type)
 
         // given
         given(queryUserPot.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
-        given(
-            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
-                email,
-                type
-            )
-        ).willReturn(null)
+        given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type))
+            .willReturn(null)
 
         // when & then
         assertThrows<AuthCodeNotFoundException> {
@@ -161,20 +144,14 @@ class CertifyEmailCodeUseCaseTests {
     @Test
     fun `인증코드 일치하지 않음`() {
         val notMatchedCode = "!@QWER"
-        val request = CertifyEmailCodeRequest(
-            email, notMatchedCode, type
-        )
+        val request = CertifyEmailCodeRequest(email, notMatchedCode, type)
 
         // given
         given(queryUserPot.queryUserByEmail(email))
-            .willReturn(user)
+            .willReturn(userStub)
 
-        given(
-            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(
-                email,
-                type
-            )
-        ).willReturn(authCode)
+        given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type))
+            .willReturn(authCodeStub)
 
         //when & then
         assertThrows<AuthCodeMismatchException> {
