@@ -110,7 +110,7 @@ class ResetManagerPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(checkUserAuthority.execute(userId))
+        given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.MANAGER)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
@@ -143,7 +143,7 @@ class ResetManagerPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(checkUserAuthority.execute(userId))
+        given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
 
         // when & then
@@ -158,7 +158,7 @@ class ResetManagerPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(checkUserAuthority.execute(userId))
+        given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.MANAGER)
 
         // when & then
@@ -173,8 +173,8 @@ class ResetManagerPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(checkUserAuthority.execute(userId))
-            .willReturn(Authority.STUDENT)
+        given(checkUserAuthority.execute(userStub.id))
+            .willReturn(Authority.MANAGER)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
             .willReturn(null)
@@ -191,8 +191,8 @@ class ResetManagerPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(checkUserAuthority.execute(userId))
-            .willReturn(Authority.STUDENT)
+        given(checkUserAuthority.execute(userStub.id))
+            .willReturn(Authority.MANAGER)
 
         given(queryAuthCodePort.queryAuthCodeByEmail(requestStub.email))
             .willReturn(authCodeStub.copy(code = "이상한코드임"))
