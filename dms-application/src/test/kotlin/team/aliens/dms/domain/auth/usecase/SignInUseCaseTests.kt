@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class SignInUseCaseTest {
+class SignInUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: AuthSecurityPort

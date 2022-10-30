@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class ReissueTokenUseCaseTest {
+class ReissueTokenUseCaseTests {
 
     @MockBean
     private lateinit var queryRefreshTokenPort: QueryRefreshTokenPort

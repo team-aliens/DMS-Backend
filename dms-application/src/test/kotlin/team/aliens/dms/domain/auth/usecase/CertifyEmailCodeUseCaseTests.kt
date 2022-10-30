@@ -21,7 +21,7 @@ import team.aliens.dms.domain.user.model.User
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class CertifyEmailCodeUseCaseTest {
+class CertifyEmailCodeUseCaseTests {
 
     @MockBean
     private lateinit var queryAuthCodePort: QueryAuthCodePort
