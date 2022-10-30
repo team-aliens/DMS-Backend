@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
-data class SignupWebRequest(
+data class SignUpWebRequest(
 
     @field:NotBlank
     @field:Length(min = 8, max = 8)

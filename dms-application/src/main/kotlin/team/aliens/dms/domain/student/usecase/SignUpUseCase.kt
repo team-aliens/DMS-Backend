@@ -7,7 +7,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.student.dto.SignUpResponse
-import team.aliens.dms.domain.student.dto.SignupRequest
+import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -23,7 +23,7 @@ import java.util.UUID
 
 /**
  *
- * 학생이 회원가입을 하는 SignupUseCase
+ * 학생이 회원가입을 하는 SignUpUseCase
  *
  * @author kimbeomjin
  * @date 2022/10/22
@@ -40,7 +40,7 @@ class SignUpUseCase(
     private val jwtPort: StudentJwtPort
 ) {
 
-    fun execute(request: SignupRequest): SignUpResponse {
+    fun execute(request: SignUpRequest): SignUpResponse {
         val (
             schoolCode, schoolAnswer, authCode,
             grade, classRoom, number,

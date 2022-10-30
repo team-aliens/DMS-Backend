@@ -18,7 +18,7 @@ import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpResponse
-import team.aliens.dms.domain.student.dto.SignupRequest
+import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.*
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
@@ -147,7 +147,7 @@ class SignUpUseCaseTests {
     }
 
     private val requestStub by lazy {
-        SignupRequest(
+        SignUpRequest(
             schoolCode = code,
             schoolAnswer = answer,
             email = email,

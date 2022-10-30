@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
-import team.aliens.dms.domain.student.dto.SignupRequest
+import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
@@ -23,7 +23,7 @@ import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
-import team.aliens.dms.student.dto.request.SignupWebRequest
+import team.aliens.dms.student.dto.request.SignUpWebRequest
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.*
 import javax.validation.Valid
@@ -42,8 +42,8 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    fun signup(@RequestBody @Valid request: SignupWebRequest): SignUpResponse {
-        val signupRequest = SignupRequest(
+    fun signUp(@RequestBody @Valid request: SignUpWebRequest): SignUpResponse {
+        val signUpRequest = SignUpRequest(
             schoolCode = request.schoolCode,
             schoolAnswer = request.schoolAnswer,
             email = request.email,
@@ -56,7 +56,7 @@ class StudentWebAdapter(
             profileImageUrl = request.profileImageUrl
         )
 
-        return signUpUseCase.execute(signupRequest)
+        return signUpUseCase.execute(signUpRequest)
     }
 
     @GetMapping("/email/duplication")

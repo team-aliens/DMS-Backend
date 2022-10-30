@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.student.dto
 
-data class SignupRequest(
+data class SignUpRequest(
     val schoolCode: String,
     val schoolAnswer: String,
     val authCode: String,
