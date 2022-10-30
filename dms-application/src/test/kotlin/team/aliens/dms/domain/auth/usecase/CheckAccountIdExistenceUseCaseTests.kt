@@ -29,8 +29,7 @@ class CheckAccountIdExistenceUseCaseTests {
     @BeforeEach
     fun setUp() {
         checkAccountIdExistenceUseCase = CheckAccountIdExistenceUseCase(
-            authQueryUserPort,
-            coveredEmailPort
+            authQueryUserPort, coveredEmailPort
         )
     }
 

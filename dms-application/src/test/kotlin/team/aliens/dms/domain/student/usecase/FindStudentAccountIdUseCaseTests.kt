@@ -37,9 +37,7 @@ class FindStudentAccountIdUseCaseTests {
     @BeforeEach
     fun setUp() {
         findStudentAccountIdUseCase = FindStudentAccountIdUseCase(
-            queryStudentPort,
-            queryUserPort,
-            coveredEmailPort
+            queryStudentPort, queryUserPort, coveredEmailPort
         )
     }
 

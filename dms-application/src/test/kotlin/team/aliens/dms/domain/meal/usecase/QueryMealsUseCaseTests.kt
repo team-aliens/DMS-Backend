@@ -35,9 +35,7 @@ class QueryMealsUseCaseTests {
     @BeforeEach
     fun setUp() {
         queryMealsUseCase = QueryMealsUseCase(
-            securityPort,
-            queryStudentPort,
-            queryMealPort
+            securityPort, queryStudentPort, queryMealPort
         )
     }
 
