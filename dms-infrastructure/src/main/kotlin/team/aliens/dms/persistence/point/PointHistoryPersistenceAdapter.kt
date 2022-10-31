@@ -18,7 +18,7 @@ class PointHistoryPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointHistoryPort {
 
-    override fun getPointScore(studentId: UUID, isBonus: Boolean): Int {
+    override fun queryPointScore(studentId: UUID, isBonus: Boolean): Int {
         return queryFactory
             .select(pointOptionJpaEntity.score.sum())
             .from(pointHistoryJpaEntity)

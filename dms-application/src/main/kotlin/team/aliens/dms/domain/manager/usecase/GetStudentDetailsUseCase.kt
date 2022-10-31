@@ -33,8 +33,8 @@ class GetStudentDetailsUseCase(
             name = user.name,
             gcn = student.grade.toString().plus(student.classRoom).plus(student.number),
             profileImageUrl = user.profileImageUrl!!,
-            bonusPoint = queryPointHistoryPort.getPointScore(studentId = studentId, isBonus = true),
-            minusPoint = queryPointHistoryPort.getPointScore(studentId = studentId, isBonus = false),
+            bonusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = true),
+            minusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = false),
             roomNumber = student.roomNumber,
             roomMates = roomMates
         )

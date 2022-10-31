@@ -87,9 +87,9 @@ class GetStudentDetailsUseCaseTest {
             .willReturn(student)
         given(queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId))
             .willReturn(emptyList())
-        given(queryPointHistoryPort.getPointScore(id, true))
+        given(queryPointHistoryPort.queryPointScore(id, true))
             .willReturn(11)
-        given((queryPointHistoryPort.getPointScore(id, false)))
+        given((queryPointHistoryPort.queryPointScore(id, false)))
             .willReturn(24)
 
         // when
