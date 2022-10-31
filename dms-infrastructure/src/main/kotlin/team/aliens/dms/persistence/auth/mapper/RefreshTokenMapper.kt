@@ -27,5 +27,4 @@ class RefreshTokenMapper : GenericMapper<RefreshToken, RefreshTokenEntity> {
             expirationTime = domain.expirationTime
         )
     }
-
 }

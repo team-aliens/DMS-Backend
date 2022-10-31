@@ -5,7 +5,6 @@ import java.time.LocalDate
 data class QueryMealsResponse(
     val meals: List<MealDetail>
 ) {
-
     data class MealDetail(
         val date: LocalDate,
         val breakfast: List<String?>,

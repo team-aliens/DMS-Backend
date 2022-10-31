@@ -43,7 +43,7 @@ class ManagerWebAdapter(
             accountId = webRequest.accountId,
             email = webRequest.email,
             authCode = webRequest.authCode,
-            newPassword = webRequest.newPassword
+            newPassword = webRequest.newPassword.value
         )
 
         resetManagerPasswordUseCase.execute(request)

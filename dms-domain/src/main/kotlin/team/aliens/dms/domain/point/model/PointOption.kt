@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.point.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
@@ -11,4 +11,5 @@ data class PointOption(
     val name: String,
 
     val score: Int
+
 )

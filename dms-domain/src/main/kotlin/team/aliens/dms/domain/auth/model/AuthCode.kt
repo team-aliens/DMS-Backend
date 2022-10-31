@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.auth.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 
 @Aggregate
 data class AuthCode(
@@ -11,7 +11,8 @@ data class AuthCode(
 
     val type: EmailType,
 
-    val expirationTime: Int,
+    val expirationTime: Int
+
 ) {
     constructor(code: String, email: String, type: EmailType) : this(
         code = code,

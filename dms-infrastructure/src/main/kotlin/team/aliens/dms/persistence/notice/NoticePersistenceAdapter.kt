@@ -11,11 +11,10 @@ class NoticePersistenceAdapter(
     private val noticeRepository: NoticeJpaRepository
 ) : NoticePort {
 
-    override fun existsByDateBetween(to: LocalDate, from: LocalDate): Boolean {
+    override fun existsNoticeByDateBetween(to: LocalDate, from: LocalDate): Boolean {
         val toLocalDateTime = to.atTime(LocalTime.now())
         val fromLocalDateTime = from.atTime(LocalTime.now())
 
         return noticeRepository.existsByCreatedAtBetween(toLocalDateTime, fromLocalDateTime)
     }
-
 }

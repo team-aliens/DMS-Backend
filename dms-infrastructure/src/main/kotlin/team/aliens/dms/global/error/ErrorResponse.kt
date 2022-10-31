@@ -2,6 +2,7 @@ package team.aliens.dms.global.error
 
 import org.springframework.validation.BindException
 import org.springframework.validation.FieldError
+import team.aliens.dms.common.error.ErrorProperty
 
 data class ErrorResponse(
     val status: Int,

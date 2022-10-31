@@ -9,7 +9,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.global.annotation.UseCase
+import team.aliens.dms.common.annotation.UseCase
 
 @UseCase
 class CertifyEmailCodeUseCase(
