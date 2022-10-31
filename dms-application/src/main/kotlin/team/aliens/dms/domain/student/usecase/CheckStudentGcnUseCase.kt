@@ -18,6 +18,7 @@ class CheckStudentGcnUseCase(
 
     fun execute(request: CheckStudentGcnRequest): String {
         val school = querySchoolPort.querySchoolById(request.schoolId) ?: throw SchoolNotFoundException
+
         val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
             schoolId = school.id,
             grade = request.grade,
