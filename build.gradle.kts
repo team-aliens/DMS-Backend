@@ -37,7 +37,7 @@ allprojects {
         compileKotlin {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
-                jvmTarget = "16"
+                jvmTarget = "17"
             }
         }
 
