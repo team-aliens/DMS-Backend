@@ -97,7 +97,7 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/name")
-    fun checkGcn(@ModelAttribute @Valid webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
+    fun checkGcn(@ModelAttribute webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
         val request = CheckStudentGcnRequest(
             schoolId = webRequest.schoolId,
             grade = webRequest.grade,
