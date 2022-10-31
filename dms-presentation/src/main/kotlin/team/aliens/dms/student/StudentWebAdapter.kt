@@ -12,18 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
-import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
-import team.aliens.dms.domain.student.dto.SignUpResponse
-import team.aliens.dms.domain.student.dto.SignUpRequest
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
-import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
-import team.aliens.dms.domain.student.usecase.SignUpUseCase
+import team.aliens.dms.domain.student.dto.*
+import team.aliens.dms.domain.student.usecase.*
+import team.aliens.dms.student.dto.request.CheckStudentGcnWebRequest
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.student.dto.request.SignUpWebRequest
+import team.aliens.dms.student.dto.response.CheckStudentGcnResponse
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.*
 import javax.validation.Valid
@@ -37,7 +32,8 @@ class StudentWebAdapter(
     private val checkDuplicatedEmailUseCase: CheckDuplicatedEmailUseCase,
     private val checkDuplicatedAccountIdUseCase: CheckDuplicatedAccountIdUseCase,
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
-    private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase
+    private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase,
+    private val checkStudentGcnUseCase: CheckStudentGcnUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -98,6 +94,20 @@ class StudentWebAdapter(
         )
 
         resetStudentPasswordUseCase.execute(request)
+    }
+
+    @GetMapping("/name")
+    fun checkGcn(@ModelAttribute @Valid webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
+        val request = CheckStudentGcnRequest(
+            schoolId = webRequest.schoolId,
+            grade = webRequest.grade,
+            classRoom = webRequest.classRoom,
+            number = webRequest.number
+        )
+
+        val result = checkStudentGcnUseCase.execute(request)
+
+        return CheckStudentGcnResponse(result)
     }
 }
    
