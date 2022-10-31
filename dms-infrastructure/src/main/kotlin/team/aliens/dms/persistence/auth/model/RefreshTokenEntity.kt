@@ -10,16 +10,17 @@ import javax.validation.constraints.NotNull
 @RedisHash("tbl_refresh_token")
 data class RefreshTokenEntity(
 
-        @Id
-        val token: String,
+    @Id
+    val token: String,
 
-        @field:NotNull
-        val userId: UUID,
+    @field:NotNull
+    val userId: UUID,
 
-        @field:NotNull
-        val authority: Authority,
+    @field:NotNull
+    val authority: Authority,
 
-        @field:NotNull
-        @TimeToLive
-        val expirationTime: Int
+    @field:NotNull
+    @TimeToLive
+    val expirationTime: Int
+
 )

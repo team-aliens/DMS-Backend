@@ -4,7 +4,12 @@ import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_user")

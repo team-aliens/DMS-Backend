@@ -13,10 +13,12 @@ class AuthCodeLimitPersistenceAdapter(
     private val authCodeLimitRepository: AuthCodeLimitRepository
 ) : AuthCodeLimitPort {
 
-    override fun queryAuthCodeLimitByEmailAndEmailType(email: String, type: EmailType) =
-        authCodeLimitMapper.toDomain(
-            authCodeLimitRepository.findByEmailAndType(email, type)
-        )
+    override fun queryAuthCodeLimitByEmailAndEmailType(
+        email: String,
+        type: EmailType
+    ) = authCodeLimitMapper.toDomain(
+        authCodeLimitRepository.findByEmailAndType(email, type)
+    )
 
     override fun saveAuthCodeLimit(authCodeLimit: AuthCodeLimit) = authCodeLimitMapper.toDomain(
         authCodeLimitRepository.save(

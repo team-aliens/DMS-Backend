@@ -11,8 +11,8 @@ import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.global.annotation.UseCase
-import team.aliens.dms.global.spi.ReceiveRandomStringPort
+import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.ReceiveRandomStringPort
 
 @UseCase
 class SendEmailCodeUseCase(
@@ -32,11 +32,13 @@ class SendEmailCodeUseCase(
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
             ?: AuthCodeLimit(request.email, request.type)
 
+        commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
+
         if (authCodeLimit.isVerified) {
             throw EmailAlreadyCertifiedException
         }
 
-        val code = receiveRandomStringPort.randomNumber(6);
+        val code = receiveRandomStringPort.randomNumber(6)
 
         val authCode = AuthCode(
             code = code,
@@ -46,8 +48,5 @@ class SendEmailCodeUseCase(
         commandAuthCodePort.saveAuthCode(authCode)
 
         sendEmailPort.sendAuthCode(request.email, request.type, code)
-
-        commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
     }
-
 }

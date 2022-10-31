@@ -18,6 +18,7 @@ subprojects {
         // kotlin
         implementation(Dependencies.KOTLIN_REFLECT)
         implementation(Dependencies.KOTLIN_JDK)
+        implementation(Dependencies.JACKSON)
 
         // java servlet
         implementation(Dependencies.JAVA_SERVLET)

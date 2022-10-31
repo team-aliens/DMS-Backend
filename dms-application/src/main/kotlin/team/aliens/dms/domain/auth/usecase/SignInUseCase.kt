@@ -1,44 +1,40 @@
 package team.aliens.dms.domain.auth.usecase
 
+import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.dto.SignInRequest
-import team.aliens.dms.domain.auth.dto.TokenAndFeaturesResponse
+import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
-import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.auth.spi.AuthQueryStudentPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
+import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.auth.spi.SecurityPort
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.global.annotation.UseCase
+import team.aliens.dms.domain.user.service.CheckUserAuthority
 
 @UseCase
 class SignInUseCase(
-    private val securityPort: SecurityPort,
+    private val securityPort: AuthSecurityPort,
     private val queryUserPort: AuthQueryUserPort,
-    private val queryStudentPort: AuthQueryStudentPort,
-    private val jwtPort: JwtPort
+    private val jwtPort: JwtPort,
+    private val checkUserAuthority: CheckUserAuthority
 ) {
 
-    fun execute(request: SignInRequest): TokenAndFeaturesResponse {
+    fun execute(request: SignInRequest): SignInResponse {
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
 
         if (!securityPort.isPasswordMatch(request.password, user.password)) {
             throw PasswordMismatchException
         }
 
-        val authority = when(queryStudentPort.queryStudentById(user.id)) {
-            is Student -> Authority.STUDENT
-            else -> Authority.MANAGER
-        }
+        val authority = checkUserAuthority.execute(user.id)
 
-        val tokenResponse = jwtPort.receiveToken(user.id, authority)
+        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, authority)
 
-        return TokenAndFeaturesResponse(
-            accessToken = tokenResponse.accessToken,
-            expiredAt = tokenResponse.expiredAt,
-            refreshToken = tokenResponse.refreshToken,
-            features = TokenAndFeaturesResponse.Features(
+        return SignInResponse(
+            accessToken = accessToken,
+            expiredAt = expiredAt,
+            refreshToken = refreshToken,
+            features = SignInResponse.Features(
+                // TODO 서비스 관리 테이블 필요
                 mealService = true,
                 noticeService = true,
                 pointService = true

@@ -7,6 +7,12 @@ import java.util.UUID
 
 @Repository
 interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
-    fun findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId: UUID, grade: Int, classRoom: Int, number: Int): StudentJpaEntity?
-    fun existsByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
+
+    fun findByUserSchoolIdAndGradeAndClassRoomAndNumber(
+        schoolId: UUID,
+        grade: Int,
+        classRoom: Int,
+        number: Int
+    ): StudentJpaEntity?
+
 }
