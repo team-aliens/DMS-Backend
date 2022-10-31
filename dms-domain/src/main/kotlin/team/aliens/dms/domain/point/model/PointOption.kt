@@ -10,6 +10,7 @@ data class PointOption(
 
     val name: String,
 
-    val score: Int
+    val score: Int,
 
+    val type: PointType
 )
