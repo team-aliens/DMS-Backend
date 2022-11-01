@@ -12,15 +12,24 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.student.dto.*
-import team.aliens.dms.domain.student.usecase.*
+import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
+import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
+import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
+import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
+import team.aliens.dms.domain.student.usecase.SignUpUseCase
+import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
 import team.aliens.dms.student.dto.request.CheckStudentGcnWebRequest
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.student.dto.request.SignUpWebRequest
 import team.aliens.dms.student.dto.response.CheckStudentGcnResponse
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
-import java.util.*
+import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
