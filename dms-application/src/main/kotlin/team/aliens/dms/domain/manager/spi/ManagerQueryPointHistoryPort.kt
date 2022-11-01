@@ -3,5 +3,8 @@ package team.aliens.dms.domain.manager.spi
 import java.util.UUID
 
 interface ManagerQueryPointHistoryPort {
-    fun queryPointScore(studentId: UUID, isBonus: Boolean): Int
+
+    fun queryTotalBonusPoint(studentId: UUID): Int
+
+    fun queryTotalMinusPoint(studentId: UUID): Int
 }

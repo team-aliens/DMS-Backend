@@ -24,8 +24,8 @@ class GetStudentDetailsUseCase(
 
         val gcn = gcnToStringPort.gcnToString(student.grade, student.classRoom, student.number)
 
-        val bonusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = true)
-        val minusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = false)
+        val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(studentId = studentId)
+        val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(studentId = studentId)
 
         val roomMateResponse = queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId)
         val roomMates = roomMateResponse.map {
