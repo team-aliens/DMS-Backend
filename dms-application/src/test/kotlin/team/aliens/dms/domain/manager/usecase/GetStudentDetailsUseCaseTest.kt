@@ -83,7 +83,7 @@ class GetStudentDetailsUseCaseTest {
         // given
         given(queryUserPort.queryUserById(id))
             .willReturn(user)
-        given(queryStudentPort.queryByUserId(id))
+        given(queryStudentPort.queryStudentById(id))
             .willReturn(student)
         given(queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId))
             .willReturn(emptyList())
@@ -116,7 +116,7 @@ class GetStudentDetailsUseCaseTest {
         // given
         given(queryUserPort.queryUserById(id))
             .willReturn(user)
-        given(queryStudentPort.queryByUserId(id))
+        given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
         // when & then

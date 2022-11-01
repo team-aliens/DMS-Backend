@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.GCNToStringPort
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -13,12 +14,18 @@ import java.util.UUID
 class GetStudentDetailsUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort,
-    private val queryPointHistoryPort: ManagerQueryPointHistoryPort
+    private val queryPointHistoryPort: ManagerQueryPointHistoryPort,
+    private val gcnToStringPort: GCNToStringPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
         val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
-        val student = queryStudentPort.queryByUserId(studentId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
+
+        val gcn = gcnToStringPort.gcnToString(student.grade, student.classRoom, student.number)
+
+        val bonusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = true)
+        val minusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = false)
 
         val roomMateResponse = queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId)
         val roomMates = roomMateResponse.map {
@@ -29,12 +36,9 @@ class GetStudentDetailsUseCase(
             )
         }
 
-        val bonusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = true)
-        val minusPoint = queryPointHistoryPort.queryPointScore(studentId = studentId, isBonus = false)
-
         return GetStudentDetailsResponse(
             name = user.name,
-            gcn = student.grade.toString().plus(student.classRoom).plus(student.number),
+            gcn = gcn,
             profileImageUrl = user.profileImageUrl!!,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
