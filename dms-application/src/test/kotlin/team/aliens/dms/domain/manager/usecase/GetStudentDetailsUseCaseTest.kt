@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.common.spi.GCNToStringPort
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -16,7 +17,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class GetStudentDetailsUseCaseTest {
@@ -30,6 +31,9 @@ class GetStudentDetailsUseCaseTest {
     @MockBean
     private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
+    @MockBean
+    private lateinit var gcnToStringPort: GCNToStringPort
+
     private lateinit var getStudentDetailsUseCase: GetStudentDetailsUseCase
 
     @BeforeEach
@@ -37,13 +41,16 @@ class GetStudentDetailsUseCaseTest {
         getStudentDetailsUseCase = GetStudentDetailsUseCase(
             queryUserPort,
             queryStudentPort,
-            queryPointHistoryPort
+            queryPointHistoryPort,
+            gcnToStringPort
         )
     }
 
     private val id = UUID.randomUUID()
+    private val bonusPoint = 11
+    private val minusPoint = 23
 
-    private val user by lazy {
+    private val userStub by lazy {
         User(
             id = id,
             schoolId = id,
@@ -57,40 +64,46 @@ class GetStudentDetailsUseCaseTest {
         )
     }
 
-    private val student by lazy {
+    private val studentStub by lazy {
         Student(
             studentId = id,
             roomNumber = 216,
             schoolId = id,
             grade = 2,
             classRoom = 1,
-            number= 20
+            number = 20
         )
     }
 
+    private val responseStub = GetStudentDetailsResponse(
+        name = userStub.name,
+        gcn = studentStub.grade.toString().plus(studentStub.classRoom).plus(studentStub.number),
+        profileImageUrl = userStub.profileImageUrl!!,
+        bonusPoint = bonusPoint,
+        minusPoint = minusPoint,
+        roomNumber = studentStub.roomNumber,
+        roomMates = emptyList()
+    )
+
     @Test
     fun `학생 상세조회 성공`() {
-        val responseStub = GetStudentDetailsResponse(
-            name = user.name,
-            gcn = student.grade.toString().plus(student.classRoom).plus(student.number),
-            profileImageUrl = user.profileImageUrl!!,
-            bonusPoint = 11,
-            minusPoint = 24,
-            roomNumber = student.roomNumber,
-            roomMates = emptyList()
-        )
-
         // given
         given(queryUserPort.queryUserById(id))
-            .willReturn(user)
+            .willReturn(userStub)
         given(queryStudentPort.queryStudentById(id))
-            .willReturn(student)
-        given(queryUserPort.queryUserByRoomNumberAndSchoolId(student.roomNumber, student.schoolId))
+            .willReturn(studentStub)
+        given(gcnToStringPort.gcnToString(studentStub.grade, studentStub.classRoom, studentStub.number))
+            .willReturn(
+                studentStub.grade.toString()
+                    .plus(studentStub.classRoom.toString())
+                    .plus(studentStub.number.toString())
+            )
+        given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
+            .willReturn(bonusPoint)
+        given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
+            .willReturn(minusPoint)
+        given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(emptyList())
-        given(queryPointHistoryPort.queryPointScore(id, true))
-            .willReturn(11)
-        given((queryPointHistoryPort.queryPointScore(id, false)))
-            .willReturn(24)
 
         // when
         val response = getStudentDetailsUseCase.execute(id)
@@ -115,7 +128,7 @@ class GetStudentDetailsUseCaseTest {
     fun `학생이 아니거나 찾을 수 없음`() {
         // given
         given(queryUserPort.queryUserById(id))
-            .willReturn(user)
+            .willReturn(userStub)
         given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
