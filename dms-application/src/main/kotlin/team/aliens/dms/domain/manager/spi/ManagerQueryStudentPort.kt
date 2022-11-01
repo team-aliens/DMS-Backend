@@ -6,4 +6,5 @@ import java.util.UUID
 interface ManagerQueryStudentPort {
 
     fun queryStudentById(userId: UUID): Student?
+
 }

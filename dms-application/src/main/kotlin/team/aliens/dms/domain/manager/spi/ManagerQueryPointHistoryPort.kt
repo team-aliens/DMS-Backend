@@ -7,4 +7,5 @@ interface ManagerQueryPointHistoryPort {
     fun queryTotalBonusPoint(studentId: UUID): Int
 
     fun queryTotalMinusPoint(studentId: UUID): Int
+
 }

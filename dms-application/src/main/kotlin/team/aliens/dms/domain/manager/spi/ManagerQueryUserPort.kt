@@ -14,4 +14,5 @@ interface ManagerQueryUserPort {
     fun queryUserByEmail(email: String): User?
 
     fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User>
+
 }
