@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.notice.usecase.QueryNoticeStatusUseCase
 import team.aliens.dms.notice.dto.response.GetNoticeStatusResponse
-import java.util.*
 
 @RequestMapping("/notices")
 @RestController
