@@ -18,7 +18,7 @@ class PointOptionJpaEntity(
     val score: Int,
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 5, nullable = false)
+    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
     val type: PointType
 
 ) : BaseUUIDEntity()

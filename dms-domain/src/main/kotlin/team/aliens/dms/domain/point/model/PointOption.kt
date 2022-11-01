@@ -13,4 +13,5 @@ data class PointOption(
     val score: Int,
 
     val type: PointType
+
 )
