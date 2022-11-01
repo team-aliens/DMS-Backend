@@ -13,7 +13,7 @@ import team.aliens.dms.domain.school.usecase.QuerySchoolQuestionUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 import team.aliens.dms.school.dto.response.SchoolIdResponse
 import team.aliens.dms.school.dto.response.SchoolQuestionResponse
-import java.util.*
+import java.util.UUID
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
