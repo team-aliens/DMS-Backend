@@ -9,7 +9,7 @@ import team.aliens.dms.domain.file.usecase.UploadFileUseCase
 import team.aliens.dms.file.dto.response.UploadFileResponse
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
+import java.util.UUID
 
 @RequestMapping("/files")
 @RestController
