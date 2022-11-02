@@ -5,6 +5,6 @@ import java.util.UUID
 
 interface ManagerQueryStudentPort {
 
-    fun queryStudentById(userId: UUID): Student?
+    fun queryStudentById(studentId: UUID): Student?
 
 }
