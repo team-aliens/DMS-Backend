@@ -31,9 +31,6 @@ class GetStudentDetailsUseCaseTest {
     @MockBean
     private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
-    @MockBean
-    private lateinit var gcnToStringUtil: GCNToStringUtil
-
     private lateinit var getStudentDetailsUseCase: GetStudentDetailsUseCase
 
     @BeforeEach
@@ -41,8 +38,7 @@ class GetStudentDetailsUseCaseTest {
         getStudentDetailsUseCase = GetStudentDetailsUseCase(
             queryUserPort,
             queryStudentPort,
-            queryPointHistoryPort,
-            gcnToStringUtil
+            queryPointHistoryPort
         )
     }
 
@@ -92,12 +88,6 @@ class GetStudentDetailsUseCaseTest {
             .willReturn(userStub)
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
-        given(gcnToStringUtil.gcnToString(studentStub.grade, studentStub.classRoom, studentStub.number))
-            .willReturn(
-                studentStub.grade.toString()
-                    .plus(studentStub.classRoom.toString())
-                    .plus(studentStub.number.toString())
-            )
         given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
             .willReturn(bonusPoint)
         given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))

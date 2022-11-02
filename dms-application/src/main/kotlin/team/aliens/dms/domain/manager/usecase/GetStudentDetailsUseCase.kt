@@ -15,14 +15,13 @@ class GetStudentDetailsUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort,
     private val queryPointHistoryPort: ManagerQueryPointHistoryPort,
-    private val gcnToStringUtil: GCNToStringUtil
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
         val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-        val gcn = gcnToStringUtil.gcnToString(student.grade, student.classRoom, student.number)
+        val gcn = GCNToStringUtil.gcnToString(student.grade, student.classRoom, student.number)
 
         val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(studentId)
