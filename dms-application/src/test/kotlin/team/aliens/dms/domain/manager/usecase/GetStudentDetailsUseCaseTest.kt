@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.common.spi.GCNToStringPort
+import team.aliens.dms.common.util.GCNToStringUtil
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -32,7 +32,7 @@ class GetStudentDetailsUseCaseTest {
     private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
     @MockBean
-    private lateinit var gcnToStringPort: GCNToStringPort
+    private lateinit var gcnToStringUtil: GCNToStringUtil
 
     private lateinit var getStudentDetailsUseCase: GetStudentDetailsUseCase
 
@@ -42,7 +42,7 @@ class GetStudentDetailsUseCaseTest {
             queryUserPort,
             queryStudentPort,
             queryPointHistoryPort,
-            gcnToStringPort
+            gcnToStringUtil
         )
     }
 
@@ -92,7 +92,7 @@ class GetStudentDetailsUseCaseTest {
             .willReturn(userStub)
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
-        given(gcnToStringPort.gcnToString(studentStub.grade, studentStub.classRoom, studentStub.number))
+        given(gcnToStringUtil.gcnToString(studentStub.grade, studentStub.classRoom, studentStub.number))
             .willReturn(
                 studentStub.grade.toString()
                     .plus(studentStub.classRoom.toString())
