@@ -15,7 +15,7 @@ class MealWebAdapter(
 ) {
 
     @GetMapping("/{date}")
-    fun queryMeals(@PathVariable("date") mealDate: LocalDate): QueryMealsResponse {
+    fun getMeals(@PathVariable("date") mealDate: LocalDate): QueryMealsResponse {
         return queryMealsUseCase.execute(mealDate)
     }
 }

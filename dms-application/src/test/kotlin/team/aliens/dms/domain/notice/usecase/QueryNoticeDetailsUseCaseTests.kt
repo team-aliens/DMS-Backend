@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.notice.dto.NoticeDetailsResponse
+import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class NoticeDetailsUseCaseTests {
+class QueryNoticeDetailsUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: NoticeSecurityPort
@@ -32,11 +32,11 @@ class NoticeDetailsUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: NoticeQueryUserPort
 
-    private lateinit var noticeDetailsUseCase: NoticeDetailsUseCase
+    private lateinit var queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase
 
     @BeforeEach
     fun setUp() {
-        noticeDetailsUseCase = NoticeDetailsUseCase(securityPort, queryNoticePort, queryUserPort)
+        queryNoticeDetailsUseCase = QueryNoticeDetailsUseCase(securityPort, queryNoticePort, queryUserPort)
     }
 
     private val currentUserId = UUID.randomUUID()
@@ -84,8 +84,8 @@ class NoticeDetailsUseCaseTests {
         )
     }
 
-    private val noticeDetailsResponseStub by lazy {
-        NoticeDetailsResponse(
+    private val queryNoticeDetailsResponseStub by lazy {
+        QueryNoticeDetailsResponse(
             title = "제목",
             content = "내용",
             createdAt = createdAt
@@ -108,10 +108,10 @@ class NoticeDetailsUseCaseTests {
             .willReturn(viewerStub)
 
         // when
-        val response = noticeDetailsUseCase.execute(noticeId)
+        val response = queryNoticeDetailsUseCase.execute(noticeId)
 
         // then
-        assertEquals(response, noticeDetailsResponseStub)
+        assertEquals(response, queryNoticeDetailsResponseStub)
     }
 
     @Test
@@ -125,7 +125,7 @@ class NoticeDetailsUseCaseTests {
 
         // when & then
         assertThrows<NoticeNotFoundException> {
-            noticeDetailsUseCase.execute(noticeId)
+            queryNoticeDetailsUseCase.execute(noticeId)
         }
     }
 
@@ -143,7 +143,7 @@ class NoticeDetailsUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            noticeDetailsUseCase.execute(noticeId)
+            queryNoticeDetailsUseCase.execute(noticeId)
         }
     }
 
@@ -164,7 +164,7 @@ class NoticeDetailsUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            noticeDetailsUseCase.execute(noticeId)
+            queryNoticeDetailsUseCase.execute(noticeId)
         }
     }
 
@@ -185,7 +185,7 @@ class NoticeDetailsUseCaseTests {
 
         // when & then
         assertThrows<SchoolInfoMismatchException> {
-            noticeDetailsUseCase.execute(noticeId)
+            queryNoticeDetailsUseCase.execute(noticeId)
         }
     }
 }

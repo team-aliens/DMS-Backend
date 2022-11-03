@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.notice.dto.NoticeDetailsResponse
+import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
@@ -11,13 +11,13 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
 @ReadOnlyUseCase
-class NoticeDetailsUseCase(
+class QueryNoticeDetailsUseCase(
     private val securityPort: NoticeSecurityPort,
     private val queryNoticePort: QueryNoticePort,
     private val queryUserPort: NoticeQueryUserPort
 ) {
 
-    fun execute(noticeId: UUID): NoticeDetailsResponse {
+    fun execute(noticeId: UUID): QueryNoticeDetailsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
 
@@ -28,7 +28,7 @@ class NoticeDetailsUseCase(
             throw SchoolInfoMismatchException
         }
 
-        return NoticeDetailsResponse(
+        return QueryNoticeDetailsResponse(
             title = notice.title,
             content = notice.content,
             createdAt = notice.createdAt!!
