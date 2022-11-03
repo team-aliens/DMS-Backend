@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
@@ -21,7 +22,7 @@ class QueryNoticeDetailsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
 
-        val writer = queryUserPort.queryUserById(notice.managerId) ?: throw UserNotFoundException
+        val writer = queryUserPort.queryUserById(notice.managerId) ?: throw ManagerNotFoundException
         val viewer = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         if (writer.schoolId != viewer.schoolId) {
