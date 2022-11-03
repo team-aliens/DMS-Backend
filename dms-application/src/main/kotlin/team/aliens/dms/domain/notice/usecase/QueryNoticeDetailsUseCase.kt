@@ -6,7 +6,7 @@ import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import team.aliens.dms.domain.school.exception.SchoolInfoMismatchException
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
@@ -25,7 +25,7 @@ class QueryNoticeDetailsUseCase(
         val viewer = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         if (writer.schoolId != viewer.schoolId) {
-            throw SchoolInfoMismatchException
+            throw SchoolMismatchException
         }
 
         return QueryNoticeDetailsResponse(

@@ -14,7 +14,7 @@ import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import team.aliens.dms.domain.school.exception.SchoolInfoMismatchException
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -184,7 +184,7 @@ class QueryNoticeDetailsUseCaseTests {
             .willReturn(viewerStub.copy(schoolId = UUID.randomUUID()))
 
         // when & then
-        assertThrows<SchoolInfoMismatchException> {
+        assertThrows<SchoolMismatchException> {
             queryNoticeDetailsUseCase.execute(noticeId)
         }
     }
