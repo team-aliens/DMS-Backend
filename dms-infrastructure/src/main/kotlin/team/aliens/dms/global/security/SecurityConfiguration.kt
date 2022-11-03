@@ -59,6 +59,7 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").permitAll()
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
