@@ -18,7 +18,7 @@ import java.util.UUID
 @RestController
 class NoticeWebAdapter(
     private val queryNoticeStatusUseCase: QueryNoticeStatusUseCase,
-    private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase
+    private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase,
     private val removeNoticeUseCase: RemoveNoticeUseCase
 ) {
 
