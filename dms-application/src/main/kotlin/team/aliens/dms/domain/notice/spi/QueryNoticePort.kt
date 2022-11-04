@@ -9,6 +9,8 @@ interface QueryNoticePort {
 
     fun existsNoticeByDateBetween(to: LocalDate, from: LocalDate): Boolean
 
+    fun queryNoticeById(noticeId: UUID): Notice?
+
     fun queryAllNoticesBySchoolIdOrder(schoolId: UUID, orderType: OrderType): List<Notice>
 
 }

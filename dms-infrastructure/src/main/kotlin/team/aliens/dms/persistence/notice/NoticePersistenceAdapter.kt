@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.notice
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notice.exception.NoticeOrderMismatchException
 import team.aliens.dms.domain.notice.model.Notice
@@ -9,7 +10,7 @@ import team.aliens.dms.persistence.notice.mapper.NoticeMapper
 import team.aliens.dms.persistence.notice.repository.NoticeJpaRepository
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
+import java.util.UUID
 
 @Component
 class NoticePersistenceAdapter(
@@ -24,6 +25,10 @@ class NoticePersistenceAdapter(
         return noticeRepository.existsByCreatedAtBetween(toLocalDateTime, fromLocalDateTime)
     }
 
+    override fun queryNoticeById(noticeId: UUID) = noticeMapper.toDomain(
+        noticeRepository.findByIdOrNull(noticeId)
+    )
+
     override fun queryAllNoticesBySchoolIdOrder(schoolId: UUID, orderType: OrderType): List<Notice> {
         return when (orderType) {
             OrderType.NEW -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId).map {
@@ -36,5 +41,11 @@ class NoticePersistenceAdapter(
 
             else -> throw NoticeOrderMismatchException
         }
+    }
+    override fun deleteNotice(notice: Notice) {
+    override fun deleteNotice(notice: Notice) {
+        noticeRepository.delete(
+            noticeMapper.toEntity(notice)
+        )
     }
 }
