@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.notice.usecase.QueryNoticeStatusUseCase
 import team.aliens.dms.domain.notice.usecase.RemoveNoticeUseCase
 import team.aliens.dms.notice.dto.response.GetNoticeStatusResponse
+import java.util.UUID
 
 @RequestMapping("/notices")
 @RestController
