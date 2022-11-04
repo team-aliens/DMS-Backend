@@ -1,15 +1,22 @@
 package team.aliens.dms.notice
 
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.notice.usecase.QueryNoticeStatusUseCase
+import team.aliens.dms.domain.notice.usecase.RemoveNoticeUseCase
 import team.aliens.dms.notice.dto.response.GetNoticeStatusResponse
+import java.util.UUID
 
 @RequestMapping("/notices")
 @RestController
 class NoticeWebAdapter(
-    private val queryNoticeStatusUseCase: QueryNoticeStatusUseCase
+    private val queryNoticeStatusUseCase: QueryNoticeStatusUseCase,
+    private val removeNoticeUseCase: RemoveNoticeUseCase
 ) {
 
     @GetMapping("/status")
@@ -17,5 +24,11 @@ class NoticeWebAdapter(
         val result = queryNoticeStatusUseCase.execute()
 
         return GetNoticeStatusResponse(result)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{notice-id}")
+    fun removeNotice(@PathVariable("notice-id") noticeId: UUID) {
+        removeNoticeUseCase.execute(noticeId)
     }
 }
