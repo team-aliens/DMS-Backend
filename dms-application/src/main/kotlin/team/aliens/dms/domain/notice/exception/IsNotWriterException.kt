@@ -4,5 +4,5 @@ import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.domain.notice.error.NoticeErrorCode
 
 object IsNotWriterException : DmsException(
-    NoticeErrorCode.ONLY_WRITER
+    NoticeErrorCode.IS_NOT_WRITER
 )
