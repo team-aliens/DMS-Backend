@@ -26,7 +26,7 @@ import java.util.UUID
 class NoticeWebAdapter(
     private val queryNoticeStatusUseCase: QueryNoticeStatusUseCase,
     private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase,
-    private val queryAllNoticesUseCase: QueryAllNoticesUseCase
+    private val queryAllNoticesUseCase: QueryAllNoticesUseCase,
     private val removeNoticeUseCase: RemoveNoticeUseCase
 ) {
 

@@ -42,7 +42,7 @@ class NoticePersistenceAdapter(
             else -> throw NoticeOrderMismatchException
         }
     }
-    override fun deleteNotice(notice: Notice) {
+
     override fun deleteNotice(notice: Notice) {
         noticeRepository.delete(
             noticeMapper.toEntity(notice)

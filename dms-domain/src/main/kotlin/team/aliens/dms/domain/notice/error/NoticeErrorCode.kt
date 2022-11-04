@@ -8,7 +8,7 @@ enum class NoticeErrorCode(
 ) : ErrorProperty {
 
     IS_NOT_WRITER(401, "Only Writer Can Delete"),
-    NOTICE_ORDER_MISMATCH(401, "Notice Order Mismatch")
+    NOTICE_ORDER_MISMATCH(401, "Notice Order Mismatch"),
 
     NOTICE_NOT_FOUND(404, "Notice Not Found")
     ;
