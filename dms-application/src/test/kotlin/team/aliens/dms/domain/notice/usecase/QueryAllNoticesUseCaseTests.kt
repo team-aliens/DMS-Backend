@@ -36,7 +36,9 @@ class QueryAllNoticesUseCaseTests {
 
     @BeforeEach
     fun setUp() {
-        queryAllNoticesUseCase = QueryAllNoticesUseCase(securityPort, queryUserPort, queryNoticePort)
+        queryAllNoticesUseCase = QueryAllNoticesUseCase(
+            securityPort, queryUserPort, queryNoticePort
+        )
     }
 
     private val currentUserId = UUID.randomUUID()
