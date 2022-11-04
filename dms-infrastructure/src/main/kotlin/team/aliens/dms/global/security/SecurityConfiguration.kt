@@ -60,6 +60,7 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
 
             // /files
