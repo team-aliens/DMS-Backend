@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.notice
 
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.notice.exception.NoticeOrderMismatchException
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.model.OrderType
 import team.aliens.dms.domain.notice.spi.NoticePort
@@ -33,9 +34,7 @@ class NoticePersistenceAdapter(
                 noticeMapper.toDomain(it)!!
             }
 
-            else -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId).map {
-                noticeMapper.toDomain(it)!!
-            }
+            else -> throw NoticeOrderMismatchException
         }
     }
 }
