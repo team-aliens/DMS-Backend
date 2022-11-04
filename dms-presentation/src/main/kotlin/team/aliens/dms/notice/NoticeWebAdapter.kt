@@ -17,8 +17,8 @@ import team.aliens.dms.domain.notice.usecase.RemoveNoticeUseCase
 import team.aliens.dms.notice.dto.request.OrderType
 import team.aliens.dms.notice.dto.response.GetNoticeStatusResponse
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
-import javax.validation.constraints.NotBlank
 import java.util.UUID
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/notices")
@@ -43,7 +43,7 @@ class NoticeWebAdapter(
     }
 
     @GetMapping("/")
-    fun queryAllNotices(@RequestParam @NotBlank orderType: OrderType): QueryAllNoticesResponse {
+    fun queryAllNotices(@RequestParam @NotNull orderType: OrderType): QueryAllNoticesResponse {
         return queryAllNoticesUseCase.execute(orderType.name)
     }
     
