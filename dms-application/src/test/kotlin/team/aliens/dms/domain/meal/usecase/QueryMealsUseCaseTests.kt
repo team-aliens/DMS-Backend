@@ -9,6 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
+import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
@@ -77,7 +78,7 @@ class QueryMealsUseCaseTests {
     @Test
     fun `급식 조회 성공`() {
         val mealDetails by lazy {
-            QueryMealsResponse.MealDetail(
+            MealDetails(
                 date = mealDate,
                 breakfast = listOf(mealStub.breakfast),
                 lunch = listOf(mealStub.lunch),
@@ -121,7 +122,7 @@ class QueryMealsUseCaseTests {
     @Test
     fun `급식 값 없음`() {
         val breakfastNullMealDetails by lazy {
-            QueryMealsResponse.MealDetail(
+            MealDetails(
                 date = mealDate,
                 breakfast = listOf(),
                 lunch = listOf(mealStub.lunch),

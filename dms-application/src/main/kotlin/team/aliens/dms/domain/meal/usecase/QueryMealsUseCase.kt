@@ -2,7 +2,7 @@ package team.aliens.dms.domain.meal.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
-import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetail
+import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.meal.spi.QueryMealPort
@@ -22,7 +22,7 @@ class QueryMealsUseCase(
         val meals = queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, student.schoolId)
 
         val mealDetails = meals.map {
-            MealDetail(
+            MealDetails(
                 date = it.mealDate,
                 breakfast = it.toSplit(it.breakfast),
                 lunch = it.toSplit(it.lunch),
