@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
+import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
@@ -59,7 +60,7 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
-            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").permitAll()
+            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
