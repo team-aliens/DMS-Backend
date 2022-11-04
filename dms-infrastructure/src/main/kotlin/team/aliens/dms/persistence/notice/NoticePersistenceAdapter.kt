@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.notice
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notice.model.Notice
+import team.aliens.dms.domain.notice.model.OrderType
 import team.aliens.dms.domain.notice.spi.NoticePort
 import team.aliens.dms.persistence.notice.mapper.NoticeMapper
 import team.aliens.dms.persistence.notice.repository.NoticeJpaRepository
@@ -26,6 +27,15 @@ class NoticePersistenceAdapter(
     override fun queryNoticeById(noticeId: UUID) = noticeMapper.toDomain(
         noticeRepository.findByIdOrNull(noticeId)
     )
+
+    override fun queryAllNoticesBySchoolIdAndOrder(schoolId: UUID, orderType: OrderType): List<Notice> {
+        return when (orderType) {
+            OrderType.NEW -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId)
+            OrderType.OLD -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtAsc(schoolId)
+        }.map {
+            noticeMapper.toDomain(it)!!
+        }
+    }
 
     override fun deleteNotice(notice: Notice) {
         noticeRepository.delete(
