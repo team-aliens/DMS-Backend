@@ -25,12 +25,12 @@ class NoticePersistenceAdapter(
     }
 
     override fun queryAllNoticesBySchoolIdOrder(schoolId: UUID, orderType: OrderType): List<Notice> {
-        return when (orderType.name) {
-            "NEW" -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId).map {
+        return when (orderType) {
+            OrderType.NEW -> noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId).map {
                 noticeMapper.toDomain(it)!!
             }
 
-            "OLD" ->  noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtAsc(schoolId).map {
+            OrderType.OLD ->  noticeRepository.findAllByManagerUserSchoolIdOrderByCreatedAtAsc(schoolId).map {
                 noticeMapper.toDomain(it)!!
             }
 
