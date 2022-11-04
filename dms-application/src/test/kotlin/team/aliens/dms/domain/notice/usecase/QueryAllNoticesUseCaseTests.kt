@@ -93,7 +93,7 @@ class QueryAllNoticesUseCaseTests {
         given(queryUserPort.queryUserById(currentUserId))
             .willReturn(userStub)
 
-        given(queryNoticePort.queryAllNoticesBySchoolIdOrder(schoolId, OrderType.NEW))
+        given(queryNoticePort.queryAllNoticesBySchoolIdAndOrder(schoolId, OrderType.NEW))
             .willReturn(listOf(noticeStub))
 
         // when

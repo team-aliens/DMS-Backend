@@ -21,7 +21,7 @@ class QueryAllNoticesUseCase(
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val order = OrderType.valueOf(orderType)
-        val notices = queryNoticePort.queryAllNoticesBySchoolIdOrder(user.schoolId, order)
+        val notices = queryNoticePort.queryAllNoticesBySchoolIdAndOrder(user.schoolId, order)
 
         return QueryAllNoticesResponse(
             notices.map {
