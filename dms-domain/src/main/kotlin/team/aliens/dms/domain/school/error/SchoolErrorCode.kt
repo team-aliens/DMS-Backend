@@ -9,7 +9,6 @@ enum class SchoolErrorCode(
 
     ANSWER_MISMATCH(401, "Answer Mismatch"),
     SCHOOL_CODE_MISMATCH(401, "School Code Mismatch"),
-    SCHOOL_MISMATCH(401, "School Mismatch"),
 
     SCHOOL_NOT_FOUND(404, "School Not Found")
     ;
