@@ -55,6 +55,7 @@ class NoticeWebAdapter(
         removeNoticeUseCase.execute(noticeId)
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun postNotice(@RequestBody @Valid postNoticeWebRequest: PostNoticeWebRequest) {
         return postNoticeUseCase.execute(
