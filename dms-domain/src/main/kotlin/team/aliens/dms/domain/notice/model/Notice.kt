@@ -19,4 +19,13 @@ data class Notice(
 
     val updatedAt: LocalDateTime?
 
-)
+) {
+    fun updateNotice(title: String, content: String) = Notice(
+        id = id,
+        managerId = id,
+        title = title,
+        content = content,
+        createdAt = createdAt,
+        updatedAt = LocalDateTime.now()
+    )
+}
