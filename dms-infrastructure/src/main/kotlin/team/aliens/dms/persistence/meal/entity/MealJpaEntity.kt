@@ -25,10 +25,7 @@ class MealJpaEntity(
     val lunch: String?,
 
     @Column(columnDefinition = "VARCHAR(255)")
-    val dinner: String?,
-
-    @Column(columnDefinition = "VARCHAR(255)")
-    val calInfo: String?
+    val dinner: String?
 
 )
 
