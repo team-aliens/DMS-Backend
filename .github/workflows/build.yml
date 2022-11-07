@@ -27,4 +27,4 @@ jobs:
           arguments: |
             build
             --build-cache
-            --no-demand
+            --no-daemon
