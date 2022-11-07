@@ -16,8 +16,13 @@ class UpdateNoticeUseCase(
 
     fun execute(noticeId: UUID, title: String, content: String) {
         val managerId = securityPort.getCurrentUserId()
-        val notice = queryNoticePort.queryNoticeByIdAndManagerId(noticeId, managerId) ?: NoticeNotFoundException
+        val notice = queryNoticePort.queryNoticeByIdAndManagerId(noticeId, managerId) ?: throw NoticeNotFoundException
 
-        commandNoticePort.saveNotice(notice)
+        commandNoticePort.saveNotice(
+            notice.copy(
+                title = title,
+                content = content
+            )
+        )
     }
 }

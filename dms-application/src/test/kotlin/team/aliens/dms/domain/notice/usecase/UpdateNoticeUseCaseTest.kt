@@ -13,6 +13,7 @@ import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
+import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -45,10 +46,10 @@ class UpdateNoticeUseCaseTest {
         Notice(
             id = noticeId,
             managerId = UUID.randomUUID(),
-            title = "제목",
-            content = "내용",
-            createdAt = createdAt,
-            updatedAt = null
+            title = title,
+            content = content,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
         )
     }
 
