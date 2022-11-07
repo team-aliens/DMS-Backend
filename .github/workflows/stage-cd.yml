@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - setting/72-cd
 
 jobs:
   build:
