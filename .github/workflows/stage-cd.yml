@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Out The Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Java
         uses: actions/setup-java@v2
@@ -44,13 +43,13 @@ jobs:
           registry: ${{ steps.ecr.outputs.registry }}
 
       - name: Connect EC2 & Deploy Docker Image
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.EC2_HOST }}
-            port: ${{ secrets.EC2_PORT }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_KEY }}
-            script: |
-              cd dms-server
-              docker pull ${{ secrets.DOCKER_IMAGE }}
-              docker run --name dms-server -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_IMAGE }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: ${{ secrets.EC2_PORT }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd dms-server
+            docker pull ${{ secrets.DOCKER_IMAGE }}
+            docker run --name dms-server -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_IMAGE }}
