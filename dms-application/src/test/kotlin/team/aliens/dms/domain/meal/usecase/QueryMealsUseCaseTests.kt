@@ -61,7 +61,8 @@ class QueryMealsUseCaseTests {
             schoolId = schoolId,
             breakfast = "아침",
             lunch = "점심",
-            dinner = "저녁"
+            dinner = "저녁",
+            calInfo = "칼로리입니다"
         )
     }
 
@@ -71,7 +72,8 @@ class QueryMealsUseCaseTests {
             schoolId = schoolId,
             breakfast = null,
             lunch = "점심",
-            dinner = "저녁"
+            dinner = "저녁",
+            calInfo = "칼로리입니다"
         )
     }
 
@@ -82,7 +84,8 @@ class QueryMealsUseCaseTests {
                 date = mealDate,
                 breakfast = listOf(mealStub.breakfast),
                 lunch = listOf(mealStub.lunch),
-                dinner = listOf(mealStub.dinner)
+                dinner = listOf(mealStub.dinner),
+                calInfo = "칼로리입니다"
             )
         }
 
@@ -126,7 +129,8 @@ class QueryMealsUseCaseTests {
                 date = mealDate,
                 breakfast = listOf(),
                 lunch = listOf(mealStub.lunch),
-                dinner = listOf(mealStub.dinner)
+                dinner = listOf(mealStub.dinner),
+                calInfo = "칼로리입니다"
             )
         }
 
