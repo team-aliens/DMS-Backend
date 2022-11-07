@@ -26,7 +26,8 @@ class QueryMealsUseCase(
                 date = it.mealDate,
                 breakfast = it.toSplit(it.breakfast),
                 lunch = it.toSplit(it.lunch),
-                dinner = it.toSplit(it.dinner)
+                dinner = it.toSplit(it.dinner),
+                calInfo = it.calInfo
             )
         }
 
