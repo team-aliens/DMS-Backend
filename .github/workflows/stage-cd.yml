@@ -42,3 +42,15 @@ jobs:
           username: ${{ steps.ecr.outputs.username }}
           password: ${{ steps.ecr.outputs.password }}
           registry: ${{ steps.ecr.outputs.registry }}
+
+      - name: Connect EC2 & Deploy Docker Image
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.EC2_HOST }}
+            port: ${{ secrets.EC2_PORT }}
+            username: ${{ secrets.EC2_USER }}
+            key: ${{ secrets.EC2_KEY }}
+            script: |
+              cd dms-server
+              docker pull ${{ secrets.DOCKER_IMAGE }}
+              docker run --name dms-server -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_IMAGE }}
