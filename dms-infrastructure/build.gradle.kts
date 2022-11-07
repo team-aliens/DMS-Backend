@@ -11,9 +11,6 @@ dependencies {
     implementation(project(":dms-application"))
     implementation(project(":dms-presentation"))
 
-    // kotlin
-    implementation(Dependencies.JACKSON)
-
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
 
@@ -37,7 +34,7 @@ dependencies {
     implementation(Dependencies.SPRING_AWS)
 
     // configuration
-    implementation(Dependencies.CONFIGURATION_PROCESSOR)
+    kapt(Dependencies.CONFIGURATION_PROCESSOR)
 
 }
 

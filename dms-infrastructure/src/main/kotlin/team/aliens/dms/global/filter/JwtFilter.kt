@@ -28,8 +28,8 @@ class JwtFilter(
         val bearerToken: String? = request.getHeader(JwtProperties.HEADER)
 
         bearerToken?.let {
-            if(bearerToken.startsWith(JwtProperties.PREFIX)) {
-                return bearerToken.substring(7)
+            if (bearerToken.startsWith(JwtProperties.PREFIX)) {
+                return bearerToken.substring(JwtProperties.PREFIX.length)
             }
         }
 

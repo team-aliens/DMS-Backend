@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.auth.model
 
-import team.aliens.dms.global.annotation.Aggregate
-import java.util.*
+import team.aliens.dms.common.annotation.Aggregate
+import java.util.UUID
 
 @Aggregate
 data class RefreshToken(
@@ -13,4 +13,5 @@ data class RefreshToken(
     val authority: Authority,
 
     val expirationTime: Int
+
 )

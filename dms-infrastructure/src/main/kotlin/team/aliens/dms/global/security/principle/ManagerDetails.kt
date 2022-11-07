@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import team.aliens.dms.domain.auth.model.Authority
-import java.util.*
+import java.util.UUID
 
 class ManagerDetails(
     private val managerId: UUID

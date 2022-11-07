@@ -8,12 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CheckSchoolAnswerUseCaseTests {
@@ -22,6 +22,11 @@ class CheckSchoolAnswerUseCaseTests {
     private lateinit var querySchoolPort: QuerySchoolPort
 
     private lateinit var checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase
+
+    @BeforeEach
+    fun setUp() {
+        checkSchoolAnswerUseCase = CheckSchoolAnswerUseCase(querySchoolPort)
+    }
 
     private val schoolStub by lazy {
         School(
@@ -34,11 +39,6 @@ class CheckSchoolAnswerUseCaseTests {
             contractStartedAt = LocalDate.now(),
             contractEndedAt = LocalDate.now(),
         )
-    }
-
-    @BeforeEach
-    fun setUp() {
-        checkSchoolAnswerUseCase = CheckSchoolAnswerUseCase(querySchoolPort)
     }
 
     @Test
@@ -78,9 +78,8 @@ class CheckSchoolAnswerUseCaseTests {
             .willReturn(schoolStub)
 
         // when & then
-        assertThrows<AnswerNotMatchedException> {
+        assertThrows<AnswerMismatchException> {
             checkSchoolAnswerUseCase.execute(schoolId, "wrong answer")
         }
     }
-
 }

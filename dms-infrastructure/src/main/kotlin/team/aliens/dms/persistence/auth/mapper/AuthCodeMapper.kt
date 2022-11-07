@@ -27,5 +27,4 @@ class AuthCodeMapper : GenericMapper<AuthCode, AuthCodeEntity> {
             expirationTime = domain.expirationTime,
         )
     }
-
 }

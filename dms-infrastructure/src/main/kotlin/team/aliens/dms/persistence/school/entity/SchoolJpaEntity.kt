@@ -2,7 +2,7 @@ package team.aliens.dms.persistence.school.entity
 
 import team.aliens.dms.persistence.BaseUUIDEntity
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table

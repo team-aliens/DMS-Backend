@@ -4,7 +4,7 @@ import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
 import team.aliens.dms.domain.auth.exception.EmailMismatchException
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 
 @ReadOnlyUseCase
 class CertifyEmailUseCase(
@@ -12,8 +12,7 @@ class CertifyEmailUseCase(
 ) {
 
     fun execute(request: CertifyEmailRequest) {
-        val user = queryUserPort.queryUserByAccountId(request.accountId)
-            ?: throw UserNotFoundException
+        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
 
         if (user.email != request.email) {
             throw EmailMismatchException

@@ -1,9 +1,8 @@
 package team.aliens.dms.global.util
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.global.spi.CoveredEmailPort
-import team.aliens.dms.global.spi.ReceiveRandomStringPort
-import java.lang.StringBuilder
+import team.aliens.dms.common.spi.CoveredEmailPort
+import team.aliens.dms.common.spi.ReceiveRandomStringPort
 import java.security.SecureRandom
 
 @Component
@@ -31,6 +30,5 @@ class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
         }
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")
-
     }
 }

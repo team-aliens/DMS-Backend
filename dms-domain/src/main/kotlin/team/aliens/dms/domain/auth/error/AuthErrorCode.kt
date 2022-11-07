@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.auth.error
 
-import team.aliens.dms.global.error.ErrorProperty
+import team.aliens.dms.common.error.ErrorProperty
 
 enum class AuthErrorCode(
     private val status: Int,
@@ -10,10 +10,12 @@ enum class AuthErrorCode(
     AUTH_CODE_MISMATCH(401, "Auth Code Mismatch"),
     EMAIL_MISMATCH(401, "Email Mismatch"),
     PASSWORD_MISMATCH(401, "Password Mismatch"),
-    AUTH_CODE_NOT_MATCHED(401, "Auth Code Not Matched"),
+
     REFRESH_TOKEN_NOT_FOUND(404, "Refresh Token Not Found"),
     AUTH_CODE_NOT_FOUND(404, "Auth Code Not Found"),
+
     EMAIL_ALREADY_CERTIFIED(409, "Email Already Certified"),
+
     AUTH_CODE_OVER_LIMITED(429, "Auth Code Over Limited")
     ;
 

@@ -11,4 +11,5 @@ data class CertifyEmailWebRequest(
     @field:Email
     @field:NotBlank
     val email: String
+
 )

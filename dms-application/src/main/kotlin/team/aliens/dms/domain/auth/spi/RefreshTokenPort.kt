@@ -1,4 +1,5 @@
 package team.aliens.dms.domain.auth.spi
 
-interface RefreshTokenPort : QueryRefreshTokenPort {
+interface RefreshTokenPort :
+    QueryRefreshTokenPort {
 }

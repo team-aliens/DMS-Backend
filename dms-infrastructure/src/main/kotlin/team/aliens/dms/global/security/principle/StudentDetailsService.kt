@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class StudentDetailsService(
@@ -14,9 +14,8 @@ class StudentDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        val studentId = UUID.fromString(username)
-        return studentRepository.findByIdOrNull(studentId)?.let {
-            StudentDetails(studentId)
-        } ?: throw InvalidTokenException
+        val student = studentRepository.findByIdOrNull(UUID.fromString(username)) ?: throw InvalidTokenException
+
+        return StudentDetails(student.userId)
     }
 }

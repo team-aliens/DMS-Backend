@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
@@ -45,10 +46,11 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
+            .antMatchers(HttpMethod.GET, "/students/name").permitAll()
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
-            .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
 
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
@@ -58,6 +60,9 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/notices/").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()

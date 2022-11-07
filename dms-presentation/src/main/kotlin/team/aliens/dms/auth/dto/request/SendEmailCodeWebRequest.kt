@@ -4,7 +4,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-data class SendEmailCodeWebRequest (
+data class SendEmailCodeWebRequest(
 
     @field:Email
     @field:NotBlank
@@ -12,4 +12,5 @@ data class SendEmailCodeWebRequest (
 
     @field:NotNull
     val type: EmailType
+
 )
