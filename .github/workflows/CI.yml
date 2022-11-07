@@ -13,12 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check Out The Repository
       - uses: actions/checkout@v3
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Set up JDK
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: '17'
