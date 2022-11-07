@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.student.usecase
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -16,7 +16,6 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.common.spi.CoveredEmailPort
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -29,15 +28,12 @@ class FindStudentAccountIdUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
 
-    @MockBean
-    private lateinit var coveredEmailPort: CoveredEmailPort
-
     private lateinit var findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 
     @BeforeEach
     fun setUp() {
         findStudentAccountIdUseCase = FindStudentAccountIdUseCase(
-            queryStudentPort, queryUserPort, coveredEmailPort
+            queryStudentPort, queryUserPort
         )
     }
 
@@ -86,14 +82,10 @@ class FindStudentAccountIdUseCaseTests {
         given(queryUserPort.queryUserById(studentStub.studentId))
             .willReturn(userStub)
 
-        given(coveredEmailPort.coveredEmail(userStub.email))
-            .willReturn("dlw********")
-
-        // when
-        val response = findStudentAccountIdUseCase.execute(schoolId, requestStub)
-
-        // then
-        assertEquals(response, "dlw********")
+        // when & then
+        assertDoesNotThrow {
+            findStudentAccountIdUseCase.execute(schoolId, requestStub)
+        }
     }
 
     @Test

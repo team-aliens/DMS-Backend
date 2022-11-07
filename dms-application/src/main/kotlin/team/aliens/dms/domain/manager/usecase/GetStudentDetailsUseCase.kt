@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.util.GCNToStringUtil
+import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -14,14 +14,14 @@ import java.util.UUID
 class GetStudentDetailsUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort,
-    private val queryPointHistoryPort: ManagerQueryPointHistoryPort,
+    private val queryPointHistoryPort: ManagerQueryPointHistoryPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
         val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-        val gcn = GCNToStringUtil.gcnToString(student.grade, student.classRoom, student.number)
+        val gcn = StringUtil.gcnToString(student.grade, student.classRoom, student.number)
 
         val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(studentId)

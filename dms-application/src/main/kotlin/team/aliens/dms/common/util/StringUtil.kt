@@ -1,14 +1,9 @@
-package team.aliens.dms.global.util
-
-import org.springframework.stereotype.Component
-import team.aliens.dms.common.spi.CoveredEmailPort
-import team.aliens.dms.common.spi.ReceiveRandomStringPort
+package team.aliens.dms.common.util
 import java.security.SecureRandom
 
-@Component
-class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
+object StringUtil {
 
-    override fun coveredEmail(email: String): String {
+    fun coveredEmail(email: String): String {
         val index = email.indexOf('@')
 
         val sb = StringBuilder(email).also {
@@ -20,7 +15,7 @@ class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
         return sb.toString();
     }
 
-    override fun randomNumber(number: Int): String {
+    fun randomNumber(number: Int): String {
         val random = SecureRandom()
         val codeList: List<Char> = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
         val authCodeList: MutableList<String> = mutableListOf()
@@ -30,6 +25,10 @@ class StingUtil : CoveredEmailPort, ReceiveRandomStringPort {
         }
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")
+    }
+
+    fun gcnToString(grade: Int, classRoom: Int, number: Int): String {
+        return grade.toString().plus(classRoom).plus(number)
     }
 
 }

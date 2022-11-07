@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.common.util.GCNToStringUtil
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
