@@ -77,7 +77,13 @@ class GetStudentDetailsUseCaseTest {
         bonusPoint = bonusPoint,
         minusPoint = minusPoint,
         roomNumber = studentStub.roomNumber,
-        roomMates = emptyList()
+        roomMates = listOf(
+            GetStudentDetailsResponse.RoomMate(
+                id = userStub.id,
+                name = userStub.name,
+                profileImageUrl = userStub.profileImageUrl!!
+            )
+        )
     )
 
     @Test
@@ -92,7 +98,7 @@ class GetStudentDetailsUseCaseTest {
         given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(minusPoint)
         given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
-            .willReturn(emptyList())
+            .willReturn(listOf(userStub))
 
         // when
         val response = getStudentDetailsUseCase.execute(id)
