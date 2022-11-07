@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check Out The Repository
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: '17'
@@ -27,4 +28,4 @@ jobs:
           arguments: |
             build
             --build-cache
-            --configure-on-demand
+            --no-demand
