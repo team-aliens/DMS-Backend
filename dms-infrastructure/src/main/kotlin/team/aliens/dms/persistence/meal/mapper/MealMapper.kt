@@ -20,7 +20,8 @@ class MealMapper(
                 schoolId = it.id.schoolId,
                 breakfast = it.breakfast,
                 lunch = it.lunch,
-                dinner = it.dinner
+                dinner = it.dinner,
+                calInfo = it.calInfo
             )
         }
     }
@@ -33,7 +34,8 @@ class MealMapper(
             school = school,
             breakfast = domain.breakfast,
             lunch = domain.lunch,
-            dinner = domain.dinner
+            dinner = domain.dinner,
+            calInfo = domain.calInfo
         )
     }
 }
