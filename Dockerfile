@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-focal
 
 EXPOSE 8080
 ENV TZ=Asia/Seoul
