@@ -9,7 +9,6 @@ data class QueryMealsResponse(
         val date: LocalDate,
         val breakfast: List<String?>,
         val lunch: List<String?>,
-        val dinner: List<String?>,
-        val calInfo: String?
+        val dinner: List<String?>
     )
 }
