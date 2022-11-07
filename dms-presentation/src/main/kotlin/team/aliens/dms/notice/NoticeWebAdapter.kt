@@ -29,7 +29,7 @@ class NoticeWebAdapter(
     private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase,
     private val queryAllNoticesUseCase: QueryAllNoticesUseCase,
     private val removeNoticeUseCase: RemoveNoticeUseCase,
-    private val postNoticeUseCase: PostNoticeUseCase
+    private val createNoticeUseCase: CreateNoticeUseCase
 ) {
 
     @GetMapping("/status")
@@ -57,10 +57,10 @@ class NoticeWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun postNotice(@RequestBody @Valid postNoticeWebRequest: PostNoticeWebRequest) {
-        return postNoticeUseCase.execute(
-            title = postNoticeWebRequest.title,
-            content = postNoticeWebRequest.content
+    fun postNotice(@RequestBody @Valid request: PostNoticeWebRequest) {
+        createNoticeUseCase.execute(
+            title = request.title,
+            content = request.content
         )
     }
 }

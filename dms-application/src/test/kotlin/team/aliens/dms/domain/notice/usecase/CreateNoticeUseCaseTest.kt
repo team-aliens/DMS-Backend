@@ -12,7 +12,7 @@ import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class PostNoticeUseCaseTest {
+class CreateNoticeUseCaseTest {
 
     @MockBean
     private lateinit var securityPort: NoticeSecurityPort
@@ -20,11 +20,11 @@ class PostNoticeUseCaseTest {
     @MockBean
     private lateinit var commentNoticePort: CommandNoticePort
 
-    private lateinit var postNoticeUseCase: PostNoticeUseCase
+    private lateinit var createNoticeUseCase: CreateNoticeUseCase
 
     @BeforeEach
     fun setUp() {
-        postNoticeUseCase = PostNoticeUseCase(
+        createNoticeUseCase = CreateNoticeUseCase(
             securityPort, commentNoticePort
         )
     }
@@ -41,7 +41,7 @@ class PostNoticeUseCaseTest {
 
         // when & then
         assertDoesNotThrow {
-            postNoticeUseCase.execute(title, content)
+            createNoticeUseCase.execute(title, content)
         }
     }
 }

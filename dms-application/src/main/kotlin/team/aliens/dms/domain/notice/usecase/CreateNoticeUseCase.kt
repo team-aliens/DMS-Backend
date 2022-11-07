@@ -7,7 +7,7 @@ import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import java.time.LocalDateTime
 
 @UseCase
-class PostNoticeUseCase(
+class CreateNoticeUseCase(
     private val securityPort: NoticeSecurityPort,
     private val commentNoticePort: CommandNoticePort
 ) {
