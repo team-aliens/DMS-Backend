@@ -22,8 +22,10 @@ class ExceptionFilter(
     ) {
         try {
             filterChain.doFilter(request, response)
+        } catch (e: DmsException) {
+            errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
-            when (e) {
+            when (e.cause) {
                 is DmsException -> errorToJson((e.cause as DmsException).errorProperty, response)
                 else -> {
                     errorToJson(InternalServerErrorException.errorProperty, response)
