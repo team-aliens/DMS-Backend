@@ -36,7 +36,7 @@ class NoticeWebAdapter(
     private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase,
     private val queryAllNoticesUseCase: QueryAllNoticesUseCase,
     private val removeNoticeUseCase: RemoveNoticeUseCase,
-    private val updateNoticeUseCase: UpdateNoticeUseCase
+    private val updateNoticeUseCase: UpdateNoticeUseCase,
     private val createNoticeUseCase: CreateNoticeUseCase
 ) {
 
