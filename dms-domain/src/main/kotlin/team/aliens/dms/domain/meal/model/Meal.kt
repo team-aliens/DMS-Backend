@@ -15,9 +15,7 @@ data class Meal(
 
     val lunch: String?,
 
-    val dinner: String?,
-
-    val calInfo: String?
+    val dinner: String?
 
 ) {
 

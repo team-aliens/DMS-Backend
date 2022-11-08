@@ -13,7 +13,8 @@ class PointOptionMapper : GenericMapper<PointOption, PointOptionJpaEntity> {
             PointOption(
                 id = it.id,
                 name = it.name,
-                score = it.score
+                score = it.score,
+                type = it.type
             )
         }
     }
@@ -22,7 +23,8 @@ class PointOptionMapper : GenericMapper<PointOption, PointOptionJpaEntity> {
         return PointOptionJpaEntity(
             id = domain.id,
             name = domain.name,
-            score = domain.score
+            score = domain.score,
+            type = domain.type
         )
     }
 }

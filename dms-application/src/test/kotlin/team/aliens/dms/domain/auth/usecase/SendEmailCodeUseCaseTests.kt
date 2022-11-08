@@ -15,7 +15,6 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.*
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.common.spi.ReceiveRandomStringPort
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
@@ -31,9 +30,6 @@ class SendEmailCodeUseCaseTests {
     private lateinit var commandAuthCodePort: CommandAuthCodePort
 
     @MockBean
-    private lateinit var receiveRandomStringPort: ReceiveRandomStringPort
-
-    @MockBean
     private lateinit var queryAuthCodeLimitPort: QueryAuthCodeLimitPort
 
     @MockBean
@@ -47,7 +43,6 @@ class SendEmailCodeUseCaseTests {
             sendEmailPort,
             queryUserPort,
             commandAuthCodePort,
-            receiveRandomStringPort,
             queryAuthCodeLimitPort,
             commandAuthCodeLimitPort
         )
@@ -92,9 +87,6 @@ class SendEmailCodeUseCaseTests {
         given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
             .willReturn(authCodeLimit)
 
-        given(receiveRandomStringPort.randomNumber(6))
-            .willReturn(code)
-
         // when & then
         assertDoesNotThrow {
             sendEmailCodeUseCase.execute(request)
@@ -107,9 +99,6 @@ class SendEmailCodeUseCaseTests {
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(userStub)
 
-        given(receiveRandomStringPort.randomNumber(6))
-            .willReturn(code)
-
         // when & then
         assertDoesNotThrow {
             sendEmailCodeUseCase.execute(request)
@@ -121,9 +110,6 @@ class SendEmailCodeUseCaseTests {
         // given
         given(queryUserPort.queryUserByEmail(email))
             .willReturn(null)
-
-        given(receiveRandomStringPort.randomNumber(6))
-            .willReturn(code)
 
         // when & then
         assertDoesNotThrow {

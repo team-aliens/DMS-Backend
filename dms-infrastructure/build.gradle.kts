@@ -23,6 +23,10 @@ dependencies {
     implementation(Dependencies.REDIS)
     implementation(Dependencies.SPRING_REDIS)
 
+    // querydsl
+    implementation(Dependencies.QUERYDSL)
+    kapt(Dependencies.QUERYDSL_PROCESSOR)
+
     // time based uuid
     implementation(Dependencies.UUID_TIME)
 

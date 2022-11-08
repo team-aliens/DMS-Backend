@@ -9,7 +9,7 @@ enum class GlobalErrorCode(
 
     SEND_EMAIL_REJECTED(400, "Send Email Rejected"),
 
-    BAD_REQUEST(404, "Bad Request"),
+    BAD_REQUEST(400, "Bad Request"),
 
     INTERNAL_SERVER_ERROR(500, "Internal Server Error")
     ;

@@ -14,7 +14,6 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.common.spi.CoveredEmailPort
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -32,9 +31,6 @@ class FindManagerAccountIdUseCaseTests {
     private lateinit var queryUserPort: ManagerQueryUserPort
 
     @MockBean
-    private lateinit var coveredEmailPort: CoveredEmailPort
-
-    @MockBean
     private lateinit var checkUserAuthority: CheckUserAuthority
 
     private lateinit var findManagerAccountIdUseCase: FindManagerAccountIdUseCase
@@ -42,7 +38,7 @@ class FindManagerAccountIdUseCaseTests {
     @BeforeEach
     fun setUp() {
         findManagerAccountIdUseCase = FindManagerAccountIdUseCase(
-            querySchoolPort, queryUserPort, coveredEmailPort, checkUserAuthority
+            querySchoolPort, queryUserPort, checkUserAuthority
         )
     }
 
@@ -89,9 +85,6 @@ class FindManagerAccountIdUseCaseTests {
 
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.MANAGER)
-
-        given(coveredEmailPort.coveredEmail(userStub.email))
-            .willReturn(coveredEmail)
 
         // when
         val response = findManagerAccountIdUseCase.execute(schoolId, answer)

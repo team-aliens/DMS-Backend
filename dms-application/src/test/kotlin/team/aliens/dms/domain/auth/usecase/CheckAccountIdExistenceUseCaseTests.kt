@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.auth.usecase
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -11,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.common.spi.CoveredEmailPort
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -21,15 +20,12 @@ class CheckAccountIdExistenceUseCaseTests {
     @MockBean
     private lateinit var authQueryUserPort: AuthQueryUserPort
 
-    @MockBean
-    private lateinit var coveredEmailPort: CoveredEmailPort
-
     private lateinit var checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase
 
     @BeforeEach
     fun setUp() {
         checkAccountIdExistenceUseCase = CheckAccountIdExistenceUseCase(
-            authQueryUserPort, coveredEmailPort
+            authQueryUserPort
         )
     }
 
@@ -55,14 +51,10 @@ class CheckAccountIdExistenceUseCaseTests {
         given(authQueryUserPort.queryUserByAccountId(accountId))
             .willReturn(userStub)
 
-        given(coveredEmailPort.coveredEmail(userStub.email))
-            .willReturn("이메일***")
-
-        // when
-        val response = checkAccountIdExistenceUseCase.execute(accountId)
-
-        // then
-        assertEquals(response, "이메일***")
+        // when & then
+        assertDoesNotThrow {
+            checkAccountIdExistenceUseCase.execute(accountId)
+        }
     }
 
     @Test
