@@ -3,7 +3,7 @@ object Dependencies {
     // kotlin
     const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect"
     const val KOTLIN_JDK = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    const val JACKSON = "com.fasterxml.jackson.module:jackson-module-kotlin"
+    const val JACKSON = "com.fasterxml.jackson.module:jackson-module-kotlin:${DependencyVersions.JACKSON_VERSION}"
 
     // java servlet
     const val JAVA_SERVLET = "javax.servlet:javax.servlet-api:${DependencyVersions.SERVLET_VERSION}"
@@ -25,6 +25,10 @@ object Dependencies {
     const val MYSQL_CONNECTOR = "mysql:mysql-connector-java"
     const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis"
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
+
+    // querydsl
+    const val QUERYDSL = "com.querydsl:querydsl-jpa:${DependencyVersions.QUERYDSL}"
+    const val QUERYDSL_PROCESSOR = "com.querydsl:querydsl-apt:${DependencyVersions.QUERYDSL}:jpa"
 
     // security
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"

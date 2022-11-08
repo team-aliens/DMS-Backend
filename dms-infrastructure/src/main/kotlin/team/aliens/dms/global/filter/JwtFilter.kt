@@ -2,7 +2,6 @@ package team.aliens.dms.global.filter
 
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
-import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.global.security.token.JwtParser
 import team.aliens.dms.global.security.token.JwtProperties
 import javax.servlet.FilterChain
@@ -19,20 +18,20 @@ class JwtFilter(
         filterChain: FilterChain
     ) {
         val token = resolvedToken(request)
-        SecurityContextHolder.getContext().authentication = jwtParser.getAuthentication(token)
+
+        token?.let {
+            SecurityContextHolder.getContext().authentication = jwtParser.getAuthentication(token)
+        }
+        SecurityContextHolder.clearContext()
 
         filterChain.doFilter(request, response)
     }
 
-    private fun resolvedToken(request: HttpServletRequest): String {
-        val bearerToken: String? = request.getHeader(JwtProperties.HEADER)
-
-        bearerToken?.let {
-            if(bearerToken.startsWith(JwtProperties.PREFIX)) {
-                return bearerToken.substring(7)
+    private fun resolvedToken(request: HttpServletRequest): String? =
+        request.getHeader(JwtProperties.HEADER)?.also {
+            if (it.startsWith(JwtProperties.PREFIX)) {
+                return it.substring(JwtProperties.PREFIX.length)
             }
         }
 
-        throw InvalidTokenException
-    }
 }

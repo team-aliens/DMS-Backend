@@ -1,12 +1,13 @@
 package team.aliens.dms.domain.student.usecase
 
+import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotMatchedException
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
-import team.aliens.dms.domain.school.exception.CodeNotMatchedException
-import team.aliens.dms.domain.student.dto.SignupRequest
-import team.aliens.dms.domain.student.dto.TokenAndFeaturesResponse
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
+import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
+import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -18,12 +19,11 @@ import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.global.annotation.UseCase
-import java.util.*
+import java.util.UUID
 
 /**
  *
- * 학생이 회원가입을 하는 SignupUseCase
+ * 학생이 회원가입을 하는 SignUpUseCase
  *
  * @author kimbeomjin
  * @date 2022/10/22
@@ -40,42 +40,44 @@ class SignUpUseCase(
     private val jwtPort: StudentJwtPort
 ) {
 
-    fun execute(request: SignupRequest): TokenAndFeaturesResponse {
-        val (schoolCode, schoolAnswer, email, authCode,
+    fun execute(request: SignUpRequest): SignUpResponse {
+        val (
+            schoolCode, schoolAnswer, authCode,
             grade, classRoom, number,
-            accountId, password, profileImageUrl) = request
+            accountId, password, email, profileImageUrl
+        ) = request
 
-        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw CodeNotMatchedException
+        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolCodeMismatchException
 
-        /*
-        학교 확인 질문 답변 검사
-         */
+        /**
+         * 학교 확인 질문 답변 검사
+         **/
         if (school.answer != schoolAnswer) {
-            throw AnswerNotMatchedException
+            throw AnswerMismatchException
         }
 
-        /*
-        이메일 중복 검사
-         */
-        if (queryUserPort.existsByEmail(email)) {
+        /**
+         * 이메일 중복 검사
+         **/
+        if (queryUserPort.existsUserByEmail(email)) {
             throw UserEmailExistsException
         }
 
-        /*
-        이메일 인증코드 검사
-         */
+        /**
+         * 이메일 인증코드 검사
+         **/
         val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
 
         if (authCode != authCodeEntity.code) {
-            throw AuthCodeNotMatchedException
+            throw AuthCodeMismatchException
         }
 
         // TODO 학번으로 이름, 호실 조회
 
-        /*
-        아이디 중복 검사
-         */
-        if (queryUserPort.existsByAccountId(accountId)) {
+        /**
+         * 아이디 중복 검사
+         **/
+        if (queryUserPort.existsUserByAccountId(accountId)) {
             throw UserAccountIdExistsException
         }
 
@@ -101,11 +103,11 @@ class SignUpUseCase(
 
         val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, Authority.STUDENT)
 
-        return TokenAndFeaturesResponse(
+        return SignUpResponse(
             accessToken = accessToken,
             expiredAt = expiredAt,
             refreshToken = refreshToken,
-            features = TokenAndFeaturesResponse.Features(
+            features = SignUpResponse.Features(
                 // TODO 서비스 관리 테이블 필요
                 mealService = true,
                 noticeService = true,
@@ -123,7 +125,7 @@ class SignUpUseCase(
     ) = User(
         schoolId = schoolId,
         accountId = accountId,
-        password = securityPort.encode(password),
+        password = securityPort.encodePassword(password),
         email = email,
         name = "", // TODO 학번으로 조회한 이름
         profileImageUrl = profileImageUrl,

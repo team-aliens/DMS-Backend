@@ -17,4 +17,5 @@ data class CertifyEmailCodeWebRequest(
 
     @field:NotNull
     val type: EmailType
+
 )

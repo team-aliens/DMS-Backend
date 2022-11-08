@@ -1,31 +1,37 @@
 package team.aliens.dms.domain.manager.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.util.StringUtil
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.school.exception.AnswerNotMatchedException
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
-import team.aliens.dms.global.spi.CoveredEmailPort
-import java.util.*
+import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.CheckUserAuthority
+import java.util.UUID
 
 @ReadOnlyUseCase
 class FindManagerAccountIdUseCase(
-    private val managerQuerySchoolPort: ManagerQuerySchoolPort,
-    private val managerQueryUserPort: ManagerQueryUserPort,
-    private val coveredEmailPort: CoveredEmailPort
+    private val querySchoolPort: ManagerQuerySchoolPort,
+    private val queryUserPort: ManagerQueryUserPort,
+    private val checkUserAuthority: CheckUserAuthority
 ) {
 
     fun execute(schoolId: UUID, answer: String): String {
-        val school = managerQuerySchoolPort.querySchoolById(schoolId) ?: throw SchoolNotFoundException
+        val school = querySchoolPort.querySchoolById(schoolId) ?: throw SchoolNotFoundException
 
         if (school.answer != answer) {
-            throw AnswerNotMatchedException
+            throw AnswerMismatchException
         }
 
-        val user = managerQueryUserPort.queryUserBySchoolId(schoolId) ?: throw ManagerNotFoundException
+        val user = queryUserPort.queryUserBySchoolId(schoolId) ?: throw UserNotFoundException
 
-        return coveredEmailPort.coveredEmail(user.email)
+        if (checkUserAuthority.execute(user.id) != Authority.MANAGER) {
+            throw ManagerNotFoundException
+        }
+
+        return StringUtil.coveredEmail(user.email)
     }
-
 }

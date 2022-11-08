@@ -47,5 +47,4 @@ class AwsS3Adapter(
     private fun getResource(fileName: String): String {
         return amazonS3Client.getResourceUrl(awsProperties.bucket, fileName)
     }
-
 }

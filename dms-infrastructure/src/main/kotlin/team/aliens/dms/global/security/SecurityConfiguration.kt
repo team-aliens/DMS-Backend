@@ -16,7 +16,9 @@ import team.aliens.dms.global.security.token.JwtParser
 @Configuration
 class SecurityConfiguration(
     private val jwtParser: JwtParser,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val authenticationEntryPoint: CustomAuthenticationEntryPoint,
+    private val accessDeniedHandler: CustomAccessDeniedHandler
 ) {
 
     @Bean
@@ -46,12 +48,15 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
+            .antMatchers(HttpMethod.GET, "/students/name").permitAll()
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.GET, "/managers/students").hasAuthority(MANAGER.name)
-
+            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
+            .antMatchers(HttpMethod.GET, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
+            
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
@@ -60,6 +65,10 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/notices/").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
@@ -67,8 +76,15 @@ class SecurityConfiguration(
             // /meals
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
+            .anyRequest().denyAll()
+
         http
             .apply(FilterConfig(jwtParser, objectMapper))
+
+        http
+            .exceptionHandling()
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .accessDeniedHandler(accessDeniedHandler)
 
         return http.build()
     }

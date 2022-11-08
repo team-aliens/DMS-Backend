@@ -7,7 +7,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsyncClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import team.aliens.dms.global.config.AwsProperties
+import team.aliens.dms.thirdparty.AwsProperties
 
 @Configuration
 class AwsSesConfig(
@@ -17,6 +17,7 @@ class AwsSesConfig(
     @Bean
     fun amazonSimpleEmailService(): AmazonSimpleEmailServiceAsync? {
         val basicAWSCredentials = BasicAWSCredentials(awsProperties.accessKey, awsProperties.secretKey)
+
         return AmazonSimpleEmailServiceAsyncClient.asyncBuilder()
             .withCredentials(AWSStaticCredentialsProvider(basicAWSCredentials))
             .withRegion(Regions.US_WEST_2)

@@ -1,13 +1,13 @@
 package team.aliens.dms.domain.student.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
-import team.aliens.dms.domain.student.exception.StudentInfoNotMatchedException
+import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.global.annotation.ReadOnlyUseCase
-import team.aliens.dms.global.spi.CoveredEmailPort
 import java.util.UUID
 
 /**
@@ -21,21 +21,23 @@ import java.util.UUID
 @ReadOnlyUseCase
 class FindStudentAccountIdUseCase(
     private val queryStudentPort: QueryStudentPort,
-    private val queryUserPort: StudentQueryUserPort,
-    private val coveredEmailPort: CoveredEmailPort
+    private val queryUserPort: StudentQueryUserPort
 ) {
 
     fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
         val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
-            schoolId, request.grade, request.classRoom, request.number
+            schoolId = schoolId,
+            grade = request.grade,
+            classRoom = request.classRoom,
+            number = request.number
         ) ?: throw StudentNotFoundException
-        
-        val user = queryUserPort.queryByUserId(student.studentId) ?: throw UserNotFoundException
+
+        val user = queryUserPort.queryUserById(student.studentId) ?: throw UserNotFoundException
 
         if (user.name != request.name) {
-            throw StudentInfoNotMatchedException
+            throw StudentInfoMismatchException
         }
 
-        return coveredEmailPort.coveredEmail(user.email)
+        return StringUtil.coveredEmail(user.email)
     }
 }

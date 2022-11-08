@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.point.model
 
-import team.aliens.dms.global.annotation.Aggregate
+import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -14,4 +14,5 @@ data class PointHistory(
     val studentId: UUID,
 
     val createdAt: LocalDateTime?
+
 )

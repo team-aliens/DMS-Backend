@@ -12,7 +12,7 @@ class RefreshTokenPersistenceAdapter(
     private val refreshTokenRepository: RefreshTokenRepository
 ) : RefreshTokenPort {
 
-    override fun queryRefreshTokenByToken(id: String) = refreshTokenMapper.toDomain(
-        refreshTokenRepository.findByIdOrNull(id)
+    override fun queryRefreshTokenByToken(token: String) = refreshTokenMapper.toDomain(
+        refreshTokenRepository.findByIdOrNull(token)
     )
 }

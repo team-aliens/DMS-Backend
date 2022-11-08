@@ -26,6 +26,7 @@ class MealJpaEntity(
 
     @Column(columnDefinition = "VARCHAR(255)")
     val dinner: String?
+
 )
 
 @Embeddable

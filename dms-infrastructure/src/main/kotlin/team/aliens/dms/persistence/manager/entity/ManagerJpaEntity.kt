@@ -21,4 +21,5 @@ class ManagerJpaEntity(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
     val user: UserJpaEntity?
+
 )

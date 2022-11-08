@@ -23,5 +23,6 @@ data class AuthCodeEntity(
 
     @field:NotNull
     @TimeToLive
-    val expirationTime: Int,
+    val expirationTime: Int
+
 )

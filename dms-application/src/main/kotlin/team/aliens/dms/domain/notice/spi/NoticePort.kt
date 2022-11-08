@@ -1,4 +1,6 @@
 package team.aliens.dms.domain.notice.spi
 
-interface NoticePort : QueryNoticePort {
+interface NoticePort :
+    QueryNoticePort,
+    CommandNoticePort {
 }
