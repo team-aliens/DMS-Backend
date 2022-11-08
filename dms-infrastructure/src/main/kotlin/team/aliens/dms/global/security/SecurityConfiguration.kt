@@ -53,6 +53,7 @@ class SecurityConfiguration(
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
+            .antMatchers(HttpMethod.GET, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
 
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()

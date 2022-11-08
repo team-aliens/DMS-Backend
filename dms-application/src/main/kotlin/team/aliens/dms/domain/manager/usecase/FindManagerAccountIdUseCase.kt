@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.CoveredEmailPort
+import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
@@ -16,7 +16,6 @@ import java.util.UUID
 class FindManagerAccountIdUseCase(
     private val querySchoolPort: ManagerQuerySchoolPort,
     private val queryUserPort: ManagerQueryUserPort,
-    private val coveredEmailPort: CoveredEmailPort,
     private val checkUserAuthority: CheckUserAuthority
 ) {
 
@@ -33,6 +32,6 @@ class FindManagerAccountIdUseCase(
             throw ManagerNotFoundException
         }
 
-        return coveredEmailPort.coveredEmail(user.email)
+        return StringUtil.coveredEmail(user.email)
     }
 }

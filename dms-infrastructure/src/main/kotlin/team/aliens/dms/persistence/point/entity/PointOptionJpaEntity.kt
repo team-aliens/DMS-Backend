@@ -1,10 +1,9 @@
 package team.aliens.dms.persistence.point.entity
 
+import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.persistence.BaseUUIDEntity
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "tbl_point_option")
@@ -16,6 +15,10 @@ class PointOptionJpaEntity(
     val name: String,
 
     @Column(columnDefinition = "INT", nullable = false)
-    val score: Int
+    val score: Int,
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    val type: PointType
 
 ) : BaseUUIDEntity()

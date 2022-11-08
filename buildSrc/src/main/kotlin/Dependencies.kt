@@ -26,6 +26,10 @@ object Dependencies {
     const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis"
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
 
+    // querydsl
+    const val QUERYDSL = "com.querydsl:querydsl-jpa:${DependencyVersions.QUERYDSL}"
+    const val QUERYDSL_PROCESSOR = "com.querydsl:querydsl-apt:${DependencyVersions.QUERYDSL}:jpa"
+
     // security
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"
 
