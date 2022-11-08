@@ -16,7 +16,9 @@ import team.aliens.dms.global.security.token.JwtParser
 @Configuration
 class SecurityConfiguration(
     private val jwtParser: JwtParser,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val authenticationEntryPoint: CustomAuthenticationEntryPoint,
+    private val accessDeniedHandler: CustomAccessDeniedHandler
 ) {
 
     @Bean
@@ -64,6 +66,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.GET, "/notices/").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
@@ -71,8 +74,15 @@ class SecurityConfiguration(
             // /meals
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
+            .anyRequest().denyAll()
+
         http
             .apply(FilterConfig(jwtParser, objectMapper))
+
+        http
+            .exceptionHandling()
+            .authenticationEntryPoint(authenticationEntryPoint)
+            .accessDeniedHandler(accessDeniedHandler)
 
         return http.build()
     }

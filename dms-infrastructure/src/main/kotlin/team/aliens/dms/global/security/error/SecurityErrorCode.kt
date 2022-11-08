@@ -10,7 +10,9 @@ enum class SecurityErrorCode(
     INVALID_TOKEN(401, "Invalid Token"),
     EXPIRED_TOKEN(401, "Expired Token"),
     UNEXPECTED_TOKEN(401, "Unexpected Token"),
-    INVALID_ROLE(401, "Invalid Role")
+    INVALID_ROLE(401, "Invalid Role"),
+
+    FORBIDDEN(403, "Can Not Access")
     ;
 
     override fun status(): Int = status
