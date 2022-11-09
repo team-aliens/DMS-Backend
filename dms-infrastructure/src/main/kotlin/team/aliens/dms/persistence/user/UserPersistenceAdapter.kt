@@ -1,5 +1,7 @@
 package team.aliens.dms.persistence.user
 
+import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -47,7 +49,32 @@ class UserPersistenceAdapter(
     )
 
     override fun searchStudent(name: String, sort: Sort): List<User> {
-        //TODO #71머지이후 querydsl 이용
+        return queryFactory
+            .selectFrom(userJpaEntity)
+            .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.userId))
+            .where(
+                userJpaEntity.name.like(name)
+            )
+            .orderBy(
+                sortFilter(sort)
+            )
+            .fetch()
+            .map {
+                userMapper.toDomain(it)!!
+            }
+    }
+
+    private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
+        return when(sort) {
+            Sort.NAME -> {
+                userJpaEntity.name.asc()
+            }
+            else -> {
+                studentJpaEntity.grade.asc()
+                studentJpaEntity.classRoom.asc()
+                studentJpaEntity.number.asc()
+            }
+        }
     }
     
     override fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User> {
