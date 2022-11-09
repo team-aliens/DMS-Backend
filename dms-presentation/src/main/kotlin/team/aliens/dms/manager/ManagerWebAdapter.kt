@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.manager.dto.GetStudentListResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.GetStudentDetailsUseCase
+import team.aliens.dms.domain.manager.usecase.GetStudentListUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.manager.dto.request.GetStudentListWebRequest
 import team.aliens.dms.manager.dto.request.ResetPasswordManagerWebRequest
@@ -28,7 +30,8 @@ import javax.validation.constraints.NotBlank
 class ManagerWebAdapter(
     private val findManagerAccountIdUseCase: FindManagerAccountIdUseCase,
     private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase,
-    private val getStudentDetailsUseCase: GetStudentDetailsUseCase
+    private val getStudentDetailsUseCase: GetStudentDetailsUseCase,
+    private val getStudentListUseCase: GetStudentListUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -58,7 +61,11 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students")
-    fun getStudentList(@RequestBody @Valid webRequest: GetStudentListWebRequest) {
+    fun getStudentList(@RequestBody @Valid request: GetStudentListWebRequest): GetStudentListResponse {
+        return getStudentListUseCase.execute(
+            name = request.name,
+            sort = request.sort
+        )
     }
     
     @GetMapping("/students/{student-id}")
