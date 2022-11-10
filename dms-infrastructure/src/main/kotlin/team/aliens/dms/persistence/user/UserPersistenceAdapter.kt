@@ -88,11 +88,5 @@ class UserPersistenceAdapter(
                 userMapper.toDomain(it)!!
             }
     }
-
-    override fun deleteUser(user: User) {
-        userRepository.delete(
-            userMapper.toEntity(user)
-        )
-    }
 }
  
