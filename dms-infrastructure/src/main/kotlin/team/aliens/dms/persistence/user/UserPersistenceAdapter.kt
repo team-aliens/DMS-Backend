@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.user
 
 import com.querydsl.core.types.OrderSpecifier
-import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -88,6 +87,12 @@ class UserPersistenceAdapter(
             .map {
                 userMapper.toDomain(it)!!
             }
+    }
+
+    override fun deleteUser(user: User) {
+        userRepository.delete(
+            userMapper.toEntity(user)
+        )
     }
 }
  
