@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.manager.spi
 
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
 
@@ -13,6 +14,8 @@ interface ManagerQueryUserPort {
 
     fun queryUserByEmail(email: String): User?
 
+    fun queryUserByNameAndSort(name: String, sort: Sort): List<User>
+    
     fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User>
 
 }

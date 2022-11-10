@@ -1,8 +1,11 @@
 package team.aliens.dms.persistence.user
 
+import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.persistence.user.mapper.UserMapper
@@ -45,6 +48,35 @@ class UserPersistenceAdapter(
         userRepository.findByAccountId(accountId)
     )
 
+    override fun queryUserByNameAndSort(name: String, sort: Sort): List<User> {
+        return queryFactory
+            .selectFrom(userJpaEntity)
+            .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.userId))
+            .where(
+                userJpaEntity.name.like(name)
+            )
+            .orderBy(
+                sortFilter(sort)
+            )
+            .fetch()
+            .map {
+                userMapper.toDomain(it)!!
+            }
+    }
+
+    private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
+        return when(sort) {
+            Sort.NAME -> {
+                userJpaEntity.name.asc()
+            }
+            else -> {
+                studentJpaEntity.grade.asc()
+                studentJpaEntity.classRoom.asc()
+                studentJpaEntity.number.asc()
+            }
+        }
+    }
+    
     override fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User> {
         return queryFactory
             .selectFrom(userJpaEntity)
