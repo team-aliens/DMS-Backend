@@ -76,8 +76,9 @@ class ManagerWebAdapter(
         return getStudentDetailsUseCase.execute(studentId)
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/students/{student-id}")
     fun deleteStudent(@PathVariable("student-id") studentId: UUID) {
-        return removeStudentUseCase.execute(studentId)
+        removeStudentUseCase.execute(studentId)
     }
 }
