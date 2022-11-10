@@ -2,6 +2,7 @@ package team.aliens.dms.manager
 
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,6 +17,7 @@ import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.GetStudentDetailsUseCase
 import team.aliens.dms.domain.manager.usecase.GetStudentListUseCase
+import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.manager.dto.request.GetStudentListWebRequest
 import team.aliens.dms.manager.dto.request.ResetPasswordManagerWebRequest
@@ -31,7 +33,8 @@ class ManagerWebAdapter(
     private val findManagerAccountIdUseCase: FindManagerAccountIdUseCase,
     private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase,
     private val getStudentDetailsUseCase: GetStudentDetailsUseCase,
-    private val getStudentListUseCase: GetStudentListUseCase
+    private val getStudentListUseCase: GetStudentListUseCase,
+    private val removeStudentUseCase: RemoveStudentUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -71,5 +74,11 @@ class ManagerWebAdapter(
     @GetMapping("/students/{student-id}")
     fun getStudentDetails(@PathVariable("student-id") studentId: UUID): GetStudentDetailsResponse {
         return getStudentDetailsUseCase.execute(studentId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/students/{student-id}")
+    fun deleteStudent(@PathVariable("student-id") studentId: UUID) {
+        removeStudentUseCase.execute(studentId)
     }
 }
