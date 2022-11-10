@@ -37,6 +37,10 @@ class NoticePersistenceAdapter(
         }
     }
 
+    override fun queryNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID) = noticeMapper.toDomain(
+        noticeRepository.findByIdAndManagerUserId(noticeId, managerId)
+    )
+
     override fun deleteNotice(notice: Notice) {
         noticeRepository.delete(
             noticeMapper.toEntity(notice)
