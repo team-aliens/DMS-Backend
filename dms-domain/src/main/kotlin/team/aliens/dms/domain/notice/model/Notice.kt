@@ -19,5 +19,4 @@ data class Notice(
 
     val updatedAt: LocalDateTime?
 
-) {
-}
+)
