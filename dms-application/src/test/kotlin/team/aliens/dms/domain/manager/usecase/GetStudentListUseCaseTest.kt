@@ -8,13 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.manager.dto.GetStudentListResponse
+import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
 
@@ -67,9 +66,9 @@ class GetStudentListUseCaseTest {
     }
 
     private val responseStub by lazy {
-        GetStudentListResponse(
+        QueryStudentListResponse(
             listOf(
-                GetStudentListResponse.StudentElement(
+                QueryStudentListResponse.StudentElement(
                     id = id,
                     name = userStub.name,
                     gcn = "2120",
@@ -83,7 +82,7 @@ class GetStudentListUseCaseTest {
     @Test
     fun `학생 목록 조회 성공`() {
         // given
-        given(queryUserPort.searchStudent(name, sort))
+        given(queryUserPort.queryUserByNameAndSort(name, sort))
             .willReturn(listOf(userStub))
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
@@ -98,11 +97,12 @@ class GetStudentListUseCaseTest {
     @Test
     fun `학생을 찾을 수 없음`() {
         // given
-        given(queryUserPort.searchStudent(name, sort))
+        given(queryUserPort.queryUserByNameAndSort(name, sort))
             .willReturn(listOf(userStub))
         given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
+        // when & then
         assertThrows<StudentNotFoundException> {
             getStudentListUseCase.execute(name, sort)
         }

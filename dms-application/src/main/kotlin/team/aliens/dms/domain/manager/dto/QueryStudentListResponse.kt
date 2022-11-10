@@ -2,7 +2,7 @@ package team.aliens.dms.domain.manager.dto
 
 import java.util.UUID
 
-data class GetStudentListResponse(
+data class QueryStudentListResponse(
     val students: List<StudentElement>
 ) {
     data class StudentElement(

@@ -2,7 +2,7 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
-import team.aliens.dms.domain.manager.dto.GetStudentListResponse
+import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
@@ -13,15 +13,15 @@ class GetStudentListUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort
 ) {
+    fun execute(name: String, sort: Sort): QueryStudentListResponse {
 
-    fun execute(name: String, sort: Sort): GetStudentListResponse {
-
-        val user = queryUserPort.searchStudent(name, sort)
+        val user = queryUserPort.queryUserByNameAndSort(name, sort)
         val students = user.map {
             queryStudentPort.queryStudentById(it.id)
 
             val student = queryStudentPort.queryStudentById(it.id) ?: throw StudentNotFoundException
-            GetStudentListResponse.StudentElement(
+
+            QueryStudentListResponse.StudentElement(
                 id = it.id,
                 name = it.name,
                 gcn = StringUtil.gcnToString(
@@ -34,8 +34,7 @@ class GetStudentListUseCase(
             )
         }
 
-        return GetStudentListResponse(students)
+        return QueryStudentListResponse(students)
     }
-
 
 }

@@ -48,7 +48,7 @@ class UserPersistenceAdapter(
         userRepository.findByAccountId(accountId)
     )
 
-    override fun searchStudent(name: String, sort: Sort): List<User> {
+    override fun queryUserByNameAndSort(name: String, sort: Sort): List<User> {
         return queryFactory
             .selectFrom(userJpaEntity)
             .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.userId))
