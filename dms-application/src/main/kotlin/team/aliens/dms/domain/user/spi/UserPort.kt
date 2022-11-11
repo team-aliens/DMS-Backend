@@ -13,5 +13,7 @@ interface UserPort :
     ManagerQueryUserPort,
     ManagerCommandUserPort,
     AuthQueryUserPort,
-    NoticeQueryUserPort {
+    NoticeQueryUserPort,
+    QueryUserPort,
+    CommandUserPort {
 }
