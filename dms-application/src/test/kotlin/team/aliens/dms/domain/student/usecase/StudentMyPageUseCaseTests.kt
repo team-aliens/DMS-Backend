@@ -92,6 +92,8 @@ class StudentMyPageUseCaseTests {
         )
     }
 
+
+
     private val studentMyPageResponseStub by lazy {
         StudentMyPageResponse(
             schoolName = "학교이름",
@@ -130,6 +132,34 @@ class StudentMyPageUseCaseTests {
 
         // then
         assertEquals(response, studentMyPageResponseStub)
+    }
+
+    @Test
+    fun `학생 마이페이지 확인 성공 프로필 기본이미지`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
+
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
+        given(querySchoolPort.querySchoolById(studentStub.schoolId))
+            .willReturn(schoolStub)
+
+        given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
+            .willReturn(1)
+
+        given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
+            .willReturn(1)
+
+        // when
+        val response = studentMyPageUseCase.execute().copy(profileImageUrl = User.PROFILE_IMAGE)
+
+        // then
+        assertEquals(response, studentMyPageResponseStub.copy(profileImageUrl = User.PROFILE_IMAGE))
     }
 
     @Test
