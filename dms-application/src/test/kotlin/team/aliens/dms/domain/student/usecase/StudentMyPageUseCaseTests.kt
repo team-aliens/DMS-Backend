@@ -106,6 +106,7 @@ class StudentMyPageUseCaseTests {
 
     @Test
     fun `학생 마이페이지 확인 성공`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -124,19 +125,23 @@ class StudentMyPageUseCaseTests {
         given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(1)
 
+        // when
         val response = studentMyPageUseCase.execute()
 
+        // then
         assertEquals(response, studentMyPageResponseStub)
     }
 
     @Test
     fun `학생 미존재`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(null)
 
+        // when & then
         assertThrows<StudentNotFoundException> {
             studentMyPageUseCase.execute()
         }
@@ -144,6 +149,7 @@ class StudentMyPageUseCaseTests {
 
     @Test
     fun `학생 유저 미존재`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -153,6 +159,7 @@ class StudentMyPageUseCaseTests {
         given(queryUserPort.queryUserById(currentUserId))
             .willReturn(null)
 
+        // when & then
         assertThrows<UserNotFoundException> {
             studentMyPageUseCase.execute()
         }
@@ -160,6 +167,7 @@ class StudentMyPageUseCaseTests {
 
     @Test
     fun `학교 미존재`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -172,6 +180,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(null)
 
+        // when & then
         assertThrows<SchoolNotFoundException> {
             studentMyPageUseCase.execute()
         }
