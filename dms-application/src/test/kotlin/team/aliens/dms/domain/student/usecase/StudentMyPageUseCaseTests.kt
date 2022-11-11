@@ -79,6 +79,20 @@ class StudentMyPageUseCaseTests {
         )
     }
 
+    private val userProfileNullStub by lazy {
+        User(
+            id = currentUserId,
+            schoolId = UUID.randomUUID(),
+            accountId = "계정아이디",
+            password = "비밀번호",
+            email = "이메일",
+            name = "이름",
+            profileImageUrl = null,
+            createdAt = LocalDateTime.now(),
+            deletedAt = null
+        )
+    }
+
     private val schoolStub by lazy {
         School(
             id = schoolId,
@@ -92,14 +106,24 @@ class StudentMyPageUseCaseTests {
         )
     }
 
-
-
     private val studentMyPageResponseStub by lazy {
         StudentMyPageResponse(
             schoolName = "학교이름",
             name = "이름",
             gcn = "2310",
             profileImageUrl = "https://~",
+            bonusPoint = 1,
+            minusPoint = 1,
+            phrase = "잘하자"
+        )
+    }
+
+    private val studentMyPageProfileUrlNullResponseStub by lazy {
+        StudentMyPageResponse(
+            schoolName = "학교이름",
+            name = "이름",
+            gcn = "2310",
+            profileImageUrl = User.PROFILE_IMAGE,
             bonusPoint = 1,
             minusPoint = 1,
             phrase = "잘하자"
@@ -144,7 +168,7 @@ class StudentMyPageUseCaseTests {
             .willReturn(studentStub)
 
         given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+            .willReturn(userProfileNullStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
@@ -156,10 +180,10 @@ class StudentMyPageUseCaseTests {
             .willReturn(1)
 
         // when
-        val response = studentMyPageUseCase.execute().copy(profileImageUrl = User.PROFILE_IMAGE)
+        val response = studentMyPageUseCase.execute()
 
         // then
-        assertEquals(response, studentMyPageResponseStub.copy(profileImageUrl = User.PROFILE_IMAGE))
+        assertEquals(response, studentMyPageProfileUrlNullResponseStub)
     }
 
     @Test
