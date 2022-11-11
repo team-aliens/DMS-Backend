@@ -26,9 +26,7 @@ class UpdateUserPasswordUseCase(
         val newEncodedPassword = securityPort.encodePassword(request.newPassword)
 
         commandUserPort.saveUser(
-            user.copy(
-                password = newEncodedPassword
-            )
+            user.copy(password = newEncodedPassword)
         )
     }
 }
