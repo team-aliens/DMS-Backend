@@ -43,7 +43,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
 
             // /users
-            .antMatchers(HttpMethod.PATCH, "users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.PATCH, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
 
             // /students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
