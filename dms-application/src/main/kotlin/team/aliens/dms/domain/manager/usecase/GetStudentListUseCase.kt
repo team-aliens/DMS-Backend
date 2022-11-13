@@ -6,6 +6,7 @@ import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.user.model.User
 
 @ReadOnlyUseCase
 class GetStudentListUseCase(
@@ -23,7 +24,7 @@ class GetStudentListUseCase(
                 name = it.name,
                 gcn = student.gcn,
                 roomNumber = student.roomNumber,
-                profileImageUrl = it.profileImageUrl!!
+                profileImageUrl = it.profileImageUrl ?: User.PROFILE_IMAGE
             )
         }
 

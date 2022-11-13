@@ -71,8 +71,8 @@ class GetStudentDetailsUseCaseTest {
     private val responseStub by lazy {
         GetStudentDetailsResponse(
             name = userStub.name,
-            gcn = "${studentStub.grade}${studentStub.classRoom}${studentStub.number}",
-            profileImageUrl = userStub.profileImageUrl!!,
+            gcn = studentStub.gcn,
+            profileImageUrl = userStub.profileImageUrl ?: User.PROFILE_IMAGE,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomNumber = studentStub.roomNumber,
@@ -80,7 +80,7 @@ class GetStudentDetailsUseCaseTest {
                 GetStudentDetailsResponse.RoomMate(
                     id = userStub.id,
                     name = userStub.name,
-                    profileImageUrl = userStub.profileImageUrl!!
+                    profileImageUrl = userStub.profileImageUrl ?: User.PROFILE_IMAGE
                 )
             )
         )
