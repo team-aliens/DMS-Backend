@@ -27,13 +27,16 @@ class StudentMyPageUseCase(
         val studentUser = queryUserPort.queryUserById(student.studentId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
+        val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(student.studentId)
+        val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(student.studentId)
+
         return StudentMyPageResponse(
             schoolName = school.name,
             name = studentUser.name,
-            gcn = "${student.grade}${student.classRoom}${student.number}",
+            gcn = student.gcn,
             profileImageUrl = studentUser.profileImageUrl ?: User.PROFILE_IMAGE,
-            bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(student.studentId),
-            minusPoint = queryPointHistoryPort.queryTotalMinusPoint(student.studentId),
+            bonusPoint = bonusPoint,
+            minusPoint = minusPoint,
             phrase = "잘하자" // TODO 상벌점 상태에 따라서 문구 출력
         )
     }
