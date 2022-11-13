@@ -1,4 +1,5 @@
 package team.aliens.dms.common.util
+
 import java.security.SecureRandom
 
 object StringUtil {
@@ -26,9 +27,4 @@ object StringUtil {
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")
     }
-
-    fun gcnToString(grade: Int, classRoom: Int, number: Int): String {
-        return grade.toString().plus(classRoom).plus(number)
-    }
-
 }
