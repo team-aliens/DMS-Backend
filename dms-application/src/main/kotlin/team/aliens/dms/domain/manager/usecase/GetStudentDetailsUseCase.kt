@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -21,8 +20,6 @@ class GetStudentDetailsUseCase(
         val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-        val gcn = StringUtil.gcnToString(student.grade, student.classRoom, student.number)
-
         val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(studentId)
 
@@ -40,7 +37,7 @@ class GetStudentDetailsUseCase(
 
         return GetStudentDetailsResponse(
             name = user.name,
-            gcn = gcn,
+            gcn = student.gcn,
             profileImageUrl = user.profileImageUrl!!,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,

@@ -35,9 +35,7 @@ class GetStudentDetailsUseCaseTest {
     @BeforeEach
     fun setUp() {
         getStudentDetailsUseCase = GetStudentDetailsUseCase(
-            queryUserPort,
-            queryStudentPort,
-            queryPointHistoryPort
+            queryUserPort, queryStudentPort, queryPointHistoryPort
         )
     }
 
@@ -70,33 +68,39 @@ class GetStudentDetailsUseCaseTest {
         )
     }
 
-    private val responseStub = GetStudentDetailsResponse(
-        name = userStub.name,
-        gcn = studentStub.grade.toString().plus(studentStub.classRoom).plus(studentStub.number),
-        profileImageUrl = userStub.profileImageUrl!!,
-        bonusPoint = bonusPoint,
-        minusPoint = minusPoint,
-        roomNumber = studentStub.roomNumber,
-        roomMates = listOf(
-            GetStudentDetailsResponse.RoomMate(
-                id = userStub.id,
-                name = userStub.name,
-                profileImageUrl = userStub.profileImageUrl!!
+    private val responseStub by lazy {
+        GetStudentDetailsResponse(
+            name = userStub.name,
+            gcn = "${studentStub.grade}${studentStub.classRoom}${studentStub.number}",
+            profileImageUrl = userStub.profileImageUrl!!,
+            bonusPoint = bonusPoint,
+            minusPoint = minusPoint,
+            roomNumber = studentStub.roomNumber,
+            roomMates = listOf(
+                GetStudentDetailsResponse.RoomMate(
+                    id = userStub.id,
+                    name = userStub.name,
+                    profileImageUrl = userStub.profileImageUrl!!
+                )
             )
         )
-    )
+    }
 
     @Test
     fun `학생 상세조회 성공`() {
         // given
         given(queryUserPort.queryUserById(id))
             .willReturn(userStub)
+
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
+
         given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
             .willReturn(bonusPoint)
+
         given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(minusPoint)
+
         given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(listOf(userStub))
 
@@ -124,6 +128,7 @@ class GetStudentDetailsUseCaseTest {
         // given
         given(queryUserPort.queryUserById(id))
             .willReturn(userStub)
+
         given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
