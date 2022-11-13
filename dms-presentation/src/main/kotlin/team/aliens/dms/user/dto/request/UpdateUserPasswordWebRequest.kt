@@ -7,6 +7,7 @@ import javax.validation.constraints.Pattern
 
 data class UpdateUserPasswordWebRequest(
 
+    @field:NotBlank
     @field:JsonFormat(shape = JsonFormat.Shape.STRING)
     val oldPassword: Password,
 
