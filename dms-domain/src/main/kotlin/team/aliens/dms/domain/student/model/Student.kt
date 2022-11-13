@@ -20,7 +20,7 @@ data class Student(
 
 ) {
 
-    val gcn: String = "${this.grade}${this.classRoom}${number()}"
+    val gcn: String = "${this.grade}${this.classRoom}${processedNumber()}"
 
-    private fun number() = if (number < 10) "0${number}".toInt() else number
+    private fun processedNumber() = if (number < 10) "0${number}".toInt() else number
 }
