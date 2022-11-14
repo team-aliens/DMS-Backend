@@ -25,24 +25,14 @@ class QueryPointHistoryUseCase(
             queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
         } ?: queryPointPort.queryAllPointHistoryByStudentId(student.id)
 
-        val points = pointHistory.map {
-            QueryPointHistoryResponse.Point(
-                pointId = it.pointId,
-                date = it.date,
-                type = it.type,
-                name = it.name,
-                score = it.score
-            )
-        }
-
         return QueryPointHistoryResponse(
             /**
              * BONUS -> 상점의 총합
              * MINUS -> 벌점의 총합(-로 계산되는 거 아님) ex) 벌점 3점 = 3
              * ALL -> 상점 + 벌점의 총합
              **/
-            totalPoint = points.sumOf { it.score },
-            points = points
+            totalPoint = pointHistory.sumOf { it.score },
+            points = pointHistory
         )
     }
 }

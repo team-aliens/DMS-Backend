@@ -10,7 +10,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.point.dto.PointRequestType
-import team.aliens.dms.domain.point.dto.vo.QueryPointHistoryVO
+import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
@@ -61,14 +61,14 @@ class QueryPointHistoryUseCaseTests {
 
     private val pointHistoryVOs by lazy {
         listOf(
-            QueryPointHistoryVO(
+            QueryPointHistoryResponse.Point(
                 pointId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
-            QueryPointHistoryVO(
+            QueryPointHistoryResponse.Point(
                 pointId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
@@ -159,23 +159,3 @@ class QueryPointHistoryUseCaseTests {
         }
     }
 }
-
-//        QueryPointHistoryResponse(
-//            totalPoint = 100,
-//            points = listOf(
-//                QueryPointHistoryResponse.Point(
-//                    pointId = UUID.randomUUID(),
-//                    date = LocalDate.now(),
-//                    type = PointType.BONUS,
-//                    name = "test name",
-//                    score = 10
-//                ),
-//                QueryPointHistoryResponse.Point(
-//                    pointId = UUID.randomUUID(),
-//                    date = LocalDate.now(),
-//                    type = PointType.MINUS,
-//                    name = "test name2",
-//                    score = -5
-//                )
-//            )
-//        )
