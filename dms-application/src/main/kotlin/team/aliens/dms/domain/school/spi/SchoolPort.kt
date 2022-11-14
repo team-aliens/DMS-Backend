@@ -5,6 +5,7 @@ import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 
 interface SchoolPort :
     QuerySchoolPort,
+    CommandSchoolPort,
     ManagerQuerySchoolPort,
     StudentQuerySchoolPort {
 }
