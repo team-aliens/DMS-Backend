@@ -22,7 +22,7 @@ class UpdateQuestionUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val school = querySchoolPort.querySchoolById(user.id) ?: throw SchoolNotFoundException
+        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         commandSchoolPort.saveSchool(
             school.copy(
