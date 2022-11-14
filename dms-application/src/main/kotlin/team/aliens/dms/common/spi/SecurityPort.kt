@@ -5,10 +5,12 @@ import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.user.spi.UserSecurityPort
 
 interface SecurityPort :
     ManagerSecurityPort,
     StudentSecurityPort,
+    UserSecurityPort,
     MealSecurityPort,
     AuthSecurityPort,
     NoticeSecurityPort {
