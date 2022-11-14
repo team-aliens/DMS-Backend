@@ -36,6 +36,11 @@ class QueryPointHistoryUseCase(
         }
 
         return QueryPointHistoryResponse(
+            /**
+             * BONUS -> 상점의 총합
+             * MINUS -> 벌점의 총합(-로 계산되는 거 아님) ex) 벌점 3점 = 3
+             * ALL -> 상점 + 벌점의 총합
+             **/
             totalPoint = points.sumOf { it.score },
             points = points
         )
