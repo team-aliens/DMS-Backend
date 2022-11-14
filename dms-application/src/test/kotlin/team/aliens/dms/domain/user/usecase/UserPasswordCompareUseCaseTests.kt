@@ -63,6 +63,7 @@ class UserPasswordCompareUseCaseTests {
         given(securityPort.isPasswordMatch(password, userStub.password))
             .willReturn(true)
 
+        // when & then
         assertDoesNotThrow {
             userPasswordCompareUseCase.execute(password)
         }
@@ -77,6 +78,7 @@ class UserPasswordCompareUseCaseTests {
         given(queryUserPort.queryUserById(currentUserId))
             .willReturn(null)
 
+        // when & then
         assertThrows<UserNotFoundException> {
             userPasswordCompareUseCase.execute(password)
         }
@@ -94,6 +96,7 @@ class UserPasswordCompareUseCaseTests {
         given(securityPort.isPasswordMatch(password, userStub.password))
             .willReturn(false)
 
+        // when & then
         assertThrows<PasswordMismatchException> {
             userPasswordCompareUseCase.execute(password)
         }
