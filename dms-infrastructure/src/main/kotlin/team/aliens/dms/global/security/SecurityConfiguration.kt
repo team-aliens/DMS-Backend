@@ -68,6 +68,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/code").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/schools/code").hasAuthority(MANAGER.name)
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
