@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
 import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.GetStudentDetailsUseCase
 import team.aliens.dms.domain.manager.usecase.GetStudentListUseCase
+import team.aliens.dms.domain.manager.usecase.ManagerMyPageUseCase
 import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.manager.dto.request.GetStudentListWebRequest
@@ -34,7 +36,8 @@ class ManagerWebAdapter(
     private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase,
     private val getStudentDetailsUseCase: GetStudentDetailsUseCase,
     private val getStudentListUseCase: GetStudentListUseCase,
-    private val removeStudentUseCase: RemoveStudentUseCase
+    private val removeStudentUseCase: RemoveStudentUseCase,
+    private val managerMyPageUseCase: ManagerMyPageUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -80,5 +83,10 @@ class ManagerWebAdapter(
     @DeleteMapping("/students/{student-id}")
     fun deleteStudent(@PathVariable("student-id") studentId: UUID) {
         removeStudentUseCase.execute(studentId)
+    }
+
+    @GetMapping("/profile")
+    fun myPage(): ManagerMyPageResponse {
+        return managerMyPageUseCase.execute()
     }
 }
