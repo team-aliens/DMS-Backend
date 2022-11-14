@@ -50,6 +50,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
             .antMatchers(HttpMethod.GET, "/students/name").permitAll()
             .antMatchers(HttpMethod.GET, "/students/profile").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.PATCH, "/students/profile").hasAuthority(STUDENT.name)
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()

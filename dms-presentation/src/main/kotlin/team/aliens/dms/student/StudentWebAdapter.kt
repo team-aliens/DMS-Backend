@@ -24,11 +24,13 @@ import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
 import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
 import team.aliens.dms.student.dto.request.CheckStudentGcnWebRequest
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.student.dto.request.SignUpWebRequest
+import team.aliens.dms.student.dto.request.UpdateStudentProfileWebRequest
 import team.aliens.dms.student.dto.response.CheckStudentGcnResponse
 import team.aliens.dms.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
@@ -45,6 +47,7 @@ class StudentWebAdapter(
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
     private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase,
     private val checkStudentGcnUseCase: CheckStudentGcnUseCase,
+    private val updateStudentProfileUseCase: UpdateStudentProfileUseCase,
     private val studentMyPageUseCase: StudentMyPageUseCase
 ) {
 
@@ -120,6 +123,12 @@ class StudentWebAdapter(
         val result = checkStudentGcnUseCase.execute(request)
 
         return CheckStudentGcnResponse(result)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/profile")
+    fun updateProfile(@RequestBody webRequest: UpdateStudentProfileWebRequest) {
+        updateStudentProfileUseCase.execute(webRequest.profileImageUrl)
     }
 
     @GetMapping("/profile")
