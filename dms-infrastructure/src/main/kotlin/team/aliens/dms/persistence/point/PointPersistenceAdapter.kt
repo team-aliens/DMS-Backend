@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.dto.vo.QueryPointHistoryVO
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.PointHistoryPort
+import team.aliens.dms.domain.point.spi.PointPort
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
@@ -12,11 +12,11 @@ import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptio
 import java.util.UUID
 
 @Component
-class PointHistoryPersistenceAdapter(
+class PointPersistenceAdapter(
     private val pointHistoryMapper: PointHistoryMapper,
     private val pointHistoryRepository: PointHistoryJpaRepository,
     private val queryFactory: JPAQueryFactory
-) : PointHistoryPort {
+) : PointPort {
 
     override fun queryPointHistoryByStudentIdAndType(studentId: UUID, type: PointType): List<QueryPointHistoryVO> {
         TODO("Not yet implemented")

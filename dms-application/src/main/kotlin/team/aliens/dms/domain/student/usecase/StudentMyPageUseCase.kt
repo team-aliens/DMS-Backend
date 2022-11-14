@@ -5,7 +5,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
+import team.aliens.dms.domain.student.spi.StudentQueryPointPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
@@ -18,7 +18,7 @@ class StudentMyPageUseCase(
     private val queryStudentPort: QueryStudentPort,
     private val queryUserPort: StudentQueryUserPort,
     private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryPointHistoryPort: StudentQueryPointHistoryPort
+    private val queryPointPort: StudentQueryPointPort
 ) {
 
     fun execute(): StudentMyPageResponse {
@@ -27,8 +27,8 @@ class StudentMyPageUseCase(
         val studentUser = queryUserPort.queryUserById(student.studentId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
-        val bonusPoint = queryPointHistoryPort.queryTotalBonusPoint(student.studentId)
-        val minusPoint = queryPointHistoryPort.queryTotalMinusPoint(student.studentId)
+        val bonusPoint = queryPointPort.queryTotalBonusPoint(student.studentId)
+        val minusPoint = queryPointPort.queryTotalMinusPoint(student.studentId)
 
         return StudentMyPageResponse(
             schoolName = school.name,
