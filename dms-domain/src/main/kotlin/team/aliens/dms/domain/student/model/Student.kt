@@ -18,4 +18,9 @@ data class Student(
 
     val number: Int
 
-)
+) {
+
+    val gcn: String = "${this.grade}${this.classRoom}${processedNumber()}"
+
+    private fun processedNumber() = if (number < 10) "0${number}".toInt() else number
+}

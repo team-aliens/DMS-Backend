@@ -17,6 +17,7 @@ import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
@@ -24,6 +25,7 @@ import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
+import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
 import team.aliens.dms.student.dto.request.CheckStudentGcnWebRequest
 import team.aliens.dms.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.student.dto.request.ResetStudentPasswordWebRequest
@@ -45,7 +47,8 @@ class StudentWebAdapter(
     private val findStudentAccountIdUseCase: FindStudentAccountIdUseCase,
     private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase,
     private val checkStudentGcnUseCase: CheckStudentGcnUseCase,
-    private val updateStudentProfileUseCase: UpdateStudentProfileUseCase
+    private val updateStudentProfileUseCase: UpdateStudentProfileUseCase,
+    private val studentMyPageUseCase: StudentMyPageUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -126,6 +129,11 @@ class StudentWebAdapter(
     @PatchMapping("/profile")
     fun updateProfile(@RequestBody webRequest: UpdateStudentProfileWebRequest) {
         updateStudentProfileUseCase.execute(webRequest.profileImageUrl)
+    }
+
+    @GetMapping("/profile")
+    fun myPage(): StudentMyPageResponse {
+        return studentMyPageUseCase.execute()
     }
 }
    

@@ -31,8 +31,7 @@ class GetStudentListUseCaseTest {
     @BeforeEach
     fun setUp() {
         getStudentListUseCase = GetStudentListUseCase(
-            queryUserPort,
-            queryStudentPort
+            queryUserPort, queryStudentPort
         )
     }
 
@@ -84,6 +83,7 @@ class GetStudentListUseCaseTest {
         // given
         given(queryUserPort.queryUserByNameAndSort(name, sort))
             .willReturn(listOf(userStub))
+
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
 
@@ -99,6 +99,7 @@ class GetStudentListUseCaseTest {
         // given
         given(queryUserPort.queryUserByNameAndSort(name, sort))
             .willReturn(listOf(userStub))
+
         given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
