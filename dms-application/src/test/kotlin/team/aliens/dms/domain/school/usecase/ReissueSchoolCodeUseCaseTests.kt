@@ -90,7 +90,7 @@ class ReissueSchoolCodeUseCaseTests {
             .willReturn(schoolStub)
 
         // when
-        val response = schoolStub.code
+        val response = schoolStub.copy(code = "09876543").code
 
         // then
         assertEquals(response, reissueSchoolCodeUseCase.execute())
