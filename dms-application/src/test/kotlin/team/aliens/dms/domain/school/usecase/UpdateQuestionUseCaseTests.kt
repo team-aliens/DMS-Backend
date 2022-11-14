@@ -83,6 +83,7 @@ class UpdateQuestionUseCaseTests {
 
     @Test
     fun `질문 변경 성공`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -92,6 +93,7 @@ class UpdateQuestionUseCaseTests {
         given(querySchoolPort.querySchoolById(schoolStub.id))
             .willReturn(schoolStub)
 
+        // when & then
         assertDoesNotThrow {
             updateQuestionUseCase.execute(requestStub)
         }
@@ -99,12 +101,14 @@ class UpdateQuestionUseCaseTests {
 
     @Test
     fun `유저를 찾을 수 없음`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
         given(queryUserPort.queryUserById(currentUserId))
             .willReturn(null)
 
+        // when & then
         assertThrows<UserNotFoundException> {
             updateQuestionUseCase.execute(requestStub)
         }
@@ -112,6 +116,7 @@ class UpdateQuestionUseCaseTests {
 
     @Test
     fun `학교를 찾을 수 없음`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -121,6 +126,7 @@ class UpdateQuestionUseCaseTests {
         given(querySchoolPort.querySchoolById(schoolStub.id))
             .willReturn(null)
 
+        // when & then
         assertThrows<SchoolNotFoundException> {
             updateQuestionUseCase.execute(requestStub)
         }
