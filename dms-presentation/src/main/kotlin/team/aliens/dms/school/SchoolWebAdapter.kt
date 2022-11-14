@@ -2,6 +2,7 @@ package team.aliens.dms.school
 
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -11,6 +12,8 @@ import team.aliens.dms.domain.school.usecase.CheckSchoolAnswerUseCase
 import team.aliens.dms.domain.school.usecase.CheckSchoolCodeUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolQuestionUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
+import team.aliens.dms.domain.school.usecase.ReissueSchoolCodeUseCase
+import team.aliens.dms.school.dto.response.ReissueSchoolCodeResponse
 import team.aliens.dms.school.dto.response.SchoolIdResponse
 import team.aliens.dms.school.dto.response.SchoolQuestionResponse
 import java.util.UUID
@@ -24,7 +27,8 @@ class SchoolWebAdapter(
     private val querySchoolsUseCase: QuerySchoolsUseCase,
     private val querySchoolQuestionUseCase: QuerySchoolQuestionUseCase,
     private val checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase,
-    private val checkSchoolCodeUseCase: CheckSchoolCodeUseCase
+    private val checkSchoolCodeUseCase: CheckSchoolCodeUseCase,
+    private val reissueSchoolCodeUseCase: ReissueSchoolCodeUseCase
 ) {
 
     @GetMapping
@@ -57,5 +61,12 @@ class SchoolWebAdapter(
         val result = checkSchoolCodeUseCase.execute(schoolCode)
 
         return SchoolIdResponse(result)
+    }
+
+    @PatchMapping("/code")
+    fun reissueCode(): ReissueSchoolCodeResponse {
+        val result = reissueSchoolCodeUseCase.execute()
+
+        return ReissueSchoolCodeResponse(result)
     }
 }
