@@ -2,13 +2,14 @@ package team.aliens.dms.persistence.point
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.point.dto.vo.QueryPointHistoryVO
+import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointPort
-import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
-import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptionJpaEntity
+import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
+import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
+import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
 import java.util.UUID
 
 @Component
@@ -18,12 +19,64 @@ class PointPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
 
-    override fun queryPointHistoryByStudentIdAndType(studentId: UUID, type: PointType): List<QueryPointHistoryVO> {
-        TODO("Not yet implemented")
+    override fun queryPointHistoryByStudentIdAndType(
+        studentId: UUID,
+        type: PointType
+    ): List<QueryPointHistoryResponse.Point> {
+        return queryFactory
+            .select(
+                QQueryPointHistoryVO(
+                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.createdAt!!,
+                    pointOptionJpaEntity.type,
+                    pointOptionJpaEntity.name,
+                    pointOptionJpaEntity.score
+                )
+            )
+            .from(pointHistoryJpaEntity)
+            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
+            .where(
+                pointHistoryJpaEntity.student.userId.eq(studentId),
+                pointOptionJpaEntity.type.eq(type)
+            )
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetch()
+            .map {
+                QueryPointHistoryResponse.Point(
+                    pointId = it.pointId,
+                    date = it.date.toLocalDate(),
+                    type = it.type,
+                    name = it.name,
+                    score = it.score
+                )
+            }
     }
 
-    override fun queryAllPointHistoryByStudentId(studentId: UUID): List<QueryPointHistoryVO> {
-        TODO("Not yet implemented")
+    override fun queryAllPointHistoryByStudentId(studentId: UUID): List<QueryPointHistoryResponse.Point> {
+        return queryFactory
+            .select(
+                QQueryPointHistoryVO(
+                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.createdAt!!,
+                    pointOptionJpaEntity.type,
+                    pointOptionJpaEntity.name,
+                    pointOptionJpaEntity.score
+                )
+            )
+            .from(pointHistoryJpaEntity)
+            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
+            .where(pointHistoryJpaEntity.student.userId.eq(studentId))
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetch()
+            .map {
+                QueryPointHistoryResponse.Point(
+                    pointId = it.pointId,
+                    date = it.date.toLocalDate(),
+                    type = it.type,
+                    name = it.name,
+                    score = it.score
+                )
+            }
     }
 
     override fun queryTotalBonusPoint(studentId: UUID): Int {
