@@ -19,7 +19,9 @@ class SchoolPersistenceAdapter(
     }
 
     override fun saveSchool(school: School) = schoolMapper.toDomain(
-        schoolMapper.toEntity(school)
+        schoolRepository.save(
+            schoolMapper.toEntity(school)
+        )
     )!!
 
     override fun querySchoolById(schoolId: UUID) = schoolMapper.toDomain(
