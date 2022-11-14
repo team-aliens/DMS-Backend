@@ -30,7 +30,6 @@ class SecurityConfiguration(
         http
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
         http
             .authorizeRequests()
 
@@ -49,33 +48,35 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
-            .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
-            .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
+            .antMatchers(HttpMethod.GET, "/students/name").permitAll()
             .antMatchers(HttpMethod.GET, "/students/name").permitAll()
             .antMatchers(HttpMethod.GET, "/students/profile").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/profile").hasAuthority(STUDENT.name)
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
-            .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.GET, "/managers/students").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.GET, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.DELETE, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
-            
+
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/answer/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/code").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/schools/question").hasAuthority(MANAGER.name)
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/notices/").hasAnyAuthority(STUDENT.name, MANAGER.name)
-            .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
-            .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/notices/{notice-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
@@ -84,6 +85,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
             .anyRequest().denyAll()
+
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
