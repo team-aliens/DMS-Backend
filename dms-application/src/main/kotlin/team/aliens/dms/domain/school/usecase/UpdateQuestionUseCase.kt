@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
