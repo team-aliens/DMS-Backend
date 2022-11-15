@@ -3,7 +3,6 @@ package team.aliens.dms.domain.point.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointPort
@@ -22,15 +21,10 @@ class QueryPointHistoryUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val student = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        /*val pointHistory = pointType?.run {
+        val pointHistory = if (pointType != null) {
             queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
-        } ?: queryPointPort.queryAllPointHistoryByStudentId(student.id)
-         */
-        
-        val pointHistory = if (pointType == null) {
-            queryPointPort.queryAllPointHistoryByStudentId(student.id)
         } else {
-            queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
+            queryPointPort.queryAllPointHistoryByStudentId(student.id)
         }
 
         return QueryPointHistoryResponse(
