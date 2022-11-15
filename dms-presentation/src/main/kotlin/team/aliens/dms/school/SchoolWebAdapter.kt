@@ -18,6 +18,8 @@ import team.aliens.dms.domain.school.usecase.QuerySchoolQuestionUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 import team.aliens.dms.domain.school.usecase.UpdateQuestionUseCase
 import team.aliens.dms.school.dto.request.UpdateQuestionWebRequest
+import team.aliens.dms.domain.school.usecase.ReissueSchoolCodeUseCase
+import team.aliens.dms.school.dto.response.ReissueSchoolCodeResponse
 import team.aliens.dms.school.dto.response.SchoolIdResponse
 import team.aliens.dms.school.dto.response.SchoolQuestionResponse
 import java.util.UUID
@@ -33,7 +35,8 @@ class SchoolWebAdapter(
     private val querySchoolQuestionUseCase: QuerySchoolQuestionUseCase,
     private val checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase,
     private val checkSchoolCodeUseCase: CheckSchoolCodeUseCase,
-    private val updateQuestionUseCase: UpdateQuestionUseCase
+    private val updateQuestionUseCase: UpdateQuestionUseCase,
+    private val reissueSchoolCodeUseCase: ReissueSchoolCodeUseCase
 ) {
 
     @GetMapping
@@ -66,6 +69,13 @@ class SchoolWebAdapter(
         val result = checkSchoolCodeUseCase.execute(schoolCode)
 
         return SchoolIdResponse(result)
+    }
+
+    @PatchMapping("/code")
+    fun reissueCode(): ReissueSchoolCodeResponse {
+        val result = reissueSchoolCodeUseCase.execute()
+
+        return ReissueSchoolCodeResponse(result)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
