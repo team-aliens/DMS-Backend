@@ -87,6 +87,9 @@ class SecurityConfiguration(
             // /meals
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
 
+            // /points
+            .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
+
             .anyRequest().denyAll()
 
 

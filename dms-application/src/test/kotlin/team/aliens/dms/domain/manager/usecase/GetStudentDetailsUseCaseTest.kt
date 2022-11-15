@@ -9,7 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -28,14 +28,14 @@ class GetStudentDetailsUseCaseTest {
     private lateinit var queryStudentPort: ManagerQueryStudentPort
 
     @MockBean
-    private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
+    private lateinit var queryPointPort: ManagerQueryPointPort
 
     private lateinit var getStudentDetailsUseCase: GetStudentDetailsUseCase
 
     @BeforeEach
     fun setUp() {
         getStudentDetailsUseCase = GetStudentDetailsUseCase(
-            queryUserPort, queryStudentPort, queryPointHistoryPort
+            queryUserPort, queryStudentPort, queryPointPort
         )
     }
 
@@ -95,10 +95,10 @@ class GetStudentDetailsUseCaseTest {
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
             .willReturn(bonusPoint)
 
-        given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(minusPoint)
 
         given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
