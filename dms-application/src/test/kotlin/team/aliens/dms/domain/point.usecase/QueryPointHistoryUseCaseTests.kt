@@ -58,7 +58,6 @@ class QueryPointHistoryUseCaseTests {
         )
     }
 
-
     private val pointHistoryVOs by lazy {
         listOf(
             QueryPointHistoryResponse.Point(
