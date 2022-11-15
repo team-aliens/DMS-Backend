@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
@@ -46,6 +47,7 @@ class ReissueSchoolCodeUseCaseTests {
 
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
+    private val code = StringUtil.randomNumber(8)
 
     private val userStub by lazy {
         User(
@@ -62,6 +64,19 @@ class ReissueSchoolCodeUseCaseTests {
     }
 
     private val schoolStub by lazy {
+        School(
+            id = schoolId,
+            name = "이정윤",
+            code = code,
+            question = "질문입니다",
+            answer = "답변입니다",
+            address = "주소입니다",
+            contractStartedAt = LocalDate.now(),
+            contractEndedAt = null
+        )
+    }
+
+    private val updatedSchoolStub by lazy {
         School(
             id = schoolId,
             name = "이정윤",
@@ -86,14 +101,14 @@ class ReissueSchoolCodeUseCaseTests {
         given(querySchoolPort.querySchoolById(userStub.schoolId))
             .willReturn(schoolStub)
 
-        given(commandSchoolPort.saveSchool(schoolStub.copy(code = "09876543")))
-            .willReturn(schoolStub)
+        given(commandSchoolPort.saveSchool(schoolStub.copy(code = code)))
+            .willReturn(updatedSchoolStub.copy(code = code))
 
         // when
-        val response = schoolStub.copy(code = "09876543").code
+        val response = reissueSchoolCodeUseCase.execute()
 
         // then
-        assertEquals(response, reissueSchoolCodeUseCase.execute())
+        assertEquals(updatedSchoolStub.code, response)
     }
 
     @Test
