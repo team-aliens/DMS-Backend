@@ -14,7 +14,7 @@ import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
+import team.aliens.dms.domain.student.spi.StudentQueryPointPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
@@ -40,14 +40,14 @@ class StudentMyPageUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryPointHistoryPort: StudentQueryPointHistoryPort
+    private lateinit var queryPointPort: StudentQueryPointPort
 
     private lateinit var studentMyPageUseCase: StudentMyPageUseCase
 
     @BeforeEach
     fun setUp() {
         studentMyPageUseCase = StudentMyPageUseCase(
-            securityPort, queryStudentPort, queryUserPort, querySchoolPort, queryPointHistoryPort
+            securityPort, queryStudentPort, queryUserPort, querySchoolPort, queryPointPort
         )
     }
 
@@ -145,10 +145,10 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
             .willReturn(1)
 
-        given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(1)
 
         // when
@@ -173,10 +173,10 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointHistoryPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
             .willReturn(1)
 
-        given(queryPointHistoryPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(1)
 
         // when

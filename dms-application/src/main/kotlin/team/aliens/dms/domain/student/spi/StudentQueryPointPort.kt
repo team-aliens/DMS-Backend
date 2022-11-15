@@ -2,7 +2,7 @@ package team.aliens.dms.domain.student.spi
 
 import java.util.UUID
 
-interface StudentQueryPointHistoryPort {
+interface StudentQueryPointPort {
 
     fun queryTotalBonusPoint(studentId: UUID): Int
 
