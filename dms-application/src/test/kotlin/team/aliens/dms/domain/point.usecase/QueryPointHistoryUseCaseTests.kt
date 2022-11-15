@@ -58,8 +58,7 @@ class QueryPointHistoryUseCaseTests {
         )
     }
 
-
-    private val pointHistoryVOs by lazy {
+    private val pointStubs by lazy {
         listOf(
             QueryPointHistoryResponse.Point(
                 pointId = UUID.randomUUID(),
@@ -88,7 +87,7 @@ class QueryPointHistoryUseCaseTests {
             .willReturn(userStub)
 
         given(queryPointPort.queryPointHistoryByStudentIdAndType(currentUserId, PointType.BONUS))
-            .willReturn(pointHistoryVOs)
+            .willReturn(pointStubs)
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
@@ -110,7 +109,7 @@ class QueryPointHistoryUseCaseTests {
             .willReturn(userStub)
 
         given(queryPointPort.queryPointHistoryByStudentIdAndType(currentUserId, PointType.MINUS))
-            .willReturn(pointHistoryVOs)
+            .willReturn(pointStubs)
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS)
@@ -132,7 +131,7 @@ class QueryPointHistoryUseCaseTests {
             .willReturn(userStub)
 
         given(queryPointPort.queryAllPointHistoryByStudentId(currentUserId))
-            .willReturn(pointHistoryVOs)
+            .willReturn(pointStubs)
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.ALL)
