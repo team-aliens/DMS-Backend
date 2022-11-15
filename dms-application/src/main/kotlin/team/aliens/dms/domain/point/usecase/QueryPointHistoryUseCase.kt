@@ -21,7 +21,7 @@ class QueryPointHistoryUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val student = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val pointHistory = pointType?.let {
+        val pointHistory = pointType?.run {
             queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
         } ?: queryPointPort.queryAllPointHistoryByStudentId(student.id)
 
