@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.school.usecase
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -76,19 +76,6 @@ class ReissueSchoolCodeUseCaseTests {
         )
     }
 
-    private val updatedSchoolStub by lazy {
-        School(
-            id = schoolId,
-            name = "이정윤",
-            code = "12345678",
-            question = "질문입니다",
-            answer = "답변입니다",
-            address = "주소입니다",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
-        )
-    }
-
     @Test
     fun `인증코드 재발급 성공`() {
         // given
@@ -101,14 +88,11 @@ class ReissueSchoolCodeUseCaseTests {
         given(querySchoolPort.querySchoolById(userStub.schoolId))
             .willReturn(schoolStub)
 
-        given(commandSchoolPort.saveSchool(schoolStub.copy(code = code)))
-            .willReturn(updatedSchoolStub.copy(code = code))
-
         // when
         val response = reissueSchoolCodeUseCase.execute()
 
         // then
-        assertEquals(updatedSchoolStub.code, response)
+        assertThat(response).isNotBlank
     }
 
     @Test
@@ -143,4 +127,4 @@ class ReissueSchoolCodeUseCaseTests {
             reissueSchoolCodeUseCase.execute()
         }
     }
- }
+}

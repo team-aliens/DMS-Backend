@@ -24,10 +24,10 @@ class ReissueSchoolCodeUseCase(
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
         val code = StringUtil.randomNumber(8)
 
-        val updatedSchool = commandSchoolPort.saveSchool(
+        commandSchoolPort.saveSchool(
             school.copy(code = code)
         )
 
-        return updatedSchool.code
+        return code
     }
 }
