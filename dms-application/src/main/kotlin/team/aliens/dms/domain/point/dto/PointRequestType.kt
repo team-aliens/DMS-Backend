@@ -10,7 +10,7 @@ enum class PointRequestType {
         fun toPointType(type: PointRequestType) = when (type) {
             BONUS -> PointType.BONUS
             MINUS -> PointType.MINUS
-            else -> PointType.ALL
+            else -> null
         }
     }
 }

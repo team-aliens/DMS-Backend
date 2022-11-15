@@ -26,7 +26,8 @@ class QueryPointHistoryUseCase(
             queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
         } ?: queryPointPort.queryAllPointHistoryByStudentId(student.id)
          */
-        val pointHistory = if (pointType == PointType.ALL) {
+        
+        val pointHistory = if (pointType == null) {
             queryPointPort.queryAllPointHistoryByStudentId(student.id)
         } else {
             queryPointPort.queryPointHistoryByStudentIdAndType(student.id, pointType)
