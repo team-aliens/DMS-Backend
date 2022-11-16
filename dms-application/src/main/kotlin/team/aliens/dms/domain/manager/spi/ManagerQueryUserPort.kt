@@ -16,6 +16,6 @@ interface ManagerQueryUserPort {
 
     fun queryUserByNameAndSort(name: String, sort: Sort): List<User>
     
-    fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User>
+    fun queryUserByRoomIdAndSchoolId(roomId: UUID, schoolId: UUID): List<User>
 
 }

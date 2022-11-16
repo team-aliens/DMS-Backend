@@ -63,6 +63,19 @@ class UserPersistenceAdapter(
             }
     }
 
+    override fun queryUserByRoomIdAndSchoolId(roomId: UUID, schoolId: UUID): List<User> {
+        return queryFactory
+            .selectFrom(userJpaEntity)
+            .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.userId))
+            .where(
+                studentJpaEntity.,
+                studentJpaEntity.room.id.schoolId.eq(schoolId)
+            ).fetch()
+            .map {
+                userMapper.toDomain(it)!!
+            }
+    }
+
     private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
         return when(sort) {
             Sort.NAME -> {
@@ -74,19 +87,6 @@ class UserPersistenceAdapter(
                 studentJpaEntity.number.asc()
             }
         }
-    }
-    
-    override fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<User> {
-        return queryFactory
-            .selectFrom(userJpaEntity)
-            .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.userId))
-            .where(
-                studentJpaEntity.room.id.roomNumber.eq(roomNumber),
-                studentJpaEntity.room.id.schoolId.eq(schoolId)
-            ).fetch()
-            .map {
-                userMapper.toDomain(it)!!
-            }
     }
 }
  
