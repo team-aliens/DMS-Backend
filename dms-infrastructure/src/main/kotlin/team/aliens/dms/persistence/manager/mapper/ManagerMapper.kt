@@ -9,13 +9,13 @@ import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
 class ManagerMapper(
-    private val userJpaRepository: UserJpaRepository
+    private val userRepository: UserJpaRepository
 ) : GenericMapper<Manager, ManagerJpaEntity> {
 
     override fun toDomain(entity: ManagerJpaEntity?): Manager? {
         return entity?.let {
             Manager(
-                managerId = it.userId,
+                id = it.id,
                 schoolId = it.user!!.school!!.id,
                 name = it.name,
                 profileImageUrl = it.profileImageUrl
@@ -24,10 +24,10 @@ class ManagerMapper(
     }
 
     override fun toEntity(domain: Manager): ManagerJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.managerId)
+        val user = userRepository.findByIdOrNull(domain.id)
 
         return ManagerJpaEntity(
-            userId = domain.managerId,
+            id = domain.id,
             user = user,
             name = domain.name,
             profileImageUrl = domain.profileImageUrl!!

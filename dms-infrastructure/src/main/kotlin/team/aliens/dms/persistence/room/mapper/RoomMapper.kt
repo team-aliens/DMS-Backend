@@ -9,7 +9,7 @@ import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class RoomMapper(
-    private val schoolJpaRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<Room, RoomJpaEntity> {
 
     override fun toDomain(entity: RoomJpaEntity?): Room? {
@@ -23,7 +23,7 @@ class RoomMapper(
     }
 
     override fun toEntity(domain: Room): RoomJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return RoomJpaEntity(
             id = domain.schoolId,

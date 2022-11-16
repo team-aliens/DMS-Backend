@@ -10,14 +10,14 @@ import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
 class StudentMapper(
-    private val roomJpaRepository: RoomJpaRepository,
-    private val userJpaRepository: UserJpaRepository
+    private val roomRepository: RoomJpaRepository,
+    private val userRepository: UserJpaRepository
 ) : GenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
         return entity?.let {
             Student(
-                studentId = it.userId,
+                id = it.id,
                 roomId = it.room!!.id,
                 schoolId = it.user!!.school!!.id,
                 grade = it.grade,
@@ -30,11 +30,11 @@ class StudentMapper(
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.studentId)
-        val room = roomJpaRepository.findByIdOrNull(domain.roomId)
+        val user = userRepository.findByIdOrNull(domain.id)
+        val room = roomRepository.findByIdOrNull(domain.roomId)
 
         return StudentJpaEntity(
-            userId = domain.studentId,
+            id = domain.id,
             user = user,
             room = room,
             grade = domain.grade,

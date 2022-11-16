@@ -16,7 +16,7 @@ class NoticeMapper(
         return entity?.let {
             Notice(
                 id = it.id,
-                managerId = it.manager!!.userId,
+                managerId = it.manager!!.id,
                 title = it.title,
                 content = it.content,
                 createdAt = it.createdAt,

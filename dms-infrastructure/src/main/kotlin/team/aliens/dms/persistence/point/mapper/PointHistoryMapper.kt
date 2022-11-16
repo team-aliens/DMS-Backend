@@ -10,8 +10,8 @@ import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 
 @Component
 class PointHistoryMapper(
-    private val pointOptionJpaRepository: PointOptionJpaRepository,
-    private val studentJpaRepository: StudentJpaRepository
+    private val pointOptionRepository: PointOptionJpaRepository,
+    private val studentRepository: StudentJpaRepository
 ) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
 
     override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
@@ -19,15 +19,15 @@ class PointHistoryMapper(
             PointHistory(
                 id = it.id,
                 pointOptionId = it.pointOption!!.id,
-                studentId = it.student!!.userId,
+                studentId = it.student!!.id,
                 createdAt = it.createdAt
             )
         }
     }
 
     override fun toEntity(domain: PointHistory): PointHistoryJpaEntity {
-        val pointOption = pointOptionJpaRepository.findByIdOrNull(domain.pointOptionId)
-        val student = studentJpaRepository.findByIdOrNull(domain.studentId)
+        val pointOption = pointOptionRepository.findByIdOrNull(domain.pointOptionId)
+        val student = studentRepository.findByIdOrNull(domain.studentId)
 
         return PointHistoryJpaEntity(
             id = domain.id,

@@ -10,7 +10,7 @@ import team.aliens.dms.persistence.student.entity.VerifiedStudentJpaEntityId
 
 @Component
 class VerifiedStudentMapper(
-    private val schoolJpaRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<VerifiedStudent, VerifiedStudentJpaEntity> {
 
     override fun toDomain(entity: VerifiedStudentJpaEntity?): VerifiedStudent? {
@@ -25,7 +25,7 @@ class VerifiedStudentMapper(
     }
 
     override fun toEntity(domain: VerifiedStudent): VerifiedStudentJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return VerifiedStudentJpaEntity(
             id = VerifiedStudentJpaEntityId(

@@ -9,7 +9,7 @@ import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class PointOptionMapper(
-    private val schoolJpaRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<PointOption, PointOptionJpaEntity> {
 
     override fun toDomain(entity: PointOptionJpaEntity?): PointOption? {
@@ -25,7 +25,7 @@ class PointOptionMapper(
     }
 
     override fun toEntity(domain: PointOption): PointOptionJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return PointOptionJpaEntity(
             id = domain.id,
