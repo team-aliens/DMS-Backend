@@ -1,19 +1,28 @@
 package team.aliens.dms.thirdparty.email
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync
+import com.amazonaws.services.simpleemail.model.CreateTemplateRequest
+import com.amazonaws.services.simpleemail.model.DeleteTemplateRequest
 import com.amazonaws.services.simpleemail.model.Destination
 import com.amazonaws.services.simpleemail.model.MessageRejectedException
 import com.amazonaws.services.simpleemail.model.SendTemplatedEmailRequest
+import com.amazonaws.services.simpleemail.model.Template
+import com.amazonaws.services.simpleemail.model.UpdateTemplateRequest
 import org.springframework.stereotype.Component
+import org.thymeleaf.context.Context
+import org.thymeleaf.spring5.SpringTemplateEngine
+import team.aliens.dms.domain.CommandTemplatePort
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
+import team.aliens.dms.thirdparty.email.exception.SesException
 
 @Component
 class AwsSESAdapter(
     private val amazonSimpleEmailServiceAsync: AmazonSimpleEmailServiceAsync,
-    private val awsSESProperties: AwsSESProperties
-) : SendEmailPort {
+    private val awsSESProperties: AwsSESProperties,
+    private val templateEngine: SpringTemplateEngine
+) : SendEmailPort, CommandTemplatePort {
 
     override fun sendAuthCode(email: String, type: EmailType, code: String) {
         val templatedEmailRequest = SendTemplatedEmailRequest()
@@ -26,6 +35,53 @@ class AwsSESAdapter(
             amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(templatedEmailRequest)
         } catch (e: MessageRejectedException) {
             throw SendEmailRejectedException
+        }
+    }
+
+    override fun createTemplate(type: EmailType) {
+        val html = templateEngine.process(type.fileName, Context())
+
+        val template = Template()
+            .withTemplateName(type.templateName)
+            .withSubjectPart(type.templateSubject)
+            .withHtmlPart(html)
+
+        runCatching {
+            amazonSimpleEmailServiceAsync.createTemplate(
+                CreateTemplateRequest().withTemplate(template)
+            )
+        }.onFailure { e ->
+            e.printStackTrace()
+            throw SesException
+        }
+    }
+
+    override fun updateTemplate(type: EmailType) {
+        val html = templateEngine.process(type.fileName, Context())
+
+        val template = Template()
+            .withTemplateName(type.templateName)
+            .withSubjectPart(type.templateSubject)
+            .withHtmlPart(html)
+
+        runCatching {
+            amazonSimpleEmailServiceAsync.updateTemplate(
+                UpdateTemplateRequest().withTemplate(template)
+            )
+        }.onFailure { e ->
+            e.printStackTrace()
+            throw SesException
+        }
+    }
+
+    override fun deleteTemplate(type: EmailType) {
+        runCatching {
+            amazonSimpleEmailServiceAsync.deleteTemplate(
+                DeleteTemplateRequest().withTemplateName(type.templateName)
+            )
+        }.onFailure { e ->
+            e.printStackTrace()
+            throw SesException
         }
     }
 }
