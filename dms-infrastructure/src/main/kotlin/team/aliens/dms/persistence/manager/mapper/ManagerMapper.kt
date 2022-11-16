@@ -6,7 +6,6 @@ import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
-import java.util.UUID
 
 @Component
 class ManagerMapper(

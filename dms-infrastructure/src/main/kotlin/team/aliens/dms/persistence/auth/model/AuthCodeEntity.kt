@@ -5,7 +5,6 @@ import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
 import org.springframework.data.redis.core.index.Indexed
 import team.aliens.dms.domain.auth.model.EmailType
-import java.util.*
 import javax.validation.constraints.NotNull
 
 @RedisHash("tbl_authcode")
