@@ -20,7 +20,7 @@ class AwsSesConfig(
 
         return AmazonSimpleEmailServiceAsyncClient.asyncBuilder()
             .withCredentials(AWSStaticCredentialsProvider(basicAWSCredentials))
-            .withRegion(Regions.US_WEST_2)
+            .withRegion(Regions.AP_NORTHEAST_2)
             .build()
     }
 }

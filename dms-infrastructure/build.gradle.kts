@@ -14,6 +14,9 @@ dependencies {
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
 
+    // thymeleaf
+    implementation(Dependencies.SPRING_THYMELEAF)
+
     // security
     implementation(Dependencies.SPRING_SECURITY)
 

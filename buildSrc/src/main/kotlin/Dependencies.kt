@@ -14,6 +14,8 @@ object Dependencies {
     // validation
     const val SPRING_VALIDATION = "org.springframework.boot:spring-boot-starter-validation"
 
+    const val SPRING_THYMELEAF = "org.springframework.boot:spring-boot-starter-thymeleaf"
+
     // transaction
     const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION}"
 
