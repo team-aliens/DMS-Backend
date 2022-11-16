@@ -8,7 +8,7 @@ enum class GlobalErrorCode(
 ) : ErrorProperty {
 
     SEND_EMAIL_REJECTED(400, "Send Email Rejected"),
-
+    SIMPLE_EMAIL_SERVICE(400, "Simple Email Service"),
     BAD_REQUEST(400, "Bad Request"),
 
     INTERNAL_SERVER_ERROR(500, "Internal Server Error")
