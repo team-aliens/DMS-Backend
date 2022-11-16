@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
-import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
@@ -16,8 +15,9 @@ class RoomMapper(
     override fun toDomain(entity: RoomJpaEntity?): Room? {
         return entity?.let {
             Room(
-                roomNumber = it.id.roomNumber,
-                schoolId = it.id.schoolId
+                id = it.id,
+                number = it.number,
+                schoolId = it.school!!.id
             )
         }
     }
@@ -26,8 +26,9 @@ class RoomMapper(
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return RoomJpaEntity(
-            id = RoomJpaEntityId(domain.roomNumber, domain.schoolId),
-            school = school
+            id = domain.schoolId,
+            school = school,
+            number = domain.number
         )
     }
 }
