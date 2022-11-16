@@ -2,27 +2,37 @@ package team.aliens.dms.domain
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.model.EmailType
+import java.time.LocalDateTime
 
 @UseCase
 class TemplateUseCase(
-    private val commandTemplatePort: CommandTemplatePort
+    private val templatePort: TemplatePort
 ) {
 
+    fun getTemplates(): List<TemplateResponse> {
+        return templatePort.queryTemplates()
+    }
+
     fun create(type: String) {
-        commandTemplatePort.createTemplate(
+        templatePort.createTemplate(
             EmailType.valueOf(type)
         )
     }
 
     fun update(type: String) {
-        commandTemplatePort.updateTemplate(
+        templatePort.updateTemplate(
             EmailType.valueOf(type)
         )
     }
 
     fun delete(type: String) {
-        commandTemplatePort.deleteTemplate(
+        templatePort.deleteTemplate(
             EmailType.valueOf(type)
         )
     }
 }
+
+data class TemplateResponse(
+    val name: String,
+    val createdAt: LocalDateTime
+)

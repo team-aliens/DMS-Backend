@@ -91,6 +91,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
 
             // /templates
+            .antMatchers(HttpMethod.GET, "/templates").permitAll()
             .antMatchers(HttpMethod.POST, "/templates").permitAll()
             .antMatchers(HttpMethod.PATCH, "/templates").permitAll()
             .antMatchers(HttpMethod.DELETE, "/templates").permitAll()

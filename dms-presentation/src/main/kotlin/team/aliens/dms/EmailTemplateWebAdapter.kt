@@ -1,11 +1,13 @@
 package team.aliens.dms
 
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.TemplateResponse
 import team.aliens.dms.domain.TemplateUseCase
 
 @RequestMapping("/templates")
@@ -13,6 +15,11 @@ import team.aliens.dms.domain.TemplateUseCase
 class EmailTemplateWebAdapter(
     private val templateUseCase: TemplateUseCase
 ) {
+
+    @GetMapping
+    fun getTemplates(): List<TemplateResponse> {
+        return templateUseCase.getTemplates()
+    }
 
     @PostMapping
     fun createTemplate(@RequestBody request: TemplateRequest) {
