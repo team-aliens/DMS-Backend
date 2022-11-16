@@ -6,6 +6,7 @@ import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
+import java.util.UUID
 
 @Component
 class ManagerMapper(
@@ -14,7 +15,12 @@ class ManagerMapper(
 
     override fun toDomain(entity: ManagerJpaEntity?): Manager? {
         return entity?.let {
-            Manager(it.userId)
+            Manager(
+                managerId = it.userId,
+                schoolId = it.user!!.school!!.id,
+                name = it.name,
+                profileImageUrl = it.profileImageUrl
+            )
         }
     }
 
@@ -23,7 +29,9 @@ class ManagerMapper(
 
         return ManagerJpaEntity(
             userId = domain.managerId,
-            user = user
+            user = user,
+            name = domain.name,
+            profileImageUrl = domain.profileImageUrl!!
         )
     }
 }
