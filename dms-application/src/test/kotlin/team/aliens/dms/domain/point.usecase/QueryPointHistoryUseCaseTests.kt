@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
@@ -51,8 +52,7 @@ class QueryPointHistoryUseCaseTests {
             accountId = "test accountId",
             password = "test password",
             email = "test email",
-            name = "test name",
-            profileImageUrl = "https://~",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

@@ -70,8 +70,7 @@ class ResetManagerPasswordUseCaseTests {
             accountId = "111111",
             password = password,
             email = email,
-            name = "이정윤",
-            profileImageUrl = "http",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

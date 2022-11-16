@@ -103,8 +103,7 @@ class SignUpUseCaseTests {
             accountId = accountId,
             password = "encoded password",
             email = email,
-            name = "",
-            profileImageUrl = profileImageUrl,
+            authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
         )
@@ -117,8 +116,7 @@ class SignUpUseCaseTests {
             accountId = accountId,
             password = "encoded password",
             email = email,
-            name = name,
-            profileImageUrl = profileImageUrl,
+            authority = Authority.STUDENT,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )
@@ -127,22 +125,26 @@ class SignUpUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = savedUserStub.id,
-            roomNumber = 318,
+            roomId = UUID.randomUUID(),
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,
-            number = 1
+            number = 1,
+            name = name,
+            profileImageUrl = profileImageUrl
         )
     }
 
     private val savedStudentStub by lazy {
         Student(
             studentId = savedUserStub.id,
-            roomNumber = 318,
+            roomId = UUID.randomUUID(),
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,
-            number = 1
+            number = 1,
+            name = name,
+            profileImageUrl = profileImageUrl
         )
     }
 

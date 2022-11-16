@@ -16,6 +16,7 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -24,13 +25,15 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class ResetStudentPasswordUseCaseTests {
 
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
+
+    private lateinit var queryStudentPort: QueryStudentPort
 
     @MockBean
     private lateinit var queryAuthCodePort: StudentQueryAuthCodePort
@@ -50,6 +53,7 @@ class ResetStudentPasswordUseCaseTests {
     fun setUp() {
         resetStudentPasswordUseCase = ResetStudentPasswordUseCase(
             queryUserPort,
+            queryStudentPort,
             queryAuthCodePort,
             commandUserPort,
             securityPort,
@@ -70,8 +74,7 @@ class ResetStudentPasswordUseCaseTests {
             accountId = "111111",
             password = password,
             email = email,
-            name = name,
-            profileImageUrl = "http",
+            authority = Authority.STUDENT,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse
 import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse.NoticeDetails
 import team.aliens.dms.domain.notice.model.Notice
@@ -54,8 +55,7 @@ class QueryAllNoticesUseCaseTests {
             accountId = "아이디",
             password = "비밀번호",
             email = "이메일@dsm.hs.kr",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

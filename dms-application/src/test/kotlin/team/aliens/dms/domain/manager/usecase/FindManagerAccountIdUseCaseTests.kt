@@ -64,8 +64,7 @@ class FindManagerAccountIdUseCaseTests {
             accountId = "accountId",
             password = "password",
             email = "email@dsm.hs.kr",
-            name = "김범지인",
-            profileImageUrl = "https://~~",
+            authority = Authority.MANAGER,
             createdAt = null,
             deletedAt = null
         )
@@ -74,7 +73,6 @@ class FindManagerAccountIdUseCaseTests {
     @Test
     fun `아이디 찾기 성공`() {
         val answer = "안희명"
-        val coveredEmail = "e****@dsm.hs.kr"
 
         // given
         given(querySchoolPort.querySchoolById(schoolId))

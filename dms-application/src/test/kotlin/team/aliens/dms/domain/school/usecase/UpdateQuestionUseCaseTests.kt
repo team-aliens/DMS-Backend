@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
@@ -61,8 +62,7 @@ class UpdateQuestionUseCaseTests {
             accountId = "계정아이디",
             password = "test password",
             email = "이메일",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

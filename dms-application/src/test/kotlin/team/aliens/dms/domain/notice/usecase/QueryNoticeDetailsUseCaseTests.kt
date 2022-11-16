@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
@@ -66,8 +67,7 @@ class QueryNoticeDetailsUseCaseTests {
             accountId = "아이디",
             password = "비밀번호",
             email = "이메일@naver.com",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )
@@ -80,8 +80,7 @@ class QueryNoticeDetailsUseCaseTests {
             accountId = "아이디",
             password = "비밀번호",
             email = "이메일@naver.com",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.STUDENT,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

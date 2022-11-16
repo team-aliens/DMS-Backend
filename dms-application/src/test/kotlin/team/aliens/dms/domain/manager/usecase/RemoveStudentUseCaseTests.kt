@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
@@ -56,8 +57,7 @@ class RemoveStudentUseCaseTests {
             accountId = "아이디",
             password = "비밀번호",
             email = "이메일",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )
@@ -66,11 +66,13 @@ class RemoveStudentUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = studentId,
-            roomNumber = 318,
+            roomId = UUID.randomUUID(),
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,
-            number = 10
+            number = 10,
+            name = "이름",
+            profileImageUrl = "https://~"
         )
     }
 
