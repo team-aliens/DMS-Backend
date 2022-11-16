@@ -9,14 +9,14 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.user.model.User
 
 @ReadOnlyUseCase
-class GetStudentListUseCase(
+class QueryStudentsUseCase(
     private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort
 ) {
     
     fun execute(name: String, sort: Sort): QueryStudentListResponse {
-        val user = queryUserPort.queryUserByNameAndSort(name, sort)
-        val students = user.map {
+        val users = queryUserPort.queryUserByNameAndSort(name, sort)
+        val students = users.map {
             val student = queryStudentPort.queryStudentById(it.id) ?: throw StudentNotFoundException
 
             QueryStudentListResponse.StudentElement(

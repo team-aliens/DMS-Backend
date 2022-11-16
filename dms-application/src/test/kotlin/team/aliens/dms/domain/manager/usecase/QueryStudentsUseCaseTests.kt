@@ -8,18 +8,17 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class GetStudentDetailsUseCaseTest {
+class QueryStudentsUseCaseTests {
 
     @MockBean
     private lateinit var queryUserPort: ManagerQueryUserPort
@@ -27,21 +26,18 @@ class GetStudentDetailsUseCaseTest {
     @MockBean
     private lateinit var queryStudentPort: ManagerQueryStudentPort
 
-    @MockBean
-    private lateinit var queryPointPort: ManagerQueryPointPort
-
-    private lateinit var getStudentDetailsUseCase: GetStudentDetailsUseCase
+    private lateinit var queryStudentsUseCase: QueryStudentsUseCase
 
     @BeforeEach
     fun setUp() {
-        getStudentDetailsUseCase = GetStudentDetailsUseCase(
-            queryUserPort, queryStudentPort, queryPointPort
+        queryStudentsUseCase = QueryStudentsUseCase(
+            queryUserPort, queryStudentPort
         )
     }
 
     private val id = UUID.randomUUID()
-    private val bonusPoint = 11
-    private val minusPoint = 23
+    private val name = "name"
+    private val sort = Sort.GCN
 
     private val userStub by lazy {
         User(
@@ -69,72 +65,47 @@ class GetStudentDetailsUseCaseTest {
     }
 
     private val responseStub by lazy {
-        GetStudentDetailsResponse(
-            name = userStub.name,
-            gcn = studentStub.gcn,
-            profileImageUrl = userStub.profileImageUrl ?: User.PROFILE_IMAGE,
-            bonusPoint = bonusPoint,
-            minusPoint = minusPoint,
-            roomNumber = studentStub.roomNumber,
-            roomMates = listOf(
-                GetStudentDetailsResponse.RoomMate(
-                    id = userStub.id,
+        QueryStudentListResponse(
+            listOf(
+                QueryStudentListResponse.StudentElement(
+                    id = id,
                     name = userStub.name,
-                    profileImageUrl = userStub.profileImageUrl ?: User.PROFILE_IMAGE
+                    gcn = "2120",
+                    roomNumber = studentStub.roomNumber,
+                    profileImageUrl = userStub.profileImageUrl!!
                 )
             )
         )
     }
 
     @Test
-    fun `학생 상세조회 성공`() {
+    fun `학생 목록 조회 성공`() {
         // given
-        given(queryUserPort.queryUserById(id))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByNameAndSort(name, sort))
+            .willReturn(listOf(userStub))
 
         given(queryStudentPort.queryStudentById(id))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
-            .willReturn(bonusPoint)
-
-        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
-            .willReturn(minusPoint)
-
-        given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
-            .willReturn(listOf(userStub))
-
         // when
-        val response = getStudentDetailsUseCase.execute(id)
+        val response = queryStudentsUseCase.execute(name, sort)
 
         // then
         assertThat(response).isEqualTo(responseStub)
     }
 
     @Test
-    fun `유저를 찾을 수 없음`() {
+    fun `학생을 찾을 수 없음`() {
         // given
-        given(queryUserPort.queryUserById(id))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<UserNotFoundException> {
-            getStudentDetailsUseCase.execute(id)
-        }
-    }
-
-    @Test
-    fun `학생이 아니거나 찾을 수 없음`() {
-        // given
-        given(queryUserPort.queryUserById(id))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByNameAndSort(name, sort))
+            .willReturn(listOf(userStub))
 
         given(queryStudentPort.queryStudentById(id))
             .willReturn(null)
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            getStudentDetailsUseCase.execute(id)
+            queryStudentsUseCase.execute(name, sort)
         }
     }
 }
