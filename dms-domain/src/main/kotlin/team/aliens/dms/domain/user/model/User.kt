@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.user.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.auth.model.Authority
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -17,16 +18,10 @@ data class User(
 
     val email: String,
 
-    val name: String,
-
-    val profileImageUrl: String? = PROFILE_IMAGE,
+    val authority: Authority,
 
     val createdAt: LocalDateTime?,
 
     val deletedAt: LocalDateTime?
 
-) {
-    companion object {
-        const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
-    }
-}
+)

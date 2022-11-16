@@ -20,8 +20,7 @@ class UserMapper(
                 accountId = it.accountId,
                 password = it.password,
                 email = it.email,
-                name = it.name,
-                profileImageUrl = it.profileImageUrl,
+                authority = it.authority,
                 createdAt = it.createdAt,
                 deletedAt = it.deletedAt
             )
@@ -37,8 +36,7 @@ class UserMapper(
             accountId = domain.accountId,
             password = domain.password,
             email = domain.email,
-            name = domain.name,
-            profileImageUrl = domain.profileImageUrl!!,
+            authority = domain.authority,
             createdAt = domain.createdAt!!,
             deletedAt = domain.deletedAt
         )
