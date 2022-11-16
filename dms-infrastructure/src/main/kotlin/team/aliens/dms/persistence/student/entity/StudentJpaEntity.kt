@@ -33,19 +33,22 @@ class StudentJpaEntity(
     val user: UserJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns(
-        JoinColumn(name = "room_number", columnDefinition = "INT UNSIGNED", nullable = false),
-        JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
-    )
+    @JoinColumn(name = "room_id", columnDefinition = "BINARY(16)", nullable = false)
     val room: RoomJpaEntity?,
 
-    @Column(columnDefinition = "TINYINT", nullable = false)
+    @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
     val grade: Int,
 
-    @Column(name = "class_room", columnDefinition = "TINYINT", nullable = false)
+    @Column(name = "class_room", columnDefinition = "TINYINT UNSIGNED", nullable = false)
     val classRoom: Int,
 
-    @Column(columnDefinition = "TINYINT", nullable = false)
-    val number: Int
+    @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
+    val number: Int,
+
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    val name: String,
+
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    val profileImageUrl: String
 
 )

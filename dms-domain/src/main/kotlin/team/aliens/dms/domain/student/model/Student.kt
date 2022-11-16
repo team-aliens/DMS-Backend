@@ -8,7 +8,7 @@ data class Student(
 
     val studentId: UUID,
 
-    val roomNumber: Int,
+    val roomId: UUID,
 
     val schoolId: UUID,
 
@@ -16,11 +16,19 @@ data class Student(
 
     val classRoom: Int,
 
-    val number: Int
+    val number: Int,
+
+    val name: String,
+
+    val profileImageUrl: String? = PROFILE_IMAGE
 
 ) {
 
     val gcn: String = "${this.grade}${this.classRoom}${processedNumber()}"
 
     private fun processedNumber() = if (number < 10) "0${number}".toInt() else number
+
+    companion object {
+        const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
+    }
 }
