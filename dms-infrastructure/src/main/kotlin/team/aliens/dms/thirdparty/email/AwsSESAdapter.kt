@@ -12,8 +12,8 @@ import com.amazonaws.services.simpleemail.model.UpdateTemplateRequest
 import org.springframework.stereotype.Component
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
-import team.aliens.dms.domain.TemplatePort
-import team.aliens.dms.domain.TemplateResponse
+import team.aliens.dms.domain.template.spi.TemplatePort
+import team.aliens.dms.domain.template.usecase.TemplateResponse
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException

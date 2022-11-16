@@ -1,7 +1,8 @@
-package team.aliens.dms.domain
+package team.aliens.dms.domain.template.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.template.spi.TemplatePort
 import java.time.LocalDateTime
 
 @UseCase

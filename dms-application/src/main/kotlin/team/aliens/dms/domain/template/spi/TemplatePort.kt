@@ -1,6 +1,7 @@
-package team.aliens.dms.domain
+package team.aliens.dms.domain.template.spi
 
 import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.template.usecase.TemplateResponse
 
 interface TemplatePort {
 
