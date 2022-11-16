@@ -24,7 +24,8 @@ import javax.persistence.UniqueConstraint
 class StudentJpaEntity(
 
     @Id
-    val userId: UUID,
+    @Column(name = "user_id")
+    val id: UUID,
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)

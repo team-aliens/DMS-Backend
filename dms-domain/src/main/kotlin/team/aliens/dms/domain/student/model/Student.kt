@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 data class Student(
 
-    val studentId: UUID,
+    val id: UUID,
 
     val roomId: UUID,
 

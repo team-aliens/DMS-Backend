@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 data class Manager(
 
-    val managerId: UUID,
+    val id: UUID,
 
     val schoolId: UUID,
 
