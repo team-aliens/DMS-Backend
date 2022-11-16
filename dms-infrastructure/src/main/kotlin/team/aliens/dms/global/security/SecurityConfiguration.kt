@@ -90,6 +90,11 @@ class SecurityConfiguration(
             // /points
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
 
+            // /templates
+            .antMatchers(HttpMethod.POST, "/templates").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/templates").permitAll()
+            .antMatchers(HttpMethod.DELETE, "/templates").permitAll()
+
             .anyRequest().denyAll()
 
 
