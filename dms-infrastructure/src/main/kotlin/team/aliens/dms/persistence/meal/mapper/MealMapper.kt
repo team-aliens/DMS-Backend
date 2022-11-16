@@ -29,7 +29,10 @@ class MealMapper(
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return MealJpaEntity(
-            id = MealJpaEntityId(domain.mealDate, domain.schoolId),
+            id = MealJpaEntityId(
+                mealDate = domain.mealDate,
+                schoolId = domain.schoolId
+            ),
             school = school,
             breakfast = domain.breakfast,
             lunch = domain.lunch,
