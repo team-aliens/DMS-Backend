@@ -13,10 +13,10 @@ class CreateNoticeUseCase(
 ) {
 
     fun execute(title: String, content: String) {
-        val managerId = securityPort.getCurrentUserId()
+        val currentManagerId = securityPort.getCurrentUserId()
 
         val notice = Notice(
-            managerId = managerId,
+            managerId = currentManagerId,
             title = title,
             content = content,
             createdAt = LocalDateTime.now(),
