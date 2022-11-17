@@ -7,6 +7,8 @@ enum class UserErrorCode(
     private val message: String
 ) : ErrorProperty {
 
+    INVALID_ROLE(403, "Invalid Role"),
+
     USER_NOT_FOUND(404, "User Not Found"),
 
     USER_EMAIL_EXISTS(409, "User Email Exists"),
