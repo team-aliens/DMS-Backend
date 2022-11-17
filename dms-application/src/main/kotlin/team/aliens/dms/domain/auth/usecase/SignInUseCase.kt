@@ -8,14 +8,12 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.service.CheckUserAuthority
 
 @UseCase
 class SignInUseCase(
     private val securityPort: AuthSecurityPort,
     private val queryUserPort: AuthQueryUserPort,
-    private val jwtPort: JwtPort,
-    private val checkUserAuthority: CheckUserAuthority
+    private val jwtPort: JwtPort
 ) {
 
     fun execute(request: SignInRequest): SignInResponse {
@@ -25,9 +23,7 @@ class SignInUseCase(
             throw PasswordMismatchException
         }
 
-        val authority = checkUserAuthority.execute(user.id)
-
-        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, authority)
+        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, user.authority)
 
         return SignInResponse(
             accessToken = accessToken,
