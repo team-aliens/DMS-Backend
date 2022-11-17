@@ -6,11 +6,11 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 
@@ -27,7 +27,7 @@ class ResetManagerPasswordUseCase(
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
 
         if (checkUserAuthority.execute(user.id) != Authority.MANAGER) {
-            throw ManagerNotFoundException
+            throw InvalidRoleException
         }
 
         if (user.email != request.email) {
