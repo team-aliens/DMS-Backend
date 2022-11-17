@@ -6,8 +6,8 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -93,7 +93,7 @@ class SignUpUseCase(
         val student = Student(
             id = user.id,
             roomId = UUID(0, 0), // TODO 학번으로 조회한 호실
-            roomNumber = "${grade}${classRoom}${processedNumber(number)}".toInt(),
+            roomNumber = 0, // TODO 학번으로 조회한 호실
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
@@ -117,8 +117,6 @@ class SignUpUseCase(
             )
         )
     }
-
-    private fun processedNumber(number: Int): Int = if (number < 10) "0${number}".toInt() else number
 
     private fun createUser(
         schoolId: UUID,

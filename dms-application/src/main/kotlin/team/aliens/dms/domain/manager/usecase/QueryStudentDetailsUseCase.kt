@@ -37,7 +37,7 @@ class QueryStudentDetailsUseCase(
             profileImageUrl = student.profileImageUrl ?: Student.PROFILE_IMAGE,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
-            roomNumber = student.number,
+            roomNumber = student.roomNumber,
             roomMates = roomMates
         )
     }
