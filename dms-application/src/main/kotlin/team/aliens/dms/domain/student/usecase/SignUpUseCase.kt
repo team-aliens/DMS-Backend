@@ -91,8 +91,9 @@ class SignUpUseCase(
         )
 
         val student = Student(
-            studentId = user.id,
+            id = user.id,
             roomId = UUID(0, 0), // TODO 학번으로 조회한 호실
+            roomNumber = "${grade}${classRoom}${processedNumber(number)}".toInt(),
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
@@ -116,6 +117,8 @@ class SignUpUseCase(
             )
         )
     }
+
+    private fun processedNumber(number: Int): Int = if (number < 10) "0${number}".toInt() else number
 
     private fun createUser(
         schoolId: UUID,

@@ -4,14 +4,12 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
-    private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort,
     private val queryPointPort: ManagerQueryPointPort
 ) {
@@ -22,11 +20,10 @@ class QueryStudentDetailsUseCase(
         val bonusPoint = queryPointPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointPort.queryTotalMinusPoint(studentId)
 
-        val roomMateResponse = queryUserPort.queryUserByRoomIdAndSchoolId(
-            roomId = student.roomNumber,
+        val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
+            roomNumber = student.roomNumber,
             schoolId = student.schoolId
-        )
-        val roomMates = roomMateResponse.map {
+        ).map {
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
@@ -40,7 +37,7 @@ class QueryStudentDetailsUseCase(
             profileImageUrl = student.profileImageUrl ?: Student.PROFILE_IMAGE,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
-            roomNumber = student.roomNumber,
+            roomNumber = student.number,
             roomMates = roomMates
         )
     }

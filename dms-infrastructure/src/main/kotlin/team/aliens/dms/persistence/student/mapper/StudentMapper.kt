@@ -19,6 +19,7 @@ class StudentMapper(
             Student(
                 id = it.id,
                 roomId = it.room!!.id,
+                roomNumber = it.room!!.number,
                 schoolId = it.user!!.school!!.id,
                 grade = it.grade,
                 classRoom = it.classRoom,

@@ -125,7 +125,7 @@ class SignUpUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = savedUserStub.id,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,
@@ -138,7 +138,7 @@ class SignUpUseCaseTests {
     private val savedStudentStub by lazy {
         Student(
             studentId = savedUserStub.id,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,

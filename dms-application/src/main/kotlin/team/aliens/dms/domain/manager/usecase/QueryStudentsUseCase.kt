@@ -4,27 +4,21 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.student.model.Student
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
-    private val queryUserPort: ManagerQueryUserPort,
     private val queryStudentPort: ManagerQueryStudentPort
 ) {
-    
-    fun execute(name: String, sort: Sort): QueryStudentListResponse {
-        val users = queryUserPort.queryUserByNameAndSort(name, sort)
-        val students = users.map {
-            val student = queryStudentPort.queryStudentById(it.id) ?: throw StudentNotFoundException
 
+    fun execute(name: String, sort: Sort): QueryStudentListResponse {
+        val students = queryStudentPort.queryUserByNameAndSort(name, sort).map {
             QueryStudentListResponse.StudentElement(
                 id = it.id,
                 name = it.name,
-                gcn = student.gcn,
-                roomNumber = student.roomNumber,
-                profileImageUrl = it.profileImageUrl ?: User.PROFILE_IMAGE
+                gcn = it.gcn,
+                roomNumber = it.roomNumber,
+                profileImageUrl = it.profileImageUrl ?: Student.PROFILE_IMAGE
             )
         }
 

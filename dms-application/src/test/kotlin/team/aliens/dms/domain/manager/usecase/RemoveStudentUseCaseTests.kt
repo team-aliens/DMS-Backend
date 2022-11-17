@@ -66,7 +66,7 @@ class RemoveStudentUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = studentId,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,

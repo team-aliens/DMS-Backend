@@ -101,7 +101,7 @@ class QueryStudentDetailsUseCaseTests {
         given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
             .willReturn(minusPoint)
 
-        given(queryUserPort.queryUserByRoomIdAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
+        given(queryUserPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(listOf(userStub))
 
         // when

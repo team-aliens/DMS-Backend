@@ -42,7 +42,7 @@ class UpdateStudentProfileUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = currentUserId,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = UUID.randomUUID(),
             grade = 1,
             classRoom = 1,

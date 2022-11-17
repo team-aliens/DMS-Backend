@@ -52,7 +52,7 @@ class FindStudentAccountIdUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = UUID.randomUUID(),
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolId,
             grade = requestStub.grade,
             classRoom = requestStub.classRoom,

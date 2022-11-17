@@ -51,7 +51,7 @@ class StudentMyPageUseCaseTests {
     private val studentStub by lazy {
         Student(
             studentId = currentUserId,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolId,
             grade = 1,
             classRoom = 1,
@@ -64,7 +64,7 @@ class StudentMyPageUseCaseTests {
     private val studentProfileNullStub by lazy {
         Student(
             studentId = currentUserId,
-            roomId = UUID.randomUUID(),
+            roomNumber = UUID.randomUUID(),
             schoolId = schoolId,
             grade = 1,
             classRoom = 1,
