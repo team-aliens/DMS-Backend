@@ -15,6 +15,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
@@ -151,7 +152,7 @@ class FindManagerAccountIdUseCaseTests {
             .willReturn(Authority.STUDENT)
 
         // when & then
-        assertThrows<ManagerNotFoundException> {
+        assertThrows<InvalidRoleException> {
             findManagerAccountIdUseCase.execute(schoolId, answer)
         }
     }
