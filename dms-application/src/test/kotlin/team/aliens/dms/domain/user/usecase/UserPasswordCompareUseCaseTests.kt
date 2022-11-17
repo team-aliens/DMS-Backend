@@ -9,6 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.QueryUserPort
@@ -44,8 +45,7 @@ class UserPasswordCompareUseCaseTests {
             accountId = "아이디",
             password = password,
             email = "이메일",
-            name = "이름",
-            profileImageUrl = "https://~",
+            authority = Authority.STUDENT,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

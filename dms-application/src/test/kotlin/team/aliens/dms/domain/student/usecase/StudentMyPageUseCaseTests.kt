@@ -16,12 +16,8 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryPointPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -34,9 +30,6 @@ class StudentMyPageUseCaseTests {
     private lateinit var queryStudentPort: QueryStudentPort
 
     @MockBean
-    private lateinit var queryUserPort: StudentQueryUserPort
-
-    @MockBean
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
@@ -47,7 +40,7 @@ class StudentMyPageUseCaseTests {
     @BeforeEach
     fun setUp() {
         studentMyPageUseCase = StudentMyPageUseCase(
-            securityPort, queryStudentPort, queryUserPort, querySchoolPort, queryPointPort
+            securityPort, queryStudentPort, querySchoolPort, queryPointPort
         )
     }
 
@@ -56,40 +49,29 @@ class StudentMyPageUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = currentUserId,
-            roomNumber = 1,
-            schoolId = UUID.randomUUID(),
-            grade = 2,
-            classRoom = 3,
-            number = 10
+            id = currentUserId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
+            schoolId = schoolId,
+            grade = 1,
+            classRoom = 1,
+            number = 1,
+            name = "이름",
+            profileImageUrl = "https://~"
         )
     }
 
-    private val userStub by lazy {
-        User(
+    private val studentProfileNullStub by lazy {
+        Student(
             id = currentUserId,
-            schoolId = UUID.randomUUID(),
-            accountId = "계정아이디",
-            password = "비밀번호",
-            email = "이메일",
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
+            schoolId = schoolId,
+            grade = 1,
+            classRoom = 1,
+            number = 1,
             name = "이름",
-            profileImageUrl = "https://~",
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
-    }
-
-    private val userProfileNullStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = UUID.randomUUID(),
-            accountId = "계정아이디",
-            password = "비밀번호",
-            email = "이메일",
-            name = "이름",
-            profileImageUrl = null,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            profileImageUrl = "https://~"
         )
     }
 
@@ -110,7 +92,7 @@ class StudentMyPageUseCaseTests {
         StudentMyPageResponse(
             schoolName = "학교이름",
             name = "이름",
-            gcn = "2310",
+            gcn = "1101",
             profileImageUrl = "https://~",
             bonusPoint = 1,
             minusPoint = 1,
@@ -122,8 +104,8 @@ class StudentMyPageUseCaseTests {
         StudentMyPageResponse(
             schoolName = "학교이름",
             name = "이름",
-            gcn = "2310",
-            profileImageUrl = User.PROFILE_IMAGE,
+            gcn = "1101",
+            profileImageUrl = "https://~",
             bonusPoint = 1,
             minusPoint = 1,
             phrase = "잘하자"
@@ -139,16 +121,16 @@ class StudentMyPageUseCaseTests {
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
             .willReturn(1)
 
-        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
             .willReturn(1)
 
         // when
@@ -167,16 +149,16 @@ class StudentMyPageUseCaseTests {
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userProfileNullStub)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentProfileNullStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
             .willReturn(1)
 
-        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
             .willReturn(1)
 
         // when
@@ -210,11 +192,11 @@ class StudentMyPageUseCaseTests {
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(currentUserId))
+        given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(null)
 
         // when & then
-        assertThrows<UserNotFoundException> {
+        assertThrows<StudentNotFoundException> {
             studentMyPageUseCase.execute()
         }
     }
@@ -228,8 +210,8 @@ class StudentMyPageUseCaseTests {
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(null)

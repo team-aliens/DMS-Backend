@@ -8,15 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.school.exception.AnswerMismatchException
-import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDate
 import java.util.UUID
@@ -64,8 +64,7 @@ class FindManagerAccountIdUseCaseTests {
             accountId = "accountId",
             password = "password",
             email = "email@dsm.hs.kr",
-            name = "김범지인",
-            profileImageUrl = "https://~~",
+            authority = Authority.MANAGER,
             createdAt = null,
             deletedAt = null
         )
@@ -74,7 +73,6 @@ class FindManagerAccountIdUseCaseTests {
     @Test
     fun `아이디 찾기 성공`() {
         val answer = "안희명"
-        val coveredEmail = "e****@dsm.hs.kr"
 
         // given
         given(querySchoolPort.querySchoolById(schoolId))

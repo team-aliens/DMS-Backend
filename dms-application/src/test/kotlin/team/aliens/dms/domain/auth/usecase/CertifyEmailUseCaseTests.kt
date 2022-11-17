@@ -10,10 +10,11 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
 import team.aliens.dms.domain.auth.exception.EmailMismatchException
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CertifyEmailUseCaseTests {
@@ -39,8 +40,7 @@ class CertifyEmailUseCaseTests {
             accountId = accountId,
             password = "password",
             email = email,
-            name = "김범지인",
-            profileImageUrl = "https://~~",
+            authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
         )

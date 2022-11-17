@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
@@ -49,8 +50,7 @@ class ManagerMyPageUseCaseTests {
             accountId = "아이디",
             password = "비밀번호",
             email = "이메일",
-            name = "이름",
-            profileImageUrl = "https://~",
+            Authority.MANAGER,
             createdAt = LocalDateTime.now(),
             deletedAt = null
         )

@@ -6,8 +6,8 @@ import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -86,18 +86,20 @@ class SignUpUseCase(
                 schoolId = school.id,
                 accountId = accountId,
                 password = password,
-                email = email,
-                profileImageUrl = profileImageUrl
+                email = email
             )
         )
 
         val student = Student(
-            studentId = user.id,
+            id = user.id,
+            roomId = UUID(0, 0), // TODO 학번으로 조회한 호실
             roomNumber = 0, // TODO 학번으로 조회한 호실
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
-            number = number
+            number = number,
+            name = "", // TODO 이름,
+            profileImageUrl = profileImageUrl
         )
         commandStudentPort.saveStudent(student)
 
@@ -120,15 +122,13 @@ class SignUpUseCase(
         schoolId: UUID,
         accountId: String,
         password: String,
-        email: String,
-        profileImageUrl: String?
+        email: String
     ) = User(
         schoolId = schoolId,
         accountId = accountId,
         password = securityPort.encodePassword(password),
         email = email,
-        name = "", // TODO 학번으로 조회한 이름
-        profileImageUrl = profileImageUrl,
+        authority = Authority.STUDENT,
         createdAt = null,
         deletedAt = null
     )

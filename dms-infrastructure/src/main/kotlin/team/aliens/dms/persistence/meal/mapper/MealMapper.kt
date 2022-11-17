@@ -10,7 +10,7 @@ import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class MealMapper(
-    private val schoolJpaRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<Meal, MealJpaEntity> {
 
     override fun toDomain(entity: MealJpaEntity?): Meal? {
@@ -26,10 +26,13 @@ class MealMapper(
     }
 
     override fun toEntity(domain: Meal): MealJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return MealJpaEntity(
-            id = MealJpaEntityId(domain.mealDate, domain.schoolId),
+            id = MealJpaEntityId(
+                mealDate = domain.mealDate,
+                schoolId = domain.schoolId
+            ),
             school = school,
             breakfast = domain.breakfast,
             lunch = domain.lunch,

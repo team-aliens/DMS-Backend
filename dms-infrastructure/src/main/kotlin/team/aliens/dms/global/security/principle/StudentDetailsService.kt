@@ -16,6 +16,6 @@ class StudentDetailsService(
     override fun loadUserByUsername(username: String?): UserDetails {
         val student = studentRepository.findByIdOrNull(UUID.fromString(username)) ?: throw InvalidTokenException
 
-        return StudentDetails(student.userId)
+        return StudentDetails(student.id)
     }
 }

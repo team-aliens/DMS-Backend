@@ -6,7 +6,9 @@ import java.util.UUID
 @Aggregate
 data class Room(
 
-    val roomNumber: Int,
+    val id: UUID = UUID(0, 0),
+
+    val number: Int,
 
     val schoolId: UUID
 

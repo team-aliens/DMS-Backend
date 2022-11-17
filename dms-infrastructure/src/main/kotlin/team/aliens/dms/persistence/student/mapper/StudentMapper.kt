@@ -4,41 +4,45 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.room.entity.RoomJpaEntityId
 import team.aliens.dms.persistence.room.repository.RoomJpaRepository
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
 class StudentMapper(
-    private val roomJpaRepository: RoomJpaRepository,
-    private val userJpaRepository: UserJpaRepository
+    private val roomRepository: RoomJpaRepository,
+    private val userRepository: UserJpaRepository
 ) : GenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
         return entity?.let {
             Student(
-                studentId = it.userId,
-                roomNumber = it.room!!.id.roomNumber,
-                schoolId = it.room!!.school!!.id,
+                id = it.id,
+                roomId = it.room!!.id,
+                roomNumber = it.room!!.number,
+                schoolId = it.user!!.school!!.id,
                 grade = it.grade,
                 classRoom = it.classRoom,
-                number = it.number
+                number = it.number,
+                name = it.name,
+                profileImageUrl = it.profileImageUrl
             )
         }
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
-        val user = userJpaRepository.findByIdOrNull(domain.studentId)
-        val room = roomJpaRepository.findByIdOrNull(RoomJpaEntityId(domain.roomNumber, domain.studentId))
+        val user = userRepository.findByIdOrNull(domain.id)
+        val room = roomRepository.findByIdOrNull(domain.roomId)
 
         return StudentJpaEntity(
-            userId = domain.studentId,
+            id = domain.id,
             user = user,
             room = room,
             grade = domain.grade,
             classRoom = domain.classRoom,
-            number = domain.number
+            number = domain.number,
+            name = domain.name,
+            profileImageUrl = domain.profileImageUrl!!
         )
     }
 }

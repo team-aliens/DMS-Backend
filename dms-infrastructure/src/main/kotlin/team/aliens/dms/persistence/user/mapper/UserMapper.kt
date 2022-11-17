@@ -9,7 +9,7 @@ import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Component
 class UserMapper(
-    private val schoolJpaRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<User, UserJpaEntity> {
 
     override fun toDomain(entity: UserJpaEntity?): User? {
@@ -20,8 +20,7 @@ class UserMapper(
                 accountId = it.accountId,
                 password = it.password,
                 email = it.email,
-                name = it.name,
-                profileImageUrl = it.profileImageUrl,
+                authority = it.authority,
                 createdAt = it.createdAt,
                 deletedAt = it.deletedAt
             )
@@ -29,7 +28,7 @@ class UserMapper(
     }
 
     override fun toEntity(domain: User): UserJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return UserJpaEntity(
             id = domain.id,
@@ -37,8 +36,7 @@ class UserMapper(
             accountId = domain.accountId,
             password = domain.password,
             email = domain.email,
-            name = domain.name,
-            profileImageUrl = domain.profileImageUrl!!,
+            authority = domain.authority,
             createdAt = domain.createdAt!!,
             deletedAt = domain.deletedAt
         )

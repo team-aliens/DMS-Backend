@@ -19,7 +19,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class SignInUseCaseTests {
@@ -62,17 +62,16 @@ class SignInUseCaseTests {
             accountId = accountId,
             password = password,
             email = "email",
-            name = "name",
-            profileImageUrl = "http://~~",
+            authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
         )
     }
 
     private val tokenResponse = TokenResponse(
-            accessToken = "Bearer dga",
-            expiredAt = LocalDateTime.now(),
-            refreshToken = "Bearer sdalkgmsalkgmsa"
+        accessToken = "Bearer dga",
+        expiredAt = LocalDateTime.now(),
+        refreshToken = "Bearer sdalkgmsalkgmsa"
     )
 
     @Test

@@ -16,6 +16,6 @@ class ManagerDetailsService(
     override fun loadUserByUsername(username: String?): UserDetails {
         val manager = managerRepository.findByIdOrNull(UUID.fromString(username)) ?: throw InvalidTokenException
 
-        return ManagerDetails(manager.userId)
+        return ManagerDetails(manager.id)
     }
 }

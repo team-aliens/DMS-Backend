@@ -7,6 +7,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -17,6 +18,7 @@ import team.aliens.dms.domain.user.service.CheckUserAuthority
 @UseCase
 class ResetStudentPasswordUseCase(
     private val queryUserPort: StudentQueryUserPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryAuthCodePort: StudentQueryAuthCodePort,
     private val commandUserPort: StudentCommandUserPort,
     private val securityPort: StudentSecurityPort,
@@ -25,12 +27,13 @@ class ResetStudentPasswordUseCase(
 
     fun execute(request: ResetStudentPasswordRequest) {
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
+        val student = queryStudentPort.queryStudentById(user.id) ?: throw StudentNotFoundException
 
         if (checkUserAuthority.execute(user.id) != Authority.STUDENT) {
             throw StudentNotFoundException
         }
 
-        if (user.name != request.name || user.email != request.email) {
+        if (student.name != request.name || user.email != request.email) {
             throw StudentInfoMismatchException
         }
 

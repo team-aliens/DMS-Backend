@@ -8,12 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.student.spi.StudentCommandUserPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -23,33 +22,34 @@ class UpdateStudentProfileUseCaseTests {
     private lateinit var securityPort: StudentSecurityPort
 
     @MockBean
-    private lateinit var queryUserPort: StudentQueryUserPort
+    private lateinit var queryStudentPort: QueryStudentPort
 
     @MockBean
-    private lateinit var commandUserPort: StudentCommandUserPort
+    private lateinit var commandStudentPort: CommandStudentPort
 
     private lateinit var updateStudentProfileUseCase: UpdateStudentProfileUseCase
 
     @BeforeEach
     fun setUp() {
         updateStudentProfileUseCase = UpdateStudentProfileUseCase(
-            securityPort, queryUserPort, commandUserPort
+            securityPort, queryStudentPort, commandStudentPort
         )
     }
 
     private val currentUserId = UUID.randomUUID()
     private val profileImageUrl = "https://~"
 
-    private val userStub by lazy {
-        User(
+    private val studentStub by lazy {
+        Student(
+            id = currentUserId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = UUID.randomUUID(),
-            accountId = "계정아이디",
-            password = "비밀번호",
-            email = "이메일",
+            grade = 1,
+            classRoom = 1,
+            number = 1,
             name = "이름",
-            profileImageUrl = profileImageUrl,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            profileImageUrl = "https://~"
         )
     }
 
@@ -59,11 +59,11 @@ class UpdateStudentProfileUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
 
-        given(commandUserPort.saveUser(userStub.copy(profileImageUrl = "바뀐 사진 url")))
-            .willReturn(userStub)
+        given(commandStudentPort.saveStudent(studentStub.copy(profileImageUrl = "바뀐 사진 url")))
+            .willReturn(studentStub)
 
         // when & then
         assertDoesNotThrow {
@@ -77,7 +77,7 @@ class UpdateStudentProfileUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryUserPort.queryUserById(currentUserId))
+        given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(null)
 
         // when & then

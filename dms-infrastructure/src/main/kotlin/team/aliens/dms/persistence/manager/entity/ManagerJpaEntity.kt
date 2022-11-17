@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.manager.entity
 
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
@@ -15,11 +16,18 @@ import javax.persistence.Table
 class ManagerJpaEntity(
 
     @Id
-    val userId: UUID,
+    @Column(name = "user_id")
+    val id: UUID,
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
-    val user: UserJpaEntity?
+    val user: UserJpaEntity?,
+
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    val name: String,
+
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    val profileImageUrl: String
 
 )

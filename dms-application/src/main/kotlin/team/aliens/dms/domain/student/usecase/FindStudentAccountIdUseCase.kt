@@ -32,9 +32,9 @@ class FindStudentAccountIdUseCase(
             number = request.number
         ) ?: throw StudentNotFoundException
 
-        val user = queryUserPort.queryUserById(student.studentId) ?: throw UserNotFoundException
+        val user = queryUserPort.queryUserById(student.id) ?: throw UserNotFoundException
 
-        if (user.name != request.name) {
+        if (student.name != request.name) {
             throw StudentInfoMismatchException
         }
 

@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.user.entity
 
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
@@ -30,11 +31,8 @@ class UserJpaEntity(
     @Column(columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     val email: String,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
-    val name: String,
-
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
-    val profileImageUrl: String,
+    @Column(columnDefinition = "VARCHAR(7)", nullable = false)
+    val authority: Authority,
 
     override val createdAt: LocalDateTime,
 

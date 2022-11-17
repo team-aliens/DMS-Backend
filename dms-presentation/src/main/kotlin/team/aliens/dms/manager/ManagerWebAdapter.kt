@@ -16,8 +16,8 @@ import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
 import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
-import team.aliens.dms.domain.manager.usecase.GetStudentDetailsUseCase
-import team.aliens.dms.domain.manager.usecase.GetStudentListUseCase
+import team.aliens.dms.domain.manager.usecase.QueryStudentDetailsUseCase
+import team.aliens.dms.domain.manager.usecase.QueryStudentsUseCase
 import team.aliens.dms.domain.manager.usecase.ManagerMyPageUseCase
 import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
@@ -34,8 +34,8 @@ import javax.validation.constraints.NotBlank
 class ManagerWebAdapter(
     private val findManagerAccountIdUseCase: FindManagerAccountIdUseCase,
     private val resetManagerPasswordUseCase: ResetManagerPasswordUseCase,
-    private val getStudentDetailsUseCase: GetStudentDetailsUseCase,
-    private val getStudentListUseCase: GetStudentListUseCase,
+    private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
+    private val queryStudentsUseCase: QueryStudentsUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
     private val managerMyPageUseCase: ManagerMyPageUseCase
 ) {
@@ -68,7 +68,7 @@ class ManagerWebAdapter(
 
     @GetMapping("/students")
     fun getStudents(@RequestBody @Valid request: GetStudentListWebRequest): QueryStudentListResponse {
-        return getStudentListUseCase.execute(
+        return queryStudentsUseCase.execute(
             name = request.name,
             sort = request.sort
         )
@@ -76,7 +76,7 @@ class ManagerWebAdapter(
     
     @GetMapping("/students/{student-id}")
     fun getStudentDetails(@PathVariable("student-id") studentId: UUID): GetStudentDetailsResponse {
-        return getStudentDetailsUseCase.execute(studentId)
+        return queryStudentDetailsUseCase.execute(studentId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

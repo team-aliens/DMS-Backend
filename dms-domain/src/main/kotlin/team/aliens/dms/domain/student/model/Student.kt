@@ -6,7 +6,9 @@ import java.util.UUID
 @Aggregate
 data class Student(
 
-    val studentId: UUID,
+    val id: UUID,
+
+    val roomId: UUID,
 
     val roomNumber: Int,
 
@@ -16,11 +18,19 @@ data class Student(
 
     val classRoom: Int,
 
-    val number: Int
+    val number: Int,
+
+    val name: String,
+
+    val profileImageUrl: String? = PROFILE_IMAGE
 
 ) {
 
-    val gcn: String = "${this.grade}${this.classRoom}${processedNumber()}"
+    val gcn: String = "${this.grade}${this.classRoom}${processeNumber()}"
 
-    private fun processedNumber() = if (number < 10) "0${number}".toInt() else number
+    private fun processeNumber() = if (number < 10) "0${number}" else number.toString()
+
+    companion object {
+        const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
+    }
 }

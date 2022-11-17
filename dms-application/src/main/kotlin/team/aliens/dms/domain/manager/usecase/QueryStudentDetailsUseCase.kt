@@ -4,42 +4,37 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 
 @ReadOnlyUseCase
-class GetStudentDetailsUseCase(
-    private val queryUserPort: ManagerQueryUserPort,
+class QueryStudentDetailsUseCase(
     private val queryStudentPort: ManagerQueryStudentPort,
     private val queryPointPort: ManagerQueryPointPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
-        val user = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
         val bonusPoint = queryPointPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointPort.queryTotalMinusPoint(studentId)
 
-        val roomMateResponse = queryUserPort.queryUserByRoomNumberAndSchoolId(
+        val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
             schoolId = student.schoolId
-        )
-        val roomMates = roomMateResponse.map {
+        ).map {
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
-                profileImageUrl = it.profileImageUrl ?: User.PROFILE_IMAGE
+                profileImageUrl = it.profileImageUrl ?: Student.PROFILE_IMAGE
             )
         }
 
         return GetStudentDetailsResponse(
-            name = user.name,
+            name = student.name,
             gcn = student.gcn,
-            profileImageUrl = user.profileImageUrl ?: User.PROFILE_IMAGE,
+            profileImageUrl = student.profileImageUrl ?: Student.PROFILE_IMAGE,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomNumber = student.roomNumber,

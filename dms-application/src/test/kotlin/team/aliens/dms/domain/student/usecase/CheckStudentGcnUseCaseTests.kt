@@ -15,11 +15,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -31,15 +27,12 @@ class CheckStudentGcnUseCaseTests {
     @MockBean
     private lateinit var queryStudentPort: QueryStudentPort
 
-    @MockBean
-    private lateinit var queryUserPort: StudentQueryUserPort
-
     private lateinit var checkStudentGcnUseCase: CheckStudentGcnUseCase
 
     @BeforeEach
     fun setUp() {
         checkStudentGcnUseCase = CheckStudentGcnUseCase(
-            querySchoolPort, queryStudentPort, queryUserPort
+            querySchoolPort, queryStudentPort
         )
     }
 
@@ -67,26 +60,15 @@ class CheckStudentGcnUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = UUID.randomUUID(),
-            roomNumber = 1,
+            id = UUID.randomUUID(),
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 2,
-            number = 3
-        )
-    }
-
-    private val userStub by lazy {
-        User(
-            id = studentStub.studentId,
-            schoolId = schoolStub.id,
-            accountId = "아이디",
-            password = "비번",
-            email = "이메일",
+            number = 3,
             name = "이름",
-            profileImageUrl = "https://~",
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            profileImageUrl = "https://~"
         )
     }
 
@@ -96,17 +78,21 @@ class CheckStudentGcnUseCaseTests {
         given(querySchoolPort.querySchoolById(requestStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolStub.id, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolStub.id,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(studentStub)
-
-        given(queryUserPort.queryUserById(studentStub.studentId))
-            .willReturn(userStub)
 
         // when
         val response = checkStudentGcnUseCase.execute(requestStub)
 
         // then
-        assertEquals(response, userStub.name)
+        assertEquals(response, studentStub.name)
     }
 
 
@@ -128,29 +114,18 @@ class CheckStudentGcnUseCaseTests {
         given(querySchoolPort.querySchoolById(requestStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolStub.id, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolStub.id,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(null)
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            checkStudentGcnUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `사용자 존재하지 않음`() {
-        // given
-        given(querySchoolPort.querySchoolById(requestStub.schoolId))
-            .willReturn(schoolStub)
-
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolStub.id, requestStub.grade, requestStub.classRoom, requestStub.number))
-            .willReturn(studentStub)
-
-        given(queryUserPort.queryUserById(studentStub.studentId))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<UserNotFoundException> {
             checkStudentGcnUseCase.execute(requestStub)
         }
     }

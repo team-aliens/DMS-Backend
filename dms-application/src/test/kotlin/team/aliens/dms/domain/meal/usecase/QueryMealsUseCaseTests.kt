@@ -46,12 +46,15 @@ class QueryMealsUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = currentUserId,
-            roomNumber = 318,
+            id = currentUserId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,
-            number = 10
+            number = 10,
+            name = "이름",
+            profileImageUrl = "https://~"
         )
     }
 
