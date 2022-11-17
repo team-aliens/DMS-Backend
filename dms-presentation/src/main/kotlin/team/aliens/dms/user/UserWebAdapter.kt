@@ -33,7 +33,7 @@ class UserWebAdapter(
     @PatchMapping("/password")
     fun updatePassword(@RequestBody @Valid webRequest: UpdateUserPasswordWebRequest) {
         val request = UpdateUserPasswordRequest(
-            oldPassword = webRequest.oldPassword.value,
+            currentPassword = webRequest.oldPassword.value,
             newPassword = webRequest.newPassword.value
         )
 
