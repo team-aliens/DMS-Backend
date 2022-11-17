@@ -16,6 +16,7 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
@@ -33,6 +34,7 @@ class ResetStudentPasswordUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
 
+    @MockBean
     private lateinit var queryStudentPort: QueryStudentPort
 
     @MockBean
@@ -80,6 +82,20 @@ class ResetStudentPasswordUseCaseTests {
         )
     }
 
+    private val studentStub by lazy {
+        Student(
+            id = userStub.id,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
+            schoolId = UUID.randomUUID(),
+            grade = 1,
+            classRoom = 1,
+            number = 1,
+            name = name,
+            profileImageUrl = "https://~"
+        )
+    }
+
     private val authCodeStub by lazy {
         AuthCode(
             code = code,
@@ -124,6 +140,9 @@ class ResetStudentPasswordUseCaseTests {
         // given
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
+
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
@@ -174,6 +193,9 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
+
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
 
@@ -188,6 +210,9 @@ class ResetStudentPasswordUseCaseTests {
         // given
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
+
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
@@ -204,6 +229,9 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
+
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
 
@@ -218,6 +246,9 @@ class ResetStudentPasswordUseCaseTests {
         // given
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
+
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)
@@ -236,6 +267,9 @@ class ResetStudentPasswordUseCaseTests {
         // given
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
+
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.STUDENT)

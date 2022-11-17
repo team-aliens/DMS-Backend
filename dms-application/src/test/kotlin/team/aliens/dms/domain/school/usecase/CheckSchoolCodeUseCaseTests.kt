@@ -12,7 +12,7 @@ import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CheckSchoolCodeUseCaseTests {

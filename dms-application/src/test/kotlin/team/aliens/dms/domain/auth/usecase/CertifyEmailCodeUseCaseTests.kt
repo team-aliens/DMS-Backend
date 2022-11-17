@@ -12,13 +12,14 @@ import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CertifyEmailCodeUseCaseTests {
@@ -53,8 +54,7 @@ class CertifyEmailCodeUseCaseTests {
             accountId = "accountId",
             password = "password",
             email = email,
-            name = "김범지인",
-            profileImageUrl = "https://~~",
+            authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
         )

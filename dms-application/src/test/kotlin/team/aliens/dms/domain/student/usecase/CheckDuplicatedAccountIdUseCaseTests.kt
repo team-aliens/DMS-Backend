@@ -49,4 +49,4 @@ class CheckDuplicatedAccountIdUseCaseTests {
             checkDuplicatedAccountIdUseCase.execute(accountId)
         }
     }
- }
+}

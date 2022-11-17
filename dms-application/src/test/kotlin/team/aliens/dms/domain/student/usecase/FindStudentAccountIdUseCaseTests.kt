@@ -51,13 +51,14 @@ class FindStudentAccountIdUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = UUID.randomUUID(),
-            roomNumber = UUID.randomUUID(),
+            id = UUID.randomUUID(),
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolId,
             grade = requestStub.grade,
             classRoom = requestStub.classRoom,
             number = requestStub.number,
-            name = "이름",
+            name = "이정윤",
             profileImageUrl = "https://~"
         )
     }
@@ -78,10 +79,17 @@ class FindStudentAccountIdUseCaseTests {
     @Test
     fun `아이디 찾기 성공`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
 
         // when & then
@@ -93,7 +101,14 @@ class FindStudentAccountIdUseCaseTests {
     @Test
     fun `학생 조회 실패`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(null)
 
         // when & then
@@ -105,10 +120,17 @@ class FindStudentAccountIdUseCaseTests {
     @Test
     fun `유저 조회 실패`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(null)
 
         // when & then
@@ -120,10 +142,17 @@ class FindStudentAccountIdUseCaseTests {
     @Test
     fun `학생 이름 불일치`() {
         // given
-        given(queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, requestStub.grade, requestStub.classRoom, requestStub.number))
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId,
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
+        )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
 
         // when & then

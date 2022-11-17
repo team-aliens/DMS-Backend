@@ -11,11 +11,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.*
+import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
+import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
+import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
+import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
+import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class SendEmailCodeUseCaseTests {
@@ -49,7 +54,6 @@ class SendEmailCodeUseCaseTests {
     }
 
     private val id = UUID.randomUUID()
-    private val code = "@SF^%L"
     private val type = EmailType.PASSWORD
     private val email = "email@dsm.hs.kr"
     private val request = SendEmailCodeRequest(email, type)
@@ -62,8 +66,7 @@ class SendEmailCodeUseCaseTests {
             accountId = "accountId",
             password = "password",
             email = email,
-            name = "김범지인",
-            profileImageUrl = "https://~~",
+            authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
         )

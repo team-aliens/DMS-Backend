@@ -17,7 +17,6 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryPointPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -50,8 +49,9 @@ class StudentMyPageUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = currentUserId,
-            roomNumber = UUID.randomUUID(),
+            id = currentUserId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolId,
             grade = 1,
             classRoom = 1,
@@ -63,8 +63,9 @@ class StudentMyPageUseCaseTests {
 
     private val studentProfileNullStub by lazy {
         Student(
-            studentId = currentUserId,
-            roomNumber = UUID.randomUUID(),
+            id = currentUserId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolId,
             grade = 1,
             classRoom = 1,
@@ -91,7 +92,7 @@ class StudentMyPageUseCaseTests {
         StudentMyPageResponse(
             schoolName = "학교이름",
             name = "이름",
-            gcn = "2310",
+            gcn = "1101",
             profileImageUrl = "https://~",
             bonusPoint = 1,
             minusPoint = 1,
@@ -103,8 +104,8 @@ class StudentMyPageUseCaseTests {
         StudentMyPageResponse(
             schoolName = "학교이름",
             name = "이름",
-            gcn = "2310",
-            profileImageUrl = Student.PROFILE_IMAGE,
+            gcn = "1101",
+            profileImageUrl = "https://~",
             bonusPoint = 1,
             minusPoint = 1,
             phrase = "잘하자"
@@ -126,10 +127,10 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
             .willReturn(1)
 
-        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
             .willReturn(1)
 
         // when
@@ -154,10 +155,10 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
             .willReturn(1)
 
-        given(queryPointPort.queryTotalMinusPoint(studentStub.studentId))
+        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
             .willReturn(1)
 
         // when
@@ -195,7 +196,7 @@ class StudentMyPageUseCaseTests {
             .willReturn(null)
 
         // when & then
-        assertThrows<UserNotFoundException> {
+        assertThrows<StudentNotFoundException> {
             studentMyPageUseCase.execute()
         }
     }

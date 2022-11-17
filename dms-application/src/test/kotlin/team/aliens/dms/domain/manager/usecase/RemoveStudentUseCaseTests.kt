@@ -65,8 +65,9 @@ class RemoveStudentUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = studentId,
-            roomNumber = UUID.randomUUID(),
+            id = studentId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,
@@ -92,7 +93,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
 
         given(commandUserPort.saveUser(userStub.copy(deletedAt = LocalDateTime.now())))
@@ -149,7 +150,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(null)
 
         // when & then
@@ -170,7 +171,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.studentId))
+        given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
 
         // when & then

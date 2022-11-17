@@ -31,7 +31,7 @@ class QueryAllNoticesUseCaseTests {
     private lateinit var queryUserPort: NoticeQueryUserPort
 
     @MockBean
-    private lateinit var  queryNoticePort: QueryNoticePort
+    private lateinit var queryNoticePort: QueryNoticePort
 
     private lateinit var queryAllNoticesUseCase: QueryAllNoticesUseCase
 

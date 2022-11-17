@@ -24,7 +24,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class ResetManagerPasswordUseCaseTests {

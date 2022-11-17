@@ -17,10 +17,16 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.*
+import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.StudentCommandUserPort
+import team.aliens.dms.domain.student.spi.StudentJwtPort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
+import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
+import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
@@ -124,8 +130,9 @@ class SignUpUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = savedUserStub.id,
-            roomNumber = UUID.randomUUID(),
+            id = savedUserStub.id,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,
@@ -137,8 +144,9 @@ class SignUpUseCaseTests {
 
     private val savedStudentStub by lazy {
         Student(
-            studentId = savedUserStub.id,
-            roomNumber = UUID.randomUUID(),
+            id = savedUserStub.id,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 1,

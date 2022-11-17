@@ -60,8 +60,9 @@ class CheckStudentGcnUseCaseTests {
 
     private val studentStub by lazy {
         Student(
-            studentId = UUID.randomUUID(),
-            roomNumber = UUID.randomUUID(),
+            id = UUID.randomUUID(),
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
             schoolId = schoolStub.id,
             grade = 1,
             classRoom = 2,
