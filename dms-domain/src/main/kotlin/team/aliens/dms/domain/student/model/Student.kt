@@ -26,9 +26,9 @@ data class Student(
 
 ) {
 
-    val gcn: String = "${this.grade}${this.classRoom}${processedNumber()}"
+    val gcn: String = "${this.grade}${this.classRoom}${processeNumber()}"
 
-    private fun processedNumber() = if (number < 10) "0${number}".toInt() else number
+    private fun processeNumber() = if (number < 10) "0${number}" else number.toString()
 
     companion object {
         const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
