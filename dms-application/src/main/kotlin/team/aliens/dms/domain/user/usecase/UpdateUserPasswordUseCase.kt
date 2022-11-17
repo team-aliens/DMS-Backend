@@ -19,7 +19,7 @@ class UpdateUserPasswordUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        if (!securityPort.isPasswordMatch(request.oldPassword, user.password)) {
+        if (!securityPort.isPasswordMatch(request.currentPassword, user.password)) {
             throw PasswordMismatchException
         }
 
