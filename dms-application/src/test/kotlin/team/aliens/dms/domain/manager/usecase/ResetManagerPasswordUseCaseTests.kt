@@ -20,6 +20,7 @@ import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
@@ -146,7 +147,7 @@ class ResetManagerPasswordUseCaseTests {
             .willReturn(Authority.STUDENT)
 
         // when & then
-        assertThrows<ManagerNotFoundException> {
+        assertThrows<InvalidRoleException> {
             resetManagerPasswordUseCase.execute(requestStub)
         }
     }
