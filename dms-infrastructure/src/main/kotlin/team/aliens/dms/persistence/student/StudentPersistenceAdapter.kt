@@ -40,7 +40,7 @@ class StudentPersistenceAdapter(
         studentRepository.findByIdOrNull(studentId)
     )
 
-    override fun queryUserByNameAndSort(name: String, sort: Sort): List<Student> {
+    override fun queryStudentsByNameAndSort(name: String, sort: Sort): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .where(

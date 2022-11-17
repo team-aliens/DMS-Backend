@@ -8,7 +8,7 @@ interface ManagerQueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
 
-    fun queryUserByNameAndSort(name: String, sort: Sort): List<Student>
+    fun queryStudentsByNameAndSort(name: String, sort: Sort): List<Student>
 
     fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<Student>
 

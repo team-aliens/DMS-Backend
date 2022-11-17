@@ -12,7 +12,7 @@ class QueryStudentsUseCase(
 ) {
 
     fun execute(name: String, sort: Sort): QueryStudentListResponse {
-        val students = queryStudentPort.queryUserByNameAndSort(name, sort).map {
+        val students = queryStudentPort.queryStudentsByNameAndSort(name, sort).map {
             QueryStudentListResponse.StudentElement(
                 id = it.id,
                 name = it.name,
