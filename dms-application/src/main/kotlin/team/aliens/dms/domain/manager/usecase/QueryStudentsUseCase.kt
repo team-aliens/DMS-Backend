@@ -4,7 +4,6 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.student.model.Student
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
@@ -18,7 +17,7 @@ class QueryStudentsUseCase(
                 name = it.name,
                 gcn = it.gcn,
                 roomNumber = it.roomNumber,
-                profileImageUrl = it.profileImageUrl ?: Student.PROFILE_IMAGE
+                profileImageUrl = it.profileImageUrl!!
             )
         }
 
