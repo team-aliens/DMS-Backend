@@ -10,9 +10,11 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -31,28 +33,24 @@ class ManagerMyPageUseCaseTests {
     private lateinit var querySchoolPort: ManagerQuerySchoolPort
 
     @MockBean
-    private lateinit var queryUserPort: ManagerQueryUserPort
+    private lateinit var queryManagerPort: QueryManagerPort
 
     private lateinit var managerMyPageUseCase: ManagerMyPageUseCase
 
     @BeforeEach
     fun setUp() {
-        managerMyPageUseCase = ManagerMyPageUseCase(securityPort, querySchoolPort, queryUserPort)
+        managerMyPageUseCase = ManagerMyPageUseCase(securityPort, querySchoolPort, queryManagerPort)
     }
 
-    private val currentUserId = UUID.randomUUID()
+    private val currentManagerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
 
-    private val userStub by lazy {
-        User(
-            id = currentUserId,
+    private val managerStub by lazy {
+        Manager(
+            id = currentManagerId,
             schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일",
-            Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            name = "이름",
+            profileImageUrl = "https://~"
         )
     }
 
@@ -83,12 +81,12 @@ class ManagerMyPageUseCaseTests {
     fun `관리자 마이페이지 확인 성공`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentManagerId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        given(queryManagerPort.queryManagerById(currentManagerId))
+            .willReturn(managerStub)
 
-        given(querySchoolPort.querySchoolById(userStub.schoolId))
+        given(querySchoolPort.querySchoolById(managerStub.schoolId))
             .willReturn(schoolStub)
 
         // when
@@ -102,13 +100,13 @@ class ManagerMyPageUseCaseTests {
     fun `사용자 미존재`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentManagerId)
 
-        given(queryUserPort.queryUserById(currentUserId))
+        given(queryManagerPort.queryManagerById(currentManagerId))
             .willReturn(null)
 
         // when & then
-        assertThrows<UserNotFoundException> {
+        assertThrows<ManagerNotFoundException> {
             managerMyPageUseCase.execute()
         }
     }
@@ -117,12 +115,12 @@ class ManagerMyPageUseCaseTests {
     fun `학교 미존재`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentManagerId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        given(queryManagerPort.queryManagerById(currentManagerId))
+            .willReturn(managerStub)
 
-        given(querySchoolPort.querySchoolById(userStub.schoolId))
+        given(querySchoolPort.querySchoolById(managerStub.schoolId))
             .willReturn(null)
 
         // when & then
