@@ -36,7 +36,7 @@ class PointPersistenceAdapter(
             .from(pointHistoryJpaEntity)
             .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.userId.eq(studentId),
+                pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(type)
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
@@ -65,7 +65,7 @@ class PointPersistenceAdapter(
             )
             .from(pointHistoryJpaEntity)
             .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
-            .where(pointHistoryJpaEntity.student.userId.eq(studentId))
+            .where(pointHistoryJpaEntity.student.id.eq(studentId))
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
@@ -85,7 +85,7 @@ class PointPersistenceAdapter(
             .from(pointHistoryJpaEntity)
             .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.userId.eq(studentId),
+                pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.BONUS)
             )
             .fetchOne()!!
@@ -97,7 +97,7 @@ class PointPersistenceAdapter(
             .from(pointHistoryJpaEntity)
             .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.userId.eq(studentId),
+                pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.MINUS)
             )
             .fetchOne()!!

@@ -23,8 +23,8 @@ class StudentMyPageUseCase(
         val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
-        val bonusPoint = queryPointPort.queryTotalBonusPoint(student.studentId)
-        val minusPoint = queryPointPort.queryTotalMinusPoint(student.studentId)
+        val bonusPoint = queryPointPort.queryTotalBonusPoint(student.id)
+        val minusPoint = queryPointPort.queryTotalMinusPoint(student.id)
 
         return StudentMyPageResponse(
             schoolName = school.name,

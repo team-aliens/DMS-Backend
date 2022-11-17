@@ -27,7 +27,7 @@ class RemoveStudentUseCase(
 
         val manager = queryUserPort.queryUserById(managerId) ?: throw ManagerNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
-        val studentUser = queryUserPort.queryUserById(student.studentId) ?: throw UserNotFoundException
+        val studentUser = queryUserPort.queryUserById(student.id) ?: throw UserNotFoundException
 
         if (student.schoolId != manager.schoolId) {
             throw SchoolMismatchException
