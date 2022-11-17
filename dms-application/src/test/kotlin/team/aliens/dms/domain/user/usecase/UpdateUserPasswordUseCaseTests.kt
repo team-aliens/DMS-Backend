@@ -46,7 +46,7 @@ class UpdateUserPasswordUseCaseTests {
 
     private val updateUserPasswordRequest by lazy {
         UpdateUserPasswordRequest(
-            oldPassword = oldPassword,
+            currentPassword = oldPassword,
             newPassword = newPassword
         )
     }
@@ -72,7 +72,7 @@ class UpdateUserPasswordUseCaseTests {
         given(queryUserPort.queryUserById(currentUserId))
             .willReturn(userStub)
 
-        given(securityPort.isPasswordMatch(updateUserPasswordRequest.oldPassword, oldPassword))
+        given(securityPort.isPasswordMatch(updateUserPasswordRequest.currentPassword, oldPassword))
             .willReturn(true)
 
         given(securityPort.encodePassword(updateUserPasswordRequest.newPassword))
