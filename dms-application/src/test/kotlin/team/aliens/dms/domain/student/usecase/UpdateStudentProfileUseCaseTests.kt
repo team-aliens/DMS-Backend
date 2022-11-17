@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -72,7 +73,7 @@ class UpdateStudentProfileUseCaseTests {
     }
 
     @Test
-    fun `유저 미존재`() {
+    fun `학생 미존재`() {
         // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
@@ -81,7 +82,7 @@ class UpdateStudentProfileUseCaseTests {
             .willReturn(null)
 
         // when & then
-        assertThrows<UserNotFoundException> {
+        assertThrows<StudentNotFoundException> {
             updateStudentProfileUseCase.execute(profileImageUrl)
         }
     }
