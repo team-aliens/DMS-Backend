@@ -5,17 +5,17 @@ import com.amazonaws.services.simpleemail.model.CreateTemplateRequest
 import com.amazonaws.services.simpleemail.model.DeleteTemplateRequest
 import com.amazonaws.services.simpleemail.model.Destination
 import com.amazonaws.services.simpleemail.model.ListTemplatesRequest
-import com.amazonaws.services.simpleemail.model.MessageRejectedException
 import com.amazonaws.services.simpleemail.model.SendTemplatedEmailRequest
 import com.amazonaws.services.simpleemail.model.Template
 import com.amazonaws.services.simpleemail.model.UpdateTemplateRequest
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
-import team.aliens.dms.domain.template.spi.TemplatePort
-import team.aliens.dms.domain.template.usecase.TemplateResponse
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.SendEmailPort
+import team.aliens.dms.domain.template.spi.TemplatePort
+import team.aliens.dms.domain.template.usecase.TemplateResponse
 import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
 import team.aliens.dms.thirdparty.email.exception.SesException
 import java.time.ZoneId
@@ -24,7 +24,8 @@ import java.time.ZoneId
 class AwsSESAdapter(
     private val amazonSimpleEmailServiceAsync: AmazonSimpleEmailServiceAsync,
     private val awsSESProperties: AwsSESProperties,
-    private val templateEngine: SpringTemplateEngine
+    private val templateEngine: SpringTemplateEngine,
+    private val objectMapper: ObjectMapper
 ) : SendEmailPort, TemplatePort {
 
     override fun queryTemplates(): List<TemplateResponse> {
@@ -41,18 +42,27 @@ class AwsSESAdapter(
     }
 
     override fun sendAuthCode(email: String, type: EmailType, code: String) {
+        val data = mutableMapOf(
+            "code" to code
+        )
+
         val templatedEmailRequest = SendTemplatedEmailRequest()
             .withDestination(Destination().withToAddresses(email))
             .withTemplate(type.templateName)
-            .withTemplateData(code)
+            .withTemplateData(paramToJson(data))
             .withSource(awsSESProperties.source)
 
-        try {
+        runCatching {
             amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(templatedEmailRequest)
-        } catch (e: MessageRejectedException) {
+        }.onFailure { e ->
+            e.printStackTrace()
             throw SendEmailRejectedException
         }
     }
+
+    private fun paramToJson(
+        params: Map<String, String>
+    ) = objectMapper.writeValueAsString(params).replace("\"".toRegex(), "\\\"")
 
     override fun createTemplate(type: EmailType) {
         val html = templateEngine.process(type.fileName, Context())
