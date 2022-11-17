@@ -16,10 +16,10 @@ class RemoveNoticeUseCase(
 ) {
 
     fun execute(noticeId: UUID) {
-        val currentUserId = securityPort.getCurrentUserId()
+        val currentManagerId = securityPort.getCurrentUserId()
         val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
 
-        if (notice.managerId != currentUserId) {
+        if (notice.managerId != currentManagerId) {
             throw IsNotWriterException
         }
 
