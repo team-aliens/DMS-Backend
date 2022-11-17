@@ -29,6 +29,13 @@ spring:
     port: ${REDIS_PORT:6379}
     host: ${REDIS_HOST:localhost}
 
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
 secret:
   secret-key: ${SECRET_KEY:asdfghgfds}
   access-exp: ${ACCESS_EXP:1800}
