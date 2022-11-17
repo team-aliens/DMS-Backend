@@ -33,15 +33,12 @@ class SignInUseCaseTests {
     @MockBean
     private lateinit var jwtPort: JwtPort
 
-    @MockBean
-    private lateinit var checkUserAuthority: CheckUserAuthority
-
     private lateinit var signInUseCase: SignInUseCase
 
     @BeforeEach
     fun setUp() {
         signInUseCase = SignInUseCase(
-            securityPort, queryUserPort, jwtPort, checkUserAuthority
+            securityPort, queryUserPort, jwtPort
         )
     }
 
@@ -83,10 +80,7 @@ class SignInUseCaseTests {
         given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(true)
 
-        given(checkUserAuthority.execute(userStub.id))
-            .willReturn(Authority.MANAGER)
-
-        given(jwtPort.receiveToken(userStub.id, Authority.MANAGER))
+        given(jwtPort.receiveToken(userStub.id, userStub.authority))
             .willReturn(tokenResponse)
 
         // when then
@@ -103,9 +97,6 @@ class SignInUseCaseTests {
 
         given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(true)
-
-        given(checkUserAuthority.execute(userStub.id))
-            .willReturn(Authority.STUDENT)
 
         given(jwtPort.receiveToken(userStub.id, Authority.STUDENT))
             .willReturn(tokenResponse)
