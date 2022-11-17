@@ -23,9 +23,9 @@ class RemoveStudentUseCase(
 ) {
 
     fun execute(studentId: UUID) {
-        val managerId = securityPort.getCurrentUserId()
+        val currentManagerId = securityPort.getCurrentUserId()
 
-        val manager = queryUserPort.queryUserById(managerId) ?: throw ManagerNotFoundException
+        val manager = queryUserPort.queryUserById(currentManagerId) ?: throw ManagerNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
         val studentUser = queryUserPort.queryUserById(student.id) ?: throw UserNotFoundException
 
