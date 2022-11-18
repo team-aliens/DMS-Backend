@@ -48,8 +48,8 @@ class QueryStudentsUseCaseTests {
     @Test
     fun `학생 목록 조회 성공`() {
         // given
-        given(queryStudentPort.queryStudentById(id))
-            .willReturn(studentStub)
+        given(queryStudentPort.queryStudentsByNameAndSort(name, sort))
+            .willReturn(listOf(studentStub))
 
         // when
         val response = queryStudentsUseCase.execute(name, sort)
