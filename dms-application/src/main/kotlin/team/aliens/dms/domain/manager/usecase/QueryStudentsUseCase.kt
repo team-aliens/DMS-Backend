@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
+import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 
@@ -10,9 +10,9 @@ class QueryStudentsUseCase(
     private val queryStudentPort: ManagerQueryStudentPort
 ) {
 
-    fun execute(name: String, sort: Sort): QueryStudentListResponse {
+    fun execute(name: String, sort: Sort): QueryStudentsResponse {
         val students = queryStudentPort.queryStudentsByNameAndSort(name, sort).map {
-            QueryStudentListResponse.StudentElement(
+            QueryStudentsResponse.StudentElement(
                 id = it.id,
                 name = it.name,
                 gcn = it.gcn,
@@ -21,6 +21,6 @@ class QueryStudentsUseCase(
             )
         }
 
-        return QueryStudentListResponse(students)
+        return QueryStudentsResponse(students)
     }
 }

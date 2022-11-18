@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
-import team.aliens.dms.domain.manager.dto.QueryStudentListResponse
+import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.QueryStudentDetailsUseCase
@@ -67,7 +67,7 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students")
-    fun getStudents(@RequestBody @Valid request: GetStudentListWebRequest): QueryStudentListResponse {
+    fun getStudents(@RequestBody @Valid request: GetStudentListWebRequest): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = request.name,
             sort = request.sort
