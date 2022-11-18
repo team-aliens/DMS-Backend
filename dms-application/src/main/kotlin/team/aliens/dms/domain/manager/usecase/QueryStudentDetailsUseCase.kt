@@ -5,7 +5,6 @@ import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 
 @ReadOnlyUseCase
@@ -27,14 +26,14 @@ class QueryStudentDetailsUseCase(
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
-                profileImageUrl = it.profileImageUrl ?: Student.PROFILE_IMAGE
+                profileImageUrl = it.profileImageUrl!!
             )
         }
 
         return GetStudentDetailsResponse(
             name = student.name,
             gcn = student.gcn,
-            profileImageUrl = student.profileImageUrl ?: Student.PROFILE_IMAGE,
+            profileImageUrl = student.profileImageUrl!!,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomNumber = student.roomNumber,

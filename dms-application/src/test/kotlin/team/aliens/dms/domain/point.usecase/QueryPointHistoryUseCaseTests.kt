@@ -4,59 +4,37 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QueryPointHistoryUseCaseTests {
 
     @MockBean
-    private lateinit var queryPointPort: QueryPointPort
-
-    @MockBean
-    private lateinit var queryUserPort: PointQueryUserPort
-
-    @MockBean
     private lateinit var securityPort: PointSecurityPort
+
+    @MockBean
+    private lateinit var queryPointPort: QueryPointPort
 
     private lateinit var queryPointHistoryUseCase: QueryPointHistoryUseCase
 
     @BeforeEach
     fun setUp() {
         queryPointHistoryUseCase = QueryPointHistoryUseCase(
-            queryPointPort, queryUserPort, securityPort
+            securityPort, queryPointPort
         )
     }
 
-    private val currentUserId = UUID.randomUUID()
-
-    private val userStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = UUID.randomUUID(),
-            accountId = "test accountId",
-            password = "test password",
-            email = "test email",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
-    }
+    private val currentStudentId = UUID.randomUUID()
 
     private val pointStubs by lazy {
         listOf(
@@ -81,12 +59,9 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(BONUS)`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentStudentId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentUserId, PointType.BONUS))
+        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.BONUS))
             .willReturn(pointStubs)
 
         // when
@@ -103,12 +78,9 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(MINUS)`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentStudentId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentUserId, PointType.MINUS))
+        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.MINUS))
             .willReturn(pointStubs)
 
         // when
@@ -125,12 +97,9 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(ALL)`() {
         // given
         given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+            .willReturn(currentStudentId)
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryPointPort.queryAllPointHistoryByStudentId(currentUserId))
+        given(queryPointPort.queryAllPointHistoryByStudentId(currentStudentId))
             .willReturn(pointStubs)
 
         // when
@@ -141,20 +110,5 @@ class QueryPointHistoryUseCaseTests {
             { assert(response.totalPoint == 5) },
             { assertThat(response.points).isNotEmpty }
         )
-    }
-
-    @Test
-    fun `유저를 찾을 수 없음`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<UserNotFoundException> {
-            queryPointHistoryUseCase.execute(PointRequestType.ALL)
-        }
     }
 }

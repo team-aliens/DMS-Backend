@@ -4,7 +4,6 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryPointPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
@@ -30,7 +29,7 @@ class StudentMyPageUseCase(
             schoolName = school.name,
             name = student.name,
             gcn = student.gcn,
-            profileImageUrl = student.profileImageUrl ?: Student.PROFILE_IMAGE,
+            profileImageUrl = student.profileImageUrl!!,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             phrase = "잘하자" // TODO 상벌점 상태에 따라서 문구 출력
