@@ -11,5 +11,5 @@ class QuerydslConfig(
 ) {
 
     @Bean
-    protected fun queryFactory(): JPAQueryFactory = JPAQueryFactory(entityManager)
+    protected fun queryFactory() = JPAQueryFactory(entityManager)
 }
