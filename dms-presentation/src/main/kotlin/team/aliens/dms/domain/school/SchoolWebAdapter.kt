@@ -64,7 +64,7 @@ class SchoolWebAdapter(
 
     @GetMapping("/code")
     fun checkCode(
-        @RequestParam @NotBlank @Size(max = 8) schoolCode: String
+        @RequestParam("school_code") @NotBlank @Size(max = 8) schoolCode: String
     ): SchoolIdResponse {
         val result = checkSchoolCodeUseCase.execute(schoolCode)
 

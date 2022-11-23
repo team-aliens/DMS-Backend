@@ -76,13 +76,13 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/account-id/duplication")
-    fun checkDuplicatedAccountId(@RequestParam @NotBlank accountId: String) {
+    fun checkDuplicatedAccountId(@RequestParam("account_id") @NotBlank accountId: String) {
         checkDuplicatedAccountIdUseCase.execute(accountId)
     }
 
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
-        @PathVariable(name = "school-id") schoolId: UUID,
+        @PathVariable("school-id") schoolId: UUID,
         @ModelAttribute webRequest: FindStudentAccountIdWebRequest
     ): FindStudentAccountIdResponse {
         val request = FindStudentAccountIdRequest(
