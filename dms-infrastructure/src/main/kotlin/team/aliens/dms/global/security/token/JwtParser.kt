@@ -56,11 +56,11 @@ class JwtParser(
     }
 
     private fun getDetails(body: Claims): UserDetails {
-        val authority = body.get("authority", Authority::class.java)
+        val authority = body.get(JwtProperties.AUTHORITY, String::class.java)
 
         return when (authority) {
-            Authority.STUDENT -> studentDetailsService.loadUserByUsername(body.id)
-            Authority.MANAGER -> managerDetailsService.loadUserByUsername(body.id)
+            Authority.STUDENT.name -> studentDetailsService.loadUserByUsername(body.id)
+            Authority.MANAGER.name -> managerDetailsService.loadUserByUsername(body.id)
             else -> throw InvalidRoleException
         }
     }
