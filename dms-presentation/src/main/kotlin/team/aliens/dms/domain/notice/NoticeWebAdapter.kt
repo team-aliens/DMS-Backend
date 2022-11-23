@@ -53,7 +53,7 @@ class NoticeWebAdapter(
     }
 
     @GetMapping("/")
-    fun queryAllNotices(@RequestParam @NotNull orderType: OrderType): QueryAllNoticesResponse {
+    fun queryAllNotices(@RequestParam("order_type") @NotNull orderType: OrderType): QueryAllNoticesResponse {
         return queryAllNoticesUseCase.execute(orderType.name)
     }
     
