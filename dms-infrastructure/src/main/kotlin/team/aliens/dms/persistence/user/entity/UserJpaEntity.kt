@@ -7,6 +7,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
@@ -31,6 +33,7 @@ class UserJpaEntity(
     @Column(columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     val email: String,
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(7)", nullable = false)
     val authority: Authority,
 
