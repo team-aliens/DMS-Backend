@@ -15,10 +15,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.user.exception.InvalidRoleException
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDate
 import java.util.UUID
 
@@ -31,15 +28,12 @@ class FindManagerAccountIdUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: ManagerQueryUserPort
 
-    @MockBean
-    private lateinit var checkUserAuthority: CheckUserAuthority
-
     private lateinit var findManagerAccountIdUseCase: FindManagerAccountIdUseCase
 
     @BeforeEach
     fun setUp() {
         findManagerAccountIdUseCase = FindManagerAccountIdUseCase(
-            querySchoolPort, queryUserPort, checkUserAuthority
+            querySchoolPort, queryUserPort
         )
     }
 
@@ -79,11 +73,8 @@ class FindManagerAccountIdUseCaseTests {
         given(querySchoolPort.querySchoolById(schoolId))
             .willReturn(schoolStub)
 
-        given(queryUserPort.queryUserBySchoolId(schoolId))
+        given(queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER))
             .willReturn(userStub)
-
-        given(checkUserAuthority.execute(userStub.id))
-            .willReturn(Authority.MANAGER)
 
         // when
         val response = findManagerAccountIdUseCase.execute(schoolId, answer)
@@ -128,31 +119,11 @@ class FindManagerAccountIdUseCaseTests {
         given(querySchoolPort.querySchoolById(schoolId))
             .willReturn(schoolStub)
 
-        given(queryUserPort.queryUserBySchoolId(schoolId))
+        given(queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER))
             .willReturn(null)
 
         // when & then
-        assertThrows<UserNotFoundException> {
-            findManagerAccountIdUseCase.execute(schoolId, answer)
-        }
-    }
-
-    @Test
-    fun `권한 불일치`() {
-        val answer = "안희명"
-
-        // given
-        given(querySchoolPort.querySchoolById(schoolId))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.queryUserBySchoolId(schoolId))
-            .willReturn(userStub)
-
-        given(checkUserAuthority.execute(userStub.id))
-            .willReturn(Authority.STUDENT)
-
-        // when & then
-        assertThrows<InvalidRoleException> {
+        assertThrows<ManagerNotFoundException> {
             findManagerAccountIdUseCase.execute(schoolId, answer)
         }
     }
