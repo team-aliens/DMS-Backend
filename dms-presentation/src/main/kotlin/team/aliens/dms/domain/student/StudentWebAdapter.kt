@@ -83,7 +83,7 @@ class StudentWebAdapter(
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
         @PathVariable("school-id") schoolId: UUID,
-        @ModelAttribute webRequest: FindStudentAccountIdWebRequest
+        @ModelAttribute @Valid webRequest: FindStudentAccountIdWebRequest
     ): FindStudentAccountIdResponse {
         val request = FindStudentAccountIdRequest(
             name = webRequest.name,
@@ -112,7 +112,7 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/name")
-    fun checkGcn(@ModelAttribute webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
+    fun checkGcn(@ModelAttribute @Valid webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
         val request = CheckStudentGcnRequest(
             schoolId = webRequest.schoolId,
             grade = webRequest.grade,
