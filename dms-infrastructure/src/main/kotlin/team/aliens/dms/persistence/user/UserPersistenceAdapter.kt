@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.user
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.persistence.user.mapper.UserMapper
@@ -28,8 +29,8 @@ class UserPersistenceAdapter(
         userRepository.findByIdOrNull(userId)
     )
 
-    override fun queryUserBySchoolId(schoolId: UUID) = userMapper.toDomain(
-        userRepository.findBySchoolId(schoolId)
+    override fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority) = userMapper.toDomain(
+        userRepository.findBySchoolIdAndAuthority(schoolId, authority)
     )
 
     override fun queryUserByEmail(email: String) = userMapper.toDomain(
