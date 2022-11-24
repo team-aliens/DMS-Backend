@@ -17,7 +17,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class FindManagerAccountIdUseCaseTests {
