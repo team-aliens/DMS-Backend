@@ -89,7 +89,7 @@ class AuthWebAdapter(
     }
 
     @GetMapping("/account-id")
-    fun checkAccountIdExistence(@RequestParam @NotBlank accountId: String): CheckAccountIdExistenceResponse {
+    fun checkAccountIdExistence(@RequestParam("account_id") @NotBlank accountId: String): CheckAccountIdExistenceResponse {
         return CheckAccountIdExistenceResponse(
             checkAccountIdExistenceUseCase.execute(accountId)
         )
