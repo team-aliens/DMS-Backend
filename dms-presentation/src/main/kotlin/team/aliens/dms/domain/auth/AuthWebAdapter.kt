@@ -53,7 +53,7 @@ class AuthWebAdapter(
     }
 
     @GetMapping("/code")
-    fun certifyEmailCode(@ModelAttribute request: CertifyEmailCodeWebRequest) {
+    fun certifyEmailCode(@ModelAttribute @Valid request: CertifyEmailCodeWebRequest) {
         certifyEmailCodeUseCase.execute(
             CertifyEmailCodeRequest(
                 email = request.email,
@@ -74,7 +74,7 @@ class AuthWebAdapter(
     }
 
     @GetMapping("/email")
-    fun certifyEmail(@ModelAttribute request: CertifyEmailWebRequest) {
+    fun certifyEmail(@ModelAttribute @Valid request: CertifyEmailWebRequest) {
         certifyEmailUseCase.execute(
             CertifyEmailRequest(
                 accountId = request.accountId,
