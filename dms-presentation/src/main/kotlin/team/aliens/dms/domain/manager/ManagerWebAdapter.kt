@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -67,7 +68,7 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students")
-    fun getStudents(@RequestBody @Valid request: GetStudentListWebRequest): QueryStudentsResponse {
+    fun getStudents(@ModelAttribute @Valid request: GetStudentListWebRequest): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = request.name,
             sort = request.sort
