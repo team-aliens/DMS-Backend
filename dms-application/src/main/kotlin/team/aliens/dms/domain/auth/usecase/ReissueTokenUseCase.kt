@@ -15,12 +15,13 @@ class ReissueTokenUseCase(
     fun execute(token: String): ReissueResponse {
         val queryToken = queryRefreshTokenPort.queryRefreshTokenByToken(token) ?: throw RefreshTokenNotFoundException
 
-        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(queryToken.userId, queryToken.authority)
+        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(queryToken.userId, queryToken.authority)
 
         return ReissueResponse(
             accessToken = accessToken,
-            expiredAt = expiredAt,
+            accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
+            refreshTokenExpiredAt = refreshTokenExpiredAt,
             features = ReissueResponse.Features(
                 // TODO 서비스 관리 테이블 필요
                 mealService = true,
