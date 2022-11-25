@@ -40,11 +40,11 @@ class StudentPersistenceAdapter(
         studentRepository.findByIdOrNull(studentId)
     )
 
-    override fun queryStudentsByNameAndSort(name: String, sort: Sort): List<Student> {
+    override fun queryStudentsByNameAndSort(name: String?, sort: Sort): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .where(
-                studentJpaEntity.name.like(name)
+                nameContains(name)
             )
             .orderBy(
                 sortFilter(sort)
@@ -54,6 +54,8 @@ class StudentPersistenceAdapter(
                 studentMapper.toDomain(it)!!
             }
     }
+
+    private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(name) }
 
     private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
         return when (sort) {
