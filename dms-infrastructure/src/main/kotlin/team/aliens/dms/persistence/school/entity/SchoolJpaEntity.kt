@@ -18,7 +18,7 @@ class SchoolJpaEntity(
 
     override val id: UUID,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String,
 
     @Column(columnDefinition = "CHAR(8)", nullable = false, unique = true)
