@@ -52,8 +52,8 @@ class NoticeWebAdapter(
         return queryNoticeDetailsUseCase.execute(noticeId)
     }
 
-    @GetMapping("/")
-    fun queryAllNotices(@RequestParam("order_type") @NotNull orderType: OrderType): QueryAllNoticesResponse {
+    @GetMapping
+    fun queryAllNotices(@RequestParam("order") @NotNull orderType: OrderType): QueryAllNoticesResponse {
         return queryAllNoticesUseCase.execute(orderType.name)
     }
     
