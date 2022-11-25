@@ -23,12 +23,13 @@ class SignInUseCase(
             throw PasswordMismatchException
         }
 
-        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, user.authority)
+        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, user.authority)
 
         return SignInResponse(
             accessToken = accessToken,
-            expiredAt = expiredAt,
+            accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
+            refreshTokenExpiredAt = refreshTokenExpiredAt,
             features = SignInResponse.Features(
                 // TODO 서비스 관리 테이블 필요
                 mealService = true,
