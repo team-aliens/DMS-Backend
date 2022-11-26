@@ -174,16 +174,18 @@ class SignUpUseCaseTests {
     private val tokenResponseStub by lazy {
         TokenResponse(
             accessToken = "test access token",
-            expiredAt = LocalDateTime.now(),
-            refreshToken = "test refresh token"
+            accessTokenExpiredAt = LocalDateTime.now(),
+            refreshToken = "test refresh token",
+            refreshTokenExpiredAt = LocalDateTime.now()
         )
     }
 
     private val signUpResponseStub by lazy {
         SignUpResponse(
             accessToken = tokenResponseStub.accessToken,
-            expiredAt = tokenResponseStub.expiredAt,
+            accessTokenExpiredAt = tokenResponseStub.accessTokenExpiredAt,
             refreshToken = tokenResponseStub.refreshToken,
+            refreshTokenExpiredAt = tokenResponseStub.refreshTokenExpiredAt,
             features = SignUpResponse.Features(
                 mealService = true,
                 noticeService = true,

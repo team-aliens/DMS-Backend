@@ -22,8 +22,9 @@ class GenerateJwtAdapter(
 
     override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
         accessToken = generateAccessToken(userId, authority),
-        expiredAt = LocalDateTime.now().plusSeconds(securityProperties.accessExp.toLong()),
-        refreshToken = generateRefreshToken(userId, authority)
+        accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
+        refreshToken = generateRefreshToken(userId, authority),
+        refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
     )
 
     private fun generateAccessToken(userId: UUID, authority: Authority) =
@@ -33,7 +34,7 @@ class GenerateJwtAdapter(
             .setId(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp))
+            .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
     private fun generateRefreshToken(userId: UUID, authority: Authority): String {
@@ -41,7 +42,7 @@ class GenerateJwtAdapter(
             .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp))
+            .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
 
         val refreshToken = RefreshTokenEntity(
