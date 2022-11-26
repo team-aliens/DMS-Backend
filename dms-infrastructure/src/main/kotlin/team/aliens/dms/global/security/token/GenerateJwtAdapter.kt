@@ -22,9 +22,9 @@ class GenerateJwtAdapter(
 
     override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
         accessToken = generateAccessToken(userId, authority),
-        accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong() / 1000),
+        accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
         refreshToken = generateRefreshToken(userId, authority),
-        refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong() / 1000)
+        refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
     )
 
     private fun generateAccessToken(userId: UUID, authority: Authority) =
