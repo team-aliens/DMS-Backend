@@ -8,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.common.extension.iterator
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
-import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
@@ -17,6 +17,7 @@ import team.aliens.dms.domain.meal.spi.QueryMealPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
+import java.time.YearMonth
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -41,8 +42,9 @@ class QueryMealsUseCaseTests {
     }
 
     private val mealDate = LocalDate.now()
-    private val firstDay = LocalDate.now()
-    private val lastDay = LocalDate.now()
+    private val month = YearMonth.from(mealDate)
+    private val firstDay = month.atDay(1)
+    private val lastDay = month.atEndOfMonth()
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
 
@@ -70,16 +72,6 @@ class QueryMealsUseCaseTests {
         )
     }
 
-    private val breakfastNullMealStub by lazy {
-        Meal(
-            mealDate = mealDate,
-            schoolId = schoolId,
-            breakfast = null,
-            lunch = "점심",
-            dinner = "저녁"
-        )
-    }
-
     @Test
     fun `급식 조회 성공`() {
         // given
@@ -92,11 +84,26 @@ class QueryMealsUseCaseTests {
         given(queryMealPort.queryAllMealsByMonthAndSchoolId(firstDay, lastDay, schoolId))
             .willReturn(listOf(mealStub))
 
+        val mealMap = listOf(mealStub).groupBy { it.mealDate }
+        val result = mutableListOf<QueryMealsResponse.MealDetails>()
+
+        for (date in firstDay..lastDay) {
+            val meals = mealMap[date]
+
+            if (meals == null) {
+                result.add(QueryMealsResponse.MealDetails.emptyOf(date))
+            } else {
+                meals[0].apply {
+                    result.add(QueryMealsResponse.MealDetails.of(this))
+                }
+            }
+        }
+
         // when
         val response = queryMealsUseCase.execute(mealDate)
 
         // then
-        assertThat(response).isNotNull
+        assertThat(response.meals).isEqualTo(result)
     }
 
     @Test
