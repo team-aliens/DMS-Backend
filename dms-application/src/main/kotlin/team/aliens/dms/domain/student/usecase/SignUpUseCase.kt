@@ -103,12 +103,13 @@ class SignUpUseCase(
         )
         commandStudentPort.saveStudent(student)
 
-        val (accessToken, expiredAt, refreshToken) = jwtPort.receiveToken(user.id, Authority.STUDENT)
+        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, Authority.STUDENT)
 
         return SignUpResponse(
             accessToken = accessToken,
-            expiredAt = expiredAt,
+            accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
+            refreshTokenExpiredAt = refreshTokenExpiredAt,
             features = SignUpResponse.Features(
                 // TODO 서비스 관리 테이블 필요
                 mealService = true,

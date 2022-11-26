@@ -17,7 +17,6 @@ import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.service.CheckUserAuthority
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -67,8 +66,9 @@ class SignInUseCaseTests {
 
     private val tokenResponse = TokenResponse(
         accessToken = "Bearer dga",
-        expiredAt = LocalDateTime.now(),
-        refreshToken = "Bearer sdalkgmsalkgmsa"
+        accessTokenExpiredAt = LocalDateTime.now(),
+        refreshToken = "Bearer sdalkgmsalkgmsa",
+        refreshTokenExpiredAt = LocalDateTime.now()
     )
 
     @Test

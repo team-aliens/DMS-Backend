@@ -50,8 +50,9 @@ class ReissueTokenUseCaseTests {
     private val tokenResponseStub by lazy {
         TokenResponse(
             accessToken = "Bearer dalkmas",
-            expiredAt = LocalDateTime.now(),
-            refreshToken = "Bearer akldsgmaslkdgmadk"
+            accessTokenExpiredAt = LocalDateTime.now(),
+            refreshToken = "Bearer akldsgmaslkdgmadk",
+            refreshTokenExpiredAt = LocalDateTime.now()
         )
     }
 

@@ -8,10 +8,8 @@ import java.util.Base64
 @ConstructorBinding
 class SecurityProperties(
     secretKey: String,
-    accessExp: Int,
-    refreshExp: Int
+    val accessExp: Int,
+    val refreshExp: Int
 ) {
     val secretKey: String = Base64.getEncoder().encodeToString(secretKey.toByteArray())
-    val accessExp: Int = accessExp * 1000
-    val refreshExp: Int = refreshExp * 1000
 }

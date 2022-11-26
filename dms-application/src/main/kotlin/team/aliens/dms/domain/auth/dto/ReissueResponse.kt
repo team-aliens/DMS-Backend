@@ -4,8 +4,9 @@ import java.time.LocalDateTime
 
 data class ReissueResponse(
     val accessToken: String,
-    val expiredAt: LocalDateTime,
+    val accessTokenExpiredAt: LocalDateTime,
     val refreshToken: String,
+    val refreshTokenExpiredAt: LocalDateTime,
     val features: Features
 ) {
     data class Features(
