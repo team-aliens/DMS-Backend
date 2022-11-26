@@ -41,6 +41,8 @@ class QueryMealsUseCaseTests {
     }
 
     private val mealDate = LocalDate.now()
+    private val firstDay = LocalDate.now()
+    private val lastDay = LocalDate.now()
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
 
@@ -60,7 +62,7 @@ class QueryMealsUseCaseTests {
 
     private val mealStub by lazy {
         Meal(
-            mealDate = LocalDate.now(),
+            mealDate = mealDate,
             schoolId = schoolId,
             breakfast = "아침",
             lunch = "점심",
@@ -70,7 +72,7 @@ class QueryMealsUseCaseTests {
 
     private val breakfastNullMealStub by lazy {
         Meal(
-            mealDate = LocalDate.now(),
+            mealDate = mealDate,
             schoolId = schoolId,
             breakfast = null,
             lunch = "점심",
@@ -80,76 +82,35 @@ class QueryMealsUseCaseTests {
 
     @Test
     fun `급식 조회 성공`() {
-        val mealDetails by lazy {
-            MealDetails(
-                date = mealDate,
-                breakfast = listOf(mealStub.breakfast),
-                lunch = listOf(mealStub.lunch),
-                dinner = listOf(mealStub.dinner)
-            )
-        }
-
-        val result by lazy {
-            QueryMealsResponse(
-                meals = listOf(mealDetails)
-            )
-        }
-
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(studentStub)
 
-        given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
+        given(queryMealPort.queryAllMealsByMonthAndSchoolId(firstDay, lastDay, schoolId))
             .willReturn(listOf(mealStub))
 
+        // when
         val response = queryMealsUseCase.execute(mealDate)
 
-        assertThat(response).isEqualTo(result)
+        // then
+        assertThat(response).isNotNull
     }
 
     @Test
     fun `학생 존재하지 않음`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
         given(queryStudentPort.queryStudentById(currentUserId))
             .willReturn(null)
 
+        // when & then
         assertThrows<StudentNotFoundException> {
             queryMealsUseCase.execute(mealDate)
         }
-    }
-
-    @Test
-    fun `급식 값 없음`() {
-        val breakfastNullMealDetails by lazy {
-            MealDetails(
-                date = mealDate,
-                breakfast = listOf(),
-                lunch = listOf(mealStub.lunch),
-                dinner = listOf(mealStub.dinner)
-            )
-        }
-
-        val result by lazy {
-            QueryMealsResponse(
-                meals = listOf(breakfastNullMealDetails)
-            )
-        }
-
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryStudentPort.queryStudentById(currentUserId))
-            .willReturn(studentStub)
-
-        given(queryMealPort.queryAllMealsByMealDateAndSchoolId(mealDate, schoolId))
-            .willReturn(listOf(breakfastNullMealStub))
-
-        val response = queryMealsUseCase.execute(mealDate)
-
-        assertThat(response).isEqualTo(result)
     }
 }
