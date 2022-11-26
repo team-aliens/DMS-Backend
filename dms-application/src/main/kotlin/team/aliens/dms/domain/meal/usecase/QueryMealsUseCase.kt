@@ -30,7 +30,7 @@ class QueryMealsUseCase(
             firstDay, lastDay, student.schoolId
         ).groupBy { it.mealDate }
 
-        val mealDetails = mutableListOf<MealDetails?>()
+        val mealDetails = mutableListOf<MealDetails>()
         for (date in firstDay..lastDay) {
             val meals = mealMap[date]
 

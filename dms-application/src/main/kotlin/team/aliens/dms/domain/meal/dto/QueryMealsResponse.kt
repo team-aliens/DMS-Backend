@@ -4,7 +4,7 @@ import team.aliens.dms.domain.meal.model.Meal
 import java.time.LocalDate
 
 data class QueryMealsResponse(
-    val meals: List<MealDetails?>
+    val meals: List<MealDetails>
 ) {
     data class MealDetails(
         val date: LocalDate,
