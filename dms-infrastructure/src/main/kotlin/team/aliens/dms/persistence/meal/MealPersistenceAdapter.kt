@@ -3,7 +3,6 @@ package team.aliens.dms.persistence.meal
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealPort
-import team.aliens.dms.persistence.meal.entity.MealJpaEntityId
 import team.aliens.dms.persistence.meal.mapper.MealMapper
 import team.aliens.dms.persistence.meal.repository.MealJpaRepository
 import java.time.LocalDate
@@ -15,10 +14,12 @@ class MealPersistenceAdapter(
     private val mealRepository: MealJpaRepository
 ) : MealPort {
 
-    override fun queryAllMealsByMealDateAndSchoolId(mealDate: LocalDate, schoolId: UUID): List<Meal> {
-        val mealId = MealJpaEntityId(mealDate, schoolId)
-
-        return mealRepository.findAllById(mealId).map {
+    override fun queryAllMealsByMonthAndSchoolId(
+        firstDay: LocalDate,
+        lastDay: LocalDate,
+        schoolId: UUID
+    ): List<Meal> {
+        return mealRepository.findBySchoolIdAndIdMealDateBetween(schoolId, firstDay, lastDay).map {
             mealMapper.toDomain(it)!!
         }
     }
