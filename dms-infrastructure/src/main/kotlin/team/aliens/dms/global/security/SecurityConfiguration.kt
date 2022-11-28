@@ -75,7 +75,7 @@ class SecurityConfiguration(
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
-            .antMatchers(HttpMethod.GET, "/notices/").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/notices").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/notices/{notice-id}").hasAuthority(MANAGER.name)
