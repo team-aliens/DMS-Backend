@@ -22,7 +22,7 @@ object StringUtil {
         val authCodeList: MutableList<String> = mutableListOf()
 
         for (i: Int in 0..number) {
-            authCodeList.add(i, codeList[random.nextInt(10)].toString());
+            authCodeList.add(i, codeList[random.nextInt(9)].toString());
         }
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")
