@@ -18,6 +18,6 @@ data class CertifyEmailCodeWebRequest(
     val authCode: String,
 
     @field:NotNull
-    val type: EmailType
+    val type: EmailType?
 
 )

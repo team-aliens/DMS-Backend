@@ -8,6 +8,6 @@ data class GetStudentListWebRequest(
     val name: String?,
 
     @field:NotNull
-    val sort: Sort
+    val sort: Sort?
 
 )

@@ -71,7 +71,7 @@ class ManagerWebAdapter(
     fun getStudents(@ModelAttribute @Valid request: GetStudentListWebRequest): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = request.name,
-            sort = request.sort
+            sort = request.sort!!
         )
     }
     

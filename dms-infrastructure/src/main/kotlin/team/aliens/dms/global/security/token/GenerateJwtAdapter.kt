@@ -49,7 +49,7 @@ class GenerateJwtAdapter(
             token = token,
             userId = userId,
             authority = authority,
-            expirationTime = securityProperties.refreshExp / 1000
+            expirationTime = securityProperties.refreshExp
         )
         refreshTokenRepository.save(refreshToken)
 
