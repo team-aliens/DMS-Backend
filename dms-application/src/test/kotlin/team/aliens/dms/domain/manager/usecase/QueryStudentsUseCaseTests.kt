@@ -78,7 +78,9 @@ class QueryStudentsUseCaseTests {
             .willReturn(managerStub)
 
         given(queryStudentPort.queryStudentsByNameAndSort(name, sort))
-            .willReturn(listOf(studentStub))
+            .willReturn(listOf(studentStub).filter {
+                managerStub.schoolId == studentStub.schoolId
+            })
 
         // when
         val response = queryStudentsUseCase.execute(name, sort)
