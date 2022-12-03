@@ -11,32 +11,54 @@ import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
+import org.junit.jupiter.api.assertThrows
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentsUseCaseTests {
 
     @MockBean
+    private lateinit var securityPort: ManagerSecurityPort
+
+    @MockBean
+    private lateinit var queryManagerPort: QueryManagerPort
+
+    @MockBean
     private lateinit var queryStudentPort: ManagerQueryStudentPort
+
 
     private lateinit var queryStudentsUseCase: QueryStudentsUseCase
 
     @BeforeEach
     fun setUp() {
         queryStudentsUseCase = QueryStudentsUseCase(
-            queryStudentPort
+            securityPort, queryManagerPort, queryStudentPort
         )
     }
 
-    private val id = UUID.randomUUID()
+    private val studentId = UUID.randomUUID()
+    private val currentUserId = UUID.randomUUID()
     private val name = "name"
     private val sort = Sort.GCN
 
+    private val managerStub by lazy {
+        Manager(
+            id = currentUserId,
+            schoolId = UUID.randomUUID(),
+            name = "관리자 이름",
+            profileImageUrl = "https://~~"
+        )
+    }
+
     private val studentStub by lazy {
         Student(
-            id = id,
+            id = studentId,
             roomId = UUID.randomUUID(),
             roomNumber = 216,
-            schoolId = id,
+            schoolId = studentId,
             grade = 2,
             classRoom = 1,
             number = 20,
@@ -48,6 +70,12 @@ class QueryStudentsUseCaseTests {
     @Test
     fun `학생 목록 조회 성공`() {
         // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
         given(queryStudentPort.queryStudentsByNameAndSort(name, sort))
             .willReturn(listOf(studentStub))
 
@@ -56,5 +84,19 @@ class QueryStudentsUseCaseTests {
 
         // then
         assertThat(response).isNotNull
+    }
+
+    @Test
+    fun `관리자 미존재`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(null)
+
+        assertThrows<ManagerNotFoundException> {
+            queryStudentsUseCase.execute(name, sort)
+        }
     }
 }
