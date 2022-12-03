@@ -41,13 +41,14 @@ class QueryStudentsUseCaseTests {
 
     private val studentId = UUID.randomUUID()
     private val currentUserId = UUID.randomUUID()
+    private val schoolId = UUID.randomUUID()
     private val name = "name"
     private val sort = Sort.GCN
 
     private val managerStub by lazy {
         Manager(
             id = currentUserId,
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             name = "관리자 이름",
             profileImageUrl = "https://~~"
         )
@@ -58,7 +59,7 @@ class QueryStudentsUseCaseTests {
             id = studentId,
             roomId = UUID.randomUUID(),
             roomNumber = 216,
-            schoolId = studentId,
+            schoolId = schoolId,
             grade = 2,
             classRoom = 1,
             number = 20,
