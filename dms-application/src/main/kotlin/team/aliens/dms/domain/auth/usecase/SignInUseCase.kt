@@ -4,15 +4,18 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
+import team.aliens.dms.domain.auth.spi.AuthQuerySchoolPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
+import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 
 @UseCase
 class SignInUseCase(
     private val securityPort: AuthSecurityPort,
     private val queryUserPort: AuthQueryUserPort,
+    private val querySchoolPort: AuthQuerySchoolPort,
     private val jwtPort: JwtPort
 ) {
 
@@ -25,17 +28,21 @@ class SignInUseCase(
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, user.authority)
 
+        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
+            ?: throw FeatureNotFoundException
+        
         return SignInResponse(
             accessToken = accessToken,
             accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
             refreshTokenExpiredAt = refreshTokenExpiredAt,
-            features = SignInResponse.Features(
-                // TODO 서비스 관리 테이블 필요
-                mealService = true,
-                noticeService = true,
-                pointService = true
-            )
+            features = availableFeatures.run {
+                SignInResponse.Features(
+                    mealService = mealService,
+                    noticeService = noticeService,
+                    pointService = pointService
+                )
+            }
         )
     }
 }

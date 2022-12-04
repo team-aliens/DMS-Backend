@@ -15,7 +15,9 @@ import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
+import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
+import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
@@ -180,6 +182,15 @@ class SignUpUseCaseTests {
         )
     }
 
+    private val featureStub by lazy {
+        AvailableFeature(
+            schoolId = userStub.schoolId,
+            mealService = true,
+            noticeService = true,
+            pointService = true
+        )
+    }
+
     private val signUpResponseStub by lazy {
         SignUpResponse(
             accessToken = tokenResponseStub.accessToken,
@@ -220,6 +231,9 @@ class SignUpUseCaseTests {
 
         given(jwtPort.receiveToken(id, Authority.STUDENT))
             .willReturn(tokenResponseStub)
+
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+            .willReturn(featureStub)
 
         // when
         val response = signUpUseCase.execute(requestStub)
@@ -324,6 +338,42 @@ class SignUpUseCaseTests {
 
         // when & then
         assertThrows<UserAccountIdExistsException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `이용 가능한 기능이 존재하지 않음`() {
+        //given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
+        given(queryUserPort.existsUserByAccountId(accountId))
+            .willReturn(false)
+
+        given(securityPort.encodePassword(requestStub.password))
+            .willReturn(userStub.password)
+
+        given(commandUserPort.saveUser(userStub))
+            .willReturn(savedUserStub)
+
+        given(commandStudentPort.saveStudent(studentStub))
+            .willReturn(savedStudentStub)
+
+        given(jwtPort.receiveToken(id, Authority.STUDENT))
+            .willReturn(tokenResponseStub)
+
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<FeatureNotFoundException> {
             signUpUseCase.execute(requestStub)
         }
     }

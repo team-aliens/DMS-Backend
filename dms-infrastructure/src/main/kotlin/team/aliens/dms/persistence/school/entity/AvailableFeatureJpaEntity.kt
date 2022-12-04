@@ -1,6 +1,5 @@
-package team.aliens.dms.persistence.feature.entity
+package team.aliens.dms.persistence.school.entity
 
-import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -12,8 +11,8 @@ import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "tbl_available_service")
-class AvailableServiceJpaEntity(
+@Table(name = "tbl_available_feature")
+class AvailableFeatureJpaEntity(
 
     @Id
     val schoolId: UUID,

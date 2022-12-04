@@ -12,9 +12,12 @@ import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.AuthQuerySchoolPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
+import team.aliens.dms.domain.school.exception.FeatureNotFoundException
+import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -30,6 +33,9 @@ class SignInUseCaseTests {
     private lateinit var queryUserPort: AuthQueryUserPort
 
     @MockBean
+    private lateinit var querySchoolPort: AuthQuerySchoolPort
+
+    @MockBean
     private lateinit var jwtPort: JwtPort
 
     private lateinit var signInUseCase: SignInUseCase
@@ -37,7 +43,7 @@ class SignInUseCaseTests {
     @BeforeEach
     fun setUp() {
         signInUseCase = SignInUseCase(
-            securityPort, queryUserPort, jwtPort
+            securityPort, queryUserPort, querySchoolPort, jwtPort
         )
     }
 
@@ -64,6 +70,15 @@ class SignInUseCaseTests {
         )
     }
 
+    private val featureStub by lazy {
+        AvailableFeature(
+            schoolId = userStub.schoolId,
+            mealService = true,
+            noticeService = true,
+            pointService = true
+        )
+    }
+
     private val tokenResponse = TokenResponse(
         accessToken = "Bearer dga",
         accessTokenExpiredAt = LocalDateTime.now(),
@@ -83,7 +98,10 @@ class SignInUseCaseTests {
         given(jwtPort.receiveToken(userStub.id, userStub.authority))
             .willReturn(tokenResponse)
 
-        // when then
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+            .willReturn(featureStub)
+
+        // when & then
         assertDoesNotThrow {
             signInUseCase.execute(requestStub)
         }
@@ -101,7 +119,10 @@ class SignInUseCaseTests {
         given(jwtPort.receiveToken(userStub.id, Authority.STUDENT))
             .willReturn(tokenResponse)
 
-        // when then
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+            .willReturn(featureStub)
+
+        // when & then
         assertDoesNotThrow {
             signInUseCase.execute(requestStub)
         }
@@ -113,7 +134,7 @@ class SignInUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(null)
 
-        // when then
+        // when & then
         assertThrows<UserNotFoundException> {
             signInUseCase.execute(requestStub)
         }
@@ -128,8 +149,29 @@ class SignInUseCaseTests {
         given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
             .willReturn(false)
 
-        // when then
+        // when & then
         assertThrows<PasswordMismatchException> {
+            signInUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `이용 가능한 기능이 존재하지 않음`() {
+        // given
+        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+            .willReturn(userStub)
+
+        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
+            .willReturn(true)
+
+        given(jwtPort.receiveToken(userStub.id, userStub.authority))
+            .willReturn(tokenResponse)
+
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<FeatureNotFoundException> {
             signInUseCase.execute(requestStub)
         }
     }
