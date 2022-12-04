@@ -35,7 +35,9 @@ class QueryStudentDetailsUseCase(
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
             schoolId = student.schoolId
-        ).map {
+        ).filter {
+            it.id != studentId
+        }.map {
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
