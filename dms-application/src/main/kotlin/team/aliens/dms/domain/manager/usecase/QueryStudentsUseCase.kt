@@ -19,9 +19,7 @@ class QueryStudentsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val students = queryStudentPort.queryStudentsByNameAndSort(name, sort).filter {
-            manager.schoolId == it.schoolId
-        }.map {
+        val students = queryStudentPort.queryStudentsByNameAndSort(name, sort, manager.schoolId).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,
                 name = it.name,

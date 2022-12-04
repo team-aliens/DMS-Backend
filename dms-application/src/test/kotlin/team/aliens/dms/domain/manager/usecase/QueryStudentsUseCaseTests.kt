@@ -77,7 +77,7 @@ class QueryStudentsUseCaseTests {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryStudentPort.queryStudentsByNameAndSort(name, sort))
+        given(queryStudentPort.queryStudentsByNameAndSort(name, sort, managerStub.schoolId))
             .willReturn(listOf(studentStub))
 
         // when
