@@ -11,7 +11,8 @@ enum class SchoolErrorCode(
     SCHOOL_CODE_MISMATCH(401, "School Code Mismatch"),
     SCHOOL_MISMATCH(401, "School Mismatch"),
 
-    SCHOOL_NOT_FOUND(404, "School Not Found")
+    SCHOOL_NOT_FOUND(404, "School Not Found"),
+    FEATURE_NOT_FOUND(404, "Feature Not Found")
     ;
 
     override fun status(): Int = status

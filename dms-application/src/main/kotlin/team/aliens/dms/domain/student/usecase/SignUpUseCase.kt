@@ -1,10 +1,12 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
+import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
@@ -105,17 +107,21 @@ class SignUpUseCase(
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, Authority.STUDENT)
 
+        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
+            ?: throw FeatureNotFoundException
+
         return SignUpResponse(
             accessToken = accessToken,
             accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
             refreshTokenExpiredAt = refreshTokenExpiredAt,
-            features = SignUpResponse.Features(
-                // TODO 서비스 관리 테이블 필요
-                mealService = true,
-                noticeService = true,
-                pointService = true,
-            )
+            features = availableFeatures.run {
+                SignUpResponse.Features(
+                    mealService = mealService,
+                    noticeService = noticeService,
+                    pointService = pointService
+                )
+            }
         )
     }
 
