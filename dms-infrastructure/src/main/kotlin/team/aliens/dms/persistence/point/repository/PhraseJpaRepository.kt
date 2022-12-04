@@ -9,6 +9,6 @@ import team.aliens.dms.domain.point.model.PointType
 @Repository
 interface PhraseJpaRepository : JpaRepository<PhraseJpaEntity, UUID> {
 
-    fun findAllByTypeAndStandardBetween(type: PointType, previousStandard: Int, standard: Int): List<PhraseJpaEntity>
+    fun findAllByTypeAndStandard(type: PointType, standard: Int): List<PhraseJpaEntity>
 
 }
