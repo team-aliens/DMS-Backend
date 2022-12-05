@@ -14,11 +14,6 @@ class PhrasePersistenceAdapterStudent(
     private val phraseMapper: PhraseMapper
 ) : PhrasePort {
 
-    override fun queryPhraseAll() = phraseRepository.findAll().map {
-        phraseMapper.toDomain(it)!!
-    }
-
-
     override fun queryPhraseAllByPointTypeAndStandardPoint(type: PointType, point: Int): List<Phrase> {
         val standard = if (point >= 10) {
             /**

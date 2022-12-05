@@ -5,8 +5,6 @@ import team.aliens.dms.domain.point.model.PointType
 
 interface StudentQueryPhrasePort {
 
-    fun queryPhraseAll(): List<Phrase>
-
     fun queryPhraseAllByPointTypeAndStandardPoint(type: PointType, point: Int): List<Phrase>
 
 }
