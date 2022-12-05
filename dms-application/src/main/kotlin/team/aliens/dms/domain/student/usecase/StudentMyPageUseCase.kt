@@ -44,20 +44,21 @@ class StudentMyPageUseCase(
     }
 
     private fun randomPhrase(bonusPoint: Int, minusPoint: Int): String {
-        val bonusPhrase =
-            studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = bonusPoint)
-        val minusPhrase =
-            studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.MINUS, point = minusPoint)
+        val bonusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
+            type = PointType.BONUS, point = bonusPoint
+        )
+        val minusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
+            type = PointType.MINUS, point = minusPoint
+        )
 
-        val phrases = mutableListOf<Phrase>()
-        phrases.addAll(bonusPhrase)
-        phrases.addAll(minusPhrase)
+        val phrases = listOf<Phrase>()
+            .plus(bonusPhrase)
+            .plus(minusPhrase)
 
-        val random = SecureRandom()
-
-        val phrase = if(phrases.size == 0) {
-            "문구가 없습니다."
-        } else phrases[random.nextInt(phrases.size)].content
+        val phrase = if(phrases.isNotEmpty()) {
+            val randomIndex = SecureRandom().nextInt(phrases.size)
+            phrases[randomIndex].content
+        } else Phrase.NO_PHRASE
 
         return phrase
     }

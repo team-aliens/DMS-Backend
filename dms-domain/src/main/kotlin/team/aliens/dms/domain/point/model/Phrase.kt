@@ -14,4 +14,8 @@ data class Phrase(
 
     val standard: Int
 
-)
+) {
+    companion object {
+        const val NO_PHRASE = "문구가 없습니다."
+    }
+}
