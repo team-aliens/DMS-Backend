@@ -55,6 +55,10 @@ class StudentMyPageUseCase(
 
         val random = SecureRandom()
 
-        return phrases[random.nextInt(phrases.size - 1)].content
+        val phrase = if(phrases.size == 0) {
+            "문구가 없습니다."
+        } else phrases[random.nextInt(phrases.size)].content
+
+        return phrase
     }
 }
