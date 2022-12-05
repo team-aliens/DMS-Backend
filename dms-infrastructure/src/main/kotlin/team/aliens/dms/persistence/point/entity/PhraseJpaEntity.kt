@@ -5,6 +5,8 @@ import team.aliens.dms.persistence.BaseUUIDEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.Table
 
 @Entity
@@ -16,6 +18,7 @@ class PhraseJpaEntity(
     @Column(columnDefinition = "VARCHAR(30)", nullable = false)
     val content: String,
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(5)", nullable = false)
     val type: PointType,
 

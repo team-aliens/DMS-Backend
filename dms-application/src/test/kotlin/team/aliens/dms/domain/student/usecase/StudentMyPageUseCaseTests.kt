@@ -1,16 +1,13 @@
 package team.aliens.dms.domain.student.usecase
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -19,6 +16,11 @@ import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.time.LocalDate
 import java.util.UUID
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertThrows
+import team.aliens.dms.domain.point.model.Phrase
+import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
 
 @ExtendWith(SpringExtension::class)
 class StudentMyPageUseCaseTests {
@@ -35,12 +37,15 @@ class StudentMyPageUseCaseTests {
     @MockBean
     private lateinit var queryPointPort: StudentQueryPointPort
 
+    @MockBean
+    private lateinit var queryPhrasePort: StudentQueryPhrasePort
+
     private lateinit var studentMyPageUseCase: StudentMyPageUseCase
 
     @BeforeEach
     fun setUp() {
         studentMyPageUseCase = StudentMyPageUseCase(
-            securityPort, queryStudentPort, querySchoolPort, queryPointPort
+            securityPort, queryStudentPort, querySchoolPort, queryPointPort, queryPhrasePort
         )
     }
 
@@ -48,20 +53,6 @@ class StudentMyPageUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        Student(
-            id = currentUserId,
-            roomId = UUID.randomUUID(),
-            roomNumber = 123,
-            schoolId = schoolId,
-            grade = 1,
-            classRoom = 1,
-            number = 1,
-            name = "이름",
-            profileImageUrl = "https://~"
-        )
-    }
-
-    private val studentProfileNullStub by lazy {
         Student(
             id = currentUserId,
             roomId = UUID.randomUUID(),
@@ -88,27 +79,12 @@ class StudentMyPageUseCaseTests {
         )
     }
 
-    private val studentMyPageResponseStub by lazy {
-        StudentMyPageResponse(
-            schoolName = "학교이름",
-            name = "이름",
-            gcn = "1101",
-            profileImageUrl = "https://~",
-            bonusPoint = 1,
-            minusPoint = 1,
-            phrase = "잘하자"
-        )
-    }
-
-    private val studentMyPageProfileUrlNullResponseStub by lazy {
-        StudentMyPageResponse(
-            schoolName = "학교이름",
-            name = "이름",
-            gcn = "1101",
-            profileImageUrl = "https://~",
-            bonusPoint = 1,
-            minusPoint = 1,
-            phrase = "잘하자"
+    private val phraseStub by lazy {
+        Phrase(
+            id = UUID.randomUUID(),
+            content = "밥좀 먹고 살자",
+            type = PointType.BONUS,
+            standard = 0
         )
     }
 
@@ -133,39 +109,17 @@ class StudentMyPageUseCaseTests {
         given(queryPointPort.queryTotalMinusPoint(studentStub.id))
             .willReturn(1)
 
-        // when
-        val response = studentMyPageUseCase.execute()
+        given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
+            .willReturn(listOf(phraseStub))
 
-        // then
-        assertEquals(response, studentMyPageResponseStub)
-    }
-
-    @Test
-    fun `학생 마이페이지 확인 성공 프로필 기본이미지`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryStudentPort.queryStudentById(currentUserId))
-            .willReturn(studentStub)
-
-        given(queryStudentPort.queryStudentById(currentUserId))
-            .willReturn(studentProfileNullStub)
-
-        given(querySchoolPort.querySchoolById(studentStub.schoolId))
-            .willReturn(schoolStub)
-
-        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
-            .willReturn(1)
-
-        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
-            .willReturn(1)
+        given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.MINUS, point = 1))
+            .willReturn(listOf(phraseStub))
 
         // when
         val response = studentMyPageUseCase.execute()
 
         // then
-        assertEquals(response, studentMyPageProfileUrlNullResponseStub)
+        assertThat(response).isNotNull
     }
 
     @Test
