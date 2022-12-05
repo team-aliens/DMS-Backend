@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.dto.request
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import org.hibernate.validator.constraints.Length
 import team.aliens.dms.domain.manager.dto.request.Password
 import javax.validation.constraints.Email
@@ -45,13 +44,12 @@ data class SignUpWebRequest(
     @field:Length(max = 20)
     val accountId: String,
 
-    @field:JsonFormat(shape = JsonFormat.Shape.STRING)
     @field:NotBlank
     @field:Pattern(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val password: Password,
+    val password: String,
 
     val profileImageUrl: String?
 
