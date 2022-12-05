@@ -14,9 +14,20 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentDetailsUseCaseTests {
+
+    @MockBean
+    private lateinit var securityPort: ManagerSecurityPort
+
+    @MockBean
+    private lateinit var queryManagerPort: QueryManagerPort
 
     @MockBean
     private lateinit var queryStudentPort: ManagerQueryStudentPort
@@ -29,20 +40,31 @@ class QueryStudentDetailsUseCaseTests {
     @BeforeEach
     fun setUp() {
         queryStudentDetailsUseCase = QueryStudentDetailsUseCase(
-            queryStudentPort, queryPointPort
+            securityPort, queryManagerPort, queryStudentPort, queryPointPort
         )
     }
 
-    private val id = UUID.randomUUID()
+    private val currentUserId = UUID.randomUUID()
+    private val studentId = UUID.randomUUID()
+    private val schoolId = UUID.randomUUID()
     private val bonusPoint = 11
     private val minusPoint = 23
 
+    private val managerStub by lazy {
+        Manager(
+            id = currentUserId,
+            schoolId = schoolId,
+            name = "관리자 이름",
+            profileImageUrl = "https://~~"
+        )
+    }
+
     private val studentStub by lazy {
         Student(
-            id = id,
+            id = studentId,
             roomId = UUID.randomUUID(),
             roomNumber = 216,
-            schoolId = id,
+            schoolId = schoolId,
             grade = 2,
             classRoom = 1,
             number = 20,
@@ -72,7 +94,13 @@ class QueryStudentDetailsUseCaseTests {
     @Test
     fun `학생 상세조회 성공`() {
         // given
-        given(queryStudentPort.queryStudentById(id))
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
         given(queryPointPort.queryTotalBonusPoint(studentStub.id))
@@ -85,21 +113,60 @@ class QueryStudentDetailsUseCaseTests {
             .willReturn(listOf(studentStub))
 
         // when
-        val response = queryStudentDetailsUseCase.execute(id)
+        val response = queryStudentDetailsUseCase.execute(studentId)
 
         // then
-        assertThat(response).isEqualTo(responseStub)
+        assertThat(response).isNotNull
     }
 
     @Test
-    fun `학생이 아니거나 찾을 수 없음`() {
+    fun `관리자 미존재`() {
         // given
-        given(queryStudentPort.queryStudentById(id))
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<ManagerNotFoundException> {
+            queryStudentDetailsUseCase.execute(studentId)
+        }
+    }
+
+    @Test
+    fun `학생 미존재`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        given(queryStudentPort.queryStudentById(studentId))
             .willReturn(null)
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            queryStudentDetailsUseCase.execute(id)
+            queryStudentDetailsUseCase.execute(studentId)
+        }
+    }
+
+    @Test
+    fun `학교 불일치`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        given(queryStudentPort.queryStudentById(studentId))
+            .willReturn(studentStub.copy(schoolId = UUID.randomUUID()))
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
+            queryStudentDetailsUseCase.execute(studentId)
         }
     }
 }

@@ -6,15 +6,28 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
+    private val securityPort: ManagerSecurityPort,
+    private val queryManagerPort: QueryManagerPort,
     private val queryStudentPort: ManagerQueryStudentPort,
     private val queryPointPort: ManagerQueryPointPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
+        val currentUserId = securityPort.getCurrentUserId()
+        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
+
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
+
+        if (manager.schoolId != student.schoolId) {
+            throw SchoolMismatchException
+        }
 
         val bonusPoint = queryPointPort.queryTotalBonusPoint(studentId)
         val minusPoint = queryPointPort.queryTotalMinusPoint(studentId)
@@ -22,7 +35,9 @@ class QueryStudentDetailsUseCase(
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
             schoolId = student.schoolId
-        ).map {
+        ).filter {
+            it.id != studentId
+        }.map {
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,

@@ -88,7 +88,7 @@ class PointPersistenceAdapter(
                 pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.BONUS)
             )
-            .fetchOne()!!
+            .fetchOne() ?: 0
     }
 
     override fun queryTotalMinusPoint(studentId: UUID): Int {
@@ -100,6 +100,6 @@ class PointPersistenceAdapter(
                 pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.MINUS)
             )
-            .fetchOne()!!
+            .fetchOne() ?: 0
     }
 }
