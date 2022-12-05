@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.user.dto.request
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import team.aliens.dms.domain.manager.dto.request.Password
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
@@ -8,12 +7,13 @@ import javax.validation.constraints.Pattern
 data class UpdateUserPasswordWebRequest(
 
     @field:NotBlank
-    @field:JsonFormat(shape = JsonFormat.Shape.STRING)
-    val oldPassword: Password,
+    val currentPassword: String,
 
     @field:NotBlank
-    @field:Pattern(regexp = Password.PATTERN)
-    @field:JsonFormat(shape = JsonFormat.Shape.STRING)
-    val newPassword: Password
+    @field:Pattern(
+        regexp = Password.PATTERN,
+        message = Password.MESSAGE
+    )
+    val newPassword: String
 
 )

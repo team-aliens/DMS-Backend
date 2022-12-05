@@ -63,7 +63,7 @@ class StudentWebAdapter(
             classRoom = request.classRoom,
             number = request.number,
             accountId = request.accountId,
-            password = request.password.value,
+            password = request.password,
             profileImageUrl = request.profileImageUrl
         )
 
@@ -105,7 +105,7 @@ class StudentWebAdapter(
             name = webRequest.name,
             email = webRequest.email,
             authCode = webRequest.authCode,
-            newPassword = webRequest.newPassword.value
+            newPassword = webRequest.newPassword
         )
 
         resetStudentPasswordUseCase.execute(request)

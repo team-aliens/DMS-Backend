@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.dto.request
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import team.aliens.dms.domain.manager.dto.request.Password
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -21,12 +20,11 @@ data class ResetStudentPasswordWebRequest(
     @field:NotBlank
     val authCode: String,
 
-    @field:JsonFormat(shape = JsonFormat.Shape.STRING)
     @field:NotBlank
     @field:Pattern(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val newPassword: Password
+    val newPassword: String
 
 )
