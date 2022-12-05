@@ -59,7 +59,7 @@ class StudentPersistenceAdapter(
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
 
-    private fun schoolEq(schoolId: UUID) = schoolId.run { userJpaEntity.school.id.eq(this) }
+    private fun schoolEq(schoolId: UUID) = userJpaEntity.school.id.eq(schoolId)
 
     private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
         return when (sort) {
