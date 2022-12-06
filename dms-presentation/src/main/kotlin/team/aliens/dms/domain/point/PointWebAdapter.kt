@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
-import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/points")
@@ -18,7 +18,7 @@ class PointWebAdapter(
 ) {
 
     @GetMapping
-    fun getPointHistory(@RequestParam @NotBlank type: PointRequestType): QueryPointHistoryResponse {
-        return queryPointHistoryUseCase.execute(type)
+    fun getPointHistory(@RequestParam @NotNull type: PointRequestType?): QueryPointHistoryResponse {
+        return queryPointHistoryUseCase.execute(type!!)
     }
 }

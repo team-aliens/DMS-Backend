@@ -48,24 +48,27 @@ class NoticeWebAdapter(
     }
 
     @GetMapping("/{notice-id}")
-    fun getDetails(@PathVariable("notice-id") noticeId: UUID): QueryNoticeDetailsResponse {
+    fun getDetails(@PathVariable("notice-id") @NotNull noticeId: UUID): QueryNoticeDetailsResponse {
         return queryNoticeDetailsUseCase.execute(noticeId)
     }
 
     @GetMapping
-    fun queryAllNotices(@RequestParam("order") @NotNull orderType: OrderType): QueryAllNoticesResponse {
-        return queryAllNoticesUseCase.execute(orderType.name)
+    fun queryAllNotices(@RequestParam("order") @NotNull orderType: OrderType?): QueryAllNoticesResponse {
+        return queryAllNoticesUseCase.execute(orderType!!.name)
     }
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{notice-id}")
-    fun removeNotice(@PathVariable("notice-id") noticeId: UUID) {
+    fun removeNotice(@PathVariable("notice-id") @NotNull noticeId: UUID) {
         removeNoticeUseCase.execute(noticeId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{notice-id}")
-    fun updateNotice(@PathVariable("notice-id") noticeId: UUID, @RequestBody @Valid request: UpdateNoticeWebRequest) {
+    fun updateNotice(
+        @PathVariable("notice-id") @NotNull noticeId: UUID,
+        @RequestBody @Valid request: UpdateNoticeWebRequest
+    ) {
         updateNoticeUseCase.execute(
             noticeId = noticeId,
             title = request.title,

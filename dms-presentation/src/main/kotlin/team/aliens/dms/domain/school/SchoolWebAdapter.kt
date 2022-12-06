@@ -25,6 +25,7 @@ import team.aliens.dms.domain.school.dto.response.SchoolQuestionResponse
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 @Validated
@@ -45,7 +46,7 @@ class SchoolWebAdapter(
     }
 
     @GetMapping("/question/{school-id}")
-    fun getQuestion(@PathVariable("school-id") schoolId: UUID): SchoolQuestionResponse {
+    fun getQuestion(@PathVariable("school-id") @NotNull schoolId: UUID): SchoolQuestionResponse {
         val result = querySchoolQuestionUseCase.execute(schoolId)
 
         return SchoolQuestionResponse(result)
@@ -53,7 +54,7 @@ class SchoolWebAdapter(
 
     @GetMapping("/answer/{school-id}")
     fun checkAnswer(
-        @PathVariable("school-id") schoolId: UUID,
+        @PathVariable("school-id") @NotNull schoolId: UUID,
         @RequestParam @NotBlank answer: String
     ) {
         checkSchoolAnswerUseCase.execute(

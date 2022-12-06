@@ -5,7 +5,6 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,12 +21,13 @@ import team.aliens.dms.domain.manager.usecase.QueryStudentsUseCase
 import team.aliens.dms.domain.manager.usecase.ManagerMyPageUseCase
 import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
-import team.aliens.dms.domain.manager.dto.request.GetStudentListWebRequest
 import team.aliens.dms.domain.manager.dto.request.ResetPasswordManagerWebRequest
 import team.aliens.dms.domain.manager.dto.response.FindManagerAccountIdResponse
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
+import team.aliens.dms.domain.manager.dto.Sort
 
 @Validated
 @RequestMapping("/managers")
@@ -43,7 +43,7 @@ class ManagerWebAdapter(
 
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
-        @PathVariable("school-id") schoolId: UUID,
+        @PathVariable("school-id") @NotNull schoolId: UUID,
         @RequestParam @NotBlank answer: String
     ): FindManagerAccountIdResponse {
         val result = findManagerAccountIdUseCase.execute(
@@ -68,21 +68,24 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students")
-    fun getStudents(@ModelAttribute @Valid request: GetStudentListWebRequest): QueryStudentsResponse {
+    fun getStudents(
+        @RequestParam name: String?,
+        @RequestParam @NotNull sort: Sort?
+    ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
-            name = request.name,
-            sort = request.sort!!
+            name = name,
+            sort = sort!!
         )
     }
     
     @GetMapping("/students/{student-id}")
-    fun getStudentDetails(@PathVariable("student-id") studentId: UUID): GetStudentDetailsResponse {
+    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): GetStudentDetailsResponse {
         return queryStudentDetailsUseCase.execute(studentId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/students/{student-id}")
-    fun deleteStudent(@PathVariable("student-id") studentId: UUID) {
+    fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
         removeStudentUseCase.execute(studentId)
     }
 

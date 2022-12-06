@@ -10,6 +10,7 @@ import team.aliens.dms.domain.file.dto.response.UploadFileResponse
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
+import javax.validation.constraints.NotNull
 
 @RequestMapping("/files")
 @RestController
@@ -18,7 +19,7 @@ class FileWebAdapter(
 ) {
 
     @PostMapping
-    fun uploadFile(@RequestPart file: MultipartFile): UploadFileResponse {
+    fun uploadFile(@RequestPart @NotNull file: MultipartFile): UploadFileResponse {
         val result = uploadFileUseCase.execute(
             file.let(transferFile)
         )

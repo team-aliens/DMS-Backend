@@ -3,7 +3,6 @@ package team.aliens.dms.domain.student
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,8 +25,6 @@ import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
 import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
-import team.aliens.dms.domain.student.dto.request.CheckStudentGcnWebRequest
-import team.aliens.dms.domain.student.dto.request.FindStudentAccountIdWebRequest
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
@@ -35,7 +32,9 @@ import team.aliens.dms.domain.student.dto.response.CheckStudentGcnResponse
 import team.aliens.dms.domain.student.dto.response.FindStudentAccountIdResponse
 import java.util.UUID
 import javax.validation.Valid
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/students")
@@ -71,7 +70,7 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/email/duplication")
-    fun checkDuplicatedEmail(@RequestParam @NotBlank email: String) {
+    fun checkDuplicatedEmail(@RequestParam @Email @NotBlank email: String) {
         checkDuplicatedEmailUseCase.execute(email)
     }
 
@@ -82,14 +81,17 @@ class StudentWebAdapter(
 
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
-        @PathVariable("school-id") schoolId: UUID,
-        @ModelAttribute @Valid webRequest: FindStudentAccountIdWebRequest
+        @PathVariable("school-id") @NotNull schoolId: UUID,
+        @RequestParam @NotBlank name: String,
+        @RequestParam @NotNull grade: Int,
+        @RequestParam("class_room") @NotNull classRoom: Int,
+        @RequestParam @NotNull number: Int
     ): FindStudentAccountIdResponse {
         val request = FindStudentAccountIdRequest(
-            name = webRequest.name,
-            grade = webRequest.grade,
-            classRoom = webRequest.classRoom,
-            number = webRequest.number
+            name = name,
+            grade = grade,
+            classRoom = classRoom,
+            number = number
         )
 
         val result = findStudentAccountIdUseCase.execute(schoolId, request)
@@ -112,12 +114,17 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/name")
-    fun checkGcn(@ModelAttribute @Valid webRequest: CheckStudentGcnWebRequest): CheckStudentGcnResponse {
+    fun checkGcn(
+        @RequestParam("school_id") @NotNull schoolId: UUID,
+        @RequestParam @NotNull grade: Int,
+        @RequestParam("class_room") @NotNull classRoom: Int,
+        @RequestParam @NotNull number: Int
+    ): CheckStudentGcnResponse {
         val request = CheckStudentGcnRequest(
-            schoolId = webRequest.schoolId,
-            grade = webRequest.grade,
-            classRoom = webRequest.classRoom,
-            number = webRequest.number
+            schoolId = schoolId,
+            grade = grade,
+            classRoom = classRoom,
+            number = number
         )
 
         val result = checkStudentGcnUseCase.execute(request)
@@ -127,7 +134,7 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/profile")
-    fun updateProfile(@RequestBody webRequest: UpdateStudentProfileWebRequest) {
+    fun updateProfile(@RequestBody @Valid webRequest: UpdateStudentProfileWebRequest) {
         updateStudentProfileUseCase.execute(webRequest.profileImageUrl)
     }
 
