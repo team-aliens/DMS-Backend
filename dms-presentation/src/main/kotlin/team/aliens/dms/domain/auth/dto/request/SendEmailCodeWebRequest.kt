@@ -11,6 +11,6 @@ data class SendEmailCodeWebRequest(
     val email: String,
 
     @field:NotNull
-    val type: EmailType
+    val type: EmailType?
 
 )
