@@ -69,7 +69,7 @@ class ManagerWebAdapter(
 
     @GetMapping("/students")
     fun getStudents(
-        @RequestParam name: String?,
+        @RequestParam(required = false) name: String?,
         @RequestParam @NotNull sort: Sort?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
