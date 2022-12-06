@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.usecase.QueryMealsUseCase
 import java.time.LocalDate
+import javax.validation.constraints.NotNull
 import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.validation.annotation.Validated
 
+@Validated
 @RequestMapping("/meals")
 @RestController
 class MealWebAdapter(
@@ -16,7 +19,7 @@ class MealWebAdapter(
 ) {
 
     @GetMapping("/{date}")
-    fun getMeals(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) mealDate: LocalDate): QueryMealsResponse {
-        return queryMealsUseCase.execute(mealDate)
+    fun getMeals(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull mealDate: LocalDate?): QueryMealsResponse {
+        return queryMealsUseCase.execute(mealDate!!)
     }
 }

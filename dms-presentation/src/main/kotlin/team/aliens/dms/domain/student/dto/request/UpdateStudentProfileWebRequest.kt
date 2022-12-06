@@ -5,6 +5,6 @@ import javax.validation.constraints.NotBlank
 data class UpdateStudentProfileWebRequest(
 
     @field:NotBlank
-    val profileImageUrl: String
+    val profileImageUrl: String?
 
 )

@@ -7,13 +7,13 @@ import javax.validation.constraints.Pattern
 data class UpdateUserPasswordWebRequest(
 
     @field:NotBlank
-    val currentPassword: String,
+    val currentPassword: String?,
 
     @field:NotBlank
     @field:Pattern(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val newPassword: String
+    val newPassword: String?
 
 )

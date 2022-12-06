@@ -5,9 +5,9 @@ import javax.validation.constraints.NotBlank
 data class SignInWebRequest(
 
     @field:NotBlank
-    val accountId: String,
+    val accountId: String?,
 
     @field:NotBlank
-    val password: String
+    val password: String?
 
 )
