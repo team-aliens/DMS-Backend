@@ -11,7 +11,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 import javax.validation.constraints.NotNull
+import org.springframework.validation.annotation.Validated
 
+@Validated
 @RequestMapping("/files")
 @RestController
 class FileWebAdapter(
