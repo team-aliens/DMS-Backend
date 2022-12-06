@@ -54,15 +54,15 @@ class StudentWebAdapter(
     @PostMapping("/signup")
     fun signUp(@RequestBody @Valid request: SignUpWebRequest): SignUpResponse {
         val signUpRequest = SignUpRequest(
-            schoolCode = request.schoolCode,
-            schoolAnswer = request.schoolAnswer,
-            email = request.email,
-            authCode = request.authCode,
-            grade = request.grade,
-            classRoom = request.classRoom,
-            number = request.number,
-            accountId = request.accountId,
-            password = request.password,
+            schoolCode = request.schoolCode!!,
+            schoolAnswer = request.schoolAnswer!!,
+            email = request.email!!,
+            authCode = request.authCode!!,
+            grade = request.grade!!,
+            classRoom = request.classRoom!!,
+            number = request.number!!,
+            accountId = request.accountId!!,
+            password = request.password!!,
             profileImageUrl = request.profileImageUrl
         )
 
@@ -70,31 +70,31 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/email/duplication")
-    fun checkDuplicatedEmail(@RequestParam @Email @NotBlank email: String) {
-        checkDuplicatedEmailUseCase.execute(email)
+    fun checkDuplicatedEmail(@RequestParam @Email @NotBlank email: String?) {
+        checkDuplicatedEmailUseCase.execute(email!!)
     }
 
     @GetMapping("/account-id/duplication")
-    fun checkDuplicatedAccountId(@RequestParam("account_id") @NotBlank accountId: String) {
-        checkDuplicatedAccountIdUseCase.execute(accountId)
+    fun checkDuplicatedAccountId(@RequestParam("account_id") @NotBlank accountId: String?) {
+        checkDuplicatedAccountIdUseCase.execute(accountId!!)
     }
 
     @GetMapping("/account-id/{school-id}")
     fun findAccountId(
-        @PathVariable("school-id") @NotNull schoolId: UUID,
-        @RequestParam @NotBlank name: String,
-        @RequestParam @NotNull grade: Int,
-        @RequestParam("class_room") @NotNull classRoom: Int,
-        @RequestParam @NotNull number: Int
+        @PathVariable("school-id") @NotNull schoolId: UUID?,
+        @RequestParam @NotBlank name: String?,
+        @RequestParam @NotNull grade: Int?,
+        @RequestParam("class_room") @NotNull classRoom: Int?,
+        @RequestParam @NotNull number: Int?
     ): FindStudentAccountIdResponse {
         val request = FindStudentAccountIdRequest(
-            name = name,
-            grade = grade,
-            classRoom = classRoom,
-            number = number
+            name = name!!,
+            grade = grade!!,
+            classRoom = classRoom!!,
+            number = number!!
         )
 
-        val result = findStudentAccountIdUseCase.execute(schoolId, request)
+        val result = findStudentAccountIdUseCase.execute(schoolId!!, request)
 
         return FindStudentAccountIdResponse(result)
     }
@@ -103,11 +103,11 @@ class StudentWebAdapter(
     @PatchMapping("/password/initialization")
     fun resetPassword(@RequestBody @Valid webRequest: ResetStudentPasswordWebRequest) {
         val request = ResetStudentPasswordRequest(
-            accountId = webRequest.accountId,
-            name = webRequest.name,
-            email = webRequest.email,
-            authCode = webRequest.authCode,
-            newPassword = webRequest.newPassword
+            accountId = webRequest.accountId!!,
+            name = webRequest.name!!,
+            email = webRequest.email!!,
+            authCode = webRequest.authCode!!,
+            newPassword = webRequest.newPassword!!
         )
 
         resetStudentPasswordUseCase.execute(request)
@@ -115,16 +115,16 @@ class StudentWebAdapter(
 
     @GetMapping("/name")
     fun checkGcn(
-        @RequestParam("school_id") @NotNull schoolId: UUID,
-        @RequestParam @NotNull grade: Int,
-        @RequestParam("class_room") @NotNull classRoom: Int,
-        @RequestParam @NotNull number: Int
+        @RequestParam("school_id") @NotNull schoolId: UUID?,
+        @RequestParam @NotNull grade: Int?,
+        @RequestParam("class_room") @NotNull classRoom: Int?,
+        @RequestParam @NotNull number: Int?
     ): CheckStudentGcnResponse {
         val request = CheckStudentGcnRequest(
-            schoolId = schoolId,
-            grade = grade,
-            classRoom = classRoom,
-            number = number
+            schoolId = schoolId!!,
+            grade = grade!!,
+            classRoom = classRoom!!,
+            number = number!!
         )
 
         val result = checkStudentGcnUseCase.execute(request)
@@ -135,7 +135,7 @@ class StudentWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/profile")
     fun updateProfile(@RequestBody @Valid webRequest: UpdateStudentProfileWebRequest) {
-        updateStudentProfileUseCase.execute(webRequest.profileImageUrl)
+        updateStudentProfileUseCase.execute(webRequest.profileImageUrl!!)
     }
 
     @GetMapping("/profile")

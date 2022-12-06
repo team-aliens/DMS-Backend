@@ -58,10 +58,10 @@ class ManagerWebAdapter(
     @PatchMapping("/password/initialization")
     fun resetPassword(@RequestBody @Valid webRequest: ResetPasswordManagerWebRequest) {
         val request = ResetManagerPasswordRequest(
-            accountId = webRequest.accountId,
-            email = webRequest.email,
-            authCode = webRequest.authCode,
-            newPassword = webRequest.newPassword
+            accountId = webRequest.accountId!!,
+            email = webRequest.email!!,
+            authCode = webRequest.authCode!!,
+            newPassword = webRequest.newPassword!!
         )
 
         resetManagerPasswordUseCase.execute(request)
@@ -79,14 +79,14 @@ class ManagerWebAdapter(
     }
     
     @GetMapping("/students/{student-id}")
-    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): GetStudentDetailsResponse {
-        return queryStudentDetailsUseCase.execute(studentId)
+    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID?): GetStudentDetailsResponse {
+        return queryStudentDetailsUseCase.execute(studentId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/students/{student-id}")
-    fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
-        removeStudentUseCase.execute(studentId)
+    fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID?) {
+        removeStudentUseCase.execute(studentId!!)
     }
 
     @GetMapping("/profile")

@@ -8,23 +8,23 @@ import javax.validation.constraints.Pattern
 data class ResetStudentPasswordWebRequest(
 
     @field:NotBlank
-    val accountId: String,
+    val accountId: String?,
 
     @field:NotBlank
-    val name: String,
+    val name: String?,
 
     @field:NotBlank
     @field:Email
-    val email: String,
+    val email: String?,
 
     @field:NotBlank
-    val authCode: String,
+    val authCode: String?,
 
     @field:NotBlank
     @field:Pattern(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val newPassword: String
+    val newPassword: String?
 
 )

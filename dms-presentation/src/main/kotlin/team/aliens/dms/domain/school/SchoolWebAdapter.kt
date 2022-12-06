@@ -46,28 +46,28 @@ class SchoolWebAdapter(
     }
 
     @GetMapping("/question/{school-id}")
-    fun getQuestion(@PathVariable("school-id") @NotNull schoolId: UUID): SchoolQuestionResponse {
-        val result = querySchoolQuestionUseCase.execute(schoolId)
+    fun getQuestion(@PathVariable("school-id") @NotNull schoolId: UUID?): SchoolQuestionResponse {
+        val result = querySchoolQuestionUseCase.execute(schoolId!!)
 
         return SchoolQuestionResponse(result)
     }
 
     @GetMapping("/answer/{school-id}")
     fun checkAnswer(
-        @PathVariable("school-id") @NotNull schoolId: UUID,
-        @RequestParam @NotBlank answer: String
+        @PathVariable("school-id") @NotNull schoolId: UUID?,
+        @RequestParam @NotBlank answer: String?
     ) {
         checkSchoolAnswerUseCase.execute(
-            schoolId = schoolId,
-            answer = answer
+            schoolId = schoolId!!,
+            answer = answer!!
         )
     }
 
     @GetMapping("/code")
     fun checkCode(
-        @RequestParam("school_code") @NotBlank @Size(max = 8) schoolCode: String
+        @RequestParam("school_code") @NotBlank @Size(max = 8) schoolCode: String?
     ): SchoolIdResponse {
-        val result = checkSchoolCodeUseCase.execute(schoolCode)
+        val result = checkSchoolCodeUseCase.execute(schoolCode!!)
 
         return SchoolIdResponse(result)
     }
@@ -83,8 +83,8 @@ class SchoolWebAdapter(
     @PatchMapping("/question")
     fun updateQuestion(@RequestBody @Valid webRequest: UpdateQuestionWebRequest) {
         val request = UpdateQuestionRequest(
-            question = webRequest.question,
-            answer = webRequest.answer
+            question = webRequest.question!!,
+            answer = webRequest.answer!!
         )
 
         updateQuestionUseCase.execute(request)

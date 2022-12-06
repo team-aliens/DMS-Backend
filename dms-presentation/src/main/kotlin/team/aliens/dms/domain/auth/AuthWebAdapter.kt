@@ -47,22 +47,22 @@ class AuthWebAdapter(
     fun singIn(@RequestBody @Valid request: SignInWebRequest): SignInResponse {
         return signInUseCase.execute(
             SignInRequest(
-                accountId = request.accountId,
-                password = request.password
+                accountId = request.accountId!!,
+                password = request.password!!
             )
         )
     }
 
     @GetMapping("/code")
     fun certifyEmailCode(
-        @RequestParam @Email @NotBlank email: String,
-        @RequestParam("auth_code") @Length(min = 6, max = 6) @NotBlank authCode: String,
+        @RequestParam @Email @NotBlank email: String?,
+        @RequestParam("auth_code") @Length(min = 6, max = 6) @NotBlank authCode: String?,
         @RequestParam @NotNull type: EmailType?
     ) {
         certifyEmailCodeUseCase.execute(
             CertifyEmailCodeRequest(
-                email = email,
-                authCode = authCode,
+                email = email!!,
+                authCode = authCode!!,
                 type = type!!.name
             )
         )
@@ -72,7 +72,7 @@ class AuthWebAdapter(
     fun sendEmailCode(@RequestBody @Valid request: SendEmailCodeWebRequest) {
         sendEmailCodeUseCase.execute(
             SendEmailCodeRequest(
-                email = request.email,
+                email = request.email!!,
                 type = request.type!!.name
             )
         )
@@ -80,13 +80,13 @@ class AuthWebAdapter(
 
     @GetMapping("/email")
     fun certifyEmail(
-        @RequestParam("account_id") @NotBlank accountId: String,
-        @RequestParam @Email @NotBlank email: String
+        @RequestParam("account_id") @NotBlank accountId: String?,
+        @RequestParam @Email @NotBlank email: String?
     ) {
         certifyEmailUseCase.execute(
             CertifyEmailRequest(
-                accountId = accountId,
-                email = email
+                accountId = accountId!!,
+                email = email!!
             )
         )
     }

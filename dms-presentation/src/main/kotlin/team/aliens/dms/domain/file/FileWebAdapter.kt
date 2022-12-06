@@ -21,9 +21,9 @@ class FileWebAdapter(
 ) {
 
     @PostMapping
-    fun uploadFile(@RequestPart @NotNull file: MultipartFile): UploadFileResponse {
+    fun uploadFile(@RequestPart @NotNull file: MultipartFile?): UploadFileResponse {
         val result = uploadFileUseCase.execute(
-            file.let(transferFile)
+            file!!.let(transferFile)
         )
 
         return UploadFileResponse(result)
