@@ -16,7 +16,7 @@ class ManagerMapper(
         return entity?.let {
             Manager(
                 id = it.id,
-                schoolId = it.user!!.school!!.id,
+                schoolId = it.user!!.school!!.id!!,
                 name = it.name,
                 profileImageUrl = it.profileImageUrl
             )

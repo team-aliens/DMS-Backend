@@ -14,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "tbl_room")
 class RoomJpaEntity(
 
-    override val id: UUID,
+    override val id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
@@ -23,4 +23,4 @@ class RoomJpaEntity(
     @Column(columnDefinition = "INT UNSIGNED", nullable = false, unique = true)
     val number: Int
 
-) : BaseUUIDEntity()
+) : BaseUUIDEntity(id)

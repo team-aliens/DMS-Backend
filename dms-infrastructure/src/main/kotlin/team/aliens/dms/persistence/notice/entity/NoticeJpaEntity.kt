@@ -15,7 +15,7 @@ import javax.persistence.Table
 @Table(name = "tbl_notice")
 class NoticeJpaEntity(
 
-    override val id: UUID,
+    override val id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)
@@ -32,4 +32,4 @@ class NoticeJpaEntity(
     @Column(columnDefinition = "DATETIME", nullable = false)
     val updatedAt: LocalDateTime = createdAt
 
-) : BaseEntity()
+) : BaseEntity(id)

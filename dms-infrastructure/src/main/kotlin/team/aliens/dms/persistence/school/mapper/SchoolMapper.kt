@@ -11,7 +11,7 @@ class SchoolMapper : GenericMapper<School, SchoolJpaEntity> {
     override fun toDomain(entity: SchoolJpaEntity?): School? {
         return entity?.let {
             School(
-                id = it.id,
+                id = it.id!!,
                 name = it.name,
                 code = it.code,
                 question = it.question,

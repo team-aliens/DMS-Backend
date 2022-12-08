@@ -18,7 +18,7 @@ import javax.persistence.Table
 @Table(name = "tbl_user")
 class UserJpaEntity(
 
-    override val id: UUID,
+    override val id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
@@ -42,4 +42,4 @@ class UserJpaEntity(
     @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?
 
-) : BaseEntity()
+) : BaseEntity(id)

@@ -15,7 +15,7 @@ class NoticeMapper(
     override fun toDomain(entity: NoticeJpaEntity?): Notice? {
         return entity?.let {
             Notice(
-                id = it.id,
+                id = it.id!!,
                 managerId = it.manager!!.id,
                 title = it.title,
                 content = it.content,

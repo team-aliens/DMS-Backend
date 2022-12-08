@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint
 )
 class SchoolJpaEntity(
 
-    override val id: UUID,
+    override val id: UUID?,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String,
@@ -39,4 +39,4 @@ class SchoolJpaEntity(
     @Column(columnDefinition = "DATE")
     val contractEndedAt: LocalDate?
 
-) : BaseUUIDEntity()
+) : BaseUUIDEntity(id)
