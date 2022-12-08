@@ -1,6 +1,7 @@
 package team.aliens.dms.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.nio.charset.StandardCharsets
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.common.error.DmsException
@@ -37,7 +38,7 @@ class ExceptionFilter(
 
     private fun errorToJson(errorProperty: ErrorProperty, response: HttpServletResponse) {
         response.status = errorProperty.status()
-        response.characterEncoding = "UTF-8"
+        response.characterEncoding = StandardCharsets.UTF_8.name()
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorProperty)))
     }
