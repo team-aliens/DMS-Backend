@@ -27,6 +27,8 @@ import team.aliens.dms.domain.notice.dto.request.PostNoticeWebRequest
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
+import team.aliens.dms.domain.notice.dto.response.CreateNoticeResponse
+import team.aliens.dms.domain.notice.dto.response.UpdateNoticeResponse
 
 @Validated
 @RequestMapping("/notices")
@@ -56,31 +58,35 @@ class NoticeWebAdapter(
     fun queryAllNotices(@RequestParam("order") @NotNull orderType: OrderType?): QueryAllNoticesResponse {
         return queryAllNoticesUseCase.execute(orderType!!.name)
     }
-    
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{notice-id}")
     fun removeNotice(@PathVariable("notice-id") @NotNull noticeId: UUID?) {
         removeNoticeUseCase.execute(noticeId!!)
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{notice-id}")
     fun updateNotice(
         @PathVariable("notice-id") @NotNull noticeId: UUID?,
         @RequestBody @Valid request: UpdateNoticeWebRequest
-    ) {
-        updateNoticeUseCase.execute(
-            noticeId = noticeId!!,
-            title = request.title!!,
-            content = request.content!!)
+    ): UpdateNoticeResponse {
+        return UpdateNoticeResponse(
+            updateNoticeUseCase.execute(
+                noticeId = noticeId!!,
+                title = request.title!!,
+                content = request.content!!
+            )
+        )
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun postNotice(@RequestBody @Valid request: PostNoticeWebRequest) {
-        createNoticeUseCase.execute(
-            title = request.title!!,
-            content = request.content!!
+    fun createNotice(@RequestBody @Valid request: PostNoticeWebRequest): CreateNoticeResponse {
+        return CreateNoticeResponse(
+            createNoticeUseCase.execute(
+                title = request.title!!,
+                content = request.content!!
+            )
         )
     }
 }
