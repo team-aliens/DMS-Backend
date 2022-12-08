@@ -2,7 +2,6 @@ package team.aliens.dms.domain.auth
 
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.auth.dto.request.CertifyEmailCodeWebRequest
-import team.aliens.dms.domain.auth.dto.request.CertifyEmailWebRequest
 import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
 import team.aliens.dms.domain.auth.dto.response.CheckAccountIdExistenceResponse
@@ -28,7 +25,11 @@ import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
 import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.SignInUseCase
 import javax.validation.Valid
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
+import org.hibernate.validator.constraints.Length
+import team.aliens.dms.domain.auth.dto.request.EmailType
 
 @Validated
 @RequestMapping("/auth")
@@ -46,19 +47,23 @@ class AuthWebAdapter(
     fun singIn(@RequestBody @Valid request: SignInWebRequest): SignInResponse {
         return signInUseCase.execute(
             SignInRequest(
-                accountId = request.accountId,
-                password = request.password
+                accountId = request.accountId!!,
+                password = request.password!!
             )
         )
     }
 
     @GetMapping("/code")
-    fun certifyEmailCode(@ModelAttribute @Valid request: CertifyEmailCodeWebRequest) {
+    fun certifyEmailCode(
+        @RequestParam @Email @NotBlank email: String?,
+        @RequestParam("auth_code") @Length(min = 6, max = 6) @NotBlank authCode: String?,
+        @RequestParam @NotNull type: EmailType?
+    ) {
         certifyEmailCodeUseCase.execute(
             CertifyEmailCodeRequest(
-                email = request.email,
-                authCode = request.authCode,
-                type = request.type.toString()
+                email = email!!,
+                authCode = authCode!!,
+                type = type!!.name
             )
         )
     }
@@ -67,24 +72,27 @@ class AuthWebAdapter(
     fun sendEmailCode(@RequestBody @Valid request: SendEmailCodeWebRequest) {
         sendEmailCodeUseCase.execute(
             SendEmailCodeRequest(
-                email = request.email,
-                type = request.type.toString()
+                email = request.email!!,
+                type = request.type!!.name
             )
         )
     }
 
     @GetMapping("/email")
-    fun certifyEmail(@ModelAttribute @Valid request: CertifyEmailWebRequest) {
+    fun certifyEmail(
+        @RequestParam("account_id") @NotBlank accountId: String?,
+        @RequestParam @Email @NotBlank email: String?
+    ) {
         certifyEmailUseCase.execute(
             CertifyEmailRequest(
-                accountId = request.accountId,
-                email = request.email
+                accountId = accountId!!,
+                email = email!!
             )
         )
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") refreshToken: String): ReissueResponse {
+    fun reissueToken(@RequestHeader("refresh-token") @NotBlank refreshToken: String): ReissueResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 

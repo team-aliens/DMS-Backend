@@ -8,9 +8,9 @@ data class SendEmailCodeWebRequest(
 
     @field:Email
     @field:NotBlank
-    val email: String,
+    val email: String?,
 
     @field:NotNull
-    val type: EmailType
+    val type: EmailType?
 
 )

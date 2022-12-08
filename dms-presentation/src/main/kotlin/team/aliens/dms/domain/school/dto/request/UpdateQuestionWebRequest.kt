@@ -5,9 +5,9 @@ import javax.validation.constraints.NotBlank
 data class UpdateQuestionWebRequest(
 
     @field:NotBlank
-    val question: String,
+    val question: String?,
 
     @field:NotBlank
-    val answer: String
+    val answer: String?
 
 )

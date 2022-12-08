@@ -7,10 +7,10 @@ data class UpdateNoticeWebRequest(
 
     @field:NotBlank
     @field:Length(max = 100)
-    val title: String,
+    val title: String?,
 
     @field:NotBlank
     @field:Length(max = 1000)
-    val content: String
+    val content: String?
 
 )

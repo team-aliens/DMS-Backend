@@ -27,7 +27,7 @@ data class ErrorResponse(
 
             return ValidationErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
-                fieldError = listOf(errorMap)
+                fieldError = errorMap
             )
         }
 
@@ -48,7 +48,7 @@ data class ErrorResponse(
 
             return ValidationErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
-                fieldError = listOf(errorMap)
+                fieldError = errorMap
             )
         }
     }
@@ -56,5 +56,5 @@ data class ErrorResponse(
 
 data class ValidationErrorResponse(
     val status: Int,
-    val fieldError: List<Map<String, String?>>
+    val fieldError: Map<String, String?>
 )
