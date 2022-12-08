@@ -17,8 +17,8 @@ class PointHistoryMapper(
     override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
         return entity?.let {
             PointHistory(
-                id = it.id,
-                pointOptionId = it.pointOption!!.id,
+                id = it.id!!,
+                pointOptionId = it.pointOption!!.id!!,
                 studentId = it.student!!.id,
                 createdAt = it.createdAt
             )

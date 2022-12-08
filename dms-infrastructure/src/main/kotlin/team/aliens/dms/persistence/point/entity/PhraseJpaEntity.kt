@@ -25,4 +25,4 @@ class PhraseJpaEntity(
     @Column(columnDefinition = "INT", nullable = false)
     val standard: Int
 
-) : BaseUUIDEntity()
+) : BaseUUIDEntity(id)

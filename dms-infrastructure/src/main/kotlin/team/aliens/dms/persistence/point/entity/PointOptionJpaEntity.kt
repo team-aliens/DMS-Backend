@@ -17,7 +17,7 @@ import javax.persistence.Table
 @Table(name = "tbl_point_option")
 class PointOptionJpaEntity(
 
-    override val id: UUID,
+    override val id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
@@ -33,4 +33,4 @@ class PointOptionJpaEntity(
     @Column(columnDefinition = "VARCHAR(5)", nullable = false)
     val type: PointType
 
-) : BaseUUIDEntity()
+) : BaseUUIDEntity(id)

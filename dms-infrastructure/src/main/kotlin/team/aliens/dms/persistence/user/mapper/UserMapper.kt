@@ -15,7 +15,7 @@ class UserMapper(
     override fun toDomain(entity: UserJpaEntity?): User? {
         return entity?.let {
             User(
-                id = it.id,
+                id = it.id!!,
                 schoolId = it.school!!.id,
                 accountId = it.accountId,
                 password = it.password,

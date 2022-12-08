@@ -15,7 +15,7 @@ class PointOptionMapper(
     override fun toDomain(entity: PointOptionJpaEntity?): PointOption? {
         return entity?.let {
             PointOption(
-                id = it.id,
+                id = it.id!!,
                 schoolId = it.school!!.id,
                 name = it.name,
                 score = it.score,
