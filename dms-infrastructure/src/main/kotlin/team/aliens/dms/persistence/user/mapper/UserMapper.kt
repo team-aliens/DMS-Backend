@@ -16,7 +16,7 @@ class UserMapper(
         return entity?.let {
             User(
                 id = it.id!!,
-                schoolId = it.school!!.id,
+                schoolId = it.school!!.id!!,
                 accountId = it.accountId,
                 password = it.password,
                 email = it.email,

@@ -15,9 +15,9 @@ class RoomMapper(
     override fun toDomain(entity: RoomJpaEntity?): Room? {
         return entity?.let {
             Room(
-                id = it.id,
+                id = it.id!!,
                 number = it.number,
-                schoolId = it.school!!.id
+                schoolId = it.school!!.id!!
             )
         }
     }
