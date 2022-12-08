@@ -14,7 +14,7 @@ class UpdateNoticeUseCase(
     private val securityPort: NoticeSecurityPort
 ) {
 
-    fun execute(noticeId: UUID, title: String, content: String) {
+    fun execute(noticeId: UUID, title: String, content: String): UUID {
         val currentManagerId = securityPort.getCurrentUserId()
         val notice = queryNoticePort.queryNoticeByIdAndManagerId(noticeId, currentManagerId) ?: throw NoticeNotFoundException
 
@@ -24,5 +24,7 @@ class UpdateNoticeUseCase(
                 content = content
             )
         )
+
+        return notice.id
     }
 }

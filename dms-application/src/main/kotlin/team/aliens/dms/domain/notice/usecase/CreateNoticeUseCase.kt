@@ -5,6 +5,7 @@ import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import java.time.LocalDateTime
+import java.util.UUID
 
 @UseCase
 class CreateNoticeUseCase(
@@ -12,7 +13,7 @@ class CreateNoticeUseCase(
     private val commentNoticePort: CommandNoticePort
 ) {
 
-    fun execute(title: String, content: String) {
+    fun execute(title: String, content: String): UUID {
         val currentManagerId = securityPort.getCurrentUserId()
 
         val notice = Notice(
@@ -23,6 +24,8 @@ class CreateNoticeUseCase(
             updatedAt = LocalDateTime.now()
         )
 
-        commentNoticePort.saveNotice(notice)
+        val noticeId = commentNoticePort.saveNotice(notice).id
+
+        return noticeId
     }
 }
