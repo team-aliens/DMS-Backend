@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.notice.usecase
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -62,10 +62,11 @@ class UpdateNoticeUseCaseTest {
         given(queryNoticePort.queryNoticeByIdAndManagerId(noticeId, managerId))
             .willReturn(noticeStub)
 
-        //when & then
-        assertDoesNotThrow {
-            updateNoticeUseCase.execute(noticeId, title, content)
-        }
+        //when
+        val response = updateNoticeUseCase.execute(noticeId, title, content)
+
+        // then
+        assertThat(response).isEqualTo(noticeId)
     }
 
     @Test
