@@ -23,9 +23,8 @@ class CreateNoticeUseCase(
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
         )
+        val savedNotice = commentNoticePort.saveNotice(notice)
 
-        val noticeId = commentNoticePort.saveNotice(notice).id
-
-        return noticeId
+        return savedNotice.id
     }
 }
