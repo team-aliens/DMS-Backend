@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
@@ -22,6 +21,10 @@ import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
+import team.aliens.dms.domain.room.exception.RoomNotFoundException
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 /**
  *
@@ -38,6 +41,8 @@ class SignUpUseCase(
     private val querySchoolPort: StudentQuerySchoolPort,
     private val queryUserPort: StudentQueryUserPort,
     private val queryAuthCodePort: StudentQueryAuthCodePort,
+    private val queryVerifiedStudentPort: StudentQueryVerifiedStudentPort,
+    private val queryRoomPort: StudentQueryRoomPort,
     private val securityPort: StudentSecurityPort,
     private val jwtPort: StudentJwtPort
 ) {
@@ -74,7 +79,21 @@ class SignUpUseCase(
             throw AuthCodeMismatchException
         }
 
+        // student 에 필드로 뒀던거 도메인 서비스로 빼는게 좋을거같아요
+
+        fun processNumber() = if (number < 10) "0${number}" else number.toString()
+
+        val gcn = "${grade}${classRoom}${processNumber()}"
+
         // TODO 학번으로 이름, 호실 조회
+        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolId(
+            gcn = gcn, schoolId = school.id
+        ) ?: throw VerifiedStudentNotFoundException
+
+        val room = queryRoomPort.queryRoomBySchoolIdAndNumber(
+            schoolId = school.id,
+            number = verifiedStudent.roomNumber
+        ) ?: throw RoomNotFoundException
 
         /**
          * 아이디 중복 검사
@@ -94,13 +113,13 @@ class SignUpUseCase(
 
         val student = Student(
             id = user.id,
-            roomId = UUID(0, 0), // TODO 학번으로 조회한 호실
-            roomNumber = 0, // TODO 학번으로 조회한 호실
+            roomId = room.id,
+            roomNumber = room.number,
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
             number = number,
-            name = "", // TODO 이름,
+            name = verifiedStudent.name,
             profileImageUrl = profileImageUrl
         )
         commandStudentPort.saveStudent(student)
