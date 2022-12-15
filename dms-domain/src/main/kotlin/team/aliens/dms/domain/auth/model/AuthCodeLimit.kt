@@ -33,17 +33,17 @@ data class AuthCodeLimit(
         const val MAX_ATTEMPT_COUNT = 5
         const val EXPIRED = 1800
         private const val VERIFIED_EXPIRED = 2700
+    }
 
-        fun certified(email: String, type: EmailType): AuthCodeLimit {
-            return AuthCodeLimit(
-                id = UUID.randomUUID(),
-                email = email,
-                type = type,
-                attemptCount = MAX_ATTEMPT_COUNT,
-                isVerified = true,
-                expirationTime = VERIFIED_EXPIRED
-            )
-        }
+    fun certified(): AuthCodeLimit {
+        return this.copy(
+            id = id,
+            email = email,
+            type = type,
+            attemptCount = MAX_ATTEMPT_COUNT,
+            isVerified = true,
+            expirationTime = VERIFIED_EXPIRED
+        )
     }
 
     fun increaseCount(): AuthCodeLimit {
