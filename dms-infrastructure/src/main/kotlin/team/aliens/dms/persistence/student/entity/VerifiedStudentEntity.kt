@@ -1,6 +1,5 @@
 package team.aliens.dms.persistence.student.entity
 
-import com.fasterxml.uuid.Generators
 import java.util.UUID
 import javax.validation.constraints.NotNull
 import org.springframework.data.annotation.Id
@@ -10,7 +9,7 @@ import org.springframework.data.redis.core.RedisHash
 class VerifiedStudentEntity(
 
     @Id
-    val id: UUID = Generators.timeBasedGenerator().generate(),
+    val id: UUID,
 
     @field:NotNull
     val schoolName: String,
