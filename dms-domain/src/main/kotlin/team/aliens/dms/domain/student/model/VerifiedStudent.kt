@@ -14,10 +14,6 @@ data class VerifiedStudent(
 
     val roomNumber: Int,
 
-    val grade: Int,
-
-    val classRoom: Int,
-
-    val number: Int
+    val gcn: String
 
 )
