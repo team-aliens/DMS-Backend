@@ -1,40 +1,32 @@
 package team.aliens.dms.persistence.student.mapper
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
-import team.aliens.dms.persistence.student.entity.VerifiedStudentJpaEntity
-import team.aliens.dms.persistence.student.entity.VerifiedStudentJpaEntityId
+import team.aliens.dms.persistence.student.entity.VerifiedStudentEntity
 
 @Component
-class VerifiedStudentMapper(
-    private val schoolRepository: SchoolJpaRepository
-) : GenericMapper<VerifiedStudent, VerifiedStudentJpaEntity> {
+class VerifiedStudentMapper : GenericMapper<VerifiedStudent, VerifiedStudentEntity> {
 
-    override fun toDomain(entity: VerifiedStudentJpaEntity?): VerifiedStudent? {
+    override fun toDomain(entity: VerifiedStudentEntity?): VerifiedStudent? {
         return entity?.let {
             VerifiedStudent(
-                gcn = entity.id.gcn,
-                schoolId = entity.id.schoolId,
+                id = entity.id,
+                schoolName = entity.schoolName,
                 name = entity.name,
-                roomNumber = entity.roomNumber
+                roomNumber = entity.roomNumber,
+                gcn = entity.gcn
             )
         }
     }
 
-    override fun toEntity(domain: VerifiedStudent): VerifiedStudentJpaEntity {
-        val school = schoolRepository.findByIdOrNull(domain.schoolId)
-
-        return VerifiedStudentJpaEntity(
-            id = VerifiedStudentJpaEntityId(
-                gcn = domain.gcn,
-                schoolId = domain.schoolId
-            ),
-            school = school,
+    override fun toEntity(domain: VerifiedStudent): VerifiedStudentEntity {
+        return VerifiedStudentEntity(
+            id = domain.id,
+            schoolName = domain.schoolName,
             name = domain.name,
-            roomNumber = domain.roomNumber
+            roomNumber = domain.roomNumber,
+            gcn = domain.gcn
         )
     }
 }
