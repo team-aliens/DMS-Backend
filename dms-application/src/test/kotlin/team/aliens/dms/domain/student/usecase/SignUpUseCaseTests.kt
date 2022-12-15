@@ -35,6 +35,13 @@ import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
+import org.junit.jupiter.api.assertDoesNotThrow
+import team.aliens.dms.domain.room.exception.RoomNotFoundException
+import team.aliens.dms.domain.room.model.Room
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 @ExtendWith(SpringExtension::class)
 class SignUpUseCaseTests {
@@ -55,6 +62,12 @@ class SignUpUseCaseTests {
     private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
+    private lateinit var queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
+
+    @MockBean
+    private lateinit var queryRoomPort: StudentQueryRoomPort
+
+    @MockBean
     private lateinit var securityPort: StudentSecurityPort
 
     @MockBean
@@ -70,6 +83,8 @@ class SignUpUseCaseTests {
             querySchoolPort,
             queryUserPort,
             queryAuthCodePort,
+            queryVerifiedStudentPort,
+            queryRoomPort,
             securityPort,
             jwtPort
         )
@@ -107,6 +122,7 @@ class SignUpUseCaseTests {
 
     private val userStub by lazy {
         User(
+            id = UUID.randomUUID(),
             schoolId = schoolStub.id,
             accountId = accountId,
             password = "encoded password",
@@ -114,6 +130,23 @@ class SignUpUseCaseTests {
             authority = Authority.STUDENT,
             createdAt = null,
             deletedAt = null
+        )
+    }
+
+    private val verifiedStudentStub by lazy {
+        VerifiedStudent(
+            schoolName = "대덕소마고",
+            name = "이정윤",
+            roomNumber = 318,
+            gcn = gcnStub
+        )
+    }
+
+    private val roomStub by lazy {
+        Room(
+            id = UUID.randomUUID(),
+            number = verifiedStudentStub.roomNumber,
+            schoolId = schoolStub.id
         )
     }
 
@@ -191,6 +224,8 @@ class SignUpUseCaseTests {
         )
     }
 
+    private val gcnStub = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}"
+
     private val signUpResponseStub by lazy {
         SignUpResponse(
             accessToken = tokenResponseStub.accessToken,
@@ -200,7 +235,7 @@ class SignUpUseCaseTests {
             features = SignUpResponse.Features(
                 mealService = true,
                 noticeService = true,
-                pointService = true,
+                pointService = true
             )
         )
     }
@@ -219,6 +254,12 @@ class SignUpUseCaseTests {
 
         given(queryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)
+
+        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
+            .willReturn(verifiedStudentStub)
+
+        given(queryRoomPort.queryRoomBySchoolIdAndNumber(schoolStub.id, verifiedStudentStub.roomNumber))
+            .willReturn(roomStub)
 
         given(securityPort.encodePassword(requestStub.password))
             .willReturn(userStub.password)
@@ -322,6 +363,51 @@ class SignUpUseCaseTests {
     }
 
     @Test
+    fun `검증된 학생 미존재`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
+        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<VerifiedStudentNotFoundException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `호실 미존재`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
+        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
+            .willReturn(verifiedStudentStub)
+
+        given(queryRoomPort.queryRoomBySchoolIdAndNumber(schoolStub.id, verifiedStudentStub.roomNumber))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<RoomNotFoundException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
     fun `아이디가 이미 존재함`() {
         // given
         given(querySchoolPort.querySchoolByCode(code))
@@ -332,6 +418,12 @@ class SignUpUseCaseTests {
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
+
+        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
+            .willReturn(verifiedStudentStub)
+
+        given(queryRoomPort.queryRoomBySchoolIdAndNumber(schoolStub.id, verifiedStudentStub.roomNumber))
+            .willReturn(roomStub)
 
         given(queryUserPort.existsUserByAccountId(accountId))
             .willReturn(true)
@@ -353,6 +445,12 @@ class SignUpUseCaseTests {
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
+
+        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
+            .willReturn(verifiedStudentStub)
+
+        given(queryRoomPort.queryRoomBySchoolIdAndNumber(schoolStub.id, verifiedStudentStub.roomNumber))
+            .willReturn(roomStub)
 
         given(queryUserPort.existsUserByAccountId(accountId))
             .willReturn(false)

@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
@@ -30,7 +31,7 @@ import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
  *
  * 학생이 회원가입을 하는 SignUpUseCase
  *
- * @author kimbeomjin
+ * @author kimbeomjin, leejeongyoon
  * @date 2022/10/22
  * @version 1.0.0
  **/
@@ -79,17 +80,19 @@ class SignUpUseCase(
             throw AuthCodeMismatchException
         }
 
-        // student 에 필드로 뒀던거 도메인 서비스로 빼는게 좋을거같아요
+        val gcn = "${grade}${classRoom}${Student.processNumber(number)}"
 
-        fun processNumber() = if (number < 10) "0${number}" else number.toString()
-
-        val gcn = "${grade}${classRoom}${processNumber()}"
-
-        // TODO 학번으로 이름, 호실 조회
-        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolId(
-            gcn = gcn, schoolId = school.id
+        /**
+         * 검증된 학생 조회
+         **/
+        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+            gcn = gcn,
+            schoolName = school.name
         ) ?: throw VerifiedStudentNotFoundException
 
+        /**
+         * 호실 조회
+         **/
         val room = queryRoomPort.queryRoomBySchoolIdAndNumber(
             schoolId = school.id,
             number = verifiedStudent.roomNumber
@@ -155,7 +158,7 @@ class SignUpUseCase(
         password = securityPort.encodePassword(password),
         email = email,
         authority = Authority.STUDENT,
-        createdAt = null,
+        createdAt = LocalDateTime.now(),
         deletedAt = null
     )
 }
