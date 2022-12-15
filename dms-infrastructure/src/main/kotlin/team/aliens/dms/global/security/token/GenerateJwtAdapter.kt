@@ -8,7 +8,7 @@ import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.global.security.SecurityProperties
-import team.aliens.dms.persistence.auth.model.RefreshTokenEntity
+import team.aliens.dms.persistence.auth.entity.RefreshTokenEntity
 import team.aliens.dms.persistence.auth.repository.RefreshTokenRepository
 import java.time.LocalDateTime
 import java.util.Date
