@@ -13,6 +13,7 @@ enum class AuthErrorCode(
 
     REFRESH_TOKEN_NOT_FOUND(404, "Refresh Token Not Found"),
     AUTH_CODE_NOT_FOUND(404, "Auth Code Not Found"),
+    AUTH_CODE_LIMIT_NOT_FOUND(404, "Auth Code Limit Not Found"),
 
     EMAIL_ALREADY_CERTIFIED(409, "Email Already Certified"),
 
