@@ -1,23 +1,25 @@
-package team.aliens.dms.persistence.auth.model
+package team.aliens.dms.persistence.auth.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
-import team.aliens.dms.domain.auth.model.Authority
-import java.util.UUID
+import org.springframework.data.redis.core.index.Indexed
+import team.aliens.dms.domain.auth.model.EmailType
 import javax.validation.constraints.NotNull
 
-@RedisHash("tbl_refresh_token")
-data class RefreshTokenEntity(
+@RedisHash("tbl_authcode")
+data class AuthCodeEntity(
 
     @Id
-    val token: String,
+    val code: String,
 
+    @Indexed
     @field:NotNull
-    val userId: UUID,
+    val email: String,
 
+    @Indexed
     @field:NotNull
-    val authority: Authority,
+    val type: EmailType,
 
     @field:NotNull
     @TimeToLive

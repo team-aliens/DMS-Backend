@@ -3,7 +3,7 @@ package team.aliens.dms.persistence.auth.mapper
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.auth.model.RefreshTokenEntity
+import team.aliens.dms.persistence.auth.entity.RefreshTokenEntity
 
 @Component
 class RefreshTokenMapper : GenericMapper<RefreshToken, RefreshTokenEntity> {

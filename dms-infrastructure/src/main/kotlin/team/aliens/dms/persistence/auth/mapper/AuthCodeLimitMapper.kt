@@ -3,7 +3,7 @@ package team.aliens.dms.persistence.auth.mapper
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.auth.model.AuthCodeLimitEntity
+import team.aliens.dms.persistence.auth.entity.AuthCodeLimitEntity
 
 @Component
 class AuthCodeLimitMapper : GenericMapper<AuthCodeLimit, AuthCodeLimitEntity> {

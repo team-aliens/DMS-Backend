@@ -1,25 +1,29 @@
-package team.aliens.dms.persistence.auth.model
+package team.aliens.dms.persistence.auth.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
-import org.springframework.data.redis.core.index.Indexed
 import team.aliens.dms.domain.auth.model.EmailType
+import java.util.UUID
 import javax.validation.constraints.NotNull
 
-@RedisHash("tbl_authcode")
-data class AuthCodeEntity(
+@RedisHash("tbl_authcode_limit")
+data class AuthCodeLimitEntity(
 
     @Id
-    val code: String,
+    val id: UUID,
 
-    @Indexed
     @field:NotNull
     val email: String,
 
-    @Indexed
     @field:NotNull
     val type: EmailType,
+
+    @field:NotNull
+    val attemptCount: Int,
+
+    @field:NotNull
+    val isVerified: Boolean,
 
     @field:NotNull
     @TimeToLive
