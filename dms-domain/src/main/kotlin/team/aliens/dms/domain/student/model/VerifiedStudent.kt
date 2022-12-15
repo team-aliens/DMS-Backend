@@ -6,12 +6,18 @@ import java.util.UUID
 @Aggregate
 data class VerifiedStudent(
 
-    val gcn: String,
+    val id: UUID,
 
-    val schoolId: UUID,
+    val schoolName: String,
 
     val name: String,
 
-    val roomNumber: Int
+    val roomNumber: Int,
+
+    val grade: Int,
+
+    val classRoom: Int,
+
+    val number: Int
 
 )
