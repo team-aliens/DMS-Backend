@@ -7,7 +7,7 @@ import team.aliens.dms.domain.student.model.Sex
 @Aggregate
 data class StudyRoom(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val schoolId: UUID,
 
