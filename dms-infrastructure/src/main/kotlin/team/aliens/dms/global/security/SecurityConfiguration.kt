@@ -96,6 +96,9 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PATCH, "/templates").permitAll()
             .antMatchers(HttpMethod.DELETE, "/templates").permitAll()
 
+            // /study-rooms
+            .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
+
             .anyRequest().denyAll()
 
 

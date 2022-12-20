@@ -8,6 +8,7 @@ import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.studyroom.spi.StudyRoomAvailableTimeQueryUserPort
 
 interface UserPort :
     QueryUserPort,
@@ -19,5 +20,6 @@ interface UserPort :
     AuthQueryUserPort,
     NoticeQueryUserPort,
     SchoolQueryUserPort,
-    PointQueryUserPort {
+    PointQueryUserPort,
+    StudyRoomAvailableTimeQueryUserPort {
 }
