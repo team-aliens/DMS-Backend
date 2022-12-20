@@ -28,6 +28,7 @@ spring:
   redis:
     port: ${REDIS_PORT:6379}
     host: ${REDIS_HOST:localhost}
+    password: ${REDIS_PASSWORD:1234}
 
   thymeleaf:
     check-template-location: true
