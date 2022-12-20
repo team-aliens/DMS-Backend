@@ -4,6 +4,7 @@ import java.util.UUID
 import javax.validation.constraints.NotNull
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import org.springframework.data.redis.core.index.Indexed
 import team.aliens.dms.domain.student.model.Sex
 import javax.persistence.Column
 import javax.persistence.EnumType
@@ -15,6 +16,7 @@ class VerifiedStudentEntity(
     @Id
     val id: UUID,
 
+    @field:Indexed
     @field:NotNull
     val schoolName: String,
 
@@ -24,6 +26,7 @@ class VerifiedStudentEntity(
     @field:NotNull
     val roomNumber: Int,
 
+    @field:Indexed
     @field:NotNull
     val gcn: String,
 
