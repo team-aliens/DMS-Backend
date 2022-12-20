@@ -1,10 +1,13 @@
 package team.aliens.dms.persistence.student.entity
 
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -49,6 +52,10 @@ class StudentJpaEntity(
     val name: String,
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
-    val profileImageUrl: String
+    val profileImageUrl: String,
+
+    @Column(columnDefinition = "VARCHAR(6)", nullable = false)
+    @Enumerated(EnumType.STRING)
+    val sex: Sex
 
 )

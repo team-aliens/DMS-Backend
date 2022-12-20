@@ -123,7 +123,8 @@ class SignUpUseCase(
             classRoom = classRoom,
             number = number,
             name = verifiedStudent.name,
-            profileImageUrl = profileImageUrl
+            profileImageUrl = profileImageUrl,
+            sex = verifiedStudent.sex
         )
         commandStudentPort.saveStudent(student)
 

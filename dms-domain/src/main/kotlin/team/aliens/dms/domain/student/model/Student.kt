@@ -22,7 +22,9 @@ data class Student(
 
     val name: String,
 
-    val profileImageUrl: String? = PROFILE_IMAGE
+    val profileImageUrl: String? = PROFILE_IMAGE,
+
+    val sex: Sex
 
 ) {
 

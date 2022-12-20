@@ -4,6 +4,10 @@ import java.util.UUID
 import javax.validation.constraints.NotNull
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
+import team.aliens.dms.domain.student.model.Sex
+import javax.persistence.Column
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 
 @RedisHash("tbl_verified_student")
 class VerifiedStudentEntity(
@@ -21,6 +25,10 @@ class VerifiedStudentEntity(
     val roomNumber: Int,
 
     @field:NotNull
-    val gcn: String
+    val gcn: String,
+
+    @Column(columnDefinition = "VARCHAR(6)", nullable = false)
+    @Enumerated(EnumType.STRING)
+    val sex: Sex
 
 )

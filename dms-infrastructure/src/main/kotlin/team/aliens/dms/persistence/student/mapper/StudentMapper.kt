@@ -25,7 +25,8 @@ class StudentMapper(
                 classRoom = it.classRoom,
                 number = it.number,
                 name = it.name,
-                profileImageUrl = it.profileImageUrl
+                profileImageUrl = it.profileImageUrl,
+                sex = it.sex
             )
         }
     }
@@ -42,7 +43,8 @@ class StudentMapper(
             classRoom = domain.classRoom,
             number = domain.number,
             name = domain.name,
-            profileImageUrl = domain.profileImageUrl!!
+            profileImageUrl = domain.profileImageUrl!!,
+            sex = domain.sex
         )
     }
 }
