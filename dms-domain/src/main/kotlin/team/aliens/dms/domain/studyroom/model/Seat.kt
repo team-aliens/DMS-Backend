@@ -8,15 +8,15 @@ data class Seat(
 
     val studyRoomId: UUID,
 
-    val studentId: UUID,
+    val studentId: UUID?,
 
-    val typeId: UUID,
+    val typeId: UUID?,
 
     val widthLocation: Int,
 
     val heightLocation: Int,
 
-    val number: Int,
+    val number: Int?,
 
     val status: SeatStatus
 

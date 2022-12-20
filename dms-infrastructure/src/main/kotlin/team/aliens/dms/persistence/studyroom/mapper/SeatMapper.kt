@@ -21,11 +21,11 @@ class SeatMapper(
             Seat(
                 id = it.id!!,
                 studyRoomId = it.studyRoom!!.id!!,
-                studentId = it.student!!.id,
-                typeId = it.type!!.id!!,
+                studentId = it.student?.id,
+                typeId = it.type?.id,
                 widthLocation = it.widthLocation,
                 heightLocation = it.heightLocation,
-                number = it.number!!,
+                number = it.number,
                 status = it.status
             )
         }
@@ -33,8 +33,14 @@ class SeatMapper(
 
     override fun toEntity(domain: Seat): SeatJpaEntity {
         val studyRoom = studyRoomRepository.findByIdOrNull(domain.studyRoomId)
-        val student = studentRepository.findByIdOrNull(domain.studentId)
-        val seatType = seatTypeRepository.findByIdOrNull(domain.typeId)
+
+        val student = domain.studentId?.let {
+            studentRepository.findByIdOrNull(it)
+        }
+
+        val seatType = domain.typeId?.let {
+            seatTypeRepository.findByIdOrNull(it)
+        }
 
         return SeatJpaEntity(
             id = domain.id,
