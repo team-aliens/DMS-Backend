@@ -7,4 +7,6 @@ interface QuerySeatTypePort {
 
     fun queryAllSeatTypeBySchoolId(schoolId: UUID): List<SeatType>
 
+    fun existsSeatTypeByName(name: String): Boolean
+
 }
