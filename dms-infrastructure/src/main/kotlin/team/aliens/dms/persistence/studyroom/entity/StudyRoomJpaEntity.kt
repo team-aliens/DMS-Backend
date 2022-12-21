@@ -55,7 +55,6 @@ class StudyRoomJpaEntity(
     val availableGrade: Int,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
-    @Transient
     val eastDescription: String,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
