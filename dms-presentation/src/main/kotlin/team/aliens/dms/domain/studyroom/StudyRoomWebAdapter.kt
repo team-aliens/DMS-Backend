@@ -12,6 +12,8 @@ import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import javax.validation.Valid
+import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
 @RequestMapping("/study-rooms")
 @RestController
