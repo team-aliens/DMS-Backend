@@ -16,6 +16,7 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentsUseCaseTests {
@@ -64,7 +65,8 @@ class QueryStudentsUseCaseTests {
             classRoom = 1,
             number = 20,
             name = name,
-            profileImageUrl = "profile image url"
+            profileImageUrl = "profile image url",
+            sex = Sex.FEMALE
         )
     }
 

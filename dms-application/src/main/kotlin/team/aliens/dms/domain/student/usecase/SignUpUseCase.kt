@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
@@ -22,12 +22,16 @@ import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
+import team.aliens.dms.domain.room.exception.RoomNotFoundException
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 /**
  *
  * 학생이 회원가입을 하는 SignUpUseCase
  *
- * @author kimbeomjin
+ * @author kimbeomjin, leejeongyoon
  * @date 2022/10/22
  * @version 1.0.0
  **/
@@ -38,6 +42,8 @@ class SignUpUseCase(
     private val querySchoolPort: StudentQuerySchoolPort,
     private val queryUserPort: StudentQueryUserPort,
     private val queryAuthCodePort: StudentQueryAuthCodePort,
+    private val queryVerifiedStudentPort: StudentQueryVerifiedStudentPort,
+    private val queryRoomPort: StudentQueryRoomPort,
     private val securityPort: StudentSecurityPort,
     private val jwtPort: StudentJwtPort
 ) {
@@ -74,7 +80,23 @@ class SignUpUseCase(
             throw AuthCodeMismatchException
         }
 
-        // TODO 학번으로 이름, 호실 조회
+        val gcn = "${grade}${classRoom}${Student.processNumber(number)}"
+
+        /**
+         * 검증된 학생 조회
+         **/
+        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+            gcn = gcn,
+            schoolName = school.name
+        ) ?: throw VerifiedStudentNotFoundException
+
+        /**
+         * 호실 조회
+         **/
+        val room = queryRoomPort.queryRoomBySchoolIdAndNumber(
+            schoolId = school.id,
+            number = verifiedStudent.roomNumber
+        ) ?: throw RoomNotFoundException
 
         /**
          * 아이디 중복 검사
@@ -94,14 +116,15 @@ class SignUpUseCase(
 
         val student = Student(
             id = user.id,
-            roomId = UUID(0, 0), // TODO 학번으로 조회한 호실
-            roomNumber = 0, // TODO 학번으로 조회한 호실
+            roomId = room.id,
+            roomNumber = room.number,
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
             number = number,
-            name = "", // TODO 이름,
-            profileImageUrl = profileImageUrl
+            name = verifiedStudent.name,
+            profileImageUrl = profileImageUrl,
+            sex = verifiedStudent.sex
         )
         commandStudentPort.saveStudent(student)
 
@@ -136,7 +159,7 @@ class SignUpUseCase(
         password = securityPort.encodePassword(password),
         email = email,
         authority = Authority.STUDENT,
-        createdAt = null,
+        createdAt = LocalDateTime.now(),
         deletedAt = null
     )
 }
