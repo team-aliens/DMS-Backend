@@ -13,7 +13,7 @@ class SeatTypePersistenceAdapter(
 ) : SeatTypePort {
 
     override fun queryAllSeatTypeBySchoolId(schoolId: UUID) = seatTypeRepository
-        .findBySchoolId(schoolId).map {
+        .findAllBySchoolId(schoolId).map {
             seatTypeMapper.toDomain(it)!!
         }
 }
