@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.studyroom
+package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
