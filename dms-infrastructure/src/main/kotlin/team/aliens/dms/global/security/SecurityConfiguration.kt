@@ -98,6 +98,7 @@ class SecurityConfiguration(
 
             // /study-rooms
             .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.PUT, "/study-rooms/available-time").hasAuthority(MANAGER.name)
 
             .anyRequest().denyAll()
 
