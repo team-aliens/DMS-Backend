@@ -12,6 +12,9 @@ import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import javax.validation.Valid
+import org.springframework.web.bind.annotation.PostMapping
+import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
+import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
@@ -20,7 +23,8 @@ import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 class StudyRoomWebAdapter(
     private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase,
     private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase,
-    private val querySeatTypesUseCase: QuerySeatTypesUseCase
+    private val querySeatTypesUseCase: QuerySeatTypesUseCase,
+    private val createSeatTypeUseCase: CreateSeatTypeUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -40,5 +44,14 @@ class StudyRoomWebAdapter(
     @GetMapping("/types")
     fun getSeatTypes(): QuerySeatTypesResponse {
         return querySeatTypesUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/types")
+    fun createSeatType(@RequestBody @Valid request: CreateSeatTypeWebRequest) {
+        return createSeatTypeUseCase.execute(
+            name = request.name!!,
+            color = request.color!!
+        )
     }
 }
