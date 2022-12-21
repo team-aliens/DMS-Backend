@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.student.entity.VerifiedStudentEntity
 
 @Repository
-interface VerifiedStudentJpaRepository : CrudRepository<VerifiedStudentEntity, UUID> {
+interface VerifiedStudentRepository : CrudRepository<VerifiedStudentEntity, UUID> {
+
+    fun findByGcnAndSchoolName(gcn: String, schoolName: String): VerifiedStudentEntity?
+
 }

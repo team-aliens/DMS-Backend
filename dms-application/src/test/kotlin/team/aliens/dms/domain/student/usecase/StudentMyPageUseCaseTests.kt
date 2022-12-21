@@ -21,6 +21,7 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
+import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
 class StudentMyPageUseCaseTests {
@@ -62,7 +63,8 @@ class StudentMyPageUseCaseTests {
             classRoom = 1,
             number = 1,
             name = "이름",
-            profileImageUrl = "https://~"
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
         )
     }
 

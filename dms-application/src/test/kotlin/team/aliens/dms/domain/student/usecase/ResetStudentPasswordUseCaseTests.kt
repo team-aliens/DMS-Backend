@@ -16,6 +16,7 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -92,7 +93,8 @@ class ResetStudentPasswordUseCaseTests {
             classRoom = 1,
             number = 1,
             name = name,
-            profileImageUrl = "https://~"
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
         )
     }
 

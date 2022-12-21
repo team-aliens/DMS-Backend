@@ -12,6 +12,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
@@ -68,7 +69,8 @@ class CheckStudentGcnUseCaseTests {
             classRoom = 2,
             number = 3,
             name = "이름",
-            profileImageUrl = "https://~"
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
         )
     }
 

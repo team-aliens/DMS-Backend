@@ -12,6 +12,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -59,7 +60,8 @@ class FindStudentAccountIdUseCaseTests {
             classRoom = requestStub.classRoom,
             number = requestStub.number,
             name = "이정윤",
-            profileImageUrl = "https://~"
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
         )
     }
 

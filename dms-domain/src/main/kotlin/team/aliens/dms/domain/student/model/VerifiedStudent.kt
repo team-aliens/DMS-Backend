@@ -14,6 +14,8 @@ data class VerifiedStudent(
 
     val roomNumber: Int,
 
-    val gcn: String
+    val gcn: String,
+
+    val sex: Sex
 
 )

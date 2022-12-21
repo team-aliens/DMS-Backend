@@ -22,15 +22,17 @@ data class Student(
 
     val name: String,
 
-    val profileImageUrl: String? = PROFILE_IMAGE
+    val profileImageUrl: String? = PROFILE_IMAGE,
+
+    val sex: Sex
 
 ) {
 
-    val gcn: String = "${this.grade}${this.classRoom}${processNumber()}"
-
-    private fun processNumber() = if (number < 10) "0${number}" else number.toString()
+    val gcn: String = "${this.grade}${this.classRoom}${processNumber(number)}"
 
     companion object {
         const val PROFILE_IMAGE = "a" // TODO 기본 프로필 이미지 넣기
+
+        fun processNumber(number: Int) = if (number < 10) "0${number}" else number.toString()
     }
 }
