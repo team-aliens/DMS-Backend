@@ -21,7 +21,7 @@ class SeatPersistenceAdapter(
         return jpaQueryFactory.selectFrom(seatTypeJpaEntity)
             .join(userJpaEntity).on(userJpaEntity.id.eq(userId))
             .join(seatJpaEntity).on(seatTypeJpaEntity.id.eq(seatJpaEntity.type.id))
-            .join(seatJpaEntity.studyRoom.school, schoolJpaEntity)
+            .join(schoolJpaEntity).on(seatJpaEntity.studyRoom.school.id.eq(schoolJpaEntity.id))
             .fetch()
             .map {
                 seatTypeMapper.toDomain(it)!!
