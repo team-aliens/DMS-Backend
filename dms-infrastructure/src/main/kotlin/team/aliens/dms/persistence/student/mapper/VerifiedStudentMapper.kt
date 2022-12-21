@@ -15,7 +15,8 @@ class VerifiedStudentMapper : GenericMapper<VerifiedStudent, VerifiedStudentEnti
                 schoolName = entity.schoolName,
                 name = entity.name,
                 roomNumber = entity.roomNumber,
-                gcn = entity.gcn
+                gcn = entity.gcn,
+                sex = entity.sex
             )
         }
     }
@@ -26,7 +27,8 @@ class VerifiedStudentMapper : GenericMapper<VerifiedStudent, VerifiedStudentEnti
             schoolName = domain.schoolName,
             name = domain.name,
             roomNumber = domain.roomNumber,
-            gcn = domain.gcn
+            gcn = domain.gcn,
+            sex = domain.sex
         )
     }
 }

@@ -15,6 +15,7 @@ import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.meal.spi.QueryMealPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
 import java.time.YearMonth
@@ -58,7 +59,8 @@ class QueryMealsUseCaseTests {
             classRoom = 3,
             number = 10,
             name = "이름",
-            profileImageUrl = "https://~"
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
         )
     }
 
