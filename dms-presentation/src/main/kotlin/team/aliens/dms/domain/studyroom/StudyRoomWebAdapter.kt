@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
-import team.aliens.dms.domain.studyroom.dto.QueryStudyRoomAvailableTimeResponse
+import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryStudyRoomAvailableTimeUseCase
@@ -17,14 +17,14 @@ import javax.validation.Valid
 @RequestMapping("/study-rooms")
 @RestController
 class StudyRoomWebAdapter(
-    private val queryStudyRoomAvailableTimeUseCase: QueryStudyRoomAvailableTimeUseCase,
+    private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase,
     private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase,
     private val querySeatTypesUseCase: QuerySeatTypesUseCase
 ) {
 
     @GetMapping("/available-time")
-    fun getAvailableTime(): QueryStudyRoomAvailableTimeResponse {
-        return queryStudyRoomAvailableTimeUseCase.execute()
+    fun getAvailableTime(): QueryAvailableTimeResponse {
+        return queryAvailableTimeUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

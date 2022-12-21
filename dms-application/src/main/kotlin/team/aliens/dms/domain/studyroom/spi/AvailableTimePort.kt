@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.studyroom.spi
 
-interface StudyRoomAvailableTimePort :
-    QueryStudyRoomAvailableTimePort,
+interface AvailableTimePort :
+    QueryAvailableTimePort,
     CommandAvailableTimePort {
 }

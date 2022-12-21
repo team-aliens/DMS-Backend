@@ -14,7 +14,7 @@ import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 
 @Entity
 @Table(name = "tbl_study_room_available_time")
-class StudyRoomAvailableTimeJpaEntity(
+class AvailableTimeJpaEntity(
 
     @Id
     val schoolId: UUID,

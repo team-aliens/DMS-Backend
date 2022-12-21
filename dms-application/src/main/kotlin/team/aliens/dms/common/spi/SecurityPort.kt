@@ -7,8 +7,8 @@ import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.SeatTypeSecurityPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomAvailableTimeSecurityPort
 import team.aliens.dms.domain.user.spi.UserSecurityPort
 
 interface SecurityPort :
@@ -20,6 +20,6 @@ interface SecurityPort :
     NoticeSecurityPort,
     SchoolSecurityPort,
     PointSecurityPort,
-    StudyRoomAvailableTimeSecurityPort,
+    StudyRoomSecurityPort,
     SeatTypeSecurityPort {
 }

@@ -5,7 +5,7 @@ import java.util.UUID
 import team.aliens.dms.common.annotation.Aggregate
 
 @Aggregate
-data class StudyRoomAvailableTime(
+data class AvailableTime(
 
     val schoolId: UUID,
 
