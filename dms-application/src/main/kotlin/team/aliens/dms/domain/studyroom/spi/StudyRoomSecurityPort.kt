@@ -2,7 +2,7 @@ package team.aliens.dms.domain.studyroom.spi
 
 import java.util.UUID
 
-interface StudyRoomAvailableTimeSecurityPort {
+interface StudyRoomSecurityPort {
 
     fun getCurrentUserId(): UUID
 
