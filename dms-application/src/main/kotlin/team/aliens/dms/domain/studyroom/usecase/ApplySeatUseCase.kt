@@ -2,6 +2,7 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.spi.CommandSeatPort
@@ -20,16 +21,18 @@ class ApplySeatUseCase(
 
         val seat = querySeatPort.querySeatById(seatId) ?: throw SeatNotFoundException
 
-        val saveSeat = seat.run {
+        val saveSeat = seat.studentId?.run {
+            throw SeatAlreadyAppliedException
+        } ?: run {
             Seat(
-                id = id,
-                studyRoomId = studyRoomId,
+                id = seat.id,
+                studyRoomId = seat.studyRoomId,
                 studentId = currentUserId,
-                typeId = typeId,
-                widthLocation = widthLocation,
-                heightLocation = heightLocation,
-                number = number,
-                status = status
+                typeId = seat.typeId,
+                widthLocation = seat.widthLocation,
+                heightLocation = seat.heightLocation,
+                number = seat.number,
+                status = seat.status
             )
         }
         commandSeatPort.saveSeat(saveSeat)
