@@ -1,8 +1,14 @@
 package team.aliens.dms.domain.studyroom.dto
 
 import java.time.LocalTime
+import javax.validation.constraints.NotNull
 
 data class UpdateAvailableTimeWebRequest(
-    val startAt: LocalTime,
-    val endAt: LocalTime
+
+    @field:NotNull
+    val startAt: LocalTime?,
+
+    @field:NotNull
+    val endAt: LocalTime?
+
 )

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.studyroom.dto.QueryStudyRoomAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
+import javax.validation.Valid
 
 @RequestMapping("/study-rooms")
 @RestController
@@ -24,10 +25,10 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/available-time")
-    fun updateAvailableTime(@RequestBody request: UpdateAvailableTimeWebRequest) {
+    fun updateAvailableTime(@RequestBody @Valid request: UpdateAvailableTimeWebRequest) {
         updateAvailableTimeUseCase.execute(
-            startAt = request.startAt,
-            endAt = request.endAt
+            startAt = request.startAt!!,
+            endAt = request.endAt!!
         )
     }
 }
