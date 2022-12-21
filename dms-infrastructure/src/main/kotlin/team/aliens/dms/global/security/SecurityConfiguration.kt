@@ -33,6 +33,9 @@ class SecurityConfiguration(
         http
             .authorizeRequests()
 
+            // healthcheck
+            .antMatchers(HttpMethod.GET, "/").permitAll()
+
             // /auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
