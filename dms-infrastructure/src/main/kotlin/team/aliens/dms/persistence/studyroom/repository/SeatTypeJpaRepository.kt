@@ -7,4 +7,7 @@ import team.aliens.dms.persistence.studyroom.entity.SeatTypeJpaEntity
 
 @Repository
 interface SeatTypeJpaRepository : CrudRepository<SeatTypeJpaEntity, UUID> {
+
+    fun findAllBySchoolId(schoolId: UUID): List<SeatTypeJpaEntity>
+
 }
