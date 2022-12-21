@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom
 
+import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -12,19 +13,25 @@ import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import javax.validation.Valid
+import javax.validation.constraints.NotNull
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
+import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
+@Validated
 @RequestMapping("/study-rooms")
 @RestController
 class StudyRoomWebAdapter(
     private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase,
     private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase,
     private val querySeatTypesUseCase: QuerySeatTypesUseCase,
-    private val createSeatTypeUseCase: CreateSeatTypeUseCase
+    private val createSeatTypeUseCase: CreateSeatTypeUseCase,
+    private val applySeatUseCase: ApplySeatUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -53,5 +60,11 @@ class StudyRoomWebAdapter(
             name = request.name!!,
             color = request.color!!
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/seats/{seat-id}")
+    fun applySeat(@PathVariable("seat-id") @NotNull seatId: UUID?) {
+        return applySeatUseCase.execute(seatId!!)
     }
 }
