@@ -7,15 +7,20 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
 import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
+import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import javax.validation.Valid
+import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
 @RequestMapping("/study-rooms")
 @RestController
 class StudyRoomWebAdapter(
     private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase,
-    private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase
+    private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase,
+    private val querySeatTypesUseCase: QuerySeatTypesUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -30,5 +35,10 @@ class StudyRoomWebAdapter(
             startAt = request.startAt!!,
             endAt = request.endAt!!
         )
+    }
+
+    @GetMapping("/types")
+    fun getSeatTypes(): QuerySeatTypesResponse {
+        return querySeatTypesUseCase.execute()
     }
 }

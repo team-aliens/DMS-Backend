@@ -33,6 +33,9 @@ class SecurityConfiguration(
         http
             .authorizeRequests()
 
+            // healthcheck
+            .antMatchers(HttpMethod.GET, "/").permitAll()
+
             // /auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
@@ -99,6 +102,7 @@ class SecurityConfiguration(
             // /study-rooms
             .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/study-rooms/available-time").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/study-rooms/types").hasAnyAuthority(STUDENT.name, MANAGER.name)
 
             .anyRequest().denyAll()
 

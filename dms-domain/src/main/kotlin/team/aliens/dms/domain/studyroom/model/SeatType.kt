@@ -6,6 +6,8 @@ data class SeatType(
 
     val id: UUID = UUID(0, 0),
 
+    val schoolId: UUID,
+
     val name: String,
 
     val color: String
