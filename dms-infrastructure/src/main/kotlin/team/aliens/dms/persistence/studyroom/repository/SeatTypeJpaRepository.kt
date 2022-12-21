@@ -10,4 +10,6 @@ interface SeatTypeJpaRepository : CrudRepository<SeatTypeJpaEntity, UUID> {
 
     fun findAllBySchoolId(schoolId: UUID): List<SeatTypeJpaEntity>
 
+    fun existsByName(name: String): Boolean
+
 }
