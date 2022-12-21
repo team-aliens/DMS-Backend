@@ -15,7 +15,7 @@ class QuerySeatTypesUseCase(
     fun execute(): QuerySeatTypesResponse {
         val currentUserId = securityPort.getCurrentUserId()
 
-        val seatTypes = querySeatTypePort.querySeatTypeByUserId(currentUserId).map {
+        val seatTypes = querySeatTypePort.queryAllSeatTypeByUserId(currentUserId).map {
             Element(
                 id = it.id,
                 name = it.name,

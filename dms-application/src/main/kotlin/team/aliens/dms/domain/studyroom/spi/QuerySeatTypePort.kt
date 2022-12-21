@@ -5,6 +5,6 @@ import team.aliens.dms.domain.studyroom.model.SeatType
 
 interface QuerySeatTypePort {
 
-    fun querySeatTypeByUserId(userId: UUID): List<SeatType>
+    fun queryAllSeatTypeByUserId(userId: UUID): List<SeatType>
 
 }
