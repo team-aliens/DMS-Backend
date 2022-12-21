@@ -12,7 +12,7 @@ import team.aliens.dms.persistence.studyroom.mapper.SeatTypeMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 
 @Component
-class SeatTypePersistenceAdapter(
+class SeatPersistenceAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
     private val seatTypeMapper: SeatTypeMapper
 ) : SeatTypePort {
