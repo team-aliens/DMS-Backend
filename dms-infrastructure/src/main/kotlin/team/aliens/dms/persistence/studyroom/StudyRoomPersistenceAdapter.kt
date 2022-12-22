@@ -35,8 +35,4 @@ class StudyRoomPersistenceAdapter(
             seatMapper.toEntity(seat)
         )
     )!!
-
-    override fun deleteSeat(seat: Seat) = seatRepository.delete(
-        seatMapper.toEntity(seat)
-    )
 }

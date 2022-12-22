@@ -6,6 +6,4 @@ interface CommandStudyRoomPort {
 
     fun saveSeat(seat: Seat): Seat
 
-    fun deleteSeat(seat: Seat)
-
 }
