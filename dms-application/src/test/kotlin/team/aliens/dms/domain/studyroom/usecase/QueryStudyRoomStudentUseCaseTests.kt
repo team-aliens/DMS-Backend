@@ -10,9 +10,11 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.QuerySeatTypePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -46,6 +48,7 @@ class QueryStudyRoomStudentUseCaseTests {
     private val studyRoomId = UUID.randomUUID()
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
+    private val studentId = UUID.randomUUID()
 
     private val studyRoomStub by lazy {
         StudyRoom(
@@ -66,7 +69,7 @@ class QueryStudyRoomStudentUseCaseTests {
         )
     }
 
-    private val seatStub by lazy {
+    private val seatNullStub by lazy {
         Seat(
             id = UUID.randomUUID(),
             studyRoomId = studyRoomId,
@@ -75,8 +78,71 @@ class QueryStudyRoomStudentUseCaseTests {
             widthLocation = 1,
             heightLocation = 1,
             number = null,
+            status = SeatStatus.EMPTY
+        )
+    }
+
+    private val seatStub by lazy {
+        Seat(
+            id = UUID.randomUUID(),
+            studyRoomId = studyRoomId,
+            studentId = studentId,
+            typeId = seatTypeStub.id,
+            widthLocation = 1,
+            heightLocation = 1,
+            number = 1,
             status = SeatStatus.IN_USE
         )
+    }
+
+    private val seatTypeStub by lazy {
+        SeatType(
+            id = UUID.randomUUID(),
+            schoolId = schoolId,
+            name = "이름",
+            color = "색깔"
+        )
+    }
+
+    private val studentStub by lazy {
+        Student(
+            id = studentId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 1,
+            schoolId = schoolId,
+            grade = 1,
+            classRoom = 1,
+            number = 1,
+            name = "이름",
+            profileImageUrl = "http:/~~",
+            sex = Sex.MALE
+        )
+    }
+
+    @Test
+    fun `자습실 조회 성공 NULL`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub)
+
+        given(queryStudyRoomPort.countSeatByStudyRoomId(studyRoomId))
+            .willReturn(1)
+
+        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+            .willReturn(listOf(seatNullStub))
+
+        given(querySeatTypePort.querySeatTypeId(seatNullStub.typeId))
+            .willReturn(null)
+
+        given(queryStudentPort.queryStudentByIdOrNull(seatNullStub.studentId))
+            .willReturn(null)
+
+        assertDoesNotThrow {
+            queryStudyRoomStudentUseCase.execute(studyRoomId)
+        }
     }
 
     @Test
@@ -94,11 +160,11 @@ class QueryStudyRoomStudentUseCaseTests {
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
             .willReturn(listOf(seatStub))
 
-        given(querySeatTypePort.querySeatTypeId(seatStub.typeId))
-            .willReturn(null)
+        given(querySeatTypePort.querySeatTypeId(seatNullStub.typeId))
+            .willReturn(seatTypeStub)
 
-        given(queryStudentPort.queryStudentByIdOrNull(seatStub.studentId))
-            .willReturn(null)
+        given(queryStudentPort.queryStudentByIdOrNull(seatNullStub.studentId))
+            .willReturn(studentStub)
 
         assertDoesNotThrow {
             queryStudyRoomStudentUseCase.execute(studyRoomId)
