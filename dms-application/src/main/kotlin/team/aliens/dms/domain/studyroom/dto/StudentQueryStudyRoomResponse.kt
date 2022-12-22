@@ -5,6 +5,8 @@ import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 
 data class StudentQueryStudyRoomResponse(
+    val floor: Int,
+    val name: String,
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,
     val availableSex: Sex,

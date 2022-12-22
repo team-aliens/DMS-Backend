@@ -31,6 +31,8 @@ class StudentQueryStudyRoomUseCase(
 
         return studyRoom.run {
             StudentQueryStudyRoomResponse(
+                floor = floor,
+                name = name,
                 totalAvailableSeat = seatCount,
                 inUseHeadcount = inUseHeadcount!!,
                 availableSex = availableSex,
