@@ -48,8 +48,8 @@ class StudyRoomPersistenceAdapter(
         .map {
             SeatElement(
                 id = it.id!!,
-                widthSize = it.widthLocation,
-                heightSize = it.heightLocation,
+                widthLocation = it.widthLocation,
+                heightLocation = it.heightLocation,
                 number = it.number,
                 type = it.type?.run {
                     TypeElement(

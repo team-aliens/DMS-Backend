@@ -60,8 +60,8 @@ class StudentQueryStudyRoomUseCaseTests {
     private val seatResponseStub by lazy {
         StudentQueryStudyRoomResponse.SeatElement(
             id = UUID.randomUUID(),
-            widthSize = 1,
-            heightSize = 1,
+            widthLocation = 1,
+            heightLocation = 1,
             number = 1,
             type = StudentQueryStudyRoomResponse.SeatElement.TypeElement(
                 id = UUID.randomUUID(),
@@ -80,8 +80,8 @@ class StudentQueryStudyRoomUseCaseTests {
     private val seatResponseStudentIdNullStub by lazy {
         StudentQueryStudyRoomResponse.SeatElement(
             id = UUID.randomUUID(),
-            widthSize = 1,
-            heightSize = 1,
+            widthLocation = 1,
+            heightLocation = 1,
             number = 1,
             type = StudentQueryStudyRoomResponse.SeatElement.TypeElement(
                 id = UUID.randomUUID(),

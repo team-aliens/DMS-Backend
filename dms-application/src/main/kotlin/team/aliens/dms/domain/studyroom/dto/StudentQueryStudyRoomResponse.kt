@@ -20,8 +20,8 @@ data class StudentQueryStudyRoomResponse(
 
     data class SeatElement(
         val id: UUID,
-        val widthSize: Int,
-        val heightSize: Int,
+        val widthLocation: Int,
+        val heightLocation: Int,
         val number: Int?,
         val type: TypeElement?,
         val status: SeatStatus,
