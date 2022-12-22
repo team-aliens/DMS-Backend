@@ -7,7 +7,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 
 @UseCase
-class DeleteSeatUseCase(
+class UnApplySeatUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
@@ -17,6 +17,8 @@ class DeleteSeatUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val seat = queryStudyRoomPort.querySeatByStudentId(currentUserId) ?: throw SeatNotFoundException
 
-        commandStudyRoomPort.deleteSeat(seat)
+        commandStudyRoomPort.saveSeat(
+            seat.copy(studentId = null)
+        )
     }
 }
