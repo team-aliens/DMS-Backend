@@ -10,4 +10,6 @@ interface QueryStudyRoomPort {
 
     fun querySeatById(seatId: UUID): Seat?
 
+    fun querySeatByStudentId(studentId: UUID): Seat?
+
 }
