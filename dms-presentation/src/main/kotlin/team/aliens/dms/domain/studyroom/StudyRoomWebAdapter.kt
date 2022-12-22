@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
-import team.aliens.dms.domain.studyroom.usecase.DeleteSeatUseCase
+import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
@@ -34,7 +34,7 @@ class StudyRoomWebAdapter(
     private val querySeatTypesUseCase: QuerySeatTypesUseCase,
     private val createSeatTypeUseCase: CreateSeatTypeUseCase,
     private val applySeatUseCase: ApplySeatUseCase,
-    private val deleteSeatUseCase: DeleteSeatUseCase
+    private val unApplySeatUseCase: UnApplySeatUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -73,7 +73,7 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun deleteSeat() {
-        deleteSeatUseCase.execute()
+    fun unApplySeat() {
+        unApplySeatUseCase.execute()
     }
 }
