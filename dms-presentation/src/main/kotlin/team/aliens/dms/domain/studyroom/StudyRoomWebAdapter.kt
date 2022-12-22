@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
+import team.aliens.dms.domain.studyroom.dto.QueryStudyRoomStudentResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.QueryStudyRoomStudentUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
 @Validated
@@ -34,7 +36,8 @@ class StudyRoomWebAdapter(
     private val querySeatTypesUseCase: QuerySeatTypesUseCase,
     private val createSeatTypeUseCase: CreateSeatTypeUseCase,
     private val applySeatUseCase: ApplySeatUseCase,
-    private val unApplySeatUseCase: UnApplySeatUseCase
+    private val unApplySeatUseCase: UnApplySeatUseCase,
+    private val queryStudyRoomStudentUseCase: QueryStudyRoomStudentUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -75,5 +78,10 @@ class StudyRoomWebAdapter(
     @DeleteMapping("/seats")
     fun unApplySeat() {
         unApplySeatUseCase.execute()
+    }
+
+    @GetMapping("/{study-room-id}/students")
+    fun getStudyRoomStudent(@PathVariable("study-room-id") @NotNull studyRoomId: UUID): QueryStudyRoomStudentResponse {
+        return queryStudyRoomStudentUseCase.execute(studyRoomId)
     }
 }
