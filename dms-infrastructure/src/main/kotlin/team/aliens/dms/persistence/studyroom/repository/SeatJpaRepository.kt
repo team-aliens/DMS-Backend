@@ -10,4 +10,8 @@ interface SeatJpaRepository : CrudRepository<SeatJpaEntity, UUID> {
 
     fun findByStudentId(studentId: UUID): SeatJpaEntity?
 
+    fun countByStudyRoomId(studyRoomId: UUID): Int
+
+    fun findAllByStudyRoomId(studyRoomId: UUID): List<SeatJpaEntity>
+
 }
