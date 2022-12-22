@@ -4,8 +4,10 @@ import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
+import team.aliens.dms.domain.studyroom.exception.SeatNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -31,11 +33,18 @@ class ApplySeatUseCase(
             throw SchoolMismatchException
         }
 
+        if (seat.status != SeatStatus.AVAILABLE) {
+            throw SeatNotAppliedException
+        }
+
         val saveSeat = seat.studentId?.run {
             throw SeatAlreadyAppliedException
         } ?: run {
             seat.copy(studentId = currentUserId)
         }
+        commandStudyRoomPort.saveStudyRoom(
+            studyRoom.copy(inUseHeadcount = studyRoom.inUseHeadcount?.plus(1))
+        )
         commandStudyRoomPort.saveSeat(saveSeat)
     }
 }
