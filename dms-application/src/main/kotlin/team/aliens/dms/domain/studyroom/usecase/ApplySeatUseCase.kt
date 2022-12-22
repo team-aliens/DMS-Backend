@@ -37,16 +37,7 @@ class ApplySeatUseCase(
         val saveSeat = seat.studentId?.run {
             throw SeatAlreadyAppliedException
         } ?: run {
-            Seat(
-                id = seat.id,
-                studyRoomId = seat.studyRoomId,
-                studentId = currentUserId,
-                typeId = seat.typeId,
-                widthLocation = seat.widthLocation,
-                heightLocation = seat.heightLocation,
-                number = seat.number,
-                status = seat.status
-            )
+            seat.copy(studentId = currentUserId)
         }
         commandSeatPort.saveSeat(saveSeat)
     }
