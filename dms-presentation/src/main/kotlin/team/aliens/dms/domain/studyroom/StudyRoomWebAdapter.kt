@@ -15,11 +15,13 @@ import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
+import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
@@ -31,7 +33,8 @@ class StudyRoomWebAdapter(
     private val updateAvailableTimeUseCase: UpdateAvailableTimeUseCase,
     private val querySeatTypesUseCase: QuerySeatTypesUseCase,
     private val createSeatTypeUseCase: CreateSeatTypeUseCase,
-    private val applySeatUseCase: ApplySeatUseCase
+    private val applySeatUseCase: ApplySeatUseCase,
+    private val unApplySeatUseCase: UnApplySeatUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -66,5 +69,11 @@ class StudyRoomWebAdapter(
     @PutMapping("/seats/{seat-id}")
     fun applySeat(@PathVariable("seat-id") @NotNull seatId: UUID?) {
         return applySeatUseCase.execute(seatId!!)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/seats")
+    fun unApplySeat() {
+        unApplySeatUseCase.execute()
     }
 }

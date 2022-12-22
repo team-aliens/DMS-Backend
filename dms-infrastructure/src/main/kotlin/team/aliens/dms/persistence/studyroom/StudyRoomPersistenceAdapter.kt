@@ -26,6 +26,10 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByIdOrNull(seatId)
     )
 
+    override fun querySeatByStudentId(studentId: UUID) = seatMapper.toDomain(
+        seatRepository.findByStudentId(studentId)
+    )
+
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
             seatMapper.toEntity(seat)
