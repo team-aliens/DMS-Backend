@@ -1,10 +1,9 @@
 package team.aliens.dms.domain.studyroom.spi
 
-import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.Seat
 
-interface QuerySeatPort {
+interface CommandStudyRoomPort {
 
-    fun querySeatById(seatId: UUID): Seat?
+    fun saveSeat(seat: Seat): Seat
 
 }
