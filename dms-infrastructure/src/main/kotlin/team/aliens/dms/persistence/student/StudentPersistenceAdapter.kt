@@ -30,15 +30,15 @@ class StudentPersistenceAdapter(
         studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
     )
 
+    override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
+        studentRepository.findByIdOrNull(studentId)
+    )
+
     override fun saveStudent(student: Student) = studentMapper.toDomain(
         studentRepository.save(
             studentMapper.toEntity(student)
         )
     )!!
-
-    override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
-        studentRepository.findByIdOrNull(studentId)
-    )
 
     override fun queryStudentsByNameAndSort(name: String?, sort: Sort, schoolId: UUID): List<Student> {
         return queryFactory
@@ -92,6 +92,12 @@ class StudentPersistenceAdapter(
     override fun deleteStudent(student: Student) {
         studentRepository.delete(
             studentMapper.toEntity(student)
+        )
+    }
+
+    override fun queryStudentByIdOrNull(studentId: UUID?) = studentId?.run {
+        studentMapper.toDomain(
+            studentRepository.findByIdOrNull(studentId)
         )
     }
 }
