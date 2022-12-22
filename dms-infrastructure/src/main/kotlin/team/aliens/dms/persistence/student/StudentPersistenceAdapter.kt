@@ -94,10 +94,4 @@ class StudentPersistenceAdapter(
             studentMapper.toEntity(student)
         )
     }
-
-    override fun queryStudentByIdOrNull(studentId: UUID?) = studentId?.run {
-        studentMapper.toDomain(
-            studentRepository.findByIdOrNull(this)
-        )
-    }
 }
