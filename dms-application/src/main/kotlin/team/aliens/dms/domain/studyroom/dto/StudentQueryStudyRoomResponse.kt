@@ -4,7 +4,7 @@ import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 
-data class QueryStudyRoomStudentResponse(
+data class StudentQueryStudyRoomResponse(
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,
     val availableSex: Sex,
