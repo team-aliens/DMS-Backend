@@ -77,6 +77,23 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
+    private val seatResponseStudentIdNullStub by lazy {
+        StudentQueryStudyRoomResponse.SeatElement(
+            id = UUID.randomUUID(),
+            widthSize = 1,
+            heightSize = 1,
+            number = 1,
+            type = StudentQueryStudyRoomResponse.SeatElement.TypeElement(
+                id = UUID.randomUUID(),
+                name = "이름",
+                color = "색깔"
+            ),
+            status = SeatStatus.IN_USE,
+            isMine = null,
+            student = null
+        )
+    }
+
     @Test
     fun `자습실 조회 성공`() {
         // given
@@ -91,6 +108,26 @@ class StudentQueryStudyRoomUseCaseTests {
 
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
             .willReturn(listOf(seatResponseStub))
+
+        assertDoesNotThrow {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
+    fun `학생 아이디 NULL`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub)
+
+        given(queryStudyRoomPort.countSeatByStudyRoomIdAndStatus(studyRoomId, SeatStatus.AVAILABLE))
+            .willReturn(1)
+
+        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+            .willReturn(listOf(seatResponseStudentIdNullStub))
 
         assertDoesNotThrow {
             studentQueryStudyRoomUseCase.execute(studyRoomId)
