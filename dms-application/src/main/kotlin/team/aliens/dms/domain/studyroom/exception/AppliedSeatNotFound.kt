@@ -3,6 +3,6 @@ package team.aliens.dms.domain.studyroom.exception
 import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.domain.studyroom.error.SeatErrorCode
 
-object SeatNotAppliedException : DmsException(
-    SeatErrorCode.SEAT_NOT_APPLIED
+object AppliedSeatNotFound : DmsException(
+    SeatErrorCode.APPLIED_SEAT_NOT_FOUND
 )
