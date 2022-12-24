@@ -7,6 +7,8 @@ interface CommandStudyRoomPort {
 
     fun saveSeat(seat: Seat): Seat
 
+    fun saveAllSeat(seats: List<Seat>)
+
     fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
 
 }

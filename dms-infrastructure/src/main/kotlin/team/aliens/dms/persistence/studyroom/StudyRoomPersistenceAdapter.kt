@@ -31,11 +31,21 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
+    override fun existsStudyRoomByFloorAndName(
+        floor: Int, name: String
+    ) = studyRoomRepository.existsByNameAndFloor(name, floor)
+
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
             seatMapper.toEntity(seat)
         )
     )!!
+
+    override fun saveAllSeat(seats: List<Seat>) {
+        seatRepository.saveAll(
+            seats.map { seatMapper.toEntity(it) }
+        )
+    }
 
     override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(
         studyRoomRepository.save(
