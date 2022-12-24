@@ -4,11 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
+import team.aliens.dms.domain.studyroom.dto.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
@@ -17,6 +14,7 @@ import team.aliens.dms.persistence.studyroom.mapper.SeatMapper
 import team.aliens.dms.persistence.studyroom.mapper.StudyRoomMapper
 import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomJpaRepository
+import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatVO
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -39,38 +37,28 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
-    override fun queryAllSeatByStudyRoomId(studyRoomId: UUID) = jpaQueryFactory
-        .selectFrom(seatJpaEntity)
-        .leftJoin(seatJpaEntity.student, studentJpaEntity).fetchJoin()
-        .leftJoin(seatJpaEntity.type, seatTypeJpaEntity).fetchJoin()
-        .where(seatJpaEntity.studyRoom.id.eq(studyRoomId))
-        .fetch()
-        .map {
-            SeatElement(
-                id = it.id!!,
-                widthLocation = it.widthLocation,
-                heightLocation = it.heightLocation,
-                number = it.number,
-                type = it.type?.run {
-                    TypeElement(
-                        id = this.id!!,
-                        name = this.name,
-                        color = this.color
-                    )
-                },
-                status = it.status,
-                isMine = null,
-                student = it.student?.run {
-                    StudentElement(
-                        id = this.id,
-                        name = this.name
-                    )
-                }
+    override fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO> {
+        return jpaQueryFactory
+            .select(
+                QQuerySeatVO(
+                    seatJpaEntity.id,
+                    seatJpaEntity.widthLocation,
+                    seatJpaEntity.heightLocation,
+                    seatJpaEntity.number,
+                    seatJpaEntity.status,
+                    seatTypeJpaEntity.id,
+                    seatTypeJpaEntity.name,
+                    seatTypeJpaEntity.color,
+                    studentJpaEntity.id,
+                    studentJpaEntity.name
+                )
             )
-        }
-
-    override fun countSeatByStudyRoomIdAndStatus(studyRoomId: UUID, status: SeatStatus) =
-        seatRepository.countByStudyRoomIdAndStatus(studyRoomId, status)
+            .from(seatJpaEntity)
+            .leftJoin(seatJpaEntity.type, seatTypeJpaEntity)
+            .leftJoin(seatJpaEntity.student, studentJpaEntity)
+            .where(seatJpaEntity.studyRoom.id.eq(studyRoomId))
+            .fetch()
+    }
 
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
