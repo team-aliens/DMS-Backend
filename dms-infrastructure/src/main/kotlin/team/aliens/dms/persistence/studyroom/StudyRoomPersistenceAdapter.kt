@@ -3,6 +3,8 @@ package team.aliens.dms.persistence.studyroom
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
@@ -47,6 +49,7 @@ class StudyRoomPersistenceAdapter(
         )
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     override fun deleteAllSeatsByStudyRoomId(studyRoomId: UUID) {
         seatRepository.deleteAllByStudyRoomId(studyRoomId)
     }
