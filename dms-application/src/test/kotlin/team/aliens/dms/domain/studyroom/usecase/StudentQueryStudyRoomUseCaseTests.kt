@@ -159,42 +159,7 @@ class StudentQueryStudyRoomUseCaseTests {
             studentQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
-
-    @Test
-    fun `자리 상태 사용중`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = number,
-                            status = SeatStatus.IN_USE,
-                            typeId = typeId,
-                            typeName = typeName,
-                            typeColor = typeColor,
-                            studentId = studentId,
-                            studentName = studentName
-                        )
-                    }
-                )
-            )
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
+    
     @Test
     fun `자리 상태 빈 자리`() {
         // given
