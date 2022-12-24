@@ -6,6 +6,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
+import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
@@ -37,6 +38,10 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
+    override fun existsStudyRoomByFloorAndName(
+        floor: Int, name: String
+    ) = studyRoomRepository.existsByNameAndFloor(name, floor)
+
     override fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO> {
         return jpaQueryFactory
             .select(
@@ -63,6 +68,18 @@ class StudyRoomPersistenceAdapter(
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
             seatMapper.toEntity(seat)
+        )
+    )!!
+
+    override fun saveAllSeat(seats: List<Seat>) {
+        seatRepository.saveAll(
+            seats.map { seatMapper.toEntity(it) }
+        )
+    }
+
+    override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(
+        studyRoomRepository.save(
+            studyRoomMapper.toEntity(studyRoom)
         )
     )!!
 }

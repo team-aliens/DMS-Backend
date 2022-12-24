@@ -7,7 +7,9 @@ enum class StudyRoomErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    STUDY_ROOM_NOT_FOUND(404, "Study Room Not Found")
+    STUDY_ROOM_NOT_FOUND(404, "Study Room Not Found"),
+
+    STUDY_ROOM_ALREADY_EXISTS(409, "Study Room Already Exists")
     ;
 
     override fun status(): Int = status
