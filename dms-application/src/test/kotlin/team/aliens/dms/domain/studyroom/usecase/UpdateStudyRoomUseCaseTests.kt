@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -12,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
@@ -126,9 +124,14 @@ class UpdateStudyRoomUseCaseTests {
             .willReturn(userStub)
 
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
+            .willReturn(
+                studyRoomStub.copy(
+                    floor = floor,
+                    name = studyRoomName
+                )
+            )
 
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, studyRoomName, schoolId))
+        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId))
             .willReturn(false)
 
         // when & then
@@ -140,11 +143,6 @@ class UpdateStudyRoomUseCaseTests {
     @Test
     fun `자습실 수정 성공 - 층 & 이름이 동일`() {
         // given
-        val requestStub = requestStub.copy(
-            floor = floor,
-            name = studyRoomName
-        )
-
         given(securityPort.getCurrentUserId())
             .willReturn(userId)
 
@@ -230,7 +228,13 @@ class UpdateStudyRoomUseCaseTests {
                 )
             )
 
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId))
+        given(
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+                requestStub.floor,
+                requestStub.name,
+                schoolId
+            )
+        )
             .willReturn(true)
 
         // when & then
