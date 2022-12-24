@@ -67,7 +67,7 @@ class StudentQueryStudyRoomUseCaseTests {
             typeId = UUID.randomUUID(),
             typeName = "타입 이름",
             typeColor = "색깔",
-            studentId = studyRoomId,
+            studentId = UUID.randomUUID(),
             studentName = "학생 이름"
         )
     }
@@ -149,6 +149,41 @@ class StudentQueryStudyRoomUseCaseTests {
 
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
             .willReturn(listOf(seatVOTypeIdNullStub))
+
+        // when & then
+        assertDoesNotThrow {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
+    fun `자신의 자리`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub)
+
+        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+            .willReturn(
+                listOf(
+                    seatVOStub.run {
+                        SeatVO(
+                            seatId = seatId,
+                            widthLocation = widthLocation,
+                            heightLocation = heightLocation,
+                            number = number,
+                            status = SeatStatus.IN_USE,
+                            typeId = typeId,
+                            typeName = typeName,
+                            typeColor = typeColor,
+                            studentId = currentUserId,
+                            studentName = studentName
+                        )
+                    }
+                )
+            )
 
         // when & then
         assertDoesNotThrow {
