@@ -3,6 +3,9 @@ package team.aliens.dms.domain.studyroom.usecase
 import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -18,14 +21,31 @@ class StudentQueryStudyRoomUseCase(
         val currentUserId = securityPort.getCurrentUserId()
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-        val seatCount = queryStudyRoomPort.countSeatByStudyRoomIdAndStatus(studyRoomId, SeatStatus.AVAILABLE)
-
         val seats = queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId).map {
-            it.copy(
-                isMine = isMine(
-                    studentId = it.student?.id,
-                    currentUserId = currentUserId
-                )
+            SeatElement(
+                id = it.seatId,
+                widthLocation = it.widthLocation,
+                heightLocation = it.heightLocation,
+                number = it.number,
+                type = it.typeId?.run {
+                    TypeElement(
+                        id = it.typeId,
+                        name = it.typeName!!,
+                        color = it.typeColor!!
+                    )
+                },
+                status = it.status,
+                isMine(
+                    studentId = it.studentId,
+                    currentUserId = currentUserId,
+                    status = it.status
+                ),
+                student = it.studentId?.run {
+                    StudentElement(
+                        id = it.studentId,
+                        name = it.studentName!!
+                    )
+                }
             )
         }
 
@@ -33,7 +53,7 @@ class StudentQueryStudyRoomUseCase(
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                totalAvailableSeat = seatCount,
+                totalAvailableSeat = availableHeadcount,
                 inUseHeadcount = inUseHeadcount!!,
                 availableSex = availableSex,
                 availableGrade = availableGrade,
@@ -48,7 +68,11 @@ class StudentQueryStudyRoomUseCase(
         }
     }
 
-    private fun isMine(studentId: UUID?, currentUserId: UUID) = studentId?.run {
+    private fun isMine(studentId: UUID?, currentUserId: UUID, status: SeatStatus) = studentId?.run {
         studentId == currentUserId
+    } ?: run {
+        if (SeatStatus.AVAILABLE == status) {
+            return false
+        } else null
     }
 }
