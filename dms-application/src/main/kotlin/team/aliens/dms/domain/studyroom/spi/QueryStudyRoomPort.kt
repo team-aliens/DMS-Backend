@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.spi
 
 import java.util.UUID
-import team.aliens.dms.domain.studyroom.dto.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 

@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.studyroom.dto
+package team.aliens.dms.domain.studyroom.spi.vo
 
 import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.SeatStatus

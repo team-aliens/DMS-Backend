@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.dto.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity

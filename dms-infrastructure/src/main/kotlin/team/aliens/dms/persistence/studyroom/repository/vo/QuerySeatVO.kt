@@ -2,7 +2,7 @@ package team.aliens.dms.persistence.studyroom.repository.vo
 
 import com.querydsl.core.annotations.QueryProjection
 import java.util.UUID
-import team.aliens.dms.domain.studyroom.dto.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 
 class QuerySeatVO @QueryProjection constructor(
