@@ -52,6 +52,7 @@ class CreateStudyRoomUseCaseTests {
 
     private val studyRoomId = UUID.randomUUID()
     private val userId = UUID.randomUUID()
+    private val schoolId = UUID.randomUUID()
     private val password = "test password"
     private val floor = 1
     private val studyRoomName = "test study room"
@@ -59,7 +60,7 @@ class CreateStudyRoomUseCaseTests {
     private val userStub by lazy {
         User(
             id = userId,
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             accountId = "test account id",
             password = password,
             email = "test email",
@@ -120,7 +121,7 @@ class CreateStudyRoomUseCaseTests {
         given(queryUserPort.queryUserById(userId))
             .willReturn(userStub)
 
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndName(floor, studyRoomName))
+        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, studyRoomName, schoolId))
             .willReturn(false)
 
         given(commandStudyRoomPort.saveStudyRoom(studyRoomStub))
@@ -159,7 +160,7 @@ class CreateStudyRoomUseCaseTests {
         given(queryUserPort.queryUserById(userId))
             .willReturn(userStub)
 
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndName(floor, studyRoomName))
+        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, studyRoomName, schoolId))
             .willReturn(true)
 
         // when & then

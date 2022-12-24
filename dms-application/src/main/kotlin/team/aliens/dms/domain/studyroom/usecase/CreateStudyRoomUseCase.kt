@@ -30,7 +30,9 @@ class CreateStudyRoomUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndName(request.floor, request.name)
+        val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+            request.floor, request.name, currentUser.schoolId
+        )
         if (isAlreadyExists) {
             throw StudyRoomAlreadyExistsException
         }
