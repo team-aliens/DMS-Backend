@@ -7,49 +7,49 @@ import javax.validation.constraints.NotNull
 data class UpdateStudyRoomWebRequest(
 
     @field:NotNull
-    val floor: Int,
+    val floor: Int?,
 
     @field:NotBlank
-    val name: String,
+    val name: String?,
 
     @field:NotNull
-    val totalWidthSize: Int,
+    val totalWidthSize: Int?,
 
     @field:NotNull
-    val totalHeightSize: Int,
+    val totalHeightSize: Int?,
 
     @field:NotBlank
-    val eastDescription: String,
+    val eastDescription: String?,
 
     @field:NotBlank
-    val westDescription: String,
+    val westDescription: String?,
 
     @field:NotBlank
-    val southDescription: String,
+    val southDescription: String?,
 
     @field:NotBlank
-    val northDescription: String,
+    val northDescription: String?,
 
     @field:NotBlank
-    val availableSex: String,
+    val availableSex: String?,
 
     @field:NotNull
-    val availableGrade: Int,
+    val availableGrade: Int?,
 
     val seats: List<SeatRequest>
 ) {
     data class SeatRequest(
 
         @field:NotNull
-        val widthLocation: Int,
+        val widthLocation: Int?,
 
         @field:NotNull
-        val heightLocation: Int,
+        val heightLocation: Int?,
 
         val number: Int?,
         val typeId: UUID?,
 
         @field:NotNull
-        val status: WebSeatStatus
+        val status: WebSeatStatus?
     )
 }

@@ -93,23 +93,23 @@ class StudyRoomWebAdapter(
         val studyRoomId = createStudyRoomUseCase.execute(
             request.run {
                 CreateStudyRoomRequest(
-                    floor = floor,
-                    name = name,
-                    totalWidthSize = totalWidthSize,
-                    totalHeightSize = totalHeightSize,
-                    eastDescription = eastDescription,
-                    westDescription = westDescription,
-                    southDescription = southDescription,
-                    northDescription = northDescription,
-                    availableSex = availableSex,
-                    availableGrade = availableGrade,
+                    floor = floor!!,
+                    name = name!!,
+                    totalWidthSize = totalWidthSize!!,
+                    totalHeightSize = totalHeightSize!!,
+                    eastDescription = eastDescription!!,
+                    westDescription = westDescription!!,
+                    southDescription = southDescription!!,
+                    northDescription = northDescription!!,
+                    availableSex = availableSex!!,
+                    availableGrade = availableGrade!!,
                     seats = seats.map {
                         CreateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation,
-                            heightLocation = it.heightLocation,
+                            widthLocation = it.widthLocation!!,
+                            heightLocation = it.heightLocation!!,
                             number = it.number,
                             typeId = it.typeId,
-                            status = it.status.name
+                            status = it.status!!.name
                         )
                     }
                 )
@@ -129,23 +129,23 @@ class StudyRoomWebAdapter(
             studyRoomId!!,
             request.run {
                 UpdateStudyRoomRequest(
-                    floor = floor,
-                    name = name,
-                    totalWidthSize = totalWidthSize,
-                    totalHeightSize = totalHeightSize,
-                    eastDescription = eastDescription,
-                    westDescription = westDescription,
-                    southDescription = southDescription,
-                    northDescription = northDescription,
-                    availableSex = availableSex,
-                    availableGrade = availableGrade,
+                    floor = floor!!,
+                    name = name!!,
+                    totalWidthSize = totalWidthSize!!,
+                    totalHeightSize = totalHeightSize!!,
+                    eastDescription = eastDescription!!,
+                    westDescription = westDescription!!,
+                    southDescription = southDescription!!,
+                    northDescription = northDescription!!,
+                    availableSex = availableSex!!,
+                    availableGrade = availableGrade!!,
                     seats = seats.map {
                         UpdateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation,
-                            heightLocation = it.heightLocation,
+                            widthLocation = it.widthLocation!!,
+                            heightLocation = it.heightLocation!!,
                             number = it.number,
                             typeId = it.typeId,
-                            status = it.status.name
+                            status = it.status!!.name
                         )
                     }
                 )
