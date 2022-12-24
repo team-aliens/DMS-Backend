@@ -39,7 +39,9 @@ class UpdateStudyRoomUseCase(
 
         if (request.floor != studyRoom.floor && request.name != studyRoom.name) {
             val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
-                request.floor, request.name, studyRoom.schoolId
+                floor = request.floor,
+                name = request.name,
+                schoolId = currentUser.schoolId
             )
 
             if (isAlreadyExists) {
