@@ -31,9 +31,9 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
-    override fun existsStudyRoomByFloorAndName(
-        floor: Int, name: String
-    ) = studyRoomRepository.existsByNameAndFloor(name, floor)
+    override fun existsStudyRoomByFloorAndNameAndSchoolId(
+        floor: Int, name: String, schoolId: UUID
+    ) = studyRoomRepository.existsByNameAndFloorAndSchoolId(name, floor, schoolId)
 
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
@@ -45,6 +45,10 @@ class StudyRoomPersistenceAdapter(
         seatRepository.saveAll(
             seats.map { seatMapper.toEntity(it) }
         )
+    }
+
+    override fun deleteAllSeatsByStudyRoomId(studyRoomId: UUID) {
+        seatRepository.deleteAllByStudyRoomId(studyRoomId)
     }
 
     override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(
