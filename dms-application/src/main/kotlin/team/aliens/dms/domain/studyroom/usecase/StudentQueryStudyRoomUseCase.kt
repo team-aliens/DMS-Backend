@@ -71,8 +71,17 @@ class StudentQueryStudyRoomUseCase(
     private fun isMine(studentId: UUID?, currentUserId: UUID, status: SeatStatus) = studentId?.run {
         studentId == currentUserId
     } ?: run {
-        if (SeatStatus.AVAILABLE == status) {
-            return false
-        } else null
+        /**
+         * student_id 가 NULL 일 경우
+         *
+         * AVAILABLE -> false
+         * UNAVAILABLE -> NULL
+         * IN_USE -> false
+         * EMPTY -> NULL
+         **/
+        when (status) {
+            SeatStatus.AVAILABLE, SeatStatus.IN_USE -> false
+            else -> null
+        }
     }
 }
