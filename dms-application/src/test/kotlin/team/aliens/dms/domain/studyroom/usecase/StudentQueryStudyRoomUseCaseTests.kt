@@ -10,7 +10,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.dto.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -149,41 +149,6 @@ class StudentQueryStudyRoomUseCaseTests {
 
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
             .willReturn(listOf(seatVOTypeIdNullStub))
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
-    @Test
-    fun `자신의 자리`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = number,
-                            status = SeatStatus.IN_USE,
-                            typeId = typeId,
-                            typeName = typeName,
-                            typeColor = typeColor,
-                            studentId = currentUserId,
-                            studentName = studentName
-                        )
-                    }
-                )
-            )
 
         // when & then
         assertDoesNotThrow {
