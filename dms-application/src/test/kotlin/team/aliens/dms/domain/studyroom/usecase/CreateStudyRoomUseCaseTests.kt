@@ -12,6 +12,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
+import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -76,7 +77,7 @@ class CreateStudyRoomUseCaseTests {
             widthSize = requestStub.totalWidthSize,
             heightSize = requestStub.totalHeightSize,
             inUseHeadcount = 0,
-            availableHeadcount = 1,
+            availableHeadcount = requestStub.seats.count { SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status) },
             availableSex = Sex.valueOf(requestStub.availableSex),
             availableGrade = requestStub.availableGrade,
             eastDescription = requestStub.eastDescription,
