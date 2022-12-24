@@ -37,11 +37,14 @@ class UpdateStudyRoomUseCase(
             throw SchoolMismatchException
         }
 
-        val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
-            request.floor, request.name, studyRoom.schoolId
-        )
-        if (isAlreadyExists) {
-            throw StudyRoomAlreadyExistsException
+        if (request.floor != studyRoom.floor && request.name != studyRoom.name) {
+            val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+                request.floor, request.name, studyRoom.schoolId
+            )
+
+            if (isAlreadyExists) {
+                throw StudyRoomAlreadyExistsException
+            }
         }
 
         val availableHeadCount = seatRequests.count {
