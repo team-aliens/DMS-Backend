@@ -19,7 +19,8 @@ import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 @Table(
     name = "tbl_seat",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = arrayOf("seat_type_id", "number"))
+        UniqueConstraint(columnNames = arrayOf("study_room_id", "seat_type_id", "number")),
+        UniqueConstraint(columnNames = arrayOf("study_room_id", "width_location", "height_location"))
     ]
 )
 class SeatJpaEntity(
@@ -38,10 +39,10 @@ class SeatJpaEntity(
     @JoinColumn(name = "seat_type_id", columnDefinition = "BINARY(16)")
     val type: SeatTypeJpaEntity?,
 
-    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
+    @Column(name = "width_location", columnDefinition = "INT UNSIGNED", nullable = false)
     val widthLocation: Int,
 
-    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
+    @Column(name = "height_location", columnDefinition = "INT UNSIGNED", nullable = false)
     val heightLocation: Int,
 
     @Column(columnDefinition = "INT UNSIGNED")
