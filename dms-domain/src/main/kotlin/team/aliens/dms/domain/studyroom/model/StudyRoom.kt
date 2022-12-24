@@ -3,6 +3,7 @@ package team.aliens.dms.domain.studyroom.model
 import java.util.UUID
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.student.model.Sex
+import kotlin.math.min
 
 @Aggregate
 data class StudyRoom(
@@ -35,4 +36,13 @@ data class StudyRoom(
 
     val northDescription: String
 
-)
+) {
+
+    fun plusInUseHeadcount() = this.copy(
+        inUseHeadcount = inUseHeadcount!!.inc()
+    )
+
+    fun minusInUseHeadcount() = this.copy(
+        inUseHeadcount = inUseHeadcount!!.dec()
+    )
+}
