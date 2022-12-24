@@ -72,36 +72,6 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
-    private val seatVOStudentIdNullStub by lazy {
-        SeatVO(
-            seatId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE,
-            typeId = UUID.randomUUID(),
-            typeName = "타입 이름",
-            typeColor = "색깔",
-            studentId = null,
-            studentName = null
-        )
-    }
-
-    private val seatVOTypeIdNullStub by lazy {
-        SeatVO(
-            seatId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE,
-            typeId = null,
-            typeName = null,
-            typeColor = null,
-            studentId = null,
-            studentName = null
-        )
-    }
-
     @Test
     fun `자습실 조회 성공`() {
         // given
@@ -121,7 +91,7 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `학생 아이디 NULL`() {
+    fun `자리 상태 신청 가능`() {
         // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
@@ -130,7 +100,24 @@ class StudentQueryStudyRoomUseCaseTests {
             .willReturn(studyRoomStub)
 
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
-            .willReturn(listOf(seatVOStudentIdNullStub))
+            .willReturn(
+                listOf(
+                    seatVOStub.run {
+                        SeatVO(
+                            seatId = seatId,
+                            widthLocation = widthLocation,
+                            heightLocation = heightLocation,
+                            number = number,
+                            status = SeatStatus.AVAILABLE,
+                            typeId = typeId,
+                            typeName = typeName,
+                            typeColor = typeColor,
+                            studentId = null,
+                            studentName = null
+                        )
+                    }
+                )
+            )
 
         // when & then
         assertDoesNotThrow {
@@ -139,7 +126,7 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `타입 아이디 NULL`() {
+    fun `자리 상태 신청 불가능`() {
         // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
@@ -148,7 +135,94 @@ class StudentQueryStudyRoomUseCaseTests {
             .willReturn(studyRoomStub)
 
         given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
-            .willReturn(listOf(seatVOTypeIdNullStub))
+            .willReturn(
+                listOf(
+                    seatVOStub.run {
+                        SeatVO(
+                            seatId = seatId,
+                            widthLocation = widthLocation,
+                            heightLocation = heightLocation,
+                            number = null,
+                            status = SeatStatus.UNAVAILABLE,
+                            typeId = null,
+                            typeName = null,
+                            typeColor = null,
+                            studentId = null,
+                            studentName = null
+                        )
+                    }
+                )
+            )
+
+        // when & then
+        assertDoesNotThrow {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
+    fun `자리 상태 사용중`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub)
+
+        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+            .willReturn(
+                listOf(
+                    seatVOStub.run {
+                        SeatVO(
+                            seatId = seatId,
+                            widthLocation = widthLocation,
+                            heightLocation = heightLocation,
+                            number = number,
+                            status = SeatStatus.IN_USE,
+                            typeId = typeId,
+                            typeName = typeName,
+                            typeColor = typeColor,
+                            studentId = studentId,
+                            studentName = studentName
+                        )
+                    }
+                )
+            )
+
+        // when & then
+        assertDoesNotThrow {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
+    fun `자리 상태 빈 자리`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub)
+
+        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+            .willReturn(
+                listOf(
+                    seatVOStub.run {
+                        SeatVO(
+                            seatId = seatId,
+                            widthLocation = widthLocation,
+                            heightLocation = heightLocation,
+                            number = null,
+                            status = SeatStatus.EMPTY,
+                            typeId = null,
+                            typeName = null,
+                            typeColor = null,
+                            studentId = null,
+                            studentName = null
+                        )
+                    }
+                )
+            )
 
         // when & then
         assertDoesNotThrow {
