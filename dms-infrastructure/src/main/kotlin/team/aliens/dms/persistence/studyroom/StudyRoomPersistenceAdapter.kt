@@ -40,9 +40,9 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
-    override fun existsStudyRoomByFloorAndName(
-        floor: Int, name: String
-    ) = studyRoomRepository.existsByNameAndFloor(name, floor)
+    override fun existsStudyRoomByFloorAndNameAndSchoolId(
+        floor: Int, name: String, schoolId: UUID
+    ) = studyRoomRepository.existsByNameAndFloorAndSchoolId(name, floor, schoolId)
 
     override fun queryAllStudentSeatsByStudyRoomId(studyRoomId: UUID): List<StudentSeatVO> {
         return jpaQueryFactory
@@ -101,6 +101,11 @@ class StudyRoomPersistenceAdapter(
         seatRepository.saveAll(
             seats.map { seatMapper.toEntity(it) }
         )
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    override fun deleteAllSeatsByStudyRoomId(studyRoomId: UUID) {
+        seatRepository.deleteAllByStudyRoomId(studyRoomId)
     }
 
     override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(

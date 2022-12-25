@@ -4,7 +4,7 @@ import java.util.UUID
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-data class CreateStudyRoomWebRequest(
+data class UpdateStudyRoomWebRequest(
 
     @field:NotNull
     val floor: Int?,

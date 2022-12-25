@@ -86,11 +86,10 @@ class StudentQueryStudyRoomUseCase(
          *
          * AVAILABLE -> false
          * UNAVAILABLE -> NULL
-         * IN_USE -> false
          * EMPTY -> NULL
          **/
         when (status) {
-            SeatStatus.AVAILABLE, SeatStatus.IN_USE -> false
+            SeatStatus.AVAILABLE -> false
             else -> null
         }
     }
