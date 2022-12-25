@@ -46,7 +46,7 @@ class StudyRoomWebAdapter(
     private val applySeatUseCase: ApplySeatUseCase,
     private val unApplySeatUseCase: UnApplySeatUseCase,
     private val createStudyRoomUseCase: CreateStudyRoomUseCase,
-    private val updateStudyRoomUseCase: UpdateStudyRoomUseCase
+    private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase
 ) {
 
@@ -154,6 +154,7 @@ class StudyRoomWebAdapter(
                 )
             }
         )
+    }
 
     @GetMapping("/{study-room-id}/students")
     fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID): StudentQueryStudyRoomResponse {
