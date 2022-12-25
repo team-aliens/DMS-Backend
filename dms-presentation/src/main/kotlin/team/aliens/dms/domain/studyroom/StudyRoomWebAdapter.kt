@@ -19,10 +19,16 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
+import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
+import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
+import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 
 @Validated
@@ -34,7 +40,9 @@ class StudyRoomWebAdapter(
     private val querySeatTypesUseCase: QuerySeatTypesUseCase,
     private val createSeatTypeUseCase: CreateSeatTypeUseCase,
     private val applySeatUseCase: ApplySeatUseCase,
-    private val unApplySeatUseCase: UnApplySeatUseCase
+    private val unApplySeatUseCase: UnApplySeatUseCase,
+    private val createStudyRoomUseCase: CreateStudyRoomUseCase,
+    private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -75,5 +83,42 @@ class StudyRoomWebAdapter(
     @DeleteMapping("/seats")
     fun unApplySeat() {
         unApplySeatUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    fun createStudyRoom(@RequestBody @Valid request: CreateStudyRoomWebRequest): CreateStudyRoomResponse {
+        val studyRoomId = createStudyRoomUseCase.execute(
+            request.run {
+                CreateStudyRoomRequest(
+                    floor = floor,
+                    name = name,
+                    totalWidthSize = totalWidthSize,
+                    totalHeightSize = totalHeightSize,
+                    eastDescription = eastDescription,
+                    westDescription = westDescription,
+                    southDescription = southDescription,
+                    northDescription = northDescription,
+                    availableSex = availableSex,
+                    availableGrade = availableGrade,
+                    seats = seats.map {
+                        CreateStudyRoomRequest.SeatRequest(
+                            widthLocation = it.widthLocation,
+                            heightLocation = it.heightLocation,
+                            number = it.number,
+                            typeId = it.typeId,
+                            status = it.status.name
+                        )
+                    }
+                )
+            }
+        )
+
+        return CreateStudyRoomResponse(studyRoomId)
+    }
+
+    @GetMapping("/{study-room-id}/students")
+    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID): StudentQueryStudyRoomResponse {
+        return studentQueryStudyRoomUseCase.execute(studyRoomId)
     }
 }
