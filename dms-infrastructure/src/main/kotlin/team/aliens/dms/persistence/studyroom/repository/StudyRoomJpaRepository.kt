@@ -8,6 +8,6 @@ import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
 @Repository
 interface StudyRoomJpaRepository : CrudRepository<StudyRoomJpaEntity, UUID> {
 
-    fun existsByNameAndFloor(name: String, floor: Int): Boolean
+    fun existsByNameAndFloorAndSchoolId(name: String, floor: Int, schoolId: UUID): Boolean
 
 }

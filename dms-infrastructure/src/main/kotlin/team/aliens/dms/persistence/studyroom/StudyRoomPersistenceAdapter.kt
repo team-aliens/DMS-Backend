@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -38,9 +40,9 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudentId(studentId)
     )
 
-    override fun existsStudyRoomByFloorAndName(
-        floor: Int, name: String
-    ) = studyRoomRepository.existsByNameAndFloor(name, floor)
+    override fun existsStudyRoomByFloorAndNameAndSchoolId(
+        floor: Int, name: String, schoolId: UUID
+    ) = studyRoomRepository.existsByNameAndFloorAndSchoolId(name, floor, schoolId)
 
     override fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO> {
         return jpaQueryFactory
@@ -75,6 +77,11 @@ class StudyRoomPersistenceAdapter(
         seatRepository.saveAll(
             seats.map { seatMapper.toEntity(it) }
         )
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    override fun deleteAllSeatsByStudyRoomId(studyRoomId: UUID) {
+        seatRepository.deleteAllByStudyRoomId(studyRoomId)
     }
 
     override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(

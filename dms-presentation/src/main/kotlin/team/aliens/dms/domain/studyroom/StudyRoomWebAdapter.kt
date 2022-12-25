@@ -16,12 +16,15 @@ import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
@@ -30,6 +33,7 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 
 @Validated
 @RequestMapping("/study-rooms")
@@ -42,6 +46,7 @@ class StudyRoomWebAdapter(
     private val applySeatUseCase: ApplySeatUseCase,
     private val unApplySeatUseCase: UnApplySeatUseCase,
     private val createStudyRoomUseCase: CreateStudyRoomUseCase,
+    private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase
 ) {
 
@@ -91,23 +96,23 @@ class StudyRoomWebAdapter(
         val studyRoomId = createStudyRoomUseCase.execute(
             request.run {
                 CreateStudyRoomRequest(
-                    floor = floor,
-                    name = name,
-                    totalWidthSize = totalWidthSize,
-                    totalHeightSize = totalHeightSize,
-                    eastDescription = eastDescription,
-                    westDescription = westDescription,
-                    southDescription = southDescription,
-                    northDescription = northDescription,
-                    availableSex = availableSex,
-                    availableGrade = availableGrade,
+                    floor = floor!!,
+                    name = name!!,
+                    totalWidthSize = totalWidthSize!!,
+                    totalHeightSize = totalHeightSize!!,
+                    eastDescription = eastDescription!!,
+                    westDescription = westDescription!!,
+                    southDescription = southDescription!!,
+                    northDescription = northDescription!!,
+                    availableSex = availableSex!!,
+                    availableGrade = availableGrade!!,
                     seats = seats.map {
                         CreateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation,
-                            heightLocation = it.heightLocation,
+                            widthLocation = it.widthLocation!!,
+                            heightLocation = it.heightLocation!!,
                             number = it.number,
                             typeId = it.typeId,
-                            status = it.status.name
+                            status = it.status!!.name
                         )
                     }
                 )
@@ -115,6 +120,40 @@ class StudyRoomWebAdapter(
         )
 
         return CreateStudyRoomResponse(studyRoomId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{study-room-id}")
+    fun updateStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestBody @Valid request: UpdateStudyRoomWebRequest
+    ) {
+        updateStudyRoomUseCase.execute(
+            studyRoomId!!,
+            request.run {
+                UpdateStudyRoomRequest(
+                    floor = floor!!,
+                    name = name!!,
+                    totalWidthSize = totalWidthSize!!,
+                    totalHeightSize = totalHeightSize!!,
+                    eastDescription = eastDescription!!,
+                    westDescription = westDescription!!,
+                    southDescription = southDescription!!,
+                    northDescription = northDescription!!,
+                    availableSex = availableSex!!,
+                    availableGrade = availableGrade!!,
+                    seats = seats.map {
+                        UpdateStudyRoomRequest.SeatRequest(
+                            widthLocation = it.widthLocation!!,
+                            heightLocation = it.heightLocation!!,
+                            number = it.number,
+                            typeId = it.typeId,
+                            status = it.status!!.name
+                        )
+                    }
+                )
+            }
+        )
     }
 
     @GetMapping("/{study-room-id}/students")
