@@ -2,10 +2,10 @@ package team.aliens.dms.persistence.studyroom.repository.vo
 
 import com.querydsl.core.annotations.QueryProjection
 import java.util.UUID
-import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.studyroom.spi.vo.ManagerSeatVO
 
-class QuerySeatVO @QueryProjection constructor(
+class QueryManagerSeatVO @QueryProjection constructor(
     seatId: UUID,
     widthLocation: Int,
     heightLocation: Int,
@@ -15,8 +15,9 @@ class QuerySeatVO @QueryProjection constructor(
     typeName: String?,
     typeColor: String?,
     studentId: UUID?,
-    studentName: String?
-) : SeatVO(
+    studentName: String?,
+    studentProfileImageUrl: String?
+) : ManagerSeatVO(
     seatId = seatId,
     widthLocation = widthLocation,
     heightLocation = heightLocation,
@@ -26,5 +27,6 @@ class QuerySeatVO @QueryProjection constructor(
     typeName = typeName,
     typeColor = typeColor,
     studentId = studentId,
-    studentName = studentName
+    studentName = studentName,
+    studentProfileImageUrl = studentProfileImageUrl
 )

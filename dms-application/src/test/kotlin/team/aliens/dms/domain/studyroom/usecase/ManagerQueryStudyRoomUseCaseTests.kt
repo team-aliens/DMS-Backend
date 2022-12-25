@@ -13,18 +13,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatVO
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.spi.vo.ManagerSeatVO
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 
 @ExtendWith(SpringExtension::class)
-class StudentQueryStudyRoomUseCaseTests {
+class ManagerQueryStudyRoomUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: StudyRoomSecurityPort
@@ -35,18 +37,22 @@ class StudentQueryStudyRoomUseCaseTests {
     @MockBean
     private lateinit var queryStudyRoomPort: QueryStudyRoomPort
 
-    private lateinit var studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase
+    @MockBean
+    private lateinit var queryStudentPort: StudyRoomQueryStudentPort
+
+    private lateinit var managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase
 
     @BeforeEach
     fun setUp() {
-        studentQueryStudyRoomUseCase = StudentQueryStudyRoomUseCase(
-            securityPort, queryUserPort, queryStudyRoomPort
+        managerQueryStudyRoomUseCase = ManagerQueryStudyRoomUseCase(
+            securityPort, queryUserPort, queryStudyRoomPort, queryStudentPort
         )
     }
 
     private val studyRoomId = UUID.randomUUID()
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
+    private val studentId = UUID.randomUUID()
 
     private val userStub by lazy {
         User(
@@ -80,8 +86,8 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
-    private val studentSeatVOStub by lazy {
-        StudentSeatVO(
+    private val managerSeatVOStub by lazy {
+        ManagerSeatVO(
             seatId = UUID.randomUUID(),
             widthLocation = 1,
             heightLocation = 1,
@@ -90,8 +96,24 @@ class StudentQueryStudyRoomUseCaseTests {
             typeId = UUID.randomUUID(),
             typeName = "타입 이름",
             typeColor = "색깔",
-            studentId = UUID.randomUUID(),
-            studentName = "학생 이름"
+            studentId = studentId,
+            studentName = "학생 이름",
+            studentProfileImageUrl = "https://~"
+        )
+    }
+
+    private val studentStub by lazy {
+        Student(
+            id = studentId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 1,
+            schoolId = schoolId,
+            grade = 1,
+            classRoom = 1,
+            number = 1,
+            name = "이정윤",
+            profileImageUrl = "https://~",
+            sex = Sex.MALE
         )
     }
 
@@ -107,12 +129,15 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
-            .willReturn(listOf(studentSeatVOStub))
+        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+            .willReturn(listOf(managerSeatVOStub))
+
+        given(queryStudentPort.queryStudentById(studentId))
+            .willReturn(studentStub)
 
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -128,11 +153,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    managerSeatVOStub.run {
+                        ManagerSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -142,7 +167,8 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -150,7 +176,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -166,11 +192,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    managerSeatVOStub.run {
+                        ManagerSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -180,7 +206,8 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -188,7 +215,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -204,11 +231,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    managerSeatVOStub.run {
+                        ManagerSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -218,15 +245,19 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = studentId,
-                            studentName = studentName
+                            studentName = studentName,
+                            studentProfileImageUrl = studentProfileImageUrl
                         )
                     }
                 )
             )
 
+        given(queryStudentPort.queryStudentById(studentId))
+            .willReturn(studentStub)
+
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -242,11 +273,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    managerSeatVOStub.run {
+                        ManagerSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -256,7 +287,8 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -264,7 +296,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -279,7 +311,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -297,7 +329,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 
@@ -315,7 +347,7 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            managerQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
 }

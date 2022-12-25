@@ -3,25 +3,26 @@ package team.aliens.dms.domain.studyroom.usecase
 import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
+import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement
+import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
+import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 
 @ReadOnlyUseCase
-class StudentQueryStudyRoomUseCase(
+class ManagerQueryStudyRoomUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val queryStudyRoomPort: QueryStudyRoomPort,
+    private val queryStudentPort: StudyRoomQueryStudentPort
 ) {
 
-    fun execute(studyRoomId: UUID): StudentQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID): ManagerQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
@@ -31,7 +32,7 @@ class StudentQueryStudyRoomUseCase(
             throw SchoolMismatchException
         }
 
-        val seats = queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoom.id).map {
+        val seats = queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoom.id).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,
@@ -45,26 +46,24 @@ class StudentQueryStudyRoomUseCase(
                     )
                 },
                 status = it.status,
-                isMine(
-                    studentId = it.studentId,
-                    currentUserId = currentUserId,
-                    status = it.status
-                ),
                 student = it.studentId?.run {
+                    val student = queryStudentPort.queryStudentById(this)!!
+
                     StudentElement(
                         id = it.studentId,
-                        name = it.studentName!!
+                        name = it.studentName!!,
+                        gcn = student.gcn,
+                        profileImageUrl = it.studentProfileImageUrl!!
                     )
                 }
             )
         }
 
         return studyRoom.run {
-            StudentQueryStudyRoomResponse(
+            ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
                 totalAvailableSeat = availableHeadcount,
-                inUseHeadcount = inUseHeadcount!!,
                 availableSex = availableSex,
                 availableGrade = availableGrade,
                 eastDescription = eastDescription,
@@ -75,23 +74,6 @@ class StudentQueryStudyRoomUseCase(
                 totalHeightSize = heightSize,
                 seats = seats
             )
-        }
-    }
-
-    private fun isMine(studentId: UUID?, currentUserId: UUID, status: SeatStatus) = studentId?.run {
-        studentId == currentUserId
-    } ?: run {
-        /**
-         * student_id 가 NULL 일 경우
-         *
-         * AVAILABLE -> false
-         * UNAVAILABLE -> NULL
-         * IN_USE -> false
-         * EMPTY -> NULL
-         **/
-        when (status) {
-            SeatStatus.AVAILABLE, SeatStatus.IN_USE -> false
-            else -> null
         }
     }
 }

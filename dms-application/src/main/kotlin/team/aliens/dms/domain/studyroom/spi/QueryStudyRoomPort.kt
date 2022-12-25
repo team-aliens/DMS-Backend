@@ -1,9 +1,10 @@
 package team.aliens.dms.domain.studyroom.spi
 
 import java.util.UUID
-import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.spi.vo.ManagerSeatVO
 
 interface QueryStudyRoomPort {
 
@@ -15,6 +16,8 @@ interface QueryStudyRoomPort {
 
     fun existsStudyRoomByFloorAndName(floor: Int, name: String): Boolean
 
-    fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO>
+    fun queryAllStudentSeatsByStudyRoomId(studyRoomId: UUID): List<StudentSeatVO>
+
+    fun queryAllManagerSeatsByStudyRoomId(studyRoomId: UUID): List<ManagerSeatVO>
 
 }
