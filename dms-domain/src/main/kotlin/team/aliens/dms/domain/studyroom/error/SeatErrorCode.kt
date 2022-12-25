@@ -7,9 +7,12 @@ enum class SeatErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    SEAT_NOT_FOUND(404, "Seat Not Found"),
 
-    SEAT_ALREADY_APPLIED(409, "Seat Already Applied")
+    SEAT_NOT_FOUND(404, "Seat Not Found"),
+    APPLIED_SEAT_NOT_FOUND(404, "Applied Seat Not Found"),
+
+    SEAT_ALREADY_APPLIED(409, "Seat Already Applied"),
+    SEAT_CAN_NOT_APPLY(409, "Seat Can Not Apply")
     ;
 
     override fun status(): Int = status
