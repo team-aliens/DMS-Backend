@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.time.LocalDateTime
 import java.util.UUID
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -9,19 +10,27 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatVO
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.model.User
 
 @ExtendWith(SpringExtension::class)
 class StudentQueryStudyRoomUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: StudyRoomSecurityPort
+
+    @MockBean
+    private lateinit var queryUserPort: StudyRoomQueryUserPort
 
     @MockBean
     private lateinit var queryStudyRoomPort: QueryStudyRoomPort
@@ -31,17 +40,31 @@ class StudentQueryStudyRoomUseCaseTests {
     @BeforeEach
     fun setUp() {
         studentQueryStudyRoomUseCase = StudentQueryStudyRoomUseCase(
-            securityPort, queryStudyRoomPort
+            securityPort, queryUserPort, queryStudyRoomPort
         )
     }
 
     private val studyRoomId = UUID.randomUUID()
     private val currentUserId = UUID.randomUUID()
+    private val schoolId = UUID.randomUUID()
+
+    private val userStub by lazy {
+        User(
+            id = currentUserId,
+            schoolId = schoolId,
+            accountId = "계정 아이디",
+            password = "비밀번호",
+            email = "이메일",
+            authority = Authority.STUDENT,
+            createdAt = LocalDateTime.now(),
+            deletedAt = null
+        )
+    }
 
     private val studyRoomStub by lazy {
         StudyRoom(
             id = studyRoomId,
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             name = "이름",
             floor = 1,
             widthSize = 1,
@@ -57,8 +80,8 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
-    private val seatVOStub by lazy {
-        SeatVO(
+    private val studentSeatVOStub by lazy {
+        StudentSeatVO(
             seatId = UUID.randomUUID(),
             widthLocation = 1,
             heightLocation = 1,
@@ -78,11 +101,14 @@ class StudentQueryStudyRoomUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
-            .willReturn(listOf(seatVOStub))
+        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+            .willReturn(listOf(studentSeatVOStub))
 
         // when & then
         assertDoesNotThrow {
@@ -96,14 +122,17 @@ class StudentQueryStudyRoomUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    seatVOStub.run {
-                        SeatVO(
+                    studentSeatVOStub.run {
+                        StudentSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -131,14 +160,17 @@ class StudentQueryStudyRoomUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    seatVOStub.run {
-                        SeatVO(
+                    studentSeatVOStub.run {
+                        StudentSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -166,14 +198,17 @@ class StudentQueryStudyRoomUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    seatVOStub.run {
-                        SeatVO(
+                    studentSeatVOStub.run {
+                        StudentSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -201,14 +236,17 @@ class StudentQueryStudyRoomUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllSeatByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    seatVOStub.run {
-                        SeatVO(
+                    studentSeatVOStub.run {
+                        StudentSeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -231,16 +269,52 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     @Test
+    fun `사용자 미존재`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<UserNotFoundException> {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
     fun `자습실 미존재`() {
         // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
+
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
 
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(null)
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
+            studentQueryStudyRoomUseCase.execute(studyRoomId)
+        }
+    }
+
+    @Test
+    fun `학교 불일치`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryUserPort.queryUserById(currentUserId))
+            .willReturn(userStub)
+
+        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
+            .willReturn(studyRoomStub.copy(schoolId = UUID.randomUUID()))
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
             studentQueryStudyRoomUseCase.execute(studyRoomId)
         }
     }
