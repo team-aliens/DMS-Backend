@@ -10,4 +10,6 @@ interface SeatJpaRepository : CrudRepository<SeatJpaEntity, UUID> {
 
     fun findByStudentId(studentId: UUID): SeatJpaEntity?
 
+    fun deleteAllByStudyRoomId(studyRoomId: UUID)
+
 }
