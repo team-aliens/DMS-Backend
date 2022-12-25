@@ -25,6 +25,8 @@ import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
@@ -46,6 +48,7 @@ class StudyRoomWebAdapter(
     private val applySeatUseCase: ApplySeatUseCase,
     private val unApplySeatUseCase: UnApplySeatUseCase,
     private val createStudyRoomUseCase: CreateStudyRoomUseCase,
+    private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase,
     private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase
 ) {
