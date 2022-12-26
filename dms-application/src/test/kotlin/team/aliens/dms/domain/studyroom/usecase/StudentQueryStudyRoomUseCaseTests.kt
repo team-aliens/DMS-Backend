@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -80,8 +80,8 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
-    private val studentSeatVOStub by lazy {
-        StudentSeatVO(
+    private val seatVOStub by lazy {
+        SeatVO(
             seatId = UUID.randomUUID(),
             widthLocation = 1,
             heightLocation = 1,
@@ -107,8 +107,8 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
-            .willReturn(listOf(studentSeatVOStub))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
+            .willReturn(listOf(seatVOStub))
 
         // when & then
         assertDoesNotThrow {
@@ -128,11 +128,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    seatVOStub.run {
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -166,11 +166,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    seatVOStub.run {
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -204,11 +204,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    seatVOStub.run {
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -242,11 +242,11 @@ class StudentQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
-                    studentSeatVOStub.run {
-                        StudentSeatVO(
+                    seatVOStub.run {
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,

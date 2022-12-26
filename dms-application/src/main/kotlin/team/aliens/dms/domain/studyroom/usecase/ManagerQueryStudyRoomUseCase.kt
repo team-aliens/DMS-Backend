@@ -32,7 +32,7 @@ class ManagerQueryStudyRoomUseCase(
             throw SchoolMismatchException
         }
 
-        val seats = queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoom.id).map {
+        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,
@@ -53,7 +53,7 @@ class ManagerQueryStudyRoomUseCase(
                         id = it.studentId,
                         name = it.studentName!!,
                         gcn = student.gcn,
-                        profileImageUrl = it.studentProfileImageUrl!!
+                        profileImageUrl = student.profileImageUrl!!
                     )
                 }
             )

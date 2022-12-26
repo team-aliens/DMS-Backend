@@ -31,7 +31,7 @@ class StudentQueryStudyRoomUseCase(
             throw SchoolMismatchException
         }
 
-        val seats = queryStudyRoomPort.queryAllStudentSeatsByStudyRoomId(studyRoom.id).map {
+        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,

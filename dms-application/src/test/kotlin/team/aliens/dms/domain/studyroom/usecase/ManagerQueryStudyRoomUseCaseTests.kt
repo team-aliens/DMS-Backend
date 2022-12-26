@@ -21,7 +21,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
-import team.aliens.dms.domain.studyroom.spi.vo.ManagerSeatVO
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 
@@ -87,7 +87,7 @@ class ManagerQueryStudyRoomUseCaseTests {
     }
 
     private val managerSeatVOStub by lazy {
-        ManagerSeatVO(
+        SeatVO(
             seatId = UUID.randomUUID(),
             widthLocation = 1,
             heightLocation = 1,
@@ -97,8 +97,7 @@ class ManagerQueryStudyRoomUseCaseTests {
             typeName = "타입 이름",
             typeColor = "색깔",
             studentId = studentId,
-            studentName = "학생 이름",
-            studentProfileImageUrl = "https://~"
+            studentName = "학생 이름"
         )
     }
 
@@ -129,7 +128,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(listOf(managerSeatVOStub))
 
         given(queryStudentPort.queryStudentById(studentId))
@@ -153,11 +152,11 @@ class ManagerQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
                     managerSeatVOStub.run {
-                        ManagerSeatVO(
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -167,8 +166,7 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = null,
-                            studentName = null,
-                            studentProfileImageUrl = null
+                            studentName = null
                         )
                     }
                 )
@@ -192,11 +190,11 @@ class ManagerQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
                     managerSeatVOStub.run {
-                        ManagerSeatVO(
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -206,8 +204,7 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null,
-                            studentProfileImageUrl = null
+                            studentName = null
                         )
                     }
                 )
@@ -231,11 +228,11 @@ class ManagerQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
                     managerSeatVOStub.run {
-                        ManagerSeatVO(
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -245,8 +242,7 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = studentId,
-                            studentName = studentName,
-                            studentProfileImageUrl = studentProfileImageUrl
+                            studentName = studentName
                         )
                     }
                 )
@@ -273,11 +269,11 @@ class ManagerQueryStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(studyRoomStub)
 
-        given(queryStudyRoomPort.queryAllManagerSeatsByStudyRoomId(studyRoomId))
+        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(
                 listOf(
                     managerSeatVOStub.run {
-                        ManagerSeatVO(
+                        SeatVO(
                             seatId = seatId,
                             widthLocation = widthLocation,
                             heightLocation = heightLocation,
@@ -287,8 +283,7 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null,
-                            studentProfileImageUrl = null
+                            studentName = null
                         )
                     }
                 )
