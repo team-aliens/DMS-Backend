@@ -3,9 +3,11 @@ package team.aliens.dms.domain.studyroom.usecase
 import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.studyroom.exception.SeatTypeInUseException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandSeatTypePort
 import team.aliens.dms.domain.studyroom.spi.QuerySeatTypePort
+import team.aliens.dms.domain.studyroom.spi.SeatTypeQueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -15,6 +17,7 @@ class RemoveSeatTypeUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
     private val querySeatTypePort: QuerySeatTypePort,
+    private val queryStudyRoomPort: SeatTypeQueryStudyRoomPort,
     private val commandSeatTypePort: CommandSeatTypePort
 ) {
 
@@ -26,6 +29,10 @@ class RemoveSeatTypeUseCase(
 
         if (user.schoolId != seatType.schoolId) {
             throw SchoolMismatchException
+        }
+
+        if (queryStudyRoomPort.existsStudyRoomBySeatTypeId(seatTypeId)) {
+            throw SeatTypeInUseException
         }
 
         commandSeatTypePort.deleteSeatType(seatType)
