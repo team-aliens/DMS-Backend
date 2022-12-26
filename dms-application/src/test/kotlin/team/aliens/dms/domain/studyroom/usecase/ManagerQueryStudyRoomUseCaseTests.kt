@@ -36,15 +36,12 @@ class ManagerQueryStudyRoomUseCaseTests {
     @MockBean
     private lateinit var queryStudyRoomPort: QueryStudyRoomPort
 
-    @MockBean
-    private lateinit var queryStudentPort: StudyRoomQueryStudentPort
-
     private lateinit var managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase
 
     @BeforeEach
     fun setUp() {
         managerQueryStudyRoomUseCase = ManagerQueryStudyRoomUseCase(
-            securityPort, queryUserPort, queryStudyRoomPort, queryStudentPort
+            securityPort, queryUserPort, queryStudyRoomPort
         )
     }
 
@@ -133,9 +130,6 @@ class ManagerQueryStudyRoomUseCaseTests {
 
         given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
             .willReturn(listOf(managerSeatVOStub))
-
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub)
 
         // when & then
         assertDoesNotThrow {
@@ -262,9 +256,6 @@ class ManagerQueryStudyRoomUseCaseTests {
                     }
                 )
             )
-
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub)
 
         // when & then
         assertDoesNotThrow {
