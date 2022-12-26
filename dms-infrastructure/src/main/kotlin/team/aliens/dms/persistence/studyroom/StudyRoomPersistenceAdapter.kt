@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
@@ -85,17 +84,11 @@ class StudyRoomPersistenceAdapter(
                     studyRoomJpaEntity.availableGrade,
                     studyRoomJpaEntity.availableSex,
                     studyRoomJpaEntity.inUseHeadcount,
-                    seatJpaEntity.count().intValue()
+                    studyRoomJpaEntity.availableHeadcount
                 )
             )
             .from(studyRoomJpaEntity)
-            .leftJoin(seatJpaEntity)
-            .on(
-                studyRoomJpaEntity.id.eq(seatJpaEntity.studyRoom.id),
-                seatJpaEntity.status.eq(SeatStatus.AVAILABLE)
-            )
             .where(studyRoomJpaEntity.school.id.eq(schoolId))
-            .groupBy(studyRoomJpaEntity.id)
             .fetch()
     }
 
