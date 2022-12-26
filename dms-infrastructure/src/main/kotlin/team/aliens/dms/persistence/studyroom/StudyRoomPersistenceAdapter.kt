@@ -89,23 +89,18 @@ class StudyRoomPersistenceAdapter(
                     studyRoomJpaEntity.availableGrade,
                     studyRoomJpaEntity.availableSex,
                     studyRoomJpaEntity.inUseHeadcount,
-                    getTotalAvailableSeatCount(studyRoomJpaEntity.id)
+                    seatJpaEntity.count().intValue()
                 )
             )
             .from(studyRoomJpaEntity)
+            .leftJoin(seatJpaEntity)
+            .on(
+                studyRoomJpaEntity.id.eq(seatJpaEntity.studyRoom.id),
+                seatJpaEntity.status.eq(SeatStatus.AVAILABLE)
+            )
             .where(studyRoomJpaEntity.school.id.eq(schoolId))
+            .groupBy(studyRoomJpaEntity.id)
             .fetch()
-    }
-
-    private fun getTotalAvailableSeatCount(studyRoomId: ComparablePath<UUID>): NumberExpression<Int> {
-        return Expressions.asNumber(
-            JPAExpressions.select(seatJpaEntity.count())
-                .from(seatJpaEntity)
-                .where(
-                    seatJpaEntity.studyRoom.id.eq(studyRoomId),
-                    seatJpaEntity.status.eq(SeatStatus.AVAILABLE)
-                )
-        ).intValue()
     }
 
     override fun querySeatByStudyRoomId(studyRoomId: UUID) = seatMapper.toDomain(
