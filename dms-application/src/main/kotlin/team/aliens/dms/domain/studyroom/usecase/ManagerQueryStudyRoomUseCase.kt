@@ -9,7 +9,6 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -18,8 +17,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 class ManagerQueryStudyRoomUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
-    private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val queryStudentPort: StudyRoomQueryStudentPort
+    private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
     fun execute(studyRoomId: UUID): ManagerQueryStudyRoomResponse {
@@ -47,13 +45,11 @@ class ManagerQueryStudyRoomUseCase(
                 },
                 status = it.status,
                 student = it.studentId?.run {
-                    val student = queryStudentPort.queryStudentById(this)!!
-
                     StudentElement(
                         id = it.studentId,
                         name = it.studentName!!,
-                        gcn = student.gcn,
-                        profileImageUrl = student.profileImageUrl!!
+                        gcn = "${it.studentGrade}${it.studentClassRoom}${processNumber(it.studentNumber!!)}",
+                        profileImageUrl = it.studentProfileImageUrl!!
                     )
                 }
             )
@@ -76,4 +72,6 @@ class ManagerQueryStudyRoomUseCase(
             )
         }
     }
+
+    private fun processNumber(number: Int) = if (number < 10) "0${number}" else number.toString()
 }
