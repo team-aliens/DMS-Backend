@@ -27,7 +27,6 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
-import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase

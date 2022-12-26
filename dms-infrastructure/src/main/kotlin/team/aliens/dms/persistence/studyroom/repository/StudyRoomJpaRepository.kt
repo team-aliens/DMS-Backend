@@ -10,6 +10,4 @@ interface StudyRoomJpaRepository : CrudRepository<StudyRoomJpaEntity, UUID> {
 
     fun existsByNameAndFloorAndSchoolId(name: String, floor: Int, schoolId: UUID): Boolean
 
-    fun findAllBySchoolId(schoolId: UUID): List<StudyRoomJpaEntity>
-
 }
