@@ -4,6 +4,7 @@ import java.util.UUID
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 
 interface QueryStudyRoomPort {
 
@@ -17,7 +18,7 @@ interface QueryStudyRoomPort {
 
     fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO>
 
-    fun queryAllStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoom>
+    fun queryAllStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoomVO>
 
     fun countSeatByStudyRoomId(studyRoomId: UUID): Int
 
