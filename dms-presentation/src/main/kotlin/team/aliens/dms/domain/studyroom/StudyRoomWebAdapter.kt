@@ -23,6 +23,8 @@ import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
@@ -30,6 +32,7 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
@@ -52,6 +55,7 @@ class StudyRoomWebAdapter(
     private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase,
     private val removeStudyRoomUseCase: RemoveStudyRoomUseCase,
+    private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase,
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase
 ) {
 
@@ -162,8 +166,13 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/{study-room-id}/students")
-    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID): StudentQueryStudyRoomResponse {
-        return studentQueryStudyRoomUseCase.execute(studyRoomId)
+    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): StudentQueryStudyRoomResponse {
+        return studentQueryStudyRoomUseCase.execute(studyRoomId!!)
+    }
+
+    @GetMapping("/{study-room-id}/managers")
+    fun managerGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): ManagerQueryStudyRoomResponse {
+        return managerQueryStudyRoomUseCase.execute(studyRoomId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

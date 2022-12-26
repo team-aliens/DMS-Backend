@@ -52,7 +52,7 @@ class StudyRoomPersistenceAdapter(
         floor: Int, name: String, schoolId: UUID
     ) = studyRoomRepository.existsByNameAndFloorAndSchoolId(name, floor, schoolId)
 
-    override fun queryAllSeatByStudyRoomId(studyRoomId: UUID): List<SeatVO> {
+    override fun queryAllSeatsByStudyRoomId(studyRoomId: UUID): List<SeatVO> {
         return jpaQueryFactory
             .select(
                 QQuerySeatVO(
@@ -65,7 +65,11 @@ class StudyRoomPersistenceAdapter(
                     seatTypeJpaEntity.name,
                     seatTypeJpaEntity.color,
                     studentJpaEntity.id,
-                    studentJpaEntity.name
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    studentJpaEntity.profileImageUrl
                 )
             )
             .from(seatJpaEntity)
