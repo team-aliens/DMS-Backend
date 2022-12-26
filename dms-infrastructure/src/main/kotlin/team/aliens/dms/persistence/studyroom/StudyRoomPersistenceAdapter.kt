@@ -67,6 +67,17 @@ class StudyRoomPersistenceAdapter(
             .fetch()
     }
 
+    override fun queryAllStudyRoomsBySchoolId(schoolId: UUID) = studyRoomRepository
+        .findAllBySchoolId(schoolId).map {
+            studyRoomMapper.toDomain(it)!!
+        }
+
+    override fun countSeatByStudyRoomId(studyRoomId: UUID) = seatRepository.countByStudyRoomId(studyRoomId)
+
+    override fun querySeatByStudyRoomId(studyRoomId: UUID) = seatMapper.toDomain(
+        seatRepository.findByStudyRoomId(studyRoomId)
+    )
+
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
             seatMapper.toEntity(seat)
