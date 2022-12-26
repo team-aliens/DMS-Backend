@@ -1,5 +1,9 @@
 package team.aliens.dms.persistence.studyroom
 
+import com.querydsl.core.types.dsl.ComparablePath
+import com.querydsl.core.types.dsl.Expressions
+import com.querydsl.core.types.dsl.NumberExpression
+import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
@@ -8,16 +12,20 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
+import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatTypeJpaEntity.seatTypeJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.QStudyRoomJpaEntity.studyRoomJpaEntity
 import team.aliens.dms.persistence.studyroom.mapper.SeatMapper
 import team.aliens.dms.persistence.studyroom.mapper.StudyRoomMapper
 import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatVO
+import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -67,10 +75,34 @@ class StudyRoomPersistenceAdapter(
             .fetch()
     }
 
-    override fun queryAllStudyRoomsBySchoolId(schoolId: UUID) = studyRoomRepository
-        .findAllBySchoolId(schoolId).map {
-            studyRoomMapper.toDomain(it)!!
-        }
+    override fun queryAllStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoomVO> {
+        return jpaQueryFactory
+            .select(
+                QQueryStudyRoomVO(
+                    studyRoomJpaEntity.id,
+                    studyRoomJpaEntity.floor,
+                    studyRoomJpaEntity.name,
+                    studyRoomJpaEntity.availableGrade,
+                    studyRoomJpaEntity.availableSex,
+                    studyRoomJpaEntity.inUseHeadcount,
+                    getTotalAvailableSeatCount(studyRoomJpaEntity.id)
+                )
+            )
+            .from(studyRoomJpaEntity)
+            .where(studyRoomJpaEntity.school.id.eq(schoolId))
+            .fetch()
+    }
+
+    private fun getTotalAvailableSeatCount(studyRoomId: ComparablePath<UUID>): NumberExpression<Int> {
+        return Expressions.asNumber(
+            JPAExpressions.select(seatJpaEntity.count())
+                .from(seatJpaEntity)
+                .where(
+                    seatJpaEntity.studyRoom.id.eq(studyRoomId),
+                    seatJpaEntity.status.eq(SeatStatus.AVAILABLE)
+                )
+        ).intValue()
+    }
 
     override fun countSeatByStudyRoomId(studyRoomId: UUID) = seatRepository.countByStudyRoomId(studyRoomId)
 
