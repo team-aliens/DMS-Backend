@@ -9,4 +9,6 @@ interface QuerySeatTypePort {
 
     fun existsSeatTypeByName(name: String): Boolean
 
+    fun querySeatTypeById(seatTypeId: UUID): SeatType?
+
 }
