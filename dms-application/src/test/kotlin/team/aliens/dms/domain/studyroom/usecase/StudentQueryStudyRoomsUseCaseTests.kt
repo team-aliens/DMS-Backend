@@ -136,7 +136,7 @@ class StudentQueryStudyRoomsUseCaseTests {
             .willReturn(userStub)
 
         given(queryStudyRoomPort.querySeatByStudentId(currentUserId))
-            .willReturn(seatStub.copy(studentId = null))
+            .willReturn(null)
 
         given(queryStudyRoomPort.queryAllStudyRoomsBySchoolId(userStub.schoolId))
             .willReturn(listOf(studyRoomVOStub))
