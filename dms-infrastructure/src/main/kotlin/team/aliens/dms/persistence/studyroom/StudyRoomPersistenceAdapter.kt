@@ -1,9 +1,5 @@
 package team.aliens.dms.persistence.studyroom
 
-import com.querydsl.core.types.dsl.ComparablePath
-import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.core.types.dsl.NumberExpression
-import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
