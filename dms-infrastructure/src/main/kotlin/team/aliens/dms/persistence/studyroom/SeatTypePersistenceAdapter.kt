@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.studyroom
 
 import java.util.UUID
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.spi.SeatTypePort
@@ -20,9 +21,17 @@ class SeatTypePersistenceAdapter(
 
     override fun existsSeatTypeByName(name: String) = seatTypeRepository.existsByName(name)
 
+    override fun querySeatTypeById(seatTypeId: UUID) = seatTypeMapper.toDomain(
+        seatTypeRepository.findByIdOrNull(seatTypeId)
+    )
+
     override fun saveSeatType(seatType: SeatType) = seatTypeMapper.toDomain(
         seatTypeRepository.save(
             seatTypeMapper.toEntity(seatType)
         )
     )!!
+
+    override fun deleteSeatType(seatType: SeatType) = seatTypeRepository.delete(
+        seatTypeMapper.toEntity(seatType)
+    )
 }

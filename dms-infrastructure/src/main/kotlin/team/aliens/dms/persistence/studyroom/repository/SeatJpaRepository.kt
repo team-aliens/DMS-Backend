@@ -14,4 +14,6 @@ interface SeatJpaRepository : CrudRepository<SeatJpaEntity, UUID> {
 
     fun findByStudyRoomId(studyRoomId: UUID): SeatJpaEntity?
 
+    fun existsByTypeId(seatTypeId: UUID): Boolean
+
 }

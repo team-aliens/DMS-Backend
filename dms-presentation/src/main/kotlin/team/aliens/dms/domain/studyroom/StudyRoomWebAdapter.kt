@@ -36,6 +36,7 @@ import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
@@ -58,7 +59,8 @@ class StudyRoomWebAdapter(
     private val removeStudyRoomUseCase: RemoveStudyRoomUseCase,
     private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase,
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase,
-    private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase
+    private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
+    private val removeSeatTypeUseCase: RemoveSeatTypeUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -179,8 +181,8 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{study-room-id}")
-    fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID) {
-        removeStudyRoomUseCase.execute(studyRoomId)
+    fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?) {
+        removeStudyRoomUseCase.execute(studyRoomId!!)
     }
 
     @GetMapping("/list/students")
@@ -191,5 +193,11 @@ class StudyRoomWebAdapter(
     @GetMapping("/list/managers")
     fun managerGetStudyRooms(): ManagerQueryStudyRoomsResponse {
         return managerQueryStudyRoomsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/types/{type-id}")
+    fun removeSeatType(@PathVariable("type-id") @NotNull seatTypeId: UUID?) {
+        return removeSeatTypeUseCase.execute(seatTypeId!!)
     }
 }
