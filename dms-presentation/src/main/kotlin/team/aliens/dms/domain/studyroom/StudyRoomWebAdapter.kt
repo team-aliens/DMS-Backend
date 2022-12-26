@@ -27,6 +27,7 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
@@ -35,6 +36,7 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 
@@ -52,7 +54,8 @@ class StudyRoomWebAdapter(
     private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase,
     private val removeStudyRoomUseCase: RemoveStudyRoomUseCase,
-    private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase
+    private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase,
+    private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -175,5 +178,10 @@ class StudyRoomWebAdapter(
     @DeleteMapping("/{study-room-id}")
     fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID) {
         removeStudyRoomUseCase.execute(studyRoomId)
+    }
+
+    @GetMapping("/list/students")
+    fun studentGetStudyRooms(): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute()
     }
 }

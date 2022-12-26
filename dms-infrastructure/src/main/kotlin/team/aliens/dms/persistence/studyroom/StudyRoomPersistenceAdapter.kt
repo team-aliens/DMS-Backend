@@ -10,14 +10,17 @@ import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatTypeJpaEntity.seatTypeJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.QStudyRoomJpaEntity.studyRoomJpaEntity
 import team.aliens.dms.persistence.studyroom.mapper.SeatMapper
 import team.aliens.dms.persistence.studyroom.mapper.StudyRoomMapper
 import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatVO
+import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -70,6 +73,28 @@ class StudyRoomPersistenceAdapter(
             .where(seatJpaEntity.studyRoom.id.eq(studyRoomId))
             .fetch()
     }
+
+    override fun queryAllStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoomVO> {
+        return jpaQueryFactory
+            .select(
+                QQueryStudyRoomVO(
+                    studyRoomJpaEntity.id,
+                    studyRoomJpaEntity.floor,
+                    studyRoomJpaEntity.name,
+                    studyRoomJpaEntity.availableGrade,
+                    studyRoomJpaEntity.availableSex,
+                    studyRoomJpaEntity.inUseHeadcount,
+                    studyRoomJpaEntity.availableHeadcount
+                )
+            )
+            .from(studyRoomJpaEntity)
+            .where(studyRoomJpaEntity.school.id.eq(schoolId))
+            .fetch()
+    }
+
+    override fun querySeatByStudyRoomId(studyRoomId: UUID) = seatMapper.toDomain(
+        seatRepository.findByStudyRoomId(studyRoomId)
+    )
 
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
