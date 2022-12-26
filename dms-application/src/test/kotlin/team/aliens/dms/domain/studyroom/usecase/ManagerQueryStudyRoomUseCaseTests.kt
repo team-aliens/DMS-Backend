@@ -18,7 +18,6 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
@@ -97,7 +96,11 @@ class ManagerQueryStudyRoomUseCaseTests {
             typeName = "타입 이름",
             typeColor = "색깔",
             studentId = studentId,
-            studentName = "학생 이름"
+            studentName = "학생 이름",
+            studentGrade = 1,
+            studentClassRoom = 1,
+            studentNumber = 1,
+            studentProfileImageUrl = "https://~"
         )
     }
 
@@ -166,7 +169,11 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -204,7 +211,11 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -242,7 +253,11 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = studentId,
-                            studentName = studentName
+                            studentName = studentName,
+                            studentGrade = studentGrade,
+                            studentClassRoom = studentClassRoom,
+                            studentNumber = studentNumber,
+                            studentProfileImageUrl = studentProfileImageUrl
                         )
                     }
                 )
@@ -283,7 +298,11 @@ class ManagerQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )

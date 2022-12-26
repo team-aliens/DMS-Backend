@@ -91,7 +91,11 @@ class StudentQueryStudyRoomUseCaseTests {
             typeName = "타입 이름",
             typeColor = "색깔",
             studentId = UUID.randomUUID(),
-            studentName = "학생 이름"
+            studentName = "학생 이름",
+            studentGrade = null,
+            studentClassRoom = null,
+            studentNumber = null,
+            studentProfileImageUrl = null
         )
     }
 
@@ -142,7 +146,11 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -180,7 +188,11 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
@@ -218,7 +230,11 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = typeName,
                             typeColor = typeColor,
                             studentId = studentId,
-                            studentName = studentName
+                            studentName = studentName,
+                            studentGrade = studentGrade,
+                            studentClassRoom = studentClassRoom,
+                            studentNumber = studentNumber,
+                            studentProfileImageUrl = studentProfileImageUrl
                         )
                     }
                 )
@@ -256,7 +272,11 @@ class StudentQueryStudyRoomUseCaseTests {
                             typeName = null,
                             typeColor = null,
                             studentId = null,
-                            studentName = null
+                            studentName = null,
+                            studentGrade = null,
+                            studentClassRoom = null,
+                            studentNumber = null,
+                            studentProfileImageUrl = null
                         )
                     }
                 )
