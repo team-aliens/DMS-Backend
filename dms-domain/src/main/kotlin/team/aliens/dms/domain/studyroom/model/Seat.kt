@@ -20,4 +20,15 @@ data class Seat(
 
     val status: SeatStatus
 
-)
+) {
+
+    fun use(studentId: UUID) = this.copy(
+        studentId = studentId,
+        status = SeatStatus.IN_USE
+    )
+
+    fun unUse() = this.copy(
+        studentId = null,
+        status = SeatStatus.AVAILABLE
+    )
+}

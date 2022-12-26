@@ -38,11 +38,13 @@ data class StudyRoom(
 
 ) {
 
-    fun plusInUseHeadcount() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.inc()
+    fun apply() = this.copy(
+        inUseHeadcount = inUseHeadcount!!.inc(),
+        availableHeadcount = availableHeadcount.dec()
     )
 
-    fun minusInUseHeadcount() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.dec()
+    fun unApply() = this.copy(
+        inUseHeadcount = inUseHeadcount!!.dec(),
+        availableHeadcount = availableHeadcount.inc()
     )
 }

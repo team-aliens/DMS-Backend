@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
@@ -13,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @UseCase
 class ApplySeatUseCase(
@@ -40,11 +40,12 @@ class ApplySeatUseCase(
         val saveSeat = seat.studentId?.run {
             throw SeatAlreadyAppliedException
         } ?: run {
-            seat.copy(studentId = currentUserId)
+            seat.use(currentUserId)
         }
         commandStudyRoomPort.saveSeat(saveSeat)
+
         commandStudyRoomPort.saveStudyRoom(
-            studyRoom.plusInUseHeadcount()
+            studyRoom.apply()
         )
     }
 }

@@ -2,7 +2,6 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFound
-import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -22,10 +21,10 @@ class UnApplySeatUseCase(
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
 
         commandStudyRoomPort.saveSeat(
-            seat.copy(studentId = null)
+            seat.unUse()
         )
         commandStudyRoomPort.saveStudyRoom(
-            studyRoom.minusInUseHeadcount()
+            studyRoom.unApply()
         )
     }
 }
