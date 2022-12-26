@@ -13,5 +13,9 @@ open class SeatVO(
     val typeName: String?,
     val typeColor: String?,
     val studentId: UUID?,
-    val studentName: String?
+    val studentName: String?,
+    val studentGrade: Int?,
+    val studentClassRoom: Int?,
+    val studentNumber: Int?,
+    val studentProfileImageUrl: String?
 )

@@ -15,7 +15,11 @@ class QuerySeatVO @QueryProjection constructor(
     typeName: String?,
     typeColor: String?,
     studentId: UUID?,
-    studentName: String?
+    studentName: String?,
+    studentGrade: Int?,
+    studentClassRoom: Int?,
+    studentNumber: Int?,
+    studentProfileImageUrl: String?
 ) : SeatVO(
     seatId = seatId,
     widthLocation = widthLocation,
@@ -26,5 +30,9 @@ class QuerySeatVO @QueryProjection constructor(
     typeName = typeName,
     typeColor = typeColor,
     studentId = studentId,
-    studentName = studentName
+    studentName = studentName,
+    studentGrade = studentGrade,
+    studentClassRoom = studentClassRoom,
+    studentNumber = studentNumber,
+    studentProfileImageUrl = studentProfileImageUrl
 )

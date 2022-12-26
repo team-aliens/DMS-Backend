@@ -57,7 +57,11 @@ class StudyRoomPersistenceAdapter(
                     seatTypeJpaEntity.name,
                     seatTypeJpaEntity.color,
                     studentJpaEntity.id,
-                    studentJpaEntity.name
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    studentJpaEntity.profileImageUrl
                 )
             )
             .from(seatJpaEntity)
