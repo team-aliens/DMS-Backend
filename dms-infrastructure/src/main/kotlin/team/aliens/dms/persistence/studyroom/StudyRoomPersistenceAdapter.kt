@@ -108,8 +108,6 @@ class StudyRoomPersistenceAdapter(
         ).intValue()
     }
 
-    override fun countSeatByStudyRoomId(studyRoomId: UUID) = seatRepository.countByStudyRoomId(studyRoomId)
-
     override fun querySeatByStudyRoomId(studyRoomId: UUID) = seatMapper.toDomain(
         seatRepository.findByStudyRoomId(studyRoomId)
     )

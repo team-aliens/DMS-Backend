@@ -20,8 +20,6 @@ interface QueryStudyRoomPort {
 
     fun queryAllStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoomVO>
 
-    fun countSeatByStudyRoomId(studyRoomId: UUID): Int
-
     fun querySeatByStudyRoomId(studyRoomId: UUID): Seat?
 
 }
