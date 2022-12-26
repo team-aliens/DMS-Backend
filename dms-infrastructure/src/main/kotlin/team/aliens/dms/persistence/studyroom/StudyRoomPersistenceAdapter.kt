@@ -100,4 +100,8 @@ class StudyRoomPersistenceAdapter(
             studyRoomMapper.toEntity(studyRoom)
         )
     )!!
+
+    override fun deleteStudyRoomById(studyRoomId: UUID) {
+        studyRoomRepository.deleteById(studyRoomId)
+    }
 }
