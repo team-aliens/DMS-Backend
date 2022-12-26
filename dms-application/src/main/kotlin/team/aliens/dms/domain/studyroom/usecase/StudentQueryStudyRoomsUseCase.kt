@@ -31,7 +31,10 @@ class StudentQueryStudyRoomsUseCase(
                 availableSex = it.availableSex,
                 inUseHeadcount = it.inUseHeadcount,
                 totalAvailableSeat = it.totalAvailableSeat,
-                isMine = isMine(userStudyRoomId, it.id)
+                isMine = isMine(
+                    userStudyRoomId = userStudyRoomId,
+                    studyRoomId = it.id
+                )
             )
         }
 
