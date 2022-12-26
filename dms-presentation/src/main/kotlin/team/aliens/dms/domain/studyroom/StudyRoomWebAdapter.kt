@@ -33,6 +33,7 @@ import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
@@ -50,6 +51,7 @@ class StudyRoomWebAdapter(
     private val createStudyRoomUseCase: CreateStudyRoomUseCase,
     private val updateStudyRoomUseCase: UpdateStudyRoomUseCase,
     private val studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase,
+    private val removeStudyRoomUseCase: RemoveStudyRoomUseCase,
     private val managerQueryStudyRoomUseCase: ManagerQueryStudyRoomUseCase
 ) {
 
@@ -167,5 +169,11 @@ class StudyRoomWebAdapter(
     @GetMapping("/{study-room-id}/managers")
     fun managerGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): ManagerQueryStudyRoomResponse {
         return managerQueryStudyRoomUseCase.execute(studyRoomId!!)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{study-room-id}")
+    fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID) {
+        removeStudyRoomUseCase.execute(studyRoomId)
     }
 }
