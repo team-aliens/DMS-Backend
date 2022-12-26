@@ -9,6 +9,7 @@ enum class SeatTypeErrorCode(
 
     SEAT_TYPE_NOT_FOUND(404, "Seat Type Not Found"),
 
+    SEAT_TYPE_IN_USE(409, "Seat Type In Use"),
     SEAT_TYPE_ALREADY_EXISTS(409, "Seat Type Already Exists")
     ;
 
