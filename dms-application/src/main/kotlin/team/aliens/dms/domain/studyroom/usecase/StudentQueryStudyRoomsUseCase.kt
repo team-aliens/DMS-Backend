@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse.StudyRoomElement
@@ -19,6 +20,8 @@ class StudentQueryStudyRoomsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
+        val userStudyRoomId = queryStudyRoomPort.querySeatByStudentId(currentUserId)?.studyRoomId
+
         val studyRoom = queryStudyRoomPort.queryAllStudyRoomsBySchoolId(user.schoolId).map {
             StudyRoomElement(
                 id = it.id,
@@ -28,12 +31,18 @@ class StudentQueryStudyRoomsUseCase(
                 availableSex = it.availableSex,
                 inUseHeadcount = it.inUseHeadcount,
                 totalAvailableSeat = it.totalAvailableSeat,
-                isMine = true // 보류
+                isMine = isMine(userStudyRoomId, it.id)
             )
         }
 
         return StudentQueryStudyRoomsResponse(
             studyRooms = studyRoom
         )
+    }
+
+    private fun isMine(userStudyRoomId: UUID?, studyRoomId: UUID) = userStudyRoomId?.run {
+        this == studyRoomId
+    } ?: run {
+        false
     }
 }
