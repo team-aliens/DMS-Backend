@@ -22,7 +22,7 @@ class StudentQueryStudyRoomsUseCase(
 
         val userStudyRoomId = queryStudyRoomPort.querySeatByStudentId(currentUserId)?.studyRoomId
 
-        val studyRoom = queryStudyRoomPort.queryAllStudyRoomsBySchoolId(user.schoolId).map {
+        val studyRooms = queryStudyRoomPort.queryAllStudyRoomsBySchoolId(user.schoolId).map {
             StudyRoomElement(
                 id = it.id,
                 floor = it.floor,
@@ -39,7 +39,7 @@ class StudentQueryStudyRoomsUseCase(
         }
 
         return StudentQueryStudyRoomsResponse(
-            studyRooms = studyRoom
+            studyRooms = studyRooms
         )
     }
 
