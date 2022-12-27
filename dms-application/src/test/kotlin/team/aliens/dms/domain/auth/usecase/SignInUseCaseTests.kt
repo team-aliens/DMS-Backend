@@ -75,7 +75,8 @@ class SignInUseCaseTests {
             schoolId = userStub.schoolId,
             mealService = true,
             noticeService = true,
-            pointService = true
+            pointService = true,
+            studyRoomService = false
         )
     }
 

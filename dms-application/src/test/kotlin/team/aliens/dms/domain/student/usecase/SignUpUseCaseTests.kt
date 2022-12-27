@@ -225,7 +225,8 @@ class SignUpUseCaseTests {
             schoolId = userStub.schoolId,
             mealService = true,
             noticeService = true,
-            pointService = true
+            pointService = true,
+            studyRoomService = false
         )
     }
 
@@ -240,7 +241,8 @@ class SignUpUseCaseTests {
             features = SignUpResponse.Features(
                 mealService = true,
                 noticeService = true,
-                pointService = true
+                pointService = true,
+                studyRoomService = false
             )
         )
     }
