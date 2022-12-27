@@ -49,7 +49,10 @@ class StudentPersistenceAdapter(
                 schoolEq(schoolId)
             )
             .orderBy(
-                sortFilter(sort)
+                sortFilter(sort),
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
             )
             .fetch()
             .map {
@@ -66,11 +69,8 @@ class StudentPersistenceAdapter(
             Sort.NAME -> {
                 studentJpaEntity.name.asc()
             }
-
             else -> {
                 studentJpaEntity.grade.asc()
-                studentJpaEntity.classRoom.asc()
-                studentJpaEntity.number.asc()
             }
         }
     }
