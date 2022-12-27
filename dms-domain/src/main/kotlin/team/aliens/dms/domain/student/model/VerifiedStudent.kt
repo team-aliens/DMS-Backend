@@ -6,7 +6,7 @@ import java.util.UUID
 @Aggregate
 data class VerifiedStudent(
 
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID = UUID(0, 0),
 
     val schoolName: String,
 
