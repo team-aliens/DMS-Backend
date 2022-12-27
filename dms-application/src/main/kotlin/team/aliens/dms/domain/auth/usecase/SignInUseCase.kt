@@ -40,7 +40,8 @@ class SignInUseCase(
                 SignInResponse.Features(
                     mealService = mealService,
                     noticeService = noticeService,
-                    pointService = pointService
+                    pointService = pointService,
+                    studyRoomService = studyRoomService,
                 )
             }
         )

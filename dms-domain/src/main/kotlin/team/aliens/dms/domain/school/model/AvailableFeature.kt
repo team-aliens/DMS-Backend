@@ -12,6 +12,8 @@ data class AvailableFeature(
 
     val noticeService: Boolean,
 
-    val pointService: Boolean
+    val pointService: Boolean,
+
+    val studyRoomService: Boolean
 
 )

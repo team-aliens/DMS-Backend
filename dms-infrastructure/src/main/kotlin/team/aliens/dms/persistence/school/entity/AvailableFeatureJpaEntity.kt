@@ -29,6 +29,9 @@ class AvailableFeatureJpaEntity(
     val noticeService: Boolean,
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
-    val pointService: Boolean
+    val pointService: Boolean,
+
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    val studyRoomService: Boolean
 
 )
