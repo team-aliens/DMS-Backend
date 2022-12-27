@@ -18,7 +18,8 @@ class AvailableFeatureMapper(
                 schoolId = entity.schoolId,
                 mealService = entity.mealService,
                 noticeService = entity.noticeService,
-                pointService = entity.pointService
+                pointService = entity.pointService,
+                studyRoomService = entity.studyRoomService
             )
         }
     }
@@ -31,7 +32,8 @@ class AvailableFeatureMapper(
             school = school,
             mealService = domain.mealService,
             noticeService = domain.noticeService,
-            pointService = domain.pointService
+            pointService = domain.pointService,
+            studyRoomService = domain.studyRoomService
         )
     }
 }

@@ -52,7 +52,7 @@ class StudentJpaEntity(
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(500)", nullable = false)
     val profileImageUrl: String,
 
     @Column(columnDefinition = "VARCHAR(6)", nullable = false)

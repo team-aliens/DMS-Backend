@@ -142,7 +142,8 @@ class SignUpUseCase(
                 SignUpResponse.Features(
                     mealService = mealService,
                     noticeService = noticeService,
-                    pointService = pointService
+                    pointService = pointService,
+                    studyRoomService = studyRoomService,
                 )
             }
         )

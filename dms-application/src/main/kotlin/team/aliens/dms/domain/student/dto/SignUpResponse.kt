@@ -12,6 +12,7 @@ data class SignUpResponse(
     data class Features(
         val mealService: Boolean,
         val noticeService: Boolean,
-        val pointService: Boolean
+        val pointService: Boolean,
+        val studyRoomService: Boolean
     )
 }

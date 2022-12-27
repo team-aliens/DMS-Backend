@@ -38,7 +38,8 @@ class ReissueTokenUseCase(
                 ReissueResponse.Features(
                     mealService = mealService,
                     noticeService = noticeService,
-                    pointService = pointService
+                    pointService = pointService,
+                    studyRoomService = studyRoomService
                 )
             }
         )
