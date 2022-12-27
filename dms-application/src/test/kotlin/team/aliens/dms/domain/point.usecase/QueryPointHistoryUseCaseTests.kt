@@ -50,7 +50,7 @@ class QueryPointHistoryUseCaseTests {
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
-                score = -5
+                score = 5
             )
         )
     }
