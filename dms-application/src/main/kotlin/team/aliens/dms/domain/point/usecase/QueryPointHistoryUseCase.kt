@@ -26,8 +26,9 @@ class QueryPointHistoryUseCase(
         val totalPoint = pointHistory.sumOf {
             if (it.type == PointType.MINUS) {
                 it.score * -1
+            } else {
+                it.score
             }
-            it.score
         }
 
         return QueryPointHistoryResponse(
