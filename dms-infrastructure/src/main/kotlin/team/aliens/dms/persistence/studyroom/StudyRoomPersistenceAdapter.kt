@@ -89,6 +89,10 @@ class StudyRoomPersistenceAdapter(
             )
             .from(studyRoomJpaEntity)
             .where(studyRoomJpaEntity.school.id.eq(schoolId))
+            .orderBy(
+                studyRoomJpaEntity.floor.asc(),
+                studyRoomJpaEntity.name.asc()
+            )
             .fetch()
     }
 
