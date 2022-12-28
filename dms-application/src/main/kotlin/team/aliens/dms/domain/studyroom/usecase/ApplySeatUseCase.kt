@@ -12,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.time.LocalTime
 import java.util.UUID
 
 @UseCase
@@ -20,7 +21,8 @@ class ApplySeatUseCase(
     private val queryUserPort: StudyRoomQueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val unApplySeatUseCase: UnApplySeatUseCase
+    private val unApplySeatUseCase: UnApplySeatUseCase,
+    private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase
 ) {
 
     fun execute(seatId: UUID) {
@@ -32,6 +34,13 @@ class ApplySeatUseCase(
 
         if (user.schoolId != studyRoom.schoolId) {
             throw SchoolMismatchException
+        }
+
+        val now = LocalTime.now()
+        val availableTime = queryAvailableTimeUseCase.execute()
+
+        if (now < availableTime.startAt || now > availableTime.endAt) {
+            throw SeatCanNotAppliedException
         }
 
         if (seat.status != SeatStatus.AVAILABLE) {
