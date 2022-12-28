@@ -21,7 +21,6 @@ class ApplySeatUseCase(
     private val queryUserPort: StudyRoomQueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val unApplySeatUseCase: UnApplySeatUseCase,
     private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase
 ) {
 
@@ -49,7 +48,18 @@ class ApplySeatUseCase(
 
         val currentSeat = queryStudyRoomPort.querySeatByStudentId(currentUserId)
         currentSeat?.let {
-            unApplySeatUseCase.execute()
+            commandStudyRoomPort.saveSeat(
+                it.unUse()
+            )
+
+            if (studyRoom.id != it.studyRoomId) {
+                val currentStudyRoom = queryStudyRoomPort.queryStudyRoomById(it.studyRoomId)
+                    ?: throw StudyRoomNotFoundException
+
+                commandStudyRoomPort.saveStudyRoom(
+                    currentStudyRoom.unApply()
+                )
+            }
         }
 
         val saveSeat = seat.studentId?.run {
@@ -59,8 +69,10 @@ class ApplySeatUseCase(
         }
         commandStudyRoomPort.saveSeat(saveSeat)
 
-        commandStudyRoomPort.saveStudyRoom(
-            studyRoom.apply()
-        )
+        if (studyRoom.id != currentSeat?.studyRoomId) {
+            commandStudyRoomPort.saveStudyRoom(
+                studyRoom.apply()
+            )
+        }
     }
 }
