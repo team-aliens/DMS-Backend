@@ -23,8 +23,8 @@ class QueryAvailableTimeUseCase(
             .queryAvailableTimeBySchoolId(user.schoolId) ?: throw AvailableTimeNotFoundException
 
         return QueryAvailableTimeResponse(
-            startAt = availableTime.startAt,
-            endAt = availableTime.endAt
+            startAt = availableTime.startAt.withSecond(0),
+            endAt = availableTime.endAt.withSecond(0)
         )
     }
 }
