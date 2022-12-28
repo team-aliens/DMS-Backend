@@ -19,7 +19,8 @@ class ApplySeatUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort
+    private val commandStudyRoomPort: CommandStudyRoomPort,
+    private val unApplySeatUseCase: UnApplySeatUseCase
 ) {
 
     fun execute(seatId: UUID) {
@@ -35,6 +36,11 @@ class ApplySeatUseCase(
 
         if (seat.status != SeatStatus.AVAILABLE) {
             throw SeatCanNotAppliedException
+        }
+
+        val currentSeat = queryStudyRoomPort.querySeatByStudentId(currentUserId)
+        currentSeat?.let {
+            unApplySeatUseCase.execute()
         }
 
         val saveSeat = seat.studentId?.run {
