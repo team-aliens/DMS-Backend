@@ -37,7 +37,7 @@ class UpdateStudyRoomUseCase(
             throw SchoolMismatchException
         }
 
-        if (request.floor != studyRoom.floor && request.name != studyRoom.name) {
+        if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
             val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
                 floor = request.floor,
                 name = request.name,
