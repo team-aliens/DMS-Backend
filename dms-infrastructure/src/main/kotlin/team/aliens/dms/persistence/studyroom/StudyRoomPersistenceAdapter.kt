@@ -4,8 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Propagation
-import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -112,9 +110,9 @@ class StudyRoomPersistenceAdapter(
         )
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     override fun deleteAllSeatsByStudyRoomId(studyRoomId: UUID) {
         seatRepository.deleteAllByStudyRoomId(studyRoomId)
+        seatRepository.flush()
     }
 
     override fun saveStudyRoom(studyRoom: StudyRoom) = studyRoomMapper.toDomain(
