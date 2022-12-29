@@ -42,16 +42,12 @@ class ApplySeatUseCase(
             throw SchoolMismatchException
         }
 
-        if (studyRoom.availableGrade != 0) {
-            if (studyRoom.availableGrade != student.grade) {
-                throw StudyRoomAvailableGradeMismatchException
-            }
+        if (studyRoom.availableGrade != 0 && studyRoom.availableGrade != student.grade) {
+            throw StudyRoomAvailableGradeMismatchException
         }
 
-        if (studyRoom.availableSex != Sex.ALL) {
-            if (studyRoom.availableSex != student.sex) {
-                throw StudyRoomAvailableSexMismatchException
-            }
+        if (studyRoom.availableSex != Sex.ALL && studyRoom.availableSex != student.sex) {
+            throw StudyRoomAvailableSexMismatchException
         }
 
         val now = LocalTime.now()
