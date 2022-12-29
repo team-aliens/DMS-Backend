@@ -31,7 +31,7 @@ class RemoveSeatTypeUseCase(
             throw SchoolMismatchException
         }
 
-        if (queryStudyRoomPort.existsStudyRoomBySeatTypeId(seatTypeId)) {
+        if (queryStudyRoomPort.existsSeatBySeatTypeId(seatTypeId)) {
             throw SeatTypeInUseException
         }
 
