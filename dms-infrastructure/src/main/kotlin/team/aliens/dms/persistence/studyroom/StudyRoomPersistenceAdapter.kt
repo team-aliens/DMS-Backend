@@ -127,5 +127,5 @@ class StudyRoomPersistenceAdapter(
         studyRoomRepository.deleteById(studyRoomId)
     }
 
-    override fun existsStudyRoomBySeatTypeId(seatTypeId: UUID) = seatRepository.existsByTypeId(seatTypeId)
+    override fun existsSeatBySeatTypeId(seatTypeId: UUID) = seatRepository.existsByTypeId(seatTypeId)
 }

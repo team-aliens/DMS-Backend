@@ -4,6 +4,6 @@ import java.util.UUID
 
 interface SeatTypeQueryStudyRoomPort {
 
-    fun existsStudyRoomBySeatTypeId(seatTypeId: UUID): Boolean
+    fun existsSeatBySeatTypeId(seatTypeId: UUID): Boolean
 
 }
