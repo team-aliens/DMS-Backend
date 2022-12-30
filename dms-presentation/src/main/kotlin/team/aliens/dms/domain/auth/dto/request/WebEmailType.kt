@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.auth.dto.request
 
-enum class EmailType {
+enum class WebEmailType {
     SIGNUP,
     PASSWORD
 }
