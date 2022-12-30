@@ -29,7 +29,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import org.hibernate.validator.constraints.Length
-import team.aliens.dms.domain.auth.dto.request.EmailType
+import team.aliens.dms.domain.auth.dto.request.WebEmailType
 
 @Validated
 @RequestMapping("/auth")
@@ -57,7 +57,7 @@ class AuthWebAdapter(
     fun certifyEmailCode(
         @RequestParam @Email @NotBlank email: String?,
         @RequestParam("auth_code") @Length(min = 6, max = 6) @NotBlank authCode: String?,
-        @RequestParam @NotNull type: EmailType?
+        @RequestParam @NotNull type: WebEmailType?
     ) {
         certifyEmailCodeUseCase.execute(
             CertifyEmailCodeRequest(

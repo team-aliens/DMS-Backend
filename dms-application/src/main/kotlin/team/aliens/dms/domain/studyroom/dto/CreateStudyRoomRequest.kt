@@ -13,8 +13,9 @@ data class CreateStudyRoomRequest(
     val northDescription: String,
     val availableSex: String,
     val availableGrade: Int,
-    val seats : List<SeatRequest>
+    val seats: List<SeatRequest>
 ) {
+
     data class SeatRequest(
         val widthLocation: Int,
         val heightLocation: Int,

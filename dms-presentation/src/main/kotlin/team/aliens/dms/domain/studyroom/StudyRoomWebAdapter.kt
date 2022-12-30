@@ -117,7 +117,7 @@ class StudyRoomWebAdapter(
                     westDescription = westDescription!!,
                     southDescription = southDescription!!,
                     northDescription = northDescription!!,
-                    availableSex = availableSex!!,
+                    availableSex = availableSex!!.name,
                     availableGrade = availableGrade!!,
                     seats = seats.map {
                         CreateStudyRoomRequest.SeatRequest(
@@ -153,7 +153,7 @@ class StudyRoomWebAdapter(
                     westDescription = westDescription!!,
                     southDescription = southDescription!!,
                     northDescription = northDescription!!,
-                    availableSex = availableSex!!,
+                    availableSex = availableSex!!.name,
                     availableGrade = availableGrade!!,
                     seats = seats.map {
                         UpdateStudyRoomRequest.SeatRequest(
