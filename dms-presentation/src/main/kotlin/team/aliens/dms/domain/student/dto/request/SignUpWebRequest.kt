@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.dto.request
 
-import org.hibernate.validator.constraints.Length
 import team.aliens.dms.domain.manager.dto.request.Password
 import javax.validation.constraints.Email
 import javax.validation.constraints.Max
@@ -30,7 +29,6 @@ data class SignUpWebRequest(
     val authCode: String?,
 
     @field:NotNull
-    @field:Size(min = 1, max = 6)
     @field:Min(1)
     @field:Max(6)
     val grade: Int?,
