@@ -9,7 +9,7 @@ import javax.validation.constraints.Size
 data class ResetStudentPasswordWebRequest(
 
     @field:NotBlank
-    @field:Size(min = 3, max = 20)
+    @field:Size(min = 4, max = 20)
     val accountId: String?,
 
     @field:NotBlank

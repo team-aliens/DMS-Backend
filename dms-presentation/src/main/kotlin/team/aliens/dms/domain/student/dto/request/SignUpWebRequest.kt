@@ -13,7 +13,7 @@ import javax.validation.constraints.Size
 data class SignUpWebRequest(
 
     @field:NotBlank
-    @field:Size(min = 8, max = 8, message = "학교 코드는 8글자 이여야 합니다.")
+    @field:Size(min = 8, max = 8, message = "학교 코드는 8글자 이여야 합니다")
     val schoolCode: String?,
 
     @field:NotBlank
@@ -26,7 +26,7 @@ data class SignUpWebRequest(
     val email: String?,
 
     @field:NotBlank
-    @field:Size(min = 6, max = 6, message = "인증 코드는 6글자 이여야 합니다.")
+    @field:Size(min = 6, max = 6, message = "인증 코드는 6글자 이여야 합니다")
     val authCode: String?,
 
     @field:NotNull
@@ -44,7 +44,7 @@ data class SignUpWebRequest(
     val number: Int?,
 
     @field:NotBlank
-    @field:Size(min = 3, max = 20)
+    @field:Size(min = 4, max = 20)
     val accountId: String?,
 
     @field:NotBlank
