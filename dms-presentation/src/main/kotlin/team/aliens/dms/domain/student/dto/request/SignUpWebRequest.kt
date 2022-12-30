@@ -31,14 +31,16 @@ data class SignUpWebRequest(
 
     @field:NotNull
     @field:Size(min = 1, max = 6)
+    @field:Min(1)
+    @field:Max(6)
     val grade: Int?,
 
     @field:NotNull
-    @field:Size(min = 1)
+    @field:Min(1)
     val classRoom: Int?,
 
     @field:NotNull
-    @field:Size(min = 1)
+    @field:Min(1)
     val number: Int?,
 
     @field:NotBlank

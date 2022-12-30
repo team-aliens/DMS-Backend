@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.studyroom.dto
 
 import java.util.UUID
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
@@ -8,7 +9,7 @@ import javax.validation.constraints.Size
 data class CreateStudyRoomWebRequest(
 
     @field:NotNull
-    @field:Size(min = 1)
+    @field:Min(1)
     val floor: Int?,
 
     @field:NotBlank
@@ -16,11 +17,11 @@ data class CreateStudyRoomWebRequest(
     val name: String?,
 
     @field:NotNull
-    @field:Size(min = 0)
+    @field:Min(0)
     val totalWidthSize: Int?,
 
     @field:NotNull
-    @field:Size(min = 0)
+    @field:Min(0)
     val totalHeightSize: Int?,
 
     @field:NotBlank
@@ -44,7 +45,7 @@ data class CreateStudyRoomWebRequest(
     val availableSex: WebSex?,
 
     @field:NotNull
-    @field:Size(min = 0)
+    @field:Min(0)
     val availableGrade: Int?,
 
     val seats: List<SeatRequest>
@@ -54,11 +55,11 @@ data class CreateStudyRoomWebRequest(
     data class SeatRequest(
 
         @field:NotNull
-        @field:Size(min = 0)
+        @field:Min(0)
         val widthLocation: Int?,
 
         @field:NotNull
-        @field:Size(min = 0)
+        @field:Min(0)
         val heightLocation: Int?,
 
         val number: Int?,
