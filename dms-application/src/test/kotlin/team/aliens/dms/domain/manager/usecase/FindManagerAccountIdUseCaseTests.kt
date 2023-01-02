@@ -9,6 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
@@ -28,12 +29,15 @@ class FindManagerAccountIdUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: ManagerQueryUserPort
 
+    @MockBean
+    private lateinit var sendEmailPort: SendEmailPort
+
     private lateinit var findManagerAccountIdUseCase: FindManagerAccountIdUseCase
 
     @BeforeEach
     fun setUp() {
         findManagerAccountIdUseCase = FindManagerAccountIdUseCase(
-            querySchoolPort, queryUserPort
+            querySchoolPort, queryUserPort, sendEmailPort
         )
     }
 
