@@ -1,10 +1,14 @@
 package team.aliens.dms.thirdparty.email
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync
+import com.amazonaws.services.simpleemail.model.Body
+import com.amazonaws.services.simpleemail.model.Content
 import com.amazonaws.services.simpleemail.model.CreateTemplateRequest
 import com.amazonaws.services.simpleemail.model.DeleteTemplateRequest
 import com.amazonaws.services.simpleemail.model.Destination
 import com.amazonaws.services.simpleemail.model.ListTemplatesRequest
+import com.amazonaws.services.simpleemail.model.Message
+import com.amazonaws.services.simpleemail.model.SendEmailRequest
 import com.amazonaws.services.simpleemail.model.SendTemplatedEmailRequest
 import com.amazonaws.services.simpleemail.model.Template
 import com.amazonaws.services.simpleemail.model.UpdateTemplateRequest
@@ -18,6 +22,7 @@ import team.aliens.dms.domain.template.spi.TemplatePort
 import team.aliens.dms.domain.template.usecase.TemplateResponse
 import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
 import team.aliens.dms.thirdparty.email.exception.SesException
+import java.nio.charset.StandardCharsets
 import java.time.ZoneId
 
 @Component
@@ -54,6 +59,30 @@ class AwsSESAdapter(
 
         runCatching {
             amazonSimpleEmailServiceAsync.sendTemplatedEmailAsync(templatedEmailRequest)
+        }.onFailure { e ->
+            e.printStackTrace()
+            throw SendEmailRejectedException
+        }
+    }
+
+    override fun sendAccountId(email: String, accountId: String) {
+        val message = Message()
+            .withBody(
+                Body().withText(
+                    Content().withCharset(StandardCharsets.UTF_8.name()).withData(accountId)
+                )
+            )
+            .withSubject(
+                Content().withCharset(StandardCharsets.UTF_8.name()).withData("DMS 아이디 찾기 이메일")
+            )
+
+        val emailRequest = SendEmailRequest()
+            .withDestination(Destination().withToAddresses(email))
+            .withMessage(message)
+            .withSource(awsSESProperties.source)
+
+        runCatching {
+            amazonSimpleEmailServiceAsync.sendEmailAsync(emailRequest)
         }.onFailure { e ->
             e.printStackTrace()
             throw SendEmailRejectedException
