@@ -40,7 +40,7 @@ data class CreateStudyRoomWebRequest(
     @field:Size(max = 20)
     val northDescription: String?,
 
-    @field:NotBlank
+    @field:NotNull
     val availableSex: WebSex?,
 
     @field:NotNull
