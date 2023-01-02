@@ -13,7 +13,6 @@ data class SendEmailCodeWebRequest(
     val email: String?,
 
     @field:NotNull
-    @field:Size(min = 6, max = 8)
     val type: WebEmailType?
 
 )

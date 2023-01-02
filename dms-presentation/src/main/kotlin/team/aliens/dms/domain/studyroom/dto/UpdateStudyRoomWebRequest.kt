@@ -41,7 +41,6 @@ data class UpdateStudyRoomWebRequest(
     val northDescription: String?,
 
     @field:NotBlank
-    @field:Size(min = 3, max = 6)
     val availableSex: WebSex?,
 
     @field:NotNull
@@ -67,7 +66,6 @@ data class UpdateStudyRoomWebRequest(
         val typeId: UUID?,
 
         @field:NotNull
-        @field:Size(min = 5, max = 11)
         val status: WebSeatStatus?
 
     )
