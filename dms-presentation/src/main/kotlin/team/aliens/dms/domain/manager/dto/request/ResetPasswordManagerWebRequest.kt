@@ -17,7 +17,7 @@ data class ResetPasswordManagerWebRequest(
     val email: String?,
 
     @field:NotBlank
-    @field:Size(min = 8, max = 8, message = "인증코드는 8글자 이여야 합니다")
+    @field:Size(min = 6, max = 6, message = "인증코드는 8글자 이여야 합니다")
     val authCode: String?,
 
     @field:NotBlank

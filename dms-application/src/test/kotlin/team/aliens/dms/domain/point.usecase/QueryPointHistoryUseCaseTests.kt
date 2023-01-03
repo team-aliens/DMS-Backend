@@ -36,8 +36,82 @@ class QueryPointHistoryUseCaseTests {
 
     private val currentStudentId = UUID.randomUUID()
 
-    private val pointStubs by lazy {
-        listOf(
+    @Test
+    fun `상벌점 내역 조회 성공(BONUS)`() {
+        // given
+        val pointStubs = listOf(
+            QueryPointHistoryResponse.Point(
+                pointId = UUID.randomUUID(),
+                date = LocalDate.now(),
+                type = PointType.BONUS,
+                name = "test name",
+                score = 10
+            ),
+            QueryPointHistoryResponse.Point(
+                pointId = UUID.randomUUID(),
+                date = LocalDate.now(),
+                type = PointType.BONUS,
+                name = "test name2",
+                score = 5
+            )
+        )
+
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentStudentId)
+
+        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.BONUS))
+            .willReturn(pointStubs)
+
+        // when
+        val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
+
+        // then
+        assertAll(
+            { assert(response.totalPoint == 15) },
+            { assertThat(response.points).isNotEmpty }
+        )
+    }
+
+    @Test
+    fun `상벌점 내역 조회 성공(MINUS)`() {
+        // given
+        val pointStubs = listOf(
+            QueryPointHistoryResponse.Point(
+                pointId = UUID.randomUUID(),
+                date = LocalDate.now(),
+                type = PointType.MINUS,
+                name = "test name",
+                score = 5
+            ),
+            QueryPointHistoryResponse.Point(
+                pointId = UUID.randomUUID(),
+                date = LocalDate.now(),
+                type = PointType.MINUS,
+                name = "test name2",
+                score = 5
+            )
+        )
+
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentStudentId)
+
+        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.MINUS))
+            .willReturn(pointStubs)
+
+        // when
+        val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS)
+
+        // then
+        assertAll(
+            { assert(response.totalPoint == 10) },
+            { assertThat(response.points).isNotEmpty }
+        )
+    }
+
+    @Test
+    fun `상벌점 내역 조회 성공(ALL)`() {
+        // given
+        val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
                 pointId = UUID.randomUUID(),
                 date = LocalDate.now(),
@@ -53,49 +127,7 @@ class QueryPointHistoryUseCaseTests {
                 score = 5
             )
         )
-    }
 
-    @Test
-    fun `상벌점 내역 조회 성공(BONUS)`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentStudentId)
-
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.BONUS))
-            .willReturn(pointStubs)
-
-        // when
-        val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
-
-        // then
-        assertAll(
-            { assert(response.totalPoint == 5) },
-            { assertThat(response.points).isNotEmpty }
-        )
-    }
-
-    @Test
-    fun `상벌점 내역 조회 성공(MINUS)`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentStudentId)
-
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.MINUS))
-            .willReturn(pointStubs)
-
-        // when
-        val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS)
-
-        // then
-        assertAll(
-            { assert(response.totalPoint == 5) },
-            { assertThat(response.points).isNotEmpty }
-        )
-    }
-
-    @Test
-    fun `상벌점 내역 조회 성공(ALL)`() {
-        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 

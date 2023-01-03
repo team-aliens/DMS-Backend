@@ -24,7 +24,7 @@ class QueryPointHistoryUseCase(
         }
 
         val totalPoint = pointHistory.sumOf {
-            if (it.type == PointType.MINUS) {
+            if (type == PointRequestType.ALL && it.type == PointType.MINUS) {
                 it.score * -1
             } else {
                 it.score
@@ -34,8 +34,8 @@ class QueryPointHistoryUseCase(
         return QueryPointHistoryResponse(
             /**
              * BONUS -> 상점의 총합 ex) 상점 3점 = 3
-             * MINUS -> 벌점의 총합 ex) 벌점 3점 = -3
-             * ALL -> 상점 + 벌점의 총합
+             * MINUS -> 벌점의 총합 ex) 벌점 4점 = 4
+             * ALL -> 상점 + 벌점의 총합 상점 3점, 벌점 4점 = -1
              **/
             totalPoint = totalPoint,
             points = pointHistory

@@ -2,6 +2,7 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
+import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -21,7 +22,8 @@ import java.util.UUID
 @ReadOnlyUseCase
 class FindStudentAccountIdUseCase(
     private val queryStudentPort: QueryStudentPort,
-    private val queryUserPort: StudentQueryUserPort
+    private val queryUserPort: StudentQueryUserPort,
+    private val sendEmailPort: SendEmailPort
 ) {
 
     fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
@@ -37,6 +39,8 @@ class FindStudentAccountIdUseCase(
         if (student.name != request.name) {
             throw StudentInfoMismatchException
         }
+
+        sendEmailPort.sendAccountId(user.email, user.accountId)
 
         return StringUtil.coveredEmail(user.email)
     }

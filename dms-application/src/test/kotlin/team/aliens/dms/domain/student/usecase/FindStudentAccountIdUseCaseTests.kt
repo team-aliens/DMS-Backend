@@ -9,6 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -30,12 +31,15 @@ class FindStudentAccountIdUseCaseTests {
     @MockBean
     private lateinit var queryUserPort: StudentQueryUserPort
 
+    @MockBean
+    private lateinit var sendEmailPort: SendEmailPort
+
     private lateinit var findStudentAccountIdUseCase: FindStudentAccountIdUseCase
 
     @BeforeEach
     fun setUp() {
         findStudentAccountIdUseCase = FindStudentAccountIdUseCase(
-            queryStudentPort, queryUserPort
+            queryStudentPort, queryUserPort, sendEmailPort
         )
     }
 
