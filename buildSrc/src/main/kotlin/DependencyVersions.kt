@@ -8,4 +8,5 @@ object DependencyVersions {
     const val UUID_TIME_VERSION = "3.1.4"
     const val SPRING_TRANSACTION = "5.3.22"
     const val QUERYDSL = "5.0.0"
+    const val APACHE_POI_VERSION = "3.7"
 }
