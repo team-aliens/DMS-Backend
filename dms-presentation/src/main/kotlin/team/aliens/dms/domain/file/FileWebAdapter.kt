@@ -11,13 +11,17 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 import javax.validation.constraints.NotNull
+import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.ResponseStatus
+import team.aliens.dms.domain.file.usecase.ImportVerifiedStudentUseCase
 
 @Validated
 @RequestMapping("/files")
 @RestController
 class FileWebAdapter(
-    private val uploadFileUseCase: UploadFileUseCase
+    private val uploadFileUseCase: UploadFileUseCase,
+    private val importVerifiedStudentUseCase: ImportVerifiedStudentUseCase
 ) {
 
     @PostMapping
@@ -27,6 +31,14 @@ class FileWebAdapter(
         )
 
         return UploadFileResponse(result)
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/verified-student")
+    fun importVerifiedStudentFromExcel(@RequestPart @NotNull file: MultipartFile?) {
+        importVerifiedStudentUseCase.execute(
+            file!!.let(transferFile)
+        )
     }
 
     private val transferFile = { multipartFile: MultipartFile ->
