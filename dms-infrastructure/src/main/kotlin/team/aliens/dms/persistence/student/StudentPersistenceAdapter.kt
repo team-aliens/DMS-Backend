@@ -13,11 +13,16 @@ import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
+import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
+import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 
 @Component
 class StudentPersistenceAdapter(
     private val studentMapper: StudentMapper,
     private val studentRepository: StudentJpaRepository,
+    private val verifiedStudentRepository: VerifiedStudentJpaRepository,
+    private val verifiedStudentMapper: VerifiedStudentMapper,
     private val queryFactory: JPAQueryFactory
 ) : StudentPort {
 
@@ -39,6 +44,14 @@ class StudentPersistenceAdapter(
             studentMapper.toEntity(student)
         )
     )!!
+
+    override fun saveAllVerifiedStudent(verifiedStudents: List<VerifiedStudent>) {
+        verifiedStudentRepository.saveAll(
+            verifiedStudents.map {
+                verifiedStudentMapper.toEntity(it)
+            }
+        )
+    }
 
     override fun queryStudentsByNameAndSort(name: String?, sort: Sort, schoolId: UUID): List<Student> {
         return queryFactory
