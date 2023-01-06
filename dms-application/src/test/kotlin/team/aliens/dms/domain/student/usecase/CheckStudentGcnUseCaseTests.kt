@@ -11,13 +11,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import java.time.LocalDate
 import java.util.UUID
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 @ExtendWith(SpringExtension::class)
 class CheckStudentGcnUseCaseTests {
@@ -26,14 +27,14 @@ class CheckStudentGcnUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryStudentPort: QueryStudentPort
+    private lateinit var queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
 
     private lateinit var checkStudentGcnUseCase: CheckStudentGcnUseCase
 
     @BeforeEach
     fun setUp() {
         checkStudentGcnUseCase = CheckStudentGcnUseCase(
-            querySchoolPort, queryStudentPort
+            querySchoolPort, queryVerifiedStudentPort
         )
     }
 
@@ -59,17 +60,13 @@ class CheckStudentGcnUseCaseTests {
         )
     }
 
-    private val studentStub by lazy {
-        Student(
+    private val verifiedStudent by lazy {
+        VerifiedStudent(
             id = UUID.randomUUID(),
-            roomId = UUID.randomUUID(),
-            roomNumber = 123,
-            schoolId = schoolStub.id,
-            grade = 1,
-            classRoom = 2,
-            number = 3,
+            schoolName = schoolStub.name,
             name = "이름",
-            profileImageUrl = "https://~",
+            roomNumber = 123,
+            gcn = "1203",
             sex = Sex.FEMALE
         )
     }
@@ -81,20 +78,18 @@ class CheckStudentGcnUseCaseTests {
             .willReturn(schoolStub)
 
         given(
-            queryStudentPort.queryStudentBySchoolIdAndGcn(
-                schoolStub.id,
-                requestStub.grade,
-                requestStub.classRoom,
-                requestStub.number
+            queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+                gcn = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}",
+                schoolName = schoolStub.name
             )
         )
-            .willReturn(studentStub)
+            .willReturn(verifiedStudent)
 
         // when
         val response = checkStudentGcnUseCase.execute(requestStub)
 
         // then
-        assertEquals(response, studentStub.name)
+        assertEquals(response, verifiedStudent.name)
     }
 
 
@@ -117,17 +112,15 @@ class CheckStudentGcnUseCaseTests {
             .willReturn(schoolStub)
 
         given(
-            queryStudentPort.queryStudentBySchoolIdAndGcn(
-                schoolStub.id,
-                requestStub.grade,
-                requestStub.classRoom,
-                requestStub.number
+            queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+                gcn = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}",
+                schoolName = schoolStub.name
             )
         )
             .willReturn(null)
 
         // when & then
-        assertThrows<StudentNotFoundException> {
+        assertThrows<VerifiedStudentNotFoundException> {
             checkStudentGcnUseCase.execute(requestStub)
         }
     }
