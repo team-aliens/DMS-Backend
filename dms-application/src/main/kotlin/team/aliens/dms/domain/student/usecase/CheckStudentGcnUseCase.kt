@@ -3,26 +3,25 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 @ReadOnlyUseCase
 class CheckStudentGcnUseCase(
     private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryStudentPort: QueryStudentPort
+    private val queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
 ) {
 
     fun execute(request: CheckStudentGcnRequest): String {
         val school = querySchoolPort.querySchoolById(request.schoolId) ?: throw SchoolNotFoundException
 
-        val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
-            schoolId = school.id,
-            grade = request.grade,
-            classRoom = request.classRoom,
-            number = request.number
-        ) ?: throw StudentNotFoundException
+        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+            gcn = "${request.grade}${request.classRoom}${Student.processNumber(request.number)}",
+            schoolName = school.name
+        ) ?: throw VerifiedStudentNotFoundException
 
-        return student.name
+        return verifiedStudent.name
     }
 }
