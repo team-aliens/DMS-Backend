@@ -17,9 +17,7 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import team.aliens.dms.thirdparty.parser.exception.ExcelSexMismatchException
 
 @Component
-class ExcelAdapter(
-
-) : ParseFilePort {
+class ExcelAdapter : ParseFilePort {
 
     override fun transferToVerifiedStudent(file: File): List<VerifiedStudent> {
         val workbook = transferToExcel(file)
@@ -49,7 +47,6 @@ class ExcelAdapter(
             e.printStackTrace()
         }
 
-
         return verifiedStudents
     }
 
@@ -63,8 +60,9 @@ class ExcelAdapter(
                 else -> throw ExcelExtensionMismatchException
             }
         }.also {
-            inputStream.close()
-            file.delete()
+            inputStream.use {
+                file.delete()
+            }
         }.onFailure {
             throw ExcelInvalidFileException
         }.getOrThrow()
