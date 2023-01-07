@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -17,7 +16,6 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
-import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
@@ -124,6 +122,7 @@ class SignUpUseCaseTests {
 
     private val verifiedStudentStub by lazy {
         VerifiedStudent(
+            id = UUID.randomUUID(),
             schoolName = schoolStub.name,
             name = name,
             roomNumber = 318,
