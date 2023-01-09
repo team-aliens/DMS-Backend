@@ -14,7 +14,6 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)

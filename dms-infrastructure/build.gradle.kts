@@ -43,6 +43,10 @@ dependencies {
     // configuration
     kapt(Dependencies.CONFIGURATION_PROCESSOR)
 
+    // excel
+    implementation(Dependencies.APACHE_POI)
+    implementation(Dependencies.APACHE_POI_OOXML)
+
 }
 
 kapt {
