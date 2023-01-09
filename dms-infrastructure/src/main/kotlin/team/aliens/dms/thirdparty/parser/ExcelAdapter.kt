@@ -53,19 +53,19 @@ class ExcelAdapter : ParseFilePort {
     private fun transferToExcel(file: File): Workbook {
         val inputStream = file.inputStream()
 
-        return runCatching {
-            when (file.extension.lowercase()) {
-                XLS -> HSSFWorkbook(inputStream)
-                XLSX -> XSSFWorkbook(inputStream)
-                else -> throw ExcelExtensionMismatchException
-            }
-        }.also {
-            inputStream.use {
+        return inputStream.use {
+            runCatching {
+                when (file.extension.lowercase()) {
+                    XLS -> HSSFWorkbook(inputStream)
+                    XLSX -> XSSFWorkbook(inputStream)
+                    else -> throw ExcelExtensionMismatchException
+                }
+            }.also {
                 file.delete()
-            }
-        }.onFailure {
-            throw ExcelInvalidFileException
-        }.getOrThrow()
+            }.onFailure {
+                throw ExcelInvalidFileException
+            }.getOrThrow()
+        }
     }
 
     private fun transferToSex(sex: String) = when (sex) {
