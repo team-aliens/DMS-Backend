@@ -1,11 +1,9 @@
 package team.aliens.dms.domain.student.spi
 
-import java.util.UUID
+import team.aliens.dms.domain.student.model.Student
 
 interface StudentQueryPointPort {
 
-    fun queryTotalBonusPoint(studentId: UUID): Int
-
-    fun queryTotalMinusPoint(studentId: UUID): Int
+    fun queryBonusAndMinusTotalPointByStudent(student: Student): Pair<Int, Int>
 
 }
