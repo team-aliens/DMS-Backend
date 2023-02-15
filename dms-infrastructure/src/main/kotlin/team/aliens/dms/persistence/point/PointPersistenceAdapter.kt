@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointPort
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptionJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
@@ -19,25 +20,25 @@ class PointPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
 
-    override fun queryPointHistoryByStudentIdAndType(
-        studentId: UUID,
+    override fun queryPointHistoryByStudentAndType(
+        student: Student,
         type: PointType
     ): List<QueryPointHistoryResponse.Point> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
+                    pointHistoryJpaEntity.type,
+                    pointHistoryJpaEntity.studentName,
+                    pointHistoryJpaEntity.score
                 )
             )
             .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
-                pointOptionJpaEntity.type.eq(type)
+                pointHistoryJpaEntity.gcn.eq(student.gcn),
+                pointHistoryJpaEntity.studentName.eq(student.name),
+                pointHistoryJpaEntity.type.eq(type)
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
@@ -52,20 +53,22 @@ class PointPersistenceAdapter(
             }
     }
 
-    override fun queryAllPointHistoryByStudentId(studentId: UUID): List<QueryPointHistoryResponse.Point> {
+    override fun queryAllPointHistoryByStudent(student: Student): List<QueryPointHistoryResponse.Point> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
+                    pointHistoryJpaEntity.type,
+                    pointHistoryJpaEntity.studentName,
+                    pointHistoryJpaEntity.score
                 )
             )
             .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
-            .where(pointHistoryJpaEntity.student.id.eq(studentId))
+            .where(
+                pointHistoryJpaEntity.gcn.eq(student.gcn),
+                pointHistoryJpaEntity.studentName.eq(student.name)
+            )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
@@ -83,9 +86,9 @@ class PointPersistenceAdapter(
         return queryFactory
             .select(pointOptionJpaEntity.score.sum())
             .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
+                // TODO: tbl_point_total 추가시 대체
+                //pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.BONUS)
             )
             .fetchOne() ?: 0
@@ -95,11 +98,11 @@ class PointPersistenceAdapter(
         return queryFactory
             .select(pointOptionJpaEntity.score.sum())
             .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
+                //pointHistoryJpaEntity.student.id.eq(studentId),
                 pointOptionJpaEntity.type.eq(PointType.MINUS)
             )
             .fetchOne() ?: 0
     }
+
 }
