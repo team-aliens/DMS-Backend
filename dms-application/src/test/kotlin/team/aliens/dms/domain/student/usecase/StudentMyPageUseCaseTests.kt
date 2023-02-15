@@ -1,14 +1,20 @@
 package team.aliens.dms.domain.student.usecase
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.domain.point.model.Phrase
+import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryPointPort
@@ -16,12 +22,6 @@ import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.time.LocalDate
 import java.util.UUID
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.point.model.Phrase
-import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
-import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
 class StudentMyPageUseCaseTests {
@@ -105,11 +105,8 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
-            .willReturn(1)
-
-        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
-            .willReturn(1)
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+            .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
             .willReturn(listOf(phraseStub))

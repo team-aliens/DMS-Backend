@@ -9,17 +9,17 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
-import java.util.UUID
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentDetailsUseCaseTests {
@@ -105,11 +105,8 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
-            .willReturn(bonusPoint)
-
-        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
-            .willReturn(minusPoint)
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+            .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(listOf(studentStub))

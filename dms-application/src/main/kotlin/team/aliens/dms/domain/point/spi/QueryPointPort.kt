@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.point.spi
 
-import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType

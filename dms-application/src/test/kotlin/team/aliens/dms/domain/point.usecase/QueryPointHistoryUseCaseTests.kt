@@ -11,8 +11,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointPort
+import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
 import java.util.UUID
 
@@ -23,6 +26,9 @@ class QueryPointHistoryUseCaseTests {
     private lateinit var securityPort: PointSecurityPort
 
     @MockBean
+    private lateinit var queryStudentPort: PointQueryStudentPort
+
+    @MockBean
     private lateinit var queryPointPort: QueryPointPort
 
     private lateinit var queryPointHistoryUseCase: QueryPointHistoryUseCase
@@ -30,25 +36,40 @@ class QueryPointHistoryUseCaseTests {
     @BeforeEach
     fun setUp() {
         queryPointHistoryUseCase = QueryPointHistoryUseCase(
-            securityPort, queryPointPort
+            securityPort, queryStudentPort, queryPointPort
         )
     }
 
     private val currentStudentId = UUID.randomUUID()
+
+    private val studentStub by lazy {
+        Student(
+            id = currentStudentId,
+            roomId = UUID.randomUUID(),
+            roomNumber = 123,
+            schoolId = UUID.randomUUID(),
+            grade = 2,
+            classRoom = 1,
+            number = 6,
+            name = "이름",
+            profileImageUrl = "https://~",
+            sex = Sex.FEMALE
+        )
+    }
 
     @Test
     fun `상벌점 내역 조회 성공(BONUS)`() {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name2",
@@ -59,8 +80,14 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.BONUS))
+        given(queryStudentPort.queryStudentById(currentStudentId))
+            .willReturn(studentStub)
+
+        given(queryPointPort.queryGrantedPointHistoryByStudentAndType(studentStub, PointType.BONUS))
             .willReturn(pointStubs)
+
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+            .willReturn(Pair(15, 0))
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
@@ -77,14 +104,14 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name",
                 score = 5
             ),
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -95,8 +122,14 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryPointPort.queryPointHistoryByStudentIdAndType(currentStudentId, PointType.MINUS))
+        given(queryStudentPort.queryStudentById(currentStudentId))
+            .willReturn(studentStub)
+
+        given(queryPointPort.queryGrantedPointHistoryByStudentAndType(studentStub, PointType.MINUS))
             .willReturn(pointStubs)
+
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+            .willReturn(Pair(15, 10))
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS)
@@ -113,14 +146,14 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             QueryPointHistoryResponse.Point(
-                pointId = UUID.randomUUID(),
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -131,8 +164,14 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryPointPort.queryAllPointHistoryByStudentId(currentStudentId))
+        given(queryStudentPort.queryStudentById(currentStudentId))
+            .willReturn(studentStub)
+
+        given(queryPointPort.queryGrantedPointHistoryByStudent(studentStub))
             .willReturn(pointStubs)
+
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+            .willReturn(Pair(10, 5))
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.ALL)
