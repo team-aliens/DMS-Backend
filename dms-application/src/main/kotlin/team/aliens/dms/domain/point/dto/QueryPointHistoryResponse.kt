@@ -9,7 +9,7 @@ data class QueryPointHistoryResponse(
     val points: List<Point>
 ) {
     data class Point(
-        val pointId: UUID,
+        val pointHistoryId: UUID,
         val date: LocalDate,
         val type: PointType,
         val name: String,
