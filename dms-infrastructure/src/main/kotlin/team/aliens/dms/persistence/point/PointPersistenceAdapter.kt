@@ -46,7 +46,6 @@ class PointPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
                     pointHistoryJpaEntity.type,
                     pointHistoryJpaEntity.name,
@@ -65,7 +64,6 @@ class PointPersistenceAdapter(
             .fetch()
             .map {
                 QueryPointHistoryResponse.Point(
-                    pointHistoryId = it.pointId,
                     date = it.date.toLocalDate(),
                     type = it.type,
                     name = it.name,
@@ -82,7 +80,6 @@ class PointPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
                     pointHistoryJpaEntity.type,
                     pointHistoryJpaEntity.name,
@@ -100,7 +97,6 @@ class PointPersistenceAdapter(
             .fetch()
             .map {
                 QueryPointHistoryResponse.Point(
-                    pointHistoryId = it.pointId,
                     date = it.date.toLocalDate(),
                     type = it.type,
                     name = it.name,
