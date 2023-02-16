@@ -24,6 +24,6 @@ class RemainOptionJpaEntity(
     val title: String,
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
-    val description: String,
+    val description: String
 
 ) : BaseUUIDEntity(id)
