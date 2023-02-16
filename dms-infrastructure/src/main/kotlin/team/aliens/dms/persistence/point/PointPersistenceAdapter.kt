@@ -54,7 +54,6 @@ class PointPersistenceAdapter(
             )
             .from(pointHistoryJpaEntity)
             .where(
-                pointHistoryJpaEntity.isCancel.eq(false),
                 pointHistoryJpaEntity.gcn.eq(gcn),
                 pointHistoryJpaEntity.name.eq(studentName),
                 pointHistoryJpaEntity.type.eq(type),
@@ -88,7 +87,6 @@ class PointPersistenceAdapter(
             )
             .from(pointHistoryJpaEntity)
             .where(
-                pointHistoryJpaEntity.isCancel.eq(false),
                 pointHistoryJpaEntity.gcn.eq(gcn),
                 pointHistoryJpaEntity.name.eq(studentName),
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
