@@ -75,6 +75,9 @@ class QueryStudentDetailsUseCaseTests {
         )
     }
 
+    private val gcn = studentStub.gcn
+    private val name = studentStub.name
+
     private val responseStub by lazy {
         GetStudentDetailsResponse(
             name = studentStub.name,
@@ -105,7 +108,7 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))

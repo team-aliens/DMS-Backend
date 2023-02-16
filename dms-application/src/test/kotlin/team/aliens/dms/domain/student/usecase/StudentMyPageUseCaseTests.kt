@@ -68,6 +68,9 @@ class StudentMyPageUseCaseTests {
         )
     }
 
+    private val gcn = studentStub.gcn
+    private val name = studentStub.name
+
     private val schoolStub by lazy {
         School(
             id = schoolId,
@@ -105,7 +108,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))

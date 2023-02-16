@@ -57,6 +57,9 @@ class QueryPointHistoryUseCaseTests {
         )
     }
 
+    private val gcn = studentStub.gcn
+    private val name = studentStub.name
+
     @Test
     fun `상벌점 내역 조회 성공(BONUS)`() {
         // given
@@ -83,10 +86,10 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryGrantedPointHistoryByStudentAndType(studentStub, PointType.BONUS))
+        given(queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.BONUS))
             .willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(15, 0))
 
         // when
@@ -125,10 +128,9 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryGrantedPointHistoryByStudentAndType(studentStub, PointType.MINUS))
-            .willReturn(pointStubs)
+        given(/* methodCall = */ queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.MINUS)).willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(15, 10))
 
         // when
@@ -167,10 +169,10 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryGrantedPointHistoryByStudent(studentStub))
+        given(queryPointPort.queryPointHistoryByGcnAndStudentName(gcn, name))
             .willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudent(studentStub))
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(10, 5))
 
         // when
