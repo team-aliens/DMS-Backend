@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -122,6 +123,38 @@ class StudentMyPageUseCaseTests {
 
         // then
         assertThat(response).isNotNull
+    }
+
+    @Test
+    fun `문구 없는 경우`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
+
+        given(queryStudentPort.queryStudentById(currentUserId))
+            .willReturn(studentStub)
+
+        given(querySchoolPort.querySchoolById(studentStub.schoolId))
+            .willReturn(schoolStub)
+
+        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
+            .willReturn(Pair(1, 1))
+
+        given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
+            .willReturn(listOf())
+
+        given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.MINUS, point = 1))
+            .willReturn(listOf())
+
+        // when
+        val response = studentMyPageUseCase.execute()
+
+        // then
+        assertThat(response).isNotNull
+        assertEquals(response.phrase, Phrase.NO_PHRASE)
     }
 
     @Test
