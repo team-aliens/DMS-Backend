@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointPort
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
-import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptionJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
@@ -20,10 +18,21 @@ class PointPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
 
-    override fun queryBonusAndMinusTotalPointByStudent(student: Student): Pair<Int, Int> {
+    override fun queryPointHistoryById(pointHistoryId: UUID) = pointHistoryMapper.toDomain(
+        pointHistoryRepository.findByIdOrNull(pointHistoryId)
+    )
+
+    override fun queryBonusAndMinusTotalPointByGcnAndStudentName(
+        gcn: String,
+        studentName: String,
+    ): Pair<Int, Int> {
         val lastHistory = queryFactory
             .selectFrom(pointHistoryJpaEntity)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .where(
+                pointHistoryJpaEntity.gcn.eq(gcn),
+                pointHistoryJpaEntity.name.eq(studentName)
+            )
             .limit(1)
             .fetchOne()
 
@@ -33,26 +42,29 @@ class PointPersistenceAdapter(
         return Pair(bonusTotal, minusTotal)
     }
 
-    override fun queryGrantedPointHistoryByStudentAndType(
-        student: Student,
-        type: PointType
+    override fun queryPointHistoryByGcnAndStudentNameAndType(
+        gcn: String,
+        studentName: String,
+        type: PointType,
+        isCancel: Boolean?
     ): List<QueryPointHistoryResponse.Point> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
+                    pointHistoryJpaEntity.type,
+                    pointHistoryJpaEntity.name,
+                    pointHistoryJpaEntity.score
                 )
             )
             .from(pointHistoryJpaEntity)
             .where(
                 pointHistoryJpaEntity.isCancel.eq(false),
-                pointHistoryJpaEntity.gcn.eq(student.gcn),
-                pointHistoryJpaEntity.name.eq(student.name),
-                pointOptionJpaEntity.type.eq(type)
+                pointHistoryJpaEntity.gcn.eq(gcn),
+                pointHistoryJpaEntity.name.eq(studentName),
+                pointHistoryJpaEntity.type.eq(type),
+                isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
@@ -67,22 +79,27 @@ class PointPersistenceAdapter(
             }
     }
 
-    override fun queryGrantedPointHistoryByStudent(student: Student): List<QueryPointHistoryResponse.Point> {
+    override fun queryPointHistoryByGcnAndStudentName(
+        gcn: String,
+        studentName: String,
+        isCancel: Boolean?
+    ): List<QueryPointHistoryResponse.Point> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
+                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
+                    pointHistoryJpaEntity.type,
+                    pointHistoryJpaEntity.name,
+                    pointHistoryJpaEntity.score
                 )
             )
             .from(pointHistoryJpaEntity)
             .where(
                 pointHistoryJpaEntity.isCancel.eq(false),
-                pointHistoryJpaEntity.gcn.eq(student.gcn),
-                pointHistoryJpaEntity.name.eq(student.name)
+                pointHistoryJpaEntity.gcn.eq(gcn),
+                pointHistoryJpaEntity.name.eq(studentName),
+                isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
