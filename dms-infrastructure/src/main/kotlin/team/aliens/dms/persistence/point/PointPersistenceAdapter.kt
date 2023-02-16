@@ -9,7 +9,6 @@ import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHist
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
-import team.aliens.dms.persistence.point.repository.vo.QueryAllPointHistoryVO
 
 @Component
 class PointPersistenceAdapter(
@@ -17,10 +16,6 @@ class PointPersistenceAdapter(
     private val pointHistoryRepository: PointHistoryJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
-
-    override fun queryPointHistoryById(pointHistoryId: UUID) = pointHistoryMapper.toDomain(
-        pointHistoryRepository.findByIdOrNull(pointHistoryId)
-    )
 
     override fun queryBonusAndMinusTotalPointByGcnAndStudentName(
         gcn: String,
