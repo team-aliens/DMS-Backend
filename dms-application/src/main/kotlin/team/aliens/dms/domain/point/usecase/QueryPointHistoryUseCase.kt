@@ -19,15 +19,18 @@ class QueryPointHistoryUseCase(
         val currentStudentId = securityPort.getCurrentUserId()
         val currentStudent = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
 
+        val gcn = currentStudent.gcn
+        val name = currentStudent.name
         val pointType = PointRequestType.toPointType(type)
+
         val pointHistories = if (pointType != null) {
-            queryPointPort.queryGrantedPointHistoryByStudentAndType(currentStudent, pointType)
+            queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, pointType)
         } else {
-            queryPointPort.queryGrantedPointHistoryByStudent(currentStudent)
+            queryPointPort.queryPointHistoryByGcnAndStudentName(gcn, name)
         }
 
         val (bonusTotal, minusTotal) =
-            queryPointPort.queryBonusAndMinusTotalPointByStudent(currentStudent)
+            queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name)
 
         return QueryPointHistoryResponse(
             totalPoint = getTotalPoint(type, bonusTotal, minusTotal),

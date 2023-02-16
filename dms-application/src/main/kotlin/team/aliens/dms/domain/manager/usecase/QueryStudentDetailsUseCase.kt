@@ -29,7 +29,10 @@ class QueryStudentDetailsUseCase(
             throw SchoolMismatchException
         }
 
-        val (bonusPoint, minusPoint) = queryPointPort.queryBonusAndMinusTotalPointByStudent(student)
+        val (bonusPoint, minusPoint) = queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(
+            gcn = student.gcn,
+            name = student.name
+        )
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
