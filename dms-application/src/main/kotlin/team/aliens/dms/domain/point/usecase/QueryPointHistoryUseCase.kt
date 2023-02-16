@@ -24,9 +24,18 @@ class QueryPointHistoryUseCase(
         val pointType = PointRequestType.toPointType(type)
 
         val pointHistories = if (pointType != null) {
-            queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, pointType)
+            queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = pointType,
+                isCancel = false
+            )
         } else {
-            queryPointPort.queryPointHistoryByGcnAndStudentName(gcn, name)
+            queryPointPort.queryPointHistoryByGcnAndStudentName(
+                gcn = gcn,
+                studentName = name,
+                isCancel = false
+            )
         }
 
         val (bonusTotal, minusTotal) =
