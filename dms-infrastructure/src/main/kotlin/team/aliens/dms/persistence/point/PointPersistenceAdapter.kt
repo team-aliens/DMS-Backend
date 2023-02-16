@@ -19,7 +19,7 @@ class PointPersistenceAdapter(
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
-        studentName: String,
+        studentName: String
     ): Pair<Int, Int> {
         val lastHistory = queryFactory
             .selectFrom(pointHistoryJpaEntity)

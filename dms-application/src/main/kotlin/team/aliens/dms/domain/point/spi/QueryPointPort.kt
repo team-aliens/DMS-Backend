@@ -7,7 +7,7 @@ interface QueryPointPort {
 
     fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
-        studentName: String,
+        studentName: String
     ): Pair<Int, Int>
 
     fun queryPointHistoryByStudentGcnAndNameAndType(

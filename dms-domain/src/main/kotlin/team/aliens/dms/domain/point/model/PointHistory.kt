@@ -27,6 +27,6 @@ data class PointHistory(
 
     val createdAt: LocalDateTime,
 
-    val schoolId: UUID,
+    val schoolId: UUID
 
 )
