@@ -4,6 +4,7 @@ import team.aliens.dms.persistence.BaseTimeEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
@@ -18,6 +19,7 @@ import javax.persistence.Table
 class RemainRecordJpaEntity(
 
     @Id
+    @Column(name = "student_id")
     val id: UUID,
 
     @MapsId
