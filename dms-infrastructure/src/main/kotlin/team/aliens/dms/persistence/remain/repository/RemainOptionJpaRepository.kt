@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.remain.entity.RemainOptionJpaEntity
 import java.util.UUID
 
-
 @Repository
 interface RemainOptionJpaRepository : CrudRepository<RemainOptionJpaEntity, UUID> {
 }
