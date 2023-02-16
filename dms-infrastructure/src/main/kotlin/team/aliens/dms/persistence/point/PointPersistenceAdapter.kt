@@ -23,13 +23,12 @@ class PointPersistenceAdapter(
     ): Pair<Int, Int> {
         val lastHistory = queryFactory
             .selectFrom(pointHistoryJpaEntity)
-            .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .where(
                 pointHistoryJpaEntity.studentGcn.eq(gcn),
                 pointHistoryJpaEntity.studentName.eq(studentName)
             )
-            .limit(1)
-            .fetchOne()
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetchFirst()
 
         val bonusTotal = lastHistory?.bonusTotal ?: 0
         val minusTotal = lastHistory?.bonusTotal ?: 0
