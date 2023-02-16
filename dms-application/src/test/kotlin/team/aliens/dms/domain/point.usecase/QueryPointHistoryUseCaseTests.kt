@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -14,6 +15,7 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointPort
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
@@ -65,14 +67,12 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name2",
@@ -109,14 +109,12 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name",
                 score = 5
             ),
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -151,14 +149,12 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             QueryPointHistoryResponse.Point(
-                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -186,5 +182,20 @@ class QueryPointHistoryUseCaseTests {
             { assert(response.totalPoint == 5) },
             { assertThat(response.points).isNotEmpty }
         )
+    }
+
+    @Test
+    fun `학생이 존재하지 않음`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentStudentId)
+
+        given(queryStudentPort.queryStudentById(currentStudentId))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<StudentNotFoundException> {
+            queryPointHistoryUseCase.execute(PointRequestType.ALL)
+        }
     }
 }
