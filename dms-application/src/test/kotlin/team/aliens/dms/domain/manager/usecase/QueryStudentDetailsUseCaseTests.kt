@@ -1,8 +1,10 @@
 package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -78,6 +80,21 @@ class QueryStudentDetailsUseCaseTests {
     private val gcn = studentStub.gcn
     private val name = studentStub.name
 
+    private val roomMateStub by lazy {
+        Student(
+            id = UUID.randomUUID(),
+            roomId = UUID.randomUUID(),
+            roomNumber = 216,
+            schoolId = schoolId,
+            grade = 2,
+            classRoom = 1,
+            number = 21,
+            name = "김철수",
+            profileImageUrl = "profile image url",
+            sex = Sex.FEMALE
+        )
+    }
+
     private val responseStub by lazy {
         GetStudentDetailsResponse(
             name = studentStub.name,
@@ -112,14 +129,19 @@ class QueryStudentDetailsUseCaseTests {
             .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
-            .willReturn(listOf(studentStub))
+            .willReturn(listOf(studentStub, roomMateStub))
 
         // when
         val response = queryStudentDetailsUseCase.execute(studentId)
 
         // then
-        assertThat(response).isNotNull
-        assertThat(response.roomMates.isEmpty())
+        assertAll(
+            { assertThat(response).isNotNull },
+            { assertThat(response.roomMates.isNotEmpty()) },
+            { assertEquals(response.roomMates[0].id, roomMateStub.id) },
+            { assertEquals(response.roomMates[0].name, roomMateStub.name) },
+            { assertEquals(response.roomMates[0].profileImageUrl, roomMateStub.profileImageUrl) }
+        )
     }
 
     @Test
