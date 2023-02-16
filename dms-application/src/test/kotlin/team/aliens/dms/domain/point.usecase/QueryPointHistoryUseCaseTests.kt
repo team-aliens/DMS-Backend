@@ -86,7 +86,7 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.BONUS))
+        given(queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.BONUS, false))
             .willReturn(pointStubs)
 
         given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
@@ -94,6 +94,8 @@ class QueryPointHistoryUseCaseTests {
 
         // when
         val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
+
+        println(response)
 
         // then
         assertAll(
@@ -128,7 +130,8 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(/* methodCall = */ queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.MINUS)).willReturn(pointStubs)
+        given(queryPointPort.queryPointHistoryByGcnAndStudentNameAndType(gcn, name, PointType.MINUS, false))
+            .willReturn(pointStubs)
 
         given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
             .willReturn(Pair(15, 10))
@@ -169,7 +172,7 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByGcnAndStudentName(gcn, name))
+        given(queryPointPort.queryPointHistoryByGcnAndStudentName(gcn, name, false))
             .willReturn(pointStubs)
 
         given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
