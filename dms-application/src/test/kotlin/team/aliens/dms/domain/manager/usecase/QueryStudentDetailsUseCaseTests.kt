@@ -119,6 +119,7 @@ class QueryStudentDetailsUseCaseTests {
 
         // then
         assertThat(response).isNotNull
+        assertThat(response.roomMates.isEmpty())
     }
 
     @Test
