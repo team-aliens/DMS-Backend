@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 data class QueryPointHistoryVO @QueryProjection constructor(
     val date: LocalDateTime,
-    val type: PointType,
-    val name: String,
-    val score: Int
+    val pointType: PointType,
+    val pointName: String,
+    val pointScore: Int
 )

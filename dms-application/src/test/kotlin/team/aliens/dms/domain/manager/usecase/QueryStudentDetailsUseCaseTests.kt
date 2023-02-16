@@ -125,7 +125,7 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(gcn, name))
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))

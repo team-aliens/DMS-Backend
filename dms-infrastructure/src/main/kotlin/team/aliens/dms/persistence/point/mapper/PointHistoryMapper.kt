@@ -17,13 +17,13 @@ class PointHistoryMapper(
             PointHistory(
                 id = it.id!!,
                 studentName = it.studentName,
-                gcn = it.gcn,
+                studentGcn = it.studentGcn,
                 bonusTotal = it.bonusTotal,
                 minusTotal = it.minusTotal,
                 isCancel = it.isCancel,
-                name = it.name,
-                score = it.score,
-                type = it.type,
+                pointName = it.pointName,
+                pointScore = it.pointScore,
+                pointType = it.pointType,
                 schoolId = it.school!!.id!!,
                 createdAt = it.createdAt
             )
@@ -36,13 +36,13 @@ class PointHistoryMapper(
         return PointHistoryJpaEntity(
             id = domain.id,
             studentName = domain.studentName,
-            gcn = domain.gcn,
+            studentGcn = domain.studentGcn,
             bonusTotal = domain.bonusTotal,
             minusTotal = domain.minusTotal,
             isCancel = domain.isCancel,
-            name = domain.name,
-            score = domain.score,
-            type = domain.type,
+            pointName = domain.pointName,
+            pointScore = domain.pointScore,
+            pointType = domain.pointType,
             school = school,
             createdAt = domain.createdAt
         )

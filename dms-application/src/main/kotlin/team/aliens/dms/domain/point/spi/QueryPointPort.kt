@@ -5,19 +5,19 @@ import team.aliens.dms.domain.point.model.PointType
 
 interface QueryPointPort {
 
-    fun queryBonusAndMinusTotalPointByGcnAndStudentName(
+    fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
         studentName: String,
     ): Pair<Int, Int>
 
-    fun queryPointHistoryByGcnAndStudentNameAndType(
+    fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
         type: PointType,
         isCancel: Boolean? = null
     ): List<QueryPointHistoryResponse.Point>
 
-    fun queryPointHistoryByGcnAndStudentName(
+    fun queryPointHistoryByStudentGcnAndName(
         gcn: String,
         studentName: String,
         isCancel: Boolean? = null

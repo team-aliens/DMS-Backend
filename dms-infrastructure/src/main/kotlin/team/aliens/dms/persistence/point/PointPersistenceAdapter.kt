@@ -17,7 +17,7 @@ class PointPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
 
-    override fun queryBonusAndMinusTotalPointByGcnAndStudentName(
+    override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
         studentName: String,
     ): Pair<Int, Int> {
@@ -25,8 +25,8 @@ class PointPersistenceAdapter(
             .selectFrom(pointHistoryJpaEntity)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .where(
-                pointHistoryJpaEntity.gcn.eq(gcn),
-                pointHistoryJpaEntity.name.eq(studentName)
+                pointHistoryJpaEntity.studentGcn.eq(gcn),
+                pointHistoryJpaEntity.studentName.eq(studentName)
             )
             .limit(1)
             .fetchOne()
@@ -37,7 +37,7 @@ class PointPersistenceAdapter(
         return Pair(bonusTotal, minusTotal)
     }
 
-    override fun queryPointHistoryByGcnAndStudentNameAndType(
+    override fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
         type: PointType,
@@ -47,16 +47,16 @@ class PointPersistenceAdapter(
             .select(
                 QQueryPointHistoryVO(
                     pointHistoryJpaEntity.createdAt!!,
-                    pointHistoryJpaEntity.type,
-                    pointHistoryJpaEntity.name,
-                    pointHistoryJpaEntity.score
+                    pointHistoryJpaEntity.pointType,
+                    pointHistoryJpaEntity.pointName,
+                    pointHistoryJpaEntity.pointScore
                 )
             )
             .from(pointHistoryJpaEntity)
             .where(
-                pointHistoryJpaEntity.gcn.eq(gcn),
-                pointHistoryJpaEntity.name.eq(studentName),
-                pointHistoryJpaEntity.type.eq(type),
+                pointHistoryJpaEntity.studentGcn.eq(gcn),
+                pointHistoryJpaEntity.studentName.eq(studentName),
+                pointHistoryJpaEntity.pointType.eq(type),
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
@@ -64,14 +64,14 @@ class PointPersistenceAdapter(
             .map {
                 QueryPointHistoryResponse.Point(
                     date = it.date.toLocalDate(),
-                    type = it.type,
-                    name = it.name,
-                    score = it.score
+                    type = it.pointType,
+                    name = it.pointName,
+                    score = it.pointScore
                 )
             }
     }
 
-    override fun queryPointHistoryByGcnAndStudentName(
+    override fun queryPointHistoryByStudentGcnAndName(
         gcn: String,
         studentName: String,
         isCancel: Boolean?
@@ -80,15 +80,15 @@ class PointPersistenceAdapter(
             .select(
                 QQueryPointHistoryVO(
                     pointHistoryJpaEntity.createdAt!!,
-                    pointHistoryJpaEntity.type,
-                    pointHistoryJpaEntity.name,
-                    pointHistoryJpaEntity.score
+                    pointHistoryJpaEntity.pointType,
+                    pointHistoryJpaEntity.pointName,
+                    pointHistoryJpaEntity.pointScore
                 )
             )
             .from(pointHistoryJpaEntity)
             .where(
-                pointHistoryJpaEntity.gcn.eq(gcn),
-                pointHistoryJpaEntity.name.eq(studentName),
+                pointHistoryJpaEntity.studentGcn.eq(gcn),
+                pointHistoryJpaEntity.studentName.eq(studentName),
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
@@ -96,9 +96,9 @@ class PointPersistenceAdapter(
             .map {
                 QueryPointHistoryResponse.Point(
                     date = it.date.toLocalDate(),
-                    type = it.type,
-                    name = it.name,
-                    score = it.score
+                    type = it.pointType,
+                    name = it.pointName,
+                    score = it.pointScore
                 )
             }
     }

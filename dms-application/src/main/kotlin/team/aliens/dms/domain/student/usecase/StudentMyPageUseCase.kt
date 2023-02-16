@@ -28,7 +28,7 @@ class StudentMyPageUseCase(
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
         val (bonusPoint, minusPoint) =
-            queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(student.gcn, student.name)
+            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val phrase = randomPhrase(bonusPoint, minusPoint)
 

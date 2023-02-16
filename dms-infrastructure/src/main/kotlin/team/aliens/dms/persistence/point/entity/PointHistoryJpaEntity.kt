@@ -24,10 +24,7 @@ class PointHistoryJpaEntity(
     val studentName: String,
 
     @Column(columnDefinition = "VARCHAR(5)", nullable = false)
-    val gcn: String,
-
-    @Column(columnDefinition = "INT", nullable = false)
-    val score: Int,
+    val studentGcn: String,
 
     @Column(columnDefinition = "INT", nullable = false)
     val bonusTotal: Int,
@@ -39,11 +36,14 @@ class PointHistoryJpaEntity(
     val isCancel: Boolean,
 
     @Column(columnDefinition = "VARCHAR(30)", nullable = false)
-    val name: String,
+    val pointName: String,
+
+    @Column(columnDefinition = "INT", nullable = false)
+    val pointScore: Int,
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(5)", nullable = false)
-    val type: PointType,
+    val pointType: PointType,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)

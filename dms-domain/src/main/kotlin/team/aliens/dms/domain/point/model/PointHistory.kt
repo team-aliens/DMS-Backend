@@ -11,7 +11,7 @@ data class PointHistory(
 
     val studentName: String,
 
-    val gcn: String,
+    val studentGcn: String,
 
     val bonusTotal: Int,
 
@@ -19,11 +19,11 @@ data class PointHistory(
 
     val isCancel: Boolean,
 
-    val name: String,
+    val pointName: String,
 
-    val score: Int,
+    val pointScore: Int,
 
-    val type: PointType,
+    val pointType: PointType,
 
     val createdAt: LocalDateTime,
 

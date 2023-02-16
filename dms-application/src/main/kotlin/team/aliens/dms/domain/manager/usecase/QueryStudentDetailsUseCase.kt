@@ -30,7 +30,7 @@ class QueryStudentDetailsUseCase(
         }
 
         val (bonusPoint, minusPoint) =
-            queryPointPort.queryBonusAndMinusTotalPointByGcnAndStudentName(student.gcn, student.name)
+            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
