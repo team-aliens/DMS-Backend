@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
@@ -12,7 +11,7 @@ import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptio
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
-import java.util.UUID
+import team.aliens.dms.persistence.point.repository.vo.QueryAllPointHistoryVO
 
 @Component
 class PointPersistenceAdapter(
