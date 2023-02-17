@@ -3,6 +3,7 @@ package team.aliens.dms.domain.point.spi
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import java.util.UUID
 
@@ -26,4 +27,9 @@ interface QueryPointHistoryPort {
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
     ): List<QueryAllPointHistoryResponse.PointHistory>
+    fun queryPointOptionByIdAndSchoolId(
+        pointOptionId: UUID,
+        schoolId: UUID
+    ): PointOption?
+
 }

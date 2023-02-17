@@ -5,19 +5,25 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
+import team.aliens.dms.persistence.point.mapper.PointOptionMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
+import team.aliens.dms.persistence.point.repository.PointOptionJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
 import java.util.UUID
 
 @Component
 class PointHistoryPersistenceAdapter(
     private val pointHistoryMapper: PointHistoryMapper,
+    private val pointOptionMapper: PointOptionMapper,
     private val pointHistoryRepository: PointHistoryJpaRepository,
+    private val pointOptionRepository: PointOptionJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : PointHistoryPort {
 
@@ -35,7 +41,7 @@ class PointHistoryPersistenceAdapter(
             .fetchFirst()
 
         val bonusTotal = lastHistory?.bonusTotal ?: 0
-        val minusTotal = lastHistory?.bonusTotal ?: 0
+        val minusTotal = lastHistory?.minusTotal ?: 0
 
         return Pair(bonusTotal, minusTotal)
     }
@@ -113,5 +119,17 @@ class PointHistoryPersistenceAdapter(
                     pointScore = it.pointScore
                 )
             }
+    }
+
+    override fun queryPointOptionByIdAndSchoolId(pointOptionId: UUID, schoolId: UUID) = pointOptionMapper.toDomain(
+        pointOptionRepository.findByIdAndSchoolId(pointOptionId, schoolId)
+    )
+
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
+        pointHistoryRepository.saveAll(
+            pointHistories.map {
+                pointHistoryMapper.toEntity(it)
+            }
+        )
     }
 }
