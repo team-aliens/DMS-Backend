@@ -6,4 +6,5 @@ object PluginVersions {
     const val JPA_PLUGIN_VERSION = "1.6.21"
     const val KAPT_VERSION = "1.7.10"
     const val ALLOPEN_VERSION = "1.6.21"
+    const val MOCKK_VERSION = "1.13.2"
 }
