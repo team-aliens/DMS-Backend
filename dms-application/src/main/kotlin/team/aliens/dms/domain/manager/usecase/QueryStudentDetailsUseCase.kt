@@ -2,14 +2,14 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import java.util.UUID
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
@@ -29,8 +29,8 @@ class QueryStudentDetailsUseCase(
             throw SchoolMismatchException
         }
 
-        val bonusPoint = queryPointPort.queryTotalBonusPoint(studentId)
-        val minusPoint = queryPointPort.queryTotalMinusPoint(studentId)
+        val (bonusPoint, minusPoint) =
+            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,

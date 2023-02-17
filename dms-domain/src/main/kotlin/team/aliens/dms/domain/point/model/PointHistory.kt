@@ -9,10 +9,24 @@ data class PointHistory(
 
     val id: UUID = UUID(0, 0),
 
-    val pointOptionId: UUID,
+    val studentName: String,
 
-    val studentId: UUID,
+    val studentGcn: String,
 
-    val createdAt: LocalDateTime?
+    val bonusTotal: Int,
+
+    val minusTotal: Int,
+
+    val isCancel: Boolean,
+
+    val pointName: String,
+
+    val pointScore: Int,
+
+    val pointType: PointType,
+
+    val createdAt: LocalDateTime,
+
+    val schoolId: UUID
 
 )

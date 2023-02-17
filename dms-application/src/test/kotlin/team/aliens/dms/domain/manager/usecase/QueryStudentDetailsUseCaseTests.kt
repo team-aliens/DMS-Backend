@@ -1,25 +1,27 @@
 package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
-import java.util.UUID
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentDetailsUseCaseTests {
@@ -75,6 +77,24 @@ class QueryStudentDetailsUseCaseTests {
         )
     }
 
+    private val gcn = studentStub.gcn
+    private val name = studentStub.name
+
+    private val roomMateStub by lazy {
+        Student(
+            id = UUID.randomUUID(),
+            roomId = UUID.randomUUID(),
+            roomNumber = 216,
+            schoolId = schoolId,
+            grade = 2,
+            classRoom = 1,
+            number = 21,
+            name = "김철수",
+            profileImageUrl = "profile image url",
+            sex = Sex.FEMALE
+        )
+    }
+
     private val responseStub by lazy {
         GetStudentDetailsResponse(
             name = studentStub.name,
@@ -105,20 +125,23 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryTotalBonusPoint(studentStub.id))
-            .willReturn(bonusPoint)
-
-        given(queryPointPort.queryTotalMinusPoint(studentStub.id))
-            .willReturn(minusPoint)
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+            .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
-            .willReturn(listOf(studentStub))
+            .willReturn(listOf(studentStub, roomMateStub))
 
         // when
         val response = queryStudentDetailsUseCase.execute(studentId)
 
         // then
-        assertThat(response).isNotNull
+        assertAll(
+            { assertThat(response).isNotNull },
+            { assertThat(response.roomMates.isNotEmpty()) },
+            { assertEquals(response.roomMates[0].id, roomMateStub.id) },
+            { assertEquals(response.roomMates[0].name, roomMateStub.name) },
+            { assertEquals(response.roomMates[0].profileImageUrl, roomMateStub.profileImageUrl) }
+        )
     }
 
     @Test
