@@ -17,9 +17,9 @@ class RemainAvailableTimeMapper(
             RemainAvailableTime(
                 id = it.id,
                 startTime = it.startTime,
-                startDayOfWalk = it.startDayOfWalk,
+                startDayOfWeek = it.startDayOfWeek,
                 endTime = it.endTime,
-                endDayOfWalk = it.endDayOfWalk
+                endDayOfWeek = it.endDayOfWeek
             )
         }
     }
@@ -31,9 +31,9 @@ class RemainAvailableTimeMapper(
             id = domain.id,
             school = school,
             startTime = domain.startTime,
-            startDayOfWalk = domain.startDayOfWalk,
+            startDayOfWeek = domain.startDayOfWeek,
             endTime = domain.endTime,
-            endDayOfWalk = domain.endDayOfWalk
+            endDayOfWeek = domain.endDayOfWeek
         )
     }
 }

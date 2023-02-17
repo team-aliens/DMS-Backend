@@ -2,7 +2,7 @@ package team.aliens.dms.domain.remain.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import java.time.DayOfWeek
-import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 @Aggregate
@@ -10,12 +10,12 @@ data class RemainAvailableTime(
 
     val id: UUID,
 
-    val startTime: LocalDate,
+    val startTime: LocalTime,
 
-    val startDayOfWalk: DayOfWeek,
+    val startDayOfWeek: DayOfWeek,
 
-    val endTime: LocalDate,
+    val endTime: LocalTime,
 
-    val endDayOfWalk: DayOfWeek
+    val endDayOfWeek: DayOfWeek
 
 )
