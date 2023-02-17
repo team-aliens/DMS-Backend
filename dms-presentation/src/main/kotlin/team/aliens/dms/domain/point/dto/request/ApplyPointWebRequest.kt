@@ -5,7 +5,7 @@ import java.util.*
 
 data class ApplyPointWebRequest(
     @field:NotNull
-    val pointOptionId: UUID,
+    val pointOptionId: UUID?,
     @field:NotNull
-    val studentIdList: List<UUID>
+    val studentIdList: List<UUID>?
 )
