@@ -18,9 +18,10 @@ import javax.persistence.Table
 class RemainAvailableTimeJpaEntity(
 
     @Id
+    @Column(name = "school_id")
     val id: UUID,
 
-    @MapsId("schoolId")
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
