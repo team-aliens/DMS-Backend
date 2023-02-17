@@ -46,6 +46,7 @@ class ApplyPointUseCaseTest {
     private lateinit var queryStudentPort: PointQueryStudentPort
 
     private lateinit var applyPointUseCase: ApplyPointUseCase
+
     @BeforeEach
     fun setUp() {
         applyPointUseCase = ApplyPointUseCase(
@@ -115,14 +116,41 @@ class ApplyPointUseCaseTest {
     }
 
     @Test
-    fun `다른_학교_학생일_경우`() {
+    fun `상벌점부여 성공`() {
         //given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
+
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
+
+        given(queryStudentPort.queryStudentById(studentId))
+            .willReturn(studentStub2)
+
+        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+            .willReturn(pointOptionStub)
+
+        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(studentStub2.gcn, studentStub2.name))
+            .willReturn(Pair(10, 10))
+
+        //when & then
+        assertDoesNotThrow {
+            applyPointUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `다른학교 학생일 경우`() {
+        //given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
+
         given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
@@ -133,37 +161,19 @@ class ApplyPointUseCaseTest {
     }
 
     @Test
-    fun `학생을_찾을수_없는경우`() {
+    fun `학생을 찾을 수 없는경우`() {
         //given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
+
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
+        
         given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
         //when & then
         assertThrows<StudentNotFoundException> {
-            applyPointUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `상벌점_부여_성공`() {
-        //given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-        given(queryManagerPort.queryManagerById(currentUserId))
-            .willReturn(managerStub)
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub2)
-        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
-            .willReturn(pointOptionStub)
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(studentStub2.gcn, studentStub2.name))
-            .willReturn(Pair(10, 10))
-
-        //when & then
-        assertDoesNotThrow {
             applyPointUseCase.execute(requestStub)
         }
     }
