@@ -18,7 +18,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointPort
+import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.time.LocalDate
@@ -37,7 +37,7 @@ class StudentMyPageUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryPointPort: StudentQueryPointPort
+    private lateinit var queryPointPort: StudentQueryPointHistoryPort
 
     @MockBean
     private lateinit var queryPhrasePort: StudentQueryPhrasePort

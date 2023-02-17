@@ -14,7 +14,7 @@ import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointPort
+import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -31,14 +31,14 @@ class QueryPointHistoryUseCaseTests {
     private lateinit var queryStudentPort: PointQueryStudentPort
 
     @MockBean
-    private lateinit var queryPointPort: QueryPointPort
+    private lateinit var queryPointHistoryPort: QueryPointHistoryPort
 
     private lateinit var queryPointHistoryUseCase: QueryPointHistoryUseCase
 
     @BeforeEach
     fun setUp() {
         queryPointHistoryUseCase = QueryPointHistoryUseCase(
-            securityPort, queryStudentPort, queryPointPort
+            securityPort, queryStudentPort, queryPointHistoryPort
         )
     }
 
@@ -86,10 +86,10 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.BONUS, false))
+        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.BONUS, false))
             .willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 0))
 
         // when
@@ -128,10 +128,10 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.MINUS, false))
+        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.MINUS, false))
             .willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 10))
 
         // when
@@ -168,10 +168,10 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, null, false))
+        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, null, false))
             .willReturn(pointStubs)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(10, 5))
 
         // when

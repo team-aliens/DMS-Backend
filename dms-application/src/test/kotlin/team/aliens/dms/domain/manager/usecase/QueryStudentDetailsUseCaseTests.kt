@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
@@ -36,7 +36,7 @@ class QueryStudentDetailsUseCaseTests {
     private lateinit var queryStudentPort: ManagerQueryStudentPort
 
     @MockBean
-    private lateinit var queryPointPort: ManagerQueryPointPort
+    private lateinit var queryPointPort: ManagerQueryPointHistoryPort
 
     private lateinit var queryStudentDetailsUseCase: QueryStudentDetailsUseCase
 

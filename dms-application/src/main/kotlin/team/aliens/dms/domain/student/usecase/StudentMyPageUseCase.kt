@@ -8,7 +8,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointPort
+import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.security.SecureRandom
@@ -18,7 +18,7 @@ class StudentMyPageUseCase(
     private val securityPort: StudentSecurityPort,
     private val queryStudentPort: QueryStudentPort,
     private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryPointPort: StudentQueryPointPort,
+    private val queryPointPort: StudentQueryPointHistoryPort,
     private val studentQueryPhrasePort: StudentQueryPhrasePort
 ) {
 

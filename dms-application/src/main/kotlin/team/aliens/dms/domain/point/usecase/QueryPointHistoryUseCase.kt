@@ -5,14 +5,14 @@ import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointPort
+import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
     private val securityPort: PointSecurityPort,
     private val queryStudentPort: PointQueryStudentPort,
-    private val queryPointPort: QueryPointPort
+    private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
     fun execute(type: PointRequestType): QueryPointHistoryResponse {
@@ -24,7 +24,7 @@ class QueryPointHistoryUseCase(
         val pointType = PointRequestType.toPointType(type)
 
         val pointHistories =
-            queryPointPort.queryPointHistoryByStudentGcnAndNameAndType(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
                 gcn = gcn,
                 studentName = name,
                 type = pointType,
@@ -32,7 +32,7 @@ class QueryPointHistoryUseCase(
             )
 
         val (bonusTotal, minusTotal) =
-            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
+            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
 
         return QueryPointHistoryResponse(
             totalPoint = getTotalPoint(type, bonusTotal, minusTotal),
