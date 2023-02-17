@@ -13,13 +13,7 @@ interface QueryPointPort {
     fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
-        type: PointType,
-        isCancel: Boolean? = null
-    ): List<QueryPointHistoryResponse.Point>
-
-    fun queryPointHistoryByStudentGcnAndName(
-        gcn: String,
-        studentName: String,
+        type: PointType?,
         isCancel: Boolean? = null
     ): List<QueryPointHistoryResponse.Point>
 

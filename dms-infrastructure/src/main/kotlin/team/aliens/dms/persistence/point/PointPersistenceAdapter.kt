@@ -39,7 +39,7 @@ class PointPersistenceAdapter(
     override fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
-        type: PointType,
+        type: PointType?,
         isCancel: Boolean?
     ): List<QueryPointHistoryResponse.Point> {
         return queryFactory
@@ -55,39 +55,7 @@ class PointPersistenceAdapter(
             .where(
                 pointHistoryJpaEntity.studentGcn.eq(gcn),
                 pointHistoryJpaEntity.studentName.eq(studentName),
-                pointHistoryJpaEntity.pointType.eq(type),
-                isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
-            )
-            .orderBy(pointHistoryJpaEntity.createdAt.desc())
-            .fetch()
-            .map {
-                QueryPointHistoryResponse.Point(
-                    date = it.date.toLocalDate(),
-                    type = it.pointType,
-                    name = it.pointName,
-                    score = it.pointScore
-                )
-            }
-    }
-
-    override fun queryPointHistoryByStudentGcnAndName(
-        gcn: String,
-        studentName: String,
-        isCancel: Boolean?
-    ): List<QueryPointHistoryResponse.Point> {
-        return queryFactory
-            .select(
-                QQueryPointHistoryVO(
-                    pointHistoryJpaEntity.createdAt!!,
-                    pointHistoryJpaEntity.pointType,
-                    pointHistoryJpaEntity.pointName,
-                    pointHistoryJpaEntity.pointScore
-                )
-            )
-            .from(pointHistoryJpaEntity)
-            .where(
-                pointHistoryJpaEntity.studentGcn.eq(gcn),
-                pointHistoryJpaEntity.studentName.eq(studentName),
+                type?.let {pointHistoryJpaEntity.pointType.eq(it) },
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())

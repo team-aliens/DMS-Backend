@@ -168,7 +168,7 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryPointHistoryByStudentGcnAndName(gcn, name, false))
+        given(queryPointPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, null, false))
             .willReturn(pointStubs)
 
         given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
