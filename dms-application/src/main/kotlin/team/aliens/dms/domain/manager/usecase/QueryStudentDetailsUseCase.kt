@@ -16,7 +16,7 @@ class QueryStudentDetailsUseCase(
     private val securityPort: ManagerSecurityPort,
     private val queryManagerPort: QueryManagerPort,
     private val queryStudentPort: ManagerQueryStudentPort,
-    private val queryPointPort: ManagerQueryPointHistoryPort
+    private val queryPointHistoryPort: ManagerQueryPointHistoryPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
@@ -30,7 +30,7 @@ class QueryStudentDetailsUseCase(
         }
 
         val (bonusPoint, minusPoint) =
-            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
+            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
