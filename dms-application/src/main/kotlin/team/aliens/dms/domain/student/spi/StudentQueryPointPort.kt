@@ -1,11 +1,7 @@
 package team.aliens.dms.domain.student.spi
 
-import java.util.UUID
-
 interface StudentQueryPointPort {
 
-    fun queryTotalBonusPoint(studentId: UUID): Int
-
-    fun queryTotalMinusPoint(studentId: UUID): Int
+    fun queryBonusAndMinusTotalPointByStudentGcnAndName(gcn: String, studentName: String): Pair<Int, Int>
 
 }

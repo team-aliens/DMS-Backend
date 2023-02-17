@@ -6,11 +6,9 @@ import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
-import team.aliens.dms.persistence.point.entity.QPointOptionJpaEntity.pointOptionJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
-import java.util.UUID
 
 @Component
 class PointPersistenceAdapter(
@@ -19,87 +17,56 @@ class PointPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : PointPort {
 
-    override fun queryPointHistoryByStudentIdAndType(
-        studentId: UUID,
-        type: PointType
+    override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
+        gcn: String,
+        studentName: String
+    ): Pair<Int, Int> {
+        val lastHistory = queryFactory
+            .selectFrom(pointHistoryJpaEntity)
+            .where(
+                pointHistoryJpaEntity.studentGcn.eq(gcn),
+                pointHistoryJpaEntity.studentName.eq(studentName)
+            )
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetchFirst()
+
+        val bonusTotal = lastHistory?.bonusTotal ?: 0
+        val minusTotal = lastHistory?.bonusTotal ?: 0
+
+        return Pair(bonusTotal, minusTotal)
+    }
+
+    override fun queryPointHistoryByStudentGcnAndNameAndType(
+        gcn: String,
+        studentName: String,
+        type: PointType?,
+        isCancel: Boolean?
     ): List<QueryPointHistoryResponse.Point> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
                     pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
+                    pointHistoryJpaEntity.pointType,
+                    pointHistoryJpaEntity.pointName,
+                    pointHistoryJpaEntity.pointScore
                 )
             )
             .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
             .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
-                pointOptionJpaEntity.type.eq(type)
+                pointHistoryJpaEntity.studentGcn.eq(gcn),
+                pointHistoryJpaEntity.studentName.eq(studentName),
+                type?.let {pointHistoryJpaEntity.pointType.eq(it) },
+                isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
                 QueryPointHistoryResponse.Point(
-                    pointId = it.pointId,
                     date = it.date.toLocalDate(),
-                    type = it.type,
-                    name = it.name,
-                    score = it.score
+                    type = it.pointType,
+                    name = it.pointName,
+                    score = it.pointScore
                 )
             }
-    }
-
-    override fun queryAllPointHistoryByStudentId(studentId: UUID): List<QueryPointHistoryResponse.Point> {
-        return queryFactory
-            .select(
-                QQueryPointHistoryVO(
-                    pointOptionJpaEntity.id,
-                    pointHistoryJpaEntity.createdAt!!,
-                    pointOptionJpaEntity.type,
-                    pointOptionJpaEntity.name,
-                    pointOptionJpaEntity.score
-                )
-            )
-            .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
-            .where(pointHistoryJpaEntity.student.id.eq(studentId))
-            .orderBy(pointHistoryJpaEntity.createdAt.desc())
-            .fetch()
-            .map {
-                QueryPointHistoryResponse.Point(
-                    pointId = it.pointId,
-                    date = it.date.toLocalDate(),
-                    type = it.type,
-                    name = it.name,
-                    score = it.score
-                )
-            }
-    }
-
-    override fun queryTotalBonusPoint(studentId: UUID): Int {
-        return queryFactory
-            .select(pointOptionJpaEntity.score.sum())
-            .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
-            .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
-                pointOptionJpaEntity.type.eq(PointType.BONUS)
-            )
-            .fetchOne() ?: 0
-    }
-
-    override fun queryTotalMinusPoint(studentId: UUID): Int {
-        return queryFactory
-            .select(pointOptionJpaEntity.score.sum())
-            .from(pointHistoryJpaEntity)
-            .join(pointHistoryJpaEntity.pointOption, pointOptionJpaEntity)
-            .where(
-                pointHistoryJpaEntity.student.id.eq(studentId),
-                pointOptionJpaEntity.type.eq(PointType.MINUS)
-            )
-            .fetchOne() ?: 0
     }
 }
