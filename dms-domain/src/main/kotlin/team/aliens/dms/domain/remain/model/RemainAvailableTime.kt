@@ -8,7 +8,7 @@ import java.util.UUID
 @Aggregate
 data class RemainAvailableTime(
 
-    val schoolId: UUID,
+    val id: UUID,
 
     val startTime: LocalDate,
 

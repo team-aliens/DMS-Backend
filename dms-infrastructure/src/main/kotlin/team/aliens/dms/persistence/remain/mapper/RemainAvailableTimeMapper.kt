@@ -15,7 +15,7 @@ class RemainAvailableTimeMapper(
     override fun toDomain(entity: RemainAvailableTimeJpaEntity?): RemainAvailableTime? {
         return entity?.let {
             RemainAvailableTime(
-                schoolId = it.id,
+                id = it.id,
                 startTime = it.startTime,
                 startDayOfWalk = it.startDayOfWalk,
                 endTime = it.endTime,
@@ -25,10 +25,10 @@ class RemainAvailableTimeMapper(
     }
 
     override fun toEntity(domain: RemainAvailableTime): RemainAvailableTimeJpaEntity {
-        val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
+        val school = schoolJpaRepository.findByIdOrNull(domain.id)
 
         return RemainAvailableTimeJpaEntity(
-            id = domain.schoolId,
+            id = domain.id,
             school = school,
             startTime = domain.startTime,
             startDayOfWalk = domain.startDayOfWalk,
