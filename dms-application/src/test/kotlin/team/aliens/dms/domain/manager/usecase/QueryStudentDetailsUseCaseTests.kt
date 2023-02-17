@@ -36,14 +36,14 @@ class QueryStudentDetailsUseCaseTests {
     private lateinit var queryStudentPort: ManagerQueryStudentPort
 
     @MockBean
-    private lateinit var queryPointPort: ManagerQueryPointHistoryPort
+    private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
     private lateinit var queryStudentDetailsUseCase: QueryStudentDetailsUseCase
 
     @BeforeEach
     fun setUp() {
         queryStudentDetailsUseCase = QueryStudentDetailsUseCase(
-            securityPort, queryManagerPort, queryStudentPort, queryPointPort
+            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort
         )
     }
 
@@ -125,7 +125,7 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))

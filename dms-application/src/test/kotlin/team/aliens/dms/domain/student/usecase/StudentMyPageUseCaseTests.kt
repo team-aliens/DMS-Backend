@@ -37,7 +37,7 @@ class StudentMyPageUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryPointPort: StudentQueryPointHistoryPort
+    private lateinit var queryPointHistoryPort: StudentQueryPointHistoryPort
 
     @MockBean
     private lateinit var queryPhrasePort: StudentQueryPhrasePort
@@ -47,7 +47,7 @@ class StudentMyPageUseCaseTests {
     @BeforeEach
     fun setUp() {
         studentMyPageUseCase = StudentMyPageUseCase(
-            securityPort, queryStudentPort, querySchoolPort, queryPointPort, queryPhrasePort
+            securityPort, queryStudentPort, querySchoolPort, queryPointHistoryPort, queryPhrasePort
         )
     }
 
@@ -109,7 +109,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
@@ -140,7 +140,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
