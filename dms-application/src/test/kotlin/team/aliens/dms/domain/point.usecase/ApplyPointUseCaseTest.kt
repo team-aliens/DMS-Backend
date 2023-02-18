@@ -168,7 +168,7 @@ class ApplyPointUseCaseTest {
 
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
-        
+
         given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
