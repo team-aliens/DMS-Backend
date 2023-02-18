@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
@@ -36,14 +36,14 @@ class QueryStudentDetailsUseCaseTests {
     private lateinit var queryStudentPort: ManagerQueryStudentPort
 
     @MockBean
-    private lateinit var queryPointPort: ManagerQueryPointPort
+    private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
     private lateinit var queryStudentDetailsUseCase: QueryStudentDetailsUseCase
 
     @BeforeEach
     fun setUp() {
         queryStudentDetailsUseCase = QueryStudentDetailsUseCase(
-            securityPort, queryManagerPort, queryStudentPort, queryPointPort
+            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort
         )
     }
 
@@ -125,7 +125,7 @@ class QueryStudentDetailsUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(bonusPoint, minusPoint))
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))

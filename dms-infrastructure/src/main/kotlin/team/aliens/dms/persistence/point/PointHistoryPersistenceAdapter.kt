@@ -4,18 +4,18 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.PointPort
+import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
 
 @Component
-class PointPersistenceAdapter(
+class PointHistoryPersistenceAdapter(
     private val pointHistoryMapper: PointHistoryMapper,
     private val pointHistoryRepository: PointHistoryJpaRepository,
     private val queryFactory: JPAQueryFactory
-) : PointPort {
+) : PointHistoryPort {
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
@@ -45,7 +45,7 @@ class PointPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
-                    pointHistoryJpaEntity.createdAt!!,
+                    pointHistoryJpaEntity.createdAt,
                     pointHistoryJpaEntity.pointType,
                     pointHistoryJpaEntity.pointName,
                     pointHistoryJpaEntity.pointScore
