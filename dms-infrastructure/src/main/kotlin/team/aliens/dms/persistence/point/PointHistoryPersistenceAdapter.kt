@@ -21,9 +21,7 @@ import java.util.UUID
 @Component
 class PointHistoryPersistenceAdapter(
     private val pointHistoryMapper: PointHistoryMapper,
-    private val pointOptionMapper: PointOptionMapper,
     private val pointHistoryRepository: PointHistoryJpaRepository,
-    private val pointOptionRepository: PointOptionJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : PointHistoryPort {
 
