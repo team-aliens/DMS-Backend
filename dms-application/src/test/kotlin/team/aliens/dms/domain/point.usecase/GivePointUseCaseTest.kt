@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
@@ -17,7 +15,7 @@ import team.aliens.dms.domain.point.spi.QueryPointPort
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import team.aliens.dms.domain.manager.model.Manager
-import team.aliens.dms.domain.point.dto.ApplyPointRequest
+import team.aliens.dms.domain.point.dto.GivePointRequest
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointPort
@@ -28,7 +26,7 @@ import team.aliens.dms.domain.student.model.Student
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class ApplyPointUseCaseTest {
+class GivePointUseCaseTest {
 
     @MockBean
     private lateinit var queryManagerPort: QueryManagerPort
@@ -45,11 +43,11 @@ class ApplyPointUseCaseTest {
     @MockBean
     private lateinit var queryStudentPort: PointQueryStudentPort
 
-    private lateinit var applyPointUseCase: ApplyPointUseCase
+    private lateinit var givePointUseCase: GivePointUseCase
 
     @BeforeEach
     fun setUp() {
-        applyPointUseCase = ApplyPointUseCase(
+        givePointUseCase = GivePointUseCase(
             queryManagerPort, securityPort, queryPointPort, commandPointPort, queryStudentPort
         )
     }
@@ -99,7 +97,7 @@ class ApplyPointUseCaseTest {
     }
 
     private val requestStub by lazy {
-        ApplyPointRequest(
+        GivePointRequest(
             pointOptionId = pointOptionId,
             studentIdList = listOf(studentId)
         )
@@ -135,7 +133,7 @@ class ApplyPointUseCaseTest {
 
         //when & then
         assertDoesNotThrow {
-            applyPointUseCase.execute(requestStub)
+            givePointUseCase.execute(requestStub)
         }
     }
 
@@ -156,7 +154,7 @@ class ApplyPointUseCaseTest {
 
         //when & then
         assertThrows<SchoolMismatchException> {
-            applyPointUseCase.execute(requestStub)
+            givePointUseCase.execute(requestStub)
         }
     }
 
@@ -174,7 +172,7 @@ class ApplyPointUseCaseTest {
 
         //when & then
         assertThrows<StudentNotFoundException> {
-            applyPointUseCase.execute(requestStub)
+            givePointUseCase.execute(requestStub)
         }
     }
 }

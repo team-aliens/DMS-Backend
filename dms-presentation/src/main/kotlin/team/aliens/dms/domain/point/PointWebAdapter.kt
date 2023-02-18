@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.point.dto.GivePointRequest
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.ApplyPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.dto.request.GivePointWebRequest
+import team.aliens.dms.domain.point.usecase.GivePointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.dto.request.ApplyPointWebRequest
 import team.aliens.dms.domain.point.usecase.ApplyPointUseCase
@@ -30,6 +33,7 @@ class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val applyPointUseCase: ApplyPointUseCase
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val givePointUseCase: GivePointUseCase
 ) {
 
     @GetMapping
@@ -39,11 +43,11 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/history")
-    fun applyPoint(@RequestBody @Valid webRequest: ApplyPointWebRequest) {
-        applyPointUseCase.execute(
-            ApplyPointRequest(
-                pointOptionId = webRequest.pointOptionId,
-                studentIdList = webRequest.studentIdList
+    fun applyPoint(@RequestBody @Valid webRequest: GivePointWebRequest) {
+        givePointUseCase.execute(
+            GivePointRequest(
+                pointOptionId = webRequest.pointOptionId!!,
+                studentIdList = webRequest.studentIdList!!
             )
         )
     }
