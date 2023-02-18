@@ -93,6 +93,7 @@ class SecurityConfiguration(
 
             // /points
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
 
             // /templates
             .antMatchers(HttpMethod.GET, "/templates").permitAll()
