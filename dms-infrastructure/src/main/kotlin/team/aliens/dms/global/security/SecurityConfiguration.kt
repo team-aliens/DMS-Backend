@@ -115,6 +115,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/study-rooms/list/students").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/study-rooms/list/managers").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/study-rooms/types/{type-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/study-rooms/my").hasAuthority(STUDENT.name)
             .anyRequest().denyAll()
 
 
