@@ -2,22 +2,18 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.ApplyPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.CommandPointPort
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointPort
+import team.aliens.dms.domain.point.spi.*
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.time.LocalDateTime
 
 @UseCase
 class ApplyPointUseCase(
-    private val queryManagerPort: QueryManagerPort,
+    private val queryManagerPort: PointQueryManagerPort,
     private val securityPort: PointSecurityPort,
     private val queryPointPort: QueryPointPort,
     private val commandPointPort: CommandPointPort,
