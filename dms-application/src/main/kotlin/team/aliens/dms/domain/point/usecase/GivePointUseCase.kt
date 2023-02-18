@@ -30,7 +30,6 @@ class GivePointUseCase(
 
         val pointList = queryStudentPort.queryStudentsWithPointHistory(givePointRequest.studentIdList)
             .map {
-                it ?: throw StudentNotFoundException
                 if(it.schoolId != manager.schoolId)
                     throw SchoolMismatchException
                 if(pointOption.type == PointType.BONUS)
@@ -51,6 +50,8 @@ class GivePointUseCase(
                     schoolId = manager.schoolId
                 )
             }
+        if(pointList.size != givePointRequest.studentIdList.size)
+            throw StudentNotFoundException
 
         commandPointPort.saveAllPointHistories(pointList)
     }

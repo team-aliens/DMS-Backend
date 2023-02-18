@@ -114,7 +114,7 @@ class StudentPersistenceAdapter(
         )
     }
 
-    override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPoint?> {
+    override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPoint> {
         return queryFactory
             .select(
                 QQueryStudentWithPointVO(
