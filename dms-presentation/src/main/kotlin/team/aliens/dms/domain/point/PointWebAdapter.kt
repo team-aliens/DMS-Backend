@@ -23,6 +23,7 @@ import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.dto.request.ApplyPointWebRequest
 import team.aliens.dms.domain.point.usecase.ApplyPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
+import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -46,8 +47,10 @@ class PointWebAdapter(
     fun applyPoint(@RequestBody @Valid webRequest: GivePointWebRequest) {
         givePointUseCase.execute(
             GivePointRequest(
-                pointOptionId = webRequest.pointOptionId!!,
-                studentIdList = webRequest.studentIdList!!
+                pointOptionId = UUID.fromString(webRequest.pointOptionId!!),
+                studentIdList = webRequest.studentIdList!!.map {
+                    UUID.fromString(it)
+                }
             )
         )
     }
