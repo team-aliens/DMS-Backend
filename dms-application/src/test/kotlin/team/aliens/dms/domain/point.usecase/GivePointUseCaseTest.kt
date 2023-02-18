@@ -18,8 +18,6 @@ import team.aliens.dms.domain.point.spi.*
 import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
@@ -32,10 +30,10 @@ class GivePointUseCaseTest {
     private lateinit var securityPort: PointSecurityPort
 
     @MockBean
-    private lateinit var queryPointPort: QueryPointPort
+    private lateinit var queryPointOptionPort: QueryPointOptionPort
 
     @MockBean
-    private lateinit var commandPointPort: CommandPointPort
+    private lateinit var commandPointHistoryPort: CommandPointHistoryPort
 
     @MockBean
     private lateinit var queryStudentPort: PointQueryStudentPort
@@ -45,7 +43,7 @@ class GivePointUseCaseTest {
     @BeforeEach
     fun setUp() {
         givePointUseCase = GivePointUseCase(
-            queryManagerPort, securityPort, queryPointPort, commandPointPort, queryStudentPort
+            queryManagerPort, securityPort, queryPointOptionPort, commandPointHistoryPort, queryStudentPort
         )
     }
 
@@ -118,7 +116,7 @@ class GivePointUseCaseTest {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
@@ -142,7 +140,7 @@ class GivePointUseCaseTest {
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
             .willReturn(studentWithPointStub)
 
-        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId2))
+        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId2))
             .willReturn(pointOptionStub)
 
         //when & then
@@ -160,7 +158,7 @@ class GivePointUseCaseTest {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))

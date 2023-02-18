@@ -125,6 +125,7 @@ class PointHistoryPersistenceAdapter(
         pointOptionRepository.findByIdAndSchoolId(pointOptionId, schoolId)
     )
 
+
     override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
         pointHistoryRepository.saveAll(
             pointHistories.map {

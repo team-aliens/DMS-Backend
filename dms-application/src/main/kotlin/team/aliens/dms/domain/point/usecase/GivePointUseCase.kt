@@ -15,8 +15,8 @@ import java.time.LocalDateTime
 class GivePointUseCase(
     private val queryManagerPort: PointQueryManagerPort,
     private val securityPort: PointSecurityPort,
-    private val queryPointPort: QueryPointPort,
-    private val commandPointPort: CommandPointPort,
+    private val queryPointOptionPort: QueryPointOptionPort,
+    private val commandPointHistoryPort: CommandPointHistoryPort,
     private val queryStudentPort: PointQueryStudentPort
 ) {
 
@@ -24,7 +24,7 @@ class GivePointUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointOption = queryPointPort.queryPointOptionByIdAndSchoolId(
+        val pointOption = queryPointOptionPort.queryPointOptionByIdAndSchoolId(
             givePointRequest.pointOptionId, manager.schoolId
         ) ?: throw PointOptionNotFoundException
 
@@ -53,6 +53,6 @@ class GivePointUseCase(
         if(pointList.size != givePointRequest.studentIdList.size)
             throw StudentNotFoundException
 
-        commandPointPort.saveAllPointHistories(pointList)
+        commandPointHistoryPort.saveAllPointHistories(pointList)
     }
 }
