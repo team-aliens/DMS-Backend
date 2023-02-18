@@ -8,17 +8,14 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointPort
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.point.dto.GivePointRequest
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.CommandPointPort
+import team.aliens.dms.domain.point.spi.*
+import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
@@ -29,7 +26,7 @@ import java.util.*
 class GivePointUseCaseTest {
 
     @MockBean
-    private lateinit var queryManagerPort: QueryManagerPort
+    private lateinit var queryManagerPort: PointQueryManagerPort
 
     @MockBean
     private lateinit var securityPort: PointSecurityPort
@@ -56,43 +53,35 @@ class GivePointUseCaseTest {
     private val schoolId = UUID.randomUUID()
     private val schoolId2 = UUID.randomUUID()
     private val studentId = UUID.randomUUID()
-    private val roomId = UUID.randomUUID()
+    private val studentId2 = UUID.randomUUID()
     private val pointOptionId = UUID.randomUUID()
 
+    private val studentWithPointStub by lazy {
+        listOf( StudentWithPoint(
+            schoolId = schoolId,
+            grade = 2,
+            classRoom = 1,
+            number = 15,
+            name = "이하성",
+            bonusTotal = 29,
+            minusTotal = 10
+        ))
+    }
     private val managerStub by lazy {
         Manager(
             id = currentUserId,
             schoolId = schoolId,
-            name = "관리자 이름",
+            name = "이름",
             profileImageUrl = "test"
         )
     }
 
-    private val studentStub by lazy {
-        Student(
-            id = studentId,
-            roomId = roomId,
-            roomNumber = 422,
-            grade = 2,
-            classRoom = 1,
-            number = 15,
-            name = "이하성",
+    private val managerStub2 by lazy {
+        Manager(
+            id = currentUserId,
             schoolId = schoolId2,
-            sex = Sex.MALE
-        )
-    }
-
-    private val studentStub2 by lazy {
-        Student(
-            id = studentId,
-            roomId = roomId,
-            roomNumber = 422,
-            grade = 2,
-            classRoom = 1,
-            number = 15,
-            name = "이하성",
-            schoolId = schoolId,
-            sex = Sex.MALE
+            name = "이름",
+            profileImageUrl = "test"
         )
     }
 
@@ -100,6 +89,13 @@ class GivePointUseCaseTest {
         GivePointRequest(
             pointOptionId = pointOptionId,
             studentIdList = listOf(studentId)
+        )
+    }
+
+    private val requestStubWithInvalidStudent by lazy {
+        GivePointRequest(
+            pointOptionId = pointOptionId,
+            studentIdList = listOf(studentId, studentId2)
         )
     }
 
@@ -122,14 +118,11 @@ class GivePointUseCaseTest {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub2)
-
         given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(studentStub2.gcn, studentStub2.name))
-            .willReturn(Pair(10, 10))
+        given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
+            .willReturn(studentWithPointStub)
 
         //when & then
         assertDoesNotThrow {
@@ -144,12 +137,12 @@ class GivePointUseCaseTest {
             .willReturn(currentUserId)
 
         given(queryManagerPort.queryManagerById(currentUserId))
-            .willReturn(managerStub)
+            .willReturn(managerStub2)
 
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub)
+        given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
+            .willReturn(studentWithPointStub)
 
-        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+        given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId2))
             .willReturn(pointOptionStub)
 
         //when & then
@@ -170,9 +163,13 @@ class GivePointUseCaseTest {
         given(queryPointPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
             .willReturn(pointOptionStub)
 
+        given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
+            .willReturn(studentWithPointStub)
+
+
         //when & then
         assertThrows<StudentNotFoundException> {
-            givePointUseCase.execute(requestStub)
+            givePointUseCase.execute(requestStubWithInvalidStudent)
         }
     }
 }
