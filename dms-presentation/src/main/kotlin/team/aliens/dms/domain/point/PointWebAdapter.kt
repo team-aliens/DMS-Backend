@@ -47,10 +47,8 @@ class PointWebAdapter(
     fun applyPoint(@RequestBody @Valid webRequest: GivePointWebRequest) {
         givePointUseCase.execute(
             GivePointRequest(
-                pointOptionId = UUID.fromString(webRequest.pointOptionId!!),
-                studentIdList = webRequest.studentIdList!!.map {
-                    UUID.fromString(it)
-                }
+                pointOptionId = webRequest.pointOptionId!!,
+                studentIdList = webRequest.studentIdList!!
             )
         )
     }
