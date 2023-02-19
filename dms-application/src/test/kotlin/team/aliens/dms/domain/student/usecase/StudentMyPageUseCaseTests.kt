@@ -18,7 +18,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointPort
+import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.time.LocalDate
@@ -37,7 +37,7 @@ class StudentMyPageUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryPointPort: StudentQueryPointPort
+    private lateinit var queryPointHistoryPort: StudentQueryPointHistoryPort
 
     @MockBean
     private lateinit var queryPhrasePort: StudentQueryPhrasePort
@@ -47,7 +47,7 @@ class StudentMyPageUseCaseTests {
     @BeforeEach
     fun setUp() {
         studentMyPageUseCase = StudentMyPageUseCase(
-            securityPort, queryStudentPort, querySchoolPort, queryPointPort, queryPhrasePort
+            securityPort, queryStudentPort, querySchoolPort, queryPointHistoryPort, queryPhrasePort
         )
     }
 
@@ -109,7 +109,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))
@@ -140,7 +140,7 @@ class StudentMyPageUseCaseTests {
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
             .willReturn(schoolStub)
 
-        given(queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
+        given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(1, 1))
 
         given(queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type = PointType.BONUS, point = 1))

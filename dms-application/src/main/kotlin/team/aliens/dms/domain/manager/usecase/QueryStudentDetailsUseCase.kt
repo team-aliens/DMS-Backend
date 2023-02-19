@@ -3,7 +3,7 @@ package team.aliens.dms.domain.manager.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.ManagerQueryPointPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
@@ -16,7 +16,7 @@ class QueryStudentDetailsUseCase(
     private val securityPort: ManagerSecurityPort,
     private val queryManagerPort: QueryManagerPort,
     private val queryStudentPort: ManagerQueryStudentPort,
-    private val queryPointPort: ManagerQueryPointPort
+    private val queryPointHistoryPort: ManagerQueryPointHistoryPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
@@ -30,7 +30,7 @@ class QueryStudentDetailsUseCase(
         }
 
         val (bonusPoint, minusPoint) =
-            queryPointPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
+            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
