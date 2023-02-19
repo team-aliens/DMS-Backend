@@ -6,6 +6,8 @@ import java.time.LocalTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -26,13 +28,15 @@ class RemainAvailableTimeJpaEntity(
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "TINYINT", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val startDayOfWeek: DayOfWeek,
 
     @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,
 
-    @Column(columnDefinition = "TINYINT", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val endDayOfWeek: DayOfWeek,
 
     @Column(columnDefinition = "TIME", nullable = false)
