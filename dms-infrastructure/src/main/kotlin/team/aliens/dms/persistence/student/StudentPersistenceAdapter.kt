@@ -118,7 +118,6 @@ class StudentPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryStudentWithPointVO(
-                    schoolJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
@@ -132,6 +131,7 @@ class StudentPersistenceAdapter(
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(
+                pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
                 pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
                 pointHistoryJpaEntity.createdAt.eq(
                         select(pointHistoryJpaEntity.createdAt.max())
@@ -145,16 +145,16 @@ class StudentPersistenceAdapter(
             .fetch()
             .map {
                 StudentWithPoint(
-                    it.schoolId,
-                    it.name,
-                    it.grade,
-                    it.classRoom,
-                    it.number,
-                    it.bonusTotal ?: 0,
-                    it.minusTotal ?: 0
+                    name = it.name,
+                    grade = it.grade,
+                    classRoom = it.classRoom,
+                    number = it.number,
+                    bonusTotal = it.bonusTotal ?: 0,
+                    minusTotal = it.minusTotal ?: 0
                 )
             }
     }
+
     private fun eqGcn(): BooleanBuilder {
         val condition = BooleanBuilder()
 

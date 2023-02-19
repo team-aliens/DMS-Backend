@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.spi.PointOptionPort
 import team.aliens.dms.persistence.point.mapper.PointOptionMapper
@@ -14,7 +15,7 @@ class PointOptionPersistenceAdapter(
     private val pointOptionJpaRepository: PointOptionJpaRepository
 ) : PointOptionPort {
 
-    override fun queryPointOptionByIdAndSchoolId(pointOptionId: UUID, schoolId: UUID) = pointOptionMapper.toDomain(
-        pointOptionJpaRepository.findByIdAndSchoolId(pointOptionId, schoolId)
+    override fun queryPointOptionById(pointOptionId: UUID) = pointOptionMapper.toDomain(
+        pointOptionJpaRepository.findByIdOrNull(pointOptionId)
     )
 }

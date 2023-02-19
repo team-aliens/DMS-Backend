@@ -4,7 +4,6 @@ import com.querydsl.core.annotations.QueryProjection
 import java.util.*
 
 data class QueryStudentWithPointVO @QueryProjection constructor(
-    val schoolId: UUID,
     val name: String,
     val grade: Int,
     val classRoom: Int,
