@@ -25,7 +25,7 @@ import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
-import team.aliens.dms.domain.studyroom.dto.StudentQueryMyStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.QueryCurrentAppliedStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
@@ -39,7 +39,7 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
-import team.aliens.dms.domain.studyroom.usecase.StudentQueryMyStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.QueryCurrentAppliedStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
@@ -63,7 +63,7 @@ class StudyRoomWebAdapter(
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase,
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
-    private val studentQueryMyStudyRoomUseCase: StudentQueryMyStudyRoomUseCase
+    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -205,7 +205,7 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/my")
-    fun getMyStudyRoom(): StudentQueryMyStudyRoomResponse {
-        return studentQueryMyStudyRoomUseCase.execute()
+    fun getMyStudyRoom(): QueryCurrentAppliedStudyRoomResponse {
+        return queryCurrentAppliedStudyRoomUseCase.execute()
     }
 }

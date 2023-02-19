@@ -19,7 +19,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class StudentQueryMyStudyRoomUseCaseTests {
+class QueryCurrentAppliedStudyRoomUseCaseTests {
 
     @MockBean
     private lateinit var securityPort: StudyRoomSecurityPort
@@ -27,11 +27,11 @@ class StudentQueryMyStudyRoomUseCaseTests {
     @MockBean
     private lateinit var queryStudyRoomPort: QueryStudyRoomPort
 
-    private lateinit var studentQueryMyStudyRoomUseCase: StudentQueryMyStudyRoomUseCase
+    private lateinit var queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase
 
     @BeforeEach
     fun setUp() {
-        studentQueryMyStudyRoomUseCase = StudentQueryMyStudyRoomUseCase(
+        queryCurrentAppliedStudyRoomUseCase = QueryCurrentAppliedStudyRoomUseCase(
             securityPort, queryStudyRoomPort
         )
     }
@@ -84,7 +84,7 @@ class StudentQueryMyStudyRoomUseCaseTests {
 
         // when & then
         assertDoesNotThrow {
-            studentQueryMyStudyRoomUseCase.execute()
+            queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }
 
@@ -99,7 +99,7 @@ class StudentQueryMyStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<AppliedSeatNotFound> {
-            studentQueryMyStudyRoomUseCase.execute()
+            queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }
 
@@ -117,7 +117,7 @@ class StudentQueryMyStudyRoomUseCaseTests {
 
         //when & then
         assertThrows<StudyRoomNotFoundException> {
-            studentQueryMyStudyRoomUseCase.execute()
+            queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }
 }
