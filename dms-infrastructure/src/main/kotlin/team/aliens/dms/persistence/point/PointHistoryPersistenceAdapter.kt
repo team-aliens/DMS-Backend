@@ -98,6 +98,8 @@ class PointHistoryPersistenceAdapter(
                 type?.let { pointHistoryJpaEntity.pointType.eq(it) },
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
+            .offset(pageData.offset)
+            .limit(pageData.size)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
