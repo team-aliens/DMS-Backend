@@ -4,7 +4,6 @@ import team.aliens.dms.domain.student.model.Student
 import java.util.*
 
 data class StudentWithPoint(
-    val schoolId: UUID,
     val name: String,
     val grade: Int,
     val classRoom: Int,
