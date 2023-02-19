@@ -37,7 +37,7 @@ class GivePointUseCase(
 
         val pointHistories = students
             .map {
-                val (newBonusTotal, newMinusTotal) = PointHistory.getNewPointTotalByPointAndPointType(
+                val (newBonusTotal, newMinusTotal) = PointHistory.getUpdatedTotalPoint(
                     pointOption.score, pointOption.type, it.bonusTotal, it.minusTotal
                 )
 

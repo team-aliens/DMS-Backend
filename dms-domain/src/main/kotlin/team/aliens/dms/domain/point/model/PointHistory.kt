@@ -31,8 +31,7 @@ data class PointHistory(
 
 ) {
     companion object {
-        fun getNewPointTotalByPointAndPointType(score: Int, pointType: PointType,
-                                                bonusTotal: Int, minusTotal: Int): Pair<Int, Int> {
+        fun getUpdatedTotalPoint(score: Int, pointType: PointType, bonusTotal: Int, minusTotal: Int): Pair<Int, Int> {
             return if(pointType == PointType.BONUS) {
                 Pair(bonusTotal + score, minusTotal)
             } else {
