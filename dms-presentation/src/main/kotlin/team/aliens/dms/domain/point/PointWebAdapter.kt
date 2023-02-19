@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
@@ -30,8 +31,11 @@ class PointWebAdapter(
     @GetMapping("/history")
     fun getAllPointHistory(
         @RequestParam @NotNull type: PointRequestType?,
-        @ModelAttribute pageData: PageData
+        @ModelAttribute pageData: PageWebData
     ): QueryAllPointHistoryResponse {
-        return queryAllPointHistoryUseCase.execute(type!!, pageData)
+        return queryAllPointHistoryUseCase.execute(
+            type = type!!,
+            pageData = PageData(pageData.page, pageData.size)
+        )
     }
 }
