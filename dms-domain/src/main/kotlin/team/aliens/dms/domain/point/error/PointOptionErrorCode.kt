@@ -7,7 +7,8 @@ enum class PointOptionErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    POINT_OPTION_NOT_FOUND(404, "Point Option Not Found")
+    POINT_OPTION_NOT_FOUND(404, "Point Option Not Found"),
+    POINT_OPTION_SCHOOL_MISMATCH(401, "Point Option School Mismatch")
     ;
 
     override fun status(): Int = status

@@ -29,4 +29,15 @@ data class PointHistory(
 
     val schoolId: UUID
 
-)
+) {
+    companion object {
+        fun getNewPointTotalByPointAndPointType(score: Int, pointType: PointType,
+                                                bonusTotal: Int, minusTotal: Int): Pair<Int, Int> {
+            return if(pointType == PointType.BONUS) {
+                Pair(bonusTotal + score, minusTotal)
+            } else {
+                Pair(bonusTotal, minusTotal + score)
+            }
+        }
+    }
+}

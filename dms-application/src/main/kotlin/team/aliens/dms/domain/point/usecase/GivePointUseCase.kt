@@ -20,28 +20,32 @@ class GivePointUseCase(
     private val queryStudentPort: PointQueryStudentPort
 ) {
 
-    fun execute(givePointRequest: GivePointRequest) {
+    fun execute(request: GivePointRequest) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointOption = queryPointOptionPort.queryPointOptionByIdAndSchoolId(
-            givePointRequest.pointOptionId, manager.schoolId
-        ) ?: throw PointOptionNotFoundException
+        val pointOption =
+            queryPointOptionPort.queryPointOptionById(request.pointOptionId) ?: throw PointOptionNotFoundException
+        pointOption.checkSchoolId(manager.schoolId)
 
-        val pointList = queryStudentPort.queryStudentsWithPointHistory(givePointRequest.studentIdList)
+        val students =
+            queryStudentPort.queryStudentsWithPointHistory(request.studentIdList)
+
+        if(students.size != request.studentIdList.size) {
+            throw StudentNotFoundException
+        }
+
+        val pointHistories = students
             .map {
-                if(it.schoolId != manager.schoolId)
-                    throw SchoolMismatchException
-                if(pointOption.type == PointType.BONUS)
-                    it.bonusTotal += pointOption.score
-                else
-                    it.minusTotal += pointOption.score
+                val (newBonusTotal, newMinusTotal) = PointHistory.getNewPointTotalByPointAndPointType(
+                    pointOption.score, pointOption.type, it.bonusTotal, it.minusTotal
+                )
 
                 PointHistory(
                     studentName = it.name,
                     studentGcn = it.gcn,
-                    bonusTotal = it.bonusTotal,
-                    minusTotal = it.minusTotal,
+                    bonusTotal = newBonusTotal,
+                    minusTotal = newMinusTotal,
                     isCancel = false,
                     pointName = pointOption.name,
                     pointScore = pointOption.score,
@@ -50,9 +54,8 @@ class GivePointUseCase(
                     schoolId = manager.schoolId
                 )
             }
-        if(pointList.size != givePointRequest.studentIdList.size)
-            throw StudentNotFoundException
 
-        commandPointHistoryPort.saveAllPointHistories(pointList)
+
+        commandPointHistoryPort.saveAllPointHistories(pointHistories)
     }
 }
