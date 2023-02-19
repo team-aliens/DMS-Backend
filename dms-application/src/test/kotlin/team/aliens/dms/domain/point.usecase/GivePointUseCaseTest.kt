@@ -12,6 +12,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.point.dto.GivePointRequest
+import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.*
@@ -56,7 +57,6 @@ class GivePointUseCaseTest {
 
     private val studentWithPointStub by lazy {
         listOf( StudentWithPoint(
-            schoolId = schoolId,
             grade = 2,
             classRoom = 1,
             number = 15,
@@ -116,7 +116,7 @@ class GivePointUseCaseTest {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+        given(queryPointOptionPort.queryPointOptionById(pointOptionId))
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
@@ -129,7 +129,7 @@ class GivePointUseCaseTest {
     }
 
     @Test
-    fun `다른학교 학생일 경우`() {
+    fun `상벌점항목이 올바르지 않은 경우`() {
         //given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
@@ -140,11 +140,11 @@ class GivePointUseCaseTest {
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
             .willReturn(studentWithPointStub)
 
-        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId2))
+        given(queryPointOptionPort.queryPointOptionById(pointOptionId))
             .willReturn(pointOptionStub)
 
         //when & then
-        assertThrows<SchoolMismatchException> {
+        assertThrows<PointOptionSchoolMismatchException> {
             givePointUseCase.execute(requestStub)
         }
     }
@@ -158,7 +158,7 @@ class GivePointUseCaseTest {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryPointOptionPort.queryPointOptionByIdAndSchoolId(pointOptionId, schoolId))
+        given(queryPointOptionPort.queryPointOptionById(pointOptionId))
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
