@@ -2,17 +2,15 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.point.dto.GivePointRequest
+import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.*
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.time.LocalDateTime
 
 @UseCase
-class GivePointUseCase(
+class GrantPointUseCase(
     private val queryManagerPort: PointQueryManagerPort,
     private val securityPort: PointSecurityPort,
     private val queryPointOptionPort: QueryPointOptionPort,
@@ -20,7 +18,7 @@ class GivePointUseCase(
     private val queryStudentPort: PointQueryStudentPort
 ) {
 
-    fun execute(request: GivePointRequest) {
+    fun execute(request: GrantPointRequest) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
@@ -37,15 +35,15 @@ class GivePointUseCase(
 
         val pointHistories = students
             .map {
-                val (newBonusTotal, newMinusTotal) = PointHistory.getUpdatedTotalPoint(
+                val (updatedBonusTotal, updatedMinusTotal) = PointHistory.getUpdatedTotalPoint(
                     pointOption.score, pointOption.type, it.bonusTotal, it.minusTotal
                 )
 
                 PointHistory(
                     studentName = it.name,
                     studentGcn = it.gcn,
-                    bonusTotal = newBonusTotal,
-                    minusTotal = newMinusTotal,
+                    bonusTotal = updatedBonusTotal,
+                    minusTotal = updatedMinusTotal,
                     isCancel = false,
                     pointName = pointOption.name,
                     pointScore = pointOption.score,

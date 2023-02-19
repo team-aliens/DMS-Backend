@@ -6,12 +6,10 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
-import team.aliens.dms.persistence.point.mapper.PointOptionMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.PointOptionJpaRepository

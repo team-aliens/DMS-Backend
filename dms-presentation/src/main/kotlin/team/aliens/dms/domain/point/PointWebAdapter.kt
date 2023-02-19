@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.point.dto.GivePointRequest
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
-import team.aliens.dms.domain.point.dto.ApplyPointRequest
+import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.dto.request.GivePointWebRequest
-import team.aliens.dms.domain.point.usecase.GivePointUseCase
+import team.aliens.dms.domain.point.dto.request.GranatPointWebRequest
+import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
-import team.aliens.dms.domain.point.dto.request.ApplyPointWebRequest
-import team.aliens.dms.domain.point.usecase.ApplyPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import java.util.*
 import javax.validation.Valid
@@ -32,9 +30,8 @@ import javax.validation.constraints.NotNull
 @RestController
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
-    private val applyPointUseCase: ApplyPointUseCase
+    private val grantPointUseCase: GrantPointUseCase
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
-    private val givePointUseCase: GivePointUseCase
 ) {
 
     @GetMapping
@@ -44,9 +41,9 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/history")
-    fun applyPoint(@RequestBody @Valid webRequest: GivePointWebRequest) {
-        givePointUseCase.execute(
-            GivePointRequest(
+    fun grantPoint(@RequestBody @Valid webRequest: GranatPointWebRequest) {
+        grantPointUseCase.execute(
+            GrantPointRequest(
                 pointOptionId = webRequest.pointOptionId!!,
                 studentIdList = webRequest.studentIdList!!
             )

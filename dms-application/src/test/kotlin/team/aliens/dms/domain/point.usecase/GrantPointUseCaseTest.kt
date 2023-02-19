@@ -11,18 +11,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import team.aliens.dms.domain.manager.model.Manager
-import team.aliens.dms.domain.point.dto.GivePointRequest
+import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.*
 import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-class GivePointUseCaseTest {
+class GrantPointUseCaseTest {
 
     @MockBean
     private lateinit var queryManagerPort: PointQueryManagerPort
@@ -39,11 +38,11 @@ class GivePointUseCaseTest {
     @MockBean
     private lateinit var queryStudentPort: PointQueryStudentPort
 
-    private lateinit var givePointUseCase: GivePointUseCase
+    private lateinit var grantPointUseCase: GrantPointUseCase
 
     @BeforeEach
     fun setUp() {
-        givePointUseCase = GivePointUseCase(
+        grantPointUseCase = GrantPointUseCase(
             queryManagerPort, securityPort, queryPointOptionPort, commandPointHistoryPort, queryStudentPort
         )
     }
@@ -84,14 +83,14 @@ class GivePointUseCaseTest {
     }
 
     private val requestStub by lazy {
-        GivePointRequest(
+        GrantPointRequest(
             pointOptionId = pointOptionId,
             studentIdList = listOf(studentId)
         )
     }
 
     private val requestStubWithInvalidStudent by lazy {
-        GivePointRequest(
+        GrantPointRequest(
             pointOptionId = pointOptionId,
             studentIdList = listOf(studentId, studentId2)
         )
@@ -124,7 +123,7 @@ class GivePointUseCaseTest {
 
         //when & then
         assertDoesNotThrow {
-            givePointUseCase.execute(requestStub)
+            grantPointUseCase.execute(requestStub)
         }
     }
 
@@ -145,7 +144,7 @@ class GivePointUseCaseTest {
 
         //when & then
         assertThrows<PointOptionSchoolMismatchException> {
-            givePointUseCase.execute(requestStub)
+            grantPointUseCase.execute(requestStub)
         }
     }
 
@@ -167,7 +166,7 @@ class GivePointUseCaseTest {
 
         //when & then
         assertThrows<StudentNotFoundException> {
-            givePointUseCase.execute(requestStubWithInvalidStudent)
+            grantPointUseCase.execute(requestStubWithInvalidStudent)
         }
     }
 }
