@@ -16,6 +16,7 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.point.exception.InvalidFilterRequestException
 import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
@@ -71,7 +72,7 @@ class QueryStudentsUseCaseTests {
     }
 
     @Test
-    fun `학생 목록 조회 성공`() {
+    fun `학생 목록 조회 성공 필터x`() {
         // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
@@ -79,14 +80,32 @@ class QueryStudentsUseCaseTests {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryStudentPort.queryStudentsByNameAndSort(name, sort, managerStub.schoolId))
-            .willReturn(listOf(studentStub))
+        given(queryStudentPort.queryStudentsByNameAndSortAndFilter(
+            name, sort, managerStub.schoolId, null, null, null
+        )).willReturn(listOf(studentStub))
 
         // when
-        val response = queryStudentsUseCase.execute(name, sort)
+        val response = queryStudentsUseCase.execute(name, sort, null, null, null)
 
         // then
         assertThat(response).isNotNull
+    }
+
+    @Test
+    fun `필터 사용시 조건 점수 입력하지 않은 경우`() {
+        //given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        //when & then
+        assertThrows<InvalidFilterRequestException> {
+            queryStudentsUseCase.execute(
+                name, sort, "BONUS", null, null
+            )
+        }
     }
 
     @Test
@@ -99,7 +118,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(null)
 
         assertThrows<ManagerNotFoundException> {
-            queryStudentsUseCase.execute(name, sort)
+            queryStudentsUseCase.execute(name, sort, null, null, null)
         }
     }
 }
