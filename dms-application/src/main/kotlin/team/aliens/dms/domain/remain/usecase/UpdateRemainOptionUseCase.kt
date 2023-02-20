@@ -17,11 +17,8 @@ class UpdateRemainOptionUseCase(
     private val queryRemainOptionPort: QueryRemainOptionPort,
     private val commendRemainOptionPort: CommandRemainOptionPort
 ) {
-    fun execute(
-        remainOptionId: UUID,
-        title: String,
-        description: String
-    ) {
+
+    fun execute(remainOptionId: UUID, title: String, description: String) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
