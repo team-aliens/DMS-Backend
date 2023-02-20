@@ -49,6 +49,7 @@ class QueryStudentsUseCaseTests {
     private val schoolId = UUID.randomUUID()
     private val name = "name"
     private val sort = Sort.GCN
+    private val filterType = PointFilterType.BONUS
 
     private val managerStub by lazy {
         Manager(
@@ -87,18 +88,10 @@ class QueryStudentsUseCaseTests {
             name, sort, managerStub.schoolId, null, null, null
         )).willReturn(listOf(studentStub))
 
-        // when & then
-        assertAll(
-            {
-                assertThat (
-                    queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
-                ).isNotNull
+        // when
+        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
 
-                assertDoesNotThrow {
-                    queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
-                }
-            }
-        )
+        assertThat(result).isNotNull
     }
 
     @Test
@@ -115,17 +108,17 @@ class QueryStudentsUseCaseTests {
             {
                 assertThrows<InvalidFilterRequestException> {
                     queryStudentsUseCase.execute(
-                        name, sort, "BONUS", null, null
+                        name, sort, filterType, null, null
                     )
                 }
                 assertThrows<InvalidFilterRequestException> {
                     queryStudentsUseCase.execute(
-                        name, sort, "BONUS", 10, null
+                        name, sort, filterType, 10, null
                     )
                 }
                 assertThrows<InvalidFilterRequestException> {
                     queryStudentsUseCase.execute(
-                        name, sort, "BONUS", null, 20
+                        name, sort, filterType, null, 20
                     )
                 }
             }
