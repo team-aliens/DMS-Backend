@@ -17,22 +17,26 @@ class QueryStudentsUseCase(
     private val queryStudentPort: ManagerQueryStudentPort
 ) {
 
-    fun execute(name: String?, sort: Sort, filterType: String?, minPoint: Int?, maxPoint: Int?): QueryStudentsResponse {
+    fun execute(name: String?, sort: Sort, filterType: String?,
+                minPoint: Int?, maxPoint: Int?): QueryStudentsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointFilterType = if(filterType != null) {
+        val pointFilterType = filterType?.let {
             if(maxPoint == null || minPoint == null) {
                 throw InvalidFilterRequestException
             }
 
             PointFilterType.valueOf(filterType)
-        } else {
-            null
         }
 
         val students = queryStudentPort.queryStudentsByNameAndSortAndFilter(
-            name, sort, manager.schoolId, pointFilterType, minPoint, maxPoint
+            name = name,
+            sort = sort,
+            schoolId = manager.schoolId,
+            pointFilter = pointFilterType,
+            minPoint = minPoint,
+            maxPoint = maxPoint
         ).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,
