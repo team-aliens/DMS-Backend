@@ -57,7 +57,6 @@ class GrantPointUseCase(
                 )
             }
 
-
         commandPointHistoryPort.saveAllPointHistories(pointHistories)
     }
 }
