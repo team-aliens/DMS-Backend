@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -85,7 +86,7 @@ class QueryStudentsUseCaseTests {
         )).willReturn(listOf(studentStub))
 
         // when
-        val response = queryStudentsUseCase.execute(name, sort, null, null, null)
+        val response = queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
 
         // then
         assertThat(response).isNotNull
@@ -101,11 +102,26 @@ class QueryStudentsUseCaseTests {
             .willReturn(managerStub)
 
         //when & then
-        assertThrows<InvalidFilterRequestException> {
-            queryStudentsUseCase.execute(
-                name, sort, "BONUS", null, null
-            )
-        }
+        assertAll(
+            {
+                assertThrows<InvalidFilterRequestException> {
+                    queryStudentsUseCase.execute(
+                        name, sort, "BONUS", null, null
+                    )
+                }
+                assertThrows<InvalidFilterRequestException> {
+                    queryStudentsUseCase.execute(
+                        name, sort, "BONUS", 10, null
+                    )
+                }
+                assertThrows<InvalidFilterRequestException> {
+                    queryStudentsUseCase.execute(
+                        name, sort, "BONUS", null, 20
+                    )
+                }
+            }
+        )
+
     }
 
     @Test
