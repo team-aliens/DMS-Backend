@@ -17,7 +17,7 @@ import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.dto.request.GranatPointWebRequest
+import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
@@ -41,7 +41,7 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/history")
-    fun grantPoint(@RequestBody @Valid webRequest: GranatPointWebRequest) {
+    fun grantPoint(@RequestBody @Valid webRequest: GrantPointWebRequest) {
         grantPointUseCase.execute(
             GrantPointRequest(
                 pointOptionId = webRequest.pointOptionId!!,
