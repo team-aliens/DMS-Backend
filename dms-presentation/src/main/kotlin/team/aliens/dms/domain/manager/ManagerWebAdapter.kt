@@ -28,6 +28,7 @@ import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import team.aliens.dms.domain.manager.dto.Sort
+import team.aliens.dms.domain.manager.dto.WebPointFilterType
 
 @Validated
 @RequestMapping("/managers")
@@ -70,11 +71,17 @@ class ManagerWebAdapter(
     @GetMapping("/students")
     fun getStudents(
         @RequestParam(required = false) name: String?,
-        @RequestParam @NotNull sort: Sort?
+        @RequestParam @NotNull sort: Sort?,
+        @RequestParam(name = "filter_type", required = false) filterType: WebPointFilterType?,
+        @RequestParam(name = "min_point", required = false) minPoint: Int?,
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,
-            sort = sort!!
+            sort = sort!!,
+            filterType = filterType?.name,
+            minPoint = minPoint,
+            maxPoint = maxPoint
         )
     }
     
