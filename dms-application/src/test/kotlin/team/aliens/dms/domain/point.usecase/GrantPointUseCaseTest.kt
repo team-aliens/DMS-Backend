@@ -10,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
+import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.point.dto.GrantPointRequest
+import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
@@ -144,6 +146,33 @@ class GrantPointUseCaseTest {
 
         //when & then
         assertThrows<PointOptionSchoolMismatchException> {
+            grantPointUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `상벌점항목을 찾을 수 없는 경우`() {
+        //given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        //when & then
+        assertThrows<PointOptionNotFoundException> {
+            grantPointUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `메니저를 찾을 수 없는 경우`() {
+        //given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        //when & then
+        assertThrows<ManagerNotFoundException> {
             grantPointUseCase.execute(requestStub)
         }
     }
