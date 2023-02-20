@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.GrantPointRequest
+import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
+import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
@@ -23,6 +28,8 @@ import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
+import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
+import team.aliens.dms.domain.point.usecase.CreatePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import java.util.UUID
@@ -34,6 +41,8 @@ import javax.validation.constraints.NotNull
 @RestController
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
+    private val createPointOptionUseCase: CreatePointOptionUseCase
+    private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
@@ -43,6 +52,19 @@ class PointWebAdapter(
     @GetMapping
     fun getPointHistory(@RequestParam @NotNull type: PointRequestType?): QueryPointHistoryResponse {
         return queryPointHistoryUseCase.execute(type!!)
+    }
+
+    @PostMapping("/options")
+    fun createPointOption(@RequestBody @Valid request: CreatePointOptionWebRequest): CreatePointOptionResponse {
+        return CreatePointOptionResponse(
+            createPointOptionUseCase.execute(
+                CreatePointOptionRequest(
+                    name = request.name!!,
+                    score = request.score!!,
+                    type = request.type!!.name
+                )
+            )
+        )
     }
 
     @ResponseStatus(HttpStatus.CREATED)
