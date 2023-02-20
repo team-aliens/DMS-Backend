@@ -118,6 +118,7 @@ class SecurityConfiguration(
 
             // /remains
             .antMatchers(HttpMethod.POST, "/remains/options").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)
             .anyRequest().denyAll()
 
         http
