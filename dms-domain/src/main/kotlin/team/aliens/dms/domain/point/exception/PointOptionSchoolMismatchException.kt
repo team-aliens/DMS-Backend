@@ -5,5 +5,4 @@ import team.aliens.dms.domain.point.error.PointOptionErrorCode
 
 object PointOptionSchoolMismatchException : DmsException(
     PointOptionErrorCode.POINT_OPTION_SCHOOL_MISMATCH
-){
-}
+)

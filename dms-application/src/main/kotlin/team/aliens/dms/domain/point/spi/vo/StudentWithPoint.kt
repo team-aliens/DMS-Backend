@@ -7,8 +7,8 @@ data class StudentWithPoint(
     val grade: Int,
     val classRoom: Int,
     val number: Int,
-    var bonusTotal: Int,
-    var minusTotal: Int
+    val bonusTotal: Int,
+    val minusTotal: Int
 ) {
     val gcn: String = "${this.grade}${this.classRoom}${Student.processNumber(number)}"
 }

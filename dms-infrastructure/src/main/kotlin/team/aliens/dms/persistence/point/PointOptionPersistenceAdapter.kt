@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.spi.PointOptionPort
 import team.aliens.dms.persistence.point.mapper.PointOptionMapper
 import team.aliens.dms.persistence.point.repository.PointOptionJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class PointOptionPersistenceAdapter(
