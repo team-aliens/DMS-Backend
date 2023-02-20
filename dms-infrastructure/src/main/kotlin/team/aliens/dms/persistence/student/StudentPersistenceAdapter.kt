@@ -4,10 +4,13 @@ import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPAExpressions.select
+import com.querydsl.jpa.JPAExpressions.selectDistinct
+import com.querydsl.jpa.JPQLQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.StudentPointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
@@ -24,6 +27,7 @@ import java.util.UUID
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
+import java.time.LocalDateTime
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
 
 @Component
@@ -66,9 +70,7 @@ class StudentPersistenceAdapter(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilterType?,
-        minPoint: Int?,
-        maxPoint: Int?
+        pointFilter: StudentPointFilter?
     ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -76,18 +78,13 @@ class StudentPersistenceAdapter(
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(
-                pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
                 pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
                 eqGcn(),
-                pointHistoryJpaEntity.createdAt.eq(
-                    select(pointHistoryJpaEntity.createdAt.max())
-                        .from(pointHistoryJpaEntity)
-                        .where(eqGcn())
-                )
+                pointHistoryJpaEntity.createdAt.eq(getStudentRecentPointHistoryCreatedAtQuery())
             )
             .where(
                 nameContains(name),
-                pointTotalBetween(pointFilter, minPoint, maxPoint),
+                pointTotalBetween(pointFilter),
                 schoolEq(schoolId)
             )
             .orderBy(
@@ -104,41 +101,24 @@ class StudentPersistenceAdapter(
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
 
-    private fun pointTotalBetween(
-        pointFilter: PointFilterType?, minPoint: Int?, maxPoint: Int?
-    ): BooleanExpression? {
+    private fun pointTotalBetween(pointFilter: StudentPointFilter?): BooleanExpression? {
         if(pointFilter == null) {
             return null
         }
 
-        return when(pointFilter) {
+        return when(pointFilter.filterType) {
             PointFilterType.BONUS -> {
-                pointHistoryJpaEntity.bonusTotal.between(minPoint!!, maxPoint!!)
+                pointHistoryJpaEntity.bonusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
             PointFilterType.MINUS -> {
-                pointHistoryJpaEntity.minusTotal.between(minPoint!!, maxPoint!!)
+                pointHistoryJpaEntity.minusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
             else -> {
                 val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
 
-                pointTotal.between(minPoint!!, maxPoint!!)
+                pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint )
             }
         }
-    }
-
-    private fun eqGcn(): BooleanBuilder {
-        val condition = BooleanBuilder()
-
-        val gcn = pointHistoryJpaEntity.studentGcn
-        condition.and(
-            gcn.substring(0, 1).eq(studentJpaEntity.grade.stringValue())
-        ).and(
-            gcn.substring(1, 2).endsWith(studentJpaEntity.classRoom.stringValue())
-        ).and(
-            gcn.substring(2).endsWith(studentJpaEntity.number.stringValue())
-        )
-
-        return condition
     }
 
     private fun schoolEq(schoolId: UUID) = userJpaEntity.school.id.eq(schoolId)
