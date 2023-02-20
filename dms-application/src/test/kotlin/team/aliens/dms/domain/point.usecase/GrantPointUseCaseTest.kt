@@ -18,7 +18,7 @@ import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.*
-import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
+import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
 
@@ -56,8 +56,8 @@ class GrantPointUseCaseTest {
     private val studentId2 = UUID.randomUUID()
     private val pointOptionId = UUID.randomUUID()
 
-    private val studentWithPointStub by lazy {
-        listOf( StudentWithPoint(
+    private val studentWithPointVOStub by lazy {
+        listOf( StudentWithPointVO(
             grade = 2,
             classRoom = 1,
             number = 15,
@@ -121,7 +121,7 @@ class GrantPointUseCaseTest {
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
-            .willReturn(studentWithPointStub)
+            .willReturn(studentWithPointVOStub)
 
         //when & then
         assertDoesNotThrow {
@@ -139,7 +139,7 @@ class GrantPointUseCaseTest {
             .willReturn(managerStub2)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
-            .willReturn(studentWithPointStub)
+            .willReturn(studentWithPointVOStub)
 
         given(queryPointOptionPort.queryPointOptionById(pointOptionId))
             .willReturn(pointOptionStub)
@@ -190,7 +190,7 @@ class GrantPointUseCaseTest {
             .willReturn(pointOptionStub)
 
         given(queryStudentPort.queryStudentsWithPointHistory(requestStub.studentIdList))
-            .willReturn(studentWithPointStub)
+            .willReturn(studentWithPointVOStub)
 
 
         //when & then

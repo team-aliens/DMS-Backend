@@ -2,7 +2,7 @@ package team.aliens.dms.domain.point.spi.vo
 
 import team.aliens.dms.domain.student.model.Student
 
-data class StudentWithPoint(
+data class StudentWithPointVO(
     val name: String,
     val grade: Int,
     val classRoom: Int,

@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
+import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
@@ -114,7 +114,7 @@ class StudentPersistenceAdapter(
         )
     }
 
-    override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPoint> {
+    override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO> {
         return queryFactory
             .select(
                 QQueryStudentWithPointVO(
@@ -144,7 +144,7 @@ class StudentPersistenceAdapter(
             )
             .fetch()
             .map {
-                StudentWithPoint(
+                StudentWithPointVO(
                     name = it.name,
                     grade = it.grade,
                     classRoom = it.classRoom,
