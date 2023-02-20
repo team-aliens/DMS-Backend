@@ -17,7 +17,11 @@ import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.*
+import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
+import team.aliens.dms.domain.point.spi.PointQueryManagerPort
+import team.aliens.dms.domain.point.spi.PointSecurityPort
+import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
