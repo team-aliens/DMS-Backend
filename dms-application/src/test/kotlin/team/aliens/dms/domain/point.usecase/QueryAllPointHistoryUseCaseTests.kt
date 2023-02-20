@@ -103,7 +103,7 @@ class QueryAllPointHistoryUseCaseTests {
         every { queryUserPort.queryUserById(managerId) } returns null
 
         // when & then
-        assertThrows<UserNotFountException> {
+        assertThrows<UserNotFoundException> {
             queryAllPointHistoryUseCase.execute(pointRequestType, pageData)
         }
     }
