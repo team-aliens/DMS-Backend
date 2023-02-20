@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.student.repository.vo
 
 import com.querydsl.core.annotations.QueryProjection
-import java.util.*
 
 data class QueryStudentWithPointVO @QueryProjection constructor(
     val name: String,

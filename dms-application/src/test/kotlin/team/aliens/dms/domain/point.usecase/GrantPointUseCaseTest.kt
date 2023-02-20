@@ -2,7 +2,7 @@ package team.aliens.dms.domain.point.usecase
 
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
+
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -18,7 +18,7 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.*
 import team.aliens.dms.domain.point.spi.vo.StudentWithPoint
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class GrantPointUseCaseTest {

@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.point.spi.vo
 
 import team.aliens.dms.domain.student.model.Student
-import java.util.*
 
 data class StudentWithPoint(
     val name: String,

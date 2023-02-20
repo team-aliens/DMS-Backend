@@ -5,7 +5,11 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.spi.*
+import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
+import team.aliens.dms.domain.point.spi.PointQueryManagerPort
+import team.aliens.dms.domain.point.spi.PointQueryStudentPort
+import team.aliens.dms.domain.point.spi.PointSecurityPort
+import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.time.LocalDateTime
 
