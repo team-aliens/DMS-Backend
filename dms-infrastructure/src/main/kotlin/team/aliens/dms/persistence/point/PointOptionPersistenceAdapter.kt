@@ -12,10 +12,10 @@ import java.util.UUID
 class PointOptionPersistenceAdapter(
     private val queryFactory: JPAQueryFactory,
     private val pointOptionMapper: PointOptionMapper,
-    private val pointOptionJpaRepository: PointOptionJpaRepository
+    private val pointOptionRepository: PointOptionJpaRepository
 ) : PointOptionPort {
 
     override fun queryPointOptionById(pointOptionId: UUID) = pointOptionMapper.toDomain(
-        pointOptionJpaRepository.findByIdOrNull(pointOptionId)
+        pointOptionRepository.findByIdOrNull(pointOptionId)
     )
 }
