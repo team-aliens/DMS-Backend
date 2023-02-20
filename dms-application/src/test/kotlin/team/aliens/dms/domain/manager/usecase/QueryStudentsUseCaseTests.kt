@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -15,11 +14,12 @@ import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.StudentPointFilter
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
-import team.aliens.dms.domain.point.exception.InvalidFilterRequestException
+import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
 import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
@@ -75,6 +75,14 @@ class QueryStudentsUseCaseTests {
         )
     }
 
+    private val studentPointFilterStub by lazy {
+        StudentPointFilter(
+            filterType = filterType,
+            minPoint = 0,
+            maxPoint = 10
+        )
+    }
+
     @Test
     fun `학생 목록 조회 성공`() {
         // given
@@ -85,7 +93,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(managerStub)
 
         given(queryStudentPort.queryStudentsByNameAndSortAndFilter(
-            name, sort, managerStub.schoolId, null, null, null
+            name, sort, managerStub.schoolId, studentPointFilterStub
         )).willReturn(listOf(studentStub))
 
         // when
@@ -106,19 +114,14 @@ class QueryStudentsUseCaseTests {
         //when & then
         assertAll(
             {
-                assertThrows<InvalidFilterRequestException> {
+                assertThrows<InvalidPointFilterRangeException> {
                     queryStudentsUseCase.execute(
                         name, sort, filterType, null, null
                     )
                 }
-                assertThrows<InvalidFilterRequestException> {
+                assertThrows<InvalidPointFilterRangeException> {
                     queryStudentsUseCase.execute(
-                        name, sort, filterType, 10, null
-                    )
-                }
-                assertThrows<InvalidFilterRequestException> {
-                    queryStudentsUseCase.execute(
-                        name, sort, filterType, null, 20
+                        name, sort, filterType, 20, 10
                     )
                 }
             }
