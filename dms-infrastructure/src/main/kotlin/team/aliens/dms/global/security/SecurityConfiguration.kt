@@ -116,8 +116,10 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/study-rooms/list/students").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/study-rooms/list/managers").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/study-rooms/types/{type-id}").hasAuthority(MANAGER.name)
-            .anyRequest().denyAll()
 
+            // /remains
+            .antMatchers(HttpMethod.POST, "/remains/options").hasAuthority(MANAGER.name)
+            .anyRequest().denyAll()
 
         http
             .apply(FilterConfig(jwtParser, objectMapper))
