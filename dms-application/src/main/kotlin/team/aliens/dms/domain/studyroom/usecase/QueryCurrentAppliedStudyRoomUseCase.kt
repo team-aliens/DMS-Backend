@@ -16,7 +16,7 @@ class QueryCurrentAppliedStudyRoomUseCase(
     fun execute(): QueryCurrentAppliedStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
 
-        val seat = queryStudyRoomPort.querySeatByStudentId(currentUserId)?: throw AppliedSeatNotFound
+        val seat = queryStudyRoomPort.querySeatByStudentId(currentUserId) ?: throw AppliedSeatNotFound
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
 
         return QueryCurrentAppliedStudyRoomResponse(
