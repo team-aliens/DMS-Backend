@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.manager.spi
 
-import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.StudentPointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
@@ -13,9 +13,7 @@ interface ManagerQueryStudentPort {
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilterType?,
-        minPoint: Int?,
-        maxPoint: Int?
+        pointFilter: StudentPointFilter?
     ): List<Student>
 
     fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<Student>

@@ -2,13 +2,13 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.StudentPointFilter
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
-import team.aliens.dms.domain.point.exception.InvalidFilterRequestException
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
@@ -22,19 +22,18 @@ class QueryStudentsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        filterType?.let {
-            if(maxPoint == null || minPoint == null) {
-                throw InvalidFilterRequestException
-            }
-        }
+
+        val studentPointFilter = StudentPointFilter.init(
+            filterType = filterType,
+            minPoint = minPoint,
+            maxPoint = maxPoint
+        )
 
         val students = queryStudentPort.queryStudentsByNameAndSortAndFilter(
             name = name,
             sort = sort,
             schoolId = manager.schoolId,
-            pointFilter = filterType,
-            minPoint = minPoint,
-            maxPoint = maxPoint
+            studentPointFilter
         ).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,
