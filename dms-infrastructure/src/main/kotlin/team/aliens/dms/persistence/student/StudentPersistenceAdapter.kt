@@ -133,6 +133,7 @@ class StudentPersistenceAdapter(
             .on(
                 pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
                 pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                eqGcn(),
                 pointHistoryJpaEntity.createdAt.eq(
                         select(pointHistoryJpaEntity.createdAt.max())
                         .from(pointHistoryJpaEntity)
