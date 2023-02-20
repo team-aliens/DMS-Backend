@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.remain.usecase
 
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
@@ -16,32 +16,21 @@ import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class UpdateRemainOptionUseCaseTests {
 
-    @MockBean
-    private lateinit var securityPort: RemainSecurityPort
-
-    @MockBean
-    private lateinit var queryUserPort: RemainQueryUserPort
-
-    @MockBean
-    private lateinit var queryRemainOptionPort: QueryRemainOptionPort
-
-    @MockBean
-    private lateinit var commandRemainOptionPort: CommandRemainOptionPort
-
-    private lateinit var updateRemainOptionUseCase: UpdateRemainOptionUseCase
-
-    @BeforeEach
-    fun setUp() {
-        updateRemainOptionUseCase = UpdateRemainOptionUseCase(
-            securityPort, queryUserPort, queryRemainOptionPort, commandRemainOptionPort
-        )
-    }
+    private val securityPort: RemainSecurityPort = mockk(relaxed = true)
+    private val queryUserPort: RemainQueryUserPort = mockk(relaxed = true)
+    private val queryRemainOptionPort: QueryRemainOptionPort = mockk(relaxed = true)
+    private val commandRemainOptionPort: CommandRemainOptionPort = mockk(relaxed = true)
+    
+    private val updateRemainOptionUseCase = UpdateRemainOptionUseCase(
+        securityPort, queryUserPort, queryRemainOptionPort, commandRemainOptionPort
+    )
 
     private val managerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
@@ -75,14 +64,11 @@ class UpdateRemainOptionUseCaseTests {
     @Test
     fun `잔류항목 수정 성공`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(managerId)
+        every { securityPort.getCurrentUserId() } returns managerId
 
-        given(queryUserPort.queryUserById(managerId))
-            .willReturn(userStub)
+        every { queryUserPort.queryUserById(managerId) } returns userStub
 
-        given(queryRemainOptionPort.queryRemainOptionById(remainOptionId))
-            .willReturn(remainOptionStub)
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
 
         //when & then
         assertDoesNotThrow {
@@ -93,14 +79,11 @@ class UpdateRemainOptionUseCaseTests {
     @Test
     fun `잔류항목 존재하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(managerId)
+        every { securityPort.getCurrentUserId() } returns managerId
 
-        given(queryUserPort.queryUserById(managerId))
-            .willReturn(userStub)
+        every { queryUserPort.queryUserById(managerId) } returns userStub
 
-        given(queryRemainOptionPort.queryRemainOptionById(remainOptionId))
-            .willReturn(null)
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns null
 
         // when & then
         assertThrows<RemainOptionNotFoundException> {
@@ -119,17 +102,28 @@ class UpdateRemainOptionUseCaseTests {
 
     @Test
     fun `같은 학교의 매니저가 아님`() {
-        given(securityPort.getCurrentUserId())
-            .willReturn(managerId)
+        // given
+        every { securityPort.getCurrentUserId() } returns managerId
 
-        given(queryUserPort.queryUserById(managerId))
-            .willReturn(userStub)
+        every { queryUserPort.queryUserById(managerId) } returns userStub
 
-        given(queryRemainOptionPort.queryRemainOptionById(remainOptionId))
-            .willReturn(otherRemainOptionStub)
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns otherRemainOptionStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
+            updateRemainOptionUseCase.execute(remainOptionId, title, description)
+        }
+    }
+
+    @Test
+    fun `유저가 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns managerId
+
+        every { queryUserPort.queryUserById(managerId) } returns null
+
+        // when & then
+        assertThrows<UserNotFoundException> {
             updateRemainOptionUseCase.execute(remainOptionId, title, description)
         }
     }
