@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -13,6 +14,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 import org.junit.jupiter.api.assertThrows
+import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
@@ -85,11 +87,18 @@ class QueryStudentsUseCaseTests {
             name, sort, managerStub.schoolId, null, null, null
         )).willReturn(listOf(studentStub))
 
-        // when
-        val response = queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
+        // when & then
+        assertAll(
+            {
+                assertThat (
+                    queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
+                ).isNotNull
 
-        // then
-        assertThat(response).isNotNull
+                assertDoesNotThrow {
+                    queryStudentsUseCase.execute(name, sort, "BONUS", 0, 10)
+                }
+            }
+        )
     }
 
     @Test
