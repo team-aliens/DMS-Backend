@@ -8,6 +8,7 @@ enum class PointHistoryErrorCode(
 ) : ErrorProperty {
 
     POINT_HISTORY_NOT_FOUND(404, "Point History Not Found"),
+    INVALID_FILTER_REQUEST(400, "Required minPoint and maxPoint")
     POINT_HISTORY_CAN_NOT_CANCEL(400, "Point History Can Not Cancel")
     ;
 
