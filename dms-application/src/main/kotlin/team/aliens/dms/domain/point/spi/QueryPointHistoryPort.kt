@@ -3,7 +3,7 @@ package team.aliens.dms.domain.point.spi
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 
-interface QueryPointPort {
+interface QueryPointHistoryPort {
 
     fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
