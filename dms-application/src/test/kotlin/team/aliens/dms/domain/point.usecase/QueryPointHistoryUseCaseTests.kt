@@ -94,8 +94,15 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.BONUS, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = PointType.BONUS,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 0))
@@ -136,8 +143,15 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.MINUS, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = PointType.MINUS,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 10))
@@ -176,8 +190,15 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, null, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = null,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(10, 5))
