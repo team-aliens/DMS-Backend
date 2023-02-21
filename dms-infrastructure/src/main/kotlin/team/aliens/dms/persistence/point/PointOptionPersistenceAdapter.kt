@@ -22,6 +22,12 @@ class PointOptionPersistenceAdapter(
         return pointOptionRepository.save(pointOptionMapper.toEntity(pointOption)).id!!
     }
 
+    override fun deletePointOption(pointOption: PointOption) {
+        pointOptionRepository.delete(
+            pointOptionMapper.toEntity(pointOption)
+        )
+    }
+
     override fun queryPointOptionById(pointOptionId: UUID) = pointOptionMapper.toDomain(
         pointOptionRepository.findByIdOrNull(pointOptionId)
     )

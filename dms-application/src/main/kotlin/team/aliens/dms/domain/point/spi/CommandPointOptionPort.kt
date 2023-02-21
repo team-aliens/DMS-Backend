@@ -5,4 +5,6 @@ import java.util.UUID
 
 interface CommandPointOptionPort {
     fun savePointOption(pointOption: PointOption): UUID
+
+    fun deletePointOption(pointOption: PointOption)
 }
