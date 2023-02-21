@@ -1,5 +1,8 @@
 package team.aliens.dms.domain.point
 
+import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -11,8 +14,10 @@ import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.usecase.ImportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
+import java.time.LocalDateTime
 import javax.validation.constraints.NotNull
 
 @Validated
@@ -21,6 +26,7 @@ import javax.validation.constraints.NotNull
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val importAllPointHistoryUseCase: ImportAllPointHistoryUseCase
 ) {
 
     @GetMapping
@@ -37,5 +43,18 @@ class PointWebAdapter(
             type = type!!,
             pageData = PageData(pageData.page, pageData.size)
         )
+    }
+    @GetMapping("/history/excel")
+    fun importAllPointHistory(
+        httpResponse: ServerHttpResponse,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
+    ): ByteArray {
+        val response = importAllPointHistoryUseCase.execute(start, end)
+        httpResponse.headers.add(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=${response.fileName}.xlsx"
+        )
+        return response.file
     }
 }
