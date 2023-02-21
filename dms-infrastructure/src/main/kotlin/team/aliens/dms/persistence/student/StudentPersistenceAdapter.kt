@@ -23,7 +23,6 @@ import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
-import java.time.LocalDateTime
 
 @Component
 class StudentPersistenceAdapter(

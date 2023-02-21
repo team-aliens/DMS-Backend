@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.point.dto.GivePointRequest
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.GrantPointRequest
@@ -29,7 +28,7 @@ import javax.validation.constraints.NotNull
 @RestController
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
-    private val grantPointUseCase: GrantPointUseCase
+    private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
 ) {
 

@@ -6,6 +6,7 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
@@ -116,11 +117,6 @@ class PointHistoryPersistenceAdapter(
                 )
             }
     }
-
-    override fun queryPointOptionByIdAndSchoolId(pointOptionId: UUID, schoolId: UUID) = pointOptionMapper.toDomain(
-        pointOptionRepository.findByIdAndSchoolId(pointOptionId, schoolId)
-    )
-
 
     override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
         pointHistoryRepository.saveAll(
