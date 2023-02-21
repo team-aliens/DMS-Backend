@@ -5,10 +5,10 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
+import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
@@ -63,8 +63,9 @@ class PointHistoryPersistenceAdapter(
         gcn: String,
         studentName: String,
         type: PointType?,
-        isCancel: Boolean?
-    ): List<QueryPointHistoryResponse.Point> {
+        isCancel: Boolean?,
+        pageData: PageData
+    ): List<PointHistoryVO> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
@@ -81,10 +82,12 @@ class PointHistoryPersistenceAdapter(
                 type?.let { pointHistoryJpaEntity.pointType.eq(it) },
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
+            .offset(pageData.offset)
+            .limit(pageData.size)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
-                QueryPointHistoryResponse.Point(
+                PointHistoryVO(
                     date = it.date.toLocalDate(),
                     type = it.pointType,
                     name = it.pointName,
