@@ -2,10 +2,10 @@ package team.aliens.dms.domain.point
 
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -47,7 +47,7 @@ class PointWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/history/{point-history-id}")
+    @PutMapping("/history/{point-history-id}")
     fun cancelGrantedPoint(@PathVariable("point-history-id") pointHistoryId: UUID) {
         cancelGrantedPointUseCase.execute(pointHistoryId)
     }
