@@ -4,7 +4,6 @@ import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPAExpressions.select
-import com.querydsl.jpa.JPQLQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -16,7 +15,6 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
-import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
@@ -26,7 +24,6 @@ import java.util.UUID
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
-import java.time.LocalDateTime
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
 
 @Component
@@ -76,11 +73,7 @@ class StudentPersistenceAdapter(
             .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
-            .on(
-                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
-                eqGcn(),
-                pointHistoryJpaEntity.createdAt.eq(getStudentRecentPointHistoryCreatedAtQuery())
-            )
+            .on(eqStudentRecentPointHistory())
             .where(
                 nameContains(name),
                 pointTotalBetween(pointFilter),
