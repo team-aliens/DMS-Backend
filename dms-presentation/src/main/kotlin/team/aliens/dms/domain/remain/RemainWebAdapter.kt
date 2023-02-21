@@ -51,7 +51,6 @@ class RemainWebAdapter(
             remainOptionId = remainOptionId!!,
             title = request.title!!,
             description = request.description!!
-
         )
     }
 
