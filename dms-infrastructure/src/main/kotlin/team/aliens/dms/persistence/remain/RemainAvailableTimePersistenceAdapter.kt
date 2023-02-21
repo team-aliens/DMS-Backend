@@ -9,12 +9,12 @@ import java.util.UUID
 
 @Component
 class RemainAvailableTimePersistenceAdapter(
-    private val remainAvailableTimeJpaRepository: RemainAvailableTimeJpaRepository,
+    private val remainAvailableTimeRepository: RemainAvailableTimeJpaRepository,
     private val remainAvailableTimeMapper: RemainAvailableTimeMapper
 ) : RemainAvailableTimePort {
 
     override fun queryRemainAvailableTimeBySchoolId(schoolId: UUID) = remainAvailableTimeMapper.toDomain(
-        remainAvailableTimeJpaRepository.findByIdOrNull(schoolId)
+        remainAvailableTimeRepository.findByIdOrNull(schoolId)
     )
 
 }
