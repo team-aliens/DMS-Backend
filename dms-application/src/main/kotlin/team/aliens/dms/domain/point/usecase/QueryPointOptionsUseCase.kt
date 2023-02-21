@@ -18,8 +18,7 @@ class QueryPointOptionsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointOptions =
-            queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(manager.schoolId, keyword)
+        val pointOptions = queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(manager.schoolId, keyword)
             .map {
                 QueryPointOptionsResponse.PointOptionResponse(
                     pointOptionId = it.id,
