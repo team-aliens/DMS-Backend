@@ -7,7 +7,7 @@ import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.spi.PointOptionPort
 import team.aliens.dms.persistence.point.mapper.PointOptionMapper
 import team.aliens.dms.persistence.point.repository.PointOptionJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class PointOptionPersistenceAdapter(
@@ -18,8 +18,10 @@ class PointOptionPersistenceAdapter(
     override fun existByNameAndSchoolId(name: String, schoolId: UUID) =
         pointOptionRepository.existsByNameAndSchoolId(name, schoolId)
 
-    override fun savePointOption(pointOption: PointOption): UUID {
-        return pointOptionRepository.save(pointOptionMapper.toEntity(pointOption)).id!!
+    override fun savePointOption(pointOption: PointOption): PointOption {
+        return pointOptionMapper.toDomain(
+            pointOptionRepository.save(pointOptionMapper.toEntity(pointOption))
+        )!!
     }
 
     override fun deletePointOption(pointOption: PointOption) {
