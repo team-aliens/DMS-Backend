@@ -17,7 +17,7 @@ class QueryPointOptionsUseCase(
     fun execute(keyword: String?): QueryPointOptionsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
-        
+
         val pointOptions =
             queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(manager.schoolId, keyword)
             .map {
