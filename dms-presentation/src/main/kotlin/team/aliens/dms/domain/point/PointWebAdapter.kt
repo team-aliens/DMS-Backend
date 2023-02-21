@@ -67,7 +67,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/history/excel")
-    fun importAllPointHistory(
+    fun exportAllPointHistory(
         httpResponse: HttpServletResponse,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
