@@ -91,7 +91,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/history")
-    fun getAllPointHistory(
+    fun getPointHistories(
         @RequestParam @NotNull type: PointRequestType?,
         @ModelAttribute pageData: PageWebData
     ): QueryAllPointHistoryResponse {
@@ -127,11 +127,10 @@ class PointWebAdapter(
     }
 
     @GetMapping("/history/students/{student-id}")
-    fun getAllStudentPointHistory(
+    fun getStudentsPointHistory(
         @PathVariable("student-id") studentId: UUID,
         @ModelAttribute pageData: PageData
     ): QueryStudentPointHistoryResponse {
         return queryStudentPointHistoryUseCase.execute(studentId, pageData)
     }
 }
-
