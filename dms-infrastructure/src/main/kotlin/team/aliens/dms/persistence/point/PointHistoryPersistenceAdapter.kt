@@ -53,7 +53,7 @@ class PointHistoryPersistenceAdapter(
             .fetchFirst()
 
         val bonusTotal = lastHistory?.bonusTotal ?: 0
-        val minusTotal = lastHistory?.bonusTotal ?: 0
+        val minusTotal = lastHistory?.minusTotal ?: 0
 
         return Pair(bonusTotal, minusTotal)
     }
@@ -131,5 +131,13 @@ class PointHistoryPersistenceAdapter(
                     pointScore = it.pointScore
                 )
             }
+    }
+
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
+        pointHistoryRepository.saveAll(
+            pointHistories.map {
+                pointHistoryMapper.toEntity(it)
+            }
+        )
     }
 }

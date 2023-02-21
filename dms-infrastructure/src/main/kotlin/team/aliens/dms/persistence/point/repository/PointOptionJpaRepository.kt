@@ -7,4 +7,5 @@ import java.util.UUID
 
 @Repository
 interface PointOptionJpaRepository : CrudRepository<PointOptionJpaEntity, UUID> {
+    fun findByIdAndSchoolId(id: UUID, schoolId: UUID): PointOptionJpaEntity?
 }
