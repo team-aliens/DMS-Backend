@@ -2,6 +2,7 @@ package team.aliens.dms.domain.remain
 
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.QueryRemainAvailableTimeUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainOptionUseCase
 import java.util.UUID
 import javax.validation.Valid
@@ -24,6 +27,7 @@ import javax.validation.constraints.NotNull
 class RemainWebAdapter(
     private val createRemainOptionUseCase: CreateRemainOptionUseCase,
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
+    private val queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,5 +51,10 @@ class RemainWebAdapter(
             title = request.title!!,
             description = request.description!!
         )
+    }
+
+    @GetMapping("/available-time")
+    fun getRemainAvailableTime(): QueryRemainAvailableTimeResponse {
+        return queryRemainAvailableTimeUseCase.execute()
     }
 }
