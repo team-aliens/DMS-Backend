@@ -56,6 +56,7 @@ class PointWebAdapter(
         return queryPointHistoryUseCase.execute(type!!)
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/options")
     fun createPointOption(@RequestBody @Valid request: CreatePointOptionWebRequest): CreatePointOptionResponse {
         return CreatePointOptionResponse(
