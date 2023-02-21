@@ -3,7 +3,7 @@ package team.aliens.dms.domain.point.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.ParseFilePort
-import team.aliens.dms.domain.point.dto.ImportAllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
@@ -12,7 +12,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
 
 @ReadOnlyUseCase
-class ImportAllPointHistoryUseCase(
+class ExportAllPointHistoryUseCase(
     private val securityPort: PointSecurityPort,
     private val queryUserPort: PointQueryUserPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
@@ -22,7 +22,7 @@ class ImportAllPointHistoryUseCase(
     fun execute(
         start: LocalDateTime?,
         end: LocalDateTime?
-    ): ImportAllPointHistoryResponse {
+    ): ExportAllPointHistoryResponse {
 
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
@@ -33,7 +33,7 @@ class ImportAllPointHistoryUseCase(
             endAt = end
         )
 
-        return ImportAllPointHistoryResponse(
+        return ExportAllPointHistoryResponse(
             file = parseFilePort.writePointHistoryExcelFile(pointHistories),
             fileName = getFileName(start, end, pointHistories)
         )

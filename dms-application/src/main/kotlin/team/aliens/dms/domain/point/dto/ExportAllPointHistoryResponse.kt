@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.point.dto
 
-class ImportAllPointHistoryResponse(
+class ExportAllPointHistoryResponse(
     val fileName: String,
     val file: ByteArray
 )

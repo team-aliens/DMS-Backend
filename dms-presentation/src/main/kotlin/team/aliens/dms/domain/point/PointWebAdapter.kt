@@ -13,7 +13,7 @@ import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.usecase.ImportAllPointHistoryUseCase
+import team.aliens.dms.domain.point.usecase.ExportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import java.net.URLEncoder
@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
-    private val importAllPointHistoryUseCase: ImportAllPointHistoryUseCase
+    private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase
 ) {
 
     @GetMapping
@@ -52,7 +52,7 @@ class PointWebAdapter(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
     ): ByteArray {
-        val response = importAllPointHistoryUseCase.execute(start, end)
+        val response = exportAllPointHistoryUseCase.execute(start, end)
         httpResponse.setHeader(
             HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"

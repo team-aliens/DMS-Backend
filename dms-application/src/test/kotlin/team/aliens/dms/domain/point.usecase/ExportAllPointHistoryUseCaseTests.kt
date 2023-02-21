@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.ParseFilePort
-import team.aliens.dms.domain.point.dto.ImportAllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
@@ -24,14 +24,14 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class ImportAllPointHistoryUseCaseTests {
+class ExportAllPointHistoryUseCaseTests {
 
     private val securityPort: PointSecurityPort = mockk(relaxed = true)
     private val queryUserPort: PointQueryUserPort = mockk(relaxed = true)
     private val queryPointHistoryPort: QueryPointHistoryPort = mockk(relaxed = true)
     private val parseFilePort: ParseFilePort = mockk(relaxed = true)
 
-    private val importAllPointHistoryUseCase = ImportAllPointHistoryUseCase(
+    private val exportAllPointHistoryUseCase = ExportAllPointHistoryUseCase(
         securityPort, queryUserPort, queryPointHistoryPort, parseFilePort
     )
 
@@ -89,7 +89,7 @@ class ImportAllPointHistoryUseCaseTests {
     @Test
     fun `상벌점 내역 엑셀 출력 성공`() {
         // given
-        val responseStub = ImportAllPointHistoryResponse(
+        val responseStub = ExportAllPointHistoryResponse(
             file = fileStub,
             fileName = "상벌점_부여내역_20230220_20230315"
         )
@@ -111,7 +111,7 @@ class ImportAllPointHistoryUseCaseTests {
         every { parseFilePort.writePointHistoryExcelFile(histories) } returns fileStub
 
         // when
-        val response = importAllPointHistoryUseCase.execute(start, end)
+        val response = exportAllPointHistoryUseCase.execute(start, end)
 
         // then
         assertAll(
@@ -123,7 +123,7 @@ class ImportAllPointHistoryUseCaseTests {
     @Test
     fun `start, end가 null인 경우`() {
         // given
-        val responseStub = ImportAllPointHistoryResponse(
+        val responseStub = ExportAllPointHistoryResponse(
             file = fileStub,
             fileName = "상벌점_부여내역" +
                     "_${oldestHistoryCreatedAt.format(File.FILE_DATE_FORMAT)}" +
@@ -147,7 +147,7 @@ class ImportAllPointHistoryUseCaseTests {
         every { parseFilePort.writePointHistoryExcelFile(histories) } returns fileStub
 
         // when
-        val response = importAllPointHistoryUseCase.execute(null, null)
+        val response = exportAllPointHistoryUseCase.execute(null, null)
 
         // then
         assertAll(
@@ -165,7 +165,7 @@ class ImportAllPointHistoryUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            importAllPointHistoryUseCase.execute(start, end)
+            exportAllPointHistoryUseCase.execute(start, end)
         }
     }
 }
