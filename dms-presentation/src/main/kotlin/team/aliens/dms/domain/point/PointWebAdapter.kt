@@ -16,6 +16,7 @@ import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.usecase.ImportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
+import java.net.URLEncoder
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletResponse
 import javax.validation.constraints.NotNull
@@ -54,7 +55,7 @@ class PointWebAdapter(
         val response = importAllPointHistoryUseCase.execute(start, end)
         httpResponse.setHeader(
             HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=${response.fileName}.xlsx"
+            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
         )
         return response.file
     }
