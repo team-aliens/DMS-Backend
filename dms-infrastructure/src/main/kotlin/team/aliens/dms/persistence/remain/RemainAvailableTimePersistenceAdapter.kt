@@ -6,7 +6,7 @@ import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.spi.RemainAvailableTimePort
 import team.aliens.dms.persistence.remain.mapper.RemainAvailableTimeMapper
 import team.aliens.dms.persistence.remain.repository.RemainAvailableTimeJpaRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class RemainAvailableTimePersistenceAdapter(
