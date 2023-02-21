@@ -28,7 +28,7 @@ class CancelGrantedPointUseCase(
             throw SchoolMismatchException
         }
 
-        commandPointHistoryPort.savePointHistory(pointHistory.canceledHistory())
+        commandPointHistoryPort.savePointHistory(pointHistory.cancelHistory())
         commandPointHistoryPort.deletePointHistory(pointHistory)
     }
 }

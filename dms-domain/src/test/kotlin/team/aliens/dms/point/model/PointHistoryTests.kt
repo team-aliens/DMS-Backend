@@ -29,7 +29,7 @@ class PointHistoryTests {
         )
 
         // when
-        val canceledHistory = pointHistory.canceledHistory()
+        val canceledHistory = pointHistory.cancelHistory()
 
         // then
         assertAll(
@@ -57,7 +57,7 @@ class PointHistoryTests {
 
         // when & then
         assertThrows<PointHistoryCanNotCancelException> {
-            canceledPointHistory.canceledHistory()
+            canceledPointHistory.cancelHistory()
         }
     }
 }
