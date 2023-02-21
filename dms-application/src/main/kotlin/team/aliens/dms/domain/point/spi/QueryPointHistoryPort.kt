@@ -26,4 +26,5 @@ interface QueryPointHistoryPort {
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
     ): List<QueryAllPointHistoryResponse.PointHistory>
+
 }
