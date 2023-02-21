@@ -60,12 +60,12 @@ class PointWebAdapter(
     @PostMapping("/options")
     fun createPointOption(@RequestBody @Valid request: CreatePointOptionWebRequest): CreatePointOptionResponse {
         return createPointOptionUseCase.execute(
-                CreatePointOptionRequest(
-                    name = request.name!!,
-                    score = request.score!!,
-                    type = request.type!!.name
-                )
+            CreatePointOptionRequest(
+                name = request.name!!,
+                score = request.score!!,
+                type = request.type!!.name
             )
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
