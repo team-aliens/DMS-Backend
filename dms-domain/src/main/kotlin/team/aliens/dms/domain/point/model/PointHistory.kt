@@ -55,9 +55,9 @@ data class PointHistory(
 
     private fun calculateTotalPoint(): Pair<Int, Int> {
         return if (this.pointType == PointType.BONUS) {
-            Pair(this.bonusTotal + this.pointScore, this.minusTotal)
+            Pair(this.bonusTotal - this.pointScore, this.minusTotal)
         } else {
-            Pair(this.bonusTotal, this.minusTotal + pointScore)
+            Pair(this.bonusTotal, this.minusTotal - pointScore)
         }
     }
 }
