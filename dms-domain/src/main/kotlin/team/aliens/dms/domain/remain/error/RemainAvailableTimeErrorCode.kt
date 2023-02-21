@@ -7,6 +7,8 @@ enum class RemainAvailableTimeErrorCode(
     private val message: String
 ) : ErrorProperty {
 
+    REMAIN_AVAILABLE_TIME_CAN_NOT_ACCESS(403, "Remain Available Time Can Not Access"),
+
     REMAIN_AVAILABLE_TIME_NOT_FOUND(404, "Remain Available Time Not Found")
     ;
 
