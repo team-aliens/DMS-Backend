@@ -11,7 +11,6 @@ import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import java.util.UUID
 
 @UseCase
 class CreatePointOptionUseCase(
