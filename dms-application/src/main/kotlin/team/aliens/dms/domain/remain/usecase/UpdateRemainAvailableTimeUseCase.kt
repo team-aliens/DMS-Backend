@@ -21,19 +21,7 @@ class UpdateRemainAvailableTimeUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val remainAvailableTime =
-            queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
-
-        remainAvailableTime?.let {
-            commandRemainAvailableTimePort.saveRemainAvailableTime(
-                it.copy(
-                    startDayOfWeek = it.startDayOfWeek,
-                    startTime = it.startTime,
-                    endDayOfWeek = it.endDayOfWeek,
-                    endTime = it.endTime
-                )
-            )
-        } ?: commandRemainAvailableTimePort.saveRemainAvailableTime(
+        commandRemainAvailableTimePort.saveRemainAvailableTime(
             RemainAvailableTime(
                 id = currentUser.schoolId,
                 startDayOfWeek = request.startDayOfWeek,
