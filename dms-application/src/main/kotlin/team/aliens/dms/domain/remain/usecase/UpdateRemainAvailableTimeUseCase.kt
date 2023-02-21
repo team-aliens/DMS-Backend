@@ -4,7 +4,6 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
 import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.spi.CommandRemainAvailableTimePort
-import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -13,8 +12,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 class UpdateRemainAvailableTimeUseCase(
     private val securityPort: RemainSecurityPort,
     private val queryUserPort: RemainQueryUserPort,
-    private val commandRemainAvailableTimePort: CommandRemainAvailableTimePort,
-    private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort
+    private val commandRemainAvailableTimePort: CommandRemainAvailableTimePort
 ) {
 
     fun execute(request: UpdateRemainAvailableTimeRequest) {
