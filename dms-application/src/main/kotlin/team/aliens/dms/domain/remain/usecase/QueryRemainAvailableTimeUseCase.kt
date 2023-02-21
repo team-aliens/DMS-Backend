@@ -3,7 +3,7 @@ package team.aliens.dms.domain.remain.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeCanNotAccessException
-import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFound
+import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
@@ -22,7 +22,7 @@ class QueryRemainAvailableTimeUseCase(
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val availableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
-            ?: throw RemainAvailableTimeNotFound
+            ?: throw RemainAvailableTimeNotFoundException
 
         val currentDateTime = LocalDateTime.now()
         val dayOfWeek = currentDateTime.dayOfWeek.value
