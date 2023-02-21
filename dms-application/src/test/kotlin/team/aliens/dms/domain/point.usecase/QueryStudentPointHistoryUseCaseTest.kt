@@ -141,7 +141,7 @@ class QueryStudentPointHistoryUseCaseTest {
         every { queryManagerPort.queryManagerById(currentUserId) } returns managerStub
 
         every { queryStudentPort.queryStudentById(studentId) } returns null
-        
+
         every {
             queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
                 gcn = studentStub.gcn,
