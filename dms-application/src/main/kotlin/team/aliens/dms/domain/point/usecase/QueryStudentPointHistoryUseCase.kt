@@ -32,7 +32,8 @@ class QueryStudentPointHistoryUseCase(
         val pointHistories = queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
             studentName = student.name,
             gcn = student.gcn,
-            pageData = pageData
+            pageData = pageData,
+            isCancel = false
         )
 
         return QueryStudentPointHistoryResponse(pointHistories)

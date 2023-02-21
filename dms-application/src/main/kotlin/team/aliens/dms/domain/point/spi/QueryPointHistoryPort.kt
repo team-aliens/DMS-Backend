@@ -20,9 +20,10 @@ interface QueryPointHistoryPort {
     fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
-        type: PointType?,
-        isCancel: Boolean? = null
-    ): List<QueryPointHistoryResponse.Point>
+        type: PointType? = null,
+        isCancel: Boolean? = null,
+        pageData: PageData = PageData.DEFAULT
+    ): List<PointHistoryVO>
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
