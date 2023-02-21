@@ -1,10 +1,12 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
@@ -20,6 +22,22 @@ class PointHistoryPersistenceAdapter(
     private val pointHistoryRepository: PointHistoryJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : PointHistoryPort {
+
+    override fun savePointHistory(pointHistory: PointHistory) = pointHistoryMapper.toDomain(
+        pointHistoryRepository.save(
+            pointHistoryMapper.toEntity(pointHistory)
+        )
+    )!!
+
+    override fun deletePointHistory(pointHistory: PointHistory) {
+        pointHistoryRepository.delete(
+            pointHistoryMapper.toEntity(pointHistory)
+        )
+    }
+
+    override fun queryPointHistoryById(pointHistoryId: UUID) = pointHistoryMapper.toDomain(
+        pointHistoryRepository.findByIdOrNull(pointHistoryId)
+    )
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
