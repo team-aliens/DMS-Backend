@@ -2,7 +2,9 @@ package team.aliens.dms.persistence.student
 
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPAExpressions.select
+import com.querydsl.jpa.JPQLQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -22,6 +24,7 @@ import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
+import java.time.LocalDateTime
 
 @Component
 class StudentPersistenceAdapter(
@@ -130,16 +133,7 @@ class StudentPersistenceAdapter(
             .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
-            .on(
-                pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
-                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
-                eqGcn(),
-                pointHistoryJpaEntity.createdAt.eq(
-                        select(pointHistoryJpaEntity.createdAt.max())
-                        .from(pointHistoryJpaEntity)
-                        .where(eqGcn())
-                )
-            )
+            .on(eqStudentRecentPointHistory())
             .where(
                 studentJpaEntity.id.`in`(studentIds)
             )
@@ -154,6 +148,20 @@ class StudentPersistenceAdapter(
                     minusTotal = it.minusTotal ?: 0
                 )
             }
+    }
+
+    private fun eqStudentRecentPointHistory(): BooleanExpression? {
+        return pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
+            .and(eqGcn())
+            .and(pointHistoryJpaEntity.createdAt.eq(
+                select(pointHistoryJpaEntity.createdAt.max())
+                    .from(pointHistoryJpaEntity)
+                    .where(
+                        pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
+                        pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                        eqGcn()
+                    )
+            ))
     }
 
     private fun eqGcn(): BooleanBuilder {
