@@ -93,6 +93,8 @@ class SecurityConfiguration(
 
             // /points
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.POST, "/points/history").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
 
             // /templates
             .antMatchers(HttpMethod.GET, "/templates").permitAll()
@@ -115,9 +117,11 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/study-rooms/list/students").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/study-rooms/list/managers").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/study-rooms/types/{type-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/study-rooms/my").hasAuthority(STUDENT.name)
 
             // /remains
             .antMatchers(HttpMethod.POST, "/remains/options").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.PATCH, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)
             .anyRequest().denyAll()
 

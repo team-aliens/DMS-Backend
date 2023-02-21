@@ -1,14 +1,13 @@
-package team.aliens.dms.domain.point.error
+package team.aliens.dms.domain.remain.error
 
 import team.aliens.dms.common.error.ErrorProperty
 
-enum class PointOptionErrorCode(
+enum class RemainOptionErrorCode(
     private val status: Int,
     private val message: String
 ) : ErrorProperty {
 
-    POINT_OPTION_NOT_FOUND(404, "Point Option Not Found"),
-    POINT_OPTION_SCHOOL_MISMATCH(401, "Point Option School Mismatch")
+    REMAIN_OPTION_NOT_FOUND(404, "Remain Option Not Found")
     ;
 
     override fun status(): Int = status

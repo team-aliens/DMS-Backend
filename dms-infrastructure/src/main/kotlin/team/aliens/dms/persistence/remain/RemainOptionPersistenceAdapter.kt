@@ -1,10 +1,12 @@
 package team.aliens.dms.persistence.remain
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.RemainOptionPort
 import team.aliens.dms.persistence.remain.mapper.RemainOptionMapper
 import team.aliens.dms.persistence.remain.repository.RemainOptionJpaRepository
+import java.util.UUID
 
 @Component
 class RemainOptionPersistenceAdapter(
@@ -17,4 +19,8 @@ class RemainOptionPersistenceAdapter(
             remainOptionMapper.toEntity(remainOption)
         )
     )!!
+
+    override fun queryRemainOptionById(remainOptionId: UUID) = remainOptionMapper.toDomain(
+        remainOptionRepository.findByIdOrNull(remainOptionId)
+    )
 }
