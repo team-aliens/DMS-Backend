@@ -13,7 +13,7 @@ data class StudentWithPointVO(
 ) {
     val gcn: String = "${this.grade}${this.classRoom}${Student.processNumber(number)}"
 
-    fun getUpdatedPointTotal(type: PointType, score: Int): Pair<Int, Int> {
+    fun calculateUpdatedPointTotal(type: PointType, score: Int): Pair<Int, Int> {
         return if(type == PointType.BONUS) {
             Pair(this.bonusTotal + score, this.minusTotal)
         }
