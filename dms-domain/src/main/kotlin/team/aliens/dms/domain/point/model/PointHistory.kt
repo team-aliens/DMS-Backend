@@ -31,17 +31,13 @@ data class PointHistory(
     val schoolId: UUID
 
 ) {
-    fun canceledHistory(): PointHistory {
+    fun cancelHistory(): PointHistory {
 
         if (this.isCancel) {
             throw PointHistoryCanNotCancelException
         }
 
-        val bonusTotal = this.bonusTotal -
-                (if (pointType == PointType.BONUS) pointScore else 0)
-
-        val minusTotal = this.minusTotal -
-                (if (pointType == PointType.MINUS) pointScore else 0)
+        val (bonusTotal, minusTotal) = calculateTotalPoint()
 
         return PointHistory(
             isCancel = true,
@@ -55,5 +51,13 @@ data class PointHistory(
             createdAt = LocalDateTime.now(),
             schoolId = this.schoolId
         )
+    }
+
+    private fun calculateTotalPoint(): Pair<Int, Int> {
+        return if (this.pointType == PointType.BONUS) {
+            Pair(this.bonusTotal + this.pointScore, this.minusTotal)
+        } else {
+            Pair(this.bonusTotal, this.minusTotal + pointScore)
+        }
     }
 }
