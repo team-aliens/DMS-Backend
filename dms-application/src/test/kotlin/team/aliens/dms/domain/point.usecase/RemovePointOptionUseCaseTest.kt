@@ -17,7 +17,7 @@ import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class RemovePointOptionUseCaseTest {
@@ -54,7 +54,7 @@ class RemovePointOptionUseCaseTest {
         )
     }
 
-    private val pointOptionStub2 by lazy {
+    private val otherPointOptionStub by lazy {
         PointOption(
             name = "호실 청소 우수",
             type = PointType.BONUS,
@@ -62,6 +62,7 @@ class RemovePointOptionUseCaseTest {
             schoolId = schoolId2
         )
     }
+
     @Test
     fun `상벌점 항목 삭제 성공`() {
         //given
@@ -99,7 +100,7 @@ class RemovePointOptionUseCaseTest {
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
 
-        every { queryPointOptionPort.queryPointOptionById(pointOptionId) } returns pointOptionStub2
+        every { queryPointOptionPort.queryPointOptionById(pointOptionId) } returns otherPointOptionStub
 
         // when & then
         assertThrows<PointOptionSchoolMismatchException> {
@@ -119,6 +120,4 @@ class RemovePointOptionUseCaseTest {
             removePointOptionUseCase.execute(pointOptionId)
         }
     }
-
-
 }

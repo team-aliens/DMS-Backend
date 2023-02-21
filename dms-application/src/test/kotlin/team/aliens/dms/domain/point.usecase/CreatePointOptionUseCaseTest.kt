@@ -2,9 +2,7 @@ package team.aliens.dms.domain.point.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,7 +19,6 @@ import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CreatePointOptionUseCaseTest {
-
 
     private val securityPort: PointSecurityPort = mockk()
     private val queryManagerPort: PointQueryManagerPort = mockk()
@@ -62,10 +59,10 @@ class CreatePointOptionUseCaseTest {
         every { queryPointOptionPort.existByNameAndSchoolId(requestStub.name, schoolId) } returns false
 
         //when & then
-        assertAll(
-            { assertThat( createPointOptionUseCase.execute(requestStub)).isNotNull },
-            { assertDoesNotThrow {createPointOptionUseCase.execute(requestStub)} }
-        )
+        assertDoesNotThrow {
+            createPointOptionUseCase.execute(requestStub)
+        }
+
     }
 
     @Test
@@ -91,6 +88,7 @@ class CreatePointOptionUseCaseTest {
         every { queryManagerPort.queryManagerById(managerId) } returns null
 
 
+        //when & then
         assertThrows<ManagerNotFoundException> {
             createPointOptionUseCase.execute(requestStub)
         }
