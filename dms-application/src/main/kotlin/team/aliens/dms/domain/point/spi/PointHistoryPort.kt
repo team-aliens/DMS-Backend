@@ -5,6 +5,7 @@ import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
 
 interface PointHistoryPort :
     QueryPointHistoryPort,
+    CommandPointHistoryPort,
     ManagerQueryPointHistoryPort,
     StudentQueryPointHistoryPort {
 }
