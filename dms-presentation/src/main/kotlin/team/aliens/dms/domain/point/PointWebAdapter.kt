@@ -2,7 +2,7 @@ package team.aliens.dms.domain.point
 
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
+import org.springframework.http.server.ServerHttpResponse
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
