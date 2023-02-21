@@ -2,7 +2,6 @@ package team.aliens.dms.domain.point
 
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpHeaders
-import org.springframework.http.server.ServerHttpResponse
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -18,6 +17,7 @@ import team.aliens.dms.domain.point.usecase.ImportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import java.time.LocalDateTime
+import javax.servlet.http.HttpServletResponse
 import javax.validation.constraints.NotNull
 
 @Validated
@@ -44,14 +44,15 @@ class PointWebAdapter(
             pageData = PageData(pageData.page, pageData.size)
         )
     }
+
     @GetMapping("/history/excel")
     fun importAllPointHistory(
-        httpResponse: ServerHttpResponse,
+        httpResponse: HttpServletResponse,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
     ): ByteArray {
         val response = importAllPointHistoryUseCase.execute(start, end)
-        httpResponse.headers.add(
+        httpResponse.setHeader(
             HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=${response.fileName}.xlsx"
         )
