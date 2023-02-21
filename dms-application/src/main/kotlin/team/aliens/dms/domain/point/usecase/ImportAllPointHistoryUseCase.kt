@@ -34,7 +34,7 @@ class ImportAllPointHistoryUseCase(
         )
 
         return ImportAllPointHistoryResponse(
-            file = parseFilePort.writeExcelFile(pointHistories),
+            file = parseFilePort.writePointHistoryExcelFile(pointHistories),
             fileName = getFileName(start, end, pointHistories)
         )
     }
