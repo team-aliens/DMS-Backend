@@ -3,6 +3,7 @@ package team.aliens.dms.domain.point.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
+import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
 import team.aliens.dms.domain.point.exception.PointOptionNameExistsException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
@@ -20,15 +21,15 @@ class CreatePointOptionUseCase(
     private val queryPointOptionPort: QueryPointOptionPort
 ) {
 
-    fun execute(request: CreatePointOptionRequest): UUID {
+    fun execute(request: CreatePointOptionRequest): CreatePointOptionResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        if(queryPointOptionPort.existByNameAndSchoolId(request.name, manager.schoolId)) {
+        if (queryPointOptionPort.existByNameAndSchoolId(request.name, manager.schoolId)) {
             throw PointOptionNameExistsException
         }
 
-        return commandPointOptionPort.savePointOption(
+        val pointOption = commandPointOptionPort.savePointOption(
             PointOption(
                 schoolId = manager.schoolId,
                 name = request.name,
@@ -36,5 +37,7 @@ class CreatePointOptionUseCase(
                 type = PointType.valueOf(request.type)
             )
         )
+
+        return CreatePointOptionResponse(pointOption.id)
     }
 }

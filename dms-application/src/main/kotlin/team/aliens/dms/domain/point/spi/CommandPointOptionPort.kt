@@ -4,7 +4,7 @@ import team.aliens.dms.domain.point.model.PointOption
 import java.util.UUID
 
 interface CommandPointOptionPort {
-    fun savePointOption(pointOption: PointOption): UUID
+    fun savePointOption(pointOption: PointOption): PointOption
 
     fun deletePointOption(pointOption: PointOption)
 }
