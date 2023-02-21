@@ -1,4 +1,4 @@
 package team.aliens.dms.domain.remain.spi
 
-interface RemainOptionPort: CommandRemainOptionPort {
+interface RemainOptionPort: CommandRemainOptionPort, QueryRemainOptionPort {
 }
