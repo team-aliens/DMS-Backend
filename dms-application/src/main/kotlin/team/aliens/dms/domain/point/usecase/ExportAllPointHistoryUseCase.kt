@@ -19,10 +19,7 @@ class ExportAllPointHistoryUseCase(
     private val writeFilePort: WriteFilePort
 ) {
 
-    fun execute(
-        start: LocalDateTime?,
-        end: LocalDateTime?
-    ): ExportAllPointHistoryResponse {
+    fun execute(start: LocalDateTime?, end: LocalDateTime?): ExportAllPointHistoryResponse {
 
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
