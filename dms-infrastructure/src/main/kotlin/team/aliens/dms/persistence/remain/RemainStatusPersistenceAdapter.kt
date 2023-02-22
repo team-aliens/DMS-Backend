@@ -43,4 +43,9 @@ class RemainStatusPersistenceAdapter(
     override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
         remainStatusRepository.deleteByRemainOptionId(remainOptionId)
     }
+    override fun saveRemainStatus(remainStatus: RemainStatus) = remainStatusMapper.toDomain(
+        remainStatusRepository.save(
+            remainStatusMapper.toEntity(remainStatus)
+        )
+    )!!
 }
