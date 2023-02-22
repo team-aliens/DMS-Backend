@@ -4,6 +4,7 @@ import team.aliens.dms.persistence.BaseTimeEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -23,7 +24,7 @@ class RemainStatusJpaEntity(
     val id: UUID,
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val student: StudentJpaEntity?,
 
