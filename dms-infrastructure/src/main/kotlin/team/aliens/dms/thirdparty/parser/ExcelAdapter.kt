@@ -3,6 +3,7 @@ package team.aliens.dms.thirdparty.parser
 import com.fasterxml.uuid.Generators
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Row.CREATE_NULL_AS_BLANK
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
@@ -109,14 +110,13 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     ): ByteArray {
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet()
-        val style = getDefaultCellStyle(workbook)
 
         val headerRow = sheet.createRow(0)
-        insertDatasAtRow(headerRow, attributes, style)
+        insertDatasAtRow(headerRow, attributes, getHeaderCellStyle(workbook))
 
         datasList.forEachIndexed { idx, datas ->
             val row = sheet.createRow(idx + 1)
-            insertDatasAtRow(row, datas, style)
+            insertDatasAtRow(row, datas, getDefaultCellStyle(workbook))
         }
 
         ByteArrayOutputStream().use { stream ->
@@ -137,10 +137,17 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         }
     }
 
+    private fun getHeaderCellStyle(workbook: XSSFWorkbook): XSSFCellStyle =
+        workbook.createCellStyle()
+            .apply {
+                fillBackgroundColor = IndexedColors.GREY_25_PERCENT.index
+                alignment = HorizontalAlignment.LEFT.ordinal.toShort()
+                verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
+            }
+
     private fun getDefaultCellStyle(workbook: XSSFWorkbook): XSSFCellStyle =
         workbook.createCellStyle()
             .apply {
-                wrapText = true
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
                 verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
             }
