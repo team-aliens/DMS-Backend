@@ -23,7 +23,7 @@ class QueryRemainAvailableTimeUseCase(
         val availableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
             ?: throw RemainAvailableTimeNotFoundException
 
-        if (!availableTime.isAccessible()) {
+        if (!availableTime.isAvailable()) {
             throw RemainAvailableTimeCanNotAccessException
         }
 

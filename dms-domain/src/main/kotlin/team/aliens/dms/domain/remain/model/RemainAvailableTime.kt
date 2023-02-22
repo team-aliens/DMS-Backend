@@ -21,7 +21,7 @@ data class RemainAvailableTime(
 
 ) {
 
-    fun isAccessible(): Boolean {
+    fun isAvailable(): Boolean {
         val currentDateTime = LocalDateTime.now()
         val dayOfWeek = currentDateTime.dayOfWeek.value
         val now = currentDateTime.toLocalTime()
@@ -30,7 +30,11 @@ data class RemainAvailableTime(
             return false
         }
 
-        if (now < startTime || now > endTime) {
+        if (dayOfWeek == startDayOfWeek.value && now < startTime) {
+            return false
+        }
+
+        if (dayOfWeek == endDayOfWeek.value && now > endTime) {
             return false
         }
 
