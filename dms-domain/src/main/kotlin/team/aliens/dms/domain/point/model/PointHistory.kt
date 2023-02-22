@@ -37,7 +37,7 @@ data class PointHistory(
             throw PointHistoryCanNotCancelException
         }
 
-        val (bonusTotal, minusTotal) = calculateTotalPoint()
+        val (bonusTotal, minusTotal) = calculateCanceledPointTotal()
 
         return PointHistory(
             isCancel = true,
@@ -53,7 +53,7 @@ data class PointHistory(
         )
     }
 
-    private fun calculateTotalPoint(): Pair<Int, Int> {
+    private fun calculateCanceledPointTotal(): Pair<Int, Int> {
         return if (this.pointType == PointType.BONUS) {
             Pair(this.bonusTotal - this.pointScore, this.minusTotal)
         } else {
