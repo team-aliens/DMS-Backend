@@ -1,7 +1,9 @@
 package team.aliens.dms.domain.remain
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,8 +15,11 @@ import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.ExportRemainStatusUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainOptionUseCase
+import java.net.URLEncoder
 import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -24,6 +29,7 @@ import javax.validation.constraints.NotNull
 class RemainWebAdapter(
     private val createRemainOptionUseCase: CreateRemainOptionUseCase,
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
+    private val exportRemainStatusUseCase: ExportRemainStatusUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,5 +53,21 @@ class RemainWebAdapter(
             title = request.title!!,
             description = request.description!!
         )
+    }
+
+    @GetMapping("/status/file")
+    fun exportRemainStatus(
+        httpResponse: HttpServletResponse
+    ): ByteArray {
+        val response = exportRemainStatusUseCase.execute()
+        httpResponse.setHeader(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
+        )
+        httpResponse.setHeader(
+            HttpHeaders.CONTENT_TYPE,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        return response.file
     }
 }
