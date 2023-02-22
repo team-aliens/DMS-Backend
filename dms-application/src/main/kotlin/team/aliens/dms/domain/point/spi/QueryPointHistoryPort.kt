@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.point.spi
 
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDateTime
@@ -20,9 +20,10 @@ interface QueryPointHistoryPort {
     fun queryPointHistoryByStudentGcnAndNameAndType(
         gcn: String,
         studentName: String,
-        type: PointType?,
-        isCancel: Boolean? = null
-    ): List<QueryPointHistoryResponse.Point>
+        type: PointType? = null,
+        isCancel: Boolean? = null,
+        pageData: PageData = PageData.DEFAULT
+    ): List<PointHistoryDto>
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,

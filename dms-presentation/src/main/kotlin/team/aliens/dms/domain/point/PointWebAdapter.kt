@@ -24,6 +24,7 @@ import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
+import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
@@ -33,6 +34,7 @@ import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
+import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
 import java.net.URLEncoder
 import java.time.LocalDateTime
@@ -47,17 +49,21 @@ import javax.validation.constraints.NotNull
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val createPointOptionUseCase: CreatePointOptionUseCase,
+    private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
     private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
-    private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
-    private val queryPointOptionsUseCase: QueryPointOptionsUseCase
+    private val queryPointOptionsUseCase: QueryPointOptionsUseCase,
+    private val queryStudentPointHistoryUseCase: QueryStudentPointHistoryUseCase
 ) {
 
     @GetMapping
-    fun getPointHistory(@RequestParam @NotNull type: PointRequestType?): QueryPointHistoryResponse {
-        return queryPointHistoryUseCase.execute(type!!)
+    fun getPointHistory(
+        @RequestParam @NotNull type: PointRequestType?,
+        @ModelAttribute pageData: PageData
+    ): QueryPointHistoryResponse {
+        return queryPointHistoryUseCase.execute(type!!, pageData)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -90,7 +96,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/history")
-    fun getAllPointHistory(
+    fun getPointHistories(
         @RequestParam @NotNull type: PointRequestType?,
         @ModelAttribute pageData: PageWebData
     ): QueryAllPointHistoryResponse {
@@ -124,5 +130,12 @@ class PointWebAdapter(
     fun getAllPointOptions(@RequestParam(required = false) keyword: String?): QueryPointOptionsResponse {
         return queryPointOptionsUseCase.execute(keyword)
     }
-}
 
+    @GetMapping("/history/students/{student-id}")
+    fun getStudentsPointHistory(
+        @PathVariable("student-id") studentId: UUID,
+        @ModelAttribute pageData: PageData
+    ): QueryStudentPointHistoryResponse {
+        return queryStudentPointHistoryUseCase.execute(studentId, pageData)
+    }
+}
