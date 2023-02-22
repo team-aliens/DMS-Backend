@@ -128,6 +128,7 @@ class SecurityConfiguration(
             // /remains
             .antMatchers(HttpMethod.POST, "/remains/options").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .anyRequest().denyAll()
 
         http
