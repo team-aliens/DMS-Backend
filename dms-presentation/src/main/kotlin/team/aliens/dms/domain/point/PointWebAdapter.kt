@@ -49,8 +49,13 @@ import javax.validation.constraints.NotNull
 class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val createPointOptionUseCase: CreatePointOptionUseCase,
+    private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
+    private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
+    private val queryPointOptionsUseCase: QueryPointOptionsUseCase,
+    private val queryStudentPointHistoryUseCase: QueryStudentPointHistoryUseCase
 ) {
 
     @GetMapping
