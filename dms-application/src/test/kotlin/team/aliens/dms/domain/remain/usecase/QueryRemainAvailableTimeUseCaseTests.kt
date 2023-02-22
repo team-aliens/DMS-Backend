@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeCanNotAccessException
 import team.aliens.dms.domain.remain.model.RemainAvailableTime
+import team.aliens.dms.domain.remain.service.CheckAccessibleRemainAvailableTime
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
@@ -32,6 +33,9 @@ class QueryRemainAvailableTimeUseCaseTests {
     @MockBean
     private lateinit var queryRemainAvailableTimePort: QueryRemainAvailableTimePort
 
+    @MockBean
+    private lateinit var checkAccessibleRemainAvailableTime: CheckAccessibleRemainAvailableTime
+
     private lateinit var queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase
 
     @BeforeEach
@@ -39,7 +43,8 @@ class QueryRemainAvailableTimeUseCaseTests {
         queryRemainAvailableTimeUseCase = QueryRemainAvailableTimeUseCase(
             securityPort,
             queryUserPort,
-            queryRemainAvailableTimePort
+            queryRemainAvailableTimePort,
+            checkAccessibleRemainAvailableTime
         )
     }
 
@@ -64,7 +69,7 @@ class QueryRemainAvailableTimeUseCaseTests {
             id = schoolId,
             startDayOfWeek = DayOfWeek.MONDAY,
             startTime = LocalTime.of(0,0),
-            endDayOfWeek = DayOfWeek.TUESDAY,
+            endDayOfWeek = DayOfWeek.SUNDAY,
             endTime = LocalTime.of(23, 59)
         )
     }
@@ -73,7 +78,7 @@ class QueryRemainAvailableTimeUseCaseTests {
         RemainAvailableTime(
             id = schoolId,
             startDayOfWeek = DayOfWeek.THURSDAY,
-            startTime = LocalTime.of(0,0),
+            startTime = LocalTime.of(0,59),
             endDayOfWeek = DayOfWeek.FRIDAY,
             endTime = LocalTime.of(23, 59)
         )
@@ -90,6 +95,9 @@ class QueryRemainAvailableTimeUseCaseTests {
 
         given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
             .willReturn(successRemainAvailableTimeStub)
+
+        given(checkAccessibleRemainAvailableTime.execute(successRemainAvailableTimeStub))
+            .willReturn(true)
 
         // when & then
         assertDoesNotThrow {
@@ -108,6 +116,9 @@ class QueryRemainAvailableTimeUseCaseTests {
 
         given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
             .willReturn(failureRemainAvailableTimeStub)
+
+        given(checkAccessibleRemainAvailableTime.execute(failureRemainAvailableTimeStub))
+            .willReturn(false)
 
         // when & then
         assertThrows<RemainAvailableTimeCanNotAccessException> {
