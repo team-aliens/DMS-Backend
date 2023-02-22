@@ -33,9 +33,9 @@ class QueryRemainOptionsUseCase(
         val remainStatus = queryRemainStatusPort.queryRemainStatusById(currentUserId)
 
         return QueryRemainOptionsResponse(
-            selectedOption = remainStatus?.let {
-                queryRemainOptionPort.queryRemainOptionById(it.remainOptionId)?.title
-            },
+            appliedRemainOption = remainOptions.find {
+                it.id == remainStatus!!.remainOptionId
+            }?.title,
             remainOptions = remainOptions
         )
     }
