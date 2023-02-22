@@ -34,7 +34,7 @@ data class RemainAvailableTime(
             return false
         }
 
-        if (dayOfWeek == endDayOfWeek.value && now > endTime) {
+        if (dayOfWeek == endDayOfWeek.value && endTime < now) {
             return false
         }
 
