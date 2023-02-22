@@ -66,7 +66,7 @@ class StudentPersistenceAdapter(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilter?
+        pointFilter: PointFilter
     ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -93,8 +93,8 @@ class StudentPersistenceAdapter(
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
 
-    private fun pointTotalBetween(pointFilter: PointFilter?): BooleanExpression? {
-        if(pointFilter == null) {
+    private fun pointTotalBetween(pointFilter: PointFilter): BooleanExpression? {
+        if(pointFilter.filterType == null) {
             return null
         }
 
@@ -108,7 +108,7 @@ class StudentPersistenceAdapter(
             else -> {
                 val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
 
-                pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint )
+                    pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint )
             }
         }
     }
