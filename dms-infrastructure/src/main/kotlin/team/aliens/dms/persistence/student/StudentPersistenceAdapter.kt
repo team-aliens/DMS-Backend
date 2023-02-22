@@ -70,7 +70,7 @@ class StudentPersistenceAdapter(
     ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
+            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
