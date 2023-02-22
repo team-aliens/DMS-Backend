@@ -5,6 +5,7 @@ import team.aliens.dms.domain.manager.spi.ManagerCommandStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
+import team.aliens.dms.domain.remain.spi.RemainQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.user.spi.UserQueryStudentPort
 
@@ -17,5 +18,6 @@ interface StudentPort :
     ManagerQueryStudentPort,
     ManagerCommandStudentPort,
     StudyRoomQueryStudentPort,
-    PointQueryStudentPort {
+    PointQueryStudentPort,
+    RemainQueryStudentPort {
 }
