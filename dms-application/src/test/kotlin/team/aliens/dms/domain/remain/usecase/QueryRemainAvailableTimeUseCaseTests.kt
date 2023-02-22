@@ -92,7 +92,7 @@ class QueryRemainAvailableTimeUseCaseTests {
             .willReturn(successRemainAvailableTimeStub)
 
         // when
-        val isAccessible = successRemainAvailableTimeStub.isAccessible()
+        val isAccessible = successRemainAvailableTimeStub.isAvailable()
 
         // then
         assertThat(isAccessible).isTrue
@@ -115,7 +115,7 @@ class QueryRemainAvailableTimeUseCaseTests {
             .willReturn(failureRemainAvailableTimeStub)
 
         // when
-        val isAccessible = failureRemainAvailableTimeStub.isAccessible()
+        val isAccessible = failureRemainAvailableTimeStub.isAvailable()
 
         // then
         assertThat(isAccessible).isFalse
