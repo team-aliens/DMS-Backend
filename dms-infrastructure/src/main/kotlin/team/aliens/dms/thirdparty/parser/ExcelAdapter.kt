@@ -87,7 +87,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         val attributes = listOf("날짜", "학생 이름", "학번", "항목", "상/벌점", "부여 점수")
 
-        val historyAttributesList: List<List<String>> = pointHistories.map {
+        val historyDatasList: List<List<String>> = pointHistories.map {
             listOf(
                 it.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")),
                 it.studentName,
@@ -100,7 +100,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         return createExcelSheet(
             attributes = attributes,
-            datasList = historyAttributesList
+            datasList = historyDatasList
         )
     }
 
