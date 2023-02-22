@@ -15,6 +15,20 @@ class PointOptionPersistenceAdapter(
     private val pointOptionMapper: PointOptionMapper,
     private val pointOptionRepository: PointOptionJpaRepository
 ) : PointOptionPort {
+    override fun existByNameAndSchoolId(name: String, schoolId: UUID) =
+        pointOptionRepository.existsByNameAndSchoolId(name, schoolId)
+
+    override fun savePointOption(pointOption: PointOption): PointOption {
+        return pointOptionMapper.toDomain(
+            pointOptionRepository.save(pointOptionMapper.toEntity(pointOption))
+        )!!
+    }
+
+    override fun deletePointOption(pointOption: PointOption) {
+        pointOptionRepository.delete(
+            pointOptionMapper.toEntity(pointOption)
+        )
+    }
 
     override fun queryPointOptionById(pointOptionId: UUID) = pointOptionMapper.toDomain(
         pointOptionRepository.findByIdOrNull(pointOptionId)
