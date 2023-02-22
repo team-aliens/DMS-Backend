@@ -95,7 +95,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.POST, "/points/history").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.GET, "/points/history/excel").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history/file").hasAuthority(MANAGER.name)
 
             // /templates
             .antMatchers(HttpMethod.GET, "/templates").permitAll()
