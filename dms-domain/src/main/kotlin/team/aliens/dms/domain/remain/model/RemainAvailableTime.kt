@@ -11,13 +11,13 @@ data class RemainAvailableTime(
 
     val id: UUID,
 
-    val startTime: LocalTime,
-
     val startDayOfWeek: DayOfWeek,
 
-    val endTime: LocalTime,
+    val startTime: LocalTime,
 
-    val endDayOfWeek: DayOfWeek
+    val endDayOfWeek: DayOfWeek,
+
+    val endTime: LocalTime
 
 ) {
 
