@@ -7,7 +7,8 @@ enum class PointHistoryErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    POINT_HISTORY_NOT_FOUND(404, "Point History Not Found")
+    POINT_HISTORY_NOT_FOUND(404, "Point History Not Found"),
+    POINT_HISTORY_CAN_NOT_CANCEL(400, "Point History Can Not Cancel")
     ;
 
     override fun status(): Int = status

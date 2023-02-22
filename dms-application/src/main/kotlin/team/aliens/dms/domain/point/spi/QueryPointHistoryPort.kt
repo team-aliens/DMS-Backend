@@ -10,6 +10,8 @@ import java.util.UUID
 
 interface QueryPointHistoryPort {
 
+    fun queryPointHistoryById(pointHistoryId: UUID): PointHistory?
+
     fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
         studentName: String
