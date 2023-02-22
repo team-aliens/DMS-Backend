@@ -3,7 +3,7 @@ package team.aliens.dms.domain.remain.dto
 import java.util.UUID
 
 data class QueryRemainOptionsResponse(
-    val selectedOption: String?,
+    val appliedRemainOption: String?,
     val remainOptions: List<RemainOptionElement>
 ) {
 
