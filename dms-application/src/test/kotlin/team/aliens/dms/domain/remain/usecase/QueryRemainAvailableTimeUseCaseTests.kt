@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.remain.usecase
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -11,7 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeCanNotAccessException
 import team.aliens.dms.domain.remain.model.RemainAvailableTime
-import team.aliens.dms.domain.remain.service.CheckAccessibleRemainAvailableTime
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
@@ -33,9 +33,6 @@ class QueryRemainAvailableTimeUseCaseTests {
     @MockBean
     private lateinit var queryRemainAvailableTimePort: QueryRemainAvailableTimePort
 
-    @MockBean
-    private lateinit var checkAccessibleRemainAvailableTime: CheckAccessibleRemainAvailableTime
-
     private lateinit var queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase
 
     @BeforeEach
@@ -43,8 +40,7 @@ class QueryRemainAvailableTimeUseCaseTests {
         queryRemainAvailableTimeUseCase = QueryRemainAvailableTimeUseCase(
             securityPort,
             queryUserPort,
-            queryRemainAvailableTimePort,
-            checkAccessibleRemainAvailableTime
+            queryRemainAvailableTimePort
         )
     }
 
@@ -67,9 +63,9 @@ class QueryRemainAvailableTimeUseCaseTests {
     private val successRemainAvailableTimeStub by lazy {
         RemainAvailableTime(
             id = schoolId,
-            startDayOfWeek = DayOfWeek.MONDAY,
+            startDayOfWeek = DayOfWeek.WEDNESDAY,
             startTime = LocalTime.of(0,0),
-            endDayOfWeek = DayOfWeek.SUNDAY,
+            endDayOfWeek = DayOfWeek.FRIDAY,
             endTime = LocalTime.of(23, 59)
         )
     }
@@ -77,9 +73,9 @@ class QueryRemainAvailableTimeUseCaseTests {
     private val failureRemainAvailableTimeStub by lazy {
         RemainAvailableTime(
             id = schoolId,
-            startDayOfWeek = DayOfWeek.THURSDAY,
-            startTime = LocalTime.of(0,59),
-            endDayOfWeek = DayOfWeek.FRIDAY,
+            startDayOfWeek = DayOfWeek.MONDAY,
+            startTime = LocalTime.of(0,0),
+            endDayOfWeek = DayOfWeek.MONDAY,
             endTime = LocalTime.of(23, 59)
         )
     }
@@ -96,10 +92,12 @@ class QueryRemainAvailableTimeUseCaseTests {
         given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
             .willReturn(successRemainAvailableTimeStub)
 
-        given(checkAccessibleRemainAvailableTime.execute(successRemainAvailableTimeStub))
-            .willReturn(true)
+        // when
+        val isAccessible = successRemainAvailableTimeStub.isAccessible()
 
-        // when & then
+        // then
+        assertThat(isAccessible).isTrue
+
         assertDoesNotThrow {
             queryRemainAvailableTimeUseCase.execute()
         }
@@ -117,13 +115,11 @@ class QueryRemainAvailableTimeUseCaseTests {
         given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
             .willReturn(failureRemainAvailableTimeStub)
 
-        given(checkAccessibleRemainAvailableTime.execute(failureRemainAvailableTimeStub))
-            .willReturn(false)
+        // when
+        val isAccessible = failureRemainAvailableTimeStub.isAccessible()
 
-        // when & then
-        assertThrows<RemainAvailableTimeCanNotAccessException> {
-            queryRemainAvailableTimeUseCase.execute()
-        }
+        // then
+        assertThat(isAccessible).isFalse
     }
 
     @Test

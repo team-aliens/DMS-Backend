@@ -2,6 +2,7 @@ package team.aliens.dms.domain.remain.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
 
@@ -18,4 +19,21 @@ data class RemainAvailableTime(
 
     val endDayOfWeek: DayOfWeek
 
-)
+) {
+
+    fun isAccessible(): Boolean {
+        val currentDateTime = LocalDateTime.now()
+        val dayOfWeek = currentDateTime.dayOfWeek.value
+        val now = currentDateTime.toLocalTime()
+
+        if (dayOfWeek < startDayOfWeek.value || dayOfWeek > endDayOfWeek.value) {
+            return false
+        }
+
+        if (now < startTime || now > endTime) {
+            return false
+        }
+
+        return true
+    }
+}
