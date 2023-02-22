@@ -9,7 +9,6 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse.RemainOptionElement
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
@@ -65,14 +64,6 @@ class QueryRemainOptionsUseCaseTests {
         )
     }
 
-    private val remainOptionElementStub by lazy {
-        RemainOptionElement(
-            id = remainOptionId,
-            title = "title",
-            description = "description"
-        )
-    }
-
     private val remainOption by lazy {
         RemainOption(
             id = remainOptionId,
@@ -99,7 +90,7 @@ class QueryRemainOptionsUseCaseTests {
         given(queryUserPort.queryUserById(userId))
             .willReturn(userStub)
 
-        given(queryRemainOptionPort.queryAllRemainOptionBySchoolId(schoolId))
+        given(queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId))
             .willReturn(listOf(remainOption))
 
         given(queryRemainStatusPort.queryRemainStatusById(userId))
