@@ -16,10 +16,12 @@ import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
+import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -30,6 +32,7 @@ class PointWebAdapter(
     private val queryPointHistoryUseCase: QueryPointHistoryUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val queryPointOptionsUseCase: QueryPointOptionsUseCase
 ) {
 
     @GetMapping
@@ -57,5 +60,10 @@ class PointWebAdapter(
             type = type!!,
             pageData = PageData(pageData.page, pageData.size)
         )
+    }
+
+    @GetMapping("/options")
+    fun getAllPointOptions(@RequestParam(required = false) keyword: String?): QueryPointOptionsResponse {
+        return queryPointOptionsUseCase.execute(keyword)
     }
 }
