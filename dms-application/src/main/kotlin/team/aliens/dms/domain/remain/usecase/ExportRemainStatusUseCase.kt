@@ -31,7 +31,7 @@ class ExportRemainStatusUseCase(
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
 
-        val studentList = queryStudentPort.queryStudentBySchoolId(manager.schoolId)
+        val studentList = queryStudentPort.queryStudentsBySchoolId(manager.schoolId)
 
         val remainStatusMap = queryRemainStatusPort.queryByStudentIdIn(
             studentIds = studentList.map { it.id }
