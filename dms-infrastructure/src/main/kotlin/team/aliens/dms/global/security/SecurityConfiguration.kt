@@ -97,6 +97,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.DELETE, "/points/options/{point-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.POST, "/points/history").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history/file").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/points/history/{point-history-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/options").hasAuthority(MANAGER.name)
 

@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.point
 
+import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -15,23 +17,27 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
-import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
+import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
+import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
+import team.aliens.dms.domain.point.usecase.CreatePointOptionUseCase
+import team.aliens.dms.domain.point.usecase.ExportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
-import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
-import team.aliens.dms.domain.point.usecase.CreatePointOptionUseCase
-import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
-import java.util.UUID
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
+import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
+import java.net.URLEncoder
+import java.time.LocalDateTime
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -43,6 +49,7 @@ class PointWebAdapter(
     private val createPointOptionUseCase: CreatePointOptionUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
     private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
     private val queryPointOptionsUseCase: QueryPointOptionsUseCase
@@ -93,6 +100,20 @@ class PointWebAdapter(
         )
     }
 
+    @GetMapping("/history/file")
+    fun exportAllPointHistory(
+        httpResponse: HttpServletResponse,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
+    ): ByteArray {
+        val response = exportAllPointHistoryUseCase.execute(start, end)
+        httpResponse.setHeader(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
+        )
+        return response.file
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/history/{point-history-id}")
     fun cancelGrantedPoint(@PathVariable("point-history-id") pointHistoryId: UUID) {
@@ -104,3 +125,4 @@ class PointWebAdapter(
         return queryPointOptionsUseCase.execute(keyword)
     }
 }
+

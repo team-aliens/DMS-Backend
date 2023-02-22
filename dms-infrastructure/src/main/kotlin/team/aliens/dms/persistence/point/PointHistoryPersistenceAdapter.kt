@@ -14,6 +14,7 @@ import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
@@ -130,6 +131,25 @@ class PointHistoryPersistenceAdapter(
                     pointType = it.pointType,
                     pointScore = it.pointScore
                 )
+            }
+    }
+
+    override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
+        schoolId: UUID,
+        startAt: LocalDateTime?,
+        endAt: LocalDateTime?
+    ): List<PointHistory> {
+        return queryFactory
+            .selectFrom(pointHistoryJpaEntity)
+            .where(
+                pointHistoryJpaEntity.school.id.eq(schoolId),
+                startAt?.let { pointHistoryJpaEntity.createdAt.goe(it) },
+                endAt?.let { pointHistoryJpaEntity.createdAt.lt(it) }
+            )
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetch()
+            .mapNotNull {
+                pointHistoryMapper.toDomain(it)
             }
     }
 
