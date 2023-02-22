@@ -77,10 +77,6 @@ class PointWebAdapter(
             HttpHeaders.CONTENT_DISPOSITION,
             "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
         )
-        httpResponse.setHeader(
-            HttpHeaders.CONTENT_TYPE,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
         return response.file
     }
 }
