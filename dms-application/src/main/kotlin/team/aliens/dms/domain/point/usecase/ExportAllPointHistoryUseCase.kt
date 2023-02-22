@@ -29,29 +29,30 @@ class ExportAllPointHistoryUseCase(
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
 
+        val endOrNow = end ?: LocalDateTime.now()
+
         val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
             schoolId = manager.schoolId,
             startAt = start,
-            endAt = end ?: LocalDateTime.now()
+            endAt = endOrNow
         )
 
         return ExportAllPointHistoryResponse(
             file = writeFilePort.writePointHistoryExcelFile(pointHistories),
-            fileName = getFileName(start, end, school, pointHistories)
+            fileName = getFileName(start, endOrNow, school, pointHistories)
         )
     }
 
     private fun getFileName(
         start: LocalDateTime?,
-        end: LocalDateTime?,
+        end: LocalDateTime,
         school: School,
         pointHistories: List<PointHistory>
     ): String {
         val startDateString = (start ?: pointHistories.last().createdAt)
             .format(File.FILE_DATE_FORMAT)
 
-        val endDateString = (end ?: LocalDateTime.now())
-            .format(File.FILE_DATE_FORMAT)
+        val endDateString = end.format(File.FILE_DATE_FORMAT)
 
         return "${school.name.replace(" ","")}_상벌점_부여내역_${startDateString}_${endDateString}"
     }
