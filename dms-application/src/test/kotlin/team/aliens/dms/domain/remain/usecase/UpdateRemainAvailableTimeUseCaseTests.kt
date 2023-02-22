@@ -10,9 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
-import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.spi.CommandRemainAvailableTimePort
-import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -33,9 +31,6 @@ class UpdateRemainAvailableTimeUseCaseTests {
     @MockBean
     private lateinit var commandRemainAvailableTimePort: CommandRemainAvailableTimePort
 
-    @MockBean
-    private lateinit var queryRemainAvailableTimePort: QueryRemainAvailableTimePort
-
     private lateinit var updateRemainAvailableTimeUseCase: UpdateRemainAvailableTimeUseCase
 
     @BeforeEach
@@ -43,8 +38,7 @@ class UpdateRemainAvailableTimeUseCaseTests {
         updateRemainAvailableTimeUseCase = UpdateRemainAvailableTimeUseCase(
                 securityPort,
                 queryUserPort,
-                commandRemainAvailableTimePort,
-                queryRemainAvailableTimePort
+                commandRemainAvailableTimePort
             )
     }
 
@@ -61,16 +55,6 @@ class UpdateRemainAvailableTimeUseCaseTests {
             authority = Authority.MANAGER,
             createdAt = null,
             deletedAt = null
-        )
-    }
-
-    private val remainAvailableTimeStub by lazy {
-        RemainAvailableTime(
-            id = schoolId,
-            startDayOfWeek = requestStub.startDayOfWeek,
-            startTime = requestStub.startTime,
-            endDayOfWeek = requestStub.endDayOfWeek,
-            endTime = requestStub.endTime
         )
     }
 
@@ -91,27 +75,6 @@ class UpdateRemainAvailableTimeUseCaseTests {
 
         given(queryUserPort.queryUserById(userId))
             .willReturn(userStub)
-
-        given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
-            .willReturn(remainAvailableTimeStub)
-
-        // when & then
-        assertDoesNotThrow {
-            updateRemainAvailableTimeUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `잔류 신청 시간 변경 성공`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
-            .willReturn(null)
 
         // when & then
         assertDoesNotThrow {
