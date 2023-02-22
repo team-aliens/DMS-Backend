@@ -23,8 +23,8 @@ import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
+import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
@@ -33,8 +33,8 @@ import team.aliens.dms.domain.point.usecase.ExportAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
-import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
+import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
 import java.net.URLEncoder
 import java.time.LocalDateTime
