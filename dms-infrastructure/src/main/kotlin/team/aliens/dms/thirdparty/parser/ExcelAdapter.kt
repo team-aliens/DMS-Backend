@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
 import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.domain.file.spi.ParseFilePort
+import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.VerifiedStudent
@@ -23,7 +24,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 @Component
-class ExcelAdapter : ParseFilePort {
+class ExcelAdapter : ParseFilePort, WriteFilePort {
 
     override fun transferToVerifiedStudent(file: File): List<VerifiedStudent> {
         val workbook = transferToExcel(file)

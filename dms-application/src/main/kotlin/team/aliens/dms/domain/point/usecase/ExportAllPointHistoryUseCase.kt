@@ -2,7 +2,7 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.ParseFilePort
+import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
@@ -16,7 +16,7 @@ class ExportAllPointHistoryUseCase(
     private val securityPort: PointSecurityPort,
     private val queryUserPort: PointQueryUserPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val parseFilePort: ParseFilePort
+    private val writeFilePort: WriteFilePort
 ) {
 
     fun execute(
@@ -34,7 +34,7 @@ class ExportAllPointHistoryUseCase(
         )
 
         return ExportAllPointHistoryResponse(
-            file = parseFilePort.writePointHistoryExcelFile(pointHistories),
+            file = writeFilePort.writePointHistoryExcelFile(pointHistories),
             fileName = getFileName(start, end, pointHistories)
         )
     }
