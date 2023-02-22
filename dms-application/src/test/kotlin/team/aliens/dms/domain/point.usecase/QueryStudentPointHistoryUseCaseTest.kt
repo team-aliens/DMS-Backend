@@ -158,7 +158,7 @@ class QueryStudentPointHistoryUseCaseTest {
 
     @Test
     fun `다른 학교 학생인경우`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(currentUserId) } returns managerStub
@@ -174,7 +174,7 @@ class QueryStudentPointHistoryUseCaseTest {
             )
         } returns listOf(pointHistoryStub, pointHistoryStub2)
 
-        //when & then
+        // when & then
         assertThrows<SchoolMismatchException> {
             queryStudentPointHistoryUseCase.execute(studentId, pageStub)
         }
