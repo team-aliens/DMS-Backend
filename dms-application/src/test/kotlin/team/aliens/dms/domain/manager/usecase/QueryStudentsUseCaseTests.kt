@@ -14,7 +14,7 @@ import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.manager.dto.PointFilterType
-import team.aliens.dms.domain.manager.dto.StudentPointFilter
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
@@ -75,8 +75,8 @@ class QueryStudentsUseCaseTests {
         )
     }
 
-    private val studentPointFilterStub by lazy {
-        StudentPointFilter(
+    private val pointFilterStub by lazy {
+        PointFilter(
             filterType = filterType,
             minPoint = 0,
             maxPoint = 10
@@ -93,7 +93,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(managerStub)
 
         given(queryStudentPort.queryStudentsByNameAndSortAndFilter(
-            name, sort, managerStub.schoolId, studentPointFilterStub
+            name, sort, managerStub.schoolId, pointFilterStub
         )).willReturn(listOf(studentStub))
 
         // when

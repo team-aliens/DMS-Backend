@@ -2,7 +2,7 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.PointFilterType
-import team.aliens.dms.domain.manager.dto.StudentPointFilter
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
@@ -23,7 +23,7 @@ class QueryStudentsUseCase(
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
 
-        val studentPointFilter = StudentPointFilter.init(
+        val pointFilter = PointFilter(
             filterType = filterType,
             minPoint = minPoint,
             maxPoint = maxPoint
@@ -33,7 +33,7 @@ class QueryStudentsUseCase(
             name = name,
             sort = sort,
             schoolId = manager.schoolId,
-            studentPointFilter
+            pointFilter = pointFilter
         ).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,

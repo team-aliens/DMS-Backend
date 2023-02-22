@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilterType
-import team.aliens.dms.domain.manager.dto.StudentPointFilter
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
@@ -66,7 +66,7 @@ class StudentPersistenceAdapter(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: StudentPointFilter?
+        pointFilter: PointFilter?
     ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -93,7 +93,7 @@ class StudentPersistenceAdapter(
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
 
-    private fun pointTotalBetween(pointFilter: StudentPointFilter?): BooleanExpression? {
+    private fun pointTotalBetween(pointFilter: PointFilter?): BooleanExpression? {
         if(pointFilter == null) {
             return null
         }
