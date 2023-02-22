@@ -46,8 +46,8 @@ class PointWebAdapter(
     private val createPointOptionUseCase: CreatePointOptionUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
-    private val removePointOptionUseCase: RemovePointOptionUseCase
     private val queryPointOptionsUseCase: QueryPointOptionsUseCase
 ) {
 

@@ -8,6 +8,4 @@ interface QueryPointOptionPort {
 
     fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<PointOption>
     fun existByNameAndSchoolId(name: String, schoolId: UUID): Boolean
-
-    fun queryPointOptionById(pointOptionId: UUID): PointOption?
 }
