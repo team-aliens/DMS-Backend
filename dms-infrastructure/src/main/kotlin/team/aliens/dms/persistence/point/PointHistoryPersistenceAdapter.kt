@@ -1,10 +1,12 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
@@ -12,6 +14,7 @@ import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
@@ -20,6 +23,22 @@ class PointHistoryPersistenceAdapter(
     private val pointHistoryRepository: PointHistoryJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : PointHistoryPort {
+
+    override fun savePointHistory(pointHistory: PointHistory) = pointHistoryMapper.toDomain(
+        pointHistoryRepository.save(
+            pointHistoryMapper.toEntity(pointHistory)
+        )
+    )!!
+
+    override fun deletePointHistory(pointHistory: PointHistory) {
+        pointHistoryRepository.delete(
+            pointHistoryMapper.toEntity(pointHistory)
+        )
+    }
+
+    override fun queryPointHistoryById(pointHistoryId: UUID) = pointHistoryMapper.toDomain(
+        pointHistoryRepository.findByIdOrNull(pointHistoryId)
+    )
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,
@@ -35,7 +54,7 @@ class PointHistoryPersistenceAdapter(
             .fetchFirst()
 
         val bonusTotal = lastHistory?.bonusTotal ?: 0
-        val minusTotal = lastHistory?.bonusTotal ?: 0
+        val minusTotal = lastHistory?.minusTotal ?: 0
 
         return Pair(bonusTotal, minusTotal)
     }
@@ -44,8 +63,9 @@ class PointHistoryPersistenceAdapter(
         gcn: String,
         studentName: String,
         type: PointType?,
-        isCancel: Boolean?
-    ): List<QueryPointHistoryResponse.Point> {
+        isCancel: Boolean?,
+        pageData: PageData
+    ): List<PointHistoryDto> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
@@ -62,10 +82,12 @@ class PointHistoryPersistenceAdapter(
                 type?.let { pointHistoryJpaEntity.pointType.eq(it) },
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )
+            .offset(pageData.offset)
+            .limit(pageData.size)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
-                QueryPointHistoryResponse.Point(
+                PointHistoryDto(
                     date = it.date.toLocalDate(),
                     type = it.pointType,
                     name = it.pointName,
@@ -113,5 +135,32 @@ class PointHistoryPersistenceAdapter(
                     pointScore = it.pointScore
                 )
             }
+    }
+
+    override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
+        schoolId: UUID,
+        startAt: LocalDateTime?,
+        endAt: LocalDateTime?
+    ): List<PointHistory> {
+        return queryFactory
+            .selectFrom(pointHistoryJpaEntity)
+            .where(
+                pointHistoryJpaEntity.school.id.eq(schoolId),
+                startAt?.let { pointHistoryJpaEntity.createdAt.goe(it) },
+                endAt?.let { pointHistoryJpaEntity.createdAt.lt(it) }
+            )
+            .orderBy(pointHistoryJpaEntity.createdAt.desc())
+            .fetch()
+            .mapNotNull {
+                pointHistoryMapper.toDomain(it)
+            }
+    }
+
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
+        pointHistoryRepository.saveAll(
+            pointHistories.map {
+                pointHistoryMapper.toEntity(it)
+            }
+        )
     }
 }

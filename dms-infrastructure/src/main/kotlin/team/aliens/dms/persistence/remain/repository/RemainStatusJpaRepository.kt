@@ -2,9 +2,9 @@ package team.aliens.dms.persistence.remain.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import team.aliens.dms.persistence.remain.entity.RemainOptionJpaEntity
+import team.aliens.dms.persistence.remain.entity.RemainStatusJpaEntity
 import java.util.UUID
 
 @Repository
-interface RemainRecordJpaRepository : CrudRepository<RemainOptionJpaEntity, UUID> {
+interface RemainStatusJpaRepository : CrudRepository<RemainStatusJpaEntity, UUID> {
 }

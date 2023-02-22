@@ -93,7 +93,14 @@ class SecurityConfiguration(
 
             // /points
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.POST, "/points/options").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/points/options/{point-option-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/points/history").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history/students/{student-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history/file").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.PUT, "/points/history/{point-history-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/options").hasAuthority(MANAGER.name)
 
             // /templates
             .antMatchers(HttpMethod.GET, "/templates").permitAll()

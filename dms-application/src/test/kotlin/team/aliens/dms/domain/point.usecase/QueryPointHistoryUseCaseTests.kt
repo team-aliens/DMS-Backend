@@ -9,12 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -59,6 +60,13 @@ class QueryPointHistoryUseCaseTests {
         )
     }
 
+    private val pageStub by lazy {
+        PageData(
+            page = 0,
+            size = 10
+        )
+    }
+
     private val gcn = studentStub.gcn
     private val name = studentStub.name
 
@@ -66,13 +74,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(BONUS)`() {
         // given
         val pointStubs = listOf(
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name2",
@@ -86,14 +94,21 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.BONUS, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = PointType.BONUS,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 0))
 
         // when
-        val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS)
+        val response = queryPointHistoryUseCase.execute(PointRequestType.BONUS, pageStub)
 
         println(response)
 
@@ -108,13 +123,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(MINUS)`() {
         // given
         val pointStubs = listOf(
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name",
                 score = 5
             ),
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -128,14 +143,21 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, PointType.MINUS, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = PointType.MINUS,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(15, 10))
 
         // when
-        val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS)
+        val response = queryPointHistoryUseCase.execute(PointRequestType.MINUS, pageStub)
 
         // then
         assertAll(
@@ -148,13 +170,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(ALL)`() {
         // given
         val pointStubs = listOf(
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
-            QueryPointHistoryResponse.Point(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -168,14 +190,21 @@ class QueryPointHistoryUseCaseTests {
         given(queryStudentPort.queryStudentById(currentStudentId))
             .willReturn(studentStub)
 
-        given(queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(gcn, name, null, false))
-            .willReturn(pointStubs)
+        given(
+            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+                gcn = gcn,
+                studentName = name,
+                type = null,
+                isCancel = false,
+                pageData = pageStub
+            )
+        ).willReturn(pointStubs)
 
         given(queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name))
             .willReturn(Pair(10, 5))
 
         // when
-        val response = queryPointHistoryUseCase.execute(PointRequestType.ALL)
+        val response = queryPointHistoryUseCase.execute(PointRequestType.ALL, pageStub)
 
         // then
         assertAll(
@@ -195,7 +224,7 @@ class QueryPointHistoryUseCaseTests {
 
         // when & then
         assertThrows<StudentNotFoundException> {
-            queryPointHistoryUseCase.execute(PointRequestType.ALL)
+            queryPointHistoryUseCase.execute(PointRequestType.ALL, pageStub)
         }
     }
 }
