@@ -18,11 +18,13 @@ import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
 import team.aliens.dms.domain.point.usecase.GrantPointUseCase
 import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
+import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -35,6 +37,7 @@ class PointWebAdapter(
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
+    private val queryPointOptionsUseCase: QueryPointOptionsUseCase
 ) {
 
     @GetMapping
@@ -68,5 +71,10 @@ class PointWebAdapter(
     @PutMapping("/history/{point-history-id}")
     fun cancelGrantedPoint(@PathVariable("point-history-id") pointHistoryId: UUID) {
         cancelGrantedPointUseCase.execute(pointHistoryId)
+    }
+
+    @GetMapping("/options")
+    fun getAllPointOptions(@RequestParam(required = false) keyword: String?): QueryPointOptionsResponse {
+        return queryPointOptionsUseCase.execute(keyword)
     }
 }
