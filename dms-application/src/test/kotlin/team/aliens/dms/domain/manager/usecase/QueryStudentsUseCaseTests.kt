@@ -104,7 +104,24 @@ class QueryStudentsUseCaseTests {
 
     @Test
     fun `필터 사용시 조건 점수 입력하지 않은 경우`() {
-        //given
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        // when & then
+        assertThrows<InvalidPointFilterRangeException> {
+            queryStudentsUseCase.execute(
+                name, sort, filterType, null, null
+            )
+        }
+    }
+
+    @Test
+    fun `상벌점 필터 범위가 잘못 된 경우`() {
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -112,21 +129,11 @@ class QueryStudentsUseCaseTests {
             .willReturn(managerStub)
 
         //when & then
-        assertAll(
-            {
-                assertThrows<InvalidPointFilterRangeException> {
-                    queryStudentsUseCase.execute(
-                        name, sort, filterType, null, null
-                    )
-                }
-                assertThrows<InvalidPointFilterRangeException> {
-                    queryStudentsUseCase.execute(
-                        name, sort, filterType, 20, 10
-                    )
-                }
-            }
-        )
-
+        assertThrows<InvalidPointFilterRangeException> {
+            queryStudentsUseCase.execute(
+                name, sort, filterType, 20, 10
+            )
+        }
     }
 
     @Test
