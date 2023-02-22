@@ -15,8 +15,8 @@ import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "tbl_remain_record")
-class RemainRecordJpaEntity(
+@Table(name = "tbl_remain_status")
+class RemainStatusJpaEntity(
 
     @Id
     @Column(name = "student_id")
