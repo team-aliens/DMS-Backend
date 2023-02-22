@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
@@ -15,7 +16,7 @@ class QueryPointHistoryUseCase(
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
-    fun execute(type: PointRequestType): QueryPointHistoryResponse {
+    fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
         val currentStudentId = securityPort.getCurrentUserId()
         val currentStudent = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
 
@@ -28,7 +29,8 @@ class QueryPointHistoryUseCase(
                 gcn = gcn,
                 studentName = name,
                 type = pointType,
-                isCancel = false
+                isCancel = false,
+                pageData = pageData
             )
 
         val (bonusTotal, minusTotal) =
