@@ -32,7 +32,7 @@ class ExportAllPointHistoryUseCase(
         val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
             schoolId = manager.schoolId,
             startAt = start,
-            endAt = end
+            endAt = end ?: LocalDateTime.now()
         )
 
         return ExportAllPointHistoryResponse(
