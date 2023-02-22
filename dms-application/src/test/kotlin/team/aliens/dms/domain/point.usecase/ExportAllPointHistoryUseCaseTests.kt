@@ -10,13 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.ParseFilePort
+import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.point.spi.PointQuerySchoolPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
@@ -29,10 +31,11 @@ class ExportAllPointHistoryUseCaseTests {
     private val securityPort: PointSecurityPort = mockk(relaxed = true)
     private val queryUserPort: PointQueryUserPort = mockk(relaxed = true)
     private val queryPointHistoryPort: QueryPointHistoryPort = mockk(relaxed = true)
-    private val parseFilePort: ParseFilePort = mockk(relaxed = true)
+    private val querySchoolPort: PointQuerySchoolPort = mockk(relaxed = true)
+    private val writeFilePort: WriteFilePort = mockk(relaxed = true)
 
     private val exportAllPointHistoryUseCase = ExportAllPointHistoryUseCase(
-        securityPort, queryUserPort, queryPointHistoryPort, parseFilePort
+        securityPort, queryUserPort, queryPointHistoryPort, querySchoolPort, writeFilePort
     )
 
     private val managerId = UUID.randomUUID()
@@ -48,6 +51,19 @@ class ExportAllPointHistoryUseCaseTests {
             authority = Authority.MANAGER,
             createdAt = null,
             deletedAt = null
+        )
+    }
+
+    private val schoolStub by lazy {
+        School(
+            id = schoolId,
+            name = "대덕소프트웨어마이스터고등학교",
+            code = "test code",
+            question = "test question",
+            answer = "test answer",
+            address = "test address",
+            contractStartedAt = LocalDate.now(),
+            contractEndedAt = LocalDate.now(),
         )
     }
 
@@ -91,7 +107,7 @@ class ExportAllPointHistoryUseCaseTests {
         // given
         val responseStub = ExportAllPointHistoryResponse(
             file = fileStub,
-            fileName = "상벌점_부여내역_20230220_20230315"
+            fileName = "대덕소프트웨어마이스터고등학교_상벌점_부여내역_20230220_20230315"
         )
 
         every { securityPort.getCurrentUserId() } returns managerId
@@ -108,7 +124,9 @@ class ExportAllPointHistoryUseCaseTests {
 
         every { queryUserPort.queryUserById(managerId) } returns userStub
 
-        every { parseFilePort.writePointHistoryExcelFile(histories) } returns fileStub
+        every { querySchoolPort.querySchoolById(schoolId) } returns schoolStub
+
+        every { writeFilePort.writePointHistoryExcelFile(histories) } returns fileStub
 
         // when
         val response = exportAllPointHistoryUseCase.execute(start, end)
@@ -125,7 +143,7 @@ class ExportAllPointHistoryUseCaseTests {
         // given
         val responseStub = ExportAllPointHistoryResponse(
             file = fileStub,
-            fileName = "상벌점_부여내역" +
+            fileName = "대덕소프트웨어마이스터고등학교_상벌점_부여내역" +
                     "_${oldestHistoryCreatedAt.format(File.FILE_DATE_FORMAT)}" +
                     "_${LocalDate.now().format(File.FILE_DATE_FORMAT)}"
         )
@@ -138,13 +156,15 @@ class ExportAllPointHistoryUseCaseTests {
             queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
                 schoolId = schoolId,
                 startAt = null,
-                endAt = null
+                endAt = any()
             )
         } returns histories
 
         every { queryUserPort.queryUserById(managerId) } returns userStub
 
-        every { parseFilePort.writePointHistoryExcelFile(histories) } returns fileStub
+        every { querySchoolPort.querySchoolById(schoolId) } returns schoolStub
+
+        every { writeFilePort.writePointHistoryExcelFile(histories) } returns fileStub
 
         // when
         val response = exportAllPointHistoryUseCase.execute(null, null)
