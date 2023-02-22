@@ -11,17 +11,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -81,7 +80,7 @@ class QueryStudentPointHistoryUseCaseTest {
     }
 
     private val pointHistoryStub by lazy {
-        PointHistoryVO(
+        PointHistoryDto(
             name = "호실 청결상태 우수",
             type = PointType.BONUS,
             score = 10,
@@ -90,7 +89,7 @@ class QueryStudentPointHistoryUseCaseTest {
     }
 
     private val pointHistoryStub2 by lazy {
-        PointHistoryVO(
+        PointHistoryDto(
             name = "타호실",
             type = PointType.MINUS,
             score = 10,
@@ -107,7 +106,7 @@ class QueryStudentPointHistoryUseCaseTest {
 
     @Test
     fun `학생 상벌점 내역 조회 성공`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(currentUserId) } returns managerStub
@@ -123,10 +122,10 @@ class QueryStudentPointHistoryUseCaseTest {
             )
         } returns listOf(pointHistoryStub, pointHistoryStub2)
 
-        //when
+        // when
         val result = queryStudentPointHistoryUseCase.execute(studentId, pageStub).pointHistories
 
-        //then
+        // then
         assertAll(
             { assertEquals(result.size, 2) },
             { assertEquals(result[0], pointHistoryStub) }
@@ -135,7 +134,7 @@ class QueryStudentPointHistoryUseCaseTest {
 
     @Test
     fun `학생 미존재`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(currentUserId) } returns managerStub
@@ -151,7 +150,7 @@ class QueryStudentPointHistoryUseCaseTest {
             )
         } returns listOf(pointHistoryStub, pointHistoryStub2)
 
-        //when & then
+        // when & then
         assertThrows<StudentNotFoundException> {
             queryStudentPointHistoryUseCase.execute(studentId, pageStub)
         }

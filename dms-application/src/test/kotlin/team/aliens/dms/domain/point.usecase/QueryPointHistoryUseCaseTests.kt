@@ -15,7 +15,7 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -74,13 +74,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(BONUS)`() {
         // given
         val pointStubs = listOf(
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name2",
@@ -123,13 +123,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(MINUS)`() {
         // given
         val pointStubs = listOf(
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name",
                 score = 5
             ),
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -170,13 +170,13 @@ class QueryPointHistoryUseCaseTests {
     fun `상벌점 내역 조회 성공(ALL)`() {
         // given
         val pointStubs = listOf(
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
-            PointHistoryVO(
+            PointHistoryDto(
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",

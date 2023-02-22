@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.point.spi
 
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
@@ -23,7 +24,7 @@ interface QueryPointHistoryPort {
         type: PointType? = null,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<PointHistoryVO>
+    ): List<PointHistoryDto>
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
