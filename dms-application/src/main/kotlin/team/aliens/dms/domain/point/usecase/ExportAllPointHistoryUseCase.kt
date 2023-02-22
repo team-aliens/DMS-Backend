@@ -5,9 +5,12 @@ import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.spi.PointQuerySchoolPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
 
@@ -16,6 +19,7 @@ class ExportAllPointHistoryUseCase(
     private val securityPort: PointSecurityPort,
     private val queryUserPort: PointQueryUserPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
+    private val querySchoolPort: PointQuerySchoolPort,
     private val writeFilePort: WriteFilePort
 ) {
 
@@ -23,6 +27,7 @@ class ExportAllPointHistoryUseCase(
 
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
 
         val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
             schoolId = manager.schoolId,
@@ -32,13 +37,14 @@ class ExportAllPointHistoryUseCase(
 
         return ExportAllPointHistoryResponse(
             file = writeFilePort.writePointHistoryExcelFile(pointHistories),
-            fileName = getFileName(start, end, pointHistories)
+            fileName = getFileName(start, end, school, pointHistories)
         )
     }
 
     private fun getFileName(
         start: LocalDateTime?,
         end: LocalDateTime?,
+        school: School,
         pointHistories: List<PointHistory>
     ): String {
         val startDateString = (start ?: pointHistories.last().createdAt)
@@ -47,6 +53,6 @@ class ExportAllPointHistoryUseCase(
         val endDateString = (end ?: LocalDateTime.now())
             .format(File.FILE_DATE_FORMAT)
 
-        return "상벌점_부여내역_${startDateString}_${endDateString}"
+        return "${school.name.replace(" ","")}_상벌점_부여내역_${startDateString}_${endDateString}"
     }
 }
