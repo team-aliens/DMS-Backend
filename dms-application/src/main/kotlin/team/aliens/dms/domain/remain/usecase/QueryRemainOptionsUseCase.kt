@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse.RemainOptionElement
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
-import team.aliens.dms.domain.remain.spi.RemainQueryRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -14,7 +14,7 @@ class QueryRemainOptionsUseCase(
     private val securityPort: RemainSecurityPort,
     private val queryUserPort: RemainQueryUserPort,
     private val queryRemainOptionPort: QueryRemainOptionPort,
-    private val queryRemainStatusPort: RemainQueryRemainStatusPort
+    private val queryRemainStatusPort: QueryRemainStatusPort
 ) {
 
     fun execute(): QueryRemainOptionsResponse {

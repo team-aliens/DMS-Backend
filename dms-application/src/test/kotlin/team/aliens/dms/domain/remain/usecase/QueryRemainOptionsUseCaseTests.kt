@@ -12,7 +12,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
-import team.aliens.dms.domain.remain.spi.RemainQueryRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -33,7 +33,7 @@ class QueryRemainOptionsUseCaseTests {
     private lateinit var queryRemainOptionPort: QueryRemainOptionPort
 
     @MockBean
-    private lateinit var queryRemainStatusPort: RemainQueryRemainStatusPort
+    private lateinit var queryRemainStatusPort: QueryRemainStatusPort
 
     private lateinit var queryRemainOptionsUseCase: QueryRemainOptionsUseCase
 
@@ -64,7 +64,7 @@ class QueryRemainOptionsUseCaseTests {
         )
     }
 
-    private val remainOption by lazy {
+    private val remainOptionStub by lazy {
         RemainOption(
             id = remainOptionId,
             schoolId = schoolId,
@@ -91,7 +91,7 @@ class QueryRemainOptionsUseCaseTests {
             .willReturn(userStub)
 
         given(queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId))
-            .willReturn(listOf(remainOption))
+            .willReturn(listOf(remainOptionStub))
 
         given(queryRemainStatusPort.queryRemainStatusById(userId))
             .willReturn(remainStatusStub)
