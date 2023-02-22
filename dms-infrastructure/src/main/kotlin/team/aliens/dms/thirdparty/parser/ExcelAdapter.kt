@@ -22,6 +22,7 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import team.aliens.dms.thirdparty.parser.exception.ExcelSexMismatchException
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.time.format.DateTimeFormatter
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -87,7 +88,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         val historyAttributesList: List<List<String>> = pointHistories.map {
             listOf(
-                it.createdAt.toString(),
+                it.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")),
                 it.studentName,
                 it.studentGcn,
                 it.pointName,
