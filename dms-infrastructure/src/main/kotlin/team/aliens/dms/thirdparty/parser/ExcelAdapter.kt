@@ -16,6 +16,7 @@ import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
@@ -78,8 +79,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     }
 
     private fun transferToSex(sex: String) = when (sex) {
-        Sex.MALE_KOREAN -> Sex.MALE
-        Sex.FEMALE_KOREAN -> Sex.FEMALE
+        Sex.MALE.korean -> Sex.MALE
+        Sex.FEMALE.korean -> Sex.FEMALE
         else -> throw ExcelSexMismatchException
     }
 
@@ -104,9 +105,29 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         )
     }
 
+    override fun writeRemainStatusExcelFile(studentRemainInfos: List<StudentRemainInfo>): ByteArray {
+
+        val attributes = listOf("학생 이름", "학번", "성별", "호실", "신청 항목")
+
+        val remainInfosList: List<List<String?>> = studentRemainInfos.map {
+            listOf(
+                it.studentName,
+                it.studentGcn,
+                it.studentSex.korean,
+                it.roomNumber.toString(),
+                it.optionName
+            )
+        }
+
+        return createExcelSheet(
+            attributes = attributes,
+            datasList = remainInfosList
+        )
+    }
+
     private fun createExcelSheet(
         attributes: List<String>,
-        datasList: List<List<String>>
+        datasList: List<List<String?>>
     ): ByteArray {
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet()
@@ -127,7 +148,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
     private fun insertDatasAtRow(
         headerRow: XSSFRow,
-        attributes: List<String>,
+        attributes: List<String?>,
         style: XSSFCellStyle
     ) {
         attributes.forEachIndexed { j, text ->
