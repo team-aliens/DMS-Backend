@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.remain
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.remain.dto.RemainStatusInfo
+import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.RemainStatusPort
 import team.aliens.dms.persistence.remain.entity.QRemainOptionJpaEntity.remainOptionJpaEntity
 import team.aliens.dms.persistence.remain.entity.QRemainStatusJpaEntity.remainStatusJpaEntity
@@ -43,6 +44,7 @@ class RemainStatusPersistenceAdapter(
     override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
         remainStatusRepository.deleteByRemainOptionId(remainOptionId)
     }
+
     override fun saveRemainStatus(remainStatus: RemainStatus) = remainStatusMapper.toDomain(
         remainStatusRepository.save(
             remainStatusMapper.toEntity(remainStatus)
