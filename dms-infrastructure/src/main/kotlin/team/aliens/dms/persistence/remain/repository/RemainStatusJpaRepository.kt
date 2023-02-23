@@ -7,4 +7,5 @@ import java.util.UUID
 
 @Repository
 interface RemainStatusJpaRepository : CrudRepository<RemainStatusJpaEntity, UUID> {
+    fun deleteByRemainOptionId(remainOptionId: UUID)
 }
