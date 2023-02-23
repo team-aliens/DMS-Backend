@@ -10,6 +10,7 @@ import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
 import java.util.UUID
@@ -36,6 +37,10 @@ class ApplyRemainUseCase(
         }
 
         val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
+
+        if (remainOption.schoolId != currentUser.schoolId) {
+            throw SchoolMismatchException
+        }
 
         commandRemainStatusPort.saveRemainStatus(
             RemainStatus(

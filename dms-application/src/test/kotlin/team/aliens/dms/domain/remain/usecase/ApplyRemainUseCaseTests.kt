@@ -17,6 +17,7 @@ import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.util.UUID
@@ -55,7 +56,7 @@ class ApplyRemainUseCaseTests {
     private val remainOptionStub by lazy {
         RemainOption(
             id = remainOptionId,
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             title = "",
             description = ""
         )
@@ -115,6 +116,30 @@ class ApplyRemainUseCaseTests {
 
         // when & then
         assertThrows<RemainOptionNotFoundException> {
+            applyRemainUseCase.execute(remainOptionId)
+        }
+    }
+
+    private val otherRemainOptionStub by lazy {
+        RemainOption(
+            id = remainOptionId,
+            schoolId = UUID.randomUUID(),
+            title = "",
+            description = ""
+        )
+    }
+
+    @Test
+    fun `다른 학교의 잔류 항목임`() {
+        //given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every { remainAvailableTimeStub.isAvailable() } returns true
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns otherRemainOptionStub
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
             applyRemainUseCase.execute(remainOptionId)
         }
     }
