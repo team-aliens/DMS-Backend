@@ -15,7 +15,7 @@ import java.util.UUID
 class RemainStatusPersistenceAdapter(
     private val remainStatusRepository: RemainStatusJpaRepository,
     private val remainStatusMapper: RemainStatusMapper,
-    private val queryFactory: JPAQueryFactory,
+    private val queryFactory: JPAQueryFactory
 ) : RemainStatusPort {
 
     override fun queryByStudentIdIn(studentIds: List<UUID>): List<RemainStatusInfo> {
@@ -38,5 +38,9 @@ class RemainStatusPersistenceAdapter(
                     optionName = it.optionName
                 )
             }
+    }
+
+    override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
+        remainStatusRepository.deleteByRemainOptionId(remainOptionId)
     }
 }
