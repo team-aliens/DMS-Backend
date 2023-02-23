@@ -34,7 +34,7 @@ class QueryRemainOptionsUseCase(
 
         return QueryRemainOptionsResponse(
             appliedRemainOption = remainOptions.find {
-                it.id == remainStatus!!.remainOptionId
+                it.id == remainStatus?.remainOptionId
             }?.title,
             remainOptions = remainOptions
         )
