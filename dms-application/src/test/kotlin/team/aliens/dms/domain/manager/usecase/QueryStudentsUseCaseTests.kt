@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,10 +13,13 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.student.model.Student
 import java.util.UUID
 import org.junit.jupiter.api.assertThrows
+import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
 import team.aliens.dms.domain.student.model.Sex
 
 @ExtendWith(SpringExtension::class)
@@ -45,6 +49,7 @@ class QueryStudentsUseCaseTests {
     private val schoolId = UUID.randomUUID()
     private val name = "name"
     private val sort = Sort.GCN
+    private val filterType = PointFilterType.BONUS
 
     private val managerStub by lazy {
         Manager(
@@ -70,6 +75,14 @@ class QueryStudentsUseCaseTests {
         )
     }
 
+    private val pointFilterStub by lazy {
+        PointFilter(
+            filterType = filterType,
+            minPoint = 0,
+            maxPoint = 10
+        )
+    }
+
     @Test
     fun `학생 목록 조회 성공`() {
         // given
@@ -79,14 +92,48 @@ class QueryStudentsUseCaseTests {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryStudentPort.queryStudentsByNameAndSort(name, sort, managerStub.schoolId))
-            .willReturn(listOf(studentStub))
+        given(queryStudentPort.queryStudentsByNameAndSortAndFilter(
+            name, sort, managerStub.schoolId, pointFilterStub
+        )).willReturn(listOf(studentStub))
 
         // when
-        val response = queryStudentsUseCase.execute(name, sort)
+        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
 
-        // then
-        assertThat(response).isNotNull
+        assertThat(result).isNotNull
+    }
+
+    @Test
+    fun `필터 사용시 조건 점수 입력하지 않은 경우`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        // when & then
+        assertThrows<InvalidPointFilterRangeException> {
+            queryStudentsUseCase.execute(
+                name, sort, filterType, null, null
+            )
+        }
+    }
+
+    @Test
+    fun `상벌점 필터 범위가 잘못 된 경우`() {
+        // given
+        given(securityPort.getCurrentUserId())
+            .willReturn(currentUserId)
+
+        given(queryManagerPort.queryManagerById(currentUserId))
+            .willReturn(managerStub)
+
+        //when & then
+        assertThrows<InvalidPointFilterRangeException> {
+            queryStudentsUseCase.execute(
+                name, sort, filterType, 20, 10
+            )
+        }
     }
 
     @Test
@@ -99,7 +146,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(null)
 
         assertThrows<ManagerNotFoundException> {
-            queryStudentsUseCase.execute(name, sort)
+            queryStudentsUseCase.execute(name, sort, null, null, null)
         }
     }
 }

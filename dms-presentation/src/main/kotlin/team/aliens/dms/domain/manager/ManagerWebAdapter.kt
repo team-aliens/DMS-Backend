@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
+import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
@@ -70,11 +71,17 @@ class ManagerWebAdapter(
     @GetMapping("/students")
     fun getStudents(
         @RequestParam(required = false) name: String?,
-        @RequestParam @NotNull sort: Sort?
+        @RequestParam @NotNull sort: Sort?,
+        @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
+        @RequestParam(name = "min_point", required = false) minPoint: Int?,
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,
-            sort = sort!!
+            sort = sort!!,
+            filterType = filterType,
+            minPoint = minPoint,
+            maxPoint = maxPoint
         )
     }
     
