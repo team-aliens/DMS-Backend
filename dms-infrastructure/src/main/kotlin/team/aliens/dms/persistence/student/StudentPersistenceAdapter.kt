@@ -118,7 +118,7 @@ class StudentPersistenceAdapter(
     override fun queryStudentsBySchoolId(schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.room, roomJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
             .join(studentJpaEntity.user, userJpaEntity)
             .where(
                 userJpaEntity.school.id.eq(schoolId)
