@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.remain.dto.StudentRemainInfo
+import team.aliens.dms.domain.student.model.Sex
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -62,4 +64,36 @@ class ExcelAdapterTests {
             { assertEquals(datasList.captured[0].size, attributes.captured.size) }
         )
     }
+
+    private val studentRemainInfos by lazy {
+        listOf(
+            StudentRemainInfo(
+                studentName = "",
+                studentGcn = "1234",
+                studentSex = Sex.FEMALE,
+                roomNumber = 200,
+                optionName = ""
+            )
+        )
+    }
+
+    @Test
+    fun `속성과 요소의 수가 일치한다 (writeRemainStatusExcelFile)`() {
+
+        // given
+        val attributes = slot<List<String>>()
+        val datasList = slot<List<List<String>>>()
+
+        every { excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) } returns byteArrayOf()
+
+        // when
+        excelAdapter.writeRemainStatusExcelFile(studentRemainInfos)
+
+        // then
+        assertAll(
+            { assertEquals(studentRemainInfos.size, datasList.captured.size) },
+            { assertEquals(datasList.captured[0].size, attributes.captured.size) }
+        )
+    }
+
 }

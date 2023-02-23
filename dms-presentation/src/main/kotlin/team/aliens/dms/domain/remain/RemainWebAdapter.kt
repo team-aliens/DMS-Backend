@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.remain
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,11 +20,14 @@ import team.aliens.dms.domain.remain.dto.request.UpdateRemainAvailableTimeWebReq
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.ExportRemainStatusUseCase
 import team.aliens.dms.domain.remain.usecase.QueryRemainAvailableTimeUseCase
 import team.aliens.dms.domain.remain.usecase.RemoveRemainOptionUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainAvailableTimeUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainOptionUseCase
+import java.net.URLEncoder
 import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -35,7 +39,8 @@ class RemainWebAdapter(
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
     private val queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase,
     private val removeRemainOptionUseCase: RemoveRemainOptionUseCase,
-    private val updateRemainAvailableTimeUseCase: UpdateRemainAvailableTimeUseCase
+    private val updateRemainAvailableTimeUseCase: UpdateRemainAvailableTimeUseCase,
+    private val exportRemainStatusUseCase: ExportRemainStatusUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -83,4 +88,16 @@ class RemainWebAdapter(
             )
         )   
     }    
+
+    @GetMapping("/status/file")
+    fun exportRemainStatus(
+        httpResponse: HttpServletResponse
+    ): ByteArray {
+        val response = exportRemainStatusUseCase.execute()
+        httpResponse.setHeader(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
+        )
+        return response.file
+    }
 }

@@ -12,19 +12,19 @@ import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.StudentPort
-import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
-import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
+import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
+import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
-import team.aliens.dms.persistence.student.repository.StudentJpaRepository
-import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
-import java.util.UUID
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
+import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
+import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
+import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -144,6 +144,21 @@ class StudentPersistenceAdapter(
         studentRepository.delete(
             studentMapper.toEntity(student)
         )
+    }
+
+    override fun queryStudentsBySchoolId(schoolId: UUID): List<Student> {
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
+            .join(studentJpaEntity.user, userJpaEntity)
+            .where(
+                userJpaEntity.school.id.eq(schoolId)
+            )
+            .orderBy(roomJpaEntity.number.asc())
+            .fetch()
+            .map {
+                studentMapper.toDomain(it)!!
+            }
     }
 
     override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO> {
