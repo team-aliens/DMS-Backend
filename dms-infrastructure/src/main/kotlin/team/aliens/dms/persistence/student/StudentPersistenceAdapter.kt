@@ -7,6 +7,8 @@ import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
@@ -60,12 +62,21 @@ class StudentPersistenceAdapter(
         )
     }
 
-    override fun queryStudentsByNameAndSort(name: String?, sort: Sort, schoolId: UUID): List<Student> {
+    override fun queryStudentsByNameAndSortAndFilter(
+        name: String?,
+        sort: Sort,
+        schoolId: UUID,
+        pointFilter: PointFilter
+    ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
+            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
+            .join(userJpaEntity.school, schoolJpaEntity)
+            .leftJoin(pointHistoryJpaEntity)
+            .on(eqStudentRecentPointHistory())
             .where(
                 nameContains(name),
+                pointTotalBetween(pointFilter),
                 schoolEq(schoolId)
             )
             .orderBy(
@@ -81,6 +92,26 @@ class StudentPersistenceAdapter(
     }
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
+
+    private fun pointTotalBetween(pointFilter: PointFilter): BooleanExpression? {
+        if(pointFilter.filterType == null) {
+            return null
+        }
+
+        return when(pointFilter.filterType) {
+            PointFilterType.BONUS -> {
+                pointHistoryJpaEntity.bonusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
+            }
+            PointFilterType.MINUS -> {
+                pointHistoryJpaEntity.minusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
+            }
+            else -> {
+                val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
+
+                    pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint )
+            }
+        }
+    }
 
     private fun schoolEq(schoolId: UUID) = userJpaEntity.school.id.eq(schoolId)
 
