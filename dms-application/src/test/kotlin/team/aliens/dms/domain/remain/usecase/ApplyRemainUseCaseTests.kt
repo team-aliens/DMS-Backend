@@ -8,9 +8,12 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.remain.exception.RemainCanNotAppliedException
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
+import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
@@ -24,18 +27,20 @@ class ApplyRemainUseCaseTests {
     private val securityPort: RemainSecurityPort = mockk(relaxed = true)
     private val queryUserPort: RemainQueryUserPort = mockk(relaxed = true)
     private val queryRemainOptionPort: QueryRemainOptionPort = mockk(relaxed = true)
+    private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort = mockk(relaxed = true)
     private val commandRemainStatusPort: CommandRemainStatusPort = mockk(relaxed = true)
 
     private val applyRemainUseCase = ApplyRemainUseCase(
-        securityPort, queryUserPort, queryRemainOptionPort, commandRemainStatusPort
+        securityPort, queryUserPort, queryRemainOptionPort, queryRemainAvailableTimePort, commandRemainStatusPort
     )
 
     private val userId = UUID.randomUUID()
+    private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
         User(
             id = userId,
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             accountId = "accountId",
             password = "password",
             email = "email",
@@ -56,11 +61,15 @@ class ApplyRemainUseCaseTests {
         )
     }
 
+    private val remainAvailableTimeStub: RemainAvailableTime = mockk()
+
     @Test
     fun `잔류 신청 성공`() {
-        //givenr
+        //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every { remainAvailableTimeStub.isAvailable() } returns true
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
 
         // when & then
@@ -82,10 +91,26 @@ class ApplyRemainUseCaseTests {
     }
 
     @Test
+    fun `잔류 신청 가능 시간이 아님`() {
+        //given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every { remainAvailableTimeStub.isAvailable() } returns false
+
+        // when & then
+        assertThrows<RemainCanNotAppliedException> {
+            applyRemainUseCase.execute(remainOptionId)
+        }
+    }
+
+    @Test
     fun `잔류 항목이 존재하지 않음`() {
         //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every { remainAvailableTimeStub.isAvailable() } returns true
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns null
 
         // when & then

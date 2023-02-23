@@ -1,9 +1,12 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
+import team.aliens.dms.domain.remain.exception.RemainCanNotAppliedException
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
 import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
@@ -16,6 +19,7 @@ class ApplyRemainUseCase(
     private val securityPort: RemainSecurityPort,
     private val queryUserPort: RemainQueryUserPort,
     private val queryRemainOptionPort: QueryRemainOptionPort,
+    private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort,
     private val commandRemainStatusPort: CommandRemainStatusPort
 ) {
 
@@ -23,6 +27,13 @@ class ApplyRemainUseCase(
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+
+        val remainAvailableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
+            ?: throw RemainAvailableTimeNotFoundException
+
+        if (!remainAvailableTime.isAvailable()) {
+            throw RemainCanNotAppliedException
+        }
 
         val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
 
