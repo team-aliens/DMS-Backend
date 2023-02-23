@@ -90,11 +90,11 @@ class QueryRemainOptionsUseCaseTests {
         given(queryUserPort.queryUserById(userId))
             .willReturn(userStub)
 
-        given(queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId))
-            .willReturn(listOf(remainOptionStub))
-
         given(queryRemainStatusPort.queryRemainStatusById(userId))
             .willReturn(remainStatusStub)
+
+        given(queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId))
+            .willReturn(listOf(remainOptionStub))
 
         // when & then
         assertDoesNotThrow {

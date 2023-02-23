@@ -21,21 +21,19 @@ class QueryRemainOptionsUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
+        val remainStatus = queryRemainStatusPort.queryRemainStatusById(currentUserId)
+
         val remainOptions = queryRemainOptionPort.queryAllRemainOptionsBySchoolId(currentUser.schoolId)
             .map {
                 RemainOptionElement(
                     id = it.id,
                     title = it.title,
-                    description = it.description
+                    description = it.description,
+                    isApplied = it.id == remainStatus?.remainOptionId
                 )
             }
 
-        val remainStatus = queryRemainStatusPort.queryRemainStatusById(currentUserId)
-
         return QueryRemainOptionsResponse(
-            appliedRemainOption = remainOptions.find {
-                it.id == remainStatus?.remainOptionId
-            }?.title,
             remainOptions = remainOptions
         )
     }
