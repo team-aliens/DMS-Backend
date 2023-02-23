@@ -26,18 +26,19 @@ data class RemainAvailableTime(
         val dayOfWeek = currentDateTime.dayOfWeek.value
         val now = currentDateTime.toLocalTime()
 
-        if (dayOfWeek < startDayOfWeek.value || dayOfWeek > endDayOfWeek.value) {
-            return false
-        }
-
-        if (dayOfWeek == startDayOfWeek.value && now < startTime) {
-            return false
-        }
-
-        if (dayOfWeek == endDayOfWeek.value && endTime < now) {
+        if (isOutOfRangeDay(dayOfWeek) || isBeforeStartTime(dayOfWeek, now) || isAfterEndTime(dayOfWeek, now)) {
             return false
         }
 
         return true
     }
+
+    private fun isOutOfRangeDay(dayOfWeek: Int) =
+        (dayOfWeek < startDayOfWeek.value || dayOfWeek > endDayOfWeek.value)
+
+    private fun isBeforeStartTime(dayOfWeek: Int, now: LocalTime) =
+        (dayOfWeek == startDayOfWeek.value && now < startTime)
+
+    private fun isAfterEndTime(dayOfWeek: Int, now: LocalTime) =
+        (dayOfWeek == endDayOfWeek.value && endTime < now)
 }
