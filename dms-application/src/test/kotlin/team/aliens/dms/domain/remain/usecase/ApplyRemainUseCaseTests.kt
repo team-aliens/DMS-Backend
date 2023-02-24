@@ -69,9 +69,9 @@ class ApplyRemainUseCaseTests {
         //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
         every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns true
-        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
 
         // when & then
         assertDoesNotThrow {
@@ -96,6 +96,7 @@ class ApplyRemainUseCaseTests {
         //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
         every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns false
 
@@ -110,8 +111,6 @@ class ApplyRemainUseCaseTests {
         //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
-        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
-        every { remainAvailableTimeStub.isAvailable() } returns true
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns null
 
         // when & then
@@ -134,9 +133,9 @@ class ApplyRemainUseCaseTests {
         //given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns otherRemainOptionStub
         every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns true
-        every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns otherRemainOptionStub
 
         // when & then
         assertThrows<SchoolMismatchException> {

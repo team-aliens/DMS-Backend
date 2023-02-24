@@ -29,17 +29,17 @@ class ApplyRemainUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
+        val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
+
+        if (remainOption.schoolId != currentUser.schoolId) {
+            throw SchoolMismatchException
+        }
+
         val remainAvailableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
             ?: throw RemainAvailableTimeNotFoundException
 
         if (!remainAvailableTime.isAvailable()) {
             throw RemainCanNotAppliedException
-        }
-
-        val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
-
-        if (remainOption.schoolId != currentUser.schoolId) {
-            throw SchoolMismatchException
         }
 
         commandRemainStatusPort.saveRemainStatus(
