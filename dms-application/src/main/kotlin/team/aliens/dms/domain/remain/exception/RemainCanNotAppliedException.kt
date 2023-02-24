@@ -4,5 +4,5 @@ import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.domain.remain.error.RemainAvailableTimeErrorCode
 
 object RemainCanNotAppliedException : DmsException(
-    RemainAvailableTimeErrorCode.REMAIN_AVAILABLE_TIME_NOT_FOUND
+    RemainAvailableTimeErrorCode.REMAIN_CAN_NOT_APPLIED
 )
