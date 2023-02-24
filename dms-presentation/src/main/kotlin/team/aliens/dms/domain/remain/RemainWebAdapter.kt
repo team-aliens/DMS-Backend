@@ -21,6 +21,7 @@ import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainAvailableTimeWebRequest
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
+import team.aliens.dms.domain.remain.usecase.ApplyRemainUseCase
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
 import team.aliens.dms.domain.remain.usecase.QueryCurrentAppliedRemainOptionUseCase
 import team.aliens.dms.domain.remain.usecase.QueryRemainOptionsUseCase
@@ -39,6 +40,7 @@ import javax.validation.constraints.NotNull
 @RequestMapping("/remains")
 @RestController
 class RemainWebAdapter(
+    private val applyRemainUseCase: ApplyRemainUseCase,
     private val createRemainOptionUseCase: CreateRemainOptionUseCase,
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
     private val queryCurrentAppliedRemainOptionUseCase: QueryCurrentAppliedRemainOptionUseCase,
@@ -48,6 +50,11 @@ class RemainWebAdapter(
     private val updateRemainAvailableTimeUseCase: UpdateRemainAvailableTimeUseCase,
     private val exportRemainStatusUseCase: ExportRemainStatusUseCase
 ) {
+
+    @PutMapping("/{remain-option-id}")
+    fun applyRemainOption(@PathVariable("remain-option-id") @NotNull remainOptionId: UUID?) {
+        applyRemainUseCase.execute(remainOptionId!!)
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/options")
