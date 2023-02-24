@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.remain.spi
 
-interface RemainAvailableTimePort:
+interface RemainAvailableTimePort :
     CommandRemainAvailableTimePort,
     QueryRemainAvailableTimePort {
 }

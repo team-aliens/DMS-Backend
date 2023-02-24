@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.remain
 
+import org.springframework.data.repository.findByIdOrNull
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.remain.dto.RemainStatusInfo
@@ -43,4 +44,8 @@ class RemainStatusPersistenceAdapter(
     override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
         remainStatusRepository.deleteByRemainOptionId(remainOptionId)
     }
+    
+    override fun queryRemainStatusById(userId: UUID) = remainStatusMapper.toDomain(
+        remainStatusRepository.findByIdOrNull(userId)
+    )
 }
