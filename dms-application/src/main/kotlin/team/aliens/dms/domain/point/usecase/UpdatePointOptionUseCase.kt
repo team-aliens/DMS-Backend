@@ -29,11 +29,12 @@ class UpdatePointOptionUseCase(
             throw SchoolMismatchException
         }
 
+        val pointType = PointType.valueOf(request.type)
         commandPointOptionPort.savePointOption(
             pointOption.copy(
                 name = request.name,
                 score = request.score,
-                type = PointType.valueOf(request.type)
+                type = pointType
             )
         )
     }

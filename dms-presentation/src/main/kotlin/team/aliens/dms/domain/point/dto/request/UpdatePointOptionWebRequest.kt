@@ -9,8 +9,8 @@ data class UpdatePointOptionWebRequest(
     @field:Size(max = 20)
     val name: String?,
 
-    @field:NotBlank
-    val type: String?,
+    @field:NotNull
+    val type: WebPointType?,
 
     @field:NotNull
     val score: Int?

@@ -98,7 +98,7 @@ class PointWebAdapter(
         updatePointOptionUseCase.execute(
             request = UpdatePointOptionRequest(
                 webRequest.name!!,
-                webRequest.type!!,
+                webRequest.type!!.name,
                 webRequest.score!!
             ),
             pointOptionId = pointOptionId!!
