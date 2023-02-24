@@ -12,7 +12,7 @@ import team.aliens.dms.domain.remain.exception.RemainStatusNotFound
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
-import team.aliens.dms.domain.remain.spi.RemainQueryRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import java.time.LocalDateTime
 import java.util.UUID
@@ -24,7 +24,7 @@ class QueryCurrentAppliedRemainOptionUseCaseTests {
     private lateinit var securityPort: RemainSecurityPort
 
     @MockBean
-    private lateinit var queryRemainStatusPort: RemainQueryRemainStatusPort
+    private lateinit var queryRemainStatusPort: QueryRemainStatusPort
 
     @MockBean
     private lateinit var queryRemainOptionPort: QueryRemainOptionPort

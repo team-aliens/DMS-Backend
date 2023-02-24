@@ -5,13 +5,13 @@ import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainStatusNotFound
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
-import team.aliens.dms.domain.remain.spi.RemainQueryRemainStatusPort
+import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 
 @ReadOnlyUseCase
 class QueryCurrentAppliedRemainOptionUseCase(
     private val securityPort: RemainSecurityPort,
-    private val queryRemainStatusPort: RemainQueryRemainStatusPort,
+    private val queryRemainStatusPort: QueryRemainStatusPort,
     private val queryRemainOptionPort: QueryRemainOptionPort
 ) {
 
