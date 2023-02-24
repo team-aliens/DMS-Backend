@@ -9,7 +9,7 @@ data class UpdatePointOptionWebRequest(
     @field:Size(max = 20)
     val name: String?,
 
-    @field:NotNull
+    @field:NotBlank
     val type: String?,
 
     @field:NotNull
