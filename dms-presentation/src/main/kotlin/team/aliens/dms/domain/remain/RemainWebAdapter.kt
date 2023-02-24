@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
@@ -21,6 +22,7 @@ import team.aliens.dms.domain.remain.dto.request.UpdateRemainAvailableTimeWebReq
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.QueryCurrentAppliedRemainOptionUseCase
 import team.aliens.dms.domain.remain.usecase.QueryRemainOptionsUseCase
 import team.aliens.dms.domain.remain.usecase.ExportRemainStatusUseCase
 import team.aliens.dms.domain.remain.usecase.QueryRemainAvailableTimeUseCase
@@ -39,6 +41,7 @@ import javax.validation.constraints.NotNull
 class RemainWebAdapter(
     private val createRemainOptionUseCase: CreateRemainOptionUseCase,
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
+    private val queryCurrentAppliedRemainOptionUseCase: QueryCurrentAppliedRemainOptionUseCase,
     private val queryRemainOptionsUseCase: QueryRemainOptionsUseCase,
     private val queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase,
     private val removeRemainOptionUseCase: RemoveRemainOptionUseCase,
@@ -69,6 +72,11 @@ class RemainWebAdapter(
         )
     }
 
+    @GetMapping("/my")
+    fun getCurrentAppliedRemainOption(): QueryCurrentAppliedRemainOptionResponse {
+        return queryCurrentAppliedRemainOptionUseCase.execute()
+    }    
+    
     @GetMapping("/options")
     fun getRemainOptions(): QueryRemainOptionsResponse {
         return queryRemainOptionsUseCase.execute()
