@@ -42,6 +42,10 @@ import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
+import org.springframework.web.bind.annotation.PatchMapping
+import team.aliens.dms.domain.point.dto.UpdatePointOptionRequest
+import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
+import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
 
 @Validated
 @RequestMapping("/points")
@@ -55,7 +59,8 @@ class PointWebAdapter(
     private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
     private val queryPointOptionsUseCase: QueryPointOptionsUseCase,
-    private val queryStudentPointHistoryUseCase: QueryStudentPointHistoryUseCase
+    private val queryStudentPointHistoryUseCase: QueryStudentPointHistoryUseCase,
+    private val updatePointOptionUseCase: UpdatePointOptionUseCase
 ) {
 
     @GetMapping
@@ -80,8 +85,24 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/options/{point-option-id}")
-    fun removePointOption(@PathVariable(name = "point-option-id") pointOptionId: UUID) {
-        removePointOptionUseCase.execute(pointOptionId)
+    fun removePointOption(@PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID?) {
+        removePointOptionUseCase.execute(pointOptionId!!)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/options/{point-option-id}")
+    fun updatePointOption(
+        @PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID?,
+        @RequestBody @Valid webRequest: UpdatePointOptionWebRequest
+    ) {
+        updatePointOptionUseCase.execute(
+            request = UpdatePointOptionRequest(
+                webRequest.name!!,
+                webRequest.type!!,
+                webRequest.score!!
+            ),
+            pointOptionId = pointOptionId!!
+        )
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -122,8 +143,8 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/history/{point-history-id}")
-    fun cancelGrantedPoint(@PathVariable("point-history-id") pointHistoryId: UUID) {
-        cancelGrantedPointUseCase.execute(pointHistoryId)
+    fun cancelGrantedPoint(@PathVariable("point-history-id") @NotNull pointHistoryId: UUID?) {
+        cancelGrantedPointUseCase.execute(pointHistoryId!!)
     }
 
     @GetMapping("/options")
@@ -133,9 +154,9 @@ class PointWebAdapter(
 
     @GetMapping("/history/students/{student-id}")
     fun getStudentsPointHistory(
-        @PathVariable("student-id") studentId: UUID,
+        @PathVariable("student-id") @NotNull studentId: UUID?,
         @ModelAttribute pageData: PageData
     ): QueryStudentPointHistoryResponse {
-        return queryStudentPointHistoryUseCase.execute(studentId, pageData)
+        return queryStudentPointHistoryUseCase.execute(studentId!!, pageData)
     }
 }
