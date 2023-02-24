@@ -129,6 +129,8 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PUT, "/remains/{remain-option-id}").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.POST, "/remains/options").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/remains/my").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/remains/options").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.GET, "/remains/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
+import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
 import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
@@ -21,6 +23,8 @@ import team.aliens.dms.domain.remain.dto.request.UpdateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.response.CreateRemainOptionResponse
 import team.aliens.dms.domain.remain.usecase.ApplyRemainUseCase
 import team.aliens.dms.domain.remain.usecase.CreateRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.QueryCurrentAppliedRemainOptionUseCase
+import team.aliens.dms.domain.remain.usecase.QueryRemainOptionsUseCase
 import team.aliens.dms.domain.remain.usecase.ExportRemainStatusUseCase
 import team.aliens.dms.domain.remain.usecase.QueryRemainAvailableTimeUseCase
 import team.aliens.dms.domain.remain.usecase.RemoveRemainOptionUseCase
@@ -39,6 +43,8 @@ class RemainWebAdapter(
     private val applyRemainUseCase: ApplyRemainUseCase,
     private val createRemainOptionUseCase: CreateRemainOptionUseCase,
     private val updateRemainOptionUseCase: UpdateRemainOptionUseCase,
+    private val queryCurrentAppliedRemainOptionUseCase: QueryCurrentAppliedRemainOptionUseCase,
+    private val queryRemainOptionsUseCase: QueryRemainOptionsUseCase,
     private val queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase,
     private val removeRemainOptionUseCase: RemoveRemainOptionUseCase,
     private val updateRemainAvailableTimeUseCase: UpdateRemainAvailableTimeUseCase,
@@ -73,6 +79,16 @@ class RemainWebAdapter(
         )
     }
 
+    @GetMapping("/my")
+    fun getCurrentAppliedRemainOption(): QueryCurrentAppliedRemainOptionResponse {
+        return queryCurrentAppliedRemainOptionUseCase.execute()
+    }    
+    
+    @GetMapping("/options")
+    fun getRemainOptions(): QueryRemainOptionsResponse {
+        return queryRemainOptionsUseCase.execute()
+    }
+    
     @GetMapping("/available-time")
     fun getRemainAvailableTime(): QueryRemainAvailableTimeResponse {
         return queryRemainAvailableTimeUseCase.execute()
