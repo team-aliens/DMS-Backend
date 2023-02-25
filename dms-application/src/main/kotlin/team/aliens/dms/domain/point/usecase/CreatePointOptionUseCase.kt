@@ -28,12 +28,13 @@ class CreatePointOptionUseCase(
             throw PointOptionNameExistsException
         }
 
+        val pointType = PointType.valueOf(request.type)
         val pointOption = commandPointOptionPort.savePointOption(
             PointOption(
                 schoolId = manager.schoolId,
                 name = request.name,
                 score = request.score,
-                type = PointType.valueOf(request.type)
+                type = pointType
             )
         )
 
