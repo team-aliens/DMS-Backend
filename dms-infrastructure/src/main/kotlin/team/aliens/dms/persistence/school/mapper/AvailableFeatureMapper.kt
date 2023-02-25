@@ -4,8 +4,8 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.school.entity.AvailableFeatureJpaEntity
+import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class AvailableFeatureMapper(
@@ -19,7 +19,8 @@ class AvailableFeatureMapper(
                 mealService = entity.mealService,
                 noticeService = entity.noticeService,
                 pointService = entity.pointService,
-                studyRoomService = entity.studyRoomService
+                studyRoomService = entity.studyRoomService,
+                remainService = entity.remainService
             )
         }
     }
@@ -33,7 +34,8 @@ class AvailableFeatureMapper(
             mealService = domain.mealService,
             noticeService = domain.noticeService,
             pointService = domain.pointService,
-            studyRoomService = domain.studyRoomService
+            studyRoomService = domain.studyRoomService,
+            remainService = domain.remainService
         )
     }
 }

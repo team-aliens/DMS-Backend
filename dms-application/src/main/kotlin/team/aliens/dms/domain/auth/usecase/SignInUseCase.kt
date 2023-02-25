@@ -42,6 +42,7 @@ class SignInUseCase(
                     noticeService = noticeService,
                     pointService = pointService,
                     studyRoomService = studyRoomService,
+                    remainService = remainService
                 )
             }
         )

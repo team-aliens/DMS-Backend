@@ -78,7 +78,8 @@ class ReissueTokenUseCaseTests {
             mealService = true,
             noticeService = true,
             pointService = true,
-            studyRoomService = false
+            studyRoomService = false,
+            remainService = true
         )
     }
 
