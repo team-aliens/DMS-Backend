@@ -140,12 +140,6 @@ class StudentPersistenceAdapter(
             }
     }
 
-    override fun deleteStudent(student: Student) {
-        studentRepository.delete(
-            studentMapper.toEntity(student)
-        )
-    }
-
     override fun queryStudentsBySchoolId(schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
