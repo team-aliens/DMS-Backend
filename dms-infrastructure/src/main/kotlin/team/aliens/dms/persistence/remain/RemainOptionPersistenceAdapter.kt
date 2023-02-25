@@ -20,7 +20,19 @@ class RemainOptionPersistenceAdapter(
         )
     )!!
 
+    override fun deleteRemainOption(remainOption: RemainOption) {
+        remainOptionRepository.delete(
+            remainOptionMapper.toEntity(remainOption)
+        )
+    }
+
     override fun queryRemainOptionById(remainOptionId: UUID) = remainOptionMapper.toDomain(
         remainOptionRepository.findByIdOrNull(remainOptionId)
     )
+
+    override fun queryAllRemainOptionsBySchoolId(schoolId: UUID) =
+        remainOptionRepository.findAllBySchoolId(schoolId)
+            .map {
+                remainOptionMapper.toDomain(it)!!
+            }
 }

@@ -7,4 +7,7 @@ import java.util.UUID
 
 @Repository
 interface RemainOptionJpaRepository : CrudRepository<RemainOptionJpaEntity, UUID> {
+
+    fun findAllBySchoolId(schoolId: UUID): List<RemainOptionJpaEntity>
+
 }
