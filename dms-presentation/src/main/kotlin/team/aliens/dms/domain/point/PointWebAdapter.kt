@@ -43,7 +43,6 @@ import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import org.springframework.web.bind.annotation.PatchMapping
-import team.aliens.dms.domain.point.dto.UpdatePointOptionRequest
 import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
 import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
 
@@ -96,12 +95,9 @@ class PointWebAdapter(
         @RequestBody @Valid webRequest: UpdatePointOptionWebRequest
     ) {
         updatePointOptionUseCase.execute(
-            request = UpdatePointOptionRequest(
-                webRequest.name!!,
-                webRequest.type!!.name,
-                webRequest.score!!
-            ),
-            pointOptionId = pointOptionId!!
+            pointOptionId = pointOptionId!!,
+            name = webRequest.name!!,
+            score = webRequest.score!!
         )
     }
 

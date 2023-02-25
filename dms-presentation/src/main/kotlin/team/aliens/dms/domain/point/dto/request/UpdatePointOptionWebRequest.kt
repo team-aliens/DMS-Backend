@@ -10,8 +10,5 @@ data class UpdatePointOptionWebRequest(
     val name: String?,
 
     @field:NotNull
-    val type: WebPointType?,
-
-    @field:NotNull
     val score: Int?
 )
