@@ -1,15 +1,14 @@
 package team.aliens.dms.domain.remain.usecase
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
@@ -23,25 +22,13 @@ import java.util.UUID
 @ExtendWith(SpringExtension::class)
 class QueryRemainAvailableTimeUseCaseTests {
 
-    @MockBean
-    private lateinit var securityPort: RemainSecurityPort
+    private val securityPort: RemainSecurityPort = mockk()
+    private val queryUserPort: RemainQueryUserPort = mockk()
+    private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort = mockk()
 
-    @MockBean
-    private lateinit var queryUserPort: RemainQueryUserPort
-
-    @MockBean
-    private lateinit var queryRemainAvailableTimePort: QueryRemainAvailableTimePort
-
-    private lateinit var queryRemainAvailableTimeUseCase: QueryRemainAvailableTimeUseCase
-
-    @BeforeEach
-    fun setUp() {
-        queryRemainAvailableTimeUseCase = QueryRemainAvailableTimeUseCase(
-            securityPort,
-            queryUserPort,
-            queryRemainAvailableTimePort
-        )
-    }
+    private val queryRemainAvailableTimeUseCase = QueryRemainAvailableTimeUseCase(
+        securityPort, queryUserPort, queryRemainAvailableTimePort
+    )
 
     private val userId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
@@ -59,7 +46,7 @@ class QueryRemainAvailableTimeUseCaseTests {
         )
     }
 
-    private val successRemainAvailableTimeStub by lazy {
+    private val remainAvailableTimeStub by lazy {
         RemainAvailableTime(
             id = schoolId,
             startDayOfWeek = DayOfWeek.WEDNESDAY,
@@ -69,66 +56,38 @@ class QueryRemainAvailableTimeUseCaseTests {
         )
     }
 
-    private val failureRemainAvailableTimeStub by lazy {
-        RemainAvailableTime(
-            id = schoolId,
-            startDayOfWeek = DayOfWeek.MONDAY,
-            startTime = LocalTime.of(0,0),
-            endDayOfWeek = DayOfWeek.MONDAY,
-            endTime = LocalTime.of(23, 59)
-        )
-    }
 
     @Test
     fun `잔류 신청 시간 보기 성공`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
 
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
-            .willReturn(successRemainAvailableTimeStub)
-
-        // when
-        val isAccessible = successRemainAvailableTimeStub.isAvailable()
-
-        // then
-        assertThat(isAccessible).isTrue
-
+        // when & then
         assertDoesNotThrow {
             queryRemainAvailableTimeUseCase.execute()
         }
     }
 
     @Test
-    fun `잔류 신청 시간 보기 실패`() {
+    fun `잔류 신청 시간이 설정되지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId))
-            .willReturn(failureRemainAvailableTimeStub)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns null
 
         // when
-        val isAccessible = failureRemainAvailableTimeStub.isAvailable()
-
-        // then
-        assertThat(isAccessible).isFalse
+        assertThrows<RemainAvailableTimeNotFoundException> {
+            queryRemainAvailableTimeUseCase.execute()
+        }
     }
 
     @Test
-    fun `유저를 찾지 못함`() {
+    fun `유저가 존재하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(null)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns null
 
         // when & then
         assertThrows<UserNotFoundException> {
