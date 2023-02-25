@@ -9,7 +9,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFound
+import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
@@ -98,7 +98,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
             .willReturn(null)
 
         // when & then
-        assertThrows<AppliedSeatNotFound> {
+        assertThrows<AppliedSeatNotFoundException> {
             queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }

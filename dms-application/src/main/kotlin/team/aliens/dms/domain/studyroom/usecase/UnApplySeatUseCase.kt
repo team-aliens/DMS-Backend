@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFound
+import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -17,7 +17,7 @@ class UnApplySeatUseCase(
     fun execute() {
         val currentUserId = securityPort.getCurrentUserId()
 
-        val seat = queryStudyRoomPort.querySeatByStudentId(currentUserId) ?: throw AppliedSeatNotFound
+        val seat = queryStudyRoomPort.querySeatByStudentId(currentUserId) ?: throw AppliedSeatNotFoundException
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
 
         commandStudyRoomPort.saveSeat(
