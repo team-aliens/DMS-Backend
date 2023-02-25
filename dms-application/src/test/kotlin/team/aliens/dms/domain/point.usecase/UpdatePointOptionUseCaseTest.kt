@@ -9,7 +9,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.point.dto.UpdatePointOptionRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
@@ -52,14 +51,6 @@ class UpdatePointOptionUseCaseTest {
             )
     }
 
-    private val requestStub by lazy {
-        UpdatePointOptionRequest(
-            name = "updated",
-            score = 20,
-            type = "BONUS"
-        )
-    }
-
     private val pointOptionStub by lazy {
         PointOption(
             name = "before",
@@ -84,10 +75,12 @@ class UpdatePointOptionUseCaseTest {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryPointOptionPort.queryPointOptionById(pointOptionId) } returns pointOptionStub
+        val name = "updated"
+        val score = 20
 
         // when & then
         assertDoesNotThrow {
-            updatePointOptionUseCase.execute(requestStub, pointOptionId)
+            updatePointOptionUseCase.execute(pointOptionId, name, score)
         }
     }
 
@@ -97,10 +90,12 @@ class UpdatePointOptionUseCaseTest {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryPointOptionPort.queryPointOptionById(pointOptionId) } returns null
+        val name = "updated"
+        val score = 20
 
         // when & then
         assertThrows<PointOptionNotFoundException> {
-            updatePointOptionUseCase.execute(requestStub, pointOptionId)
+            updatePointOptionUseCase.execute(pointOptionId, name, score)
         }
     }
 
@@ -110,10 +105,12 @@ class UpdatePointOptionUseCaseTest {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryPointOptionPort.queryPointOptionById(pointOptionId) } returns otherPointOptionStub
+        val name = "updated"
+        val score = 20
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            updatePointOptionUseCase.execute(requestStub, pointOptionId)
+            updatePointOptionUseCase.execute(pointOptionId, name, score)
         }
     }
 
@@ -122,10 +119,12 @@ class UpdatePointOptionUseCaseTest {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns null
+        val name = "updated"
+        val score = 20
 
         // when & then
         assertThrows<UserNotFoundException> {
-            updatePointOptionUseCase.execute(requestStub, pointOptionId)
+            updatePointOptionUseCase.execute(pointOptionId, name, score)
         }
     }
 }
