@@ -9,4 +9,6 @@ interface CommandStudentPort {
 
     fun saveAllVerifiedStudent(verifiedStudents: List<VerifiedStudent>)
 
+    fun deleteVerifiedStudent(verifiedStudent: VerifiedStudent)
+
 }
