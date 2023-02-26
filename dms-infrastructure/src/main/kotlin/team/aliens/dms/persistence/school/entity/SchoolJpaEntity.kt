@@ -9,7 +9,8 @@ import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_school",
+@Table(
+    name = "tbl_school",
     uniqueConstraints = [
         UniqueConstraint(columnNames = arrayOf("name", "address"))
     ]

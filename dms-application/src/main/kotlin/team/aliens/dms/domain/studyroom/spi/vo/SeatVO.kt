@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.spi.vo
 
-import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import java.util.UUID
 
 open class SeatVO(
     val seatId: UUID,

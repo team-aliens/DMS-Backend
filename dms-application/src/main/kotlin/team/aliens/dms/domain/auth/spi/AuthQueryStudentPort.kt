@@ -6,5 +6,4 @@ import java.util.UUID
 interface AuthQueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
-
 }

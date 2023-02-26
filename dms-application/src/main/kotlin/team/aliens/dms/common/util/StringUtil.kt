@@ -4,16 +4,18 @@ import java.security.SecureRandom
 
 object StringUtil {
 
+    private const val NUMBER_OF_CHAR_TO_DISPLAY = 3
+
     fun coveredEmail(email: String): String {
         val index = email.indexOf('@')
 
         val sb = StringBuilder(email).also {
-            for (i in (index / 3) until index) {
+            for (i in (index / NUMBER_OF_CHAR_TO_DISPLAY) until index) {
                 it.setCharAt(i, '*')
             }
         }
 
-        return sb.toString();
+        return sb.toString()
     }
 
     fun randomNumber(number: Int): String {
@@ -22,7 +24,7 @@ object StringUtil {
         val authCodeList: MutableList<String> = mutableListOf()
 
         for (i: Int in 0 until number) {
-            authCodeList.add(i, codeList[random.nextInt(10)].toString());
+            authCodeList.add(i, codeList[random.nextInt(codeList.size)].toString())
         }
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")

@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Aggregate
-data class RemainStatus (
+data class RemainStatus(
 
     val id: UUID = UUID(0, 0),
 

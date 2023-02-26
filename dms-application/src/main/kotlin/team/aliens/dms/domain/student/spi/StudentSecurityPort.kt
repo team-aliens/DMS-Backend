@@ -7,5 +7,4 @@ interface StudentSecurityPort {
     fun encodePassword(password: String): String
 
     fun getCurrentUserId(): UUID
-
 }

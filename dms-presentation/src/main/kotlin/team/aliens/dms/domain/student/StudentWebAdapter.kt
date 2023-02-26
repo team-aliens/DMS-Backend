@@ -152,4 +152,3 @@ class StudentWebAdapter(
         studentWithdrawalUseCase.execute()
     }
 }
-   

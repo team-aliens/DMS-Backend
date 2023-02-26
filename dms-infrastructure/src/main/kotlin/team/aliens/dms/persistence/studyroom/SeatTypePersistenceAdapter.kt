@@ -1,12 +1,12 @@
 package team.aliens.dms.persistence.studyroom
 
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.spi.SeatTypePort
 import team.aliens.dms.persistence.studyroom.mapper.SeatTypeMapper
 import team.aliens.dms.persistence.studyroom.repository.SeatTypeJpaRepository
+import java.util.UUID
 
 @Component
 class SeatTypePersistenceAdapter(

@@ -6,5 +6,4 @@ import team.aliens.dms.persistence.point.entity.PointHistoryJpaEntity
 import java.util.UUID
 
 @Repository
-interface PointHistoryJpaRepository : CrudRepository<PointHistoryJpaEntity, UUID> {
-}
+interface PointHistoryJpaRepository : CrudRepository<PointHistoryJpaEntity, UUID>

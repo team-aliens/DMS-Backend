@@ -19,7 +19,7 @@ data class PointOption(
 
 ) {
     fun checkSchoolId(schoolId: UUID) {
-        if(schoolId != this.schoolId) {
+        if (schoolId != this.schoolId) {
             throw PointOptionSchoolMismatchException
         }
     }

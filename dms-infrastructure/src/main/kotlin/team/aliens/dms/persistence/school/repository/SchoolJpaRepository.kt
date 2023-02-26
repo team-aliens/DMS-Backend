@@ -9,5 +9,4 @@ import java.util.UUID
 interface SchoolJpaRepository : CrudRepository<SchoolJpaEntity, UUID> {
 
     fun findByCode(code: String): SchoolJpaEntity?
-
 }

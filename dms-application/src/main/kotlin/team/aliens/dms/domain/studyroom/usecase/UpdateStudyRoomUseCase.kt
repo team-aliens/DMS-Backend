@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
@@ -24,18 +24,18 @@ class UpdateStudyRoomUseCase(
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
-        val (_, _, totalWidthSize, totalHeightSize,
+        val (
+            _, _, totalWidthSize, totalHeightSize,
             eastDescription, westDescription, southDescription, northDescription,
-            _, availableGrade, seatRequests) = request
+            _, availableGrade, seatRequests
+        ) = request
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
 
-        if (currentUser.schoolId != studyRoom.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(currentUser.schoolId, studyRoom.schoolId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
             val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(

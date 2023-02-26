@@ -5,5 +5,4 @@ import java.util.UUID
 interface StudyRoomSecurityPort {
 
     fun getCurrentUserId(): UUID
-
 }

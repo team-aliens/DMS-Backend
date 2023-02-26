@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
@@ -27,7 +26,7 @@ class UpdateRemainOptionUseCaseTests {
     private val queryUserPort: RemainQueryUserPort = mockk(relaxed = true)
     private val queryRemainOptionPort: QueryRemainOptionPort = mockk(relaxed = true)
     private val commandRemainOptionPort: CommandRemainOptionPort = mockk(relaxed = true)
-    
+
     private val updateRemainOptionUseCase = UpdateRemainOptionUseCase(
         securityPort, queryUserPort, queryRemainOptionPort, commandRemainOptionPort
     )
@@ -70,7 +69,7 @@ class UpdateRemainOptionUseCaseTests {
 
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
 
-        //when & then
+        // when & then
         assertDoesNotThrow {
             updateRemainOptionUseCase.execute(remainOptionId, title, description)
         }

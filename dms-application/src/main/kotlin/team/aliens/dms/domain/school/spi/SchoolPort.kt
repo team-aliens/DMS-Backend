@@ -15,5 +15,4 @@ interface SchoolPort :
     AuthQuerySchoolPort,
     StudyRoomQuerySchoolPort,
     PointQuerySchoolPort,
-    RemainQuerySchoolPort {
-}
+    RemainQuerySchoolPort

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.dto
 
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
+import java.util.UUID
 
 data class StudentQueryStudyRoomsResponse(
     val studyRooms: List<StudyRoomElement>

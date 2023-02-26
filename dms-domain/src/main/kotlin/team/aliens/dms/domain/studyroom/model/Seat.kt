@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.model
 
+import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import java.util.UUID
 
 data class Seat(
@@ -22,10 +23,16 @@ data class Seat(
 
 ) {
 
-    fun use(studentId: UUID) = this.copy(
-        studentId = studentId,
-        status = SeatStatus.IN_USE
-    )
+    fun use(studentId: UUID): Seat {
+        this.studentId?.let {
+            throw SeatAlreadyAppliedException
+        }
+
+        return this.copy(
+            studentId = studentId,
+            status = SeatStatus.IN_USE
+        )
+    }
 
     fun unUse() = this.copy(
         studentId = null,

@@ -1,5 +1,8 @@
 package team.aliens.dms.persistence.studyroom.entity
 
+import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -11,9 +14,6 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
-import team.aliens.dms.domain.studyroom.model.SeatStatus
-import team.aliens.dms.persistence.BaseUUIDEntity
-import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 
 @Entity
 @Table(

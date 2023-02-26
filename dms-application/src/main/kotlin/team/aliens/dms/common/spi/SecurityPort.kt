@@ -21,5 +21,4 @@ interface SecurityPort :
     SchoolSecurityPort,
     PointSecurityPort,
     StudyRoomSecurityPort,
-    RemainSecurityPort{
-}
+    RemainSecurityPort

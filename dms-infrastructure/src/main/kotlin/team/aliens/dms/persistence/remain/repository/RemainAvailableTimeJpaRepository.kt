@@ -6,5 +6,4 @@ import team.aliens.dms.persistence.remain.entity.RemainAvailableTimeJpaEntity
 import java.util.UUID
 
 @Repository
-interface RemainAvailableTimeJpaRepository : CrudRepository<RemainAvailableTimeJpaEntity, UUID> {
-}
+interface RemainAvailableTimeJpaRepository : CrudRepository<RemainAvailableTimeJpaEntity, UUID>

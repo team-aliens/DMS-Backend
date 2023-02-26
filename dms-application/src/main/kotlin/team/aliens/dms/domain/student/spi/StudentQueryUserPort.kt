@@ -12,5 +12,4 @@ interface StudentQueryUserPort {
     fun queryUserById(userId: UUID): User?
 
     fun queryUserByAccountId(accountId: String): User?
-
 }

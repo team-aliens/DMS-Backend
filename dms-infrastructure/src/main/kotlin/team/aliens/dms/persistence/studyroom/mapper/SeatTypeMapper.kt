@@ -10,7 +10,7 @@ import team.aliens.dms.persistence.studyroom.entity.SeatTypeJpaEntity
 @Component
 class SeatTypeMapper(
     private val schoolRepository: SchoolJpaRepository
-) : GenericMapper<SeatType, SeatTypeJpaEntity>{
+) : GenericMapper<SeatType, SeatTypeJpaEntity> {
 
     override fun toDomain(entity: SeatTypeJpaEntity?): SeatType? {
         return entity?.let {

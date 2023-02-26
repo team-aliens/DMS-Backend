@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.auth
 
+import org.hibernate.validator.constraints.Length
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,15 +10,16 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
-import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
-import team.aliens.dms.domain.auth.dto.response.CheckAccountIdExistenceResponse
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
 import team.aliens.dms.domain.auth.dto.ReissueResponse
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
+import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
+import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
+import team.aliens.dms.domain.auth.dto.request.WebEmailType
+import team.aliens.dms.domain.auth.dto.response.CheckAccountIdExistenceResponse
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
 import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
@@ -28,8 +30,6 @@ import javax.validation.Valid
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
-import org.hibernate.validator.constraints.Length
-import team.aliens.dms.domain.auth.dto.request.WebEmailType
 
 @Validated
 @RequestMapping("/auth")

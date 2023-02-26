@@ -11,5 +11,4 @@ interface AuthCodeEntityRepository : CrudRepository<AuthCodeEntity, String> {
     fun findByEmail(email: String): AuthCodeEntity?
 
     fun findByEmailAndType(email: String, type: EmailType): AuthCodeEntity?
-
 }

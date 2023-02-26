@@ -5,5 +5,4 @@ import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.auth.entity.RefreshTokenEntity
 
 @Repository
-interface RefreshTokenRepository : CrudRepository<RefreshTokenEntity, String> {
-}
+interface RefreshTokenRepository : CrudRepository<RefreshTokenEntity, String>

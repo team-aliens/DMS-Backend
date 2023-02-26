@@ -51,30 +51,29 @@ class CreatePointOptionUseCaseTest {
 
     @Test
     fun `상벌점 항목 생성 성공`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
 
         every { queryPointOptionPort.existByNameAndSchoolId(requestStub.name, schoolId) } returns false
 
-        //when & then
+        // when & then
         assertDoesNotThrow {
             createPointOptionUseCase.execute(requestStub)
         }
-
     }
 
     @Test
     fun `항목이 이미 존재하는 경우`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
 
         every { queryPointOptionPort.existByNameAndSchoolId(requestStub.name, schoolId) } returns true
 
-        //when & then
+        // when & then
         assertThrows<PointOptionNameExistsException> {
             createPointOptionUseCase.execute(requestStub)
         }
@@ -87,11 +86,9 @@ class CreatePointOptionUseCaseTest {
 
         every { queryManagerPort.queryManagerById(managerId) } returns null
 
-
-        //when & then
+        // when & then
         assertThrows<ManagerNotFoundException> {
             createPointOptionUseCase.execute(requestStub)
         }
     }
-
 }

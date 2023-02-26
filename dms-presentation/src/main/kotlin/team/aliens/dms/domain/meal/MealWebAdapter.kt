@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.meal
 
+import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -8,8 +10,6 @@ import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.usecase.QueryMealsUseCase
 import java.time.LocalDate
 import javax.validation.constraints.NotNull
-import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.validation.annotation.Validated
 
 @Validated
 @RequestMapping("/meals")

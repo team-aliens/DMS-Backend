@@ -8,7 +8,7 @@ import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
 
@@ -25,9 +25,8 @@ class QueryStudentPointHistoryUseCase(
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
-        if (student.schoolId != manager.schoolId) {
-            throw SchoolMismatchException
-        }
+
+        validateSameSchool(manager.schoolId, student.schoolId)
 
         val pointHistories = queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
             studentName = student.name,

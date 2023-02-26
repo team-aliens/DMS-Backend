@@ -15,5 +15,4 @@ interface CommandStudyRoomPort {
     fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
 
     fun deleteStudyRoomById(studyRoomId: UUID)
-
 }

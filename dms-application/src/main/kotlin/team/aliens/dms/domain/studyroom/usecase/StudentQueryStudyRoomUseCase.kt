@@ -1,8 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
@@ -13,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @ReadOnlyUseCase
 class StudentQueryStudyRoomUseCase(
@@ -27,9 +27,7 @@ class StudentQueryStudyRoomUseCase(
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
 
-        if (user.schoolId != studyRoom.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(user.schoolId, studyRoom.schoolId)
 
         val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
             SeatElement(

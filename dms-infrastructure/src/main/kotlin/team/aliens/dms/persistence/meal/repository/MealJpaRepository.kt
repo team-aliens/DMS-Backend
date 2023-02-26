@@ -11,5 +11,4 @@ import java.util.UUID
 interface MealJpaRepository : CrudRepository<MealJpaEntity, MealJpaEntityId> {
 
     fun findBySchoolIdAndIdMealDateBetween(schoolId: UUID, startAt: LocalDate, endAt: LocalDate): List<MealJpaEntity>
-
 }

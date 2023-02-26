@@ -1,9 +1,8 @@
 package team.aliens.dms.domain.studyroom.model
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.student.model.Sex
-import kotlin.math.min
+import java.util.UUID
 
 @Aggregate
 data class StudyRoom(

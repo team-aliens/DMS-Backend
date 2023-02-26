@@ -7,5 +7,4 @@ import java.util.UUID
 interface QueryMealPort {
 
     fun queryAllMealsByMonthAndSchoolId(firstDay: LocalDate, lastDay: LocalDate, schoolId: UUID): List<Meal>
-
 }

@@ -6,7 +6,7 @@ import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
@@ -22,11 +22,10 @@ class CancelGrantedPointUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val pointHistory = queryPointHistoryPort.queryPointHistoryById(pointHistoryId) ?: throw PointHistoryNotFoundException
+        val pointHistory = queryPointHistoryPort.queryPointHistoryById(pointHistoryId)
+            ?: throw PointHistoryNotFoundException
 
-        if (manager.schoolId != pointHistory.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(manager.schoolId, pointHistory.schoolId)
 
         commandPointHistoryPort.savePointHistory(pointHistory.cancelHistory())
         commandPointHistoryPort.deletePointHistory(pointHistory)

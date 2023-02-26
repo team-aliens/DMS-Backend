@@ -105,7 +105,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
 
     @Test
     fun `자습실을 찾지 못함`() {
-        //given
+        // given
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -115,7 +115,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
         given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
             .willReturn(null)
 
-        //when & then
+        // when & then
         assertThrows<StudyRoomNotFoundException> {
             queryCurrentAppliedStudyRoomUseCase.execute()
         }

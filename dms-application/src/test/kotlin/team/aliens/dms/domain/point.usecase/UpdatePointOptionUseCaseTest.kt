@@ -2,7 +2,6 @@ package team.aliens.dms.domain.point.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -19,6 +18,7 @@ import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class UpdatePointOptionUseCaseTest {
@@ -39,16 +39,16 @@ class UpdatePointOptionUseCaseTest {
     private val schoolId2 = UUID.randomUUID()
 
     private val userStub by lazy {
-            User(
-                id = managerId,
-                schoolId = schoolId,
-                accountId = "manager",
-                password = "pw",
-                email = "manaager@manager.com",
-                authority = Authority.MANAGER,
-                createdAt = null,
-                deletedAt = null
-            )
+        User(
+            id = managerId,
+            schoolId = schoolId,
+            accountId = "manager",
+            password = "pw",
+            email = "manaager@manager.com",
+            authority = Authority.MANAGER,
+            createdAt = null,
+            deletedAt = null
+        )
     }
 
     private val pointOptionStub by lazy {

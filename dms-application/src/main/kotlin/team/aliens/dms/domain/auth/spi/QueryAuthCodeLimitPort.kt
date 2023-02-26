@@ -6,5 +6,4 @@ import team.aliens.dms.domain.auth.model.EmailType
 interface QueryAuthCodeLimitPort {
 
     fun queryAuthCodeLimitByEmailAndEmailType(email: String, type: EmailType): AuthCodeLimit?
-
 }

@@ -6,5 +6,4 @@ import java.util.UUID
 interface RemainQueryUserPort {
 
     fun queryUserById(userId: UUID): User?
-
 }

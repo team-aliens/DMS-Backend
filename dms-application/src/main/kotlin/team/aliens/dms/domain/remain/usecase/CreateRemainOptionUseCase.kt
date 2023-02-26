@@ -9,7 +9,7 @@ import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @UseCase
-class CreateRemainOptionUseCase (
+class CreateRemainOptionUseCase(
     private val securityPort: RemainSecurityPort,
     private val queryUserPort: QueryUserPort,
     private val commentRemainOptionPort: CommandRemainOptionPort

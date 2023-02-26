@@ -7,5 +7,4 @@ interface CommandSeatTypePort {
     fun saveSeatType(seatType: SeatType): SeatType
 
     fun deleteSeatType(seatType: SeatType)
-
 }

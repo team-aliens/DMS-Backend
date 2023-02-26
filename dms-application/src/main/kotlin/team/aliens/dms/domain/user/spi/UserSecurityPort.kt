@@ -9,5 +9,4 @@ interface UserSecurityPort {
     fun isPasswordMatch(rawPassword: String, encodedPassword: String): Boolean
 
     fun encodePassword(password: String): String
-
 }

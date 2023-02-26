@@ -6,5 +6,4 @@ import java.util.UUID
 interface CheckUserAuthority {
 
     fun execute(userId: UUID): Authority
-
 }

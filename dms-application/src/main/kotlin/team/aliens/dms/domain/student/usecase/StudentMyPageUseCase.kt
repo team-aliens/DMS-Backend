@@ -55,7 +55,7 @@ class StudentMyPageUseCase(
             .plus(bonusPhrase)
             .plus(minusPhrase)
 
-        val phrase = if(phrases.isNotEmpty()) {
+        val phrase = if (phrases.isNotEmpty()) {
             val randomIndex = SecureRandom().nextInt(phrases.size)
             phrases[randomIndex].content
         } else Phrase.NO_PHRASE

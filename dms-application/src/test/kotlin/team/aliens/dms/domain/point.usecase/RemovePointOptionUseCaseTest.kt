@@ -65,7 +65,7 @@ class RemovePointOptionUseCaseTest {
 
     @Test
     fun `상벌점 항목 삭제 성공`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
@@ -80,7 +80,7 @@ class RemovePointOptionUseCaseTest {
 
     @Test
     fun `상벌점 항목 미존재`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
@@ -95,7 +95,7 @@ class RemovePointOptionUseCaseTest {
 
     @Test
     fun `학교 불일치`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
@@ -114,7 +114,6 @@ class RemovePointOptionUseCaseTest {
         every { securityPort.getCurrentUserId() } returns currentUserId
 
         every { queryManagerPort.queryManagerById(managerId) } returns null
-
 
         assertThrows<ManagerNotFoundException> {
             removePointOptionUseCase.execute(pointOptionId)

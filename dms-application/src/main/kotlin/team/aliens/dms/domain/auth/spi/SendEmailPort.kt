@@ -7,5 +7,4 @@ interface SendEmailPort {
     fun sendAuthCode(email: String, type: EmailType, code: String)
 
     fun sendAccountId(email: String, accountId: String)
-
 }

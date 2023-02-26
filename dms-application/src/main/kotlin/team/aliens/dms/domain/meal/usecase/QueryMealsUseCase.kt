@@ -37,9 +37,7 @@ class QueryMealsUseCase(
             if (meals == null) {
                 mealDetails.add(MealDetails.emptyOf(date))
             } else {
-                meals[0].apply {
-                    mealDetails.add(MealDetails.of(this))
-                }
+                mealDetails.add(MealDetails.of(meals[0]))
             }
         }
 

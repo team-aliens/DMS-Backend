@@ -12,5 +12,4 @@ interface TemplatePort {
     fun updateTemplate(type: EmailType)
 
     fun deleteTemplate(type: EmailType)
-
 }

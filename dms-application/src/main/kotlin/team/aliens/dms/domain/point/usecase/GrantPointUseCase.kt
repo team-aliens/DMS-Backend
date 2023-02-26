@@ -10,7 +10,6 @@ import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.time.LocalDateTime
 
@@ -33,7 +32,7 @@ class GrantPointUseCase(
 
         val students =
             queryStudentPort.queryStudentsWithPointHistory(request.studentIdList)
-        if(students.size != request.studentIdList.size) {
+        if (students.size != request.studentIdList.size) {
             throw StudentNotFoundException
         }
 

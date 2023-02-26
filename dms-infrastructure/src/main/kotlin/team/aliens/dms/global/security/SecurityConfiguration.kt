@@ -53,7 +53,6 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/students/name").permitAll()
-            .antMatchers(HttpMethod.GET, "/students/name").permitAll()
             .antMatchers(HttpMethod.GET, "/students/profile").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
@@ -66,7 +65,6 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/managers/profile").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
-            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.DELETE, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
 
             // /schools
@@ -137,6 +135,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/remains/status/file").hasAuthority(MANAGER.name)
+
             .anyRequest().denyAll()
 
         http

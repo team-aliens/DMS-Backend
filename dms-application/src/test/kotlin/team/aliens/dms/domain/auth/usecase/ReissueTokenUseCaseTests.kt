@@ -94,7 +94,7 @@ class ReissueTokenUseCaseTests {
 
     @Test
     fun `토큰 재발급 성공`() {
-        //given
+        // given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(token))
             .willReturn(refreshTokenStub)
 
@@ -107,7 +107,7 @@ class ReissueTokenUseCaseTests {
         given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
             .willReturn(featureStub)
 
-        //when & then
+        // when & then
         assertDoesNotThrow {
             reissueTokenUseCase.execute(token)
         }
@@ -115,11 +115,11 @@ class ReissueTokenUseCaseTests {
 
     @Test
     fun `리프레시 토큰을 찾을 수 없음`() {
-        //given
+        // given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(token))
             .willReturn(null)
 
-        //when & then
+        // when & then
         assertThrows<RefreshTokenNotFoundException> {
             reissueTokenUseCase.execute(token)
         }
@@ -145,7 +145,7 @@ class ReissueTokenUseCaseTests {
 
     @Test
     fun `이용 가능한 기능이 존재하지 않음`() {
-        //given
+        // given
         given(queryRefreshTokenPort.queryRefreshTokenByToken(token))
             .willReturn(refreshTokenStub)
 

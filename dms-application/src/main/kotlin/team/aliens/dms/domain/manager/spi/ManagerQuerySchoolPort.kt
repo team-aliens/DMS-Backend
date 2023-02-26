@@ -6,5 +6,4 @@ import java.util.UUID
 interface ManagerQuerySchoolPort {
 
     fun querySchoolById(schoolId: UUID): School?
-
 }

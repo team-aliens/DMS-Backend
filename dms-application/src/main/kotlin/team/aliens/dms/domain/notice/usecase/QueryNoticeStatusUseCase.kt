@@ -14,8 +14,12 @@ class QueryNoticeStatusUseCase(
      **/
     fun execute(): Boolean {
         val now = LocalDate.now()
-        val from = now.plusDays(7)
+        val from = now.plusDays(NOTICE_PERIOD)
 
         return queryNoticePort.existsNoticeByDateBetween(now, from)
+    }
+
+    companion object {
+        private const val NOTICE_PERIOD: Long = 7
     }
 }

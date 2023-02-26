@@ -149,7 +149,6 @@ class UploadFileUseCaseTests {
         assertEquals(response, filePathStub)
     }
 
-
     @Test
     fun `파일 확장자 잘못됨`() {
         assertThrows<FileInvalidExtensionException> {

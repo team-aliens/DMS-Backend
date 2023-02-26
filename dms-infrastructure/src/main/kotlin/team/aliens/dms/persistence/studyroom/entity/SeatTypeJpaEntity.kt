@@ -1,5 +1,7 @@
 package team.aliens.dms.persistence.studyroom.entity
 
+import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -7,8 +9,6 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
-import team.aliens.dms.persistence.BaseUUIDEntity
-import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 
 @Entity
 @Table(name = "tbl_seat_type")

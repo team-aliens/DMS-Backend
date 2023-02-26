@@ -50,11 +50,11 @@ class CertifyEmailUseCaseTests {
     fun `이메일 검증 성공`() {
         val request = CertifyEmailRequest(accountId, email)
 
-        //given
+        // given
         given(queryUserPort.queryUserByAccountId(request.accountId))
             .willReturn(userStub)
 
-        //when then
+        // when then
         assertDoesNotThrow {
             certifyEmailUseCase.execute(request)
         }
@@ -64,11 +64,11 @@ class CertifyEmailUseCaseTests {
     fun `유저를 찾을 수 없음`() {
         val request = CertifyEmailRequest(accountId, email)
 
-        //given
+        // given
         given(queryUserPort.queryUserByAccountId(request.accountId))
             .willReturn(null)
 
-        //when then
+        // when then
         assertThrows<UserNotFoundException> {
             certifyEmailUseCase.execute(request)
         }
@@ -79,11 +79,11 @@ class CertifyEmailUseCaseTests {
         val mismatchEmail = "mis@match.com"
         val request = CertifyEmailRequest(accountId, mismatchEmail)
 
-        //given
+        // given
         given(queryUserPort.queryUserByAccountId(request.accountId))
             .willReturn(userStub)
 
-        //when then
+        // when then
         assertThrows<EmailMismatchException> {
             certifyEmailUseCase.execute(request)
         }

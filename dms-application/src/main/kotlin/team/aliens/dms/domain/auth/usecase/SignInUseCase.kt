@@ -26,11 +26,13 @@ class SignInUseCase(
             throw PasswordMismatchException
         }
 
-        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, user.authority)
+        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
+            userId = user.id, authority = user.authority
+        )
 
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException
-        
+
         return SignInResponse(
             accessToken = accessToken,
             accessTokenExpiredAt = accessTokenExpiredAt,

@@ -10,6 +10,9 @@ operator fun ClosedRange<LocalDate>.iterator(): Iterator<LocalDate> {
 
         override fun hasNext(): Boolean = hasNext
         override fun next(): LocalDate {
+            if (!hasNext) {
+                throw NoSuchElementException()
+            }
             val value = next
             if (value == finalElement) {
                 hasNext = false

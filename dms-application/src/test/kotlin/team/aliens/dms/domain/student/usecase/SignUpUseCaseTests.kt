@@ -7,20 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
-import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpRequest
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -36,9 +32,7 @@ import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
-import team.aliens.dms.domain.user.model.User
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -89,7 +83,6 @@ class SignUpUseCaseTests {
     }
 
     private val id = UUID.randomUUID()
-    private val userId = UUID.randomUUID()
     private val code = "12345678"
     private val email = "test@test.com"
     private val accountId = "test accountId"
@@ -139,62 +132,6 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = schoolStub.id,
-            accountId = accountId,
-            password = password,
-            email = email,
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
-    }
-
-    private val savedUserStub by lazy {
-        User(
-            id = userStub.id,
-            schoolId = userStub.schoolId,
-            accountId = userStub.accountId,
-            password = userStub.password,
-            email = userStub.email,
-            authority = userStub.authority,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
-    }
-
-    private val studentStub by lazy {
-        Student(
-            id = savedUserStub.id,
-            roomId = UUID.randomUUID(),
-            roomNumber = 123,
-            schoolId = savedUserStub.schoolId,
-            grade = 1,
-            classRoom = 1,
-            number = 1,
-            name = name,
-            profileImageUrl = profileImageUrl,
-            sex = Sex.FEMALE
-        )
-    }
-
-    private val savedStudentStub by lazy {
-        Student(
-            id = studentStub.id,
-            roomId = studentStub.roomId,
-            roomNumber = studentStub.roomNumber,
-            schoolId = studentStub.schoolId,
-            grade = studentStub.grade,
-            classRoom = studentStub.classRoom,
-            number = studentStub.number,
-            name = studentStub.name,
-            profileImageUrl = studentStub.profileImageUrl,
-            sex = studentStub.sex
-        )
-    }
-
     private val requestStub by lazy {
         SignUpRequest(
             schoolCode = code,
@@ -210,42 +147,11 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val tokenResponseStub by lazy {
-        TokenResponse(
-            accessToken = "test access token",
-            accessTokenExpiredAt = LocalDateTime.now(),
-            refreshToken = "test refresh token",
-            refreshTokenExpiredAt = LocalDateTime.now()
-        )
-    }
-
-    private val featureStub by lazy {
-        AvailableFeature(
-            schoolId = userStub.schoolId,
-            mealService = true,
-            noticeService = true,
-            pointService = true,
-            studyRoomService = false,
-            remainService = true
-        )
-    }
-
-    private val gcnStub = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}"
-
-    private val signUpResponseStub by lazy {
-        SignUpResponse(
-            accessToken = tokenResponseStub.accessToken,
-            accessTokenExpiredAt = tokenResponseStub.accessTokenExpiredAt,
-            refreshToken = tokenResponseStub.refreshToken,
-            refreshTokenExpiredAt = tokenResponseStub.refreshTokenExpiredAt,
-            features = SignUpResponse.Features(
-                mealService = true,
-                noticeService = true,
-                pointService = true,
-                studyRoomService = false
-            )
-        )
-    }
+    private val gcnStub = Student.processGcn(
+        grade = requestStub.grade,
+        classRoom = requestStub.classRoom,
+        number = requestStub.number
+    )
 
 //    @Test
 //    fun `회원가입 성공`() {
@@ -321,6 +227,9 @@ class SignUpUseCaseTests {
         // given
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
 
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(true)

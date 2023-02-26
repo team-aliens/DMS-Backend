@@ -10,5 +10,4 @@ import java.util.UUID
 interface AuthCodeLimitRepository : CrudRepository<AuthCodeLimitEntity, UUID> {
 
     fun findByEmailAndType(email: String, type: EmailType): AuthCodeLimitEntity?
-
 }

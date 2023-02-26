@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
@@ -12,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
@@ -26,9 +27,7 @@ class ManagerQueryStudyRoomUseCase(
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
 
-        if (user.schoolId != studyRoom.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(user.schoolId, studyRoom.schoolId)
 
         val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
             SeatElement(
@@ -48,7 +47,7 @@ class ManagerQueryStudyRoomUseCase(
                     StudentElement(
                         id = it.studentId,
                         name = it.studentName!!,
-                        gcn = "${it.studentGrade}${it.studentClassRoom}${processNumber(it.studentNumber!!)}",
+                        gcn = Student.processGcn(it.studentGrade!!, it.studentClassRoom!!, it.studentNumber!!),
                         profileImageUrl = it.studentProfileImageUrl!!
                     )
                 }
@@ -72,6 +71,4 @@ class ManagerQueryStudyRoomUseCase(
             )
         }
     }
-
-    private fun processNumber(number: Int) = if (number < 10) "0${number}" else number.toString()
 }

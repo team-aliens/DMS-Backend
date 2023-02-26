@@ -41,4 +41,3 @@ class UserPersistenceAdapter(
         userRepository.findByAccountId(accountId)
     )
 }
- 

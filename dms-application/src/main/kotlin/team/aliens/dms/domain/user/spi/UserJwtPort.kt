@@ -7,5 +7,4 @@ import java.util.UUID
 interface UserJwtPort {
 
     fun receiveToken(userId: UUID, authority: Authority): TokenResponse
-
 }

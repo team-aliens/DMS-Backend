@@ -8,5 +8,4 @@ interface QueryRemainOptionPort {
     fun queryRemainOptionById(remainOptionId: UUID): RemainOption?
 
     fun queryAllRemainOptionsBySchoolId(schoolId: UUID): List<RemainOption>
-
 }

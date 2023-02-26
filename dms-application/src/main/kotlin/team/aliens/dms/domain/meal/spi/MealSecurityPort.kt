@@ -5,5 +5,4 @@ import java.util.UUID
 interface MealSecurityPort {
 
     fun getCurrentUserId(): UUID
-
 }

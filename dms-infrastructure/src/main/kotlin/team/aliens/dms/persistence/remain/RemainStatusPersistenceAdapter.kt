@@ -42,7 +42,6 @@ class RemainStatusPersistenceAdapter(
             }
     }
 
-
     override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
         remainStatusRepository.deleteByRemainOptionId(remainOptionId)
     }

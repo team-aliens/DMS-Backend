@@ -7,5 +7,4 @@ class DmsBackendApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

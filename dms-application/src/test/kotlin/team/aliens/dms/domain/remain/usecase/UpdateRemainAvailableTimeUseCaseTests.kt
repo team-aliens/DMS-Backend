@@ -36,10 +36,10 @@ class UpdateRemainAvailableTimeUseCaseTests {
     @BeforeEach
     fun setUp() {
         updateRemainAvailableTimeUseCase = UpdateRemainAvailableTimeUseCase(
-                securityPort,
-                queryUserPort,
-                commandRemainAvailableTimePort
-            )
+            securityPort,
+            queryUserPort,
+            commandRemainAvailableTimePort
+        )
     }
 
     private val userId = UUID.randomUUID()

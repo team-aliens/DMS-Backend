@@ -6,5 +6,4 @@ import java.util.UUID
 interface QueryRemainAvailableTimePort {
 
     fun queryRemainAvailableTimeBySchoolId(schoolId: UUID): RemainAvailableTime?
-
 }

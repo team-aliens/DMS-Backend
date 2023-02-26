@@ -131,8 +131,9 @@ class UpdateStudyRoomUseCaseTests {
                 )
             )
 
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId))
-            .willReturn(false)
+        given(
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId)
+        ).willReturn(false)
 
         // when & then
         assertDoesNotThrow {

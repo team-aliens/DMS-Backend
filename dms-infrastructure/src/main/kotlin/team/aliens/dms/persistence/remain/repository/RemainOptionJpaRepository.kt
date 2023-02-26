@@ -9,5 +9,4 @@ import java.util.UUID
 interface RemainOptionJpaRepository : CrudRepository<RemainOptionJpaEntity, UUID> {
 
     fun findAllBySchoolId(schoolId: UUID): List<RemainOptionJpaEntity>
-
 }
