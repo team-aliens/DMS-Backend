@@ -179,6 +179,9 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
+        given(queryStudentPort.queryStudentById(studentStub.id))
+            .willReturn(studentStub)
+
         given(checkUserAuthority.execute(userStub.id))
             .willReturn(Authority.MANAGER)
 

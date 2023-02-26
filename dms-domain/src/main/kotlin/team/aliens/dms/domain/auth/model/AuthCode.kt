@@ -28,7 +28,7 @@ data class AuthCode(
     }
 
     fun validateAuthCode(code: String) {
-        if (this.code == code) {
+        if (this.code != code) {
             throw AuthCodeMismatchException
         }
     }

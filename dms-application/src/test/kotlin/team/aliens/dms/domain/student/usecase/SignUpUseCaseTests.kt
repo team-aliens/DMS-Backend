@@ -224,6 +224,9 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(true)
 
