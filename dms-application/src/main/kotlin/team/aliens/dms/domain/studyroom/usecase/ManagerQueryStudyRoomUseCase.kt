@@ -47,7 +47,7 @@ class ManagerQueryStudyRoomUseCase(
                     StudentElement(
                         id = it.studentId,
                         name = it.studentName!!,
-                        gcn = "${it.studentGrade}${it.studentClassRoom}${Student.processNumber(it.studentNumber!!)}",
+                        gcn = Student.processGcn(it.studentGrade!!, it.studentClassRoom!!, it.studentNumber!!),
                         profileImageUrl = it.studentProfileImageUrl!!
                     )
                 }

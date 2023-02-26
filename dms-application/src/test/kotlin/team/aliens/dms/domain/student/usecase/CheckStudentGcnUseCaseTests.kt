@@ -79,7 +79,7 @@ class CheckStudentGcnUseCaseTests {
 
         given(
             queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-                gcn = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}",
+                gcn = Student.processGcn(requestStub.grade, requestStub.classRoom, requestStub.number),
                 schoolName = schoolStub.name
             )
         )
@@ -112,7 +112,7 @@ class CheckStudentGcnUseCaseTests {
 
         given(
             queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-                gcn = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}",
+                gcn = Student.processGcn(requestStub.grade, requestStub.classRoom, requestStub.number),
                 schoolName = schoolStub.name
             )
         )

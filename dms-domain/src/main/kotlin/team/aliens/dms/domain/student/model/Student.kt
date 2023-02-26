@@ -28,11 +28,13 @@ data class Student(
 
 ) {
 
-    val gcn: String = "${this.grade}${this.classRoom}${processNumber(number)}"
+    val gcn: String = processGcn(this.grade, this.classRoom, this.number)
 
     companion object {
         const val PROFILE_IMAGE = "https://image-dms.s3.ap-northeast-2.amazonaws.com/59fd0067-93ef-4bcb-8722-5bc8786c5156%7C%7C%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%B3.png"
 
-        fun processNumber(number: Int) = if (number < 10) "0$number" else number.toString()
+        fun processGcn(grade: Int, classRoom: Int, number: Int) = "${grade}${classRoom}${processNumber(number)}"
+
+        private fun processNumber(number: Int) = if (number < 10) "0$number" else number.toString()
     }
 }

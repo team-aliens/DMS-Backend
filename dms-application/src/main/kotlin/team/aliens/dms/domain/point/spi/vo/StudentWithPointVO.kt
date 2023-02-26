@@ -11,7 +11,7 @@ data class StudentWithPointVO(
     val bonusTotal: Int,
     val minusTotal: Int
 ) {
-    val gcn: String = "${this.grade}${this.classRoom}${Student.processNumber(number)}"
+    val gcn: String = Student.processGcn(this.grade, this.classRoom, this.number)
 
     fun calculateUpdatedPointTotal(type: PointType, score: Int): Pair<Int, Int> {
         return if (type == PointType.BONUS) {

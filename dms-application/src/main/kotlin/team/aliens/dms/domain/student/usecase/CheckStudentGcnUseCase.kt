@@ -18,7 +18,7 @@ class CheckStudentGcnUseCase(
         val school = querySchoolPort.querySchoolById(request.schoolId) ?: throw SchoolNotFoundException
 
         val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-            gcn = "${request.grade}${request.classRoom}${Student.processNumber(request.number)}",
+            gcn = Student.processGcn(request.grade, request.classRoom, request.number),
             schoolName = school.name
         ) ?: throw VerifiedStudentNotFoundException
 

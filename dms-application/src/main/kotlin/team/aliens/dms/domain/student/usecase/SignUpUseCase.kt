@@ -65,7 +65,11 @@ class SignUpUseCase(
          * 검증된 학생 조회
          **/
         val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-            gcn = "${grade}${classRoom}${Student.processNumber(number)}",
+            gcn = Student.processGcn(
+                grade = grade,
+                classRoom = classRoom,
+                number = number
+            ),
             schoolName = school.name
         ) ?: throw VerifiedStudentNotFoundException
 

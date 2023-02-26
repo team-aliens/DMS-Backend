@@ -147,7 +147,11 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val gcnStub = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}"
+    private val gcnStub = Student.processGcn(
+        grade = requestStub.grade,
+        classRoom = requestStub.classRoom,
+        number = requestStub.number
+    )
 
 //    @Test
 //    fun `회원가입 성공`() {

@@ -50,9 +50,6 @@ class RemoveStudentUseCase(
             )
         }
 
-        // 잔류 내역 삭제
-        commandRemainStatusPort.deleteByStudentId(studentId)
-
         commandUserPort.saveUser(
             studentUser.copy(deletedAt = LocalDateTime.now())
         )
