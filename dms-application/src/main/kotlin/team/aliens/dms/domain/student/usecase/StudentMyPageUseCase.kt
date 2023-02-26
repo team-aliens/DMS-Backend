@@ -37,6 +37,7 @@ class StudentMyPageUseCase(
             name = student.name,
             gcn = student.gcn,
             profileImageUrl = student.profileImageUrl!!,
+            sex = student.sex,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             phrase = phrase
