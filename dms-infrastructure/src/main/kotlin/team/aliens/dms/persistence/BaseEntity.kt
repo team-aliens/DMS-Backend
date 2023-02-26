@@ -1,11 +1,11 @@
 package team.aliens.dms.persistence
 
+import org.hibernate.annotations.GenericGenerator
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.MappedSuperclass
-import org.hibernate.annotations.GenericGenerator
 
 @MappedSuperclass
 abstract class BaseEntity(

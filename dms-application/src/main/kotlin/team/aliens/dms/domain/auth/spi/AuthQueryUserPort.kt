@@ -10,5 +10,4 @@ interface AuthQueryUserPort {
     fun queryUserByAccountId(accountId: String): User?
 
     fun queryUserById(id: UUID): User?
-
 }

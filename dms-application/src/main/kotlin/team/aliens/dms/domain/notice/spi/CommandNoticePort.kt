@@ -7,5 +7,4 @@ interface CommandNoticePort {
     fun deleteNotice(notice: Notice)
 
     fun saveNotice(notice: Notice): Notice
-
 }

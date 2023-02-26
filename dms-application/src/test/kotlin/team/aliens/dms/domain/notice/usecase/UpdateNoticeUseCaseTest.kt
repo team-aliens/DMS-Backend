@@ -62,7 +62,7 @@ class UpdateNoticeUseCaseTest {
         given(queryNoticePort.queryNoticeByIdAndManagerId(noticeId, managerId))
             .willReturn(noticeStub)
 
-        //when
+        // when
         val response = updateNoticeUseCase.execute(noticeId, title, content)
 
         // then

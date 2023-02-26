@@ -6,5 +6,4 @@ import java.util.UUID
 interface AuthQuerySchoolPort {
 
     fun queryAvailableFeaturesBySchoolId(schoolId: UUID): AvailableFeature?
-
 }

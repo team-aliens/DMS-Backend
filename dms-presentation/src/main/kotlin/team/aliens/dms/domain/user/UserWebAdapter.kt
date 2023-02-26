@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.user.dto.UpdateUserPasswordRequest
+import team.aliens.dms.domain.user.dto.request.UpdateUserPasswordWebRequest
 import team.aliens.dms.domain.user.usecase.UpdateUserPasswordUseCase
 import team.aliens.dms.domain.user.usecase.UserPasswordCompareUseCase
-import team.aliens.dms.domain.user.dto.request.UpdateUserPasswordWebRequest
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 

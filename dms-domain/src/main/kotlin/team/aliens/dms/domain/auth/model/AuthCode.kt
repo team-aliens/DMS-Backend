@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.auth.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 
 @Aggregate
 data class AuthCode(
@@ -23,5 +24,12 @@ data class AuthCode(
 
     companion object {
         const val EXPIRED = 180
+        const val AUTH_CODE_SIZE = 6
+    }
+
+    fun validateAuthCode(code: String) {
+        if (this.code == code) {
+            throw AuthCodeMismatchException
+        }
     }
 }

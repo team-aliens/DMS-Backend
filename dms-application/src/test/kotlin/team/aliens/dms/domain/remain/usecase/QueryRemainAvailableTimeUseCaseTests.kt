@@ -50,19 +50,20 @@ class QueryRemainAvailableTimeUseCaseTests {
         RemainAvailableTime(
             id = schoolId,
             startDayOfWeek = DayOfWeek.WEDNESDAY,
-            startTime = LocalTime.of(0,0),
+            startTime = LocalTime.of(0, 0),
             endDayOfWeek = DayOfWeek.FRIDAY,
             endTime = LocalTime.of(23, 59)
         )
     }
-
 
     @Test
     fun `잔류 신청 시간 보기 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
-        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every {
+            queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId)
+        } returns remainAvailableTimeStub
 
         // when & then
         assertDoesNotThrow {

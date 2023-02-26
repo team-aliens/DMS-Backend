@@ -23,4 +23,8 @@ data class School(
 
     val contractEndedAt: LocalDate?
 
-)
+) {
+    companion object {
+        const val SCHOOL_CODE_SIZE: Int = 8
+    }
+}

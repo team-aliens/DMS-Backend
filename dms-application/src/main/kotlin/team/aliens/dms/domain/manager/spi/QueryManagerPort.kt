@@ -6,5 +6,4 @@ import java.util.UUID
 interface QueryManagerPort {
 
     fun queryManagerById(managerId: UUID): Manager?
-
 }

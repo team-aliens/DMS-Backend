@@ -1,13 +1,12 @@
 package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
@@ -19,6 +18,7 @@ import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
+import java.util.UUID
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -42,7 +42,9 @@ class StudyRoomPersistenceAdapter(
     )
 
     override fun existsStudyRoomByFloorAndNameAndSchoolId(
-        floor: Int, name: String, schoolId: UUID
+        floor: Int,
+        name: String,
+        schoolId: UUID
     ) = studyRoomRepository.existsByNameAndFloorAndSchoolId(name, floor, schoolId)
 
     override fun queryAllSeatsByStudyRoomId(studyRoomId: UUID): List<SeatVO> {

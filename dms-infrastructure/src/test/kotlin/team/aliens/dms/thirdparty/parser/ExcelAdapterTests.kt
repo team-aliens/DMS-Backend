@@ -95,5 +95,4 @@ class ExcelAdapterTests {
             { assertEquals(datasList.captured[0].size, attributes.captured.size) }
         )
     }
-
 }

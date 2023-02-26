@@ -5,13 +5,16 @@ class PageData(
     size: Long?
 ) {
 
-    val page: Long = page ?: 0
-    val size: Long = size ?: 500
+    val page: Long = page ?: PAGE_NUM
+    val size: Long = size ?: PAGE_SIZE
 
     val offset: Long
         get() = page * size
 
     companion object {
+        private const val PAGE_NUM: Long = 0
+        private const val PAGE_SIZE: Long = 500
+
         val DEFAULT = PageData(null, null)
     }
 }

@@ -15,7 +15,6 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -63,17 +62,17 @@ class QueryPointOptionsUseCaseTest {
 
     @Test
     fun `상벌점 항목 조회 성공`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns managerId
         every { queryManagerPort.queryManagerById(managerId) } returns managerStub
         every {
             queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(schoolId, keyword)
         } returns listOf(pointOptionStub)
 
-        //when
+        // when
         val response = queryPointOptionsUseCase.execute(keyword).pointOptions
 
-        //then
+        // then
         assertEquals(response[0], responseStub)
     }
 

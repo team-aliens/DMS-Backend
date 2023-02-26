@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -27,6 +28,7 @@ import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
 import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
+import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
 import team.aliens.dms.domain.point.usecase.CreatePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.ExportAllPointHistoryUseCase
@@ -36,15 +38,13 @@ import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
+import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
 import java.net.URLEncoder
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
-import org.springframework.web.bind.annotation.PatchMapping
-import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
-import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
 
 @Validated
 @RequestMapping("/points")

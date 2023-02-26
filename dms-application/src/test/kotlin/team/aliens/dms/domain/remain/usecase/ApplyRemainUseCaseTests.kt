@@ -66,11 +66,13 @@ class ApplyRemainUseCaseTests {
 
     @Test
     fun `잔류 신청 성공`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
-        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every {
+            queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId)
+        } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns true
 
         // when & then
@@ -81,7 +83,7 @@ class ApplyRemainUseCaseTests {
 
     @Test
     fun `유저가 존재하지 않음`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns null
 
@@ -93,11 +95,13 @@ class ApplyRemainUseCaseTests {
 
     @Test
     fun `잔류 신청 가능 시간이 아님`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns remainOptionStub
-        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every {
+            queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId)
+        } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns false
 
         // when & then
@@ -108,7 +112,7 @@ class ApplyRemainUseCaseTests {
 
     @Test
     fun `잔류 항목이 존재하지 않음`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns null
@@ -130,11 +134,13 @@ class ApplyRemainUseCaseTests {
 
     @Test
     fun `다른 학교의 잔류 항목임`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryRemainOptionPort.queryRemainOptionById(remainOptionId) } returns otherRemainOptionStub
-        every { queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId) } returns remainAvailableTimeStub
+        every {
+            queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId)
+        } returns remainAvailableTimeStub
         every { remainAvailableTimeStub.isAvailable() } returns true
 
         // when & then

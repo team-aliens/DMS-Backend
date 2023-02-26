@@ -23,5 +23,4 @@ interface UserPort :
     SchoolQueryUserPort,
     PointQueryUserPort,
     StudyRoomQueryUserPort,
-    RemainQueryUserPort {
-}
+    RemainQueryUserPort

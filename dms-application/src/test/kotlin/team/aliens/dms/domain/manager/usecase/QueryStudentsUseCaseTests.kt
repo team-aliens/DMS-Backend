@@ -1,26 +1,25 @@
 package team.aliens.dms.domain.manager.usecase
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.student.model.Student
-import java.util.UUID
-import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.PointFilter
+import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentsUseCaseTests {
@@ -33,7 +32,6 @@ class QueryStudentsUseCaseTests {
 
     @MockBean
     private lateinit var queryStudentPort: ManagerQueryStudentPort
-
 
     private lateinit var queryStudentsUseCase: QueryStudentsUseCase
 
@@ -92,9 +90,11 @@ class QueryStudentsUseCaseTests {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        given(queryStudentPort.queryStudentsByNameAndSortAndFilter(
-            name, sort, managerStub.schoolId, pointFilterStub
-        )).willReturn(listOf(studentStub))
+        given(
+            queryStudentPort.queryStudentsByNameAndSortAndFilter(
+                name, sort, managerStub.schoolId, pointFilterStub
+            )
+        ).willReturn(listOf(studentStub))
 
         // when
         val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
@@ -128,7 +128,7 @@ class QueryStudentsUseCaseTests {
         given(queryManagerPort.queryManagerById(currentUserId))
             .willReturn(managerStub)
 
-        //when & then
+        // when & then
         assertThrows<InvalidPointFilterRangeException> {
             queryStudentsUseCase.execute(
                 name, sort, filterType, 20, 10

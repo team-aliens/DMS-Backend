@@ -7,5 +7,4 @@ interface PointHistoryPort :
     QueryPointHistoryPort,
     CommandPointHistoryPort,
     ManagerQueryPointHistoryPort,
-    StudentQueryPointHistoryPort {
-}
+    StudentQueryPointHistoryPort

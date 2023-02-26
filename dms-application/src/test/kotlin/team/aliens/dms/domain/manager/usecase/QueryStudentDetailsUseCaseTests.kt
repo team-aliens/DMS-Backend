@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
@@ -92,24 +91,6 @@ class QueryStudentDetailsUseCaseTests {
             name = "김철수",
             profileImageUrl = "profile image url",
             sex = Sex.FEMALE
-        )
-    }
-
-    private val responseStub by lazy {
-        GetStudentDetailsResponse(
-            name = studentStub.name,
-            gcn = studentStub.gcn,
-            profileImageUrl = studentStub.profileImageUrl ?: Student.PROFILE_IMAGE,
-            bonusPoint = bonusPoint,
-            minusPoint = minusPoint,
-            roomNumber = studentStub.roomNumber,
-            roomMates = listOf(
-                GetStudentDetailsResponse.RoomMate(
-                    id = studentStub.id,
-                    name = studentStub.name,
-                    profileImageUrl = studentStub.profileImageUrl ?: Student.PROFILE_IMAGE
-                )
-            )
         )
     }
 

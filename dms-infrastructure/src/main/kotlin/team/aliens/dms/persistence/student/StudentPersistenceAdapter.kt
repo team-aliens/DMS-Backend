@@ -100,11 +100,11 @@ class StudentPersistenceAdapter(
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
 
     private fun pointTotalBetween(pointFilter: PointFilter): BooleanExpression? {
-        if(pointFilter.filterType == null) {
+        if (pointFilter.filterType == null) {
             return null
         }
 
-        return when(pointFilter.filterType) {
+        return when (pointFilter.filterType) {
             PointFilterType.BONUS -> {
                 pointHistoryJpaEntity.bonusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
@@ -114,7 +114,7 @@ class StudentPersistenceAdapter(
             else -> {
                 val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
 
-                    pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint )
+                pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
         }
     }
@@ -197,15 +197,17 @@ class StudentPersistenceAdapter(
     private fun eqStudentRecentPointHistory(): BooleanExpression? {
         return pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
             .and(eqGcn())
-            .and(pointHistoryJpaEntity.createdAt.eq(
-                select(pointHistoryJpaEntity.createdAt.max())
-                    .from(pointHistoryJpaEntity)
-                    .where(
-                        pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
-                        pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
-                        eqGcn()
-                    )
-            ))
+            .and(
+                pointHistoryJpaEntity.createdAt.eq(
+                    select(pointHistoryJpaEntity.createdAt.max())
+                        .from(pointHistoryJpaEntity)
+                        .where(
+                            pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
+                            pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                            eqGcn()
+                        )
+                )
+            )
     }
 
     private fun eqGcn(): BooleanBuilder {

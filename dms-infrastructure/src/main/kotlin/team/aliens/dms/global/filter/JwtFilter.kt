@@ -33,5 +33,4 @@ class JwtFilter(
                 return it.substring(JwtProperties.PREFIX.length)
             }
         }
-
 }

@@ -6,5 +6,4 @@ import team.aliens.dms.domain.auth.model.EmailType
 interface QueryAuthCodePort {
 
     fun queryAuthCodeByEmailAndEmailType(email: String, type: EmailType): AuthCode?
-
 }

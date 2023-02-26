@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
@@ -36,9 +35,7 @@ class ResetManagerPasswordUseCase(
 
         val authCode = queryAuthCodePort.queryAuthCodeByEmail(request.email) ?: throw AuthCodeNotFoundException
 
-        if (authCode.code != request.authCode) {
-            throw AuthCodeMismatchException
-        }
+        authCode.validateAuthCode(request.authCode)
 
         commandUserPort.saveUser(
             user.copy(password = securityPort.encodePassword(request.newPassword))

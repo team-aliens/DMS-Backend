@@ -5,5 +5,4 @@ import team.aliens.dms.domain.auth.model.RefreshToken
 interface QueryRefreshTokenPort {
 
     fun queryRefreshTokenByToken(token: String): RefreshToken?
-
 }

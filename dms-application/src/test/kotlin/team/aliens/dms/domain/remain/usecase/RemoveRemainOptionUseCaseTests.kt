@@ -103,7 +103,7 @@ class RemoveRemainOptionUseCaseTests {
 
     @Test
     fun `같은 학교의 매니저가 아님`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns managerId
 
         every { queryUserPort.queryUserById(managerId) } returns userStub
@@ -118,7 +118,7 @@ class RemoveRemainOptionUseCaseTests {
 
     @Test
     fun `유저가 존재하지 않음`() {
-        //given
+        // given
         every { securityPort.getCurrentUserId() } returns managerId
 
         every { queryUserPort.queryUserById(managerId) } returns null

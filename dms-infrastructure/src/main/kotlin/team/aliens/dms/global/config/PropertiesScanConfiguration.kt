@@ -4,8 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Configuration
 import team.aliens.dms.global.security.SecurityProperties
 import team.aliens.dms.thirdparty.AwsProperties
-import team.aliens.dms.thirdparty.storage.AwsS3Properties
 import team.aliens.dms.thirdparty.email.AwsSESProperties
+import team.aliens.dms.thirdparty.storage.AwsS3Properties
 
 @ConfigurationPropertiesScan(
     basePackageClasses = [
@@ -16,5 +16,4 @@ import team.aliens.dms.thirdparty.email.AwsSESProperties
     ]
 )
 @Configuration
-class PropertiesScanConfiguration {
-}
+class PropertiesScanConfiguration

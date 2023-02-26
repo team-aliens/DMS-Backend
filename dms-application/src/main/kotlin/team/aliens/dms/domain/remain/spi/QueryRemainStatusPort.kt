@@ -7,7 +7,6 @@ import java.util.UUID
 interface QueryRemainStatusPort {
 
     fun queryByStudentIdIn(studentIds: List<UUID>): List<RemainStatusInfo>
-    
+
     fun queryRemainStatusById(userId: UUID): RemainStatus?
-    
 }

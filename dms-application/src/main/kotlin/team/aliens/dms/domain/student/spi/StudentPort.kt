@@ -17,5 +17,4 @@ interface StudentPort :
     ManagerQueryStudentPort,
     StudyRoomQueryStudentPort,
     PointQueryStudentPort,
-    RemainQueryStudentPort {
-}
+    RemainQueryStudentPort

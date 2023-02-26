@@ -28,3 +28,6 @@ jobs:
             build
             --build-cache
             --no-daemon
+
+      - name: Run Detekt
+        run: ./gradlew detekt

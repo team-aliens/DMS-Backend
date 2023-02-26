@@ -23,9 +23,11 @@ class CreateStudyRoomUseCase(
 ) {
 
     fun execute(request: CreateStudyRoomRequest): UUID {
-        val (_, _, totalWidthSize, totalHeightSize,
+        val (
+            _, _, totalWidthSize, totalHeightSize,
             eastDescription, westDescription, southDescription, northDescription,
-            _, availableGrade, seatRequests) = request
+            _, availableGrade, seatRequests
+        ) = request
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException

@@ -65,5 +65,4 @@ class QuerySchoolsUseCaseTests {
         // then
         assertThat(response).isNotNull
     }
-
 }

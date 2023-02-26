@@ -7,7 +7,7 @@ import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.util.UUID
 
@@ -24,11 +24,10 @@ class RemoveRemainOptionUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
+        val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId)
+            ?: throw RemainOptionNotFoundException
 
-        if (remainOption.schoolId != manager.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(remainOption.schoolId, manager.schoolId)
 
         commandRemainStatusPort.deleteRemainStatusByRemainOptionId(remainOption.id)
         commandRemainOptionPort.deleteRemainOption(remainOption)

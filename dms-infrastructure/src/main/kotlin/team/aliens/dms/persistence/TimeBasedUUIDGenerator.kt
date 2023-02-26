@@ -1,9 +1,9 @@
 package team.aliens.dms.persistence
 
 import com.fasterxml.uuid.Generators
-import java.io.Serializable
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.id.IdentifierGenerator
+import java.io.Serializable
 
 class TimeBasedUUIDGenerator : IdentifierGenerator {
 

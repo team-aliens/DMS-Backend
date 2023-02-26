@@ -7,7 +7,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
 
@@ -25,9 +25,7 @@ class QueryStudentDetailsUseCase(
 
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-        if (manager.schoolId != student.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(manager.schoolId, student.schoolId)
 
         val (bonusPoint, minusPoint) =
             queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)

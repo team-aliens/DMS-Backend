@@ -6,7 +6,7 @@ import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
@@ -34,8 +34,20 @@ class RemoveStudentUseCase(
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
         val studentUser = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
 
-        if (student.schoolId != manager.schoolId) {
-            throw SchoolMismatchException
+        validateSameSchool(student.schoolId, manager.schoolId)
+
+        // 잔류 내역 삭제
+        commandRemainStatusPort.deleteByStudentId(studentId)
+
+        // 자습실 신청 상태 제거
+        queryStudyRoomPort.querySeatByStudentId(studentId)?.let { seat ->
+            val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
+            commandStudyRoomPort.saveSeat(
+                seat.unUse()
+            )
+            commandStudyRoomPort.saveStudyRoom(
+                studyRoom.unApply()
+            )
         }
 
         // 잔류 내역 삭제

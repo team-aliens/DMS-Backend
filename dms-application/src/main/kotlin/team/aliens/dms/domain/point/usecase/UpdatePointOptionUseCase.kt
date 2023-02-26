@@ -1,14 +1,14 @@
 package team.aliens.dms.domain.point.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @UseCase
 class UpdatePointOptionUseCase(
@@ -23,9 +23,8 @@ class UpdatePointOptionUseCase(
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val pointOption = queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException
-        if(pointOption.schoolId != manager.schoolId) {
-            throw SchoolMismatchException
-        }
+
+        validateSameSchool(pointOption.schoolId, manager.schoolId)
 
         commandPointOptionPort.savePointOption(
             pointOption.copy(

@@ -1,10 +1,9 @@
 package team.aliens.dms.persistence.studyroom.repository
 
-import java.util.UUID
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.studyroom.entity.AvailableTimeJpaEntity
+import java.util.UUID
 
 @Repository
-interface AvailableTimeJpaRepository : CrudRepository<AvailableTimeJpaEntity, UUID> {
-}
+interface AvailableTimeJpaRepository : CrudRepository<AvailableTimeJpaEntity, UUID>

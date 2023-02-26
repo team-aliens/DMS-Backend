@@ -9,5 +9,4 @@ interface CommandPointHistoryPort {
     fun deletePointHistory(pointHistory: PointHistory)
 
     fun saveAllPointHistories(pointHistories: List<PointHistory>)
-    
 }

@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.auth.usecase
 
+import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
@@ -11,8 +13,6 @@ import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.util.StringUtil
 
 @UseCase
 class SendEmailCodeUseCase(
@@ -37,7 +37,7 @@ class SendEmailCodeUseCase(
             throw EmailAlreadyCertifiedException
         }
 
-        val code = StringUtil.randomNumber(6)
+        val code = StringUtil.randomNumber(AuthCode.AUTH_CODE_SIZE)
 
         val authCode = AuthCode(
             code = code,

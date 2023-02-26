@@ -10,5 +10,4 @@ interface QuerySchoolPort {
     fun querySchoolById(schoolId: UUID): School?
 
     fun querySchoolByCode(code: String): School?
-
 }

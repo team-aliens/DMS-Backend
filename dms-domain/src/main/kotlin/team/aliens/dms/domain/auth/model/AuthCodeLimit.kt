@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.auth.model
 
-import team.aliens.dms.domain.auth.exception.AuthCodeOverLimitException
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.auth.exception.AuthCodeOverLimitException
 import java.util.UUID
 
 @Aggregate

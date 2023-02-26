@@ -15,7 +15,6 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort

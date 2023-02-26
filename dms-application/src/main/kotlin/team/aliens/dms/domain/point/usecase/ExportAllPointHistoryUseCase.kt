@@ -54,6 +54,6 @@ class ExportAllPointHistoryUseCase(
 
         val endDateString = end.format(File.FILE_DATE_FORMAT)
 
-        return "${school.name.replace(" ","")}_상벌점_부여내역_${startDateString}_${endDateString}"
+        return "${school.name.replace(" ","")}_상벌점_부여내역_${startDateString}_$endDateString"
     }
 }

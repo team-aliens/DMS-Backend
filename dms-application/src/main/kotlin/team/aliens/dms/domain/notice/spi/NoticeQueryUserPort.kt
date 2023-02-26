@@ -6,5 +6,4 @@ import java.util.UUID
 interface NoticeQueryUserPort {
 
     fun queryUserById(userId: UUID): User?
-
 }

@@ -144,8 +144,8 @@ class ExportAllPointHistoryUseCaseTests {
         val responseStub = ExportAllPointHistoryResponse(
             file = fileStub,
             fileName = "대덕소프트웨어마이스터고등학교_상벌점_부여내역" +
-                    "_${oldestHistoryCreatedAt.format(File.FILE_DATE_FORMAT)}" +
-                    "_${LocalDate.now().format(File.FILE_DATE_FORMAT)}"
+                "_${oldestHistoryCreatedAt.format(File.FILE_DATE_FORMAT)}" +
+                "_${LocalDate.now().format(File.FILE_DATE_FORMAT)}"
         )
 
         every { securityPort.getCurrentUserId() } returns managerId

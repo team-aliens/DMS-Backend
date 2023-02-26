@@ -8,6 +8,7 @@ import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
+import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
@@ -55,30 +56,10 @@ class SignUpUseCase(
             accountId, password, email, profileImageUrl
         ) = request
 
-        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolCodeMismatchException
+        val school = validateSchool(schoolCode, schoolAnswer)
 
-        /**
-         * 학교 확인 질문 답변 검사
-         **/
-        if (school.answer != schoolAnswer) {
-            throw AnswerMismatchException
-        }
-
-        /**
-         * 이메일 중복 검사
-         **/
-        if (queryUserPort.existsUserByEmail(email)) {
-            throw UserEmailExistsException
-        }
-
-        /**
-         * 이메일 인증코드 검사
-         **/
-        val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
-
-        if (authCode != authCodeEntity.code) {
-            throw AuthCodeMismatchException
-        }
+        validateAuthCode(authCode, email)
+        validateUserDuplicated(accountId, email)
 
         val gcn = "${grade}${classRoom}${Student.processNumber(number)}"
 
@@ -97,13 +78,6 @@ class SignUpUseCase(
             schoolId = school.id,
             number = verifiedStudent.roomNumber
         ) ?: throw RoomNotFoundException
-
-        /**
-         * 아이디 중복 검사
-         **/
-        if (queryUserPort.existsUserByAccountId(accountId)) {
-            throw UserAccountIdExistsException
-        }
 
         val user = commandUserPort.saveUser(
             createUser(
@@ -129,7 +103,9 @@ class SignUpUseCase(
         commandStudentPort.saveStudent(student)
         commandStudentPort.deleteVerifiedStudent(verifiedStudent)
 
-        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, Authority.STUDENT)
+        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
+            userId = user.id, authority = Authority.STUDENT
+        )
 
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException
@@ -148,6 +124,46 @@ class SignUpUseCase(
                 )
             }
         )
+    }
+
+    private fun validateAuthCode(authCode: String, email: String) {
+        /**
+         * 이메일 인증코드 검사
+         **/
+        val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
+
+        if (authCode != authCodeEntity.code) {
+            throw AuthCodeMismatchException
+        }
+    }
+
+    private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
+        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolCodeMismatchException
+
+        /**
+         * 학교 확인 질문 답변 검사
+         **/
+        if (school.answer != schoolAnswer) {
+            throw AnswerMismatchException
+        }
+
+        return school
+    }
+
+    private fun validateUserDuplicated(accountId: String, email: String) {
+        /**
+         * 아이디 중복 검사
+         **/
+        if (queryUserPort.existsUserByAccountId(accountId)) {
+            throw UserAccountIdExistsException
+        }
+
+        /**
+         * 이메일 중복 검사
+         **/
+        if (queryUserPort.existsUserByEmail(email)) {
+            throw UserEmailExistsException
+        }
     }
 
     private fun createUser(

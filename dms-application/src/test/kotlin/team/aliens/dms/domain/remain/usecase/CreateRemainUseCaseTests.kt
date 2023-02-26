@@ -23,7 +23,9 @@ class CreateRemainUseCaseTests {
     private val queryUserPort: QueryUserPort = mockk(relaxed = true)
     private val commentRemainOptionPort: CommandRemainOptionPort = mockk(relaxed = true)
 
-    private val createRemainOptionUseCase = CreateRemainOptionUseCase(securityPort, queryUserPort, commentRemainOptionPort)
+    private val createRemainOptionUseCase = CreateRemainOptionUseCase(
+        securityPort, queryUserPort, commentRemainOptionPort
+    )
 
     private val managerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
@@ -79,5 +81,4 @@ class CreateRemainUseCaseTests {
             createRemainOptionUseCase.execute(title, description)
         }
     }
-
 }

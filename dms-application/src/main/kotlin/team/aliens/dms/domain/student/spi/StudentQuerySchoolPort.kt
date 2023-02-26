@@ -11,5 +11,4 @@ interface StudentQuerySchoolPort {
     fun querySchoolById(schoolId: UUID): School?
 
     fun queryAvailableFeaturesBySchoolId(schoolId: UUID): AvailableFeature?
-
 }

@@ -15,7 +15,6 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -23,6 +22,7 @@ import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
@@ -183,11 +183,10 @@ class ResetStudentPasswordUseCaseTests {
             .willReturn(Authority.MANAGER)
 
         // when & then
-        assertThrows<StudentNotFoundException> {
+        assertThrows<InvalidRoleException> {
             resetStudentPasswordUseCase.execute(requestStub)
         }
     }
-
 
     @Test
     fun `학생 정보 이름 불일치`() {

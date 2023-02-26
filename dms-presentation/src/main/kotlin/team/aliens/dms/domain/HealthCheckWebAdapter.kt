@@ -8,5 +8,4 @@ class HealthCheckWebAdapter {
 
     @GetMapping
     fun healthCheck() = "OK"
-
 }

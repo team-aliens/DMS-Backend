@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -24,9 +24,7 @@ class RemoveStudyRoomUseCase(
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
 
-        if (studyRoom.schoolId != manager.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(studyRoom.schoolId, manager.schoolId)
 
         commandStudyRoomPort.deleteAllSeatsByStudyRoomId(studyRoomId)
         commandStudyRoomPort.deleteStudyRoomById(studyRoomId)

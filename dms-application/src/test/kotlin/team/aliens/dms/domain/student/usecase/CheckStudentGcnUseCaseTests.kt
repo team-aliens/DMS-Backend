@@ -11,14 +11,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 import java.time.LocalDate
 import java.util.UUID
-import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.VerifiedStudent
-import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 @ExtendWith(SpringExtension::class)
 class CheckStudentGcnUseCaseTests {
@@ -91,7 +91,6 @@ class CheckStudentGcnUseCaseTests {
         // then
         assertEquals(response, verifiedStudent.name)
     }
-
 
     @Test
     fun `학교 존재하지 않음`() {

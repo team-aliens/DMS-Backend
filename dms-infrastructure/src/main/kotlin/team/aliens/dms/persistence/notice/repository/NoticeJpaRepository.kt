@@ -17,5 +17,4 @@ interface NoticeJpaRepository : CrudRepository<NoticeJpaEntity, UUID> {
     fun findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId: UUID): List<NoticeJpaEntity>
 
     fun findByIdAndManagerUserId(id: UUID, managerId: UUID): NoticeJpaEntity?
-
 }

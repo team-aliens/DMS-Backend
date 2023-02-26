@@ -1,8 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.SeatTypeInUseException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandSeatTypePort
@@ -11,6 +10,7 @@ import team.aliens.dms.domain.studyroom.spi.SeatTypeQueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @UseCase
 class RemoveSeatTypeUseCase(
@@ -27,9 +27,7 @@ class RemoveSeatTypeUseCase(
 
         val seatType = querySeatTypePort.querySeatTypeById(seatTypeId) ?: throw SeatTypeNotFoundException
 
-        if (user.schoolId != seatType.schoolId) {
-            throw SchoolMismatchException
-        }
+        validateSameSchool(user.schoolId, seatType.schoolId)
 
         if (queryStudyRoomPort.existsSeatBySeatTypeId(seatTypeId)) {
             throw SeatTypeInUseException

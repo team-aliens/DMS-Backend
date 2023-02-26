@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.spi.vo
 
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
+import java.util.UUID
 
 open class StudyRoomVO(
     val id: UUID,

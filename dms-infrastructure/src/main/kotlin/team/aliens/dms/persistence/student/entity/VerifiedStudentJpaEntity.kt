@@ -1,13 +1,13 @@
 package team.aliens.dms.persistence.student.entity
 
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.persistence.BaseUUIDEntity
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Table
-import team.aliens.dms.persistence.BaseUUIDEntity
 
 @Entity
 @Table(name = "tbl_verified_student")

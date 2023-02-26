@@ -14,5 +14,4 @@ interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
         classRoom: Int,
         number: Int
     ): StudentJpaEntity?
-
 }

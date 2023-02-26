@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.spi
 
-import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.SeatType
+import java.util.UUID
 
 interface QuerySeatTypePort {
 
@@ -10,5 +10,4 @@ interface QuerySeatTypePort {
     fun existsSeatTypeByName(name: String): Boolean
 
     fun querySeatTypeById(seatTypeId: UUID): SeatType?
-
 }

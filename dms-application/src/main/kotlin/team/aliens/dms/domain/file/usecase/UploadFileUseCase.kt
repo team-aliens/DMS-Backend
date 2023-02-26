@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.file.usecase
 
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.exception.FileInvalidExtensionException
 import team.aliens.dms.domain.file.spi.UploadFilePort
-import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import java.io.File
 
 @ReadOnlyUseCase

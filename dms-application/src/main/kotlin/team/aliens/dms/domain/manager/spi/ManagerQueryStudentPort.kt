@@ -17,5 +17,4 @@ interface ManagerQueryStudentPort {
     ): List<Student>
 
     fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<Student>
-
 }

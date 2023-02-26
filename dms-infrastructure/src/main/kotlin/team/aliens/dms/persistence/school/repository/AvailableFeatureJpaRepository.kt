@@ -6,5 +6,4 @@ import team.aliens.dms.persistence.school.entity.AvailableFeatureJpaEntity
 import java.util.UUID
 
 @Repository
-interface AvailableFeatureJpaRepository : CrudRepository<AvailableFeatureJpaEntity, UUID> {
-}
+interface AvailableFeatureJpaRepository : CrudRepository<AvailableFeatureJpaEntity, UUID>

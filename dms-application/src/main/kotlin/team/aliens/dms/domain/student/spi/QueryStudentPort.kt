@@ -8,5 +8,4 @@ interface QueryStudentPort {
     fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int): Student?
 
     fun queryStudentById(studentId: UUID): Student?
-
 }

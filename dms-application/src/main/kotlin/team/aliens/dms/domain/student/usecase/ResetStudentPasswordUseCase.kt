@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
@@ -12,6 +11,7 @@ import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.CheckUserAuthority
 
@@ -30,7 +30,7 @@ class ResetStudentPasswordUseCase(
         val student = queryStudentPort.queryStudentById(user.id) ?: throw StudentNotFoundException
 
         if (checkUserAuthority.execute(user.id) != Authority.STUDENT) {
-            throw StudentNotFoundException
+            throw InvalidRoleException
         }
 
         if (student.name != request.name || user.email != request.email) {
@@ -39,9 +39,7 @@ class ResetStudentPasswordUseCase(
 
         val authCode = queryAuthCodePort.queryAuthCodeByEmail(user.email) ?: throw AuthCodeNotFoundException
 
-        if (authCode.code != request.authCode) {
-            throw AuthCodeMismatchException
-        }
+        authCode.validateAuthCode(request.authCode)
 
         commandUserPort.saveUser(
             user.copy(password = securityPort.encodePassword(request.newPassword))

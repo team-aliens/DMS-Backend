@@ -3,7 +3,6 @@ package team.aliens.dms.domain.auth.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.EmailType
@@ -29,9 +28,7 @@ class CertifyEmailCodeUseCase(
         val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)
             ?: throw AuthCodeNotFoundException
 
-        if (authCode.code != request.authCode) {
-            throw AuthCodeMismatchException
-        }
+        authCode.validateAuthCode(request.authCode)
 
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
             ?: throw AuthCodeLimitNotFoundException

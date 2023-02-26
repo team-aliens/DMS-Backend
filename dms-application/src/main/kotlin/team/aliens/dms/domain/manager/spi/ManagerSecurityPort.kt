@@ -7,5 +7,4 @@ interface ManagerSecurityPort {
     fun getCurrentUserId(): UUID
 
     fun encodePassword(password: String): String
-
 }
