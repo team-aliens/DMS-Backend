@@ -1,31 +1,31 @@
 package team.aliens.dms.domain.student.usecase
 
-import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
+import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
+import java.time.LocalDateTime
 import java.util.UUID
-import team.aliens.dms.domain.room.exception.RoomNotFoundException
-import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
-import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 
 /**
  *
@@ -127,6 +127,7 @@ class SignUpUseCase(
             sex = verifiedStudent.sex
         )
         commandStudentPort.saveStudent(student)
+        commandStudentPort.deleteVerifiedStudent(verifiedStudent)
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(user.id, Authority.STUDENT)
 
