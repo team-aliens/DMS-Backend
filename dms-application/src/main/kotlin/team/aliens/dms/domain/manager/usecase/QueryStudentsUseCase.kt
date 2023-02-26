@@ -44,7 +44,8 @@ class QueryStudentsUseCase(
                 name = it.name,
                 gcn = it.gcn,
                 roomNumber = it.roomNumber,
-                profileImageUrl = it.profileImageUrl!!
+                profileImageUrl = it.profileImageUrl!!,
+                sex = it.sex
             )
         }
 
