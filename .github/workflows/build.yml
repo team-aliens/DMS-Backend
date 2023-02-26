@@ -30,4 +30,4 @@ jobs:
             --no-daemon
 
       - name: Run Detekt
-        run: ./gradlew detekt
+        run: ./gradlew :dms-application:detekt

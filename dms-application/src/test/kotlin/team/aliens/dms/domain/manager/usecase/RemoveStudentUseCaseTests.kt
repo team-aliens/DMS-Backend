@@ -58,7 +58,8 @@ class RemoveStudentUseCaseTests {
     @BeforeEach
     fun setUp() {
         removeStudentUseCase = RemoveStudentUseCase(
-            securityPort, queryUserPort, queryStudentPort, commandRemainStatusPort, queryStudyRoomPort, commandStudyRoomPort, commandUserPort
+            securityPort, queryUserPort, queryStudentPort, commandRemainStatusPort,
+            queryStudyRoomPort, commandStudyRoomPort, commandUserPort
         )
     }
 

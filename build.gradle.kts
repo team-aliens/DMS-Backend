@@ -39,6 +39,8 @@ subprojects {
         // test
         implementation(Dependencies.SPRING_TEST)
         implementation(Dependencies.MOCKK)
+
+        detektPlugins(Dependencies.DETEKT)
     }
 }
 

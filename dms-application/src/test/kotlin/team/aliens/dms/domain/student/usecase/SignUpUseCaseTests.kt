@@ -147,26 +147,6 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val tokenResponseStub by lazy {
-        TokenResponse(
-            accessToken = "test access token",
-            accessTokenExpiredAt = LocalDateTime.now(),
-            refreshToken = "test refresh token",
-            refreshTokenExpiredAt = LocalDateTime.now()
-        )
-    }
-
-    private val featureStub by lazy {
-        AvailableFeature(
-            schoolId = userStub.schoolId,
-            mealService = true,
-            noticeService = true,
-            pointService = true,
-            studyRoomService = false,
-            remainService = true
-        )
-    }
-
     private val gcnStub = "${requestStub.grade}${requestStub.classRoom}${Student.processNumber(requestStub.number)}"
 
 //    @Test

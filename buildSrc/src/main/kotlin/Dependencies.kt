@@ -52,4 +52,7 @@ object Dependencies {
     // excel
     const val APACHE_POI = "org.apache.poi:poi:${DependencyVersions.APACHE_POI_VERSION}"
     const val APACHE_POI_OOXML = "org.apache.poi:poi-ooxml:${DependencyVersions.APACHE_POI_VERSION}"
+
+    // detekt
+    const val DETEKT = "io.gitlab.arturbosch.detekt:detekt-formatting:${PluginVersions.DETEKT_VERSION}"
 }

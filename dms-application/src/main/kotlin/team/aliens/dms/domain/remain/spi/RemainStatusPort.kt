@@ -7,5 +7,4 @@ interface RemainStatusPort :
     CommandRemainStatusPort,
     QueryRemainStatusPort,
     StudentCommandRemainStatusPort,
-    ManagerCommandRemainStatusPort {
-}
+    ManagerCommandRemainStatusPort

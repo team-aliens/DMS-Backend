@@ -61,13 +61,11 @@ class SignUpUseCase(
         validateAuthCode(authCode, email)
         validateUserDuplicated(accountId, email)
 
-        val gcn = "${grade}${classRoom}${Student.processNumber(number)}"
-
         /**
          * 검증된 학생 조회
          **/
         val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-            gcn = gcn,
+            gcn = "${grade}${classRoom}${Student.processNumber(number)}",
             schoolName = school.name
         ) ?: throw VerifiedStudentNotFoundException
 

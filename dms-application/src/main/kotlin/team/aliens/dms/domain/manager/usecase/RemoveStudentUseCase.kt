@@ -53,17 +53,6 @@ class RemoveStudentUseCase(
         // 잔류 내역 삭제
         commandRemainStatusPort.deleteByStudentId(studentId)
 
-        // 자습실 신청 상태 제거
-        queryStudyRoomPort.querySeatByStudentId(studentId)?.let { seat ->
-            val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
-            commandStudyRoomPort.saveSeat(
-                seat.unUse()
-            )
-            commandStudyRoomPort.saveStudyRoom(
-                studyRoom.unApply()
-            )
-        }
-
         commandUserPort.saveUser(
             studentUser.copy(deletedAt = LocalDateTime.now())
         )
