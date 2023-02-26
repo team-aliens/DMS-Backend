@@ -58,6 +58,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/students/signup").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/profile").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.DELETE, "/students").hasAuthority(STUDENT.name)
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()

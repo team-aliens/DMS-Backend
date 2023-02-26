@@ -2,6 +2,7 @@ package team.aliens.dms.domain.student
 
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -11,25 +12,26 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.SignUpRequest
-import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
-import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
-import team.aliens.dms.domain.student.usecase.SignUpUseCase
-import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
-import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
-import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
 import team.aliens.dms.domain.student.dto.response.CheckStudentGcnResponse
 import team.aliens.dms.domain.student.dto.response.FindStudentAccountIdResponse
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
+import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
+import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
+import team.aliens.dms.domain.student.usecase.SignUpUseCase
+import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
+import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.Email
@@ -47,7 +49,8 @@ class StudentWebAdapter(
     private val resetStudentPasswordUseCase: ResetStudentPasswordUseCase,
     private val checkStudentGcnUseCase: CheckStudentGcnUseCase,
     private val updateStudentProfileUseCase: UpdateStudentProfileUseCase,
-    private val studentMyPageUseCase: StudentMyPageUseCase
+    private val studentMyPageUseCase: StudentMyPageUseCase,
+    private val studentWithdrawalUseCase: StudentWithdrawalUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -141,6 +144,12 @@ class StudentWebAdapter(
     @GetMapping("/profile")
     fun myPage(): StudentMyPageResponse {
         return studentMyPageUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    fun withdrawal() {
+        studentWithdrawalUseCase.execute()
     }
 }
    
