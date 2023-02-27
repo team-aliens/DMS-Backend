@@ -71,7 +71,7 @@ class ExcelAdapterTests {
                 studentName = "",
                 studentGcn = "1234",
                 studentSex = Sex.FEMALE,
-                roomNumber = 200,
+                roomNumber = "200",
                 optionName = ""
             )
         )

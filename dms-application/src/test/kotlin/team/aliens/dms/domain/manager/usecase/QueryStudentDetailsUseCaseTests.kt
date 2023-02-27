@@ -65,7 +65,7 @@ class QueryStudentDetailsUseCaseTests {
         Student(
             id = studentId,
             roomId = UUID.randomUUID(),
-            roomNumber = 216,
+            roomNumber = "216",
             schoolId = schoolId,
             grade = 2,
             classRoom = 1,
@@ -83,7 +83,7 @@ class QueryStudentDetailsUseCaseTests {
         Student(
             id = UUID.randomUUID(),
             roomId = UUID.randomUUID(),
-            roomNumber = 216,
+            roomNumber = "216",
             schoolId = schoolId,
             grade = 2,
             classRoom = 1,

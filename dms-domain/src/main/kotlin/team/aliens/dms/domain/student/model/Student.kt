@@ -10,7 +10,7 @@ data class Student(
 
     val roomId: UUID,
 
-    val roomNumber: Int,
+    val roomNumber: String,
 
     val schoolId: UUID,
 

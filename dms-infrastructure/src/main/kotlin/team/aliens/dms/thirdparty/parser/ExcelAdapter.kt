@@ -44,7 +44,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                         schoolName = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
                         name = getCell(1, CREATE_NULL_AS_BLANK).stringCellValue,
                         gcn = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomNumber = getCell(3, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
+                        roomNumber = getCell(3, CREATE_NULL_AS_BLANK).stringCellValue,
                         sex = transferToSex(
                             getCell(4, CREATE_NULL_AS_BLANK).stringCellValue
                         )
@@ -114,7 +114,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 it.studentName,
                 it.studentGcn,
                 it.studentSex.korean,
-                it.roomNumber.toString(),
+                it.roomNumber,
                 it.optionName
             )
         }

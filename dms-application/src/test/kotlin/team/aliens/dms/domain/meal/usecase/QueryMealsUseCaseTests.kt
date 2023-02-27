@@ -53,7 +53,7 @@ class QueryMealsUseCaseTests {
         Student(
             id = currentUserId,
             roomId = UUID.randomUUID(),
-            roomNumber = 123,
+            roomNumber = "123",
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,
