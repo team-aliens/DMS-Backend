@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 data class PointHistoryDto(
-    val id: UUID,
+    val pointHistoryId: UUID,
     val date: LocalDate,
     val type: PointType,
     val name: String,
