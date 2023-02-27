@@ -1,51 +1,133 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        .wrapper {
-            text-align: center;
-            width: 700px;
-            margin: 0 auto;
-        }
-        .main {
-            font-size: 36px;
-        }
-        .sub {
-            color: #999999;
-            font-size: 16px;
-        }
-        .accountId {
-            text-align: center;
-            background-color: #F5F9FF;
-            margin: 80px auto;
-            font-size: 40px;
-            line-height: 80px;
-            height: 80px;
-            width: 400px;
-        }
-    </style>
+<!DOCTYPE html>
+<html lang="en" style="box-sizing: content-box">
+<head style="box-sizing: content-box">
+    <meta charset="UTF-8" style="box-sizing: content-box" />
+    <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge"
+            style="box-sizing: content-box"
+    />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+            style="box-sizing: content-box"
+    />
+    <title style="box-sizing: content-box">Document</title>
 </head>
-<body>
-
-
-
-<div class="wrapper">
-    <img style="margin-top: 60px;" height="42px" src="https://image-dms.s3.ap-northeast-2.amazonaws.com/d7d796d9-47f7-4faa-92da-c675f42cbc97%7C%7CLOGO%20-%20HORIZONTAL.svg">
-
-    <p style="margin-top: 100px;">
-        <span class="main">기숙사 관리 시스템 아이디 찾기를 통한<br>아이디입니다.</span>
-    </p>
-    <p>
-        <span class="sub" style="margin-top: 44px; color: #555555;">
-            아래 아이디를 복사하여 로그인을 완료하시기 바랍니다.
-        </span>
-    </p>
-    <div class="accountId">{{accountId}}</div>
+<body style="box-sizing: content-box">
+<div
+        class="container"
+        style="
+        box-sizing: content-box;
+        padding: 40px 10px;
+        border-top: 3px solid #3D8AFF;
+        border-bottom: 3px solid #3D8AFF;
+      "
+>
+    <div
+            class="iconWrapper"
+            style="
+          box-sizing: content-box;
+          display: flex;
+          text-align: center;
+          padding-bottom: 10px;
+          width: fit-content;
+          margin: 0 auto;
+        "
+    >
+        <img
+                src="https://image-dms.s3.ap-northeast-2.amazonaws.com/d7d796d9-47f7-4faa-92da-c675f42cbc97%7C%7CLOGO%20-%20HORIZONTAL.svg"
+                style="box-sizing: content-box"
+                height="42px"
+        />
+        <div
+                class="iconText"
+                style="
+            box-sizing: content-box;
+            padding-left: 5px;
+            font-family: 'Pretendard-Regular';
+            font-weight: 100;
+            font-size: 15px;
+            display: inline;
+          "
+        >
+            <i
+                    style="
+              box-sizing: content-box;
+              font-size: inherit;
+              font-weight: inherit;
+              font-style: normal;
+              font-family: inherit;
+              color: #e84045;
+            "
+            > </i
+            >
+        </div>
+    </div>
+    <div
+            class="mainTitle"
+            style="
+          box-sizing: content-box;
+          font-family: 'Pretendard-Regular';
+          font-size: 25px;
+          font-weight: 600;
+          margin: 0 auto;
+          width: fit-content;
+        "
+    >
+        <i
+                style="
+            box-sizing: content-box;
+            font-size: inherit;
+            font-weight: inherit;
+            font-style: normal;
+            font-family: inherit;
+            color: #3D8AFF;
+          "
+        >DMS 아이디 </i
+        >
+        안내입니다.
+    </div>
+    <div
+            class="splitBorder"
+            style="
+          box-sizing: content-box;
+          width: 80px;
+          height: 2px;
+          background-color: #d3d3d3;
+          margin: 15px auto 14px;
+        "
+    ></div>
+    <div
+            class="description"
+            style="
+          box-sizing: content-box;
+          font-size: 400;
+          font-family: 'Pretendard-Regular';
+          color: #505050;
+          margin: 0 auto;
+          width: fit-content;
+        "
+    >
+        아래 아이디를 복사하여 로그인을 완료하시기 바랍니다.
+    </div>
+    <div
+            class="codeBox"
+            style="
+          box-sizing: content-box;
+          padding: 20px 52px;
+          background-color: #ededed;
+          font-family: 'Pretendard-Regular';
+          border-radius: 5px;
+          font-size: 20px;
+          font-weight: 600;
+          letter-spacing: 0.3em;
+          width: fit-content;
+          margin: 20px auto 0;
+        "
+    >
+        {{accountId}}
+    </div>
 </div>
 </body>
+</html>
