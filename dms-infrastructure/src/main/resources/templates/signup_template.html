@@ -1,15 +1,46 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .wrapper {
+            text-align: center;
+            width: 700px;
+            margin: 0 auto;
+        }
+        .main {
+            font-size: 36px;
+        }
+        .sub {
+            color: #999999;
+            font-size: 16px;
+        }
+        .code {
+            text-align: center;
+            background-color: #F5F9FF;
+            margin: 80px auto;
+            font-size: 40px;
+            line-height: 80px;
+            height: 80px;
+            width: 400px;
+        }
+    </style>
 </head>
 <body>
-<div style="font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 400px; height: 600px; border-top: 4px solid #02b875; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
-    <h1 style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;"><span
-            style="font-size: 15px; margin: 0 0 10px 3px;"></span><br/><span style="color: #02b875">메일인증</span>   안내입니다.
-    </h1>
-    <p style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">안녕하세요.<br/>DMS에 가입해 주셔서 진심으로 감사드립니다.<br/>인증
-        창에<b style="color: #02b875">   {{code}}   </b>를 입력하여 메일인증을 완료해주세요.<br/>감사합니다.</p>
-    <div style="border-top: 1px solid #DDD; padding: 5px;"></div>
+<div class="wrapper">
+    <p style="margin-top: 200px;">
+        <span class="main">기숙사 관리 시스템 아이디 찾기를 통한<br>아이디입니다.</span>
+    </p>
+    <p>
+            <span class="sub" style="color: #555555;">
+                아래 이메일 인증번호를 복사하여 인증확인 받으시기 바랍니다.
+            </span>
+    </p>
+    <div class="code">{{code}}</div>
 </div>
 </body>
-</html>
