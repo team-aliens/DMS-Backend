@@ -8,7 +8,7 @@ enum class FileErrorCode(
 ) : ErrorProperty {
 
     INVALID_EXTENSION(400, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)"),
-
+    BAD_EXCEL_FORMAT(400, "Bas Excel Format"),
     IO_INTERRUPTED(500, "Interrupted File IO")
     ;
 
