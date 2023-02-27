@@ -61,7 +61,7 @@ class QueryStudentPointHistoryUseCaseTest {
             number = 15,
             roomId = roomId,
             sex = Sex.MALE,
-            roomNumber = 422
+            roomNumber = "422"
         )
     }
 
@@ -75,7 +75,7 @@ class QueryStudentPointHistoryUseCaseTest {
             number = 11,
             roomId = roomId,
             sex = Sex.MALE,
-            roomNumber = 422
+            roomNumber = "422"
         )
     }
 
