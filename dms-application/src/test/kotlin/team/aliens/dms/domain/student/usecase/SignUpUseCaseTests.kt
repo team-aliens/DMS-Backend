@@ -118,7 +118,7 @@ class SignUpUseCaseTests {
             id = UUID.randomUUID(),
             schoolName = schoolStub.name,
             name = name,
-            roomNumber = 318,
+            roomNumber = "318",
             gcn = gcnStub,
             sex = Sex.FEMALE
         )

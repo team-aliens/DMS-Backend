@@ -5,5 +5,5 @@ import java.util.UUID
 
 interface StudentQueryRoomPort {
 
-    fun queryRoomBySchoolIdAndNumber(schoolId: UUID, number: Int): Room?
+    fun queryRoomBySchoolIdAndNumber(schoolId: UUID, number: String): Room?
 }

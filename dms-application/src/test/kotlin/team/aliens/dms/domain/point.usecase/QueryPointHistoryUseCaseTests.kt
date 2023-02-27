@@ -49,7 +49,7 @@ class QueryPointHistoryUseCaseTests {
         Student(
             id = currentStudentId,
             roomId = UUID.randomUUID(),
-            roomNumber = 123,
+            roomNumber = "123",
             schoolId = UUID.randomUUID(),
             grade = 2,
             classRoom = 1,
@@ -75,12 +75,14 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name2",
@@ -124,12 +126,14 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name",
                 score = 5
             ),
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",
@@ -171,12 +175,14 @@ class QueryPointHistoryUseCaseTests {
         // given
         val pointStubs = listOf(
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.BONUS,
                 name = "test name",
                 score = 10
             ),
             PointHistoryDto(
+                pointHistoryId = UUID.randomUUID(),
                 date = LocalDate.now(),
                 type = PointType.MINUS,
                 name = "test name2",

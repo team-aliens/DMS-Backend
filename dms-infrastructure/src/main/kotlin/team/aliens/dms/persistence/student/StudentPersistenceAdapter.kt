@@ -132,7 +132,7 @@ class StudentPersistenceAdapter(
         }
     }
 
-    override fun queryUserByRoomNumberAndSchoolId(roomNumber: Int, schoolId: UUID): List<Student> {
+    override fun queryUserByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)

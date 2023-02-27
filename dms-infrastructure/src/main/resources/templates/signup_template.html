@@ -1,15 +1,133 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en" style="box-sizing: content-box">
+<head style="box-sizing: content-box">
+    <meta charset="UTF-8" style="box-sizing: content-box" />
+    <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge"
+            style="box-sizing: content-box"
+    />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+            style="box-sizing: content-box"
+    />
+    <title style="box-sizing: content-box">Document</title>
 </head>
-<body>
-<div style="font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 400px; height: 600px; border-top: 4px solid #02b875; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
-    <h1 style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;"><span
-            style="font-size: 15px; margin: 0 0 10px 3px;"></span><br/><span style="color: #02b875">메일인증</span>   안내입니다.
-    </h1>
-    <p style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">안녕하세요.<br/>DMS에 가입해 주셔서 진심으로 감사드립니다.<br/>인증
-        창에<b style="color: #02b875">   {{code}}   </b>를 입력하여 메일인증을 완료해주세요.<br/>감사합니다.</p>
-    <div style="border-top: 1px solid #DDD; padding: 5px;"></div>
+<body style="box-sizing: content-box">
+<div
+        class="container"
+        style="
+        box-sizing: content-box;
+        padding: 40px 10px;
+        border-top: 3px solid #3D8AFF;
+        border-bottom: 3px solid #3D8AFF;
+      "
+>
+    <div
+            class="iconWrapper"
+            style="
+          box-sizing: content-box;
+          display: flex;
+          text-align: center;
+          padding-bottom: 10px;
+          width: fit-content;
+          margin: 0 auto;
+        "
+    >
+        <img
+                src="https://image-dms.s3.ap-northeast-2.amazonaws.com/d7d796d9-47f7-4faa-92da-c675f42cbc97%7C%7CLOGO%20-%20HORIZONTAL.svg"
+                style="box-sizing: content-box"
+                height="42px"
+        />
+        <div
+                class="iconText"
+                style="
+            box-sizing: content-box;
+            padding-left: 5px;
+            font-family: 'Pretendard-Regular';
+            font-weight: 100;
+            font-size: 15px;
+            display: inline;
+          "
+        >
+            <i
+                    style="
+              box-sizing: content-box;
+              font-size: inherit;
+              font-weight: inherit;
+              font-style: normal;
+              font-family: inherit;
+              color: #e84045;
+            "
+            > </i
+            >
+        </div>
+    </div>
+    <div
+            class="mainTitle"
+            style="
+          box-sizing: content-box;
+          font-family: 'Pretendard-Regular';
+          font-size: 25px;
+          font-weight: 600;
+          margin: 0 auto;
+          width: fit-content;
+        "
+    >
+        <i
+                style="
+            box-sizing: content-box;
+            font-size: inherit;
+            font-weight: inherit;
+            font-style: normal;
+            font-family: inherit;
+            color: #3D8AFF;
+          "
+        >회원가입 인증 </i
+        >
+        안내입니다.
+    </div>
+    <div
+            class="splitBorder"
+            style="
+          box-sizing: content-box;
+          width: 80px;
+          height: 2px;
+          background-color: #d3d3d3;
+          margin: 15px auto 14px;
+        "
+    ></div>
+    <div
+            class="description"
+            style="
+          box-sizing: content-box;
+          font-size: 400;
+          font-family: 'Pretendard-Regular';
+          color: #505050;
+          margin: 0 auto;
+          width: fit-content;
+        "
+    >
+        DMS에서 보낸 인증 메일입니다.
+    </div>
+    <div
+            class="codeBox"
+            style="
+          box-sizing: content-box;
+          padding: 20px 52px;
+          background-color: #ededed;
+          font-family: 'Pretendard-Regular';
+          border-radius: 5px;
+          font-size: 20px;
+          font-weight: 600;
+          letter-spacing: 0.7em;
+          width: fit-content;
+          margin: 20px auto 0;
+        "
+    >
+        {{code}}
+    </div>
 </div>
 </body>
 </html>

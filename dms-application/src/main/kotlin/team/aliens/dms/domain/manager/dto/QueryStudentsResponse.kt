@@ -11,7 +11,7 @@ data class QueryStudentsResponse(
         val name: String,
         val gcn: String,
         val sex: Sex,
-        val roomNumber: Int,
+        val roomNumber: String,
         val profileImageUrl: String
     )
 }

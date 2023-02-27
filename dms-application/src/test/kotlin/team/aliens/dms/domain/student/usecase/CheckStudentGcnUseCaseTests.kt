@@ -65,7 +65,7 @@ class CheckStudentGcnUseCaseTests {
             id = UUID.randomUUID(),
             schoolName = schoolStub.name,
             name = "이름",
-            roomNumber = 123,
+            roomNumber = "123",
             gcn = "1203",
             sex = Sex.FEMALE
         )
