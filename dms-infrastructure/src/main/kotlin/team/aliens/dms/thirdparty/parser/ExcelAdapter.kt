@@ -44,7 +44,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                         id = Generators.timeBasedGenerator().generate(),
                         schoolName = schoolName,
                         name = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
-                        gcn = getCell(1, CREATE_NULL_AS_BLANK).stringCellValue.toInt().toString(),
+                        gcn = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
                         roomNumber = getCell(2, CREATE_NULL_AS_BLANK).stringCellValue.toInt(),
                         sex = transferToSex(
                             getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
