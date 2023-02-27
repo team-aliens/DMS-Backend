@@ -69,6 +69,7 @@ class PointHistoryPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
+                    pointHistoryJpaEntity.id,
                     pointHistoryJpaEntity.createdAt,
                     pointHistoryJpaEntity.pointType,
                     pointHistoryJpaEntity.pointName,
@@ -88,6 +89,7 @@ class PointHistoryPersistenceAdapter(
             .fetch()
             .map {
                 PointHistoryDto(
+                    id = it.id,
                     date = it.date.toLocalDate(),
                     type = it.pointType,
                     name = it.pointName,
