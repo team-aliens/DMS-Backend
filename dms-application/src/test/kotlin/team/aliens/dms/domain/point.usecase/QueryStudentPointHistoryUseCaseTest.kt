@@ -81,6 +81,7 @@ class QueryStudentPointHistoryUseCaseTest {
 
     private val pointHistoryStub by lazy {
         PointHistoryDto(
+            pointHistoryId = UUID.randomUUID(),
             name = "호실 청결상태 우수",
             type = PointType.BONUS,
             score = 10,
@@ -90,6 +91,7 @@ class QueryStudentPointHistoryUseCaseTest {
 
     private val pointHistoryStub2 by lazy {
         PointHistoryDto(
+            pointHistoryId = UUID.randomUUID(),
             name = "타호실",
             type = PointType.MINUS,
             score = 10,
