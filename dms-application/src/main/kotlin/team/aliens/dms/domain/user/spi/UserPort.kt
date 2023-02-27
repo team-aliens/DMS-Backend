@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.user.spi
 
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
+import team.aliens.dms.domain.file.spi.FileQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
@@ -23,4 +24,5 @@ interface UserPort :
     SchoolQueryUserPort,
     PointQueryUserPort,
     StudyRoomQueryUserPort,
-    RemainQueryUserPort
+    RemainQueryUserPort,
+    FileQueryUserPort
