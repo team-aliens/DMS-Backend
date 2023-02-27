@@ -20,7 +20,7 @@ class RoomJpaEntity(
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(3)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(4)", nullable = false, unique = true)
     val number: String
 
 ) : BaseUUIDEntity(id)
