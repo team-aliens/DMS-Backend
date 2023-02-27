@@ -10,7 +10,7 @@ data class GetStudentDetailsResponse(
     val sex: Sex,
     val bonusPoint: Int,
     val minusPoint: Int,
-    val roomNumber: Int,
+    val roomNumber: String,
     val roomMates: List<RoomMate>
 
 ) {

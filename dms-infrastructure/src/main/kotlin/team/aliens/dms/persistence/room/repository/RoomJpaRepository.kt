@@ -8,5 +8,5 @@ import java.util.UUID
 @Repository
 interface RoomJpaRepository : CrudRepository<RoomJpaEntity, UUID> {
 
-    fun findBySchoolIdAndNumber(schoolId: UUID, number: Int): RoomJpaEntity?
+    fun findBySchoolIdAndNumber(schoolId: UUID, number: String): RoomJpaEntity?
 }
