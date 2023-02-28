@@ -119,6 +119,7 @@ class SignUpUseCaseTests {
             schoolName = schoolStub.name,
             name = name,
             roomNumber = "318",
+            roomLocation = "A",
             gcn = gcnStub,
             sex = Sex.FEMALE
         )

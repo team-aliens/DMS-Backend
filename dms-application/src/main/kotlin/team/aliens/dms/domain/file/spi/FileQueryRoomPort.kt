@@ -5,6 +5,5 @@ import java.util.UUID
 
 interface FileQueryRoomPort {
 
-    fun queryRoomsByRoomNumbersIn(roomNumbers: List<String>, schoolId: UUID) : List<Room>
-
+    fun queryRoomsByRoomNumbersIn(roomNumbers: List<String>, schoolId: UUID): List<Room>
 }
