@@ -19,7 +19,7 @@ spring:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
         show_sql: ${SHOW_SQL:true}
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
   jackson:
