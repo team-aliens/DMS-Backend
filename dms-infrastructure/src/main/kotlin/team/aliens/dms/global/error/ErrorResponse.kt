@@ -1,5 +1,6 @@
 package team.aliens.dms.global.error
 
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import team.aliens.dms.common.error.ErrorProperty
@@ -48,6 +49,13 @@ data class ErrorResponse(
             return ValidationErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
                 fieldError = errorMap
+            )
+        }
+
+        fun of(e: DataIntegrityViolationException): ErrorResponse {
+            return ErrorResponse(
+                status = GlobalErrorCode.BAD_REQUEST.status(),
+                message = e.message ?: ""
             )
         }
     }

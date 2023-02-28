@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.room
 
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.RoomPort
 import team.aliens.dms.persistence.room.mapper.RoomMapper
 import team.aliens.dms.persistence.room.repository.RoomJpaRepository
@@ -18,4 +19,18 @@ class RoomPersistenceAdapter(
             number = number
         )
     )
+
+    override fun queryRoomsByRoomNumbersIn(roomNumbers: List<String>, schoolId: UUID): List<Room> {
+        return roomRepository.findAllByNumberIsInAndSchoolId(
+            numbers = roomNumbers,
+            schoolId = schoolId
+        ).mapNotNull(roomMapper::toDomain)
+    }
+
+    override fun saveRooms(rooms: List<Room>) =
+        roomRepository.saveAll(
+            rooms.map {  roomMapper.toEntity(it) }
+        ).map {
+            roomMapper.toDomain(it)!!
+        }
 }

@@ -9,4 +9,6 @@ import java.util.UUID
 interface RoomJpaRepository : CrudRepository<RoomJpaEntity, UUID> {
 
     fun findBySchoolIdAndNumber(schoolId: UUID, number: String): RoomJpaEntity?
+
+    fun findAllByNumberIsInAndSchoolId(numbers: List<String>, schoolId: UUID): List<RoomJpaEntity>
 }

@@ -19,6 +19,7 @@ import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
@@ -43,12 +44,17 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                     VerifiedStudent(
                         id = Generators.timeBasedGenerator().generate(),
                         schoolName = schoolName,
-                        name = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
-                        gcn = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomNumber = getCell(2, CREATE_NULL_AS_BLANK).stringCellValue,
+                        gcn = Student.processGcn(
+                            grade = getCell(0, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
+                            classRoom = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
+                            number = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
+                        ),
                         sex = transferToSex(
                             getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
-                        )
+                        ),
+                        name = getCell(4, CREATE_NULL_AS_BLANK).stringCellValue,
+                        roomNumber = getCell(5, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
+                        roomLocation = getCell(6, CREATE_NULL_AS_BLANK).stringCellValue,
                     )
                 }
                 verifiedStudents.add(excelData)
@@ -60,6 +66,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         return verifiedStudents
     }
+
 
     private fun transferToExcel(file: File): Workbook {
         val inputStream = file.inputStream()
