@@ -59,6 +59,7 @@ class FindStudentAccountIdUseCaseTests {
             id = UUID.randomUUID(),
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = schoolId,
             grade = requestStub.grade,
             classRoom = requestStub.classRoom,

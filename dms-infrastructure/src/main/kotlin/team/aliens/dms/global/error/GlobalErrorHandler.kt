@@ -1,5 +1,6 @@
 package team.aliens.dms.global.error
 
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.validation.BindException
 import org.springframework.validation.BindingResult
@@ -23,4 +24,8 @@ class GlobalErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     protected fun handleMethodArgumentNotViolationException(e: BindingResult): ValidationErrorResponse? = ErrorResponse.of(e)
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    protected fun handleDataIntegrityViolationException(e: DataIntegrityViolationException): ErrorResponse? = ErrorResponse.of(e)
 }

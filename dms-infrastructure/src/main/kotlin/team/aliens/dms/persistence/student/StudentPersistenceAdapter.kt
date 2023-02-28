@@ -32,14 +32,14 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository,
     private val verifiedStudentRepository: VerifiedStudentJpaRepository,
     private val verifiedStudentMapper: VerifiedStudentMapper,
-    private val queryFactory: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
         schoolId: UUID,
         grade: Int,
         classRoom: Int,
-        number: Int
+        number: Int,
     ) = studentMapper.toDomain(
         studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
     )
@@ -72,7 +72,7 @@ class StudentPersistenceAdapter(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilter
+        pointFilter: PointFilter,
     ): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -108,9 +108,11 @@ class StudentPersistenceAdapter(
             PointFilterType.BONUS -> {
                 pointHistoryJpaEntity.bonusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
+
             PointFilterType.MINUS -> {
                 pointHistoryJpaEntity.minusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
             }
+
             else -> {
                 val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
 
@@ -126,6 +128,7 @@ class StudentPersistenceAdapter(
             Sort.NAME -> {
                 studentJpaEntity.name.asc()
             }
+
             else -> {
                 studentJpaEntity.grade.asc()
             }

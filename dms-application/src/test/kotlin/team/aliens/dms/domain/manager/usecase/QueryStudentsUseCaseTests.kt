@@ -63,6 +63,7 @@ class QueryStudentsUseCaseTests {
             id = studentId,
             roomId = UUID.randomUUID(),
             roomNumber = "216",
+            roomLocation = "A",
             schoolId = schoolId,
             grade = 2,
             classRoom = 1,

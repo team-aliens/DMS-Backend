@@ -66,6 +66,7 @@ class CheckStudentGcnUseCaseTests {
             schoolName = schoolStub.name,
             name = "이름",
             roomNumber = "123",
+            roomLocation = "A",
             gcn = "1203",
             sex = Sex.FEMALE
         )
