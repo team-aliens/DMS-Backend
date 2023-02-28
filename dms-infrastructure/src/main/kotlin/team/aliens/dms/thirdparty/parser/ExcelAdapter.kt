@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
 import team.aliens.dms.domain.file.FileExtension.XLSX
+import team.aliens.dms.domain.file.exception.BadExcelFormatException
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.model.PointHistory
@@ -29,7 +30,7 @@ import java.time.format.DateTimeFormatter
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
 
-    override fun transferToVerifiedStudent(file: File): List<VerifiedStudent> {
+    override fun transferToVerifiedStudent(file: File, schoolName: String): List<VerifiedStudent> {
         val workbook = transferToExcel(file)
 
         val verifiedStudents = mutableListOf<VerifiedStudent>()
@@ -41,20 +42,20 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 val excelData = worksheet.getRow(i).run {
                     VerifiedStudent(
                         id = Generators.timeBasedGenerator().generate(),
-                        schoolName = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
-                        name = getCell(1, CREATE_NULL_AS_BLANK).stringCellValue,
-                        gcn = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomNumber = getCell(3, CREATE_NULL_AS_BLANK).stringCellValue,
+                        schoolName = schoolName,
+                        name = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
+                        gcn = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
+                        roomNumber = getCell(2, CREATE_NULL_AS_BLANK).stringCellValue,
                         sex = transferToSex(
-                            getCell(4, CREATE_NULL_AS_BLANK).stringCellValue
+                            getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
                         )
                     )
                 }
-
                 verifiedStudents.add(excelData)
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            throw BadExcelFormatException
         }
 
         return verifiedStudents

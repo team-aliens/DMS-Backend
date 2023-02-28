@@ -85,7 +85,7 @@ class SecurityConfiguration(
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
-            .antMatchers(HttpMethod.POST, "/files/verified-student").permitAll()
+            .antMatchers(HttpMethod.POST, "/files/verified-student").hasAuthority(MANAGER.name)
 
             // /meals
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
