@@ -9,6 +9,9 @@ class MealScheduler(
     private val saveAllMealsUseCase: SaveAllMealsUseCase
 ) {
 
-    @Scheduled(cron = "0 25 17 * * *", zone = "Asia/Seoul")
+    /**
+     * 매달 20일에 cron job 실행
+     */
+    @Scheduled(cron = "0 0 0 20 * *", zone = "Asia/Seoul")
     fun saveAllMeals() = saveAllMealsUseCase.execute()
 }
