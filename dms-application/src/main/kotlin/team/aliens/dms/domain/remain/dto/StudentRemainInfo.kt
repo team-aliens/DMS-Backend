@@ -6,6 +6,6 @@ data class StudentRemainInfo(
     val studentName: String,
     val studentGcn: String,
     val studentSex: Sex,
-    val roomNumber: Int,
+    val roomNumber: String,
     val optionName: String?
 )

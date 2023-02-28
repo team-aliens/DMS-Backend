@@ -8,7 +8,7 @@ data class Room(
 
     val id: UUID = UUID(0, 0),
 
-    val number: Int,
+    val number: String,
 
     val schoolId: UUID
 

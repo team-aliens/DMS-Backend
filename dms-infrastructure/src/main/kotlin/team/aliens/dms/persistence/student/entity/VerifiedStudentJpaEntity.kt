@@ -21,8 +21,8 @@ class VerifiedStudentJpaEntity(
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
-    val roomNumber: Int,
+    @Column(columnDefinition = "VARCHAR(4)", nullable = false)
+    val roomNumber: String,
 
     @Column(columnDefinition = "VARCHAR(4)", nullable = false)
     val gcn: String,

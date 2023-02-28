@@ -76,7 +76,7 @@ class ExportRemainStatusUseCaseTests {
         Student(
             id = studentId,
             roomId = UUID.randomUUID(),
-            roomNumber = 123,
+            roomNumber = "123",
             schoolId = UUID.randomUUID(),
             grade = 1,
             classRoom = 1,

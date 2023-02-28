@@ -12,7 +12,7 @@ data class VerifiedStudent(
 
     val name: String,
 
-    val roomNumber: Int,
+    val roomNumber: String,
 
     val gcn: String,
 

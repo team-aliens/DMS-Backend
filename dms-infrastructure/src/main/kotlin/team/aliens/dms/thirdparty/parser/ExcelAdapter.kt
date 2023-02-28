@@ -115,7 +115,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 it.studentName,
                 it.studentGcn,
                 it.studentSex.korean,
-                it.roomNumber.toString(),
+                it.roomNumber,
                 it.optionName
             )
         }
