@@ -23,4 +23,12 @@ class MealPersistenceAdapter(
             mealMapper.toDomain(it)!!
         }
     }
+
+    override fun saveAllMeals(meals: List<Meal>) {
+        mealRepository.saveAll(
+            meals.map {
+                mealMapper.toEntity(it)
+            }
+        )
+    }
 }
