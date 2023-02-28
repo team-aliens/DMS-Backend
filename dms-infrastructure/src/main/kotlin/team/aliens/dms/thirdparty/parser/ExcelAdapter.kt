@@ -45,7 +45,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                         schoolName = schoolName,
                         name = getCell(0, CREATE_NULL_AS_BLANK).stringCellValue,
                         gcn = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomNumber = getCell(2, CREATE_NULL_AS_BLANK).stringCellValue.toInt(),
+                        roomNumber = getCell(2, CREATE_NULL_AS_BLANK).stringCellValue,
                         sex = transferToSex(
                             getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
                         )
