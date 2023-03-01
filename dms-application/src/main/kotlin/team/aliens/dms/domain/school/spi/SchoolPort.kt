@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.school.spi
 
 import team.aliens.dms.domain.auth.spi.AuthQuerySchoolPort
+import team.aliens.dms.domain.file.spi.FileQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.meal.spi.MealQuerySchoolPort
 import team.aliens.dms.domain.point.spi.PointQuerySchoolPort
@@ -17,4 +18,5 @@ interface SchoolPort :
     StudyRoomQuerySchoolPort,
     PointQuerySchoolPort,
     RemainQuerySchoolPort,
+    FileQuerySchoolPort
     MealQuerySchoolPort
