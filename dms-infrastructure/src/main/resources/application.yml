@@ -47,6 +47,9 @@ secret:
   access-exp: ${ACCESS_EXP:1800}
   refresh-exp: ${REFRESH_EXP:7200}
 
+open-feign:
+  neis-key: ${NEIS_KEY}
+
 cloud:
   aws:
     credentials:
