@@ -14,8 +14,8 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 @Component
 @Aspect
 class AvailableFeatureAspect(
-    private val schoolSecurityPort: SchoolSecurityPort,
-    private val schoolQueryUserPort: SchoolQueryUserPort,
+    private val securityPort: SchoolSecurityPort,
+    private val queryUserPort: SchoolQueryUserPort,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
@@ -52,8 +52,8 @@ class AvailableFeatureAspect(
     }
 
     private fun getAvailableFeature(): AvailableFeature {
-        val currentUserId = schoolSecurityPort.getCurrentUserId()
-        val currentUser = schoolQueryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val currentUserId = securityPort.getCurrentUserId()
+        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
         return querySchoolPort.queryAvailableFeaturesBySchoolId(currentUser.schoolId) ?: throw FeatureNotFoundException
     }
 }
