@@ -18,5 +18,5 @@ interface SchoolPort :
     StudyRoomQuerySchoolPort,
     PointQuerySchoolPort,
     RemainQuerySchoolPort,
-    FileQuerySchoolPort
+    FileQuerySchoolPort,
     MealQuerySchoolPort
