@@ -50,6 +50,7 @@ class QueryPointHistoryUseCaseTests {
             id = currentStudentId,
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = UUID.randomUUID(),
             grade = 2,
             classRoom = 1,

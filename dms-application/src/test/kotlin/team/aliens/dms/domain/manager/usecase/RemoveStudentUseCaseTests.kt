@@ -81,6 +81,7 @@ class RemoveStudentUseCaseTests {
             id = studentId,
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,

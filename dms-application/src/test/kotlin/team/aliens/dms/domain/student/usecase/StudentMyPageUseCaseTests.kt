@@ -59,6 +59,7 @@ class StudentMyPageUseCaseTests {
             id = currentUserId,
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = schoolId,
             grade = 1,
             classRoom = 1,
