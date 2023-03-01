@@ -12,6 +12,8 @@ data class Student(
 
     val roomNumber: String,
 
+    val roomLocation: String,
+
     val schoolId: UUID,
 
     val grade: Int,

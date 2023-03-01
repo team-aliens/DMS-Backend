@@ -94,6 +94,7 @@ class SignUpUseCase(
             id = user.id,
             roomId = room.id,
             roomNumber = room.number,
+            roomLocation = verifiedStudent.roomLocation,
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,

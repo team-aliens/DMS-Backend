@@ -40,6 +40,9 @@ class StudentJpaEntity(
     @JoinColumn(name = "room_id", columnDefinition = "BINARY(16)", nullable = false)
     val room: RoomJpaEntity?,
 
+    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    val roomLocation: String,
+
     @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
     val grade: Int,
 

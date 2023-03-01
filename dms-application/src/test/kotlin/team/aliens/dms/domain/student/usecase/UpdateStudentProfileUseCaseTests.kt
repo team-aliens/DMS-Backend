@@ -45,6 +45,7 @@ class UpdateStudentProfileUseCaseTests {
             id = currentUserId,
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = UUID.randomUUID(),
             grade = 1,
             classRoom = 1,

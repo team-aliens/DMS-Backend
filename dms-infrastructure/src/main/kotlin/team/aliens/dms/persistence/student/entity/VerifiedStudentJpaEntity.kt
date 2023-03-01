@@ -8,9 +8,15 @@ import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_verified_student")
+@Table(
+    name = "tbl_verified_student",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = arrayOf("schoolName", "gcn"))
+    ]
+)
 class VerifiedStudentJpaEntity(
 
     override val id: UUID?,
@@ -22,13 +28,16 @@ class VerifiedStudentJpaEntity(
     val name: String,
 
     @Column(columnDefinition = "VARCHAR(4)", nullable = false)
-    val roomNumber: String,
+    val roomNumber: String, // TODO: int로 바꾸기
+
+    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    val roomLocation: String,
 
     @Column(columnDefinition = "VARCHAR(4)", nullable = false)
     val gcn: String,
 
     @Column(columnDefinition = "VARCHAR(6)", nullable = false)
     @Enumerated(EnumType.STRING)
-    val sex: Sex
+    val sex: Sex,
 
 ) : BaseUUIDEntity(id)

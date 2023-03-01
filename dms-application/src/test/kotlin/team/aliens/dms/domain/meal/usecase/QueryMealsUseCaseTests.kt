@@ -54,6 +54,7 @@ class QueryMealsUseCaseTests {
             id = currentUserId,
             roomId = UUID.randomUUID(),
             roomNumber = "123",
+            roomLocation = "A",
             schoolId = schoolId,
             grade = 2,
             classRoom = 3,
