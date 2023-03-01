@@ -8,6 +8,7 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
@@ -24,6 +25,7 @@ class RemoveStudentUseCase(
     private val commandRemainStatusPort: StudentCommandRemainStatusPort,
     private val queryStudyRoomPort: StudentQueryStudyRoomPort,
     private val commandStudyRoomPort: StudentCommandStudyRoomPort,
+    private val commandStudentPort: CommandStudentPort,
     private val commandUserPort: ManagerCommandUserPort
 ) {
 
@@ -49,6 +51,10 @@ class RemoveStudentUseCase(
                 studyRoom.unApply()
             )
         }
+
+        commandStudentPort.saveStudent(
+            student.copy(deletedAt = LocalDateTime.now())
+        )
 
         commandUserPort.saveUser(
             studentUser.copy(deletedAt = LocalDateTime.now())
