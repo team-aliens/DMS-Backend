@@ -142,7 +142,8 @@ class StudentPersistenceAdapter(
             .join(studentJpaEntity.user, userJpaEntity)
             .where(
                 roomJpaEntity.number.eq(roomNumber),
-                userJpaEntity.school.id.eq(schoolId)
+                userJpaEntity.school.id.eq(schoolId),
+                userJpaEntity.deletedAt.isNotNull
             ).fetch()
             .map {
                 studentMapper.toDomain(it)!!
