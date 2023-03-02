@@ -14,7 +14,8 @@ class WebMvcConfig : WebMvcConfigurer {
                 "http://localhost:3000",
                 "http://localhost:3001",
                 "http://localhost:3002",
-                "http://team-aliens-dev.dsm-dms.com"
+                "http://team-aliens-dev.dsm-dms.com",
+                "https://www.aliens-dms.com"
             )
     }
 }
