@@ -77,6 +77,7 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())

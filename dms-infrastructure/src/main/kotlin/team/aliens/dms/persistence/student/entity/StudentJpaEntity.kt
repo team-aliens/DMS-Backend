@@ -1,8 +1,10 @@
 package team.aliens.dms.persistence.student.entity
 
+import org.hibernate.annotations.Where
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.persistence.room.entity.RoomJpaEntity
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
+import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -25,6 +27,7 @@ import javax.persistence.UniqueConstraint
         UniqueConstraint(columnNames = arrayOf("grade", "class_room", "number"))
     ]
 )
+@Where(clause = "deleted_at is null")
 class StudentJpaEntity(
 
     @Id
@@ -60,6 +63,8 @@ class StudentJpaEntity(
 
     @Column(columnDefinition = "VARCHAR(6)", nullable = false)
     @Enumerated(EnumType.STRING)
-    val sex: Sex
+    val sex: Sex,
 
+    @Column(columnDefinition = "DATETIME")
+    val deletedAt: LocalDateTime?
 )
