@@ -27,7 +27,8 @@ class StudentMapper(
                 number = it.number,
                 name = it.name,
                 profileImageUrl = it.profileImageUrl,
-                sex = it.sex
+                sex = it.sex,
+                deletedAt = it.deletedAt
             )
         }
     }
@@ -46,7 +47,8 @@ class StudentMapper(
             number = domain.number,
             name = domain.name,
             profileImageUrl = domain.profileImageUrl!!,
-            sex = domain.sex
+            sex = domain.sex,
+            deletedAt = domain.deletedAt
         )
     }
 }

@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.student.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Aggregate
@@ -26,8 +27,9 @@ data class Student(
 
     val profileImageUrl: String? = PROFILE_IMAGE,
 
-    val sex: Sex
+    val sex: Sex,
 
+    val deletedAt: LocalDateTime? = null
 ) {
 
     val gcn: String = processGcn(this.grade, this.classRoom, this.number)

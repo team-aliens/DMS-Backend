@@ -18,6 +18,7 @@ import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
@@ -51,6 +52,9 @@ class RemoveStudentUseCaseTests {
     private lateinit var commandStudyRoomPort: StudentCommandStudyRoomPort
 
     @MockBean
+    private lateinit var commandStudentPort: CommandStudentPort
+
+    @MockBean
     private lateinit var commandUserPort: ManagerCommandUserPort
 
     private lateinit var removeStudentUseCase: RemoveStudentUseCase
@@ -59,7 +63,7 @@ class RemoveStudentUseCaseTests {
     fun setUp() {
         removeStudentUseCase = RemoveStudentUseCase(
             securityPort, queryUserPort, queryStudentPort, commandRemainStatusPort,
-            queryStudyRoomPort, commandStudyRoomPort, commandUserPort
+            queryStudyRoomPort, commandStudyRoomPort, commandStudentPort, commandUserPort
         )
     }
 
