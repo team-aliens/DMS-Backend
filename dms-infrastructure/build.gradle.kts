@@ -47,6 +47,11 @@ dependencies {
     implementation(Dependencies.APACHE_POI)
     implementation(Dependencies.APACHE_POI_OOXML)
 
+    // open feign
+    implementation(Dependencies.OPEN_FEIGN)
+
+    // gson
+    implementation(Dependencies.GSON)
 }
 
 kapt {
