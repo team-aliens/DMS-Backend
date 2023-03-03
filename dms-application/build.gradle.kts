@@ -8,6 +8,9 @@ dependencies {
 
     // transaction
     implementation(Dependencies.SPRING_TRANSACTION)
+
+    // aop
+    implementation(Dependencies.SPRING_AOP)
 }
 
 allOpen {
