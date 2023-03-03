@@ -62,11 +62,7 @@ class SignUpUseCase(
         val school = validateSchool(schoolCode, schoolAnswer)
 
         validateAuthCode(authCode, email)
-        validateUserDuplicated(accountId, email)
-
-        if (queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(grade, classRoom, number)) {
-            throw StudentAlreadyExistsException
-        }
+        validateUserDuplicated(accountId, email, grade, classRoom, number)
 
         /**
          * 검증된 학생 조회
@@ -160,7 +156,7 @@ class SignUpUseCase(
         return school
     }
 
-    private fun validateUserDuplicated(accountId: String, email: String) {
+    private fun validateUserDuplicated(accountId: String, email: String, grade: Int, classRoom: Int, number: Int) {
         /**
          * 아이디 중복 검사
          **/
@@ -173,6 +169,13 @@ class SignUpUseCase(
          **/
         if (queryUserPort.existsUserByEmail(email)) {
             throw UserEmailExistsException
+        }
+
+        /**
+         * 학번 중복 검사
+         **/
+        if (queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(grade, classRoom, number)) {
+            throw StudentAlreadyExistsException
         }
     }
 
