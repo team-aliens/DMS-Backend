@@ -11,9 +11,11 @@ import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
@@ -39,6 +41,7 @@ import java.util.UUID
 @UseCase
 class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
+    private val queryStudentPort: QueryStudentPort,
     private val commandUserPort: StudentCommandUserPort,
     private val querySchoolPort: StudentQuerySchoolPort,
     private val queryUserPort: StudentQueryUserPort,
@@ -60,6 +63,10 @@ class SignUpUseCase(
 
         validateAuthCode(authCode, email)
         validateUserDuplicated(accountId, email)
+
+        if (queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(grade, classRoom, number)) {
+            throw StudentAlreadyExistsException
+        }
 
         /**
          * 검증된 학생 조회
