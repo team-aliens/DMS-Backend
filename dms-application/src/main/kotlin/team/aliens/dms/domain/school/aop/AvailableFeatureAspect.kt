@@ -36,7 +36,7 @@ class AvailableFeatureAspect(
     }
 
     @Before("within(team.aliens.dms.domain.point.usecase.*)")
-    fun beforePointService()  {
+    fun beforePointService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.pointService) {
             throw FeatureNotAvailableException
@@ -47,6 +47,14 @@ class AvailableFeatureAspect(
     fun beforeStudyRoomService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.studyRoomService) {
+            throw FeatureNotAvailableException
+        }
+    }
+
+    @Before("within(team.aliens.dms.domain.remain.usecase.*)")
+    fun beforeRemainRoomService() {
+        val availableFeature = getAvailableFeature()
+        if (!availableFeature.remainService) {
             throw FeatureNotAvailableException
         }
     }
