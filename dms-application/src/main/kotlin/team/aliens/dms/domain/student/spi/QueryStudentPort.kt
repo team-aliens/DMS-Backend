@@ -5,6 +5,8 @@ import java.util.UUID
 
 interface QueryStudentPort {
 
+    fun existsStudentByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
+
     fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int): Student?
 
     fun queryStudentById(studentId: UUID): Student?
