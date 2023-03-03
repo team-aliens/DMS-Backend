@@ -28,8 +28,10 @@ class PointHistoryTests {
             schoolId = UUID.randomUUID()
         )
 
+        val pointTotal = Pair(3, 0)
+
         // when
-        val canceledHistory = pointHistory.cancelHistory()
+        val canceledHistory = pointHistory.cancelHistory(pointTotal)
 
         // then
         assertAll(
@@ -55,9 +57,11 @@ class PointHistoryTests {
             schoolId = UUID.randomUUID()
         )
 
+        val pointTotal = Pair(3, 0)
+
         // when & then
         assertThrows<PointHistoryCanNotCancelException> {
-            canceledPointHistory.cancelHistory()
+            canceledPointHistory.cancelHistory(pointTotal)
         }
     }
 }
