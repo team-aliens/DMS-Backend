@@ -28,16 +28,16 @@ class QueryMealsUseCase(
 
         val mealMap = queryMealPort.queryAllMealsByMonthAndSchoolId(
             firstDay, lastDay, student.schoolId
-        ).groupBy { it.mealDate }
+        ).associateBy { it.mealDate }
 
         val mealDetails = mutableListOf<MealDetails>()
         for (date in firstDay..lastDay) {
-            val meals = mealMap[date]
+            val meal = mealMap[date]
 
-            if (meals == null) {
+            if (meal == null) {
                 mealDetails.add(MealDetails.emptyOf(date))
             } else {
-                mealDetails.add(MealDetails.of(meals[0]))
+                mealDetails.add(MealDetails.of(meal))
             }
         }
 

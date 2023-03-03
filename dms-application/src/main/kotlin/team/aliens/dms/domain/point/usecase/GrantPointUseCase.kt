@@ -26,12 +26,13 @@ class GrantPointUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointOption =
-            queryPointOptionPort.queryPointOptionById(request.pointOptionId) ?: throw PointOptionNotFoundException
+        val pointOption = queryPointOptionPort.queryPointOptionById(request.pointOptionId)
+            ?: throw PointOptionNotFoundException
+
         pointOption.checkSchoolId(manager.schoolId)
 
-        val students =
-            queryStudentPort.queryStudentsWithPointHistory(request.studentIdList)
+        val students = queryStudentPort.queryStudentsWithPointHistory(request.studentIdList)
+
         if (students.size != request.studentIdList.size) {
             throw StudentNotFoundException
         }
