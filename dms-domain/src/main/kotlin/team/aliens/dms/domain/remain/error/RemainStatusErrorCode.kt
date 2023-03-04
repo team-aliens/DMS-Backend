@@ -1,13 +1,14 @@
 package team.aliens.dms.domain.remain.error
 
 import team.aliens.dms.common.error.ErrorProperty
+import team.aliens.dms.common.error.ErrorStatus
 
 enum class RemainStatusErrorCode(
     private val status: Int,
     private val message: String
 ) : ErrorProperty {
 
-    REMAIN_STATUS_NOT_FOUND(404, "Remain Status Not Found")
+    REMAIN_STATUS_NOT_FOUND(ErrorStatus.NOT_FOUND, "Remain Status Not Found")
     ;
 
     override fun status() = status

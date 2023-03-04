@@ -1,15 +1,16 @@
 package team.aliens.dms.domain.manager.error
 
 import team.aliens.dms.common.error.ErrorProperty
+import team.aliens.dms.common.error.ErrorStatus
 
 enum class ManagerErrorCode(
     private val status: Int,
     private val message: String
 ) : ErrorProperty {
 
-    MANAGER_INFO_NOT_MATCHED(401, "Manager Info Not Matched"),
+    MANAGER_INFO_NOT_MATCHED(ErrorStatus.UNAUTHORIZED, "Manager Info Not Matched"),
 
-    MANAGER_NOT_FOUND(404, "Manager Not Found")
+    MANAGER_NOT_FOUND(ErrorStatus.NOT_FOUND, "Manager Not Found")
     ;
 
     override fun status(): Int = status

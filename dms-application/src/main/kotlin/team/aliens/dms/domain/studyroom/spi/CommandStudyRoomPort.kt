@@ -14,5 +14,7 @@ interface CommandStudyRoomPort {
 
     fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
 
+    fun saveAllStudyRooms(studyRooms: List<StudyRoom>)
+
     fun deleteStudyRoomById(studyRoomId: UUID)
 }

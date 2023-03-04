@@ -36,6 +36,12 @@ class StudentPersistenceAdapter(
     private val queryFactory: JPAQueryFactory,
 ) : StudentPort {
 
+    override fun existsStudentByGradeAndClassRoomAndNumber(
+        grade: Int,
+        classRoom: Int,
+        number: Int
+    ): Boolean = studentRepository.existsByGradeAndClassRoomAndNumber(grade, classRoom, number)
+
     override fun queryStudentBySchoolIdAndGcn(
         schoolId: UUID,
         grade: Int,
