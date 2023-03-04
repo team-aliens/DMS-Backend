@@ -35,6 +35,7 @@ class ReissueTokenUseCase(
             accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
             refreshTokenExpiredAt = refreshTokenExpiredAt,
+            authority = user.authority,
             features = availableFeatures.run {
                 ReissueResponse.Features(
                     mealService = mealService,

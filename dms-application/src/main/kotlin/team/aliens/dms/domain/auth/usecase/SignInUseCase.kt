@@ -38,6 +38,7 @@ class SignInUseCase(
             accessTokenExpiredAt = accessTokenExpiredAt,
             refreshToken = refreshToken,
             refreshTokenExpiredAt = refreshTokenExpiredAt,
+            authority = user.authority,
             features = availableFeatures.run {
                 SignInResponse.Features(
                     mealService = mealService,
