@@ -18,7 +18,7 @@ class ReissueTokenUseCase(
     private val querySchoolPort: AuthQuerySchoolPort
 ) {
 
-    fun execute(token: String): ReissueResponse {
+    fun execute(token: String, authority: String): ReissueResponse {
         val queryToken = queryRefreshTokenPort.queryRefreshTokenByToken(token) ?: throw RefreshTokenNotFoundException
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(

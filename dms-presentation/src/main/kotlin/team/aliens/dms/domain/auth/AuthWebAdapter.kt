@@ -18,6 +18,7 @@ import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
+import team.aliens.dms.domain.auth.dto.request.WebAuthorityType
 import team.aliens.dms.domain.auth.dto.request.WebEmailType
 import team.aliens.dms.domain.auth.dto.response.CheckAccountIdExistenceResponse
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
@@ -48,7 +49,8 @@ class AuthWebAdapter(
         return signInUseCase.execute(
             SignInRequest(
                 accountId = request.accountId!!,
-                password = request.password!!
+                password = request.password!!,
+                authority = request.authority!!.name
             )
         )
     }
@@ -92,8 +94,11 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") @NotBlank refreshToken: String): ReissueResponse {
-        return reissueTokenUseCase.execute(refreshToken)
+    fun reissueToken(
+        @RequestHeader("refresh-token") @NotBlank refreshToken: String,
+        @RequestParam @NotNull authority: WebAuthorityType?
+    ): ReissueResponse {
+        return reissueTokenUseCase.execute(refreshToken, authority!!.name)
     }
 
     @GetMapping("/account-id")
