@@ -75,6 +75,10 @@ class CancelGrantedPointUseCaseTests {
 
         every { queryPointHistoryPort.queryPointHistoryById(pointHistoryId) } returns pointHistoryStub
 
+        every { queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
+            pointHistoryStub.studentGcn, pointHistoryStub.studentName
+        ) } returns Pair(0,0)
+
         // when & then
         assertDoesNotThrow {
             cancelGrantedPointUseCase.execute(pointHistoryId)

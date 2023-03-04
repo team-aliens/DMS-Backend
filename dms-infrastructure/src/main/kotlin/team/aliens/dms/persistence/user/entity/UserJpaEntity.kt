@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.user.entity
 
+import org.hibernate.annotations.Where
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
@@ -16,6 +17,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_user")
+@Where(clause = "deleted_at is null")
 class UserJpaEntity(
 
     override val id: UUID?,

@@ -14,4 +14,6 @@ interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
         classRoom: Int,
         number: Int
     ): StudentJpaEntity?
+
+    fun existsByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
 }
