@@ -13,7 +13,7 @@ enum class SchoolErrorCode(
     SCHOOL_MISMATCH(ErrorStatus.UNAUTHORIZED, "School Mismatch"),
 
     SCHOOL_NOT_FOUND(ErrorStatus.NOT_FOUND, "School Not Found"),
-    FEATURE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Feature Not Found")
+    FEATURE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Feature Not Found"),
 
     FEATURE_NOT_AVAILABLE(ErrorStatus.FORBIDDEN, "Feature Not Available")
     ;
