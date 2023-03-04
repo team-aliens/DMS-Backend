@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.dto
 
-import team.aliens.dms.domain.auth.model.Authority
 import java.time.LocalDateTime
 
 data class SignUpResponse(
@@ -8,7 +7,6 @@ data class SignUpResponse(
     val accessTokenExpiredAt: LocalDateTime,
     val refreshToken: String,
     val refreshTokenExpiredAt: LocalDateTime,
-    val authority: Authority,
     val features: Features
 ) {
     data class Features(
