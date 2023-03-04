@@ -8,8 +8,9 @@ enum class FileErrorCode(
 ) : ErrorProperty {
 
     INVALID_EXTENSION(400, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)"),
-    BAD_EXCEL_FORMAT(400, "Bas Excel Format"),
-    IO_INTERRUPTED(500, "Interrupted File IO")
+    BAD_EXCEL_FORMAT(400, "Bad Excel Format"),
+    IO_INTERRUPTED(500, "Interrupted File IO"),
+    EXEL_VALUE_DUPLICATE(409, "Exel Value Duplicated")
     ;
 
     override fun status(): Int = status

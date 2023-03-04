@@ -28,6 +28,7 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelSexMismatchException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.format.DateTimeFormatter
+import team.aliens.dms.domain.file.exception.ExelValueDuplicateException
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -35,37 +36,49 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     override fun transferToVerifiedStudent(file: File, schoolName: String): List<VerifiedStudent> {
         val workbook = transferToExcel(file)
 
-        val verifiedStudents = mutableListOf<VerifiedStudent>()
+        val verifiedStudents = mutableMapOf<String, VerifiedStudent>()
 
         try {
             val worksheet = workbook.getSheetAt(0)
 
             for (i in 1..worksheet.lastRowNum) {
-                val excelData = worksheet.getRow(i).run {
-                    VerifiedStudent(
-                        id = Generators.timeBasedGenerator().generate(),
-                        schoolName = schoolName,
-                        gcn = Student.processGcn(
-                            grade = getCell(0, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
-                            classRoom = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
-                            number = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
-                        ),
-                        sex = transferToSex(
-                            getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
-                        ),
-                        name = getCell(4, CREATE_NULL_AS_BLANK).stringCellValue,
-                        roomNumber = getCell(5, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomLocation = getCell(6, CREATE_NULL_AS_BLANK).stringCellValue,
+                worksheet.getRow(i).run {
+                    val gcn = Student.processGcn(
+                        grade = getCell(0, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
+                        classRoom = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
+                        number = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
                     )
+
+                    if (!verifiedStudents.containsKey(gcn)) {
+                        val verifiedStudent = VerifiedStudent(
+                            id = Generators.timeBasedGenerator().generate(),
+                            schoolName = schoolName,
+                            gcn = gcn,
+                            sex = transferToSex(
+                                getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
+                            ),
+                            name = getCell(4, CREATE_NULL_AS_BLANK).stringCellValue,
+                            roomNumber = getCell(5, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
+                            roomLocation = getCell(6, CREATE_NULL_AS_BLANK).stringCellValue,
+                        )
+
+                        verifiedStudents[verifiedStudent.gcn] = verifiedStudent
+                    } else {
+                        throw ExelValueDuplicateException
+                    }
                 }
-                verifiedStudents.add(excelData)
             }
+        } catch (e: ExelValueDuplicateException) {
+            throw ExelValueDuplicateException
         } catch (e: Exception) {
             e.printStackTrace()
             throw BadExcelFormatException
         }
 
         return verifiedStudents
+            .map {
+                it.value
+            }
     }
 
     private fun transferToExcel(file: File): Workbook {
