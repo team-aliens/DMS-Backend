@@ -1,9 +1,12 @@
 package team.aliens.dms.persistence.student
 
 import com.querydsl.core.BooleanBuilder
+import com.querydsl.core.Tuple
+import com.querydsl.core.types.Expression
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.CaseBuilder
+import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -54,6 +57,31 @@ class StudentPersistenceAdapter(
     override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
         studentRepository.findByIdOrNull(studentId)
     )
+
+    override fun existsByGcnList(gcnList: List<Triple<Int, Int, Int>>): Boolean {
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .where(
+                Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
+                    .`in`(*queryStudentGcnIn(gcnList))
+            )
+            .fetchFirst() != null
+    }
+
+    private fun queryStudentGcnIn(gcnList: List<Triple<Int, Int, Int>>): Array<Expression<Tuple>> {
+        val tuple: MutableList<Expression<Tuple>> = ArrayList()
+        for (gcn in gcnList) {
+            tuple.add(
+                Expressions.template(
+                    Tuple::class.java,
+                    "(({0}, {1}, {2}))",
+                    studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number
+                )
+            )
+        }
+
+        return tuple.toTypedArray()
+    }
 
     override fun saveStudent(student: Student) = studentMapper.toDomain(
         studentRepository.save(

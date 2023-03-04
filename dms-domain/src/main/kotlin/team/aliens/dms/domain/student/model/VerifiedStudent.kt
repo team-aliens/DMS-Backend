@@ -20,4 +20,19 @@ data class VerifiedStudent(
 
     val sex: Sex
 
-)
+) {
+
+    fun calculateEachGcn(): Triple<Int, Int, Int> {
+        var gcn = this.gcn.toInt()
+
+        val number = gcn % 100
+        gcn /= 100
+
+        val classRoom = gcn % 10
+        gcn /= 10
+
+        val grade = gcn % 10
+
+        return Triple(grade, classRoom, number)
+    }
+}
