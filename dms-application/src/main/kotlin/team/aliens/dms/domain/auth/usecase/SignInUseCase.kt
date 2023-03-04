@@ -9,6 +9,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 
 @UseCase
@@ -21,6 +22,10 @@ class SignInUseCase(
 
     fun execute(request: SignInRequest): SignInResponse {
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
+
+        if (!user.verifyAuthority(request.authority)) {
+            throw InvalidRoleException
+        }
 
         if (!securityPort.isPasswordMatch(request.password, user.password)) {
             throw PasswordMismatchException

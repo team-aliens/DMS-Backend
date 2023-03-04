@@ -8,6 +8,7 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
+import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 
 @UseCase
@@ -26,6 +27,10 @@ class ReissueTokenUseCase(
         )
 
         val user = queryUserPort.queryUserById(queryToken.userId) ?: throw UserNotFoundException
+
+        if (!user.verifyAuthority(authority)) {
+            throw InvalidRoleException
+        }
 
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException

@@ -24,4 +24,7 @@ data class User(
 
     val deletedAt: LocalDateTime?
 
-)
+) {
+    fun verifyAuthority(authority: String) =
+        this.authority == Authority.valueOf(authority)
+}
