@@ -14,6 +14,7 @@ import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -76,14 +77,6 @@ class SignUpUseCase(
             schoolName = school.name
         ) ?: throw VerifiedStudentNotFoundException
 
-        /**
-         * 호실 조회
-         **/
-        val room = queryRoomPort.queryRoomBySchoolIdAndNumber(
-            schoolId = school.id,
-            number = verifiedStudent.roomNumber
-        ) ?: throw RoomNotFoundException
-
         val user = commandUserPort.saveUser(
             createUser(
                 schoolId = school.id,
@@ -93,20 +86,13 @@ class SignUpUseCase(
             )
         )
 
-        val student = Student(
-            id = user.id,
-            roomId = room.id,
-            roomNumber = room.number,
-            roomLocation = verifiedStudent.roomLocation,
-            schoolId = school.id,
-            grade = grade,
-            classRoom = classRoom,
-            number = number,
-            name = verifiedStudent.name,
-            profileImageUrl = profileImageUrl ?: Student.PROFILE_IMAGE,
-            sex = verifiedStudent.sex
+        saveStudent(
+            user = user,
+            verifiedStudent = verifiedStudent,
+            school = school,
+            grade = grade, classRoom = classRoom, number = number,
+            profileImageUrl = profileImageUrl
         )
-        commandStudentPort.saveStudent(student)
         commandStudentPort.deleteVerifiedStudent(verifiedStudent)
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
@@ -193,4 +179,37 @@ class SignUpUseCase(
         createdAt = LocalDateTime.now(),
         deletedAt = null
     )
+
+    private fun saveStudent(
+        user: User,
+        verifiedStudent: VerifiedStudent,
+        school: School,
+        grade: Int,
+        classRoom: Int,
+        number: Int,
+        profileImageUrl: String?
+    ) {
+        /**
+         * 호실 조회
+         **/
+        val room = queryRoomPort.queryRoomBySchoolIdAndNumber(
+            schoolId = school.id,
+            number = verifiedStudent.roomNumber
+        ) ?: throw RoomNotFoundException
+
+        val student = Student(
+            id = user.id,
+            roomId = room.id,
+            roomNumber = room.number,
+            roomLocation = verifiedStudent.roomLocation,
+            schoolId = school.id,
+            grade = grade,
+            classRoom = classRoom,
+            number = number,
+            name = verifiedStudent.name,
+            profileImageUrl = profileImageUrl ?: Student.PROFILE_IMAGE,
+            sex = verifiedStudent.sex
+        )
+        commandStudentPort.saveStudent(student)
+    }
 }

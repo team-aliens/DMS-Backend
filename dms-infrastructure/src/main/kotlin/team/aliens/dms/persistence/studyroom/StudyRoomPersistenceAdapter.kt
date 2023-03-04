@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.Seat
+import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
@@ -100,6 +101,14 @@ class StudyRoomPersistenceAdapter(
         seatRepository.findByStudyRoomId(studyRoomId)
     )
 
+    override fun queryAllStudyRooms() = studyRoomRepository.findAll().map {
+        studyRoomMapper.toDomain(it)!!
+    }
+
+    override fun queryAllSeatsBySeatStatus(seatStatus: SeatStatus) = seatRepository.findAllByStatus(seatStatus).map {
+        seatMapper.toDomain(it)!!
+    }
+
     override fun saveSeat(seat: Seat) = seatMapper.toDomain(
         seatRepository.save(
             seatMapper.toEntity(seat)
@@ -122,6 +131,14 @@ class StudyRoomPersistenceAdapter(
             studyRoomMapper.toEntity(studyRoom)
         )
     )!!
+
+    override fun saveAllStudyRooms(studyRooms: List<StudyRoom>) {
+        studyRoomRepository.saveAll(
+            studyRooms.map {
+                studyRoomMapper.toEntity(it)
+            }
+        )
+    }
 
     override fun deleteStudyRoomById(studyRoomId: UUID) {
         studyRoomRepository.deleteById(studyRoomId)

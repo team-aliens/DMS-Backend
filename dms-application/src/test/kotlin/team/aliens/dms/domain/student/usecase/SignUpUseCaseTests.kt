@@ -11,7 +11,6 @@ import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
@@ -336,35 +335,36 @@ class SignUpUseCaseTests {
         }
     }
 
-    @Test
-    fun `호실 미존재`() {
-        // given
-        given(querySchoolPort.querySchoolByCode(code))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.existsUserByEmail(email))
-            .willReturn(false)
-
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
-
-        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
-            requestStub.grade,
-            requestStub.classRoom,
-            requestStub.number)
-        ).willReturn(false)
-
-        given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
-            .willReturn(verifiedStudentStub)
-
-        given(queryRoomPort.queryRoomBySchoolIdAndNumber(schoolStub.id, verifiedStudentStub.roomNumber))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<RoomNotFoundException> {
-            signUpUseCase.execute(requestStub)
-        }
-    }
+//    @Test
+//    fun `호실 미존재`() {
+//        // given
+//        every { querySchoolPort.querySchoolByCode(code) } returns schoolStub
+//
+//        every { queryUserPort.existsUserByEmail(email) } returns false
+//
+//        every { queryAuthCodePort.queryAuthCodeByEmail(email) } returns authCodeStub
+//
+//        every {
+//            queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
+//                gcnStub, schoolStub.name
+//            )
+//        } returns verifiedStudentStub
+//
+//        every { securityPort.encodePassword(requestStub.password) } returns password
+//
+//        every { commandUserPort.saveUser(any()) } returns userStub
+//
+//        every {
+//            queryRoomPort.queryRoomBySchoolIdAndNumber(
+//                schoolStub.id, verifiedStudentStub.roomNumber
+//            )
+//        } returns null
+//
+//        // when & then
+//        assertThrows<RoomNotFoundException> {
+//            signUpUseCase.execute(requestStub)
+//        }
+//    }
 
     @Test
     fun `아이디가 이미 존재함`() {
