@@ -27,7 +27,14 @@ class CancelGrantedPointUseCase(
 
         validateSameSchool(manager.schoolId, pointHistory.schoolId)
 
-        commandPointHistoryPort.savePointHistory(pointHistory.cancelHistory())
+        val pointTotal = queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
+            gcn = pointHistory.studentGcn,
+            studentName = pointHistory.studentName
+        )
+
+        commandPointHistoryPort.savePointHistory(
+            pointHistory.cancelHistory(pointTotal)
+        )
         commandPointHistoryPort.deletePointHistory(pointHistory)
     }
 }

@@ -16,11 +16,13 @@ import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
@@ -39,6 +41,9 @@ class SignUpUseCaseTests {
 
     @MockBean
     private lateinit var commandStudentPort: CommandStudentPort
+
+    @MockBean
+    private lateinit var queryStudentPort: QueryStudentPort
 
     @MockBean
     private lateinit var commandUserPort: StudentCommandUserPort
@@ -70,6 +75,7 @@ class SignUpUseCaseTests {
     fun setUp() {
         signUpUseCase = SignUpUseCase(
             commandStudentPort,
+            queryStudentPort,
             commandUserPort,
             querySchoolPort,
             queryUserPort,
@@ -279,6 +285,30 @@ class SignUpUseCaseTests {
     }
 
     @Test
+    fun `학번 이미 존재`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodePort.queryAuthCodeByEmail(email))
+            .willReturn(authCodeStub)
+
+        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+            requestStub.grade,
+            requestStub.classRoom,
+            requestStub.number)
+        ).willReturn(true)
+
+        // when & then
+        assertThrows<StudentAlreadyExistsException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
     fun `검증된 학생 미존재`() {
         // given
         given(querySchoolPort.querySchoolByCode(code))
@@ -289,6 +319,12 @@ class SignUpUseCaseTests {
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
+
+        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+            requestStub.grade,
+            requestStub.classRoom,
+            requestStub.number)
+        ).willReturn(false)
 
         given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
             .willReturn(null)
@@ -341,6 +377,12 @@ class SignUpUseCaseTests {
 
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
+
+        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+            requestStub.grade,
+            requestStub.classRoom,
+            requestStub.number)
+        ).willReturn(false)
 
         given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
             .willReturn(verifiedStudentStub)

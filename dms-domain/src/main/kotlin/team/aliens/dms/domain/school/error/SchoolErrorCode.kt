@@ -14,6 +14,8 @@ enum class SchoolErrorCode(
 
     SCHOOL_NOT_FOUND(ErrorStatus.NOT_FOUND, "School Not Found"),
     FEATURE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Feature Not Found")
+
+    FEATURE_NOT_AVAILABLE(ErrorStatus.FORBIDDEN, "Feature Not Available")
     ;
 
     override fun status(): Int = status

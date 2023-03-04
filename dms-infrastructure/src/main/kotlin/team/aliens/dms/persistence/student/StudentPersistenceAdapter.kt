@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.student
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -34,6 +35,12 @@ class StudentPersistenceAdapter(
     private val verifiedStudentMapper: VerifiedStudentMapper,
     private val queryFactory: JPAQueryFactory,
 ) : StudentPort {
+
+    override fun existsStudentByGradeAndClassRoomAndNumber(
+        grade: Int,
+        classRoom: Int,
+        number: Int
+    ): Boolean = studentRepository.existsByGradeAndClassRoomAndNumber(grade, classRoom, number)
 
     override fun queryStudentBySchoolIdAndGcn(
         schoolId: UUID,
@@ -107,17 +114,24 @@ class StudentPersistenceAdapter(
 
         return when (pointFilter.filterType) {
             PointFilterType.BONUS -> {
-                pointHistoryJpaEntity.bonusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
+                CaseBuilder()
+                    .`when`(pointHistoryJpaEntity.isNotNull)
+                    .then(pointHistoryJpaEntity.bonusTotal)
+                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
             }
 
             PointFilterType.MINUS -> {
-                pointHistoryJpaEntity.minusTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
+                CaseBuilder()
+                    .`when`(pointHistoryJpaEntity.isNotNull)
+                    .then(pointHistoryJpaEntity.minusTotal)
+                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
             }
 
             else -> {
-                val pointTotal = pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal)
-
-                pointTotal.between(pointFilter.minPoint, pointFilter.maxPoint)
+                CaseBuilder()
+                    .`when`(pointHistoryJpaEntity.isNotNull)
+                    .then(pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal))
+                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
             }
         }
     }
