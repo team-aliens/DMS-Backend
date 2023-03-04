@@ -10,12 +10,12 @@ import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.RoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.io.File
-import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
 
 @UseCase
 class ImportVerifiedStudentUseCase(
