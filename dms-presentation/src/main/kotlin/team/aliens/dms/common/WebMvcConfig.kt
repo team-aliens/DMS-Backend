@@ -1,6 +1,7 @@
 package team.aliens.dms.common
 
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpHeaders
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -18,5 +19,6 @@ class WebMvcConfig : WebMvcConfigurer {
                 "https://admin.aliens-dms.com",
                 "https://admin-dev.aliens-dms.com"
             )
+            .exposedHeaders(HttpHeaders.CONTENT_DISPOSITION)
     }
 }
