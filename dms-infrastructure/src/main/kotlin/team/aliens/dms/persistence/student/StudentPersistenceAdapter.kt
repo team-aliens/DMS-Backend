@@ -75,7 +75,7 @@ class StudentPersistenceAdapter(
                 Expressions.template(
                     Tuple::class.java,
                     "(({0}, {1}, {2}))",
-                    studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number
+                    gcn.first, gcn.second, gcn.third
                 )
             )
         }
