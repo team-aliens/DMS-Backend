@@ -58,10 +58,13 @@ class StudentPersistenceAdapter(
         studentRepository.findByIdOrNull(studentId)
     )
 
-    override fun existsByGcnList(gcnList: List<Triple<Int, Int, Int>>): Boolean {
+    override fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean {
         return queryFactory
             .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.user, userJpaEntity)
+            .join(userJpaEntity.school, schoolJpaEntity)
             .where(
+                schoolJpaEntity.id.eq(schoolId),
                 Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
                     .`in`(*queryStudentGcnIn(gcnList))
             )

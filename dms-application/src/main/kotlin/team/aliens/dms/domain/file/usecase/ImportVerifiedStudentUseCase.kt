@@ -40,7 +40,7 @@ class ImportVerifiedStudentUseCase(
                 it.calculateEachGcn()
             }
 
-        if (queryStudentPort.existsByGcnList(gcnList)) {
+        if (queryStudentPort.existsBySchoolIdAndGcnList(school.id, gcnList)) {
             throw StudentAlreadyExistsException
         }
 
