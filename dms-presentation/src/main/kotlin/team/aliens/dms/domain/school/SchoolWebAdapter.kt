@@ -27,6 +27,8 @@ import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
+import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
+import team.aliens.dms.domain.school.usecase.QueryAvailableFeaturesUseCase
 
 @Validated
 @RequestMapping("/schools")
@@ -37,7 +39,8 @@ class SchoolWebAdapter(
     private val checkSchoolAnswerUseCase: CheckSchoolAnswerUseCase,
     private val checkSchoolCodeUseCase: CheckSchoolCodeUseCase,
     private val updateQuestionUseCase: UpdateQuestionUseCase,
-    private val reissueSchoolCodeUseCase: ReissueSchoolCodeUseCase
+    private val reissueSchoolCodeUseCase: ReissueSchoolCodeUseCase,
+    private val queryAvailableFeaturesUseCase: QueryAvailableFeaturesUseCase
 ) {
 
     @GetMapping
@@ -70,6 +73,11 @@ class SchoolWebAdapter(
         val result = checkSchoolCodeUseCase.execute(schoolCode!!)
 
         return SchoolIdResponse(result)
+    }
+
+    @GetMapping("/available-features")
+    fun queryAvailableFeatures(): QueryAvailableFeaturesResponse {
+        return queryAvailableFeaturesUseCase.execute()
     }
 
     @PatchMapping("/code")
