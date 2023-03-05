@@ -13,6 +13,7 @@ import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -28,7 +29,7 @@ class ApplySeatUseCase(
     private val queryStudentPort: StudyRoomQueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val queryAvailableTimeUseCase: QueryAvailableTimeUseCase
+    private val queryAvailableTimePort: QueryAvailableTimePort
 ) {
 
     fun execute(seatId: UUID) {
@@ -40,7 +41,7 @@ class ApplySeatUseCase(
 
         validateSameSchool(studyRoom.schoolId, user.schoolId)
         validateStudyRoomAvailable(studyRoom, currentUserId)
-        validateSeatAvailable(seat)
+        validateSeatAvailable(studyRoom.schoolId, seat)
 
         val currentSeat = queryStudyRoomPort.querySeatByStudentId(currentUserId)
         currentSeat?.let {
@@ -80,9 +81,9 @@ class ApplySeatUseCase(
         }
     }
 
-    private fun validateSeatAvailable(seat: Seat) {
+    private fun validateSeatAvailable(schoolId: UUID, seat: Seat) {
         val now = LocalTime.now()
-        val availableTime = queryAvailableTimeUseCase.execute()
+        val availableTime = queryAvailableTimePort.queryAvailableTimeBySchoolId(schoolId) ?: throw AvailableTimeNotFoundException
 
         if (now < availableTime.startAt || now > availableTime.endAt) {
             throw SeatCanNotAppliedException
