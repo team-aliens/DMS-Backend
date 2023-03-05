@@ -24,12 +24,12 @@ class QueryNoticeStatusUseCaseTests {
     }
 
     private val to = LocalDate.now()
-    private val from = to.plusDays(7)
+    private val from = to.minusDays(7)
 
     @Test
     fun `7일 이내의 공지사항 존재함`() {
         // given
-        given(queryNoticePort.existsNoticeByDateBetween(to, from))
+        given(queryNoticePort.existsNoticeByDateBetween(from, to))
             .willReturn(true)
 
         // when
@@ -42,7 +42,7 @@ class QueryNoticeStatusUseCaseTests {
     @Test
     fun `7일 이내의 공지사항 존재하지 않음`() {
         // given
-        given(queryNoticePort.existsNoticeByDateBetween(to, from))
+        given(queryNoticePort.existsNoticeByDateBetween(from, to))
             .willReturn(false)
 
         // when
