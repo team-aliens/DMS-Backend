@@ -10,8 +10,10 @@ import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.RoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.CommandStudentPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.io.File
 
@@ -23,7 +25,8 @@ class ImportVerifiedStudentUseCase(
     private val querySchoolPort: FileQuerySchoolPort,
     private val commandRoomPort: RoomPort,
     private val queryRoomPort: FileQueryRoomPort,
-    private val commandStudentPort: CommandStudentPort
+    private val commandStudentPort: CommandStudentPort,
+    private val queryStudentPort: QueryStudentPort
 ) {
 
     fun execute(file: File) {
@@ -32,6 +35,14 @@ class ImportVerifiedStudentUseCase(
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         val verifiedStudents = parseFilePort.transferToVerifiedStudent(file, school.name)
+        val gcnList = verifiedStudents
+            .map {
+                it.calculateEachGcn()
+            }
+
+        if (queryStudentPort.existsBySchoolIdAndGcnList(school.id, gcnList)) {
+            throw StudentAlreadyExistsException
+        }
 
         saveNotExistsRooms(verifiedStudents, school)
 
