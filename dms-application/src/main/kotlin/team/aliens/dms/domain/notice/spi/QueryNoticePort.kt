@@ -7,7 +7,7 @@ import java.util.UUID
 
 interface QueryNoticePort {
 
-    fun existsNoticeByDateBetween(to: LocalDate, from: LocalDate): Boolean
+    fun existsNoticeByDateBetween(from: LocalDate, to: LocalDate): Boolean
 
     fun queryNoticeById(noticeId: UUID): Notice?
 

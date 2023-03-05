@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.studyroom.model
 
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
+import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import java.util.UUID
 
 data class Seat(
@@ -24,7 +25,12 @@ data class Seat(
 ) {
 
     fun use(studentId: UUID): Seat {
-        this.studentId?.let {
+
+        if (this.status == SeatStatus.UNAVAILABLE || this.status == SeatStatus.EMPTY) {
+            throw SeatCanNotAppliedException
+        }
+
+        if (this.status == SeatStatus.IN_USE || this.studentId != null) {
             throw SeatAlreadyAppliedException
         }
 
