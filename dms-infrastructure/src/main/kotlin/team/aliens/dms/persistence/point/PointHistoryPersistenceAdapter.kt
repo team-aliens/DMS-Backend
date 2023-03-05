@@ -147,6 +147,7 @@ class PointHistoryPersistenceAdapter(
         return queryFactory
             .selectFrom(pointHistoryJpaEntity)
             .where(
+                pointHistoryJpaEntity.isCancel.eq(false),
                 pointHistoryJpaEntity.school.id.eq(schoolId),
                 startAt?.let { pointHistoryJpaEntity.createdAt.goe(it) },
                 endAt?.let { pointHistoryJpaEntity.createdAt.lt(it) }
