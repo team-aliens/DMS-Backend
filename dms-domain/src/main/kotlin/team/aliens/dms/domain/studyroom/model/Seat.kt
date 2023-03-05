@@ -24,7 +24,8 @@ data class Seat(
 ) {
 
     fun use(studentId: UUID): Seat {
-        this.studentId?.let {
+
+        if (this.status != SeatStatus.AVAILABLE || this.studentId != null) {
             throw SeatAlreadyAppliedException
         }
 
