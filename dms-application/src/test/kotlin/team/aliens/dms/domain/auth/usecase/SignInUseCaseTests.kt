@@ -49,18 +49,28 @@ class SignInUseCaseTests {
 
     private val accountId = "accountId"
     private val password = "password"
+    private val schoolId = UUID.randomUUID()
 
-    private val requestStub by lazy {
+    private val studentSignInRequestStub by lazy {
         SignInRequest(
             accountId = accountId,
-            password = password
+            password = password,
+            authority = "STUDENT"
         )
     }
 
-    private val userStub by lazy {
+    private val managerSignInRequestStub by lazy {
+        SignInRequest(
+            accountId = accountId,
+            password = password,
+            authority = "MANAGER"
+        )
+    }
+
+    private val studentStub by lazy {
         User(
             id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
+            schoolId = schoolId,
             accountId = accountId,
             password = password,
             email = "email",
@@ -70,9 +80,22 @@ class SignInUseCaseTests {
         )
     }
 
+    private val managerStub by lazy {
+        User(
+            id = UUID.randomUUID(),
+            schoolId = schoolId,
+            accountId = accountId,
+            password = password,
+            email = "email",
+            authority = Authority.MANAGER,
+            createdAt = null,
+            deletedAt = null
+        )
+    }
+
     private val featureStub by lazy {
         AvailableFeature(
-            schoolId = userStub.schoolId,
+            schoolId = schoolId,
             mealService = true,
             noticeService = true,
             pointService = true,
@@ -91,90 +114,90 @@ class SignInUseCaseTests {
     @Test
     fun `매니저일때 로그인 성공`() {
         // given
-        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByAccountId(managerSignInRequestStub.accountId))
+            .willReturn(managerStub)
 
-        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
+        given(securityPort.isPasswordMatch(managerSignInRequestStub.password, managerStub.password))
             .willReturn(true)
 
-        given(jwtPort.receiveToken(userStub.id, userStub.authority))
+        given(jwtPort.receiveToken(managerStub.id, managerStub.authority))
             .willReturn(tokenResponse)
 
-        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(managerStub.schoolId))
             .willReturn(featureStub)
 
         // when & then
         assertDoesNotThrow {
-            signInUseCase.execute(requestStub)
+            signInUseCase.execute(managerSignInRequestStub)
         }
     }
 
     @Test
     fun `학생일때 로그인 성공`() {
         // given
-        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByAccountId(studentSignInRequestStub.accountId))
+            .willReturn(studentStub)
 
-        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
+        given(securityPort.isPasswordMatch(studentSignInRequestStub.password, studentStub.password))
             .willReturn(true)
 
-        given(jwtPort.receiveToken(userStub.id, Authority.STUDENT))
+        given(jwtPort.receiveToken(studentStub.id, Authority.STUDENT))
             .willReturn(tokenResponse)
 
-        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(studentStub.schoolId))
             .willReturn(featureStub)
 
         // when & then
         assertDoesNotThrow {
-            signInUseCase.execute(requestStub)
+            signInUseCase.execute(studentSignInRequestStub)
         }
     }
 
     @Test
     fun `유저를 찾을 수 없음`() {
         // given
-        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
+        given(queryUserPort.queryUserByAccountId(managerSignInRequestStub.accountId))
             .willReturn(null)
 
         // when & then
         assertThrows<UserNotFoundException> {
-            signInUseCase.execute(requestStub)
+            signInUseCase.execute(managerSignInRequestStub)
         }
     }
 
     @Test
     fun `비밀번호가 틀림`() {
         // given
-        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByAccountId(studentSignInRequestStub.accountId))
+            .willReturn(studentStub)
 
-        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
+        given(securityPort.isPasswordMatch(studentSignInRequestStub.password, studentStub.password))
             .willReturn(false)
 
         // when & then
         assertThrows<PasswordMismatchException> {
-            signInUseCase.execute(requestStub)
+            signInUseCase.execute(studentSignInRequestStub)
         }
     }
 
     @Test
     fun `이용 가능한 기능이 존재하지 않음`() {
         // given
-        given(queryUserPort.queryUserByAccountId(requestStub.accountId))
-            .willReturn(userStub)
+        given(queryUserPort.queryUserByAccountId(studentSignInRequestStub.accountId))
+            .willReturn(studentStub)
 
-        given(securityPort.isPasswordMatch(requestStub.password, userStub.password))
+        given(securityPort.isPasswordMatch(studentSignInRequestStub.password, studentStub.password))
             .willReturn(true)
 
-        given(jwtPort.receiveToken(userStub.id, userStub.authority))
+        given(jwtPort.receiveToken(studentStub.id, studentStub.authority))
             .willReturn(tokenResponse)
 
-        given(querySchoolPort.queryAvailableFeaturesBySchoolId(userStub.schoolId))
+        given(querySchoolPort.queryAvailableFeaturesBySchoolId(studentStub.schoolId))
             .willReturn(null)
 
         // when & then
         assertThrows<FeatureNotFoundException> {
-            signInUseCase.execute(requestStub)
+            signInUseCase.execute(studentSignInRequestStub)
         }
     }
 }
