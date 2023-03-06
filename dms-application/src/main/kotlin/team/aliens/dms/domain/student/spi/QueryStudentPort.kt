@@ -10,4 +10,6 @@ interface QueryStudentPort {
     fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int): Student?
 
     fun queryStudentById(studentId: UUID): Student?
+
+    fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean
 }

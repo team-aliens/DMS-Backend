@@ -17,11 +17,11 @@ class NoticePersistenceAdapter(
     private val noticeMapper: NoticeMapper
 ) : NoticePort {
 
-    override fun existsNoticeByDateBetween(to: LocalDate, from: LocalDate): Boolean {
-        val toLocalDateTime = to.atTime(LocalTime.now())
+    override fun existsNoticeByDateBetween(from: LocalDate, to: LocalDate): Boolean {
         val fromLocalDateTime = from.atTime(LocalTime.now())
+        val toLocalDateTime = to.atTime(LocalTime.now())
 
-        return noticeRepository.existsByCreatedAtBetween(toLocalDateTime, fromLocalDateTime)
+        return noticeRepository.existsByCreatedAtBetween(fromLocalDateTime, toLocalDateTime)
     }
 
     override fun queryNoticeById(noticeId: UUID) = noticeMapper.toDomain(

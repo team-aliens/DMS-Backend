@@ -296,10 +296,12 @@ class SignUpUseCaseTests {
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
 
-        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
-            requestStub.grade,
-            requestStub.classRoom,
-            requestStub.number)
+        given(
+            queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
         ).willReturn(true)
 
         // when & then
@@ -320,10 +322,12 @@ class SignUpUseCaseTests {
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
 
-        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
-            requestStub.grade,
-            requestStub.classRoom,
-            requestStub.number)
+        given(
+            queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
         ).willReturn(false)
 
         given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
@@ -378,10 +382,12 @@ class SignUpUseCaseTests {
         given(queryAuthCodePort.queryAuthCodeByEmail(email))
             .willReturn(authCodeStub)
 
-        given(queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
-            requestStub.grade,
-            requestStub.classRoom,
-            requestStub.number)
+        given(
+            queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
+                requestStub.grade,
+                requestStub.classRoom,
+                requestStub.number
+            )
         ).willReturn(false)
 
         given(queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(gcnStub, schoolStub.name))
