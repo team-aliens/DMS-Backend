@@ -11,6 +11,7 @@ enum class AuthErrorCode(
     AUTH_CODE_MISMATCH(ErrorStatus.UNAUTHORIZED, "Auth Code Mismatch"),
     EMAIL_MISMATCH(ErrorStatus.UNAUTHORIZED, "Email Mismatch"),
     PASSWORD_MISMATCH(ErrorStatus.UNAUTHORIZED, "Password Mismatch"),
+    UNVERIFIED_AUTH_CODE(ErrorStatus.UNAUTHORIZED, "Unverified Auth Code"),
 
     REFRESH_TOKEN_NOT_FOUND(ErrorStatus.NOT_FOUND, "Refresh Token Not Found"),
     AUTH_CODE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Auth Code Not Found"),
