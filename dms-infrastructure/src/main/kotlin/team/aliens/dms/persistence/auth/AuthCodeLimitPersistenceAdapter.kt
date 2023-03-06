@@ -25,4 +25,9 @@ class AuthCodeLimitPersistenceAdapter(
             authCodeLimitMapper.toEntity(authCodeLimit)
         )
     )!!
+
+    override fun queryAuthCodeLimitByEmail(email: String): AuthCodeLimit? =
+        authCodeLimitMapper.toDomain(
+            authCodeLimitRepository.findByEmail(email)
+        )
 }
