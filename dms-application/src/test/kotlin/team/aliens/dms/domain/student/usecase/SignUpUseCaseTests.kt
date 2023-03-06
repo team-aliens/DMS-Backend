@@ -7,9 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
@@ -25,7 +24,7 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
 import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -52,10 +51,10 @@ class SignUpUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryAuthCodePort: StudentQueryAuthCodePort
+    private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
-    private lateinit var queryUserPort: StudentQueryUserPort
+    private lateinit var queryAuthCodeLimitPort: StudentQueryAuthCodeLimitPort
 
     @MockBean
     private lateinit var queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
@@ -79,7 +78,7 @@ class SignUpUseCaseTests {
             commandUserPort,
             querySchoolPort,
             queryUserPort,
-            queryAuthCodePort,
+            queryAuthCodeLimitPort,
             queryVerifiedStudentPort,
             queryRoomPort,
             securityPort,
@@ -110,11 +109,14 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val authCodeStub by lazy {
-        AuthCode(
-            code = "123412",
+    private val authCodeLimitStub by lazy {
+        AuthCodeLimit(
+            id = UUID.randomUUID(),
             email = email,
-            type = EmailType.SIGNUP
+            type = EmailType.SIGNUP,
+            attemptCount = 0,
+            isVerified = true,
+            expirationTime = 1800
         )
     }
 
@@ -234,8 +236,8 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(true)
@@ -255,8 +257,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
@@ -281,8 +283,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
@@ -341,8 +343,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
