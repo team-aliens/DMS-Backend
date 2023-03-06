@@ -247,44 +247,6 @@ class SignUpUseCaseTests {
     }
 
     @Test
-    fun `이메일 인증코드가 존재하지 않음`() {
-        // given
-        given(querySchoolPort.querySchoolByCode(code))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.existsUserByEmail(email))
-            .willReturn(false)
-
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<AuthCodeNotFoundException> {
-            signUpUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `이메일 인증코드가 일치하지 않음`() {
-        val wrongCodeAuthCode = authCodeStub.copy(code = "wrong code")
-
-        // given
-        given(querySchoolPort.querySchoolByCode(code))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.existsUserByEmail(email))
-            .willReturn(false)
-
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(wrongCodeAuthCode)
-
-        // when & then
-        assertThrows<AuthCodeMismatchException> {
-            signUpUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
     fun `학번 이미 존재`() {
         // given
         given(querySchoolPort.querySchoolByCode(code))

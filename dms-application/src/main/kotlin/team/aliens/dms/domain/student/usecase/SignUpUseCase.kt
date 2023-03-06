@@ -1,8 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
@@ -62,7 +60,6 @@ class SignUpUseCase(
 
         val school = validateSchool(schoolCode, schoolAnswer)
 
-        validateAuthCode(authCode, email)
         validateUserDuplicated(accountId, email, grade, classRoom, number)
 
         /**
@@ -116,17 +113,6 @@ class SignUpUseCase(
                 )
             }
         )
-    }
-
-    private fun validateAuthCode(authCode: String, email: String) {
-        /**
-         * 이메일 인증코드 검사
-         **/
-        val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
-
-        if (authCode != authCodeEntity.code) {
-            throw AuthCodeMismatchException
-        }
     }
 
     private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
