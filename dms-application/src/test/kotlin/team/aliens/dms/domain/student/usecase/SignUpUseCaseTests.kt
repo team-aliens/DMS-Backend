@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -9,6 +8,7 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
+import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.model.Room
@@ -182,8 +182,8 @@ class SignUpUseCaseTests {
 //        given(queryUserPort.existsUserByEmail(email))
 //            .willReturn(false)
 //
-//        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-//            .willReturn(authCodeStub)
+//        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+//            .willReturn(authCodeLimitStub)
 //
 //        given(queryUserPort.existsUserByAccountId(accountId))
 //            .willReturn(false)
@@ -411,11 +411,10 @@ class SignUpUseCaseTests {
         given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
             .willReturn(unverifiedAuthCodeLimitStub)
 
-        // when
-        val isVerified = unverifiedAuthCodeLimitStub.isVerified
-
-        // then
-        assertThat(isVerified).isFalse
+        // when & then
+        assertThrows<UnverifiedAuthCodeException> {
+            signUpUseCase.execute(requestStub)
+        }
     }
 
 //    @Test
