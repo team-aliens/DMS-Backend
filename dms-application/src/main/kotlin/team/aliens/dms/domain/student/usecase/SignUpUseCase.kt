@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
+import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
+import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
@@ -19,7 +19,7 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
 import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -46,7 +46,7 @@ class SignUpUseCase(
     private val commandUserPort: StudentCommandUserPort,
     private val querySchoolPort: StudentQuerySchoolPort,
     private val queryUserPort: StudentQueryUserPort,
-    private val queryAuthCodePort: StudentQueryAuthCodePort,
+    private val queryAuthCodeLimitPort: StudentQueryAuthCodeLimitPort,
     private val queryVerifiedStudentPort: StudentQueryVerifiedStudentPort,
     private val queryRoomPort: StudentQueryRoomPort,
     private val securityPort: StudentSecurityPort,
@@ -62,7 +62,7 @@ class SignUpUseCase(
 
         val school = validateSchool(schoolCode, schoolAnswer)
 
-        validateAuthCode(authCode, email)
+        validateAuthCodeLimit(email)
         validateUserDuplicated(accountId, email, grade, classRoom, number)
 
         /**
@@ -118,14 +118,12 @@ class SignUpUseCase(
         )
     }
 
-    private fun validateAuthCode(authCode: String, email: String) {
-        /**
-         * 이메일 인증코드 검사
-         **/
-        val authCodeEntity = queryAuthCodePort.queryAuthCodeByEmail(email) ?: throw AuthCodeNotFoundException
+    private fun validateAuthCodeLimit(email: String) {
+        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email)
+            ?: throw AuthCodeLimitNotFoundException
 
-        if (authCode != authCodeEntity.code) {
-            throw AuthCodeMismatchException
+        if (!authCodeLimit.isVerified) {
+            throw UnverifiedAuthCodeException
         }
     }
 

@@ -7,9 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
+import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
+import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
@@ -25,7 +25,7 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
+import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
 import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
@@ -52,10 +52,10 @@ class SignUpUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryAuthCodePort: StudentQueryAuthCodePort
+    private lateinit var queryUserPort: StudentQueryUserPort
 
     @MockBean
-    private lateinit var queryUserPort: StudentQueryUserPort
+    private lateinit var queryAuthCodeLimitPort: StudentQueryAuthCodeLimitPort
 
     @MockBean
     private lateinit var queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
@@ -79,7 +79,7 @@ class SignUpUseCaseTests {
             commandUserPort,
             querySchoolPort,
             queryUserPort,
-            queryAuthCodePort,
+            queryAuthCodeLimitPort,
             queryVerifiedStudentPort,
             queryRoomPort,
             securityPort,
@@ -110,11 +110,25 @@ class SignUpUseCaseTests {
         )
     }
 
-    private val authCodeStub by lazy {
-        AuthCode(
-            code = "123412",
+    private val authCodeLimitStub by lazy {
+        AuthCodeLimit(
+            id = UUID.randomUUID(),
             email = email,
-            type = EmailType.SIGNUP
+            type = EmailType.SIGNUP,
+            attemptCount = 0,
+            isVerified = true,
+            expirationTime = 1800
+        )
+    }
+
+    private val unverifiedAuthCodeLimitStub by lazy {
+        AuthCodeLimit(
+            id = UUID.randomUUID(),
+            email = email,
+            type = EmailType.SIGNUP,
+            attemptCount = 0,
+            isVerified = false,
+            expirationTime = 1800
         )
     }
 
@@ -168,8 +182,8 @@ class SignUpUseCaseTests {
 //        given(queryUserPort.existsUserByEmail(email))
 //            .willReturn(false)
 //
-//        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-//            .willReturn(authCodeStub)
+//        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+//            .willReturn(authCodeLimitStub)
 //
 //        given(queryUserPort.existsUserByAccountId(accountId))
 //            .willReturn(false)
@@ -234,52 +248,14 @@ class SignUpUseCaseTests {
         given(querySchoolPort.querySchoolByCode(code))
             .willReturn(schoolStub)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(true)
 
         // when & then
         assertThrows<UserEmailExistsException> {
-            signUpUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `이메일 인증코드가 존재하지 않음`() {
-        // given
-        given(querySchoolPort.querySchoolByCode(code))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.existsUserByEmail(email))
-            .willReturn(false)
-
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<AuthCodeNotFoundException> {
-            signUpUseCase.execute(requestStub)
-        }
-    }
-
-    @Test
-    fun `이메일 인증코드가 일치하지 않음`() {
-        val wrongCodeAuthCode = authCodeStub.copy(code = "wrong code")
-
-        // given
-        given(querySchoolPort.querySchoolByCode(code))
-            .willReturn(schoolStub)
-
-        given(queryUserPort.existsUserByEmail(email))
-            .willReturn(false)
-
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(wrongCodeAuthCode)
-
-        // when & then
-        assertThrows<AuthCodeMismatchException> {
             signUpUseCase.execute(requestStub)
         }
     }
@@ -293,8 +269,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
@@ -319,8 +295,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
@@ -379,8 +355,8 @@ class SignUpUseCaseTests {
         given(queryUserPort.existsUserByEmail(email))
             .willReturn(false)
 
-        given(queryAuthCodePort.queryAuthCodeByEmail(email))
-            .willReturn(authCodeStub)
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(authCodeLimitStub)
 
         given(
             queryStudentPort.existsStudentByGradeAndClassRoomAndNumber(
@@ -401,6 +377,42 @@ class SignUpUseCaseTests {
 
         // when & then
         assertThrows<UserAccountIdExistsException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `인증 코드 제한 찾지 못함`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<AuthCodeLimitNotFoundException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `인증 코드가 확인되지 않음`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(unverifiedAuthCodeLimitStub)
+
+        // when & then
+        assertThrows<UnverifiedAuthCodeException> {
             signUpUseCase.execute(requestStub)
         }
     }
