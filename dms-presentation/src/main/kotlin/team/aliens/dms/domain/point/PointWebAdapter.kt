@@ -43,6 +43,7 @@ import java.net.URLEncoder
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.servlet.http.HttpServletResponse
+import javax.validation.ConstraintViolationException
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -107,7 +108,9 @@ class PointWebAdapter(
         grantPointUseCase.execute(
             GrantPointRequest(
                 pointOptionId = webRequest.pointOptionId!!,
-                studentIdList = webRequest.studentIdList!!
+                studentIdList = webRequest.studentIdList!!.map {
+                    it ?: throw ConstraintViolationException(setOf())
+                }
             )
         )
     }
