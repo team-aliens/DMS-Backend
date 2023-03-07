@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.AuthCode
+import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.room.model.Room
@@ -116,6 +117,17 @@ class SignUpUseCaseTests {
             type = EmailType.SIGNUP,
             attemptCount = 0,
             isVerified = true,
+            expirationTime = 1800
+        )
+    }
+
+    private val unverifiedAuthCodeLimitStub by lazy {
+        AuthCodeLimit(
+            id = UUID.randomUUID(),
+            email = email,
+            type = EmailType.SIGNUP,
+            attemptCount = 0,
+            isVerified = false,
             expirationTime = 1800
         )
     }
@@ -367,6 +379,43 @@ class SignUpUseCaseTests {
         assertThrows<UserAccountIdExistsException> {
             signUpUseCase.execute(requestStub)
         }
+    }
+
+    @Test
+    fun `인증 코드 제한 찾지 못함`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(null)
+
+        // when & then
+        assertThrows<AuthCodeLimitNotFoundException> {
+            signUpUseCase.execute(requestStub)
+        }
+    }
+
+    @Test
+    fun `인증 코드가 확인되지 않음`() {
+        // given
+        given(querySchoolPort.querySchoolByCode(code))
+            .willReturn(schoolStub)
+
+        given(queryUserPort.existsUserByEmail(email))
+            .willReturn(false)
+
+        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email))
+            .willReturn(unverifiedAuthCodeLimitStub)
+
+        // when
+        val isVerified = unverifiedAuthCodeLimitStub.isVerified
+
+        // when & then
+        assertThat(isVerified).isFalse
     }
 
 //    @Test
