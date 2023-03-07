@@ -40,7 +40,8 @@ class ReissueTokenUseCase(
                     mealService = mealService,
                     noticeService = noticeService,
                     pointService = pointService,
-                    studyRoomService = studyRoomService
+                    studyRoomService = studyRoomService,
+                    remainService = remainService
                 )
             }
         )
