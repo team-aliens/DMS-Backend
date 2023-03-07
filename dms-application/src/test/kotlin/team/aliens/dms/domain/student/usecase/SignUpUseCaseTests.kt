@@ -414,7 +414,7 @@ class SignUpUseCaseTests {
         // when
         val isVerified = unverifiedAuthCodeLimitStub.isVerified
 
-        // when & then
+        // then
         assertThat(isVerified).isFalse
     }
 
