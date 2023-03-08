@@ -51,13 +51,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd dms-server
+            cd dms-dev
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.DOCKER_DEV_IMAGE }}
             docker pull ${{ secrets.DOCKER_DEV_IMAGE }}
-            docker rm -f dms-server || true
-            docker run -d --name dms-server -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_DEV_IMAGE }}
+            docker rm -f dms-dev || true
+            docker run -d --name dms-dev -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_DEV_IMAGE }}
             sleep 20
-            is_healthy=$(docker inspect --format '{{ .State.Health.Status }}' dms-server)
+            is_healthy=$(docker inspect --format '{{ .State.Health.Status }}' dms-dev)
             echo $is_healthy
             if [[ $is_healthy -ne "healthy" ]]; then
                 echo $is_healthy
