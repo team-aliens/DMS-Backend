@@ -1,4 +1,4 @@
-name: CD for Stage
+name: CD for Prod
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    environment: stage
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
