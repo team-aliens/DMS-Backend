@@ -12,7 +12,7 @@ import java.util.UUID
 interface UserJpaRepository : CrudRepository<UserJpaEntity, UUID> {
 
     @Query("select * from tbl_user as u where u.email=:email", nativeQuery = true)
-    fun a(@Param("email") email: String): UserJpaEntity?
+    fun findExistsByEmail(@Param("email") email: String): UserJpaEntity?
 
     @Query("select * from tbl_user as u where u.account_id=:accountId", nativeQuery = true)
     fun findExistsByAccountId(@Param("accountId") accountId: String): UserJpaEntity?
