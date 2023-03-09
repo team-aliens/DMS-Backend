@@ -113,6 +113,7 @@ class SignUpUseCase(
                     noticeService = noticeService,
                     pointService = pointService,
                     studyRoomService = studyRoomService,
+                    remainService = remainService
                 )
             }
         )
