@@ -55,6 +55,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     private val studyRoomStub by lazy {
         StudyRoom(
             schoolId = UUID.randomUUID(),
+            timeSlotId = null,
             name = "가온실",
             floor = 1,
             widthSize = 10,

@@ -73,6 +73,7 @@ class CreateStudyRoomUseCaseTests {
     private val studyRoomStub by lazy {
         StudyRoom(
             schoolId = userStub.schoolId,
+            timeSlotId = null,
             name = requestStub.name,
             floor = requestStub.floor,
             widthSize = requestStub.totalWidthSize,

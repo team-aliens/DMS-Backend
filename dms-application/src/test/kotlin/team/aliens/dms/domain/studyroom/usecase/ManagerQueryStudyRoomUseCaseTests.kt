@@ -66,6 +66,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         StudyRoom(
             id = studyRoomId,
             schoolId = schoolId,
+            timeSlotId = null,
             name = "이름",
             floor = 1,
             widthSize = 1,
