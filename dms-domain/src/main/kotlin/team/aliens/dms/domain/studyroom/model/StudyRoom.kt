@@ -11,6 +11,8 @@ data class StudyRoom(
 
     val schoolId: UUID,
 
+    val timeSlotId: UUID?,
+
     val name: String,
 
     val floor: Int,

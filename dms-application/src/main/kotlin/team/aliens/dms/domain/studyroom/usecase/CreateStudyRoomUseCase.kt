@@ -47,6 +47,7 @@ class CreateStudyRoomUseCase(
 
         val studyRoom = StudyRoom(
             schoolId = currentUser.schoolId,
+            timeSlotId = null,
             name = request.name,
             floor = request.floor,
             widthSize = totalWidthSize,
