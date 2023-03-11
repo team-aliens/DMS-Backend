@@ -6,10 +6,12 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
+import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepository
 
 @Component
 class StudyRoomMapper(
-    private val schoolRepository: SchoolJpaRepository
+    private val schoolRepository: SchoolJpaRepository,
+    private val studyRoomTimeSlotRepository: StudyRoomTimeSlotJpaRepository
 ) : GenericMapper<StudyRoom, StudyRoomJpaEntity> {
 
     override fun toDomain(entity: StudyRoomJpaEntity?): StudyRoom? {
@@ -17,6 +19,7 @@ class StudyRoomMapper(
             StudyRoom(
                 id = it.id!!,
                 schoolId = entity.school!!.id!!,
+                timeSlotId = entity.timeSlot!!.id!!,
                 name = entity.name,
                 floor = entity.floor,
                 widthSize = entity.widthSize,
@@ -35,10 +38,12 @@ class StudyRoomMapper(
 
     override fun toEntity(domain: StudyRoom): StudyRoomJpaEntity {
         val school = schoolRepository.findByIdOrNull(domain.schoolId)
+        val timeSlot = domain.timeSlotId?.let { studyRoomTimeSlotRepository.findByIdOrNull(it) }
 
         return StudyRoomJpaEntity(
             id = domain.id,
             school = school,
+            timeSlot = timeSlot,
             name = domain.name,
             floor = domain.floor,
             widthSize = domain.widthSize,

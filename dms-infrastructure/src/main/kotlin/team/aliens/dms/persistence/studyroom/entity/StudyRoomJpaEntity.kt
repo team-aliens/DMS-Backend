@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint
 @Table(
     name = "tbl_study_room",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = arrayOf("floor", "name"))
+        UniqueConstraint(columnNames = arrayOf("school_id", "floor", "name"))
     ]
 )
 class StudyRoomJpaEntity(
@@ -28,6 +28,10 @@ class StudyRoomJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "time_slot_id", columnDefinition = "BINARY(16)", nullable = true)
+    val timeSlot: StudyRoomTimeSlotJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
