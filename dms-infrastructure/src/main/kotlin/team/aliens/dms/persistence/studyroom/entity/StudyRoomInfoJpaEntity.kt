@@ -41,6 +41,9 @@ class StudyRoomInfoJpaEntity(
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val heightSize: Int,
 
+    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
+    val availableHeadcount: Int,
+
     @Column(columnDefinition = "VARCHAR(6)", nullable = false)
     @Enumerated(EnumType.STRING)
     val availableSex: Sex,

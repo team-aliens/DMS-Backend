@@ -24,9 +24,6 @@ class StudyRoomJpaEntity(
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val inUseHeadcount: Int,
 
-    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
-    val availableHeadcount: Int,
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_info_id", columnDefinition = "BINARY(16)", nullable = true)
     val studyRoomInfo: StudyRoomInfoJpaEntity?,

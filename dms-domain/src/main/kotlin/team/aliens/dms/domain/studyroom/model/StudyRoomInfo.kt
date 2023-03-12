@@ -19,6 +19,8 @@ data class StudyRoomInfo(
 
     val heightSize: Int,
 
+    val availableHeadcount: Int,
+
     val availableSex: Sex,
 
     val availableGrade: Int,

@@ -19,9 +19,8 @@ class StudyRoomMapper(
             StudyRoom(
                 id = it.id!!,
                 inUseHeadcount = it.inUseHeadcount,
-                availableHeadcount = it.availableHeadcount,
                 studyRoomInfoId = it.studyRoomInfo!!.id!!,
-                timeSlotId = it.timeSlot!!.id!!
+                timeSlotId = it.timeSlot?.id
             )
         }
     }
@@ -33,7 +32,6 @@ class StudyRoomMapper(
         return StudyRoomJpaEntity(
             id = domain.id,
             inUseHeadcount = domain.inUseHeadcount,
-            availableHeadcount = domain.availableHeadcount,
             studyRoomInfo = studyRoom,
             timeSlot = timeSlot
         )

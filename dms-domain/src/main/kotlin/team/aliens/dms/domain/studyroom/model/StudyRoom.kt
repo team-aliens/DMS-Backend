@@ -8,8 +8,6 @@ data class StudyRoom(
 
     val inUseHeadcount: Int,
 
-    val availableHeadcount: Int,
-
     val studyRoomInfoId: UUID,
 
     val timeSlotId: UUID?
