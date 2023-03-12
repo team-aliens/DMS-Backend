@@ -16,7 +16,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_seat_application")
-class StudyRoomJpaEntity(
+class SeatApplicationJpaEntity(
 
     @EmbeddedId
     val id: SeatApplicationJpaEntityId,
@@ -43,7 +43,7 @@ data class SeatApplicationJpaEntityId(
     @JoinColumn(nullable = false)
     val seatId: UUID,
 
-    @Column(nullable = false)
-    val schoolId: UUID
+    @Column(nullable = true)
+    val timeSlotId: UUID?
 
 ) : Serializable

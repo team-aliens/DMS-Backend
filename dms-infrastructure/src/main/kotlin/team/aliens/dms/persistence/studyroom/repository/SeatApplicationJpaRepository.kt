@@ -2,15 +2,15 @@ package team.aliens.dms.persistence.studyroom.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntity
 import java.util.UUID
 
 @Repository
-interface StudyRoomJpaRepository : CrudRepository<StudyRoomJpaEntity, UUID> {
+interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity, UUID> {
 
-    fun findByStudyRoomInfoId(studyRoomInfoId: UUID): List<StudyRoomJpaEntity>
+    fun findByStudyRoomInfoId(studyRoomInfoId: UUID): List<SeatApplicationJpaEntity>
 
-    fun findByTimeSlotId(timeSlotId: UUID): List<StudyRoomJpaEntity>
+    fun findByTimeSlotId(timeSlotId: UUID): List<SeatApplicationJpaEntity>
 
     fun deleteByIdIn(id: List<UUID>)
 

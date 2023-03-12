@@ -2,38 +2,44 @@ package team.aliens.dms.persistence.studyroom.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
-import team.aliens.dms.persistence.studyroom.repository.StudyRoomInfoJpaRepository
+import team.aliens.dms.persistence.student.repository.StudentJpaRepository
+import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntityId
+import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepository
 
 @Component
-class StudyRoomMapper(
-    private val studyRoomRepository: StudyRoomInfoJpaRepository,
-    private val timeSlotRepository: StudyRoomTimeSlotJpaRepository
-) : GenericMapper<StudyRoom, StudyRoomJpaEntity> {
+class SeatApplicationMapper(
+    private val seatRepository: SeatJpaRepository,
+    private val timeSlotRepository: StudyRoomTimeSlotJpaRepository,
+    private val studentRepository: StudentJpaRepository
+) : GenericMapper<SeatApplication, SeatApplicationJpaEntity> {
 
-    override fun toDomain(entity: StudyRoomJpaEntity?): StudyRoom? {
+    override fun toDomain(entity: SeatApplicationJpaEntity?): SeatApplication? {
         return entity?.let {
-            StudyRoom(
-                id = it.id!!,
-                inUseHeadcount = it.inUseHeadcount,
-                studyRoomInfoId = it.studyRoomInfo!!.id!!,
-                timeSlotId = it.timeSlot?.id
+            SeatApplication(
+                seatId = it.seat!!.id!!,
+                timeSlotId = it.timeSlot?.id,
+                studentId = it.student!!.id
             )
         }
     }
 
-    override fun toEntity(domain: StudyRoom): StudyRoomJpaEntity {
-        val studyRoom = studyRoomRepository.findByIdOrNull(domain.studyRoomInfoId)
-        val timeSlot = timeSlotRepository.findByIdOrNull(domain.studyRoomInfoId)
+    override fun toEntity(domain: SeatApplication): SeatApplicationJpaEntity {
+        val seat = seatRepository.findByIdOrNull(domain.seatId)
+        val timeSlot = domain.timeSlotId?.let { timeSlotRepository.findByIdOrNull(it) }
+        val student = studentRepository.findByIdOrNull(domain.studentId)
 
-        return StudyRoomJpaEntity(
-            id = domain.id,
-            inUseHeadcount = domain.inUseHeadcount,
-            studyRoomInfo = studyRoom,
-            timeSlot = timeSlot
+        return SeatApplicationJpaEntity(
+            id = SeatApplicationJpaEntityId(
+                seatId = domain.seatId,
+                timeSlotId = domain.timeSlotId
+            ),
+            seat = seat,
+            timeSlot = timeSlot,
+            student = student
         )
     }
 }
