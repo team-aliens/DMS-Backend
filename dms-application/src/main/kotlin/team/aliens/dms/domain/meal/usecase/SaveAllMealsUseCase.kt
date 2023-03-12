@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.meal.usecase
 
+import team.aliens.dms.common.annotation.SchedulerUseCase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.CommandMealPort
@@ -7,7 +8,7 @@ import team.aliens.dms.domain.meal.spi.MealFeignClientPort
 import team.aliens.dms.domain.meal.spi.MealFeignClientSchoolPort
 import team.aliens.dms.domain.meal.spi.MealQuerySchoolPort
 
-@UseCase
+@SchedulerUseCase
 class SaveAllMealsUseCase(
     private val querySchoolPort: MealQuerySchoolPort,
     private val commandMealPort: CommandMealPort,
