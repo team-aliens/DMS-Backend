@@ -1,49 +1,25 @@
 package team.aliens.dms.domain.studyroom.model
 
-import team.aliens.dms.common.annotation.Aggregate
-import team.aliens.dms.domain.student.model.Sex
 import java.util.UUID
 
-@Aggregate
 data class StudyRoom(
 
     val id: UUID = UUID(0, 0),
 
-    val schoolId: UUID,
-
-    val timeSlotId: UUID?,
-
-    val name: String,
-
-    val floor: Int,
-
-    val widthSize: Int,
-
-    val heightSize: Int,
-
-    val inUseHeadcount: Int? = 0,
+    val inUseHeadcount: Int,
 
     val availableHeadcount: Int,
 
-    val availableSex: Sex,
+    val studyRoomInfoId: UUID,
 
-    val availableGrade: Int,
-
-    val eastDescription: String,
-
-    val westDescription: String,
-
-    val southDescription: String,
-
-    val northDescription: String
+    val timeSlotId: UUID?
 
 ) {
-
     fun apply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.inc()
+        inUseHeadcount = inUseHeadcount.inc()
     )
 
     fun unApply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.dec()
+        inUseHeadcount = inUseHeadcount.dec()
     )
 }

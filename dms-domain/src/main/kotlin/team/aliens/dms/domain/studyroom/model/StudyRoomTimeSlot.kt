@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class StudyRoomTimeSlot(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val schoolId: UUID,
 
