@@ -52,6 +52,9 @@ dependencies {
 
     // gson
     implementation(Dependencies.GSON)
+
+    // jackson
+    implementation(Dependencies.JACKSON_TYPE)
 }
 
 kapt {
