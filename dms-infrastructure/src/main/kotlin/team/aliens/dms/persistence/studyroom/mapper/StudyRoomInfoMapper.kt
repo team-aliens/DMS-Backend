@@ -2,26 +2,25 @@ package team.aliens.dms.persistence.studyroom.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.StudyRoomInfo
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
-import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.StudyRoomInfoJpaEntity
 
 @Component
-class StudyRoomMapper(
+class StudyRoomInfoMapper(
     private val schoolRepository: SchoolJpaRepository
-) : GenericMapper<StudyRoom, StudyRoomJpaEntity> {
+) : GenericMapper<StudyRoomInfo, StudyRoomInfoJpaEntity> {
 
-    override fun toDomain(entity: StudyRoomJpaEntity?): StudyRoom? {
+    override fun toDomain(entity: StudyRoomInfoJpaEntity?): StudyRoomInfo? {
         return entity?.let {
-            StudyRoom(
+            StudyRoomInfo(
                 id = it.id!!,
                 schoolId = entity.school!!.id!!,
                 name = entity.name,
                 floor = entity.floor,
                 widthSize = entity.widthSize,
                 heightSize = entity.heightSize,
-                inUseHeadcount = entity.inUseHeadcount,
                 availableHeadcount = entity.availableHeadcount,
                 availableSex = entity.availableSex,
                 availableGrade = entity.availableGrade,
@@ -33,17 +32,16 @@ class StudyRoomMapper(
         }
     }
 
-    override fun toEntity(domain: StudyRoom): StudyRoomJpaEntity {
+    override fun toEntity(domain: StudyRoomInfo): StudyRoomInfoJpaEntity {
         val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
-        return StudyRoomJpaEntity(
+        return StudyRoomInfoJpaEntity(
             id = domain.id,
             school = school,
             name = domain.name,
             floor = domain.floor,
             widthSize = domain.widthSize,
             heightSize = domain.heightSize,
-            inUseHeadcount = domain.inUseHeadcount!!,
             availableHeadcount = domain.availableHeadcount,
             availableSex = domain.availableSex,
             availableGrade = domain.availableGrade,

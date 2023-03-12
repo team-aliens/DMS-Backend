@@ -5,7 +5,7 @@ import team.aliens.dms.domain.student.model.Sex
 import java.util.UUID
 
 @Aggregate
-data class StudyRoom(
+data class StudyRoomInfo(
 
     val id: UUID = UUID(0, 0),
 
@@ -18,8 +18,6 @@ data class StudyRoom(
     val widthSize: Int,
 
     val heightSize: Int,
-
-    val inUseHeadcount: Int? = 0,
 
     val availableHeadcount: Int,
 
@@ -35,13 +33,4 @@ data class StudyRoom(
 
     val northDescription: String
 
-) {
-
-    fun apply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.inc()
-    )
-
-    fun unApply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.dec()
-    )
-}
+)

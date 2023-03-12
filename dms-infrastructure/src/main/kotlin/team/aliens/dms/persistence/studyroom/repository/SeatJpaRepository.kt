@@ -11,9 +11,11 @@ interface SeatJpaRepository : JpaRepository<SeatJpaEntity, UUID> {
 
     fun findByStudentId(studentId: UUID): SeatJpaEntity?
 
-    fun deleteAllByStudyRoomId(studyRoomId: UUID)
+    fun deleteAllByStudyRoomIdIn(studyRoomIds: List<UUID>)
 
     fun findByStudyRoomId(studyRoomId: UUID): SeatJpaEntity?
+
+    fun findByStudyRoomIdIn(studyRoomIds: List<UUID>): List<SeatJpaEntity>
 
     fun existsByTypeId(seatTypeId: UUID): Boolean
 
