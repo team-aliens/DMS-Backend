@@ -2,7 +2,6 @@ package team.aliens.dms.domain.school.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -16,6 +15,7 @@ import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class QueryAvailableFeaturesUseCaseTest {

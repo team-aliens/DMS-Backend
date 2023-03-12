@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.meal.usecase
 
 import team.aliens.dms.common.annotation.SchedulerUseCase
-import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.CommandMealPort
 import team.aliens.dms.domain.meal.spi.MealFeignClientPort

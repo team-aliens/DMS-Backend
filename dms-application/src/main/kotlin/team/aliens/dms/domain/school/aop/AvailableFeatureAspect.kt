@@ -2,7 +2,6 @@ package team.aliens.dms.domain.school.aop
 
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
-import org.aspectj.lang.annotation.Pointcut
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.school.exception.FeatureNotAvailableException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
@@ -20,8 +19,10 @@ class AvailableFeatureAspect(
     private val querySchoolPort: QuerySchoolPort
 ) {
 
-    @Before("within(team.aliens.dms.domain.meal.usecase.*) && " +
-            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)")
+    @Before(
+        "within(team.aliens.dms.domain.meal.usecase.*) && " +
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
     fun beforeMealService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.mealService) {
@@ -29,8 +30,10 @@ class AvailableFeatureAspect(
         }
     }
 
-    @Before("within(team.aliens.dms.domain.notice.usecase.*) && " +
-            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)")
+    @Before(
+        "within(team.aliens.dms.domain.notice.usecase.*) && " +
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
     fun beforeNoticeService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.noticeService) {
@@ -38,8 +41,10 @@ class AvailableFeatureAspect(
         }
     }
 
-    @Before("within(team.aliens.dms.domain.point.usecase.*) && " +
-            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)")
+    @Before(
+        "within(team.aliens.dms.domain.point.usecase.*) && " +
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
     fun beforePointService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.pointService) {
@@ -47,8 +52,10 @@ class AvailableFeatureAspect(
         }
     }
 
-    @Before("within(team.aliens.dms.domain.studyroom.usecase.*) && " +
-            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)")
+    @Before(
+        "within(team.aliens.dms.domain.studyroom.usecase.*) && " +
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
     fun beforeStudyRoomService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.studyRoomService) {
@@ -56,8 +63,10 @@ class AvailableFeatureAspect(
         }
     }
 
-    @Before("within(team.aliens.dms.domain.remain.usecase.*) && " +
-            "!@annotation(team.aliens.dms.common.annotation.SchedulerUseCase)")
+    @Before(
+        "within(team.aliens.dms.domain.remain.usecase.*) && " +
+            "!@annotation(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
     fun beforeRemainRoomService() {
         val availableFeature = getAvailableFeature()
         if (!availableFeature.remainService) {
