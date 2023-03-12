@@ -4,14 +4,11 @@ import java.util.UUID
 
 data class StudyRoom(
 
-    val id: UUID = UUID(0, 0),
+    val seatId: UUID,
 
-    val inUseHeadcount: Int,
+    val timeSlotId: UUID,
 
-    val studyRoomInfoId: UUID,
-
-    val timeSlotId: UUID?
-
+    val studentId: UUID
 ) {
     fun apply() = this.copy(
         inUseHeadcount = inUseHeadcount.inc()

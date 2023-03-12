@@ -8,5 +8,11 @@ import java.util.UUID
 @Repository
 interface StudyRoomJpaRepository : CrudRepository<StudyRoomJpaEntity, UUID> {
 
-    fun existsByNameAndFloorAndSchoolId(name: String, floor: Int, schoolId: UUID): Boolean
+    fun findByStudyRoomInfoId(studyRoomInfoId: UUID): List<StudyRoomJpaEntity>
+
+    fun findByTimeSlotId(timeSlotId: UUID): List<StudyRoomJpaEntity>
+
+    fun deleteByIdIn(id: List<UUID>)
+
+    fun deleteByStudyRoomInfoId(studyRoomInfoId: UUID)
 }
