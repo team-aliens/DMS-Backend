@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.annotation.SchedulerUseCase
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 
-@UseCase
+@SchedulerUseCase
 class ResetAllStudyRoomsUseCase(
     private val commandStudyRoomPort: CommandStudyRoomPort,
     private val queryStudyRoomPort: QueryStudyRoomPort
