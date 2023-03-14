@@ -16,12 +16,12 @@ import javax.persistence.UniqueConstraint
 
 @Entity
 @Table(
-    name = "tbl_study_room_info",
+    name = "tbl_study_room",
     uniqueConstraints = [
         UniqueConstraint(columnNames = arrayOf("school_id", "floor", "name"))
     ]
 )
-class StudyRoomInfoJpaEntity(
+class StudyRoomJpaEntity(
 
     override val id: UUID?,
 

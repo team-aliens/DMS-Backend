@@ -2,19 +2,13 @@ package team.aliens.dms.domain.studyroom.model
 
 import java.util.UUID
 
-data class StudyRoom(
+data class SeatApplication(
+
+    val id: UUID = UUID.randomUUID(),
 
     val seatId: UUID,
 
-    val timeSlotId: UUID,
+    val timeSlotId: UUID?,
 
     val studentId: UUID
-) {
-    fun apply() = this.copy(
-        inUseHeadcount = inUseHeadcount.inc()
-    )
-
-    fun unApply() = this.copy(
-        inUseHeadcount = inUseHeadcount.dec()
-    )
-}
+)

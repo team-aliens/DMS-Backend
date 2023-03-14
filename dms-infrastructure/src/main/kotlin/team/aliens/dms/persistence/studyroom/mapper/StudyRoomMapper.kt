@@ -2,19 +2,19 @@ package team.aliens.dms.persistence.studyroom.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.studyroom.model.StudyRoomInfo
+import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
-import team.aliens.dms.persistence.studyroom.entity.StudyRoomInfoJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.StudyRoomJpaEntity
 
 @Component
-class StudyRoomInfoMapper(
+class StudyRoomMapper(
     private val schoolRepository: SchoolJpaRepository
-) : GenericMapper<StudyRoomInfo, StudyRoomInfoJpaEntity> {
+) : GenericMapper<StudyRoom, StudyRoomJpaEntity> {
 
-    override fun toDomain(entity: StudyRoomInfoJpaEntity?): StudyRoomInfo? {
+    override fun toDomain(entity: StudyRoomJpaEntity?): StudyRoom? {
         return entity?.let {
-            StudyRoomInfo(
+            StudyRoom(
                 id = it.id!!,
                 schoolId = entity.school!!.id!!,
                 name = entity.name,
@@ -32,10 +32,10 @@ class StudyRoomInfoMapper(
         }
     }
 
-    override fun toEntity(domain: StudyRoomInfo): StudyRoomInfoJpaEntity {
+    override fun toEntity(domain: StudyRoom): StudyRoomJpaEntity {
         val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
-        return StudyRoomInfoJpaEntity(
+        return StudyRoomJpaEntity(
             id = domain.id,
             school = school,
             name = domain.name,

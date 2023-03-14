@@ -27,7 +27,7 @@ class SeatJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id", columnDefinition = "BINARY(16)", nullable = false)
-    val studyRoom: StudyRoomInfoJpaEntity?,
+    val studyRoom: StudyRoomJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_type_id", columnDefinition = "BINARY(16)")

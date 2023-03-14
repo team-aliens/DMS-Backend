@@ -5,7 +5,7 @@ import team.aliens.dms.domain.student.model.Sex
 import java.util.UUID
 
 @Aggregate
-data class StudyRoomInfo(
+data class StudyRoom(
 
     val id: UUID = UUID(0, 0),
 

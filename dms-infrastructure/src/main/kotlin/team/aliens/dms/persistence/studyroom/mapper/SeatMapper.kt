@@ -6,11 +6,11 @@ import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.studyroom.entity.SeatJpaEntity
 import team.aliens.dms.persistence.studyroom.repository.SeatTypeJpaRepository
-import team.aliens.dms.persistence.studyroom.repository.StudyRoomInfoJpaRepository
+import team.aliens.dms.persistence.studyroom.repository.StudyRoomJpaRepository
 
 @Component
 class SeatMapper(
-    private val studyRoomRepository: StudyRoomInfoJpaRepository,
+    private val studyRoomRepository: StudyRoomJpaRepository,
     private val seatTypeRepository: SeatTypeJpaRepository
 ) : GenericMapper<Seat, SeatJpaEntity> {
 
