@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.StudyRoomFacade
@@ -11,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
 import java.util.UUID
@@ -89,7 +91,7 @@ class ManagerQueryStudyRoomsUseCaseTests {
         every { queryUserPort.queryUserById(managerId) } returns null
 
         // when & then
-        assertDoesNotThrow {
+        assertThrows<UserNotFoundException> {
             managerQueryRoomsUseCase.execute(timeSlotId)
         }
     }

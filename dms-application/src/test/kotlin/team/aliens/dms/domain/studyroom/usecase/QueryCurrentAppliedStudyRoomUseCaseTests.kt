@@ -98,18 +98,6 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `seat이 존재하지 않음`() {
-        // given
-        every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatById(seatApplicationStub.seatId) } returns null
-
-        // when & then
-        assertThrows<SeatNotFoundException> {
-            queryCurrentAppliedStudyRoomUseCase.execute()
-        }
-    }
-
-    @Test
     fun `seatApplication이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
@@ -117,6 +105,19 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<AppliedSeatNotFoundException> {
+            queryCurrentAppliedStudyRoomUseCase.execute()
+        }
+    }
+
+    @Test
+    fun `seat이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns seatApplicationStub
+        every { queryStudyRoomPort.querySeatById(seatStub.id) } returns null
+
+        // when & then
+        assertThrows<SeatNotFoundException> {
             queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }
