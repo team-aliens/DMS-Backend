@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
@@ -96,8 +97,14 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/seats/{seat-id}")
-    fun applySeat(@PathVariable("seat-id") @NotNull seatId: UUID?) {
-        return applySeatUseCase.execute(seatId!!)
+    fun applySeat(
+        @PathVariable("seat-id") @NotNull seatId: UUID?,
+        @RequestParam(name = "time_slot") timeSlotId: UUID?
+    ) {
+        return applySeatUseCase.execute(
+            seatId = seatId!!,
+            timeSlotId = timeSlotId
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -189,13 +196,13 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/list/students")
-    fun studentGetStudyRooms(): StudentQueryStudyRoomsResponse {
-        return studentQueryStudyRoomsUseCase.execute()
+    fun studentGetStudyRooms(@RequestParam(name = "time_slot") timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @GetMapping("/list/managers")
-    fun managerGetStudyRooms(): ManagerQueryStudyRoomsResponse {
-        return managerQueryStudyRoomsUseCase.execute()
+    fun managerGetStudyRooms(@RequestParam(name = "time_slot") timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
