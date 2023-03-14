@@ -8,11 +8,9 @@ import java.util.UUID
 @Repository
 interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity, UUID> {
 
-    fun findByStudyRoomInfoId(studyRoomInfoId: UUID): List<SeatApplicationJpaEntity>
+    fun queryByStudentId(studentId: UUID): SeatApplicationJpaEntity?
 
-    fun findByTimeSlotId(timeSlotId: UUID): List<SeatApplicationJpaEntity>
+    fun deleteByStudentId(studyRoomId: UUID)
 
-    fun deleteByIdIn(id: List<UUID>)
-
-    fun deleteByStudyRoomInfoId(studyRoomInfoId: UUID)
+    fun deleteByTimeSlotId(timeSlotId: UUID)
 }
