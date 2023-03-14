@@ -47,7 +47,7 @@ class SecurityConfiguration(
             // /users
             .antMatchers(HttpMethod.GET, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
-
+            
             // /students
             .antMatchers(HttpMethod.GET, "/students/email/duplication").permitAll()
             .antMatchers(HttpMethod.GET, "/students/account-id/duplication").permitAll()
@@ -66,7 +66,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/managers/profile").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
             .antMatchers(HttpMethod.DELETE, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
-
+            
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
             .antMatchers(HttpMethod.GET, "/schools/question/{school-id}").permitAll()
@@ -102,7 +102,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PUT, "/points/history/{point-history-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/options").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/points/options/{point-option-id}").hasAuthority(MANAGER.name)
-
+            
             // /templates
             .antMatchers(HttpMethod.GET, "/templates").permitAll()
             .antMatchers(HttpMethod.POST, "/templates").permitAll()

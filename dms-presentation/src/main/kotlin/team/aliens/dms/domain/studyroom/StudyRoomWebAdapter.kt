@@ -193,7 +193,7 @@ class StudyRoomWebAdapter(
     @GetMapping("/{study-room-id}/managers")
     fun managerGetStudyRoom(
         @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
-                            @RequestParam(name = "time_slot") timeSlotId: UUID?
+        @RequestParam(name = "time_slot") timeSlotId: UUID?
     ): ManagerQueryStudyRoomResponse {
         return managerQueryStudyRoomUseCase.execute(
             studyRoomId = studyRoomId!!,

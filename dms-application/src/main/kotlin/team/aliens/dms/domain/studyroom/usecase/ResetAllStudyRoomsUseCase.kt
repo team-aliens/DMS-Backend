@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.SchedulerUseCase
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 
 @SchedulerUseCase
