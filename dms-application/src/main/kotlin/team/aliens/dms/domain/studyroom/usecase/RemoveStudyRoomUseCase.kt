@@ -23,10 +23,10 @@ class RemoveStudyRoomUseCase(
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(studyRoom.schoolId, manager.schoolId)
 
-        commandStudyRoomPort.deleteAllSeatsByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.deleteSeatByStudyRoomId(studyRoomId)
         commandStudyRoomPort.deleteStudyRoomById(studyRoomId)
     }
 }

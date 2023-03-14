@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse.StudyRoomElement
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -13,39 +14,35 @@ import java.util.UUID
 class StudentQueryStudyRoomsUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val queryStudyRoomPort: QueryStudyRoomPort,
+    private val studyRoomFacade: StudyRoomFacade
 ) {
 
     fun execute(timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        timeSlotId?.run {
-            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
-                throw StudyRoomTimeSlotNotFoundException
-            }
-        } ?: run {
-            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
-                throw StudyRoomTimeSlotNotFoundException
-            }
-        }
+        studyRoomFacade.validateNullableTimeSlotId(timeSlotId, user.schoolId)
 
+        val seatApplication = queryStudyRoomPort.querySeatApplicationByStudentId(currentUserId)
+        val userStudyRoomId = seatApplication?.let { queryStudyRoomPort.querySeatById(it.seatId)?.studyRoomId }
 
-        val studyRooms = queryStudyRoomPort.queryAllStudyRoomsBySchoolId(user.schoolId).map {
-            StudyRoomElement(
-                id = it.id,
-                floor = it.floor,
-                name = it.name,
-                availableGrade = it.availableGrade,
-                availableSex = it.availableSex,
-                inUseHeadcount = it.inUseHeadcount,
-                totalAvailableSeat = it.totalAvailableSeat,
-                isMine = isMine(
-                    userStudyRoomId = userStudyRoomId,
-                    studyRoomId = it.id
+        val studyRooms = queryStudyRoomPort.queryAllStudyRoomsByTimeSlotId(timeSlotId)
+            .map {
+                StudyRoomElement(
+                    id = it.id,
+                    floor = it.floor,
+                    name = it.name,
+                    availableGrade = it.availableGrade,
+                    availableSex = it.availableSex,
+                    inUseHeadcount = it.inUseHeadcount,
+                    totalAvailableSeat = it.totalAvailableSeat,
+                    isMine = isMine(
+                        userStudyRoomId = userStudyRoomId,
+                        studyRoomId = it.id
+                    )
                 )
-            )
-        }
+            }
 
         return StudentQueryStudyRoomsResponse(
             studyRooms = studyRooms

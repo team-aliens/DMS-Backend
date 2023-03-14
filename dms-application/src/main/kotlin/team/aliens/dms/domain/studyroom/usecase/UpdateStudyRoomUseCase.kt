@@ -34,7 +34,6 @@ class UpdateStudyRoomUseCase(
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(currentUser.schoolId, studyRoom.schoolId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
@@ -43,14 +42,9 @@ class UpdateStudyRoomUseCase(
                 name = request.name,
                 schoolId = currentUser.schoolId
             )
-
             if (isAlreadyExists) {
                 throw StudyRoomAlreadyExistsException
             }
-        }
-
-        val availableHeadCount = seatRequests.count {
-            SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
         }
 
         commandStudyRoomPort.saveStudyRoom(
@@ -59,8 +53,9 @@ class UpdateStudyRoomUseCase(
                 floor = request.floor,
                 widthSize = totalWidthSize,
                 heightSize = totalHeightSize,
-                inUseHeadcount = 0,
-                availableHeadcount = availableHeadCount,
+                availableHeadcount = seatRequests.count {
+                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+                },
                 availableSex = Sex.valueOf(request.availableSex),
                 availableGrade = availableGrade,
                 eastDescription = eastDescription,
@@ -70,11 +65,9 @@ class UpdateStudyRoomUseCase(
             )
         )
 
-        commandStudyRoomPort.deleteAllSeatsByStudyRoomId(studyRoomId)
-        val seats = seatRequests.map {
+        val seats = request.seats.map {
             Seat(
-                studyRoomId = studyRoomId,
-                studentId = null,
+                studyRoomId = studyRoom.id,
                 typeId = it.typeId,
                 widthLocation = it.widthLocation,
                 heightLocation = it.heightLocation,
@@ -82,6 +75,8 @@ class UpdateStudyRoomUseCase(
                 status = SeatStatus.valueOf(it.status)
             )
         }
-        commandStudyRoomPort.saveAllSeat(seats)
+        commandStudyRoomPort.saveAllSeats(seats)
+
+        commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
     }
 }
