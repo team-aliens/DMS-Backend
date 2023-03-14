@@ -180,13 +180,25 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/{study-room-id}/students")
-    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): StudentQueryStudyRoomResponse {
-        return studentQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun studentGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestParam(name = "time_slot") timeSlotId: UUID?
+    ): StudentQueryStudyRoomResponse {
+        return studentQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId
+        )
     }
 
     @GetMapping("/{study-room-id}/managers")
-    fun managerGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): ManagerQueryStudyRoomResponse {
-        return managerQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun managerGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+                            @RequestParam(name = "time_slot") timeSlotId: UUID?
+    ): ManagerQueryStudyRoomResponse {
+        return managerQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
