@@ -3,12 +3,12 @@ package team.aliens.dms.domain.studyroom.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -19,7 +19,8 @@ import java.util.UUID
 class ManagerQueryStudyRoomUseCase(
     private val securityPort: StudyRoomSecurityPort,
     private val queryUserPort: StudyRoomQueryUserPort,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val queryStudyRoomPort: QueryStudyRoomPort,
+    private val studyRoomFacade: StudyRoomFacade
 ) {
 
     fun execute(studyRoomId: UUID, timeSlotId: UUID?): ManagerQueryStudyRoomResponse {
@@ -29,15 +30,7 @@ class ManagerQueryStudyRoomUseCase(
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        timeSlotId?.run {
-            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
-                throw StudyRoomTimeSlotNotFoundException
-            }
-        } ?: run {
-            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
-                throw StudyRoomTimeSlotNotFoundException
-            }
-        }
+        studyRoomFacade.validateNullableTimeSlotId(timeSlotId, user.schoolId)
 
         val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(

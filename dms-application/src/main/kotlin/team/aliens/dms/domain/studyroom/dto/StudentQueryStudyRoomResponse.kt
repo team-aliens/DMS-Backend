@@ -6,6 +6,7 @@ import java.util.UUID
 
 data class StudentQueryStudyRoomResponse(
     val floor: Int,
+    val timeSlot: String?,
     val name: String,
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,
