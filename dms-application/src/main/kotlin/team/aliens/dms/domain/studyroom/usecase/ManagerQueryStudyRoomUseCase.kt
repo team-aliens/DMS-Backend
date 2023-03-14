@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -21,15 +22,24 @@ class ManagerQueryStudyRoomUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(studyRoomId: UUID): ManagerQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID?): ManagerQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
+        timeSlotId?.run {
+            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        } ?: run {
+            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        }
+
+        val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,
@@ -54,10 +64,13 @@ class ManagerQueryStudyRoomUseCase(
             )
         }
 
+        val timeSlot = timeSlotId?.let { queryStudyRoomPort.queryTimeSlotById(it) }
+
         return studyRoom.run {
             ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
+                timeSlot = timeSlot?.name,
                 totalAvailableSeat = availableHeadcount,
                 availableSex = availableSex,
                 availableGrade = availableGrade,

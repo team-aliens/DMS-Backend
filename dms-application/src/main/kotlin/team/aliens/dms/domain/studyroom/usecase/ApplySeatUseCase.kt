@@ -31,9 +31,19 @@ class ApplySeatUseCase(
     private val queryAvailableTimePort: QueryAvailableTimePort
 ) {
 
-    fun execute(seatId: UUID) {
+    fun execute(seatId: UUID, timeSlotId: UUID?) {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+
+        timeSlotId?.run {
+            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        } ?: run {
+            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        }
 
         val seat = queryStudyRoomPort.querySeatById(seatId) ?: throw SeatNotFoundException
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException

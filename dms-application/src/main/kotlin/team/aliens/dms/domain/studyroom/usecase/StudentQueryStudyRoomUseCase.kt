@@ -21,15 +21,22 @@ class StudentQueryStudyRoomUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(studyRoomId: UUID): StudentQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID?): StudentQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
+        timeSlotId?.run {
+            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        } ?: run {
+            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        }
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,

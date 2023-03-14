@@ -16,11 +16,20 @@ class StudentQueryStudyRoomsUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(): StudentQueryStudyRoomsResponse {
+    fun execute(timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val userStudyRoomId = queryStudyRoomPort.querySeatByStudentId(currentUserId)?.studyRoomId
+        timeSlotId?.run {
+            if (!queryStudyRoomPort.existsTimeSlotById(timeSlotId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        } ?: run {
+            if (queryStudyRoomPort.existsTimeSlotsBySchoolId(user.schoolId)) {
+                throw StudyRoomTimeSlotNotFoundException
+            }
+        }
+
 
         val studyRooms = queryStudyRoomPort.queryAllStudyRoomsBySchoolId(user.schoolId).map {
             StudyRoomElement(
