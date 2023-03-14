@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
+import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
@@ -87,6 +88,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns seatApplicationStub
+        every { queryStudyRoomPort.querySeatById(seatApplicationStub.seatId) } returns seatStub
         every { queryStudyRoomPort.queryStudyRoomById(seatStub.studyRoomId) } returns studyRoomStub
 
         // when & then
@@ -99,10 +101,10 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     fun `seat이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns null
+        every { queryStudyRoomPort.querySeatById(seatApplicationStub.seatId) } returns null
 
         // when & then
-        assertThrows<AppliedSeatNotFoundException> {
+        assertThrows<SeatNotFoundException> {
             queryCurrentAppliedStudyRoomUseCase.execute()
         }
     }

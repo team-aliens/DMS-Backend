@@ -81,4 +81,16 @@ class ManagerQueryStudyRoomsUseCaseTests {
             managerQueryRoomsUseCase.execute(null)
         }
     }
+
+    @Test
+    fun `유저가 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns managerId
+        every { queryUserPort.queryUserById(managerId) } returns null
+
+        // when & then
+        assertDoesNotThrow {
+            managerQueryRoomsUseCase.execute(timeSlotId)
+        }
+    }
 }
