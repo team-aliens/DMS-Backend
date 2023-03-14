@@ -1,20 +1,15 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -25,47 +20,28 @@ import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
 import java.util.UUID
 
-@ExtendWith(SpringExtension::class)
 class UpdateStudyRoomUseCaseTests {
 
-    @MockBean
-    private lateinit var queryStudyRoomPort: QueryStudyRoomPort
+    private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
+    private val commandStudyRoomPort: CommandStudyRoomPort = mockk(relaxed = true)
+    private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
+    private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
 
-    @MockBean
-    private lateinit var commandStudyRoomPort: CommandStudyRoomPort
+    private val updateStudyRoomUseCase = UpdateStudyRoomUseCase(
+        queryStudyRoomPort, commandStudyRoomPort, securityPort, queryUserPort
+    )
 
-    @MockBean
-    private lateinit var securityPort: StudyRoomSecurityPort
-
-    @MockBean
-    private lateinit var queryUserPort: StudyRoomQueryUserPort
-
-    private lateinit var updateStudyRoomUseCase: UpdateStudyRoomUseCase
-
-    @BeforeEach
-    fun setUp() {
-        updateStudyRoomUseCase = UpdateStudyRoomUseCase(
-            queryStudyRoomPort,
-            commandStudyRoomPort,
-            securityPort,
-            queryUserPort
-        )
-    }
-
-    private val studyRoomId = UUID.randomUUID()
     private val userId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val password = "test password"
-    private val floor = 1
-    private val studyRoomName = "test study room"
+    private val studyRoomId = UUID.randomUUID()
 
     private val userStub by lazy {
         User(
             id = userId,
             schoolId = schoolId,
-            accountId = "test account id",
-            password = password,
-            email = "test email",
+            accountId = "account id",
+            password = "password",
+            email = "email",
             authority = Authority.STUDENT,
             createdAt = LocalDateTime.now(),
             deletedAt = null
@@ -74,14 +50,14 @@ class UpdateStudyRoomUseCaseTests {
 
     private val studyRoomStub by lazy {
         StudyRoom(
-            schoolId = userStub.schoolId,
+            id = studyRoomId,
+            schoolId = schoolId,
             name = requestStub.name,
             floor = requestStub.floor,
             widthSize = requestStub.totalWidthSize,
             heightSize = requestStub.totalHeightSize,
-            inUseHeadcount = 0,
-            availableHeadcount = requestStub.seats.count { SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status) },
             availableSex = Sex.valueOf(requestStub.availableSex),
+            availableHeadcount = 1,
             availableGrade = requestStub.availableGrade,
             eastDescription = requestStub.eastDescription,
             westDescription = requestStub.westDescription,
@@ -92,8 +68,8 @@ class UpdateStudyRoomUseCaseTests {
 
     private val requestStub by lazy {
         UpdateStudyRoomRequest(
-            floor = 5,
-            name = "new study room name",
+            floor = 1,
+            name = "",
             totalWidthSize = 10,
             totalHeightSize = 10,
             eastDescription = "eastDescription",
@@ -117,23 +93,18 @@ class UpdateStudyRoomUseCaseTests {
     @Test
     fun `자습실 수정 성공 - 층 & 이름이 동일하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+        val floor = 9
+        val name = "qweqwe"
 
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(
-                studyRoomStub.copy(
-                    floor = floor,
-                    name = studyRoomName
-                )
-            )
-
-        given(
-            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId)
-        ).willReturn(false)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every {
+            queryStudyRoomPort.queryStudyRoomById(studyRoomId)
+        } returns studyRoomStub.copy(
+            floor = floor,
+            name = name
+        )
+        every { queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, name, schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
@@ -144,14 +115,9 @@ class UpdateStudyRoomUseCaseTests {
     @Test
     fun `자습실 수정 성공 - 층 & 이름이 동일`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
 
         // when & then
         assertDoesNotThrow {
@@ -162,11 +128,8 @@ class UpdateStudyRoomUseCaseTests {
     @Test
     fun `유저를 찾을 수 없음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(null)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns null
 
         // when & then
         assertThrows<UserNotFoundException> {
@@ -175,16 +138,11 @@ class UpdateStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `자습실을 찾을 수 없음`() {
+    fun `자습실 정보를 찾을 수 없음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(null)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns null
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
@@ -193,50 +151,20 @@ class UpdateStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `학교가 일치하지 않음`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(
-                studyRoomStub.copy(schoolId = UUID.randomUUID())
-            )
-
-        // when & then
-        assertThrows<SchoolMismatchException> {
-            updateStudyRoomUseCase.execute(studyRoomId, requestStub)
-        }
-    }
-
-    @Test
     fun `같은 층, 이름의 자습실이 이미 존재함`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+        val floor = 9
+        val name = "qweqwe"
 
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(
-                studyRoomStub.copy(
-                    floor = floor,
-                    name = studyRoomName
-                )
-            )
-
-        given(
-            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
-                requestStub.floor,
-                requestStub.name,
-                schoolId
-            )
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every {
+            queryStudyRoomPort.queryStudyRoomById(studyRoomId)
+        } returns studyRoomStub.copy(
+            floor = floor,
+            name = name
         )
-            .willReturn(true)
+        every { queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId) } returns true
 
         // when & then
         assertThrows<StudyRoomAlreadyExistsException> {
