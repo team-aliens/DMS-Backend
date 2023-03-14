@@ -5,11 +5,14 @@ import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.AvailableTimeNotFoundException
+import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatchException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
@@ -52,30 +55,19 @@ class ApplySeatUseCase(
         validateStudyRoomAvailable(studyRoom, currentUserId)
         validateTimeAvailable(studyRoom.schoolId)
 
-        val currentSeat = queryStudyRoomPort.querySeatByStudentId(currentUserId)
-        currentSeat?.let {
-            commandStudyRoomPort.saveSeat(
-                it.unUse()
-            )
-
-            if (studyRoom.id != it.studyRoomId) {
-                val currentStudyRoom = queryStudyRoomPort.queryStudyRoomById(it.studyRoomId)
-                    ?: throw StudyRoomNotFoundException
-
-                commandStudyRoomPort.saveStudyRoom(
-                    currentStudyRoom.unApply()
-                )
-            }
+        if (queryStudyRoomPort.existsSeatApplicationBySeatIdAndTimeSlotId(seatId, timeSlotId)) {
+            throw SeatAlreadyAppliedException
         }
 
-        val saveSeat = seat.use(currentUserId)
-        commandStudyRoomPort.saveSeat(saveSeat)
+        commandStudyRoomPort.deleteSeatApplicationByStudentId(currentUserId)
 
-        if (studyRoom.id != currentSeat?.studyRoomId) {
-            commandStudyRoomPort.saveStudyRoom(
-                studyRoom.apply()
+        commandStudyRoomPort.saveSeatApplication(
+            SeatApplication(
+                seatId = seatId,
+                timeSlotId = timeSlotId,
+                studentId = currentUserId
             )
-        }
+        )
     }
 
     private fun validateStudyRoomAvailable(studyRoom: StudyRoom, currentUserId: UUID) {
