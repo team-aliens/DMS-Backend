@@ -16,8 +16,9 @@ class StudyRoomTimeSlotMapper(
         return entity?.let {
             StudyRoomTimeSlot(
                 id = it.id!!,
-                schoolId = entity.school!!.id!!,
-                name = entity.name
+                schoolId = it.school!!.id!!,
+                startTime = it.startTime,
+                endTime = it.endTime
             )
         }
     }
@@ -27,7 +28,8 @@ class StudyRoomTimeSlotMapper(
         return StudyRoomTimeSlotJpaEntity(
             id = domain.id,
             school = school,
-            name = domain.name
+            startTime = domain.startTime,
+            endTime = domain.endTime
         )
     }
 }

@@ -22,8 +22,6 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -92,18 +90,6 @@ class RemoveStudentUseCaseTests {
             name = "이름",
             profileImageUrl = "https://~",
             sex = Sex.FEMALE
-        )
-    }
-
-    private val seatStub by lazy {
-        Seat(
-            id = UUID.randomUUID(),
-            studyRoomId = studyRoomId,
-            typeId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE
         )
     }
 

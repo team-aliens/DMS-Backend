@@ -48,7 +48,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     private val seatApplicationStub by lazy {
         SeatApplication(
             seatId = seatStub.id,
-            timeSlotId = null,
+            timeSlotId = UUID.randomUUID(),
             studentId = userId
         )
     }
@@ -87,7 +87,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     fun `자습실 목록 조회 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns seatApplicationStub
+        every { queryStudyRoomPort.querySeatApplicationsByStudentId(userId) } returns listOf(seatApplicationStub)
         every { queryStudyRoomPort.querySeatById(seatApplicationStub.seatId) } returns seatStub
         every { queryStudyRoomPort.queryStudyRoomById(seatStub.studyRoomId) } returns studyRoomStub
 
@@ -101,7 +101,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     fun `seatApplication이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns null
+        every { queryStudyRoomPort.querySeatApplicationsByStudentId(userId) } returns listOf()
 
         // when & then
         assertThrows<AppliedSeatNotFoundException> {
@@ -113,7 +113,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     fun `seat이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns seatApplicationStub
+        every { queryStudyRoomPort.querySeatApplicationsByStudentId(userId) } returns listOf(seatApplicationStub)
         every { queryStudyRoomPort.querySeatById(seatStub.id) } returns null
 
         // when & then
@@ -126,7 +126,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     fun `studyRoom이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
-        every { queryStudyRoomPort.querySeatApplicationByStudentId(userId) } returns seatApplicationStub
+        every { queryStudyRoomPort.querySeatApplicationsByStudentId(userId) } returns listOf(seatApplicationStub)
         every { queryStudyRoomPort.querySeatById(seatStub.id) } returns seatStub
         every { queryStudyRoomPort.queryStudyRoomById(seatStub.studyRoomId) } returns null
 

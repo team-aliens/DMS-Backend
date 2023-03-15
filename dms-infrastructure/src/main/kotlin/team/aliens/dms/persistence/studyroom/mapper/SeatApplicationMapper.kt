@@ -6,6 +6,7 @@ import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntityId
 import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepository
 
@@ -19,9 +20,8 @@ class SeatApplicationMapper(
     override fun toDomain(entity: SeatApplicationJpaEntity?): SeatApplication? {
         return entity?.let {
             SeatApplication(
-                id = it.id!!,
                 seatId = it.seat!!.id!!,
-                timeSlotId = it.timeSlot?.id,
+                timeSlotId = it.timeSlot!!.id!!,
                 studentId = it.student!!.id
             )
         }
@@ -29,11 +29,14 @@ class SeatApplicationMapper(
 
     override fun toEntity(domain: SeatApplication): SeatApplicationJpaEntity {
         val seat = seatRepository.findByIdOrNull(domain.seatId)
-        val timeSlot = domain.timeSlotId?.let { timeSlotRepository.findByIdOrNull(it) }
+        val timeSlot = timeSlotRepository.findByIdOrNull(domain.timeSlotId)
         val student = studentRepository.findByIdOrNull(domain.studentId)
 
         return SeatApplicationJpaEntity(
-            id = domain.id,
+            id = SeatApplicationJpaEntityId(
+                seatId = domain.seatId,
+                timeSlotId = domain.timeSlotId
+            ),
             seat = seat,
             timeSlot = timeSlot,
             student = student

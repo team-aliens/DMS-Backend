@@ -10,6 +10,7 @@ import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -64,12 +65,21 @@ class StudentQueryStudyRoomUseCaseTests {
         )
     }
 
+    private val timeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = timeSlotId,
+            schoolId = schoolId,
+            name = "10:00 ~ 10:50"
+        )
+    }
+
     @Test
     fun `자습실 조회 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.existsTimeSlotById(timeSlotId) } returns true
 
         // when & then
@@ -102,6 +112,28 @@ class StudentQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<SchoolMismatchException> {
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    private val otherTimeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = timeSlotId,
+            schoolId = schoolId,
+            name = "10:00 ~ 10:50"
+        )
+    }
+
+    @Test
+    fun `다른 학교의 이용시간임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
+
+        // when & then
+        assertDoesNotThrow {
             studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
