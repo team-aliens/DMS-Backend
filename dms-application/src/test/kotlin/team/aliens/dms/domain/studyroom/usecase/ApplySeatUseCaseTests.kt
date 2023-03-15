@@ -8,15 +8,16 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -36,10 +37,9 @@ class ApplySeatUseCaseTests {
     private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
     private val commandStudyRoomPort: CommandStudyRoomPort = mockk(relaxed = true)
     private val queryAvailableTimePort: QueryAvailableTimePort = mockk(relaxed = true)
-    private val studyRoomFacade: StudyRoomFacade = mockk(relaxed = true)
 
     private val applySeatUseCase = ApplySeatUseCase(
-        securityPort, queryUserPort, queryStudentPort, queryStudyRoomPort, commandStudyRoomPort, queryAvailableTimePort, studyRoomFacade
+        securityPort, queryUserPort, queryStudentPort, queryStudyRoomPort, commandStudyRoomPort, queryAvailableTimePort
     )
 
     private val userId = UUID.randomUUID()
@@ -89,6 +89,14 @@ class ApplySeatUseCaseTests {
         )
     }
 
+    private val timeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = timeSlotId,
+            schoolId = schoolId,
+            name = "10:00 ~ 10:50"
+        )
+    }
+
     private val studyRoomStub = mockk<StudyRoom>(relaxed = true)
 
     private val availableTimeStub: AvailableTime = mockk(relaxed = true)
@@ -101,6 +109,7 @@ class ApplySeatUseCaseTests {
         every { queryStudentPort.queryStudentById(userId) } returns studentStub
         every { queryStudyRoomPort.querySeatById(seatId) } returns seatStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { studyRoomStub.schoolId } returns schoolId
         every { studyRoomStub.checkIsAvailableGradeAndSex(studentStub.grade, studentStub.sex) } returns Unit
 
@@ -155,6 +164,20 @@ class ApplySeatUseCaseTests {
         }
     }
 
+    @Test
+    fun `자습실 이용시간이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudentPort.queryStudentById(userId) } returns studentStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
+
+        // when & then
+        assertThrows<StudyRoomTimeSlotNotFoundException> {
+            applySeatUseCase.execute(seatId, timeSlotId)
+        }
+    }
+
     private val notAvailableSeatStub by lazy {
         Seat(
             id = seatId,
@@ -175,6 +198,7 @@ class ApplySeatUseCaseTests {
         every { queryStudentPort.queryStudentById(userId) } returns studentStub
         every { queryStudyRoomPort.querySeatById(seatId) } returns notAvailableSeatStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { studyRoomStub.schoolId } returns schoolId
 
         // when & then
@@ -190,6 +214,7 @@ class ApplySeatUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudentPort.queryStudentById(userId) } returns studentStub
         every { queryStudyRoomPort.querySeatById(seatId) } returns seatStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
         every { studyRoomStub.schoolId } returns schoolId
         every { studyRoomStub.checkIsAvailableGradeAndSex(studentStub.grade, studentStub.sex) } returns Unit
@@ -211,6 +236,8 @@ class ApplySeatUseCaseTests {
         every { queryStudentPort.queryStudentById(userId) } returns studentStub
         every { queryStudyRoomPort.querySeatById(seatId) } returns seatStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { studyRoomStub.schoolId } returns schoolId
         every { studyRoomStub.checkIsAvailableGradeAndSex(studentStub.grade, studentStub.sex) } returns Unit
 

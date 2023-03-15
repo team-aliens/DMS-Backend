@@ -99,18 +99,18 @@ class StudyRoomWebAdapter(
     @PutMapping("/seats/{seat-id}")
     fun applySeat(
         @PathVariable("seat-id") @NotNull seatId: UUID?,
-        @RequestParam(name = "time_slot") timeSlotId: UUID?
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
     ) {
         return applySeatUseCase.execute(
             seatId = seatId!!,
-            timeSlotId = timeSlotId
+            timeSlotId = timeSlotId!!
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun unApplySeat(@RequestParam(name = "time_slot") timeSlotId: UUID?) {
-        unApplySeatUseCase.execute(timeSlotId)
+    fun unApplySeat(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?) {
+        unApplySeatUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -182,22 +182,22 @@ class StudyRoomWebAdapter(
     @GetMapping("/{study-room-id}/students")
     fun studentGetStudyRoom(
         @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
-        @RequestParam(name = "time_slot") timeSlotId: UUID?
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
     ): StudentQueryStudyRoomResponse {
         return studentQueryStudyRoomUseCase.execute(
             studyRoomId = studyRoomId!!,
-            timeSlotId = timeSlotId
+            timeSlotId = timeSlotId!!
         )
     }
 
     @GetMapping("/{study-room-id}/managers")
     fun managerGetStudyRoom(
         @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
-        @RequestParam(name = "time_slot") timeSlotId: UUID?
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
     ): ManagerQueryStudyRoomResponse {
         return managerQueryStudyRoomUseCase.execute(
             studyRoomId = studyRoomId!!,
-            timeSlotId = timeSlotId
+            timeSlotId = timeSlotId!!
         )
     }
 
@@ -208,13 +208,13 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/list/students")
-    fun studentGetStudyRooms(@RequestParam(name = "time_slot") timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
-        return studentQueryStudyRoomsUseCase.execute(timeSlotId)
+    fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @GetMapping("/list/managers")
-    fun managerGetStudyRooms(@RequestParam(name = "time_slot") timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
-        return managerQueryStudyRoomsUseCase.execute(timeSlotId)
+    fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

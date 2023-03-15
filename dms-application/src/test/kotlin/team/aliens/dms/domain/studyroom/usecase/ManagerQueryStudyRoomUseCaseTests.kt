@@ -8,9 +8,10 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -24,15 +25,15 @@ class ManagerQueryStudyRoomUseCaseTests {
     private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
     private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
     private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
-    private val studyRoomFacade: StudyRoomFacade = mockk(relaxed = true)
 
     private val managerQueryRoomUseCase = ManagerQueryStudyRoomUseCase(
-        securityPort, queryUserPort, queryStudyRoomPort, studyRoomFacade
+        securityPort, queryUserPort, queryStudyRoomPort
     )
 
     private val userId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
     private val studyRoomId = UUID.randomUUID()
+    private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
         User(
@@ -65,16 +66,25 @@ class ManagerQueryStudyRoomUseCaseTests {
         )
     }
 
+    private val timeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = timeSlotId,
+            schoolId = schoolId,
+            name = "10:00 ~ 10:50"
+        )
+    }
+
     @Test
     fun `자습실 조회 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
 
         // when & then
         assertDoesNotThrow {
-            managerQueryRoomUseCase.execute(studyRoomId, null)
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
@@ -86,7 +96,7 @@ class ManagerQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
-            managerQueryRoomUseCase.execute(studyRoomId, null)
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
@@ -99,7 +109,21 @@ class ManagerQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
-            managerQueryRoomUseCase.execute(studyRoomId, null)
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    @Test
+    fun `이용시간이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
+
+        // when & then
+        assertThrows<StudyRoomTimeSlotNotFoundException> {
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
@@ -122,12 +146,12 @@ class ManagerQueryStudyRoomUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns otherUserId
         every { queryUserPort.queryUserById(userId) } returns otherUserStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryStudyRoomById(studyRoomStub.id) } returns studyRoomStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            managerQueryRoomUseCase.execute(studyRoomId, null)
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 }

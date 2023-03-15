@@ -48,7 +48,7 @@ class QueryCurrentAppliedStudyRoomUseCaseTests {
     private val seatApplicationStub by lazy {
         SeatApplication(
             seatId = seatStub.id,
-            timeSlotId = null,
+            timeSlotId = UUID.randomUUID(),
             studentId = userId
         )
     }

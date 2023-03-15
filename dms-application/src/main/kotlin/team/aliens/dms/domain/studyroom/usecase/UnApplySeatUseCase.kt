@@ -16,7 +16,7 @@ class UnApplySeatUseCase(
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
-    fun execute(timeSlotId: UUID?) {
+    fun execute(timeSlotId: UUID) {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 

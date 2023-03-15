@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -23,14 +24,15 @@ class StudentQueryStudyRoomUseCase(
     private val studyRoomFacade: StudyRoomFacade
 ) {
 
-    fun execute(studyRoomId: UUID, timeSlotId: UUID?): StudentQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID): StudentQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        studyRoomFacade.validateNullableTimeSlotId(timeSlotId, user.schoolId)
+        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw StudyRoomTimeSlotNotFoundException
+        validateSameSchool(timeSlot.schoolId, user.schoolId)
 
         val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
@@ -60,13 +62,11 @@ class StudentQueryStudyRoomUseCase(
             )
         }
 
-        val timeSlot = timeSlotId?.let { queryStudyRoomPort.queryTimeSlotById(it) }
-
         return studyRoom.run {
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlot = timeSlot?.name,
+                timeSlot = timeSlot.name,
                 totalAvailableSeat = availableHeadcount,
                 inUseHeadcount = seats.count { it.student != null },
                 availableSex = availableSex,

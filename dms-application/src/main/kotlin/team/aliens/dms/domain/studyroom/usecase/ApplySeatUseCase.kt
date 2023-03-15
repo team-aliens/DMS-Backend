@@ -3,12 +3,12 @@ package team.aliens.dms.domain.studyroom.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.exception.AvailableTimeNotFoundException
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -28,19 +28,18 @@ class ApplySeatUseCase(
     private val queryStudentPort: StudyRoomQueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val queryAvailableTimePort: QueryAvailableTimePort,
-    private val studyRoomFacade: StudyRoomFacade
+    private val queryAvailableTimePort: QueryAvailableTimePort
 ) {
 
-    fun execute(seatId: UUID, timeSlotId: UUID?) {
+    fun execute(seatId: UUID, timeSlotId: UUID) {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        studyRoomFacade.validateNullableTimeSlotId(timeSlotId, user.schoolId)
-
         val seat = queryStudyRoomPort.querySeatById(seatId) ?: throw SeatNotFoundException
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
+        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw StudyRoomTimeSlotNotFoundException
 
+        validateSameSchool(timeSlot.schoolId, user.schoolId)
         validateSameSchool(studyRoom.schoolId, user.schoolId)
         validateStudyRoomAvailable(studyRoom, currentUserId)
         validateTimeAvailable(studyRoom.schoolId)

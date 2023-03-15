@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.StudyRoomFacade
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -22,10 +23,9 @@ class ManagerQueryStudyRoomsUseCaseTests {
     private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
     private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
     private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
-    private val studyRoomFacade: StudyRoomFacade = mockk(relaxed = true)
 
     private val managerQueryRoomsUseCase = ManagerQueryStudyRoomsUseCase(
-        securityPort, queryUserPort, queryStudyRoomPort, studyRoomFacade
+        securityPort, queryUserPort, queryStudyRoomPort
     )
 
     private val managerId = UUID.randomUUID()
@@ -58,11 +58,20 @@ class ManagerQueryStudyRoomsUseCaseTests {
         )
     }
 
+    private val timeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = UUID.randomUUID(),
+            schoolId = schoolId,
+            name = "10:00 ~ 10:50"
+        )
+    }
+
     @Test
     fun `자습실 목록 조회 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns managerId
         every { queryUserPort.queryUserById(managerId) } returns userStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.queryAllStudyRoomsByTimeSlotId(timeSlotId) } returns listOf(studyRoomStub)
 
         // when & then
@@ -71,16 +80,24 @@ class ManagerQueryStudyRoomsUseCaseTests {
         }
     }
 
+    private val otherTimeSlotStub by lazy {
+        StudyRoomTimeSlot(
+            id = UUID.randomUUID(),
+            schoolId = UUID.randomUUID(),
+            name = "10:00 ~ 10:50"
+        )
+    }
+
     @Test
-    fun `자습실 생성 성공 (timeSlotId null인 경우)`() {
+    fun `학교 불일치`() {
         // given
         every { securityPort.getCurrentUserId() } returns managerId
         every { queryUserPort.queryUserById(managerId) } returns userStub
-        every { queryStudyRoomPort.queryAllStudyRoomsByTimeSlotId(timeSlotId) } returns listOf(studyRoomStub)
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
 
         // when & then
-        assertDoesNotThrow {
-            managerQueryRoomsUseCase.execute(null)
+        assertThrows<SchoolMismatchException> {
+            managerQueryRoomsUseCase.execute(timeSlotId)
         }
     }
 
