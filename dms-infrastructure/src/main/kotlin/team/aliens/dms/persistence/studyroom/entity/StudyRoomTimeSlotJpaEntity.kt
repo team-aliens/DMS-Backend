@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.studyroom.entity
 
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
+import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -22,8 +23,11 @@ class StudyRoomTimeSlotJpaEntity(
 
     override val id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
-    val name: String,
+    @Column(columnDefinition = "DARETIME(6)", nullable = false)
+    val startTime: LocalDateTime,
+
+    @Column(columnDefinition = "DARETIME(6)", nullable = false)
+    val endTime: LocalDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
