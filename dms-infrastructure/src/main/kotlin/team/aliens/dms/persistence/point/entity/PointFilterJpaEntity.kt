@@ -12,9 +12,15 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(name = "tbl_point_filter")
+@Table(
+    name = "tbl_point_filter",
+    uniqueConstraints = [
+        UniqueConstraint(columnNames = arrayOf("school_id", "name"))
+    ]
+)
 class PointFilterJpaEntity(
 
     override val id: UUID?,
