@@ -24,8 +24,8 @@ class StudentQueryStudyRoomsUseCase(
 
         studyRoomFacade.validateNullableTimeSlotId(timeSlotId, user.schoolId)
 
-        val seatApplication = queryStudyRoomPort.querySeatApplicationByStudentId(currentUserId)
-        val userStudyRoomId = seatApplication?.let { queryStudyRoomPort.querySeatById(it.seatId)?.studyRoomId }
+        val seatApplications = queryStudyRoomPort.querySeatApplicationsByStudentId(currentUserId)
+        val userStudyRoomIds = queryStudyRoomPort.queryAllSeatsById(seatApplications.map { it.seatId }).map { it.studyRoomId }
 
         val studyRooms = queryStudyRoomPort.queryAllStudyRoomsByTimeSlotId(timeSlotId)
             .map {
@@ -37,21 +37,12 @@ class StudentQueryStudyRoomsUseCase(
                     availableSex = it.availableSex,
                     inUseHeadcount = it.inUseHeadcount,
                     totalAvailableSeat = it.totalAvailableSeat,
-                    isMine = isMine(
-                        userStudyRoomId = userStudyRoomId,
-                        studyRoomId = it.id
-                    )
+                    isMine = userStudyRoomIds.contains(it.id)
                 )
             }
 
         return StudentQueryStudyRoomsResponse(
             studyRooms = studyRooms
         )
-    }
-
-    private fun isMine(userStudyRoomId: UUID?, studyRoomId: UUID) = userStudyRoomId?.run {
-        this == studyRoomId
-    } ?: run {
-        false
     }
 }

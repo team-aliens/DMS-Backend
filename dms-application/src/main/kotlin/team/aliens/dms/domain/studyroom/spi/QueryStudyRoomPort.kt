@@ -14,9 +14,9 @@ interface QueryStudyRoomPort {
 
     fun querySeatById(seatId: UUID): Seat?
 
-    fun querySeatApplicationByStudentId(studentId: UUID): SeatApplication?
+    fun querySeatApplicationsByStudentId(studentId: UUID): List<SeatApplication>
 
-    fun queryStudyRoomsBySchoolId(schoolId: UUID): List<StudyRoom>
+    fun queryAllSeatsById(seatIds: List<UUID>): List<Seat>
 
     fun existsStudyRoomByFloorAndNameAndSchoolId(floor: Int, name: String, schoolId: UUID): Boolean
 

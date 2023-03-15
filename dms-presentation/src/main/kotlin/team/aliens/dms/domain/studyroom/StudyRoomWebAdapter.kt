@@ -109,8 +109,8 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun unApplySeat() {
-        unApplySeatUseCase.execute()
+    fun unApplySeat(@RequestParam(name = "time_slot") timeSlotId: UUID?) {
+        unApplySeatUseCase.execute(timeSlotId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)

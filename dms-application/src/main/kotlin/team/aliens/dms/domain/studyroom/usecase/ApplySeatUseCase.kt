@@ -52,7 +52,7 @@ class ApplySeatUseCase(
             throw SeatAlreadyAppliedException
         }
 
-        commandStudyRoomPort.deleteSeatApplicationByStudentId(currentUserId)
+        commandStudyRoomPort.deleteSeatApplicationByStudentIdAndTimeSlotId(currentUserId, timeSlotId)
 
         commandStudyRoomPort.saveSeatApplication(
             SeatApplication(

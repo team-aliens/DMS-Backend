@@ -8,7 +8,7 @@ import java.util.UUID
 @Repository
 interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity, UUID> {
 
-    fun queryByStudentId(studentId: UUID): SeatApplicationJpaEntity?
+    fun queryByStudentId(studentId: UUID): List<SeatApplicationJpaEntity>
 
     fun deleteByStudentId(studyRoomId: UUID)
 
