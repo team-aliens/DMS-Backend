@@ -2,6 +2,8 @@ package team.aliens.dms.domain.studyroom.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatchException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
 import java.util.UUID
 
 @Aggregate
@@ -33,4 +35,14 @@ data class StudyRoom(
 
     val northDescription: String
 
-)
+) {
+    fun checkIsAvailableGradeAndSex(grade: Int, sex: Sex) {
+        if (availableGrade != 0 && availableGrade != grade) {
+            throw StudyRoomAvailableGradeMismatchException
+        }
+
+        if (availableSex != Sex.ALL && availableSex != sex) {
+            throw StudyRoomAvailableSexMismatchException
+        }
+    }
+}

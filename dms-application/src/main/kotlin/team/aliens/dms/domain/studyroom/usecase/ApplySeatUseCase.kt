@@ -3,14 +3,11 @@ package team.aliens.dms.domain.studyroom.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.exception.AvailableTimeNotFoundException
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
-import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatchException
-import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.SeatStatus
@@ -22,7 +19,6 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.time.LocalTime
 import java.util.UUID
 
 @UseCase
@@ -70,21 +66,13 @@ class ApplySeatUseCase(
 
     private fun validateStudyRoomAvailable(studyRoom: StudyRoom, currentUserId: UUID) {
         val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
-
-        if (studyRoom.availableGrade != 0 && studyRoom.availableGrade != student.grade) {
-            throw StudyRoomAvailableGradeMismatchException
-        }
-
-        if (studyRoom.availableSex != Sex.ALL && studyRoom.availableSex != student.sex) {
-            throw StudyRoomAvailableSexMismatchException
-        }
+        studyRoom.checkIsAvailableGradeAndSex(student.grade, student.sex)
     }
 
     private fun validateTimeAvailable(schoolId: UUID) {
-        val now = LocalTime.now()
         val availableTime = queryAvailableTimePort.queryAvailableTimeBySchoolId(schoolId) ?: throw AvailableTimeNotFoundException
 
-        if (now < availableTime.startAt || now > availableTime.endAt) {
+        if (!availableTime.isAvailable()) {
             throw SeatCanNotAppliedException
         }
     }
