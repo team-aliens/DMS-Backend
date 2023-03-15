@@ -13,6 +13,7 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatc
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatApplication
+import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
@@ -47,6 +48,10 @@ class ApplySeatUseCase(
         validateSameSchool(studyRoom.schoolId, user.schoolId)
         validateStudyRoomAvailable(studyRoom, currentUserId)
         validateTimeAvailable(studyRoom.schoolId)
+
+        if (seat.status != SeatStatus.AVAILABLE) {
+            throw SeatCanNotAppliedException
+        }
 
         if (queryStudyRoomPort.existsSeatApplicationBySeatIdAndTimeSlotId(seatId, timeSlotId)) {
             throw SeatAlreadyAppliedException
