@@ -7,8 +7,6 @@ import java.util.UUID
 @Aggregate
 data class StudentTag(
 
-    val id: UUID,
-
     val studentId: UUID,
 
     val tagId: UUID,
