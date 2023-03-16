@@ -61,7 +61,8 @@ class ManagerQueryStudyRoomUseCase(
             ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlot = timeSlot.name,
+                timeSlotStartTime = timeSlot.startTime,
+                timeSlotEndTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
                 availableSex = availableSex,
                 availableGrade = availableGrade,

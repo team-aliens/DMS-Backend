@@ -66,7 +66,8 @@ class StudentQueryStudyRoomUseCase(
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlot = timeSlot.name,
+                timeSlotStartTime = timeSlot.startTime,
+                timeSlotEndTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
                 inUseHeadcount = seats.count { it.student != null },
                 availableSex = availableSex,

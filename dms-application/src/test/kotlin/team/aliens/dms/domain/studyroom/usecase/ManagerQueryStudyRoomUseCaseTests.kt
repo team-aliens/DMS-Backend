@@ -18,6 +18,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.UUID
 
 class ManagerQueryStudyRoomUseCaseTests {
@@ -70,7 +71,8 @@ class ManagerQueryStudyRoomUseCaseTests {
         StudyRoomTimeSlot(
             id = timeSlotId,
             schoolId = schoolId,
-            name = "10:00 ~ 10:50"
+            startTime = LocalTime.of(0, 0),
+            endTime = LocalTime.of(0, 0)
         )
     }
 

@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.studyroom.model
 
-import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.UUID
 
 data class StudyRoomTimeSlot(
@@ -9,7 +9,7 @@ data class StudyRoomTimeSlot(
 
     val schoolId: UUID,
 
-    val startTime: LocalDateTime,
+    val startTime: LocalTime,
 
-    val endTime: LocalDateTime,
+    val endTime: LocalTime,
 )
