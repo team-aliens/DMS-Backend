@@ -4,5 +4,4 @@ import org.springframework.data.repository.CrudRepository
 import team.aliens.dms.persistence.point.entity.PointFilterJpaEntity
 import java.util.UUID
 
-interface PointFilterJpaRepository : CrudRepository<PointFilterJpaEntity, UUID>{
-}
+interface PointFilterJpaRepository : CrudRepository<PointFilterJpaEntity, UUID>
