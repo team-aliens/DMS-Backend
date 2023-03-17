@@ -2,8 +2,10 @@ package team.aliens.dms.persistence.student.entity
 
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
+import java.io.Serializable
 import java.util.UUID
 import javax.persistence.Column
+import javax.persistence.Embeddable
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.JoinColumn
@@ -30,3 +32,14 @@ class TagJpaEntity(
     val school: SchoolJpaEntity?
 
 ) : BaseUUIDEntity(id)
+
+@Embeddable
+data class StudentTagId(
+
+    @Column(nullable = false)
+    val studentId: UUID,
+
+    @Column(nullable = false)
+    val tagId: UUID
+
+) : Serializable
