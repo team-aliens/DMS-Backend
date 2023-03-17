@@ -17,6 +17,7 @@ class TagMapper(
             Tag(
                 id = it.id!!,
                 name = it.name,
+                color = it.color,
                 schoolId = it.school!!.id!!
             )
         }
@@ -28,6 +29,7 @@ class TagMapper(
         return TagJpaEntity(
             id = domain.id,
             name = domain.name,
+            color = domain.color,
             school = school
         )
     }

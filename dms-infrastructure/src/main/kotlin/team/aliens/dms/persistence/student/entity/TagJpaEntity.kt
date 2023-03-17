@@ -27,6 +27,9 @@ class TagJpaEntity(
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
+    @Column(columnDefinition = "CHAR(7)", nullable = false)
+    val color: String,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?
