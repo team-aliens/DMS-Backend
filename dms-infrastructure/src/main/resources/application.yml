@@ -22,9 +22,6 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-
   redis:
     port: ${REDIS_PORT:6379}
     host: ${REDIS_HOST:localhost}
