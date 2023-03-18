@@ -242,5 +242,9 @@ class StudyRoomPersistenceAdapter(
         seatApplicationRepository.deleteAll()
     }
 
+    override fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID) {
+        studyRoomTimeSlotRepository.deleteByStudyRoomId(studyRoomId)
+    }
+
     override fun existsSeatBySeatTypeId(seatTypeId: UUID) = seatRepository.existsByTypeId(seatTypeId)
 }

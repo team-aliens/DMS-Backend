@@ -8,4 +8,6 @@ import java.util.UUID
 interface StudyRoomTimeSlotJpaRepository : CrudRepository<StudyRoomTimeSlotJpaEntity, StudyRoomTimeSlotJpaEntityId> {
 
     fun existsByTimeSlotId(timeSlotId: UUID): Boolean
+
+    fun deleteByStudyRoomId(studyRoomId: UUID)
 }
