@@ -11,5 +11,5 @@ data class TimeSlot(
 
     val startTime: LocalTime,
 
-    val endTime: LocalTime,
+    val endTime: LocalTime
 )
