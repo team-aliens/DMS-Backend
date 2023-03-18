@@ -8,12 +8,12 @@ import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntityId
 import team.aliens.dms.persistence.studyroom.repository.SeatJpaRepository
-import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepository
+import team.aliens.dms.persistence.studyroom.repository.TimeSlotJpaRepository
 
 @Component
 class SeatApplicationMapper(
     private val seatRepository: SeatJpaRepository,
-    private val timeSlotRepository: StudyRoomTimeSlotJpaRepository,
+    private val timeSlotRepository: TimeSlotJpaRepository,
     private val studentRepository: StudentJpaRepository
 ) : GenericMapper<SeatApplication, SeatApplicationJpaEntity> {
 
