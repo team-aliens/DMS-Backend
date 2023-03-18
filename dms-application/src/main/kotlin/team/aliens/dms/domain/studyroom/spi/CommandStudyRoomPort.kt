@@ -4,6 +4,7 @@ import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import java.util.UUID
 
 interface CommandStudyRoomPort {
@@ -12,7 +13,7 @@ interface CommandStudyRoomPort {
 
     fun saveAllSeats(seats: List<Seat>): List<Seat>
 
-    fun saveTimeSlot(timeSlot: StudyRoomTimeSlot): StudyRoomTimeSlot
+    fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot
 
     fun saveSeatApplication(seatApplication: SeatApplication): SeatApplication
 
