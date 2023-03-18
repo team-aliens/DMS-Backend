@@ -2,7 +2,10 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
@@ -108,14 +111,32 @@ class CreateStudyRoomUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns managerId
         every { queryUserPort.queryUserById(managerId) } returns userStub
-        every { queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId) } returns false
-        every { commandStudyRoomPort.saveStudyRoom(any()) } returns studyRoomStub
+        every {
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+                requestStub.floor,
+                requestStub.name,
+                schoolId
+            )
+        } returns false
+
+        val studyRoomSlot = slot<StudyRoom>()
+        every { commandStudyRoomPort.saveStudyRoom(capture(studyRoomSlot)) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
 
         // when & then
-        assertDoesNotThrow {
-            createStudyRoomUseCase.execute(requestStub)
-        }
+        assertAll(
+            {
+                assertDoesNotThrow {
+                    createStudyRoomUseCase.execute(requestStub)
+                }
+            },
+            {
+                assertEquals(
+                    studyRoomSlot.captured.availableHeadcount,
+                    requestStub.seats.count { it.status == SeatStatus.AVAILABLE.name }
+                )
+            }
+        )
     }
 
     @Test
