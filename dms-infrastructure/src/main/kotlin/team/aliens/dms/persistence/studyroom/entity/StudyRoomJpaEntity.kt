@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint
 @Table(
     name = "tbl_study_room",
     uniqueConstraints = [
-        UniqueConstraint(columnNames = arrayOf("floor", "name"))
+        UniqueConstraint(columnNames = arrayOf("school_id", "floor", "name"))
     ]
 )
 class StudyRoomJpaEntity(
@@ -40,9 +40,6 @@ class StudyRoomJpaEntity(
 
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val heightSize: Int,
-
-    @Column(columnDefinition = "INT UNSIGNED", nullable = false)
-    val inUseHeadcount: Int,
 
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val availableHeadcount: Int,

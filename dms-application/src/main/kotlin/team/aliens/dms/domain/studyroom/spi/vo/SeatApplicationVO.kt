@@ -3,7 +3,7 @@ package team.aliens.dms.domain.studyroom.spi.vo
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import java.util.UUID
 
-open class SeatVO(
+open class SeatApplicationVO(
     val seatId: UUID,
     val widthLocation: Int,
     val heightLocation: Int,

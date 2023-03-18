@@ -22,9 +22,6 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -63,7 +60,7 @@ class RemoveStudentUseCaseTests {
     fun setUp() {
         removeStudentUseCase = RemoveStudentUseCase(
             securityPort, queryUserPort, queryStudentPort, commandRemainStatusPort,
-            queryStudyRoomPort, commandStudyRoomPort, commandStudentPort, commandUserPort
+            commandStudyRoomPort, commandStudentPort, commandUserPort
         )
     }
 
@@ -96,19 +93,6 @@ class RemoveStudentUseCaseTests {
         )
     }
 
-    private val seatStub by lazy {
-        Seat(
-            id = UUID.randomUUID(),
-            studyRoomId = studyRoomId,
-            studentId = studentId,
-            typeId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE
-        )
-    }
-
     private val managerId = UUID.randomUUID()
     private val studentId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
@@ -128,9 +112,6 @@ class RemoveStudentUseCaseTests {
 
         given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
-
-        given(queryStudyRoomPort.querySeatByStudentId(studentId))
-            .willReturn(null)
 
         given(commandUserPort.saveUser(userStub.copy(deletedAt = LocalDateTime.now())))
             .willReturn(userStub)
@@ -212,33 +193,6 @@ class RemoveStudentUseCaseTests {
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            removeStudentUseCase.execute(studentId)
-        }
-    }
-
-    @Test
-    fun `자습실 존재하지 않음`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(managerId)
-
-        given(queryUserPort.queryUserById(managerId))
-            .willReturn(userStub)
-
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub)
-
-        given(queryUserPort.queryUserById(studentStub.id))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.querySeatByStudentId(studentId))
-            .willReturn(seatStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<StudyRoomNotFoundException> {
             removeStudentUseCase.execute(studentId)
         }
     }

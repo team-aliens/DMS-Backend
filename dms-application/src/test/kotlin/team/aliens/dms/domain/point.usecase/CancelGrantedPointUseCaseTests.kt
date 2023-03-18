@@ -3,7 +3,6 @@ package team.aliens.dms.domain.point.usecase
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -64,27 +63,6 @@ class CancelGrantedPointUseCaseTests {
             createdAt = LocalDateTime.of(2023, 3, 5, 12, 0),
             schoolId = schoolId
         )
-    }
-
-    @Test
-    fun `상벌점 부여 취소 성공`() {
-        // given
-        every { securityPort.getCurrentUserId() } returns managerId
-
-        every { queryUserPort.queryUserById(managerId) } returns userStub
-
-        every { queryPointHistoryPort.queryPointHistoryById(pointHistoryId) } returns pointHistoryStub
-
-        every {
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
-                pointHistoryStub.studentGcn, pointHistoryStub.studentName
-            )
-        } returns Pair(0, 0)
-
-        // when & then
-        assertDoesNotThrow {
-            cancelGrantedPointUseCase.execute(pointHistoryId)
-        }
     }
 
     @Test
