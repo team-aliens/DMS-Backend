@@ -20,7 +20,7 @@ interface QueryStudyRoomPort {
 
     fun existsStudyRoomByFloorAndNameAndSchoolId(floor: Int, name: String, schoolId: UUID): Boolean
 
-    fun queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID?): List<SeatApplicationVO>
+    fun queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): List<SeatApplicationVO>
 
     fun queryAllStudyRoomsByTimeSlotId(timeSlotId: UUID): List<StudyRoomVO>
 
@@ -28,11 +28,7 @@ interface QueryStudyRoomPort {
 
     fun queryTimeSlotById(timeSlotId: UUID): TimeSlot?
 
-    fun queryAllSeatApplicationByTimeSlotId(timeSlotId: UUID?): List<SeatApplication>
-
-    fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID?): Boolean
-
-    fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
+    fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID): Boolean
 
     fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): Boolean
 }

@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.core.types.Expression
-import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -70,7 +69,7 @@ class StudyRoomPersistenceAdapter(
 
     override fun queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(
         studyRoomId: UUID,
-        timeSlotId: UUID?,
+        timeSlotId: UUID,
     ): List<SeatApplicationVO> {
         return jpaQueryFactory
             .select(
@@ -97,7 +96,7 @@ class StudyRoomPersistenceAdapter(
             .leftJoin(seatApplicationJpaEntity)
             .on(
                 seatJpaEntity.id.eq(seatApplicationJpaEntity.seat.id),
-                seatApplicationTimeSlotIdEqOrIsNull(timeSlotId)
+                seatApplicationJpaEntity.timeSlot.id.eq(timeSlotId)
             )
             .leftJoin(seatApplicationJpaEntity.student, studentJpaEntity)
             .where(
@@ -124,7 +123,7 @@ class StudyRoomPersistenceAdapter(
             .leftJoin(seatJpaEntity).on(studyRoomJpaEntity.id.eq(seatJpaEntity.studyRoom.id))
             .leftJoin(seatApplicationJpaEntity).on(
                 seatJpaEntity.id.eq(seatApplicationJpaEntity.seat.id),
-                seatApplicationTimeSlotIdEqOrIsNull(timeSlotId)
+                seatApplicationJpaEntity.timeSlot.id.eq(timeSlotId)
             )
             .groupBy(studyRoomJpaEntity.id)
             .orderBy(
@@ -142,35 +141,13 @@ class StudyRoomPersistenceAdapter(
         timeSlotRepository.findByIdOrNull(timeSlotId)
     )
 
-    override fun queryAllSeatApplicationByTimeSlotId(timeSlotId: UUID?) =
-        jpaQueryFactory.selectFrom(seatApplicationJpaEntity)
-            .where(
-                seatApplicationTimeSlotIdEqOrIsNull(timeSlotId)
-            )
-            .fetch()
-            .map {
-                seatApplicationMapper.toDomain(it)!!
-            }
-
-    private fun seatApplicationTimeSlotIdEqOrIsNull(timeSlotId: UUID?): BooleanExpression? =
-        if (timeSlotId != null) seatApplicationJpaEntity.timeSlot.id.eq(timeSlotId) else seatApplicationJpaEntity.isNull
-
-    override fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID?) =
+    override fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID) =
         jpaQueryFactory.selectFrom(seatApplicationJpaEntity)
             .where(
                 seatApplicationJpaEntity.seat.id.eq(seatId),
-                seatApplicationTimeSlotIdEqOrIsNull(timeSlotId)
+                seatApplicationJpaEntity.timeSlot.id.eq(timeSlotId)
             )
             .fetchFirst() != null
-
-    override fun saveSeat(seat: Seat) = seatMapper.toDomain(
-        seatRepository.save(
-            seatMapper.toEntity(seat)
-        )
-    )!!
-
-    override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =
-        studyRoomTimeSlotRepository.existsByTimeSlotId(timeSlotId)
 
     override fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID) =
         studyRoomTimeSlotRepository.existsById(
@@ -212,25 +189,16 @@ class StudyRoomPersistenceAdapter(
         studyRoomRepository.deleteById(studyRoomId)
     }
 
-    override fun deleteTimeSlotById(studyRoomTimeSlotId: UUID) {
-        timeSlotRepository.deleteById(studyRoomTimeSlotId)
-    }
-
-    override fun deleteSeatApplications(seatApplicationIds: List<UUID>) {
-        seatApplicationRepository.deleteAllById(seatApplicationIds)
+    override fun deleteTimeSlotById(timeSlotId: UUID) {
+        timeSlotRepository.deleteById(timeSlotId)
     }
 
     override fun deleteSeatApplicationByStudentId(studentId: UUID) {
         seatApplicationRepository.deleteByStudentId(studentId)
     }
 
-    override fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID?) {
-        jpaQueryFactory
-            .delete(seatApplicationJpaEntity)
-            .where(
-                seatApplicationJpaEntity.student.id.eq(studentId),
-                seatApplicationTimeSlotIdEqOrIsNull(timeSlotId)
-            )
+    override fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID) {
+        seatApplicationRepository.deleteByStudentIdAndTimeSlotId(studentId, timeSlotId)
     }
 
     override fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID) {

@@ -9,8 +9,6 @@ import java.util.UUID
 
 interface CommandStudyRoomPort {
 
-    fun saveSeat(seat: Seat): Seat
-
     fun saveAllSeats(seats: List<Seat>): List<Seat>
 
     fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot
@@ -23,7 +21,7 @@ interface CommandStudyRoomPort {
 
     fun deleteStudyRoomById(studyRoomId: UUID)
 
-    fun deleteTimeSlotById(studyRoomTimeSlotId: UUID)
+    fun deleteTimeSlotById(timeSlotId: UUID)
 
     fun deleteSeatApplicationByStudyRoomId(studyRoomId: UUID)
 
@@ -31,9 +29,7 @@ interface CommandStudyRoomPort {
 
     fun deleteAllSeatApplications()
 
-    fun deleteSeatApplications(seatApplicationIds: List<UUID>)
-
-    fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID?)
+    fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID)
 
     fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID)
 

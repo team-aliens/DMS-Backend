@@ -43,25 +43,24 @@ class UpdateStudyRoomUseCase(
             }
         }
 
-        val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(
-            request.run {
-                studyRoom.copy(
-                    name = name,
-                    floor = floor,
-                    widthSize = totalWidthSize,
-                    heightSize = totalHeightSize,
-                    availableHeadcount = seats.count {
-                        SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
-                    },
-                    availableSex = Sex.valueOf(request.availableSex),
-                    availableGrade = availableGrade,
-                    eastDescription = eastDescription,
-                    westDescription = westDescription,
-                    southDescription = southDescription,
-                    northDescription = northDescription
-                )
-            }
-        )
+        val newStudyRoom = request.run {
+            studyRoom.copy(
+                name = name,
+                floor = floor,
+                widthSize = totalWidthSize,
+                heightSize = totalHeightSize,
+                availableHeadcount = seats.count {
+                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+                },
+                availableSex = Sex.valueOf(request.availableSex),
+                availableGrade = availableGrade,
+                eastDescription = eastDescription,
+                westDescription = westDescription,
+                southDescription = southDescription,
+                northDescription = northDescription
+            )
+        }
+        val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(newStudyRoom)
 
         commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
         val studyRoomTimeSlots = request.timeSlotIds.map {
