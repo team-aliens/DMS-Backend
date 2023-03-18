@@ -192,6 +192,11 @@ class StudyRoomPersistenceAdapter(
         )
     )!!
 
+    override fun saveAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>) =
+        studyRoomTimeSlotRepository.saveAll(
+            studyRoomTimeSlots.map { studyRoomTimeSlotMapper.toEntity(it) }
+        ).map { studyRoomTimeSlotMapper.toDomain(it)!! }
+
     override fun deleteStudyRoomById(studyRoomId: UUID) {
         studyRoomRepository.deleteById(studyRoomId)
     }
