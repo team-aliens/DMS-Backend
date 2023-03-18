@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -59,7 +59,7 @@ class StudentQueryStudyRoomsUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = UUID.randomUUID(),
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),
@@ -82,7 +82,7 @@ class StudentQueryStudyRoomsUseCaseTests {
     }
 
     private val otherTimeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = UUID.randomUUID(),
             schoolId = UUID.randomUUID(),
             startTime = LocalTime.of(0, 0),

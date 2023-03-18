@@ -11,7 +11,7 @@ import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -94,7 +94,7 @@ class CreateStudyRoomUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = UUID.randomUUID(),
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),

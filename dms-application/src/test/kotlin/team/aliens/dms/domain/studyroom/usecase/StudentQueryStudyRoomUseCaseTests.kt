@@ -8,9 +8,8 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.StudyRoomFacade
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -24,10 +23,9 @@ class StudentQueryStudyRoomUseCaseTests {
     private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
     private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
     private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
-    private val studyRoomFacade: StudyRoomFacade = mockk(relaxed = true)
 
     private val studentQueryRoomUseCase = StudentQueryStudyRoomUseCase(
-        securityPort, queryUserPort, queryStudyRoomPort, studyRoomFacade
+        securityPort, queryUserPort, queryStudyRoomPort
     )
 
     private val userId = UUID.randomUUID()
@@ -67,7 +65,7 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = timeSlotId,
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),
@@ -110,7 +108,6 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns otherUserId
         every { queryUserPort.queryUserById(userId) } returns otherUserStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryStudyRoomById(studyRoomStub.id) } returns studyRoomStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
@@ -119,7 +116,7 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     private val otherTimeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = timeSlotId,
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),

@@ -12,12 +12,12 @@ import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -91,7 +91,7 @@ class ApplySeatUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = timeSlotId,
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),
@@ -175,7 +175,7 @@ class ApplySeatUseCaseTests {
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
 
         // when & then
-        assertThrows<StudyRoomTimeSlotNotFoundException> {
+        assertThrows<TimeSlotNotFoundException> {
             applySeatUseCase.execute(seatId, timeSlotId)
         }
     }
