@@ -80,7 +80,6 @@ class StudentQueryStudyRoomUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.existsTimeSlotById(timeSlotId) } returns true
 
         // when & then
         assertDoesNotThrow {
