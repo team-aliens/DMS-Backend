@@ -82,6 +82,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
 
         // when & then
@@ -116,11 +117,26 @@ class ManagerQueryStudyRoomUseCaseTests {
     }
 
     @Test
+    fun `자습실에 대한 이용시간이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
+
+        // when & then
+        assertThrows<StudyRoomNotFoundException> {
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    @Test
     fun `이용시간이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
 
         // when & then

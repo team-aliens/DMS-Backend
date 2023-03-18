@@ -81,6 +81,7 @@ class CreateStudyRoomUseCaseTests {
             northDescription = "northDescription",
             availableSex = "FEMALE",
             availableGrade = 2,
+            timeSlotIds = listOf(UUID.randomUUID()),
             seats = listOf(
                 CreateStudyRoomRequest.SeatRequest(
                     widthLocation = 1,

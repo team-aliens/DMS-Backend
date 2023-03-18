@@ -7,6 +7,7 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsExceptio
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -55,6 +56,14 @@ class CreateStudyRoomUseCase(
             )
         }
         val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(studyRoom)
+
+        val studyRoomTimeSlots = request.timeSlotIds.map {
+            StudyRoomTimeSlot(
+                studyRoomId = savedStudyRoom.id,
+                timeSlotId = it
+            )
+        }
+        commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
 
         val seats = request.seats.map {
             Seat(

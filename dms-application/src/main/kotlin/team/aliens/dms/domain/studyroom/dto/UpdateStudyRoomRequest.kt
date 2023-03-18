@@ -13,6 +13,7 @@ data class UpdateStudyRoomRequest(
     val northDescription: String,
     val availableSex: String,
     val availableGrade: Int,
+    val timeSlotIds: List<UUID>,
     val seats: List<SeatRequest>
 ) {
 
