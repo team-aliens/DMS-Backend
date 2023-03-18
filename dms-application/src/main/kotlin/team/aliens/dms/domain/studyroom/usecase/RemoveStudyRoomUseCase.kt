@@ -25,6 +25,7 @@ class RemoveStudyRoomUseCase(
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(studyRoom.schoolId, manager.schoolId)
 
+        commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
         commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
         commandStudyRoomPort.deleteSeatByStudyRoomId(studyRoomId)
         commandStudyRoomPort.deleteStudyRoomById(studyRoomId)
