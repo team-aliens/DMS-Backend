@@ -23,11 +23,6 @@ class CreateStudyRoomUseCase(
 ) {
 
     fun execute(request: CreateStudyRoomRequest): UUID {
-        val (
-            _, _, totalWidthSize, totalHeightSize,
-            eastDescription, westDescription, southDescription, northDescription,
-            _, availableGrade, seatRequests
-        ) = request
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
@@ -41,31 +36,29 @@ class CreateStudyRoomUseCase(
             throw StudyRoomAlreadyExistsException
         }
 
-        val availableHeadCount = seatRequests.count {
-            SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+        val studyRoom = request.run {
+            StudyRoom(
+                schoolId = currentUser.schoolId,
+                name = name,
+                floor = floor,
+                widthSize = totalWidthSize,
+                heightSize = totalHeightSize,
+                availableHeadcount = request.seats.count {
+                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+                },
+                availableSex = Sex.valueOf(availableSex),
+                availableGrade = availableGrade,
+                eastDescription = eastDescription,
+                westDescription = westDescription,
+                southDescription = southDescription,
+                northDescription = northDescription
+            )
         }
-
-        val studyRoom = StudyRoom(
-            schoolId = currentUser.schoolId,
-            name = request.name,
-            floor = request.floor,
-            widthSize = totalWidthSize,
-            heightSize = totalHeightSize,
-            inUseHeadcount = 0,
-            availableHeadcount = availableHeadCount,
-            availableSex = Sex.valueOf(request.availableSex),
-            availableGrade = availableGrade,
-            eastDescription = eastDescription,
-            westDescription = westDescription,
-            southDescription = southDescription,
-            northDescription = northDescription
-        )
         val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(studyRoom)
 
-        val seats = seatRequests.map {
+        val seats = request.seats.map {
             Seat(
                 studyRoomId = savedStudyRoom.id,
-                studentId = null,
                 typeId = it.typeId,
                 widthLocation = it.widthLocation,
                 heightLocation = it.heightLocation,
@@ -73,7 +66,7 @@ class CreateStudyRoomUseCase(
                 status = SeatStatus.valueOf(it.status)
             )
         }
-        commandStudyRoomPort.saveAllSeat(seats)
+        commandStudyRoomPort.saveAllSeats(seats)
 
         return savedStudyRoom.id
     }

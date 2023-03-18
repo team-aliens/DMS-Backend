@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
 import team.aliens.dms.domain.school.dto.request.UpdateQuestionWebRequest
@@ -18,6 +19,7 @@ import team.aliens.dms.domain.school.dto.response.SchoolIdResponse
 import team.aliens.dms.domain.school.dto.response.SchoolQuestionResponse
 import team.aliens.dms.domain.school.usecase.CheckSchoolAnswerUseCase
 import team.aliens.dms.domain.school.usecase.CheckSchoolCodeUseCase
+import team.aliens.dms.domain.school.usecase.QueryAvailableFeaturesUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolQuestionUseCase
 import team.aliens.dms.domain.school.usecase.QuerySchoolsUseCase
 import team.aliens.dms.domain.school.usecase.ReissueSchoolCodeUseCase
@@ -27,8 +29,6 @@ import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
-import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
-import team.aliens.dms.domain.school.usecase.QueryAvailableFeaturesUseCase
 
 @Validated
 @RequestMapping("/schools")

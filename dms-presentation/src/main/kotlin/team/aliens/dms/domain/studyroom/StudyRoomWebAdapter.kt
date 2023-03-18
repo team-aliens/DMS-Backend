@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
@@ -96,14 +97,20 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/seats/{seat-id}")
-    fun applySeat(@PathVariable("seat-id") @NotNull seatId: UUID?) {
-        return applySeatUseCase.execute(seatId!!)
+    fun applySeat(
+        @PathVariable("seat-id") @NotNull seatId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ) {
+        return applySeatUseCase.execute(
+            seatId = seatId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun unApplySeat() {
-        unApplySeatUseCase.execute()
+    fun unApplySeat(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?) {
+        unApplySeatUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -173,13 +180,25 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/{study-room-id}/students")
-    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): StudentQueryStudyRoomResponse {
-        return studentQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun studentGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ): StudentQueryStudyRoomResponse {
+        return studentQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @GetMapping("/{study-room-id}/managers")
-    fun managerGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): ManagerQueryStudyRoomResponse {
-        return managerQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun managerGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ): ManagerQueryStudyRoomResponse {
+        return managerQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -189,13 +208,13 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/list/students")
-    fun studentGetStudyRooms(): StudentQueryStudyRoomsResponse {
-        return studentQueryStudyRoomsUseCase.execute()
+    fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @GetMapping("/list/managers")
-    fun managerGetStudyRooms(): ManagerQueryStudyRoomsResponse {
-        return managerQueryStudyRoomsUseCase.execute()
+    fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

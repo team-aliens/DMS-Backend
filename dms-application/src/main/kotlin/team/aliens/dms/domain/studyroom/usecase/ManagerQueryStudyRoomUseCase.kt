@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -21,15 +22,17 @@ class ManagerQueryStudyRoomUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(studyRoomId: UUID): ManagerQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID): ManagerQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
+        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw StudyRoomTimeSlotNotFoundException
+        validateSameSchool(timeSlot.schoolId, user.schoolId)
+
+        val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,
@@ -58,6 +61,8 @@ class ManagerQueryStudyRoomUseCase(
             ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
+                timeSlotStartTime = timeSlot.startTime,
+                timeSlotEndTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
                 availableSex = availableSex,
                 availableGrade = availableGrade,
