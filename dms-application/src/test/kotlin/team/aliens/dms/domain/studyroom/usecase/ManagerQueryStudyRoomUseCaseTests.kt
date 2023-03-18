@@ -122,6 +122,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
 
         // when & then
@@ -136,7 +137,6 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
 
         // when & then
@@ -166,6 +166,31 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns otherUserStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+
+    private val otherTimeSlotStub by lazy {
+        TimeSlot(
+            id = timeSlotId,
+            schoolId = UUID.randomUUID(),
+            startTime = LocalTime.of(0, 0),
+            endTime = LocalTime.of(0, 0)
+        )
+    }
+
+    @Test
+    fun `다른 학교의 이용시간임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
