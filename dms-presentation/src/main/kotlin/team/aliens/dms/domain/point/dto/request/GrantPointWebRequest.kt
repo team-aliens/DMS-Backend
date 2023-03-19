@@ -12,7 +12,7 @@ data class GrantPointWebRequest(
     val studentIdList: List<UUID>?
 ) {
     init {
-        studentIdList?.map {
+        studentIdList?.forEach {
             it as UUID? ?: throw ConstraintViolationException(setOf())
         }
     }

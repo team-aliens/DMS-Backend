@@ -57,7 +57,7 @@ data class CreateStudyRoomWebRequest(
 
 ) {
     init {
-        timeSlotIds?.map {
+        timeSlotIds?.forEach {
             it as UUID? ?: throw ConstraintViolationException(setOf())
         }
     }
