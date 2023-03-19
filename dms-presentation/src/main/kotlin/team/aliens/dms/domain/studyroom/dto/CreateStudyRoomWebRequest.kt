@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.dto
 
+import team.aliens.dms.common.validator.NotNullElements
 import java.util.UUID
-import javax.validation.ConstraintViolationException
 import javax.validation.Valid
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
@@ -49,18 +49,13 @@ data class CreateStudyRoomWebRequest(
     @field:Min(0)
     val availableGrade: Int?,
 
-    @field:NotNull
+    @field:NotNullElements
     val timeSlotIds: List<UUID>?,
 
     @field:Valid
     val seats: List<SeatRequest>
 
 ) {
-    init {
-        timeSlotIds?.forEach {
-            it as UUID? ?: throw ConstraintViolationException(setOf())
-        }
-    }
 
     data class SeatRequest(
 
