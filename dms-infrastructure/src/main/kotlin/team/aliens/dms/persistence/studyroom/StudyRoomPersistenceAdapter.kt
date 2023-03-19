@@ -207,11 +207,7 @@ class StudyRoomPersistenceAdapter(
     }
 
     override fun deleteSeatApplicationByStudyRoomId(studyRoomId: UUID) {
-        jpaQueryFactory
-            .delete(seatApplicationJpaEntity)
-            .where(
-                seatApplicationJpaEntity.seat.studyRoom.id.eq(studyRoomId)
-            )
+        seatApplicationRepository.deleteBySeatStudyRoomId(studyRoomId)
     }
 
     override fun deleteSeatByStudyRoomId(studyRoomId: UUID) {
