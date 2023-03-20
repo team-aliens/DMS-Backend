@@ -3,6 +3,9 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -10,6 +13,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
@@ -18,9 +22,6 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
 
 class UpdateTimeSlotUseCaseTests {
 
@@ -65,6 +66,7 @@ class UpdateTimeSlotUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(newStartTime, newEndTime) } returns false
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotStub.id) } returns timeSlotStub
 
         val newTimeSlot = slot<TimeSlot>()
@@ -91,10 +93,24 @@ class UpdateTimeSlotUseCaseTests {
     }
 
     @Test
+    fun `이미 존재하는 시간대임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(newStartTime, newEndTime) } returns true
+
+        // when & then
+        assertThrows<TimeSlotAlreadyExistException> {
+            updateTimeSlotUseCase.execute(timeSlotStub.id, newStartTime, newEndTime)
+        }
+    }
+
+    @Test
     fun `이용시간이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(newStartTime, newEndTime) } returns false
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotStub.id) } returns null
 
         // when & then
@@ -117,6 +133,7 @@ class UpdateTimeSlotUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(newStartTime, newEndTime) } returns false
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotStub.id) } returns otherTimeSlotStub
 
         // when & then

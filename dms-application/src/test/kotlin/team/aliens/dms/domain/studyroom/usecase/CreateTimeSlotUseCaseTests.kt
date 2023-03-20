@@ -2,31 +2,32 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistException
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
+import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
 
 class CreateTimeSlotUseCaseTests {
 
     private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
     private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
+    private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
     private val commandStudyRoomPort: CommandStudyRoomPort = mockk(relaxed = true)
 
     private val createTimeSlotUseCase = CreateTimeSlotUseCase(
-        securityPort, queryUserPort, commandStudyRoomPort
+        securityPort, queryUserPort, queryStudyRoomPort, commandStudyRoomPort
     )
 
     private val userId = UUID.randomUUID()
@@ -45,41 +46,6 @@ class CreateTimeSlotUseCaseTests {
         )
     }
 
-    private val studyRoomInfosStubs by lazy {
-        listOf(
-            StudyRoom(
-                id = UUID.randomUUID(),
-                schoolId = userStub.schoolId,
-                name = "",
-                floor = 1,
-                widthSize = 1,
-                heightSize = 1,
-                availableHeadcount = 1,
-                availableSex = Sex.FEMALE,
-                availableGrade = 1,
-                eastDescription = "",
-                westDescription = "",
-                southDescription = "",
-                northDescription = ""
-            ),
-            StudyRoom(
-                id = UUID.randomUUID(),
-                schoolId = userStub.schoolId,
-                name = "",
-                floor = 1,
-                widthSize = 1,
-                heightSize = 1,
-                availableHeadcount = 1,
-                availableSex = Sex.FEMALE,
-                availableGrade = 1,
-                eastDescription = "",
-                westDescription = "",
-                southDescription = "",
-                northDescription = ""
-            )
-        )
-    }
-
     private val timeSlotStub by lazy {
         TimeSlot(
             id = UUID.randomUUID(),
@@ -95,6 +61,7 @@ class CreateTimeSlotUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { commandStudyRoomPort.saveTimeSlot(any()) } returns timeSlotStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(timeSlotStub.startTime, timeSlotStub.endTime) } returns false
 
         // when
         val response = createTimeSlotUseCase.execute(timeSlotStub.startTime, timeSlotStub.endTime)
@@ -111,6 +78,7 @@ class CreateTimeSlotUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { commandStudyRoomPort.saveTimeSlot(any()) } returns timeSlotStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(timeSlotStub.startTime, timeSlotStub.endTime) } returns false
 
         // when
         val response = createTimeSlotUseCase.execute(timeSlotStub.startTime, timeSlotStub.endTime)
@@ -129,6 +97,19 @@ class CreateTimeSlotUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
+            createTimeSlotUseCase.execute(timeSlotStub.startTime, timeSlotStub.endTime)
+        }
+    }
+
+    @Test
+    fun `이미 존재하는 시간대임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(timeSlotStub.startTime, timeSlotStub.endTime) } returns true
+
+        // when & then
+        assertThrows<TimeSlotAlreadyExistException> {
             createTimeSlotUseCase.execute(timeSlotStub.startTime, timeSlotStub.endTime)
         }
     }
