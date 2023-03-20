@@ -14,8 +14,10 @@ import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import java.time.LocalDate
 import java.util.UUID
 
@@ -42,34 +44,20 @@ class ManagerMyPageUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        Manager(
-            id = currentManagerId,
-            schoolId = schoolId,
-            name = "이름",
-            profileImageUrl = "https://~"
-        )
+        createManagerStub(id = currentManagerId, schoolId = schoolId)
     }
 
     private val schoolStub by lazy {
-        School(
-            id = schoolId,
-            name = "학교이름",
-            code = "12345678",
-            question = "질문",
-            answer = "답변",
-            address = "주소",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
-        )
+        createSchoolStub(id = schoolId)
     }
 
     private val managerMyPageResponse by lazy {
         ManagerMyPageResponse(
             schoolId = schoolId,
-            schoolName = "학교이름",
-            code = "12345678",
-            question = "질문",
-            answer = "답변"
+            schoolName = "test name",
+            code = "test code",
+            question = "test question",
+            answer = "test answer"
         )
     }
 

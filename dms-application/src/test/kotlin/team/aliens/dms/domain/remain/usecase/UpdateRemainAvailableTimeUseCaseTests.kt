@@ -14,7 +14,7 @@ import team.aliens.dms.domain.remain.spi.CommandRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.UUID
@@ -46,15 +46,8 @@ class UpdateRemainAvailableTimeUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+        createUserStub(
+            id = userId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 

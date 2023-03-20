@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
@@ -17,8 +16,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -47,16 +45,7 @@ class ManagerQueryStudyRoomsUseCaseTests {
     private val studyRoomId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = schoolId,
-            accountId = "계정 아이디",
-            password = "비밀번호",
-            email = "이메일",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(id = currentUserId, schoolId = schoolId)
     }
 
     private val seatStub by lazy {

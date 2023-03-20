@@ -12,13 +12,13 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
-import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
+import team.aliens.dms.domain.notice.stub.createNoticeStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -49,47 +49,35 @@ class QueryNoticeDetailsUseCaseTests {
     private val schoolId = UUID.randomUUID()
     private val createdAt = LocalDateTime.now()
 
+//    private val noticeStub by lazy {
+//        Notice(
+//            id = UUID.randomUUID(),
+//            managerId = UUID.randomUUID(),
+//            title = "제목",
+//            content = "내용",
+//            createdAt = createdAt,
+//            updatedAt = null
+//        )
+//    }
+
     private val noticeStub by lazy {
-        Notice(
-            id = UUID.randomUUID(),
-            managerId = UUID.randomUUID(),
-            title = "제목",
-            content = "내용",
-            createdAt = createdAt,
-            updatedAt = null
-        )
+        createNoticeStub(createdAt = createdAt)
     }
 
     private val writerStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일@naver.com",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+        createUserStub(
+            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
     private val viewerStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일@naver.com",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(id = currentUserId, schoolId = schoolId)
     }
 
     private val queryNoticeDetailsResponseStub by lazy {
         QueryNoticeDetailsResponse(
-            title = "제목",
-            content = "내용",
+            title = "title",
+            content = "content",
             createdAt = createdAt
         )
     }

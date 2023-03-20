@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
@@ -21,8 +20,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -55,21 +53,11 @@ class UpdateStudyRoomUseCaseTests {
     private val studyRoomId = UUID.randomUUID()
     private val userId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val password = "test password"
     private val floor = 1
     private val studyRoomName = "test study room"
 
     private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = password,
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(id = userId, schoolId = schoolId)
     }
 
     private val studyRoomStub by lazy {

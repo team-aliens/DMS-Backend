@@ -17,8 +17,7 @@ import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.time.LocalDate
 import java.util.UUID
 
@@ -46,19 +45,7 @@ class QueryPointHistoryUseCaseTests {
     private val currentStudentId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        Student(
-            id = currentStudentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = UUID.randomUUID(),
-            grade = 2,
-            classRoom = 1,
-            number = 6,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
-        )
+        createStudentStub(id = currentStudentId)
     }
 
     private val pageStub by lazy {

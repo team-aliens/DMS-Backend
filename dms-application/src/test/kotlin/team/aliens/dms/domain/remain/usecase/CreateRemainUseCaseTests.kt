@@ -8,12 +8,12 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.CommandRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.remain.stub.createRemainOptionStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -31,15 +31,8 @@ class CreateRemainUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+        createUserStub(
+            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
@@ -48,12 +41,7 @@ class CreateRemainUseCaseTests {
     private val description = "description"
 
     private val remainOptionStub by lazy {
-        RemainOption(
-            id = remainOptionId,
-            schoolId = schoolId,
-            title = title,
-            description = description
-        )
+        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
     }
 
     @Test

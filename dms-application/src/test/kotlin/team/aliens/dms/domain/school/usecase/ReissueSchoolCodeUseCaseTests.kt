@@ -8,18 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDate
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -48,32 +45,15 @@ class ReissueSchoolCodeUseCaseTests {
 
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val code = StringUtil.randomNumber(8)
 
     private val userStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+        createUserStub(
+            id = currentUserId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
     private val schoolStub by lazy {
-        School(
-            id = schoolId,
-            name = "이정윤",
-            code = code,
-            question = "질문입니다",
-            answer = "답변입니다",
-            address = "주소입니다",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
-        )
+        createSchoolStub(id = schoolId)
     }
 
     @Test

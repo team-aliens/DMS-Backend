@@ -19,12 +19,10 @@ import team.aliens.dms.domain.remain.spi.RemainQueryStudentPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.school.stub.createSchoolStub
+import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDate
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -45,47 +43,19 @@ class ExportRemainStatusUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+        createUserStub(
+            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
     private val schoolStub by lazy {
-        School(
-            id = schoolId,
-            name = "대덕소프트웨어마이스터고등학교",
-            code = "test code",
-            question = "test question",
-            answer = "test answer",
-            address = "test address",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
+        createSchoolStub(id = schoolId)
     }
 
     private val studentId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        Student(
-            id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = UUID.randomUUID(),
-            grade = 1,
-            classRoom = 1,
-            number = 1,
-            name = "김은빈",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
-        )
+        createStudentStub(id = studentId)
     }
 
     private val remainStatusInfoStub by lazy {

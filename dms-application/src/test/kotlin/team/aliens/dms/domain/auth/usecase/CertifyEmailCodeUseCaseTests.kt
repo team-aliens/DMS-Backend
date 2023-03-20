@@ -14,16 +14,15 @@ import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
-import team.aliens.dms.domain.auth.model.AuthCodeLimit
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
+import team.aliens.dms.domain.auth.stub.createAuthCodeLimitStub
+import team.aliens.dms.domain.auth.stub.createAuthCodeStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.util.UUID
+import team.aliens.dms.domain.user.stub.createUserStub
 
 @ExtendWith(SpringExtension::class)
 class CertifyEmailCodeUseCaseTests {
@@ -49,43 +48,20 @@ class CertifyEmailCodeUseCaseTests {
         )
     }
 
-    private val id = UUID.randomUUID()
-    private val authCodeLimitId = UUID.randomUUID()
     private val code = "123546"
     private val type = EmailType.PASSWORD
     private val email = "email@dsm.hs.kr"
 
     private val userStub by lazy {
-        User(
-            id = id,
-            schoolId = id,
-            accountId = "accountId",
-            password = "password",
-            email = email,
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub()
     }
 
     private val authCodeStub by lazy {
-        AuthCode(
-            code = code,
-            email = email,
-            type = type,
-            expirationTime = 0
-        )
+        createAuthCodeStub()
     }
 
     private val authCodeLimitStub by lazy {
-        AuthCodeLimit(
-            id = authCodeLimitId,
-            email = email,
-            type = type,
-            attemptCount = 0,
-            isVerified = false,
-            expirationTime = AuthCodeLimit.EXPIRED
-        )
+        createAuthCodeLimitStub()
     }
 
     private val verifiedAuthCodeLimitStub by lazy {
