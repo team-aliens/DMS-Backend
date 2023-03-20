@@ -19,7 +19,11 @@ class UpdateTimeSlotUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
-    fun execute(timeSlotId: UUID, startTime: LocalTime, endTime: LocalTime) {
+    fun execute(
+        timeSlotId: UUID,
+        startTime: LocalTime,
+        endTime: LocalTime
+    ) {
         val currentManagerId = securityPort.getCurrentUserId()
         val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
 
