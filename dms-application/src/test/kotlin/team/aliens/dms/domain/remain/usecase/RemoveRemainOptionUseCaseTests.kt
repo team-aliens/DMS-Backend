@@ -20,7 +20,6 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
-
 @ExtendWith(SpringExtension::class)
 class RemoveRemainOptionUseCaseTests {
 

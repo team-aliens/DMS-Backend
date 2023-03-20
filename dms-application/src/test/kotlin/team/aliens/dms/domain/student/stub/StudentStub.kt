@@ -8,8 +8,8 @@ import java.util.UUID
 internal fun createStudentStub(
     id: UUID = UUID.randomUUID(),
     roomId: UUID = UUID.randomUUID(),
-    roomNumber:String =  "415",
-    roomLocation:String =  "C",
+    roomNumber: String = "415",
+    roomLocation: String = "C",
     schoolId: UUID = UUID.randomUUID(),
     grade: Int = 2,
     classRoom: Int = 2,

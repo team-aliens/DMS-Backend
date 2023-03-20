@@ -53,7 +53,7 @@ class QueryMealsUseCaseTests {
     }
 
     private val mealStub by lazy {
-       createMealStub(mealDate = mealDate, schoolId = schoolId)
+        createMealStub(mealDate = mealDate, schoolId = schoolId)
     }
 
     @Test
