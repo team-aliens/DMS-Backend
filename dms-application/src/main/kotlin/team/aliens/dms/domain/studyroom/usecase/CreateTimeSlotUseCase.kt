@@ -3,7 +3,7 @@ package team.aliens.dms.domain.studyroom.usecase
 import java.time.LocalTime
 import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -23,7 +23,7 @@ class CreateTimeSlotUseCase(
         val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
 
         if (queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(startTime, endTime)) {
-            throw TimeSlotAlreadyExistException
+            throw TimeSlotAlreadyExistsException
         }
 
         val savedTimeSlot = commandStudyRoomPort.saveTimeSlot(

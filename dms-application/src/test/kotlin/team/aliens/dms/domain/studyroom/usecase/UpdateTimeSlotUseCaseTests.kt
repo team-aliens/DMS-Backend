@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
-import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
@@ -100,7 +100,7 @@ class UpdateTimeSlotUseCaseTests {
         every { queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(newStartTime, newEndTime) } returns true
 
         // when & then
-        assertThrows<TimeSlotAlreadyExistException> {
+        assertThrows<TimeSlotAlreadyExistsException> {
             updateTimeSlotUseCase.execute(timeSlotStub.id, newStartTime, newEndTime)
         }
     }
