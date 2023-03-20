@@ -2,6 +2,9 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -17,9 +20,6 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
 
 class ManagerQueryStudyRoomUseCaseTests {
 
@@ -82,8 +82,8 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
 
         // when & then
         assertDoesNotThrow {
@@ -117,21 +117,6 @@ class ManagerQueryStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `자습실에 대한 이용시간이 존재하지 않음`() {
-        // given
-        every { securityPort.getCurrentUserId() } returns userId
-        every { queryUserPort.queryUserById(userId) } returns userStub
-        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
-
-        // when & then
-        assertThrows<StudyRoomNotFoundException> {
-            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
-        }
-    }
-
-    @Test
     fun `이용시간이 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
@@ -141,6 +126,21 @@ class ManagerQueryStudyRoomUseCaseTests {
 
         // when & then
         assertThrows<TimeSlotNotFoundException> {
+            managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    @Test
+    fun `자습실에 대한 이용시간이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf()
+
+        // when & then
+        assertThrows<StudyRoomNotFoundException> {
             managerQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
@@ -165,6 +165,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns otherUserId
         every { queryUserPort.queryUserById(userId) } returns otherUserStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
 
         // when & then
@@ -188,7 +189,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(otherTimeSlotStub)
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
 
         // when & then

@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Student
@@ -13,7 +14,6 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
@@ -32,18 +32,22 @@ class ManagerQueryStudyRoomUseCase(
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
         validateSameSchool(user.schoolId, timeSlot.schoolId)
 
-        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
-            throw StudyRoomNotFoundException
-        }
+        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(user.schoolId)
+            .apply {
+                if (!any { it.id == timeSlotId }) {
+                    throw StudyRoomNotFoundException
+                }
+            }
 
-        val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
-            SeatElement(
-                id = it.seatId,
-                widthLocation = it.widthLocation,
-                heightLocation = it.heightLocation,
-                number = it.number,
-                type = it.typeId?.run {
-                    TypeElement(
+        val seats =
+            queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
+                SeatElement(
+                    id = it.seatId,
+                    widthLocation = it.widthLocation,
+                    heightLocation = it.heightLocation,
+                    number = it.number,
+                    type = it.typeId?.run {
+                        TypeElement(
                         id = it.typeId,
                         name = it.typeName!!,
                         color = it.typeColor!!
@@ -65,8 +69,13 @@ class ManagerQueryStudyRoomUseCase(
             ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlotStartTime = timeSlot.startTime,
-                timeSlotEndTime = timeSlot.endTime,
+                timeSlots = timeSlots.map {
+                    ManagerQueryStudyRoomResponse.TimeSlotElement(
+                        id = it.id,
+                        startTime = it.startTime,
+                        endTime = it.endTime
+                    )
+                },
                 totalAvailableSeat = availableHeadcount,
                 availableSex = availableSex,
                 availableGrade = availableGrade,
