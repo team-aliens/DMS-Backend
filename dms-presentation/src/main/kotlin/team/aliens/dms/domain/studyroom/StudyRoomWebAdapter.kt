@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
+import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.CreateTimeSlotWebResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
@@ -228,5 +230,13 @@ class StudyRoomWebAdapter(
     @GetMapping("/my")
     fun getMyStudyRoom(): QueryCurrentAppliedStudyRoomResponse {
         return queryCurrentAppliedStudyRoomUseCase.execute()
+    }
+
+    @PostMapping("/time-slots")
+    fun createTimeSlotUseCase(
+        @RequestBody @Valid request: CreateStudyRoomTimeSlotWebRequest
+    ): CreateTimeSlotWebResponse {
+        val id = createTimeSlotUseCase.execute(request.startTime!!, request.endTime!!)
+        return CreateTimeSlotWebResponse(id)
     }
 }
