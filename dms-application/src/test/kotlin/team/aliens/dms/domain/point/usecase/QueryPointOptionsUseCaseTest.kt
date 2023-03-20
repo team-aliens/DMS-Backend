@@ -34,11 +34,17 @@ class QueryPointOptionsUseCaseTest {
     private val keyword = "호"
 
     private val managerStub by lazy {
-        createManagerStub(id = managerId, schoolId = schoolId)
+        createManagerStub(
+            id = managerId,
+            schoolId = schoolId
+        )
     }
 
     private val pointOptionStub by lazy {
-        createPointOptionStub(id = pointOptionId, schoolId = schoolId)
+        createPointOptionStub(
+            id = pointOptionId,
+            schoolId = schoolId
+        )
     }
 
     private val responseStub by lazy {

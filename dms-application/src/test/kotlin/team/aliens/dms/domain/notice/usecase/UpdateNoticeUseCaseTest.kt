@@ -42,7 +42,11 @@ class UpdateNoticeUseCaseTest {
     private val content = "content"
 
     private val noticeStub by lazy {
-        createNoticeStub(id = noticeId, title = title, content = content)
+        createNoticeStub(
+            id = noticeId,
+            title = title,
+            content = content
+        )
     }
 
     @Test

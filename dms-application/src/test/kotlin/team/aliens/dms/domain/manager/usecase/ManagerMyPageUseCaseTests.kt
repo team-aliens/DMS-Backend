@@ -41,7 +41,10 @@ class ManagerMyPageUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        createManagerStub(id = currentManagerId, schoolId = schoolId)
+        createManagerStub(
+            id = currentManagerId,
+            schoolId = schoolId
+        )
     }
 
     private val schoolStub by lazy {

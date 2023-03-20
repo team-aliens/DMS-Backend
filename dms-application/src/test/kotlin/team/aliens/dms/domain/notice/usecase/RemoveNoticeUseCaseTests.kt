@@ -43,7 +43,10 @@ class RemoveNoticeUseCaseTests {
     private val noticeId = UUID.randomUUID()
 
     private val noticeStub by lazy {
-        createNoticeStub(id = noticeId, managerId = managerId)
+        createNoticeStub(
+            id = noticeId,
+            managerId = managerId
+        )
     }
 
     @Test

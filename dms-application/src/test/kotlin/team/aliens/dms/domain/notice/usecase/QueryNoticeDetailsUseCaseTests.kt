@@ -49,35 +49,29 @@ class QueryNoticeDetailsUseCaseTests {
     private val schoolId = UUID.randomUUID()
     private val createdAt = LocalDateTime.now()
 
-//    private val noticeStub by lazy {
-//        Notice(
-//            id = UUID.randomUUID(),
-//            managerId = UUID.randomUUID(),
-//            title = "제목",
-//            content = "내용",
-//            createdAt = createdAt,
-//            updatedAt = null
-//        )
-//    }
-
     private val noticeStub by lazy {
         createNoticeStub(createdAt = createdAt)
     }
 
     private val writerStub by lazy {
         createUserStub(
-            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 
     private val viewerStub by lazy {
-        createUserStub(id = currentUserId, schoolId = schoolId)
+        createUserStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val queryNoticeDetailsResponseStub by lazy {
         QueryNoticeDetailsResponse(
-            title = "title",
-            content = "content",
+            title = noticeStub.title,
+            content = noticeStub.content,
             createdAt = createdAt
         )
     }

@@ -57,7 +57,10 @@ class UpdateStudyRoomUseCaseTests {
     private val studyRoomName = "test study room"
 
     private val userStub by lazy {
-        createUserStub(id = userId, schoolId = schoolId)
+        createUserStub(
+            id = userId,
+            schoolId = schoolId
+        )
     }
 
     private val studyRoomStub by lazy {

@@ -41,14 +41,19 @@ class ApplyRemainUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = userId, schoolId = schoolId, authority = Authority.MANAGER
+            id = userId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 
     private val remainOptionId = UUID.randomUUID()
 
     private val remainOptionStub by lazy {
-        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
+        createRemainOptionStub(
+            id = remainOptionId,
+            schoolId = schoolId
+        )
     }
 
     private val remainAvailableTimeStub: RemainAvailableTime = mockk()

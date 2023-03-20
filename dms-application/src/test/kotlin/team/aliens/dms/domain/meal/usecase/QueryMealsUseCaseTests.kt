@@ -49,11 +49,17 @@ class QueryMealsUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        createStudentStub(id = currentUserId, schoolId = schoolId)
+        createStudentStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val mealStub by lazy {
-        createMealStub(mealDate = mealDate, schoolId = schoolId)
+        createMealStub(
+            mealDate = mealDate,
+            schoolId = schoolId
+        )
     }
 
     @Test

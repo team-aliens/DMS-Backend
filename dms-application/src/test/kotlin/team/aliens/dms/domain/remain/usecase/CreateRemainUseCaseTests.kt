@@ -32,7 +32,9 @@ class CreateRemainUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 
@@ -41,7 +43,10 @@ class CreateRemainUseCaseTests {
     private val description = "description"
 
     private val remainOptionStub by lazy {
-        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
+        createRemainOptionStub(
+            id = remainOptionId,
+            schoolId = schoolId
+        )
     }
 
     @Test

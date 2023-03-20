@@ -47,7 +47,9 @@ class UpdateRemainAvailableTimeUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = userId, schoolId = schoolId, authority = Authority.MANAGER
+            id = userId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 

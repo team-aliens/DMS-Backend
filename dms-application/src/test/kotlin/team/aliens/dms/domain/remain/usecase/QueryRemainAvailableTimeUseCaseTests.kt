@@ -31,7 +31,10 @@ class QueryRemainAvailableTimeUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        createUserStub(id = userId, schoolId = schoolId)
+        createUserStub(
+            id = userId,
+            schoolId = schoolId
+        )
     }
 
     private val remainAvailableTimeStub by lazy {

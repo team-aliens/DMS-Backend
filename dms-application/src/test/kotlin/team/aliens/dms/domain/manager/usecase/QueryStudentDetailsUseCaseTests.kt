@@ -56,7 +56,10 @@ class QueryStudentDetailsUseCaseTests {
     }
 
     private val studentStub by lazy {
-        createStudentStub(id = studentId, schoolId = schoolId)
+        createStudentStub(
+            id = studentId,
+            schoolId = schoolId
+        )
     }
 
     private val gcn = studentStub.gcn

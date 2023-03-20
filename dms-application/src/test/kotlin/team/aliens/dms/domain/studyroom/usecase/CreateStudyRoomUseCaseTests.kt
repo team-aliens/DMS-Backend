@@ -57,7 +57,9 @@ class CreateStudyRoomUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = userId, schoolId = schoolId, password = password
+            id = userId,
+            schoolId = schoolId,
+            password = password
         )
     }
 

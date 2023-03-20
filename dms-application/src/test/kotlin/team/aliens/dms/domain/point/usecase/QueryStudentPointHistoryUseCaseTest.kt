@@ -43,15 +43,24 @@ class QueryStudentPointHistoryUseCaseTest {
     private val otherSchoolId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        createManagerStub(id = managerId, schoolId = schoolId)
+        createManagerStub(
+            id = managerId,
+            schoolId = schoolId
+        )
     }
 
     private val studentStub by lazy {
-        createStudentStub(id = studentId, schoolId = schoolId)
+        createStudentStub(
+            id = studentId,
+            schoolId = schoolId
+        )
     }
 
     private val otherSchoolStudentStub by lazy {
-        createStudentStub(id = schoolId, schoolId = otherSchoolId)
+        createStudentStub(
+            id = schoolId,
+            schoolId = otherSchoolId
+        )
     }
 
     private val pointHistoryStub by lazy {

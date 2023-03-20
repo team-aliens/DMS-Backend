@@ -62,19 +62,6 @@ class ResetManagerPasswordUseCaseTests {
     private val password = "이정윤비번"
     private val userId = UUID.randomUUID()
 
-//    private val userStub by lazy {
-//        User(
-//            id = userId,
-//            schoolId = UUID.randomUUID(),
-//            accountId = "111111",
-//            password = password,
-//            email = email,
-//            authority = Authority.MANAGER,
-//            createdAt = LocalDateTime.now(),
-//            deletedAt = null
-//        )
-//    }
-
     private val userStub by lazy {
         createUserStub(
             id = userId, password = password, email = email, authority = Authority.MANAGER

@@ -50,11 +50,17 @@ class QueryRemainOptionsUseCaseTests {
     private val remainOptionId = UUID.randomUUID()
 
     private val userStub by lazy {
-        createUserStub(id = userId, schoolId = schoolId)
+        createUserStub(
+            id = userId,
+            schoolId = schoolId
+        )
     }
 
     private val remainOptionStub by lazy {
-        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
+        createRemainOptionStub(
+            id = remainOptionId,
+            schoolId = schoolId
+        )
     }
 
     private val remainStatusStub by lazy {

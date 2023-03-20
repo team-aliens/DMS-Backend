@@ -55,7 +55,9 @@ class UpdateQuestionUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = currentUserId, schoolId = schoolStub.id, authority = Authority.MANAGER
+            id = currentUserId,
+            schoolId = schoolStub.id,
+            authority = Authority.MANAGER
         )
     }
 

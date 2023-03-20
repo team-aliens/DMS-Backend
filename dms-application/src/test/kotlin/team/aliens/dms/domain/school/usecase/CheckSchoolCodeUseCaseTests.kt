@@ -30,7 +30,10 @@ class CheckSchoolCodeUseCaseTests {
     private val schoolCode = "AUTH1234"
 
     private val schoolStub by lazy {
-        createSchoolStub(id = schoolId, code = schoolCode)
+        createSchoolStub(
+            id = schoolId,
+            code = schoolCode
+        )
     }
 
     @Test

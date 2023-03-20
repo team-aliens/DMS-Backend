@@ -42,12 +42,17 @@ class ExportAllPointHistoryUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 
     private val schoolStub by lazy {
-        createSchoolStub(id = schoolId, name = "대덕소프트웨어마이스터고등학교")
+        createSchoolStub(
+            id = schoolId,
+            name = "대덕소프트웨어마이스터고등학교"
+        )
     }
 
     private val start = LocalDateTime.of(2023, 2, 20, 12, 0)

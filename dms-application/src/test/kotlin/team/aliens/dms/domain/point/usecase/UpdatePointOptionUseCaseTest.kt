@@ -39,7 +39,9 @@ class UpdatePointOptionUseCaseTest {
 
     private val userStub by lazy {
         createUserStub(
-            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 

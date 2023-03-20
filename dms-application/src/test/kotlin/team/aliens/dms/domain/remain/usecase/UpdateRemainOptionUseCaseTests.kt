@@ -35,7 +35,11 @@ class UpdateRemainOptionUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        createUserStub(id = managerId, schoolId = schoolId, authority = Authority.MANAGER)
+        createUserStub(
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
+        )
     }
 
     private val remainOptionId = UUID.randomUUID()
@@ -43,7 +47,10 @@ class UpdateRemainOptionUseCaseTests {
     private val description = "descripton"
 
     private val remainOptionStub by lazy {
-        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
+        createRemainOptionStub(
+            id = remainOptionId,
+            schoolId = schoolId
+        )
     }
 
     @Test

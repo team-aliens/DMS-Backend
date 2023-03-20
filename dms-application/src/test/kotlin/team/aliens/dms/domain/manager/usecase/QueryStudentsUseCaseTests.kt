@@ -49,11 +49,17 @@ class QueryStudentsUseCaseTests {
     private val filterType = PointFilterType.BONUS
 
     private val managerStub by lazy {
-        createManagerStub(id = currentUserId, schoolId = schoolId)
+        createManagerStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val studentStub by lazy {
-        createStudentStub(id = studentId, schoolId = schoolId)
+        createStudentStub(
+            id = studentId,
+            schoolId = schoolId
+        )
     }
 
     private val pointFilterStub by lazy {

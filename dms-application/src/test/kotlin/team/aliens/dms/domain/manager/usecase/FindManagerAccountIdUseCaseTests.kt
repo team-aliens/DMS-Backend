@@ -43,7 +43,10 @@ class FindManagerAccountIdUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val schoolStub by lazy {
-        createSchoolStub(id = schoolId, answer = "안희명")
+        createSchoolStub(
+            id = schoolId,
+            answer = "안희명"
+        )
     }
 
     private val userStub by lazy {

@@ -37,7 +37,10 @@ class RemovePointOptionUseCaseTest {
     private val pointOptionId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        createManagerStub(id = managerId, schoolId = schoolId)
+        createManagerStub(
+            id = managerId,
+            schoolId = schoolId
+        )
     }
 
     private val pointOptionStub by lazy {
