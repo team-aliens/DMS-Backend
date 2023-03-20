@@ -27,8 +27,8 @@ class SeatApplicationJpaEntity(
 
     @MapsId("timeSlotId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "time_slot_id", columnDefinition = "BINARY(16)", nullable = true)
-    val timeSlot: StudyRoomTimeSlotJpaEntity?,
+    @JoinColumn(name = "time_slot_id", columnDefinition = "BINARY(16)", nullable = false)
+    val timeSlot: TimeSlotJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)

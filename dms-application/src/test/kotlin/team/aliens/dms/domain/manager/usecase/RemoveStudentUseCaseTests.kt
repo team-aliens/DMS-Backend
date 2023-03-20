@@ -21,7 +21,6 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
-import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import java.time.LocalDateTime
@@ -41,9 +40,6 @@ class RemoveStudentUseCaseTests {
 
     @MockBean
     private lateinit var commandRemainStatusPort: StudentCommandRemainStatusPort
-
-    @MockBean
-    private lateinit var queryStudyRoomPort: StudentQueryStudyRoomPort
 
     @MockBean
     private lateinit var commandStudyRoomPort: StudentCommandStudyRoomPort
@@ -96,7 +92,6 @@ class RemoveStudentUseCaseTests {
     private val managerId = UUID.randomUUID()
     private val studentId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val studyRoomId = UUID.randomUUID()
 
     @Test
     fun `학생 삭제 성공`() {

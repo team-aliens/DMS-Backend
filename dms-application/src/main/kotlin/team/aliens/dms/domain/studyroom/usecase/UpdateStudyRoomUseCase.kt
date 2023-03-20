@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsExceptio
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -24,11 +25,6 @@ class UpdateStudyRoomUseCase(
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
-        val (
-            _, _, totalWidthSize, totalHeightSize,
-            eastDescription, westDescription, southDescription, northDescription,
-            _, availableGrade, seatRequests
-        ) = request
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
@@ -47,13 +43,13 @@ class UpdateStudyRoomUseCase(
             }
         }
 
-        commandStudyRoomPort.saveStudyRoom(
+        val newStudyRoom = request.run {
             studyRoom.copy(
-                name = request.name,
-                floor = request.floor,
+                name = name,
+                floor = floor,
                 widthSize = totalWidthSize,
                 heightSize = totalHeightSize,
-                availableHeadcount = seatRequests.count {
+                availableHeadcount = seats.count {
                     SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
                 },
                 availableSex = Sex.valueOf(request.availableSex),
@@ -63,8 +59,20 @@ class UpdateStudyRoomUseCase(
                 southDescription = southDescription,
                 northDescription = northDescription
             )
-        )
+        }
+        val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(newStudyRoom)
 
+        commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
+        val studyRoomTimeSlots = request.timeSlotIds.map {
+            StudyRoomTimeSlot(
+                studyRoomId = savedStudyRoom.id,
+                timeSlotId = it
+            )
+        }
+        commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
+
+        commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.deleteSeatByStudyRoomId(studyRoomId)
         val seats = request.seats.map {
             Seat(
                 studyRoomId = studyRoom.id,
@@ -76,7 +84,5 @@ class UpdateStudyRoomUseCase(
             )
         }
         commandStudyRoomPort.saveAllSeats(seats)
-
-        commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
     }
 }

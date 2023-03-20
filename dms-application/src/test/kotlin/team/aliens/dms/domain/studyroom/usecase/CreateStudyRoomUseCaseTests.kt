@@ -2,7 +2,10 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.auth.model.Authority
@@ -11,7 +14,7 @@ import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -81,6 +84,7 @@ class CreateStudyRoomUseCaseTests {
             northDescription = "northDescription",
             availableSex = "FEMALE",
             availableGrade = 2,
+            timeSlotIds = listOf(UUID.randomUUID()),
             seats = listOf(
                 CreateStudyRoomRequest.SeatRequest(
                     widthLocation = 1,
@@ -94,7 +98,7 @@ class CreateStudyRoomUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        StudyRoomTimeSlot(
+        TimeSlot(
             id = UUID.randomUUID(),
             schoolId = schoolId,
             startTime = LocalTime.of(0, 0),
@@ -107,14 +111,32 @@ class CreateStudyRoomUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns managerId
         every { queryUserPort.queryUserById(managerId) } returns userStub
-        every { queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId) } returns false
-        every { commandStudyRoomPort.saveStudyRoom(any()) } returns studyRoomStub
+        every {
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+                requestStub.floor,
+                requestStub.name,
+                schoolId
+            )
+        } returns false
+
+        val studyRoomSlot = slot<StudyRoom>()
+        every { commandStudyRoomPort.saveStudyRoom(capture(studyRoomSlot)) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
 
         // when & then
-        assertDoesNotThrow {
-            createStudyRoomUseCase.execute(requestStub)
-        }
+        assertAll(
+            {
+                assertDoesNotThrow {
+                    createStudyRoomUseCase.execute(requestStub)
+                }
+            },
+            {
+                assertEquals(
+                    studyRoomSlot.captured.availableHeadcount,
+                    requestStub.seats.count { it.status == SeatStatus.AVAILABLE.name }
+                )
+            }
+        )
     }
 
     @Test
