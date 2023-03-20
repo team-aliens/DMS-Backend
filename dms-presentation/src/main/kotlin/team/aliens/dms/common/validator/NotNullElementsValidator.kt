@@ -21,6 +21,5 @@ class NotNullElementsValidator : ConstraintValidator<NotNullElements?, List<Any?
     override fun isValid(
         objects: List<Any?>,
         context: ConstraintValidatorContext,
-    ) =  objects.stream().allMatch { it != null }
-
+    ) = objects.stream().allMatch { it != null }
 }

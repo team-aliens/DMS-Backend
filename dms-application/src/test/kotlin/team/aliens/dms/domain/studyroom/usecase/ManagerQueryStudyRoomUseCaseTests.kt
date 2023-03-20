@@ -173,7 +173,6 @@ class ManagerQueryStudyRoomUseCaseTests {
         }
     }
 
-
     private val otherTimeSlotStub by lazy {
         TimeSlot(
             id = timeSlotId,

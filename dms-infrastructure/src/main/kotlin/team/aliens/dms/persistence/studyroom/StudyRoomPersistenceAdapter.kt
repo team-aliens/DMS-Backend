@@ -17,7 +17,6 @@ import team.aliens.dms.persistence.studyroom.entity.QSeatApplicationJpaEntity.se
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatTypeJpaEntity.seatTypeJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QStudyRoomJpaEntity.studyRoomJpaEntity
-import team.aliens.dms.persistence.studyroom.entity.QStudyRoomTimeSlotJpaEntity.studyRoomTimeSlotJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.StudyRoomTimeSlotJpaEntityId
 import team.aliens.dms.persistence.studyroom.mapper.SeatApplicationMapper
 import team.aliens.dms.persistence.studyroom.mapper.SeatMapper
