@@ -1,5 +1,8 @@
 package team.aliens.dms.domain.studyroom
 
+import java.util.UUID
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -29,6 +32,7 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
@@ -44,9 +48,7 @@ import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
-import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
+import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
 
 @Validated
 @RequestMapping("/study-rooms")
@@ -66,7 +68,9 @@ class StudyRoomWebAdapter(
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase,
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
-    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase
+    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
+    private val createTimeSlotUseCase: CreateTimeSlotUseCase,
+    private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
 ) {
 
     @GetMapping("/available-time")
@@ -239,4 +243,6 @@ class StudyRoomWebAdapter(
         val id = createTimeSlotUseCase.execute(request.startTime!!, request.endTime!!)
         return CreateTimeSlotWebResponse(id)
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
 }
