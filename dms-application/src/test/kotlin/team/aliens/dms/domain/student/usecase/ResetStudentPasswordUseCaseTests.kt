@@ -68,15 +68,24 @@ class ResetStudentPasswordUseCaseTests {
     private val password = "이정윤비번"
 
     private val userStub by lazy {
-        createUserStub(password = password, email = email)
+        createUserStub(
+            password = password,
+            email = email
+        )
     }
 
     private val studentStub by lazy {
-        createStudentStub(id = userStub.id, name = name)
+        createStudentStub(
+            id = userStub.id,
+            name = name
+        )
     }
 
     private val authCodeStub by lazy {
-        createAuthCodeStub(code = code, type = EmailType.PASSWORD)
+        createAuthCodeStub(
+            code = code,
+            type = EmailType.PASSWORD
+        )
     }
 
     private val requestStub by lazy {

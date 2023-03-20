@@ -48,7 +48,9 @@ class ReissueSchoolCodeUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = currentUserId, schoolId = schoolId, authority = Authority.MANAGER
+            id = currentUserId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 

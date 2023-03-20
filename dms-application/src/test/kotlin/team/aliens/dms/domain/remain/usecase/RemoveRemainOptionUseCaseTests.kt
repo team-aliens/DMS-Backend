@@ -38,13 +38,18 @@ class RemoveRemainOptionUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
+            id = managerId,
+            schoolId = schoolId,
+            authority = Authority.MANAGER
         )
     }
 
     private val remainOptionId = UUID.randomUUID()
     private val remainOptionStub by lazy {
-        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
+        createRemainOptionStub(
+            id = remainOptionId,
+            schoolId = schoolId
+        )
     }
 
     @Test

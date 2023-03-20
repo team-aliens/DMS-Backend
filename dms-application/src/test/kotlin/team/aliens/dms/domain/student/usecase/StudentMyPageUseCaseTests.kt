@@ -54,7 +54,10 @@ class StudentMyPageUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        createStudentStub(id = currentUserId, schoolId = schoolId)
+        createStudentStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val gcn = studentStub.gcn

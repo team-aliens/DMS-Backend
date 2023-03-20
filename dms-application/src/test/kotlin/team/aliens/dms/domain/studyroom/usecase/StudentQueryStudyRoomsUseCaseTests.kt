@@ -33,7 +33,10 @@ class StudentQueryStudyRoomsUseCaseTests {
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        createUserStub(id = userId, schoolId = schoolId)
+        createUserStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val studyRoomStub by lazy {

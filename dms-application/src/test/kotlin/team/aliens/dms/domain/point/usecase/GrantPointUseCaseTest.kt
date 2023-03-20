@@ -71,11 +71,17 @@ class GrantPointUseCaseTest {
     }
 
     private val managerStub by lazy {
-        createManagerStub(id = currentUserId, schoolId = schoolId)
+        createManagerStub(
+            id = currentUserId,
+            schoolId = schoolId
+        )
     }
 
     private val managerStub2 by lazy {
-        createManagerStub(id = currentUserId, schoolId = schoolId2)
+        createManagerStub(
+            id = currentUserId,
+            schoolId = schoolId2
+        )
     }
 
     private val requestStub by lazy {
@@ -93,7 +99,10 @@ class GrantPointUseCaseTest {
     }
 
     private val pointOptionStub by lazy {
-        createPointOptionStub(id = pointOptionId, schoolId = schoolId)
+        createPointOptionStub(
+            id = pointOptionId,
+            schoolId = schoolId
+        )
     }
 
     @Test

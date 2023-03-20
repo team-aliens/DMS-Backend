@@ -115,11 +115,6 @@ class SignUpUseCaseTests {
     }
 
     private val roomStub by lazy {
-//        Room(
-//            id = UUID.randomUUID(),
-//            number = verifiedStudentStub.roomNumber,
-//            schoolId = schoolStub.id
-//        )
         createRoomStub(
             number = verifiedStudentStub.roomNumber, schoolId = schoolStub.id
         )

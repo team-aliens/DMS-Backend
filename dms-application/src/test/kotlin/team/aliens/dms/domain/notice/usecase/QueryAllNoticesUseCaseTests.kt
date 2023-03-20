@@ -52,7 +52,10 @@ class QueryAllNoticesUseCaseTests {
     }
 
     private val noticeStub by lazy {
-        createNoticeStub(id = noticeId, createdAt = createdAt)
+        createNoticeStub(
+            id = noticeId,
+            createdAt = createdAt
+        )
     }
 
     private val queryAllNoticesResponseStub by lazy {
