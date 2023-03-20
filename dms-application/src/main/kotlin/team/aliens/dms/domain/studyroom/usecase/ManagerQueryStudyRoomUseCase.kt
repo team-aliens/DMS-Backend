@@ -34,7 +34,7 @@ class ManagerQueryStudyRoomUseCase(
 
         val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoom.id)
             .apply {
-                if (!any { it.id == timeSlotId }) {
+                if (none { it.id == timeSlotId }) {
                     throw StudyRoomNotFoundException
                 }
             }
