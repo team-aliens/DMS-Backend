@@ -22,6 +22,7 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.QueryCurrentAppliedStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
+import team.aliens.dms.domain.studyroom.dto.QueryTimeSlotsResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
@@ -35,6 +36,7 @@ import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryCurrentAppliedStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
+import team.aliens.dms.domain.studyroom.usecase.QueryTimeSlotsUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
@@ -64,7 +66,8 @@ class StudyRoomWebAdapter(
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase,
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
-    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase
+    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
+    private val queryTimeSlotsUseCase: QueryTimeSlotsUseCase,
 ) {
 
     @GetMapping("/available-time")
@@ -228,5 +231,10 @@ class StudyRoomWebAdapter(
     @GetMapping("/my")
     fun getMyStudyRoom(): QueryCurrentAppliedStudyRoomResponse {
         return queryCurrentAppliedStudyRoomUseCase.execute()
+    }
+
+    @GetMapping("/time-slots")
+    fun queryTimeSlots(): QueryTimeSlotsResponse {
+        return queryTimeSlotsUseCase.execute()
     }
 }
