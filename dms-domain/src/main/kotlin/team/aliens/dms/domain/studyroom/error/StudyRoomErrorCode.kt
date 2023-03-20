@@ -15,7 +15,7 @@ enum class StudyRoomErrorCode(
     TIME_SLOT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Study Room Time Slot Not Found"),
 
     STUDY_ROOM_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Study Room Already Exists"),
-    TIME_SLOT_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Timeslot Already Exists")
+    TIME_SLOT_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Timeslot Already Exists"),
     TIME_SLOT_IN_USE(ErrorStatus.CONFLICT, "Time Slot In Use")
     ;
 
