@@ -236,6 +236,7 @@ class StudyRoomWebAdapter(
         return queryCurrentAppliedStudyRoomUseCase.execute()
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/time-slots")
     fun createTimeSlotUseCase(
         @RequestBody @Valid request: CreateTimeSlotWebRequest
@@ -245,4 +246,15 @@ class StudyRoomWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/time-slots/{time-slot-id}")
+    fun updateTimeSlot(
+        @PathVariable("time-slot-id") timeSlotId: UUID,
+        @RequestBody @Valid request: UpdateTimeSlotWebRequest
+    ) {
+        updateTimeSlotUseCase.execute(
+            timeSlotId = timeSlotId,
+            startTime = request.startTime!!,
+            endTime = request.endTime!!
+        )
+    }
 }
