@@ -9,12 +9,12 @@ spring:
   datasource:
     url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:qaz}
+    password: ${MYSQL_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL:update}
+      ddl-auto: ${DDL:validate}
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
@@ -48,7 +48,7 @@ secret:
   refresh-exp: ${REFRESH_EXP:7200}
 
 open-feign:
-  neis-key: ${NEIS_KEY:asd}
+  neis-key: ${NEIS_KEY}
 
 cloud:
   aws:
