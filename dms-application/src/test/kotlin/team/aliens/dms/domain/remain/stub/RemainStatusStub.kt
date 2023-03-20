@@ -9,7 +9,7 @@ internal fun createRemainStatusStub(
     remainOptionId: UUID = UUID.randomUUID(),
     createdAt: LocalDateTime = LocalDateTime.now()
 ) = RemainStatus(
-    id =id,
+    id = id,
     remainOptionId = remainOptionId,
     createdAt = createdAt
 )
