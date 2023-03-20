@@ -8,15 +8,14 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
-import team.aliens.dms.domain.point.model.PointOption
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.stub.createPointOptionStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -38,29 +37,15 @@ class RemovePointOptionUseCaseTest {
     private val pointOptionId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        Manager(
-            id = managerId,
-            schoolId = schoolId,
-            name = "메니저"
-        )
+        createManagerStub(id = managerId, schoolId = schoolId)
     }
 
     private val pointOptionStub by lazy {
-        PointOption(
-            name = "호실 청소 우수",
-            type = PointType.BONUS,
-            score = 10,
-            schoolId = schoolId
-        )
+        createPointOptionStub(schoolId = schoolId)
     }
 
     private val otherPointOptionStub by lazy {
-        PointOption(
-            name = "호실 청소 우수",
-            type = PointType.BONUS,
-            score = 10,
-            schoolId = schoolId2
-        )
+        createPointOptionStub(schoolId = schoolId2)
     }
 
     @Test

@@ -9,15 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
-import team.aliens.dms.domain.point.model.PointOption
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.stub.createPointOptionStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -39,34 +38,17 @@ class UpdatePointOptionUseCaseTest {
     private val schoolId2 = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "manager",
-            password = "pw",
-            email = "manaager@manager.com",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub(
+            id = managerId, schoolId = schoolId, authority = Authority.MANAGER)
+
     }
 
     private val pointOptionStub by lazy {
-        PointOption(
-            name = "before",
-            score = 10,
-            type = PointType.MINUS,
-            schoolId = schoolId
-        )
+        createPointOptionStub(schoolId = schoolId)
     }
 
     private val otherPointOptionStub by lazy {
-        PointOption(
-            name = "before",
-            score = 10,
-            type = PointType.MINUS,
-            schoolId = schoolId2
-        )
+        createPointOptionStub(schoolId = schoolId2)
     }
 
     @Test

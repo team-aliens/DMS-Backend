@@ -17,9 +17,10 @@ import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.remain.stub.createRemainOptionStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -39,27 +40,15 @@ class ApplyRemainUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+        createUserStub(
+            id = userId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
     private val remainOptionId = UUID.randomUUID()
 
     private val remainOptionStub by lazy {
-        RemainOption(
-            id = remainOptionId,
-            schoolId = schoolId,
-            title = "",
-            description = ""
-        )
+        createRemainOptionStub(id = remainOptionId, schoolId = schoolId)
     }
 
     private val remainAvailableTimeStub: RemainAvailableTime = mockk()

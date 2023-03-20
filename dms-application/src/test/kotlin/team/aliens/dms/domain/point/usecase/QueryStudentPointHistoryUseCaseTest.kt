@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.dto.PointHistoryDto
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
@@ -19,8 +19,7 @@ import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.time.LocalDate
 import java.util.UUID
 
@@ -44,41 +43,15 @@ class QueryStudentPointHistoryUseCaseTest {
     private val otherSchoolId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        Manager(
-            id = managerId,
-            schoolId = schoolId,
-            name = "사감쌤"
-        )
+        createManagerStub(id = managerId, schoolId = schoolId)
     }
 
     private val studentStub by lazy {
-        Student(
-            id = studentId,
-            schoolId = schoolId,
-            name = "이하성",
-            grade = 2,
-            classRoom = 1,
-            number = 15,
-            roomId = roomId,
-            sex = Sex.MALE,
-            roomNumber = "422",
-            roomLocation = "A"
-        )
+        createStudentStub(id = studentId, schoolId = schoolId)
     }
 
     private val otherSchoolStudentStub by lazy {
-        Student(
-            id = studentId,
-            schoolId = otherSchoolId,
-            name = "홍길동",
-            grade = 1,
-            classRoom = 1,
-            number = 11,
-            roomId = roomId,
-            sex = Sex.MALE,
-            roomNumber = "422",
-            roomLocation = "A"
-        )
+        createStudentStub(id = schoolId, schoolId = otherSchoolId)
     }
 
     private val pointHistoryStub by lazy {

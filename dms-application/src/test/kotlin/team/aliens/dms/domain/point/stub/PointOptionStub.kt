@@ -4,7 +4,7 @@ import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import java.util.UUID
 
-internal fun createPointOption(
+internal fun createPointOptionStub(
     id: UUID = UUID.randomUUID(),
     schoolId: UUID = UUID.randomUUID(),
     name: String = "기숙사 봉사 활동",

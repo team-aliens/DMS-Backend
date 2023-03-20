@@ -10,9 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
+import team.aliens.dms.domain.auth.stub.createAuthCodeStub
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
@@ -21,9 +21,8 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CheckUserAuthority
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -63,26 +62,27 @@ class ResetManagerPasswordUseCaseTests {
     private val password = "이정윤비번"
     private val userId = UUID.randomUUID()
 
+//    private val userStub by lazy {
+//        User(
+//            id = userId,
+//            schoolId = UUID.randomUUID(),
+//            accountId = "111111",
+//            password = password,
+//            email = email,
+//            authority = Authority.MANAGER,
+//            createdAt = LocalDateTime.now(),
+//            deletedAt = null
+//        )
+//    }
+
     private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = UUID.randomUUID(),
-            accountId = "111111",
-            password = password,
-            email = email,
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+        createUserStub(
+            id = userId, password = password, email = email, authority = Authority.MANAGER
         )
     }
 
     private val authCodeStub by lazy {
-        AuthCode(
-            code = code,
-            email = email,
-            type = EmailType.PASSWORD,
-            expirationTime = 123
-        )
+        createAuthCodeStub(code = code, email = email, type = EmailType.PASSWORD)
     }
 
     private val requestStub by lazy {

@@ -9,12 +9,10 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import team.aliens.dms.domain.user.spi.UserSecurityPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -39,16 +37,7 @@ class UserPasswordCompareUseCaseTests {
     private val password = "비밀번호"
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            accountId = "아이디",
-            password = password,
-            email = "이메일",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(password = password)
     }
 
     @Test

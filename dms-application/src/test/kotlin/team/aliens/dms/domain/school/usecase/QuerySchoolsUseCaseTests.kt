@@ -7,10 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import java.time.LocalDate
-import java.util.UUID
+import team.aliens.dms.domain.school.stub.createSchoolStub
 
 @ExtendWith(SpringExtension::class)
 class QuerySchoolsUseCaseTests {
@@ -26,29 +24,11 @@ class QuerySchoolsUseCaseTests {
     }
 
     private val schoolStub by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "test name",
-            code = "test code",
-            question = "test question",
-            answer = "test answer",
-            address = "test address",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
+        createSchoolStub()
     }
 
     private val schoolStub2 by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "test name2",
-            code = "test code2",
-            question = "test question2",
-            answer = "test answer2",
-            address = "test address2",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
+        createSchoolStub()
     }
 
     @Test

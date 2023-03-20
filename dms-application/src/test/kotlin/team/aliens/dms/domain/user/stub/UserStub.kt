@@ -10,7 +10,7 @@ internal fun createUserStub(
     schoolId: UUID = UUID.randomUUID(),
     accountId: String = "accountId",
     password: String = "password",
-    email: String = "email",
+    email: String = "email@dsm.hs.kr",
     authority: Authority = Authority.STUDENT,
     createdAt: LocalDateTime? = null,
     deletedAt: LocalDateTime? = null

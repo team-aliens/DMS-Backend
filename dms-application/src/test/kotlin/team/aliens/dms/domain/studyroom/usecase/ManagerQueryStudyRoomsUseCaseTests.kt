@@ -5,7 +5,6 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
@@ -15,8 +14,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalTime
 import java.util.UUID
 
@@ -32,20 +30,11 @@ class ManagerQueryStudyRoomsUseCaseTests {
 
     private val managerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val password = "test password"
+    //private val password = "test password"
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = password,
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(id = managerId, schoolId = schoolId)
     }
 
     private val studyRoomStub by lazy {

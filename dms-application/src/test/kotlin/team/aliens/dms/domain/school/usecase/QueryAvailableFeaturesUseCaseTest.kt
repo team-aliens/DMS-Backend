@@ -9,12 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
+import team.aliens.dms.domain.school.stub.createAvailableFeatureStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -33,27 +33,13 @@ class QueryAvailableFeaturesUseCaseTest {
     )
 
     private val userStub by lazy {
-        User(
-            id = managerId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+        createUserStub(
+            id = managerId, schoolId = schoolId, authority = Authority.MANAGER
         )
     }
 
     private val availableFeatureStub by lazy {
-        AvailableFeature(
-            mealService = true,
-            studyRoomService = true,
-            remainService = true,
-            pointService = true,
-            noticeService = true,
-            schoolId = schoolId
-        )
+        createAvailableFeatureStub(schoolId = schoolId)
     }
 
     @Test

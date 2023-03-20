@@ -5,7 +5,7 @@ import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDateTime
 import java.util.UUID
 
-internal fun createPointHistory(
+internal fun createPointHistoryStub(
     id: UUID = UUID.randomUUID(),
     studentName: String = "이름",
     studentGcn: String = "2201",

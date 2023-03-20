@@ -10,9 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import java.time.LocalDate
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -29,16 +28,7 @@ class CheckSchoolAnswerUseCaseTests {
     }
 
     private val schoolStub by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "test name",
-            code = "test code",
-            question = "test question",
-            answer = "test answer",
-            address = "test address",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
+        createSchoolStub()
     }
 
     @Test

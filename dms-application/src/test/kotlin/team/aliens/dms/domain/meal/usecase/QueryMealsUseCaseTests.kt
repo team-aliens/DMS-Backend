@@ -10,13 +10,12 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.common.extension.iterator
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
-import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.MealQueryStudentPort
 import team.aliens.dms.domain.meal.spi.MealSecurityPort
 import team.aliens.dms.domain.meal.spi.QueryMealPort
+import team.aliens.dms.domain.meal.stub.createMealStub
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.UUID
@@ -50,29 +49,11 @@ class QueryMealsUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        Student(
-            id = currentUserId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 3,
-            number = 10,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
-        )
+        createStudentStub(id = currentUserId, schoolId = schoolId)
     }
 
     private val mealStub by lazy {
-        Meal(
-            mealDate = mealDate,
-            schoolId = schoolId,
-            breakfast = "아침",
-            lunch = "점심",
-            dinner = "저녁"
-        )
+       createMealStub(mealDate = mealDate, schoolId = schoolId)
     }
 
     @Test

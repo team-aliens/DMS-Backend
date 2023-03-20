@@ -8,16 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse
 import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse.NoticeDetails
-import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.model.OrderType
 import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
+import team.aliens.dms.domain.notice.stub.createNoticeStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -49,27 +48,11 @@ class QueryAllNoticesUseCaseTests {
     private val createdAt = LocalDateTime.now()
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일@dsm.hs.kr",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(schoolId = schoolId)
     }
 
     private val noticeStub by lazy {
-        Notice(
-            id = noticeId,
-            managerId = UUID.randomUUID(),
-            title = "제목",
-            content = "내용",
-            createdAt = createdAt,
-            updatedAt = null
-        )
+        createNoticeStub(id = noticeId, createdAt = createdAt)
     }
 
     private val queryAllNoticesResponseStub by lazy {
@@ -77,7 +60,7 @@ class QueryAllNoticesUseCaseTests {
             listOf(
                 NoticeDetails(
                     id = noticeId,
-                    title = "제목",
+                    title = "title",
                     createdAt = createdAt
                 )
             )
