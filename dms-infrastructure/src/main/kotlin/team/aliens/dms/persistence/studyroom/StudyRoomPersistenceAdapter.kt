@@ -181,6 +181,9 @@ class StudyRoomPersistenceAdapter(
             )
         )
 
+    override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =
+        studyRoomTimeSlotRepository.existsByTimeSlotId(timeSlotId)
+
     override fun saveAllSeats(seats: List<Seat>) =
         seatRepository.saveAll(
             seats.map { seatMapper.toEntity(it) }

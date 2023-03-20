@@ -118,6 +118,8 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.DELETE, "/study-rooms/types/{type-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/study-rooms/my").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/study-rooms/time-slots").hasAnyAuthority(STUDENT.name, MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/study-rooms/time-slots/{time-slot-id}").hasAuthority(MANAGER.name)
+            
             // /remains
             .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/remains/{remain-option-id}").hasAuthority(STUDENT.name)
