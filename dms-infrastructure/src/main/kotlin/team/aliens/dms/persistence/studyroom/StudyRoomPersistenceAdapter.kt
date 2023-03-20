@@ -120,6 +120,11 @@ class StudyRoomPersistenceAdapter(
                 )
             )
             .from(studyRoomJpaEntity)
+            .join(studyRoomTimeSlotJpaEntity)
+            .on(
+                studyRoomTimeSlotJpaEntity.studyRoom.id.eq(studyRoomJpaEntity.id),
+                studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotId)
+            )
             .leftJoin(seatJpaEntity)
             .on(studyRoomJpaEntity.id.eq(seatJpaEntity.studyRoom.id))
             .leftJoin(seatApplicationJpaEntity)
