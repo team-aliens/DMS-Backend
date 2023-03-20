@@ -161,6 +161,9 @@ class StudyRoomPersistenceAdapter(
     override fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime) =
         timeSlotRepository.existsByStartTimeAndEndTime(startTime, endTime)
 
+    override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =
+        studyRoomTimeSlotRepository.existsByTimeSlotId(timeSlotId)
+
     override fun saveAllSeats(seats: List<Seat>) =
         seatRepository.saveAll(
             seats.map { seatMapper.toEntity(it) }

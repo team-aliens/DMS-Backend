@@ -16,6 +16,7 @@ enum class StudyRoomErrorCode(
 
     STUDY_ROOM_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Study Room Already Exists"),
     TIME_SLOT_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Timeslot Already Exists")
+    TIME_SLOT_IN_USE(ErrorStatus.CONFLICT, "Time Slot In Use")
     ;
 
     override fun status(): Int = status

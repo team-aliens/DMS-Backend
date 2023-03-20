@@ -34,4 +34,7 @@ interface QueryStudyRoomPort {
     fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): Boolean
 
     fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime): Boolean
+
+    fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
+
 }

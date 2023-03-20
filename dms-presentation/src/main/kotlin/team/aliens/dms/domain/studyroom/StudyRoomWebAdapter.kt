@@ -44,6 +44,7 @@ import team.aliens.dms.domain.studyroom.usecase.QueryCurrentAppliedStudyRoomUseC
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.RemoveTimeSlotUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
@@ -72,6 +73,7 @@ class StudyRoomWebAdapter(
     private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
     private val createTimeSlotUseCase: CreateTimeSlotUseCase,
     private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
+    private val removeTimeSlotUseCase: RemoveTimeSlotUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -257,5 +259,11 @@ class StudyRoomWebAdapter(
             startTime = request.startTime!!,
             endTime = request.endTime!!
         )
+    }
+    
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/time-slots/{time-slot-id}")
+    fun removeTimeSlot(@PathVariable("time-slot-id") timeSlotId: UUID) {
+        removeTimeSlotUseCase.execute(timeSlotId)
     }
 }
