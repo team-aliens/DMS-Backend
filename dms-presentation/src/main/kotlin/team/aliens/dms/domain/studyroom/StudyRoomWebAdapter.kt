@@ -249,11 +249,11 @@ class StudyRoomWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/time-slots/{time-slot-id}")
     fun updateTimeSlot(
-        @PathVariable("time-slot-id") timeSlotId: UUID,
+        @PathVariable("time-slot-id") @NotNull timeSlotId: UUID?,
         @RequestBody @Valid request: UpdateTimeSlotWebRequest
     ) {
         updateTimeSlotUseCase.execute(
-            timeSlotId = timeSlotId,
+            timeSlotId = timeSlotId!!,
             startTime = request.startTime!!,
             endTime = request.endTime!!
         )
