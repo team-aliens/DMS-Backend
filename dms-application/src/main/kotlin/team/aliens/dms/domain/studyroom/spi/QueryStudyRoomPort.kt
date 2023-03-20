@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.studyroom.spi
 
+import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
-import java.util.UUID
 
 interface QueryStudyRoomPort {
 
@@ -27,6 +27,8 @@ interface QueryStudyRoomPort {
     fun queryTimeSlotsBySchoolId(schoolId: UUID): List<TimeSlot>
 
     fun queryTimeSlotById(timeSlotId: UUID): TimeSlot?
+
+    fun queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId: UUID, studyRoomId: UUID): List<TimeSlot>
 
     fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID): Boolean
 

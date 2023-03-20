@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.core.types.Expression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.Seat
@@ -17,6 +18,8 @@ import team.aliens.dms.persistence.studyroom.entity.QSeatApplicationJpaEntity.se
 import team.aliens.dms.persistence.studyroom.entity.QSeatJpaEntity.seatJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatTypeJpaEntity.seatTypeJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QStudyRoomJpaEntity.studyRoomJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.QStudyRoomTimeSlotJpaEntity.studyRoomTimeSlotJpaEntity
+import team.aliens.dms.persistence.studyroom.entity.QTimeSlotJpaEntity.timeSlotJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.StudyRoomTimeSlotJpaEntityId
 import team.aliens.dms.persistence.studyroom.mapper.SeatApplicationMapper
 import team.aliens.dms.persistence.studyroom.mapper.SeatMapper
@@ -30,7 +33,6 @@ import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepo
 import team.aliens.dms.persistence.studyroom.repository.TimeSlotJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatApplicationVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
-import java.util.UUID
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -140,6 +142,23 @@ class StudyRoomPersistenceAdapter(
     override fun queryTimeSlotById(timeSlotId: UUID) = timeSlotMapper.toDomain(
         timeSlotRepository.findByIdOrNull(timeSlotId)
     )
+
+    override fun queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId: UUID, studyRoomId: UUID): List<TimeSlot> {
+        return jpaQueryFactory.selectFrom(timeSlotJpaEntity)
+            .join(studyRoomTimeSlotJpaEntity)
+            .on(
+                studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotJpaEntity.id),
+                studyRoomTimeSlotJpaEntity.studyRoom.id.eq(studyRoomId)
+            )
+            .join(studyRoomTimeSlotJpaEntity.studyRoom, studyRoomJpaEntity)
+            .where(
+                studyRoomJpaEntity.school.id.eq(schoolId)
+            )
+            .fetch()
+            .map {
+                timeSlotMapper.toDomain(it)!!
+            }
+    }
 
     override fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID) =
         jpaQueryFactory.selectFrom(seatApplicationJpaEntity)

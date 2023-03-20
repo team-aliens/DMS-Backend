@@ -83,7 +83,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(timeSlotStub)
 
         // when & then
         assertDoesNotThrow {
@@ -137,7 +137,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf()
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf()
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
@@ -165,7 +165,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns otherUserId
         every { queryUserPort.queryUserById(userId) } returns otherUserStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(timeSlotStub)
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
 
         // when & then
@@ -189,7 +189,7 @@ class ManagerQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(otherTimeSlotStub)
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(otherTimeSlotStub)
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
 
         // when & then

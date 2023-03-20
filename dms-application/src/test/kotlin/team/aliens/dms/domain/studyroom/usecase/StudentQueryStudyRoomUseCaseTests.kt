@@ -82,7 +82,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(timeSlotStub)
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
 
         // when & then
@@ -123,7 +123,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf()
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf()
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
@@ -187,7 +187,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(otherTimeSlotStub)
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(otherTimeSlotStub)
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
 
         // when & then

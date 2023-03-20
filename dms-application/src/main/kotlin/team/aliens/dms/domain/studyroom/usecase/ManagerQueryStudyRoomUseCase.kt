@@ -32,7 +32,7 @@ class ManagerQueryStudyRoomUseCase(
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
         validateSameSchool(user.schoolId, timeSlot.schoolId)
 
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(user.schoolId)
+        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoom.id)
             .apply {
                 if (!any { it.id == timeSlotId }) {
                     throw StudyRoomNotFoundException
