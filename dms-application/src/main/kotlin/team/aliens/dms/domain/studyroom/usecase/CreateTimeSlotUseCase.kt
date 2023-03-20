@@ -18,6 +18,7 @@ class CreateTimeSlotUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
+
     fun execute(startTime: LocalTime, endTime: LocalTime): UUID {
         val currentManagerId = securityPort.getCurrentUserId()
         val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
