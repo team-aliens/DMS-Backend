@@ -27,6 +27,7 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.QueryCurrentAppliedStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
+import team.aliens.dms.domain.studyroom.dto.QueryTimeSlotsResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
@@ -42,6 +43,7 @@ import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryCurrentAppliedStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
+import team.aliens.dms.domain.studyroom.usecase.QueryTimeSlotsUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveTimeSlotUseCase
@@ -71,6 +73,7 @@ class StudyRoomWebAdapter(
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
     private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
+    private val queryTimeSlotsUseCase: QueryTimeSlotsUseCase,
     private val createTimeSlotUseCase: CreateTimeSlotUseCase,
     private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
     private val removeTimeSlotUseCase: RemoveTimeSlotUseCase
@@ -239,6 +242,11 @@ class StudyRoomWebAdapter(
         return queryCurrentAppliedStudyRoomUseCase.execute()
     }
 
+    @GetMapping("/time-slots")
+    fun queryTimeSlots(): QueryTimeSlotsResponse {
+        return queryTimeSlotsUseCase.execute()
+    }
+    
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/time-slots")
     fun createTimeSlotUseCase(
@@ -263,7 +271,7 @@ class StudyRoomWebAdapter(
     
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/time-slots/{time-slot-id}")
-    fun removeTimeSlot(@PathVariable("time-slot-id") timeSlotId: UUID) {
-        removeTimeSlotUseCase.execute(timeSlotId)
+    fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID?) {
+        removeTimeSlotUseCase.execute(timeSlotId!!)
     }
 }

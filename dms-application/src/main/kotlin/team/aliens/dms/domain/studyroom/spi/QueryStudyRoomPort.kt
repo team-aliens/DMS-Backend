@@ -29,6 +29,8 @@ interface QueryStudyRoomPort {
 
     fun queryTimeSlotById(timeSlotId: UUID): TimeSlot?
 
+    fun queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId: UUID, studyRoomId: UUID): List<TimeSlot>
+
     fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID): Boolean
 
     fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): Boolean
