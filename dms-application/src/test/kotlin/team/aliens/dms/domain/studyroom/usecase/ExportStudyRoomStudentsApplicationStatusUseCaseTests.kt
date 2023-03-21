@@ -3,6 +3,10 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import java.io.File
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -23,10 +27,6 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.io.File
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.UUID
 
 class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
 
@@ -109,7 +109,9 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
         StudentSeatApplicationVO(
             studentId = studentId,
             studyRoomName = "",
+            studyRoomFloor = 1,
             seatNumber = 1,
+            seatTypeName = "",
             timeSlotId = timeSlotStub.id
         )
     }
@@ -121,8 +123,7 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
             studentGrade = 1,
             studentClassRoom = 2,
             studentNumber = 3,
-            studyRoomName = "",
-            seatNumber = 1,
+            seatFullName = "",
             timeSlotId = timeSlotStub.id
         )
     }
@@ -156,8 +157,6 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
             { assertEquals(studentSeatInfo.studentGrade, studentStub.grade) },
             { assertEquals(studentSeatInfo.studentClassRoom, studentStub.classRoom) },
             { assertEquals(studentSeatInfo.studentNumber, studentStub.number) },
-            { assertEquals(studentSeatInfo.studyRoomName, studentSeatApplicationVOStub.studyRoomName) },
-            { assertEquals(studentSeatInfo.seatNumber, studentSeatApplicationVOStub.seatNumber) },
             { assertEquals(studentSeatInfo.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
             { assert(response.fileName.startsWith("${schoolStub.name.replace(" ", "")}_자습실_신청상태_")) }
         )
@@ -195,8 +194,6 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
             { assertEquals(studentSeatInfo.studentGrade, studentStub.grade) },
             { assertEquals(studentSeatInfo.studentClassRoom, studentStub.classRoom) },
             { assertEquals(studentSeatInfo.studentNumber, studentStub.number) },
-            { assertEquals(studentSeatInfo.studyRoomName, studentSeatApplicationVOStub.studyRoomName) },
-            { assertEquals(studentSeatInfo.seatNumber, studentSeatApplicationVOStub.seatNumber) },
             { assertEquals(studentSeatInfo.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
             { assert(response.fileName.startsWith("${schoolStub.name.replace(" ", "")}_자습실_신청상태_")) }
         )
