@@ -18,4 +18,9 @@ data class Seat(
 
     val status: SeatStatus
 
-)
+) {
+    companion object {
+        fun processFullName(seatNumber: Int, typeName: String?) =
+            " ${seatNumber}번 ${typeName ?: "일반"}자리"
+    }
+}
