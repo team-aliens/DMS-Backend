@@ -30,12 +30,11 @@ class ManagerQueryStudyRoomsUseCaseTests {
 
     private val managerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    //private val password = "test password"
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
         createUserStub(
-            id = currentUserId,
+            id = managerId,
             schoolId = schoolId
         )
     }

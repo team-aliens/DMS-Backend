@@ -34,7 +34,7 @@ class StudentQueryStudyRoomsUseCaseTests {
 
     private val userStub by lazy {
         createUserStub(
-            id = currentUserId,
+            id = userId,
             schoolId = schoolId
         )
     }
