@@ -1,15 +1,19 @@
 package team.aliens.dms.thirdparty.parser
 
 import com.fasterxml.uuid.Generators
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.time.format.DateTimeFormatter
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Row.CREATE_NULL_AS_BLANK
+import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
-import org.apache.poi.xssf.usermodel.XSSFCellStyle
-import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
@@ -22,12 +26,11 @@ import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.domain.studyroom.model.TimeSlot
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
+import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
-import team.aliens.dms.thirdparty.parser.exception.ExcelSexMismatchException
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.time.format.DateTimeFormatter
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -39,23 +42,22 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         try {
             val worksheet = workbook.getSheetAt(0)
-
             for (i in 1..worksheet.lastRowNum) {
                 val excelData = worksheet.getRow(i).run {
                     VerifiedStudent(
                         id = Generators.timeBasedGenerator().generate(),
                         schoolName = schoolName,
                         gcn = Student.processGcn(
-                            grade = getCell(0, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
-                            classRoom = getCell(1, CREATE_NULL_AS_BLANK).numericCellValue.toInt(),
-                            number = getCell(2, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
+                            grade = getIntValue(0),
+                            classRoom = getIntValue(1),
+                            number = getIntValue(2)
                         ),
-                        sex = transferToSex(
-                            getCell(3, CREATE_NULL_AS_BLANK).stringCellValue
+                        sex = Sex.transferToSex(
+                            getStringValue(3)
                         ),
-                        name = getCell(4, CREATE_NULL_AS_BLANK).stringCellValue,
-                        roomNumber = getCell(5, CREATE_NULL_AS_BLANK).numericCellValue.toInt().toString(),
-                        roomLocation = getCell(6, CREATE_NULL_AS_BLANK).stringCellValue,
+                        name = getStringValue(4),
+                        roomNumber = getIntValue(3).toString(),
+                        roomLocation = getStringValue(5)
                     )
                 }
                 verifiedStudents.add(excelData)
@@ -67,6 +69,10 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         return verifiedStudents
     }
+
+    private fun Row.getStringValue(idx: Int) = getCell(idx, CREATE_NULL_AS_BLANK).stringCellValue
+
+    private fun Row.getIntValue(idx: Int) = getCell(idx, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
 
     private fun transferToExcel(file: File): Workbook {
         val inputStream = file.inputStream()
@@ -84,12 +90,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 throw ExcelInvalidFileException
             }.getOrThrow()
         }
-    }
-
-    private fun transferToSex(sex: String) = when (sex) {
-        Sex.MALE.korean -> Sex.MALE
-        Sex.FEMALE.korean -> Sex.FEMALE
-        else -> throw ExcelSexMismatchException
     }
 
     override fun writePointHistoryExcelFile(pointHistories: List<PointHistory>): ByteArray {
@@ -133,6 +133,97 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         )
     }
 
+    override fun addStudyRoomApplicationStatusExcelFile(
+        baseFile: File,
+        timeSlots: List<TimeSlot>,
+        studentSeatsMap: Map<Pair<String, String>, StudentSeatInfo>,
+    ): ByteArray {
+        val workbook = transferToExcel(baseFile)
+        val worksheet = workbook.getSheetAt(0)
+
+        val columnCount = worksheet.getRow(0).lastCellNum.toInt()
+        insertDatasAtRow(
+            row = worksheet.getRow(0),
+            startIdx = columnCount,
+            datas = timeSlots.map { it.name },
+            style = getHeaderCellStyle(workbook)
+        )
+
+        for (i in 1..worksheet.lastRowNum) {
+            val row = worksheet.getRow(i)
+            val studentSeat = row.run {
+                try {
+                    studentSeatsMap[
+                        Pair(
+                            Student.processGcn(getIntValue(0), getIntValue(1), getIntValue(2)),
+                            getStringValue(3)
+                        )
+                    ]
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    throw BadExcelFormatException
+                }
+            } ?: throw UserNotFoundException
+
+            val timeSlotIdx = studentSeat.timeSlotId?.let {
+                timeSlots.indexOfFirst { it.id == studentSeat.timeSlotId }
+            }
+            insertDatasAtRow(
+                row = row,
+                startIdx = columnCount,
+                datas = (timeSlots.indices).map {
+                    if (it == timeSlotIdx) studentSeat.seatFullName else null
+                },
+                style = getDefaultCellStyle(workbook)
+            )
+        }
+        formatWorkSheet(worksheet)
+
+        ByteArrayOutputStream().use { stream ->
+            workbook.write(stream)
+            return stream.toByteArray()
+        }
+    }
+
+    private fun formatWorkSheet(
+        worksheet: Sheet,
+    ) {
+        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
+        worksheet.apply {
+            // 정렬 필터 적용
+            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum))
+            createFreezePane(0, 1)
+            // 데이터에 맞춰 폭 조정
+            (0 until lastCellNum)
+                .map { autoSizeColumn(it) }
+        }
+    }
+
+    override fun writeStudyRoomApplicationStatusExcelFile(
+        timeSlots: List<TimeSlot>,
+        studentSeats: List<StudentSeatInfo>,
+    ): ByteArray {
+        val attributes = listOf("학년", "반", "번호", "이름", *timeSlots.map { it.name }.toTypedArray())
+
+        val remainInfosList = studentSeats.map { it ->
+            val timeSlotIdx = it.timeSlotId?.let { timeSlots.indexOfFirst { t -> t.id == it } }
+            listOf(
+                it.studentGrade.toString(),
+                it.studentClassRoom.toString(),
+                it.studentNumber.toString(),
+                it.studentName,
+                *(timeSlots.indices)
+                    .map { i -> if (i == timeSlotIdx) it.seatFullName else null }
+                    .toTypedArray(),
+            )
+        }
+
+        return createExcelSheet(
+            attributes = attributes,
+            datasList = remainInfosList
+        )
+    }
+
     private fun createExcelSheet(
         attributes: List<String>,
         datasList: List<List<String?>>
@@ -147,6 +238,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             val row = sheet.createRow(idx + 1)
             insertDatasAtRow(row, datas, getDefaultCellStyle(workbook))
         }
+        formatWorkSheet(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
@@ -155,27 +247,56 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     }
 
     private fun insertDatasAtRow(
-        headerRow: XSSFRow,
-        attributes: List<String?>,
-        style: XSSFCellStyle
+        row: Row,
+        datas: List<String?>,
+        style: CellStyle,
     ) {
-        attributes.forEachIndexed { j, text ->
-            val cell = headerRow.createCell(j)
-            cell.setCellValue(text)
+        datas.forEachIndexed { i, data ->
+            val cell = row.createCell(i)
+            data?.toIntOrNull()?.toDouble()?.let {
+                cell.setCellValue(it)
+            } ?: cell.setCellValue(data)
             cell.cellStyle = style
         }
     }
 
-    private fun getHeaderCellStyle(workbook: XSSFWorkbook): XSSFCellStyle =
-        workbook.createCellStyle()
+    private fun insertDatasAtRow(
+        row: Row,
+        startIdx: Int,
+        datas: List<String?>,
+        style: CellStyle,
+    ) {
+        datas.forEachIndexed { i, data ->
+            val cell = row.createCell(i + startIdx)
+            data?.toIntOrNull()?.toDouble()?.let {
+                cell.setCellValue(it)
+            } ?: cell.setCellValue(data)
+            cell.cellStyle = style
+        }
+    }
+
+    private fun getHeaderCellStyle(workbook: Workbook): CellStyle {
+        val borderStyle = CellStyle.BORDER_THIN
+        val borderColor = IndexedColors.BLACK.index
+
+        return workbook.createCellStyle()
             .apply {
-                fillForegroundColor = IndexedColors.GREY_25_PERCENT.index
+                fillForegroundColor = IndexedColors.YELLOW.index
                 fillPattern = CellStyle.SOLID_FOREGROUND
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
                 verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
+                borderLeft = borderStyle
+                borderTop = borderStyle
+                borderRight = borderStyle
+                borderBottom = borderStyle
+                leftBorderColor = borderColor
+                topBorderColor = borderColor
+                rightBorderColor = borderColor
+                bottomBorderColor = borderColor
             }
+    }
 
-    private fun getDefaultCellStyle(workbook: XSSFWorkbook): XSSFCellStyle =
+    private fun getDefaultCellStyle(workbook: Workbook): CellStyle =
         workbook.createCellStyle()
             .apply {
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
