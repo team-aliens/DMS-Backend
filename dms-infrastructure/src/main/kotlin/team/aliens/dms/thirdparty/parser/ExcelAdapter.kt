@@ -191,7 +191,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
         worksheet.apply {
             // 정렬 필터 적용
-            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum))
+            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
             createFreezePane(0, 1)
             // 데이터에 맞춰 폭 조정
             (0 until lastCellNum)
