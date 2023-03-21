@@ -7,6 +7,7 @@ import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 
 interface QueryStudyRoomPort {
@@ -39,4 +40,5 @@ interface QueryStudyRoomPort {
 
     fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
 
+    fun querySeatApplicationsByStudentIdIn(studentIds: List<UUID>): List<StudentSeatApplicationVO>
 }
