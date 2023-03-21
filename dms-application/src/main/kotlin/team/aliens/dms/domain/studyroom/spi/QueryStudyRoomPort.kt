@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.spi
 
+import java.time.LocalTime
 import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
@@ -34,5 +35,8 @@ interface QueryStudyRoomPort {
 
     fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): Boolean
 
+    fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime): Boolean
+
     fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
+
 }

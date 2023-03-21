@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.core.types.Expression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalTime
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -180,6 +181,9 @@ class StudyRoomPersistenceAdapter(
                 timeSlotId = timeSlotId
             )
         )
+
+    override fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime) =
+        timeSlotRepository.existsByStartTimeAndEndTime(startTime, endTime)
 
     override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =
         studyRoomTimeSlotRepository.existsByTimeSlotId(timeSlotId)
