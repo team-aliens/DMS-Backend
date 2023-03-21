@@ -9,18 +9,17 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionSchoolMismatchException
-import team.aliens.dms.domain.point.model.PointOption
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointQueryStudentPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
+import team.aliens.dms.domain.point.stub.createPointOptionStub
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import java.util.UUID
 
@@ -70,21 +69,18 @@ class GrantPointUseCaseTest {
             )
         )
     }
+
     private val managerStub by lazy {
-        Manager(
+        createManagerStub(
             id = currentUserId,
-            schoolId = schoolId,
-            name = "이름",
-            profileImageUrl = "test"
+            schoolId = schoolId
         )
     }
 
     private val managerStub2 by lazy {
-        Manager(
+        createManagerStub(
             id = currentUserId,
-            schoolId = schoolId2,
-            name = "이름",
-            profileImageUrl = "test"
+            schoolId = schoolId2
         )
     }
 
@@ -103,12 +99,9 @@ class GrantPointUseCaseTest {
     }
 
     private val pointOptionStub by lazy {
-        PointOption(
+        createPointOptionStub(
             id = pointOptionId,
-            schoolId = schoolId,
-            type = PointType.BONUS,
-            name = "봉사",
-            score = 10,
+            schoolId = schoolId
         )
     }
 

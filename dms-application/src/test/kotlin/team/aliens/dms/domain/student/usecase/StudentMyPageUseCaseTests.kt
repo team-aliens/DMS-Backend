@@ -12,16 +12,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
+import team.aliens.dms.domain.point.stub.createPhraseStub
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import java.time.LocalDate
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -55,18 +54,9 @@ class StudentMyPageUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = currentUserId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 1,
-            classRoom = 1,
-            number = 1,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 
@@ -74,25 +64,11 @@ class StudentMyPageUseCaseTests {
     private val name = studentStub.name
 
     private val schoolStub by lazy {
-        School(
-            id = schoolId,
-            name = "학교이름",
-            code = "12345678",
-            question = "질문",
-            answer = "정답",
-            address = "주소",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
-        )
+        createSchoolStub(id = schoolId)
     }
 
     private val phraseStub by lazy {
-        Phrase(
-            id = UUID.randomUUID(),
-            content = "밥좀 먹고 살자",
-            type = PointType.BONUS,
-            standard = 0
-        )
+        createPhraseStub()
     }
 
     @Test

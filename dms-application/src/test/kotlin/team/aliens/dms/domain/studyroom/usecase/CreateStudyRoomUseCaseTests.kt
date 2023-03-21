@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
@@ -20,8 +19,7 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalTime
 import java.util.UUID
 
@@ -40,15 +38,9 @@ class CreateStudyRoomUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = managerId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "test password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 

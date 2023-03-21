@@ -12,15 +12,14 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
-import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQuerySchoolPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.point.stub.createPointHistoryStub
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
@@ -42,28 +41,17 @@ class ExportAllPointHistoryUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = managerId,
             schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+            authority = Authority.MANAGER
         )
     }
 
     private val schoolStub by lazy {
-        School(
+        createSchoolStub(
             id = schoolId,
-            name = "대덕소프트웨어마이스터고등학교",
-            code = "test code",
-            question = "test question",
-            answer = "test answer",
-            address = "test address",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
+            name = "대덕소프트웨어마이스터고등학교"
         )
     }
 
@@ -71,31 +59,14 @@ class ExportAllPointHistoryUseCaseTests {
     private val end = LocalDateTime.of(2023, 3, 15, 12, 0)
 
     private val oldestHistoryCreatedAt = LocalDateTime.of(2023, 3, 1, 12, 0)
+
     private val histories by lazy {
         listOf(
-            PointHistory(
-                studentName = "김은빈",
-                studentGcn = "2106",
-                bonusTotal = 3,
-                minusTotal = 0,
-                isCancel = false,
-                pointName = "분리수거",
-                pointScore = 3,
-                pointType = PointType.BONUS,
-                createdAt = LocalDateTime.of(2023, 3, 5, 12, 0),
-                schoolId = schoolId
+            createPointHistoryStub(
+                createdAt = LocalDateTime.of(2023, 3, 5, 12, 0)
             ),
-            PointHistory(
-                studentName = "김은빈",
-                studentGcn = "2106",
-                bonusTotal = 3,
-                minusTotal = 0,
-                isCancel = false,
-                pointName = "분리수거",
-                pointScore = 3,
-                pointType = PointType.BONUS,
-                createdAt = oldestHistoryCreatedAt,
-                schoolId = schoolId
+            createPointHistoryStub(
+                createdAt = oldestHistoryCreatedAt
             )
         )
     }

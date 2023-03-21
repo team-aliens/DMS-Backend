@@ -8,16 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
-import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.PointQueryUserPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.stub.createPointHistoryStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -38,31 +37,15 @@ class CancelGrantedPointUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = managerId,
             schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
+            authority = Authority.MANAGER
         )
     }
 
     private val pointHistoryStub by lazy {
-        PointHistory(
-            studentName = "김은빈",
-            studentGcn = "2106",
-            bonusTotal = 3,
-            minusTotal = 0,
-            isCancel = false,
-            pointName = "분리수거",
-            pointScore = 3,
-            pointType = PointType.BONUS,
-            createdAt = LocalDateTime.of(2023, 3, 5, 12, 0),
-            schoolId = schoolId
-        )
+        createPointHistoryStub(schoolId = schoolId)
     }
 
     @Test

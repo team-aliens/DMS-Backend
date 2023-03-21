@@ -8,18 +8,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -47,40 +44,19 @@ class FindStudentAccountIdUseCaseTests {
 
     private val requestStub by lazy {
         FindStudentAccountIdRequest(
-            name = "이정윤",
+            name = "이름",
             grade = 2,
-            classRoom = 3,
-            number = 10
+            classRoom = 2,
+            number = 1
         )
     }
 
     private val studentStub by lazy {
-        Student(
-            id = UUID.randomUUID(),
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = requestStub.grade,
-            classRoom = requestStub.classRoom,
-            number = requestStub.number,
-            name = "이정윤",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
-        )
+        createStudentStub()
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            accountId = "이정윤123",
-            password = "이정윤123!",
-            email = "이정윤14@naver.com",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = LocalDateTime.now()
-        )
+        createUserStub(schoolId = schoolId)
     }
 
     @Test

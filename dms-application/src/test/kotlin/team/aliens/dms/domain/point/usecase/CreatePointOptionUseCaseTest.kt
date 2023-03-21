@@ -8,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.exception.PointOptionNameExistsException
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
@@ -34,10 +34,9 @@ class CreatePointOptionUseCaseTest {
     private val schoolId = UUID.randomUUID()
 
     private val managerStub by lazy {
-        Manager(
+        createManagerStub(
             id = managerId,
-            schoolId = schoolId,
-            name = "메니저"
+            schoolId = schoolId
         )
     }
 

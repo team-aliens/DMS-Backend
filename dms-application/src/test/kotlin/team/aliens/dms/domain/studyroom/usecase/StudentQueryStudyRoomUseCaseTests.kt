@@ -2,13 +2,10 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
@@ -19,7 +16,8 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
+import java.util.UUID
 
 class StudentQueryStudyRoomUseCaseTests {
 
@@ -37,15 +35,9 @@ class StudentQueryStudyRoomUseCaseTests {
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
@@ -147,15 +139,9 @@ class StudentQueryStudyRoomUseCaseTests {
 
     private val otherUserId = UUID.randomUUID()
     private val otherUserStub by lazy {
-        User(
+        createUserStub(
             id = otherUserId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 

@@ -8,16 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.remain.model.RemainOption
-import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.remain.stub.createRemainOptionStub
+import team.aliens.dms.domain.remain.stub.createRemainStatusStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -52,33 +50,21 @@ class QueryRemainOptionsUseCaseTests {
     private val remainOptionId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
     private val remainOptionStub by lazy {
-        RemainOption(
+        createRemainOptionStub(
             id = remainOptionId,
-            schoolId = schoolId,
-            title = "title",
-            description = "description"
+            schoolId = schoolId
         )
     }
 
     private val remainStatusStub by lazy {
-        RemainStatus(
-            id = UUID.randomUUID(),
-            remainOptionId = remainOptionId,
-            createdAt = LocalDateTime.MIN
-        )
+        createRemainStatusStub(remainOptionId = remainOptionId)
     }
 
     @Test

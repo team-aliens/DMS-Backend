@@ -8,13 +8,13 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
-import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointQueryManagerPort
 import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.stub.createPointOptionStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -34,19 +34,15 @@ class QueryPointOptionsUseCaseTest {
     private val keyword = "호"
 
     private val managerStub by lazy {
-        Manager(
+        createManagerStub(
             id = managerId,
-            name = "메니저",
             schoolId = schoolId
         )
     }
 
     private val pointOptionStub by lazy {
-        PointOption(
+        createPointOptionStub(
             id = pointOptionId,
-            name = "호실청소 우수",
-            type = PointType.BONUS,
-            score = 10,
             schoolId = schoolId
         )
     }
@@ -54,9 +50,9 @@ class QueryPointOptionsUseCaseTest {
     private val responseStub by lazy {
         QueryPointOptionsResponse.PointOptionResponse(
             pointOptionId = pointOptionId,
-            name = "호실청소 우수",
+            name = pointOptionStub.name,
             type = PointType.BONUS,
-            score = 10
+            score = pointOptionStub.score
         )
     }
 

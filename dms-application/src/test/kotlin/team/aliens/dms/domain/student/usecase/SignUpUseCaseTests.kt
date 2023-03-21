@@ -9,18 +9,15 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
-import team.aliens.dms.domain.auth.model.AuthCodeLimit
-import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.room.model.Room
+import team.aliens.dms.domain.auth.stub.createAuthCodeLimitStub
+import team.aliens.dms.domain.room.stub.createRoomStub
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
-import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
@@ -31,9 +28,9 @@ import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.student.stub.createVerifiedStudentStub
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
-import java.time.LocalDate
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -98,57 +95,28 @@ class SignUpUseCaseTests {
     private val profileImageUrl = "test profileImage"
 
     private val schoolStub by lazy {
-        School(
-            id = id,
-            name = "test name",
-            code = code,
-            question = question,
-            answer = answer,
-            address = "주소",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
+        createSchoolStub(
+            id = id, code = code, question = question, answer = answer
         )
     }
 
     private val authCodeLimitStub by lazy {
-        AuthCodeLimit(
-            id = UUID.randomUUID(),
-            email = email,
-            type = EmailType.SIGNUP,
-            attemptCount = 0,
-            isVerified = true,
-            expirationTime = 1800
-        )
+        createAuthCodeLimitStub(email = email, isVerified = true)
     }
 
     private val unverifiedAuthCodeLimitStub by lazy {
-        AuthCodeLimit(
-            id = UUID.randomUUID(),
-            email = email,
-            type = EmailType.SIGNUP,
-            attemptCount = 0,
-            isVerified = false,
-            expirationTime = 1800
-        )
+        createAuthCodeLimitStub(email = email)
     }
 
     private val verifiedStudentStub by lazy {
-        VerifiedStudent(
-            id = UUID.randomUUID(),
-            schoolName = schoolStub.name,
-            name = name,
-            roomNumber = "318",
-            roomLocation = "A",
-            gcn = gcnStub,
-            sex = Sex.FEMALE
+        createVerifiedStudentStub(
+            schoolName = schoolStub.name, name = name, gcn = gcnStub
         )
     }
 
     private val roomStub by lazy {
-        Room(
-            id = UUID.randomUUID(),
-            number = verifiedStudentStub.roomNumber,
-            schoolId = schoolStub.id
+        createRoomStub(
+            number = verifiedStudentStub.roomNumber, schoolId = schoolStub.id
         )
     }
 
