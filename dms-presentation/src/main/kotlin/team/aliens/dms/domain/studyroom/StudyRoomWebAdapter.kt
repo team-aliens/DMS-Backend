@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom
 
+import org.springframework.http.HttpHeaders
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import team.aliens.dms.common.util.FileUtil
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
@@ -37,6 +41,7 @@ import team.aliens.dms.domain.studyroom.dto.UpdateTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.ExportStudyRoomApplicationStatusUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateTimeSlotUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomsUseCase
@@ -52,6 +57,11 @@ import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
+import java.net.URLEncoder
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
 
 @Validated
@@ -73,6 +83,7 @@ class StudyRoomWebAdapter(
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
     private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
+    private val exportStudyRoomApplicationStatusUseCase: ExportStudyRoomApplicationStatusUseCase,
     private val queryTimeSlotsUseCase: QueryTimeSlotsUseCase,
     private val createTimeSlotUseCase: CreateTimeSlotUseCase,
     private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
@@ -273,5 +284,20 @@ class StudyRoomWebAdapter(
     @DeleteMapping("/time-slots/{time-slot-id}")
     fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID?) {
         removeTimeSlotUseCase.execute(timeSlotId!!)
+    }
+
+    @PostMapping("/students/file")
+    fun exportStudyRoomStudentsApplicationStatus(
+        @RequestPart file: MultipartFile?,
+        httpResponse: HttpServletResponse,
+    ): ByteArray {
+        val response = exportStudyRoomApplicationStatusUseCase.execute(
+            file?.let(FileUtil.transferFile)
+        )
+        httpResponse.setHeader(
+            HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
+        )
+        return response.file
     }
 }
