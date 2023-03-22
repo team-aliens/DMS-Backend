@@ -8,7 +8,7 @@ enum class TagErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    TAG_NOT_FOUND(ErrorStatus.NOT_FOUND, "Tag NotFound")
+    TAG_NOT_FOUND(ErrorStatus.NOT_FOUND, "Tag Not Found")
     ;
 
     override fun status(): Int = status
