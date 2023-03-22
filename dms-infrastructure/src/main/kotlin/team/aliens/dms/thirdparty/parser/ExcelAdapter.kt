@@ -56,8 +56,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                             getStringValue(3)
                         ),
                         name = getStringValue(4),
-                        roomNumber = getIntValue(3).toString(),
-                        roomLocation = getStringValue(5)
+                        roomNumber = getIntValue(5).toString(),
+                        roomLocation = getStringValue(6)
                     )
                 }
                 verifiedStudents.add(excelData)
