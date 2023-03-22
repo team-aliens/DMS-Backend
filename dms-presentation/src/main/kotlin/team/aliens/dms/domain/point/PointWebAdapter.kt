@@ -1,7 +1,11 @@
 package team.aliens.dms.domain.point
 
+import java.time.LocalDateTime
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.dto.PageWebData
+import team.aliens.dms.common.util.FileUtil.setExcelContentDisposition
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
 import team.aliens.dms.domain.point.dto.GrantPointRequest
@@ -39,12 +44,6 @@ import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
-import java.net.URLEncoder
-import java.time.LocalDateTime
-import java.util.UUID
-import javax.servlet.http.HttpServletResponse
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/points")
@@ -130,10 +129,7 @@ class PointWebAdapter(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
     ): ByteArray {
         val response = exportAllPointHistoryUseCase.execute(start, end)
-        httpResponse.setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
-        )
+        httpResponse.setExcelContentDisposition(response.fileName)
         return response.file
     }
 

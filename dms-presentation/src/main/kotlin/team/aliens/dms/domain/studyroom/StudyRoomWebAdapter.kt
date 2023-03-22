@@ -1,11 +1,9 @@
 package team.aliens.dms.domain.studyroom
 
-import java.net.URLEncoder
 import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import team.aliens.dms.common.util.FileUtil
+import team.aliens.dms.common.util.FileUtil.setExcelContentDisposition
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
@@ -291,10 +290,7 @@ class StudyRoomWebAdapter(
         val response = exportStudyRoomApplicationStatusUseCase.execute(
             file?.let(FileUtil.transferFile)
         )
-        httpResponse.setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
-        )
+        httpResponse.setExcelContentDisposition(response.fileName)
         return response.file
     }
 }
