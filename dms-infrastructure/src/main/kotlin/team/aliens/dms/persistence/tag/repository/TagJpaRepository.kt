@@ -1,7 +1,7 @@
-package team.aliens.dms.persistence.student.repository
+package team.aliens.dms.persistence.tag.repository
 
 import org.springframework.data.repository.CrudRepository
-import team.aliens.dms.persistence.student.entity.TagJpaEntity
+import team.aliens.dms.persistence.tag.entity.TagJpaEntity
 import java.util.UUID
 
 interface TagJpaRepository : CrudRepository<TagJpaEntity, UUID>
