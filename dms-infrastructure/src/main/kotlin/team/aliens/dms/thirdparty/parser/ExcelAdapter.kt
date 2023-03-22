@@ -254,7 +254,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     ) {
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
-            data?.toIntOrNull()?.toDouble()?.let {
+            data?.toDoubleOrNull()?.let {
                 cell.setCellValue(it)
             } ?: cell.setCellValue(data)
             cell.cellStyle = style
