@@ -183,7 +183,7 @@ class StudyRoomPersistenceAdapter(
             .from(seatApplicationJpaEntity)
             .join(seatApplicationJpaEntity.seat, seatJpaEntity)
             .join(seatJpaEntity.studyRoom, studyRoomJpaEntity)
-            .leftJoin(seatJpaEntity.type, seatTypeJpaEntity)
+            .join(seatJpaEntity.type, seatTypeJpaEntity)
             .where(
                 seatApplicationJpaEntity.student.id.`in`(studentIds)
             )
