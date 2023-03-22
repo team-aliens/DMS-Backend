@@ -22,6 +22,7 @@ class QueryTagsUseCase(
         val tags = queryTagPort.queryTagsBySchoolId(manager.schoolId)
             .map {
                 TagResponse(
+                    id = it.id,
                     name = it.name,
                     color = it.color
                 )
