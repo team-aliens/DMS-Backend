@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
@@ -8,6 +9,7 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQuerySchoolPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
@@ -15,7 +17,6 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
@@ -56,24 +57,30 @@ class ExportStudyRoomApplicationStatusUseCase(
         val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
 
         return ExportStudyRoomApplicationStatusResponse(
-            file = file?.let {
-                writeFilePort.addStudyRoomApplicationStatusExcelFile(
-                    baseFile = file,
-                    timeSlots = timeSlots,
-                    studentSeatsMap = studentSeats.associateBy {
-                        Pair(
-                            Student.processGcn(it.studentGrade, it.studentClassRoom, it.studentNumber),
-                            it.studentName
-                        )
-                    }
-                )
-            } ?: writeFilePort.writeStudyRoomApplicationStatusExcelFile(
-                timeSlots = timeSlots,
-                studentSeats = studentSeats
-            ),
+            file = getStudyRoomApplicationStatusFile(file, timeSlots, studentSeats),
             fileName = getFileName(school.name)
         )
     }
+
+    private fun getStudyRoomApplicationStatusFile(
+        file: java.io.File?,
+        timeSlots: List<TimeSlot>,
+        studentSeats: List<StudentSeatInfo>,
+    ) = file?.let {
+        writeFilePort.addStudyRoomApplicationStatusExcelFile(
+            baseFile = file,
+            timeSlots = timeSlots,
+            studentSeatsMap = studentSeats.associateBy {
+                Pair(
+                    Student.processGcn(it.studentGrade, it.studentClassRoom, it.studentNumber),
+                    it.studentName
+                )
+            }
+        )
+    } ?: writeFilePort.writeStudyRoomApplicationStatusExcelFile(
+        timeSlots = timeSlots,
+        studentSeats = studentSeats
+    )
 
     private fun getFileName(schoolName: String) =
         "${schoolName.replace(" ", "")}_자습실_신청상태_${LocalDateTime.now().format(File.FILE_DATE_FORMAT)}"
