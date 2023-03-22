@@ -4,4 +4,6 @@ import org.springframework.data.repository.CrudRepository
 import team.aliens.dms.persistence.tag.entity.TagJpaEntity
 import java.util.UUID
 
-interface TagJpaRepository : CrudRepository<TagJpaEntity, UUID>
+interface TagJpaRepository : CrudRepository<TagJpaEntity, UUID> {
+    fun findBySchoolId(schoolId: UUID): List<TagJpaEntity>
+}
