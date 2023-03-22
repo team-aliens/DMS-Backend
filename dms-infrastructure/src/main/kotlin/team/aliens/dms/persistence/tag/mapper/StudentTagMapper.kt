@@ -3,9 +3,9 @@ package team.aliens.dms.persistence.tag.mapper
 import org.springframework.data.repository.findByIdOrNull
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.persistence.GenericMapper
+import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.tag.entity.StudentTagId
 import team.aliens.dms.persistence.tag.entity.StudentTagJpaEntity
-import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.tag.repository.TagJpaRepository
 
 class StudentTagMapper(

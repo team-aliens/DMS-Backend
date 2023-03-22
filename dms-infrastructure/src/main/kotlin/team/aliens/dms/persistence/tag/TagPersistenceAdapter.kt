@@ -9,6 +9,4 @@ import team.aliens.dms.persistence.tag.repository.TagJpaRepository
 class TagPersistenceAdapter(
     private val tagRepository: TagJpaRepository,
     private val queryFactory: JPAQueryFactory
-) : TagPort {
-
-}
+) : TagPort

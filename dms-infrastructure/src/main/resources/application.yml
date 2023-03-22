@@ -9,12 +9,12 @@ spring:
   datasource:
     url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false
     username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:1234}
+    password: ${MYSQL_PASSWORD:11111111}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL:validate}
+      ddl-auto: ${DDL:update}
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
@@ -45,7 +45,7 @@ secret:
   refresh-exp: ${REFRESH_EXP:7200}
 
 open-feign:
-  neis-key: ${NEIS_KEY}
+  neis-key: ${NEIS_KEY:asdf}
 
 cloud:
   aws:
@@ -60,7 +60,7 @@ cloud:
     s3:
       bucket: ${BUCKET_NAME:dms}
     ses:
-      source: ${SES_SENDER}
+      source: ${SES_SENDER:asdf}
 
 logging:
   level:
