@@ -250,21 +250,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         row: Row,
         datas: List<String?>,
         style: CellStyle,
-    ) {
-        datas.forEachIndexed { i, data ->
-            val cell = row.createCell(i)
-            data?.toIntOrNull()?.toDouble()?.let {
-                cell.setCellValue(it)
-            } ?: cell.setCellValue(data)
-            cell.cellStyle = style
-        }
-    }
-
-    private fun insertDatasAtRow(
-        row: Row,
-        startIdx: Int,
-        datas: List<String?>,
-        style: CellStyle,
+        startIdx: Int = 0
     ) {
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
