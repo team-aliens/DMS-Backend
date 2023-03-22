@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.studyroom.dto
 
+import team.aliens.dms.common.validator.NotNullElements
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
-import team.aliens.dms.common.validator.NotNullElements
 
 data class CreateStudyRoomWebRequest(
 
