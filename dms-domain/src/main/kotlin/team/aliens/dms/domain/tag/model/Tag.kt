@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.student.model
+package team.aliens.dms.domain.tag.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import java.util.UUID
