@@ -1,3 +1,4 @@
 package team.aliens.dms.domain.tag.spi
 
-interface TagPort
+interface TagPort :
+    QueryTagPort
