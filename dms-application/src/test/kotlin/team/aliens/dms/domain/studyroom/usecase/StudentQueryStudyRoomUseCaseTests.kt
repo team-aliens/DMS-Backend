@@ -10,6 +10,7 @@ import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
@@ -117,7 +118,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
 
         // when & then
-        assertThrows<StudyRoomNotFoundException> {
+        assertThrows<StudyRoomTimeSlotNotFoundException> {
             studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }

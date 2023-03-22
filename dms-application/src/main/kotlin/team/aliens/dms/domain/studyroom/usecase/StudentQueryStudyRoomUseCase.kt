@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -30,7 +31,7 @@ class StudentQueryStudyRoomUseCase(
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
         if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
-            throw StudyRoomNotFoundException
+            throw StudyRoomTimeSlotNotFoundException
         }
 
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
