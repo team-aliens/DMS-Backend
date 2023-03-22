@@ -3,6 +3,7 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -17,7 +18,6 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
-import java.util.UUID
 
 class StudentQueryStudyRoomUseCaseTests {
 
@@ -74,7 +74,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(timeSlotStub)
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
 
         // when & then
@@ -114,8 +114,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
-        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
-        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf()
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
@@ -129,6 +128,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
 
         // when & then
@@ -173,6 +173,7 @@ class StudentQueryStudyRoomUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
         every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
         every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(otherTimeSlotStub)
 

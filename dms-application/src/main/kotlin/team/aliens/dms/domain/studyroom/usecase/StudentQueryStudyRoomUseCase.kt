@@ -29,6 +29,10 @@ class StudentQueryStudyRoomUseCase(
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
+        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
+            throw StudyRoomNotFoundException
+        }
+
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
         validateSameSchool(user.schoolId, timeSlot.schoolId)
 
