@@ -101,6 +101,10 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/templates").permitAll()
             .antMatchers(HttpMethod.PATCH, "/templates").permitAll()
             .antMatchers(HttpMethod.DELETE, "/templates").permitAll()
+
+            // /tags
+            .antMatchers(HttpMethod.GET, "/tags").hasAuthority(MANAGER.name)
+
             // /study-rooms
             .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/study-rooms/available-time").hasAuthority(MANAGER.name)
