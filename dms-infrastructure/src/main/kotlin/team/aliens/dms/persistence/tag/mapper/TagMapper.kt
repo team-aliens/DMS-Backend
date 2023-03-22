@@ -1,11 +1,11 @@
-package team.aliens.dms.persistence.student.mapper
+package team.aliens.dms.persistence.tag.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.student.model.Tag
+import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
-import team.aliens.dms.persistence.student.entity.TagJpaEntity
+import team.aliens.dms.persistence.tag.entity.TagJpaEntity
 
 @Component
 class TagMapper(

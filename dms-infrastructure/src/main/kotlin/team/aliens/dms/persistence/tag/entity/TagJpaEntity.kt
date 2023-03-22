@@ -1,4 +1,4 @@
-package team.aliens.dms.persistence.student.entity
+package team.aliens.dms.persistence.tag.entity
 
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity

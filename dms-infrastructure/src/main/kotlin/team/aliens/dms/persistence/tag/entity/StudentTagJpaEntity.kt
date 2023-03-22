@@ -1,4 +1,4 @@
-package team.aliens.dms.persistence.student.entity
+package team.aliens.dms.persistence.tag.entity
 
 import team.aliens.dms.persistence.BaseTimeEntity
 import javax.persistence.EmbeddedId
@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.MapsId
 import javax.persistence.Table
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 
 @Entity
 @Table(name = "tbl_student_tag")
