@@ -205,15 +205,15 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     ): ByteArray {
         val attributes = listOf("학년", "반", "번호", "이름", *timeSlots.map { it.name }.toTypedArray())
 
-        val remainInfosList = studentSeats.map { it ->
-            val timeSlotIdx = it.timeSlotId?.let { timeSlots.indexOfFirst { t -> t.id == it } }
+        val remainInfosList = studentSeats.map { studentSeat ->
+            val timeSlotIdx = studentSeat.timeSlotId?.let { timeSlots.indexOfFirst { ts -> ts.id == it } }
             listOf(
-                it.studentGrade.toString(),
-                it.studentClassRoom.toString(),
-                it.studentNumber.toString(),
-                it.studentName,
+                studentSeat.studentGrade.toString(),
+                studentSeat.studentClassRoom.toString(),
+                studentSeat.studentNumber.toString(),
+                studentSeat.studentName,
                 *(timeSlots.indices)
-                    .map { i -> if (i == timeSlotIdx) it.seatFullName else null }
+                    .map { i -> if (i == timeSlotIdx) studentSeat.seatFullName else null }
                     .toTypedArray(),
             )
         }
