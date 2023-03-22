@@ -7,7 +7,8 @@ import team.aliens.dms.domain.studyroom.model.SeatStatus
 
 data class StudentQueryStudyRoomResponse(
     val floor: Int,
-    val timeSlots: List<TimeSlotElement>,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
     val name: String,
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,
@@ -44,10 +45,4 @@ data class StudentQueryStudyRoomResponse(
             val name: String
         )
     }
-
-    data class TimeSlotElement(
-        val id: UUID,
-        val startTime: LocalTime,
-        val endTime: LocalTime
-    )
 }

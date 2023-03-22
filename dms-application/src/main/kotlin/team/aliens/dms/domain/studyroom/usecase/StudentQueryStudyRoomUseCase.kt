@@ -32,13 +32,6 @@ class StudentQueryStudyRoomUseCase(
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
         validateSameSchool(user.schoolId, timeSlot.schoolId)
 
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoomId)
-            .apply {
-                if (none { it.id == timeSlotId }) {
-                    throw StudyRoomNotFoundException
-                }
-            }
-
         val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
                 id = it.seatId,
@@ -71,13 +64,8 @@ class StudentQueryStudyRoomUseCase(
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlots = timeSlots.map {
-                    StudentQueryStudyRoomResponse.TimeSlotElement(
-                        id = it.id,
-                        startTime = it.startTime,
-                        endTime = it.endTime
-                    )
-                },
+                startTime = timeSlot.startTime,
+                endTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
                 inUseHeadcount = seats.count { it.student != null },
                 availableSex = availableSex,
