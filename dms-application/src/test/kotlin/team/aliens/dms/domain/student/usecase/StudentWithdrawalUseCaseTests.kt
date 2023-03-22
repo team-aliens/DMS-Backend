@@ -16,9 +16,6 @@ import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.student.stub.createStudentStub
-import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
