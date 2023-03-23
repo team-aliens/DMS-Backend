@@ -7,5 +7,5 @@ interface QueryTagPort {
 
     fun queryTagsBySchoolId(schoolId: UUID): List<Tag>
 
-    fun existsByName(name: String): Boolean
+    fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 }

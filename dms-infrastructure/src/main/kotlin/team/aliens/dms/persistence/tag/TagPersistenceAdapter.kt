@@ -21,8 +21,8 @@ class TagPersistenceAdapter(
             }
     }
 
-    override fun existsByName(name: String): Boolean {
-        return tagRepository.existsByName(name)
+    override fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean {
+        return tagRepository.existsByNameAndSchoolId(name, schoolId)
     }
 
     override fun saveTag(tag: Tag): Tag {

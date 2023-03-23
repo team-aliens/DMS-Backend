@@ -7,5 +7,5 @@ import java.util.UUID
 interface TagJpaRepository : CrudRepository<TagJpaEntity, UUID> {
     fun findBySchoolId(schoolId: UUID): List<TagJpaEntity>
 
-    fun existsByName(name: String): Boolean
+    fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 }

@@ -22,7 +22,7 @@ class CreateTagUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        if (queryTagPort.existsByName(name)) {
+        if (queryTagPort.existsByNameAndSchoolId(name, manager.schoolId)) {
             throw TagAlreadyExistsException
         }
 
