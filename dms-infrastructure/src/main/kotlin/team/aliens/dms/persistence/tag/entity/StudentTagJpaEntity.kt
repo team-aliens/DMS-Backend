@@ -1,6 +1,7 @@
-package team.aliens.dms.persistence.student.entity
+package team.aliens.dms.persistence.tag.entity
 
 import team.aliens.dms.persistence.BaseTimeEntity
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import javax.persistence.EmbeddedId
 import javax.persistence.Entity
 import javax.persistence.FetchType

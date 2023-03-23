@@ -140,16 +140,6 @@ class ManagerQueryStudyRoomUseCaseTests {
 
     private val otherUserId = UUID.randomUUID()
     private val otherUserStub by lazy {
-//        User(
-//            id = otherUserId,
-//            schoolId = schoolId,
-//            accountId = "test account id",
-//            password = "password",
-//            email = "test email",
-//            authority = Authority.STUDENT,
-//            createdAt = LocalDateTime.now(),
-//            deletedAt = null
-//        )
         createUserStub(
             id = otherUserId,
             schoolId = schoolId
