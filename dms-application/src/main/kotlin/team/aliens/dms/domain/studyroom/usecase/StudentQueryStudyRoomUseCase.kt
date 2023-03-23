@@ -7,6 +7,7 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -29,15 +30,12 @@ class StudentQueryStudyRoomUseCase(
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
+        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
+            throw StudyRoomTimeSlotNotFoundException
+        }
+
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
         validateSameSchool(user.schoolId, timeSlot.schoolId)
-
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoomId)
-            .apply {
-                if (none { it.id == timeSlotId }) {
-                    throw StudyRoomNotFoundException
-                }
-            }
 
         val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
@@ -71,13 +69,8 @@ class StudentQueryStudyRoomUseCase(
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
-                timeSlots = timeSlots.map {
-                    StudentQueryStudyRoomResponse.TimeSlotElement(
-                        id = it.id,
-                        startTime = it.startTime,
-                        endTime = it.endTime
-                    )
-                },
+                startTime = timeSlot.startTime,
+                endTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
                 inUseHeadcount = seats.count { it.student != null },
                 availableSex = availableSex,
