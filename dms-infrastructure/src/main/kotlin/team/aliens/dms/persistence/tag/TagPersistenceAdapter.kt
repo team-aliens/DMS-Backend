@@ -21,6 +21,10 @@ class TagPersistenceAdapter(
             }
     }
 
+    override fun existsByName(name: String): Boolean {
+        return tagRepository.existsByName(name)
+    }
+
     override fun saveTag(tag: Tag): Tag {
         return tagMapper.toDomain(
             tagRepository.save(tagMapper.toEntity(tag))
