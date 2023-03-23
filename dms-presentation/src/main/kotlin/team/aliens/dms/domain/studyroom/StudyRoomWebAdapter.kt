@@ -59,6 +59,9 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
+import java.util.UUID
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/study-rooms")
@@ -253,7 +256,7 @@ class StudyRoomWebAdapter(
     fun queryTimeSlots(): QueryTimeSlotsResponse {
         return queryTimeSlotsUseCase.execute()
     }
-    
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/time-slots")
     fun createTimeSlotUseCase(
@@ -275,7 +278,7 @@ class StudyRoomWebAdapter(
             endTime = request.endTime!!
         )
     }
-    
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/time-slots/{time-slot-id}")
     fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID?) {

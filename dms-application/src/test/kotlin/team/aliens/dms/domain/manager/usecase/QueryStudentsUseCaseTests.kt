@@ -12,13 +12,12 @@ import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -50,27 +49,16 @@ class QueryStudentsUseCaseTests {
     private val filterType = PointFilterType.BONUS
 
     private val managerStub by lazy {
-        Manager(
+        createManagerStub(
             id = currentUserId,
-            schoolId = schoolId,
-            name = "관리자 이름",
-            profileImageUrl = "https://~~"
+            schoolId = schoolId
         )
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 20,
-            name = name,
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 

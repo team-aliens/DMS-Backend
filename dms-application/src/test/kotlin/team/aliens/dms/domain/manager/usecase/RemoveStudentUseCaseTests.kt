@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -16,13 +15,12 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
+import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -61,31 +59,13 @@ class RemoveStudentUseCaseTests {
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(schoolId = schoolId)
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 3,
-            number = 10,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 

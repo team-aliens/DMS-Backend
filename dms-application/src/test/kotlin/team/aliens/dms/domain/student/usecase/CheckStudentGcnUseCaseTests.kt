@@ -9,15 +9,13 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
-import java.time.LocalDate
+import team.aliens.dms.domain.student.stub.createVerifiedStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -48,28 +46,11 @@ class CheckStudentGcnUseCaseTests {
     }
 
     private val schoolStub by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "대마고",
-            code = "코드",
-            question = "질문",
-            answer = "답변",
-            address = "주소",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
-        )
+        createSchoolStub()
     }
 
     private val verifiedStudent by lazy {
-        VerifiedStudent(
-            id = UUID.randomUUID(),
-            schoolName = schoolStub.name,
-            name = "이름",
-            roomNumber = "123",
-            roomLocation = "A",
-            gcn = "1203",
-            sex = Sex.FEMALE
-        )
+        createVerifiedStudentStub(schoolName = schoolStub.name)
     }
 
     @Test

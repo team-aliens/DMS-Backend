@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.studyroom
 import com.querydsl.core.types.Expression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalTime
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.Seat
@@ -35,7 +36,6 @@ import team.aliens.dms.persistence.studyroom.repository.TimeSlotJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatApplicationVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QStudentSeatApplicationVO
-import java.util.UUID
 
 @Component
 class StudyRoomPersistenceAdapter(

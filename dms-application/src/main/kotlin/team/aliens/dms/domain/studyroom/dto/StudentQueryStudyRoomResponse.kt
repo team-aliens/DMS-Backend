@@ -1,13 +1,14 @@
 package team.aliens.dms.domain.studyroom.dto
 
-import java.time.LocalTime
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import java.time.LocalTime
+import java.util.UUID
 
 data class StudentQueryStudyRoomResponse(
     val floor: Int,
-    val timeSlots: List<TimeSlotElement>,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
     val name: String,
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,
@@ -44,10 +45,4 @@ data class StudentQueryStudyRoomResponse(
             val name: String
         )
     }
-
-    data class TimeSlotElement(
-        val id: UUID,
-        val startTime: LocalTime,
-        val endTime: LocalTime
-    )
 }

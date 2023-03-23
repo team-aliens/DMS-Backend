@@ -11,15 +11,14 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -53,27 +52,13 @@ class QueryStudentDetailsUseCaseTests {
     private val minusPoint = 23
 
     private val managerStub by lazy {
-        Manager(
-            id = currentUserId,
-            schoolId = schoolId,
-            name = "관리자 이름",
-            profileImageUrl = "https://~~"
-        )
+        createManagerStub(schoolId = schoolId)
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 20,
-            name = "김범진",
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 
@@ -81,19 +66,7 @@ class QueryStudentDetailsUseCaseTests {
     private val name = studentStub.name
 
     private val roomMateStub by lazy {
-        Student(
-            id = UUID.randomUUID(),
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 21,
-            name = "김철수",
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
-        )
+        createStudentStub(schoolId = schoolId)
     }
 
     @Test
