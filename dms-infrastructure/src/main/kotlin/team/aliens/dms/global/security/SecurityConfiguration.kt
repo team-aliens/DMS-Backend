@@ -35,6 +35,7 @@ class SecurityConfiguration(
 
             // healthcheck
             .antMatchers(HttpMethod.GET, "/").permitAll()
+
             // /auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
@@ -42,6 +43,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/auth/code").permitAll()
             .antMatchers(HttpMethod.POST, "/auth/tokens").permitAll()
             .antMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
+
             // /users
             .antMatchers(HttpMethod.GET, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
@@ -56,6 +58,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/profile").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.DELETE, "/students").hasAuthority(STUDENT.name)
+
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
             .antMatchers(HttpMethod.GET, "/managers/students").hasAuthority(MANAGER.name)
@@ -72,6 +75,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.PATCH, "/schools/question").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/schools/code").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/schools/available-features").hasAuthority(MANAGER.name)
+
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.GET, "/notices").hasAnyAuthority(STUDENT.name, MANAGER.name)
@@ -79,6 +83,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/notices/{notice-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
+
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
             .antMatchers(HttpMethod.POST, "/files/verified-student").hasAuthority(MANAGER.name)
@@ -86,6 +91,7 @@ class SecurityConfiguration(
 
             // /meals
             .antMatchers(HttpMethod.GET, "/meals/{date}").hasAuthority(STUDENT.name)
+
             // /points
             .antMatchers(HttpMethod.GET, "/points").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.POST, "/points/options").hasAuthority(MANAGER.name)
@@ -128,6 +134,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.POST, "/study-rooms/time-slots").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/study-rooms/time-slots/{time-slot-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/study-rooms/time-slots/{time-slot-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/study-rooms/students/file").hasAuthority(MANAGER.name)
 
             // /remains
             .antMatchers(HttpMethod.PUT, "/remains/available-time").hasAuthority(MANAGER.name)

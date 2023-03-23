@@ -199,7 +199,7 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
-            .join(studentJpaEntity.user, userJpaEntity)
+            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
             .where(
                 userJpaEntity.school.id.eq(schoolId)
             )

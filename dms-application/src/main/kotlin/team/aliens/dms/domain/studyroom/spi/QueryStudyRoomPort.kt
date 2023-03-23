@@ -5,6 +5,7 @@ import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import java.time.LocalTime
 import java.util.UUID
@@ -38,4 +39,7 @@ interface QueryStudyRoomPort {
     fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime): Boolean
 
     fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
+
+    fun querySeatApplicationsByStudentIdIn(studentIds: List<UUID>): List<StudentSeatApplicationVO>
+
 }

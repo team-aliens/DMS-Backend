@@ -45,4 +45,8 @@ data class StudyRoom(
             throw StudyRoomAvailableSexMismatchException
         }
     }
+
+    companion object {
+        fun precessFullName(floor: Int, name: String) = "${floor}층 $name"
+    }
 }

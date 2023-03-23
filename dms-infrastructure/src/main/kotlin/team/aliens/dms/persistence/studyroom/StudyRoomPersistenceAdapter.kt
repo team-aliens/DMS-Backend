@@ -2,6 +2,8 @@ package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.core.types.Expression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalTime
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.studyroom.model.Seat
@@ -11,6 +13,7 @@ import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.StudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.QSeatApplicationJpaEntity.seatApplicationJpaEntity
@@ -32,8 +35,7 @@ import team.aliens.dms.persistence.studyroom.repository.StudyRoomTimeSlotJpaRepo
 import team.aliens.dms.persistence.studyroom.repository.TimeSlotJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatApplicationVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
-import java.time.LocalTime
-import java.util.UUID
+import team.aliens.dms.persistence.studyroom.repository.vo.QStudentSeatApplicationVO
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -47,7 +49,7 @@ class StudyRoomPersistenceAdapter(
     private val timeSlotRepository: TimeSlotJpaRepository,
     private val studyRoomTimeSlotRepository: StudyRoomTimeSlotJpaRepository,
     private val seatApplicationRepository: SeatApplicationJpaRepository,
-    private val jpaQueryFactory: JPAQueryFactory,
+    private val jpaQueryFactory: JPAQueryFactory
 ) : StudyRoomPort {
 
     override fun queryStudyRoomById(studyRoomId: UUID) = studyRoomMapper.toDomain(
@@ -164,6 +166,28 @@ class StudyRoomPersistenceAdapter(
             .map {
                 timeSlotMapper.toDomain(it)!!
             }
+    }
+
+    override fun querySeatApplicationsByStudentIdIn(studentIds: List<UUID>): List<StudentSeatApplicationVO> {
+        return jpaQueryFactory
+            .select(
+                QStudentSeatApplicationVO(
+                    seatApplicationJpaEntity.student.id,
+                    studyRoomJpaEntity.name,
+                    studyRoomJpaEntity.floor,
+                    seatJpaEntity.number,
+                    seatTypeJpaEntity.name,
+                    seatApplicationJpaEntity.timeSlot.id
+                )
+            )
+            .from(seatApplicationJpaEntity)
+            .join(seatApplicationJpaEntity.seat, seatJpaEntity)
+            .join(seatJpaEntity.studyRoom, studyRoomJpaEntity)
+            .join(seatJpaEntity.type, seatTypeJpaEntity)
+            .where(
+                seatApplicationJpaEntity.student.id.`in`(studentIds)
+            )
+            .fetch()
     }
 
     override fun existsSeatApplicationBySeatIdAndTimeSlotId(seatId: UUID, timeSlotId: UUID) =

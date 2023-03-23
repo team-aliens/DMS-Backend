@@ -8,6 +8,8 @@ enum class StudentErrorCode(
     private val message: String
 ) : ErrorProperty {
 
+    SEX_MISMATCH(ErrorStatus.BAD_REQUEST, "Sex Mismatch"),
+
     STUDENT_INFO_MISMATCH(ErrorStatus.UNAUTHORIZED, "Student Info Mismatch"),
 
     STUDENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Student Not Found"),
