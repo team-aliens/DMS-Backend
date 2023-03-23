@@ -29,8 +29,8 @@ class TagWebAdapter(
     @PostMapping
     fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
         val tagId = createTagUseCase.execute(
-            name = webRequest.name,
-            color = webRequest.color
+            name = webRequest.name!!,
+            color = webRequest.color!!
         )
 
         return CreateTagWebResponse(tagId)
