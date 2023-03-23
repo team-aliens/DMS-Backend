@@ -20,4 +20,10 @@ class TagPersistenceAdapter(
                 tagMapper.toDomain(it)!!
             }
     }
+
+    override fun saveTag(tag: Tag): Tag {
+        return tagMapper.toDomain(
+            tagRepository.save(tagMapper.toEntity(tag))
+        )!!
+    }
 }
