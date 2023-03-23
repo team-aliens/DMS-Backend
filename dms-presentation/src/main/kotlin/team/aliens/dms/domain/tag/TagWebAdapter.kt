@@ -12,6 +12,8 @@ import team.aliens.dms.domain.tag.dto.QueryTagsResponse
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import javax.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
 @Validated
 @RequestMapping("/tags")
@@ -26,6 +28,7 @@ class TagWebAdapter(
         return queryTagsUseCase.execute()
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
         val tagId = createTagUseCase.execute(
