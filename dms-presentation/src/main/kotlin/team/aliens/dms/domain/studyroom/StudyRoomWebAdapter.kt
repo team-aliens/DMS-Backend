@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import team.aliens.dms.common.util.FileUtil
-import team.aliens.dms.common.util.FileUtil.setExcelContentDisposition
+import team.aliens.dms.common.util.setExcelContentDisposition
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
