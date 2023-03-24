@@ -146,6 +146,9 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/remains/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/remains/status/file").hasAuthority(MANAGER.name)
+
+            // tag
+            .antMatchers(HttpMethod.POST, "/tags/students").hasAuthority(MANAGER.name)
             .anyRequest().denyAll()
 
         http
