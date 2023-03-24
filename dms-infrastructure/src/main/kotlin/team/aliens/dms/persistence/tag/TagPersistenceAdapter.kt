@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.tag
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.spi.TagPort
@@ -10,8 +11,8 @@ import java.util.UUID
 
 @Component
 class TagPersistenceAdapter(
-    private val tagMapper: TagMapper,
     private val tagRepository: TagJpaRepository,
+    private val tagMapper: TagMapper,
     private val queryFactory: JPAQueryFactory
 ) : TagPort {
     override fun queryTagsBySchoolId(schoolId: UUID): List<Tag> {
@@ -20,4 +21,8 @@ class TagPersistenceAdapter(
                 tagMapper.toDomain(it)!!
             }
     }
+
+    override fun queryTagById(tagId: UUID) = tagMapper.toDomain(
+        tagRepository.findByIdOrNull(tagId)
+    )
 }
