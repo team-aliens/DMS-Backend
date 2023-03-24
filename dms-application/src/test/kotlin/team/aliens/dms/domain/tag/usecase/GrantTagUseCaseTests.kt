@@ -11,7 +11,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
-import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
+import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.tag.spi.TagQueryStudentPort
 import team.aliens.dms.domain.tag.spi.TagQueryUserPort
@@ -27,11 +27,11 @@ class GrantTagUseCaseTests {
     private val queryUserPort: TagQueryUserPort = mockk(relaxed = true)
     private val queryTagPort: QueryTagPort = mockk(relaxed = true)
     private val queryStudentPort: TagQueryStudentPort = mockk(relaxed = true)
-    private val commandStudentTagPort: CommandStudentTagPort = mockk(relaxed = true)
+    private val commandTagPort: CommandTagPort = mockk(relaxed = true)
 
 
     private val grantTagUseCase = GrantTagUseCase(
-        securityPort, queryUserPort, queryTagPort, queryStudentPort, commandStudentTagPort
+        securityPort, queryUserPort, queryTagPort, queryStudentPort, commandTagPort
     )
 
     private val userId = UUID.randomUUID()

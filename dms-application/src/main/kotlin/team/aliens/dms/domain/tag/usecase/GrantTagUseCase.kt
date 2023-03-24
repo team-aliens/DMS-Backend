@@ -6,7 +6,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.model.StudentTag
-import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
+import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.tag.spi.TagQueryStudentPort
 import team.aliens.dms.domain.tag.spi.TagQueryUserPort
@@ -20,7 +20,7 @@ class GrantTagUseCase(
     private val queryUserPort: TagQueryUserPort,
     private val queryTagPort: QueryTagPort,
     private val queryStudentPort: TagQueryStudentPort,
-    private val commandStudentTagPort: CommandStudentTagPort
+    private val commandTagPort: CommandTagPort
 ) {
 
     fun execute(request: GrantTagRequest) {
@@ -35,13 +35,13 @@ class GrantTagUseCase(
         validateSameSchool(currentManager.schoolId, tag.schoolId)
 
         val studentTags = students.map {
-                StudentTag(
-                    studentId = it.id,
-                    tagId = tag.id,
-                    createdAt = LocalDateTime.now()
-                )
-            }
+            StudentTag(
+                studentId = it.id,
+                tagId = tag.id,
+                createdAt = LocalDateTime.now()
+            )
+        }
 
-        commandStudentTagPort.saveAllStudentTags(studentTags)
+        commandTagPort.saveAllStudentTags(studentTags)
     }
 }
