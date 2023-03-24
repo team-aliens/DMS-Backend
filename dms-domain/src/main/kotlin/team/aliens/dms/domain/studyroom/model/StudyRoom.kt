@@ -47,13 +47,6 @@ data class StudyRoom(
     }
 
     companion object {
-        fun precessName(
-            floor: Int,
-            name: String,
-            seatNameType: SeatNameType?
-        ) = when (seatNameType) {
-            SeatNameType.SHORT, null -> "${floor}-${name[0]}"
-            SeatNameType.LONG -> "${floor}층 $name"
-        }
+        fun precessName(floor: Int, name: String) = "$floor-${name}"
     }
 }

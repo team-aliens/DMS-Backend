@@ -26,4 +26,3 @@ fun HttpServletResponse.setExcelContentDisposition(fileName: String) {
         "attachment; filename=${URLEncoder.encode(fileName, "UTF-8")}.xlsx"
     )
 }
-

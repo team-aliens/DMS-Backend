@@ -39,7 +39,6 @@ import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateTimeSlotWebRequest
-import team.aliens.dms.domain.studyroom.dto.WebSeatNameType
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
@@ -286,12 +285,10 @@ class StudyRoomWebAdapter(
     @PostMapping("/students/file")
     fun exportStudyRoomStudentsApplicationStatus(
         @RequestPart file: MultipartFile?,
-        @RequestParam("seat_name_type") seatNameType: WebSeatNameType?,
-        httpResponse: HttpServletResponse,
+        httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportStudyRoomApplicationStatusUseCase.execute(
-            file = file?.let(FileUtil.transferFile),
-            seatNameTypeString = seatNameType?.name
+            file = file?.let(FileUtil.transferFile)
         )
         httpResponse.setExcelContentDisposition(response.fileName)
         return response.file

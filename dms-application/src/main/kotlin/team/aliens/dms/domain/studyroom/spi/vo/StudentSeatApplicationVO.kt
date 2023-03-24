@@ -7,6 +7,6 @@ open class StudentSeatApplicationVO(
     val studyRoomName: String,
     val studyRoomFloor: Int,
     val seatNumber: Int,
-    val seatTypeName: String?,
+    val seatTypeName: String,
     val timeSlotId: UUID
 )

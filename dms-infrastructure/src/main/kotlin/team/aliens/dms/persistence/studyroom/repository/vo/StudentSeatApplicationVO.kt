@@ -9,7 +9,7 @@ class StudentSeatApplicationVO @QueryProjection constructor(
     studyRoomName: String,
     studyRoomFloor: Int,
     seatNumber: Int,
-    seatTypeName: String?,
+    seatTypeName: String,
     timeSlotId: UUID
 ) : StudentSeatApplicationVO(
     studentId = studentId,
