@@ -1,10 +1,12 @@
 package team.aliens.dms.domain.tag
 
+import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
@@ -26,6 +28,7 @@ class TagWebAdapter(
         return queryTagsUseCase.execute()
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/students")
     fun grantTag(@RequestBody @Valid request: GrantTagWebRequest) {
         grantTagUseCase.execute(
