@@ -8,6 +8,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
 import team.aliens.dms.domain.studyroom.model.Seat
+import team.aliens.dms.domain.studyroom.model.SeatNameType
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
@@ -28,7 +29,7 @@ class ExportStudyRoomApplicationStatusUseCase(
     private val writeFilePort: WriteFilePort,
 ) {
 
-    fun execute(file: java.io.File?): ExportStudyRoomApplicationStatusResponse {
+    fun execute(file: java.io.File?, seatNameTypeString: String?): ExportStudyRoomApplicationStatusResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
@@ -37,6 +38,7 @@ class ExportStudyRoomApplicationStatusUseCase(
             studentIds = students.map { it.id }
         ).associateBy { it.studentId }
 
+        val seatNameType = seatNameTypeString?.let { SeatNameType.valueOf(it) }
         val studentSeats = students.map { student ->
             val seat = studentSeatApplicationsMap[student.id]
             StudentSeatInfo(
@@ -46,8 +48,8 @@ class ExportStudyRoomApplicationStatusUseCase(
                 studentClassRoom = student.classRoom,
                 studentNumber = student.number,
                 seatFullName = seat?.let {
-                    StudyRoom.precessFullName(it.studyRoomFloor, it.studyRoomName) +
-                        Seat.processFullName(it.seatNumber, it.seatTypeName)
+                    StudyRoom.precessName(it.studyRoomFloor, it.studyRoomName, seatNameType) +
+                            " " + Seat.processName(it.seatNumber, it.seatTypeName, seatNameType)
                 },
                 timeSlotId = seat?.timeSlotId
             )
