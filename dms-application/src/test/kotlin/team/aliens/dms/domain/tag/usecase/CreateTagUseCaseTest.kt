@@ -43,7 +43,7 @@ class CreateTagUseCaseTest {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByName(name) } returns false
+        every { queryTagPort.existsByNameAndSchoolId(name, schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
@@ -56,7 +56,7 @@ class CreateTagUseCaseTest {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByName(name) } returns true
+        every { queryTagPort.existsByNameAndSchoolId(name, schoolId) } returns true
 
         // when & then
         assertThrows<TagAlreadyExistsException> {
