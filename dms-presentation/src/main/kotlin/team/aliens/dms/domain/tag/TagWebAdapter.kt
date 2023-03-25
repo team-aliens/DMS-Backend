@@ -28,7 +28,7 @@ import javax.validation.Valid
 @RestController
 class TagWebAdapter(
     private val queryTagsUseCase: QueryTagsUseCase,
-    private val cancelGrantedTagUseCase: CancelGrantedTagUseCase
+    private val cancelGrantedTagUseCase: CancelGrantedTagUseCase,
     private val grantTagUseCase: GrantTagUseCase,
     private val createTagUseCase: CreateTagUseCase
 ) {
