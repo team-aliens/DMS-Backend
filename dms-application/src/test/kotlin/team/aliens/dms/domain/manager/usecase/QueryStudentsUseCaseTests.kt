@@ -19,6 +19,8 @@ import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
 import team.aliens.dms.domain.student.stub.createStudentStub
 import java.util.UUID
+import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
+import team.aliens.dms.domain.tag.stub.createTagStub
 
 @ExtendWith(SpringExtension::class)
 class QueryStudentsUseCaseTests {
@@ -73,6 +75,20 @@ class QueryStudentsUseCaseTests {
     @Test
     fun `학생 목록 조회 성공`() {
         // given
+        val studentWitTagStub = StudentWithTag(
+            id = studentStub.id,
+            name = studentStub.name,
+            grade = studentStub.grade,
+            classRoom = studentStub.classRoom,
+            number = studentStub.number,
+            roomNumber = studentStub.roomNumber,
+            profileImageUrl = studentStub.profileImageUrl!!,
+            sex = studentStub.sex,
+            tags = listOf(
+                createTagStub(name = "1OUT")
+            )
+        )
+
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -83,7 +99,7 @@ class QueryStudentsUseCaseTests {
             queryStudentPort.queryStudentsByNameAndSortAndFilter(
                 name, sort, managerStub.schoolId, pointFilterStub
             )
-        ).willReturn(listOf(studentStub))
+        ).willReturn(listOf(studentWitTagStub))
 
         // when
         val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
