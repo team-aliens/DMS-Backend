@@ -126,13 +126,7 @@ class StudentPersistenceAdapter(
             .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(tagJpaEntity)
-            .on(
-                tagJpaEntity.id.`in`(
-                    select(studentTagJpaEntity.tag.id)
-                        .from(studentTagJpaEntity)
-                        .where(studentTagJpaEntity.student.eq(studentJpaEntity))
-                )
-            )
+            .on(eqTag())
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
@@ -179,6 +173,14 @@ class StudentPersistenceAdapter(
                         }
                 )
             }
+    }
+
+    private fun eqTag(): BooleanExpression? {
+        return tagJpaEntity.id.`in`(
+            select(studentTagJpaEntity.tag.id)
+                .from(studentTagJpaEntity)
+                .where(studentTagJpaEntity.student.eq(studentJpaEntity))
+        )
     }
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
