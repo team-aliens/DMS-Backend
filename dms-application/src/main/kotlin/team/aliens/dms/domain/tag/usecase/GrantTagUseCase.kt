@@ -30,7 +30,7 @@ class GrantTagUseCase(
 
         validateSameSchool(currentManager.schoolId, tag.schoolId)
 
-        val students = queryStudentPort.queryAllStudentsByIdIn(request.studentIds)
+        val students = queryStudentPort.queryAllStudentsByIdsIn(request.studentIds)
         if (request.studentIds.count() != students.count()) {
             throw StudentNotFoundException
         }

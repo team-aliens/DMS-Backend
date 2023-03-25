@@ -79,7 +79,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
-        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns studentsStub
+        every { queryStudentPort.queryAllStudentsByIdsIn(requestStub.studentIds) } returns studentsStub
 
         // when & then
         assertDoesNotThrow {
@@ -118,7 +118,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
-        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns emptyList()
+        every { queryStudentPort.queryAllStudentsByIdsIn(requestStub.studentIds) } returns emptyList()
 
         // when & then
         assertThrows<StudentNotFoundException> {
@@ -132,7 +132,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns otherSchoolTagStub
-        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns studentsStub
+        every { queryStudentPort.queryAllStudentsByIdsIn(requestStub.studentIds) } returns studentsStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
