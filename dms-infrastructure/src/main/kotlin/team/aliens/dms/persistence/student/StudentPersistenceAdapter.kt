@@ -2,6 +2,8 @@ package team.aliens.dms.persistence.student
 
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.Tuple
+import com.querydsl.core.group.GroupBy.groupBy
+import com.querydsl.core.group.GroupBy.list
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
+import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
@@ -27,12 +30,17 @@ import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
+import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
+import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
+import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
+import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
     private val studentMapper: StudentMapper,
+    private val tagMapper: TagMapper,
     private val studentRepository: StudentJpaRepository,
     private val verifiedStudentRepository: VerifiedStudentJpaRepository,
     private val verifiedStudentMapper: VerifiedStudentMapper,
@@ -111,12 +119,20 @@ class StudentPersistenceAdapter(
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
-    ): List<Student> {
+    ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
-            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
+            .join(studentJpaEntity.room, roomJpaEntity)
+            .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
+            .leftJoin(tagJpaEntity)
+            .on(
+                tagJpaEntity.id.`in`(
+                    select(studentTagJpaEntity.tag.id)
+                        .from(studentTagJpaEntity)
+                        .where(studentTagJpaEntity.student.eq(studentJpaEntity))
+                )
+            )
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
@@ -130,9 +146,38 @@ class StudentPersistenceAdapter(
                 studentJpaEntity.classRoom.asc(),
                 studentJpaEntity.number.asc()
             )
-            .fetch()
+            .transform(
+                groupBy(studentJpaEntity.id)
+                    .list(
+                        QQueryStudentsWithTagVO(
+                            studentJpaEntity.id,
+                            studentJpaEntity.name,
+                            studentJpaEntity.grade,
+                            studentJpaEntity.classRoom,
+                            studentJpaEntity.number,
+                            roomJpaEntity.number,
+                            studentJpaEntity.profileImageUrl,
+                            studentJpaEntity.sex,
+                            list(tagJpaEntity)
+                        )
+                    )
+            )
             .map {
-                studentMapper.toDomain(it)!!
+                StudentWithTag(
+                    id = it.id,
+                    name = it.name,
+                    grade = it.grade,
+                    classRoom = it.classRoom,
+                    number = it.number,
+                    roomNumber = it.roomNumber,
+                    profileImageUrl = it.profileImageUrl,
+                    sex = it.sex,
+                    tags = it.tags
+                        .map {
+                                tag ->
+                            tagMapper.toDomain(tag)!!
+                        }
+                )
             }
     }
 
