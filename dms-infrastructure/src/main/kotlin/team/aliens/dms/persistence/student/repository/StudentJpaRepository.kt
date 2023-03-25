@@ -16,4 +16,6 @@ interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
     ): StudentJpaEntity?
 
     fun existsByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
+
+    fun findAllByIdIn(ids: List<UUID>): List<StudentJpaEntity>
 }

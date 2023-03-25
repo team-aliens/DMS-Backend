@@ -4,15 +4,24 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.tag.dto.CreateTagWebRequest
+import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
+import team.aliens.dms.domain.tag.dto.GrantTagRequest
+import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
 import team.aliens.dms.domain.tag.dto.QueryTagsResponse
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
+import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
+import team.aliens.dms.domain.tag.usecase.GrantTagUseCase
 import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import java.util.UUID
 import javax.validation.constraints.NotNull
+import javax.validation.Valid
 
 @Validated
 @RequestMapping("/tags")
@@ -20,6 +29,8 @@ import javax.validation.constraints.NotNull
 class TagWebAdapter(
     private val queryTagsUseCase: QueryTagsUseCase,
     private val cancelGrantedTagUseCase: CancelGrantedTagUseCase
+    private val grantTagUseCase: GrantTagUseCase,
+    private val createTagUseCase: CreateTagUseCase
 ) {
 
     @GetMapping
@@ -37,5 +48,27 @@ class TagWebAdapter(
             studentId = studentId!!,
             tagId = tagId!!
         )
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/students")
+    fun grantTag(@RequestBody @Valid request: GrantTagWebRequest) {
+        grantTagUseCase.execute(
+            GrantTagRequest(
+                tagId = request.tagId!!,
+                studentIds = request.studentIds!!
+            )
+        )
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
+        val tagId = createTagUseCase.execute(
+            name = webRequest.name!!,
+            color = webRequest.color!!
+        )
+
+        return CreateTagWebResponse(tagId)
     }
 }

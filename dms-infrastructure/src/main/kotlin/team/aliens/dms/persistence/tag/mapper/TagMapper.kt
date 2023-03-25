@@ -24,7 +24,7 @@ class TagMapper(
     }
 
     override fun toEntity(domain: Tag): TagJpaEntity {
-        val school = schoolRepository.findByIdOrNull(domain.id)
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return TagJpaEntity(
             id = domain.id,

@@ -11,6 +11,6 @@ data class StudentTag(
 
     val tagId: UUID,
 
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime?
 
 )

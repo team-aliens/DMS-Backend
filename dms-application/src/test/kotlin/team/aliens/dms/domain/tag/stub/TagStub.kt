@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.tag.stub
 
-import java.util.UUID
 import team.aliens.dms.domain.tag.model.Tag
+import java.util.UUID
 
 internal fun createTagStub(
     id: UUID = UUID.randomUUID(),
