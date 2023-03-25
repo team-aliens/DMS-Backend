@@ -37,6 +37,7 @@ class TagPersistenceAdapter(
                 studentTagMapper.toEntity(it)
             }
         )
+    }
 
     override fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean {
         return tagRepository.existsByNameAndSchoolId(name, schoolId)

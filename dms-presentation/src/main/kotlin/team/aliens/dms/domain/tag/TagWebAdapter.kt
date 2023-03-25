@@ -41,6 +41,7 @@ class TagWebAdapter(
                 studentIds = request.studentIds!!
             )
         )
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
