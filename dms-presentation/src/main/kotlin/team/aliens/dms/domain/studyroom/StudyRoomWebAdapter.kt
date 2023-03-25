@@ -1,9 +1,6 @@
 package team.aliens.dms.domain.studyroom
 
-import java.util.UUID
 import javax.servlet.http.HttpServletResponse
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping

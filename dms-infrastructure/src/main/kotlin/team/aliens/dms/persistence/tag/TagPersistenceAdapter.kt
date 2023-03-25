@@ -20,4 +20,14 @@ class TagPersistenceAdapter(
                 tagMapper.toDomain(it)!!
             }
     }
+
+    override fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean {
+        return tagRepository.existsByNameAndSchoolId(name, schoolId)
+    }
+
+    override fun saveTag(tag: Tag): Tag {
+        return tagMapper.toDomain(
+            tagRepository.save(tagMapper.toEntity(tag))
+        )!!
+    }
 }
