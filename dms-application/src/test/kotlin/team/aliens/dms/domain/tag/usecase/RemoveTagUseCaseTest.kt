@@ -36,8 +36,8 @@ class RemoveTagUseCaseTest {
     private val tagId = UUID.randomUUID()
 
     private val userStub = createUserStub(
-        currentUserId,
-        schoolId
+        id = currentUserId,
+        schoolId = schoolId
     )
 
     private val tagStub = createTagStub(
@@ -73,7 +73,7 @@ class RemoveTagUseCaseTest {
     }
 
     @Test
-    fun `삭제 권한이 없음`() {
+    fun `학교가 일치하지 않음`() {
         // given
         val diffSchoolTag = createTagStub(
             id = tagId,
@@ -90,7 +90,7 @@ class RemoveTagUseCaseTest {
     }
 
     @Test
-    fun `사용자를 찾을 수 없음`() {
+    fun `유저가 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns null
