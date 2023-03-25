@@ -78,7 +78,7 @@ class CancelGrantedTagUseCaseTests {
     }
 
     @Test
-    fun `관리자를 찾지 못함`() {
+    fun `관리자를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns null
@@ -90,7 +90,7 @@ class CancelGrantedTagUseCaseTests {
     }
 
     @Test
-    fun `태그를 찾지 못함`() {
+    fun `태그를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
@@ -103,7 +103,7 @@ class CancelGrantedTagUseCaseTests {
     }
 
     @Test
-    fun `매니저와 태그의 학교 식별자가 다름`() {
+    fun `매니저와 태그의 학교 식별자 불일치`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
@@ -116,7 +116,7 @@ class CancelGrantedTagUseCaseTests {
     }
 
     @Test
-    fun `학생을 찾지 못함`() {
+    fun `학생을 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
