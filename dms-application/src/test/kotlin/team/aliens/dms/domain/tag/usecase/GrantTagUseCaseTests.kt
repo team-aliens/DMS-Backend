@@ -57,10 +57,12 @@ class GrantTagUseCaseTests {
         createTagStub()
     }
 
-    private val studentStub by lazy {
-        createStudentStub(
-            id = studentId,
-            schoolId = schoolId
+    private val studentsStub by lazy {
+        listOf(
+            createStudentStub(
+                id = studentId,
+                schoolId = schoolId
+            )
         )
     }
 
@@ -77,7 +79,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
-        every { queryStudentPort.queryStudentById(requestStub.studentIds[0]) } returns studentStub
+        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns studentsStub
 
         // when & then
         assertDoesNotThrow {
@@ -116,7 +118,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
-        every { queryStudentPort.queryStudentById(requestStub.studentIds[0]) } returns null
+        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns emptyList()
 
         // when & then
         assertThrows<StudentNotFoundException> {
@@ -130,7 +132,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns otherSchoolTagStub
-        every { queryStudentPort.queryStudentById(requestStub.studentIds[0]) } returns studentStub
+        every { queryStudentPort.queryAllStudentsByIdIn(requestStub.studentIds) } returns studentsStub
 
         // when & then
         assertThrows<SchoolMismatchException> {

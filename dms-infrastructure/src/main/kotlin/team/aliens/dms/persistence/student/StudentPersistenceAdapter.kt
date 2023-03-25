@@ -273,4 +273,10 @@ class StudentPersistenceAdapter(
 
         return condition
     }
+
+    override fun queryAllStudentsByIdIn(studentIds: List<UUID>) =
+        studentRepository.findAllByIdIn(studentIds)
+            .map {
+                studentMapper.toDomain(it)!!
+            }
 }

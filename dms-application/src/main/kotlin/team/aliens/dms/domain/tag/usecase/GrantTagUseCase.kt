@@ -26,13 +26,14 @@ class GrantTagUseCase(
     fun execute(request: GrantTagRequest) {
         val currentManagerId = securityPort.getCurrentUserId()
         val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
-
         val tag = queryTagPort.queryTagById(request.tagId) ?: throw TagNotFoundException
-        val students = request.studentIds.map {
-            queryStudentPort.queryStudentById(it) ?: throw StudentNotFoundException
-        }
 
         validateSameSchool(currentManager.schoolId, tag.schoolId)
+
+        val students = queryStudentPort.queryAllStudentsByIdIn(request.studentIds)
+        if (request.studentIds.count() != students.count()) {
+            throw StudentNotFoundException
+        }
 
         val studentTags = students.map {
             StudentTag(
