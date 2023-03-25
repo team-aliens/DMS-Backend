@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -22,6 +23,9 @@ import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import java.util.UUID
 import javax.validation.constraints.NotNull
 import javax.validation.Valid
+import team.aliens.dms.domain.tag.usecase.RemoveTagUseCase
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.http.HttpStatus
 
 @Validated
 @RequestMapping("/tags")
@@ -30,12 +34,19 @@ class TagWebAdapter(
     private val queryTagsUseCase: QueryTagsUseCase,
     private val cancelGrantedTagUseCase: CancelGrantedTagUseCase,
     private val grantTagUseCase: GrantTagUseCase,
+    private val removeTagUseCase: RemoveTagUseCase
     private val createTagUseCase: CreateTagUseCase
 ) {
 
     @GetMapping
     fun queryTags(): QueryTagsResponse {
         return queryTagsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{tag-id}")
+    fun removeTag(@PathVariable("tag-id") @NotNull tagId: UUID?) {
+        removeTagUseCase.execute(tagId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
