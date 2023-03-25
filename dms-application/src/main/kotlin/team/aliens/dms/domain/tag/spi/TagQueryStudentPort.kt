@@ -8,5 +8,4 @@ interface TagQueryStudentPort {
     fun queryStudentById(studentId: UUID): Student?
 
     fun queryAllStudentsByIdsIn(studentIds: List<UUID>): List<Student>
-
 }
