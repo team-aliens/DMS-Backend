@@ -112,6 +112,7 @@ class SecurityConfiguration(
 
             // /tags
             .antMatchers(HttpMethod.GET, "/tags").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/tags/students").hasAuthority(MANAGER.name)
 
             // /study-rooms
             .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
