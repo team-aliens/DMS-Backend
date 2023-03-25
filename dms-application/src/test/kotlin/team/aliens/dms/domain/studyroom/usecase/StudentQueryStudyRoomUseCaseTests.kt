@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 
@@ -43,29 +43,16 @@ class StudentQueryStudyRoomUseCaseTests {
     }
 
     private val studyRoomStub by lazy {
-        StudyRoom(
+        createStudyRoomStub(
             id = studyRoomId,
-            schoolId = schoolId,
-            name = "",
-            floor = 1,
-            widthSize = 1,
-            heightSize = 1,
-            availableHeadcount = 1,
-            availableSex = Sex.FEMALE,
-            availableGrade = 1,
-            eastDescription = "",
-            westDescription = "",
-            southDescription = "",
-            northDescription = ""
+            schoolId = schoolId
         )
     }
 
     private val timeSlotStub by lazy {
-        TimeSlot(
+        createTimeSlotStub(
             id = timeSlotId,
-            schoolId = schoolId,
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
+            schoolId = schoolId
         )
     }
 

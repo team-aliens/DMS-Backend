@@ -3,25 +3,24 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
-import java.time.LocalTime
-import java.util.UUID
 
 class CreateStudyRoomUseCaseTests {
 
@@ -45,22 +44,10 @@ class CreateStudyRoomUseCaseTests {
     }
 
     private val studyRoomStub by lazy {
-        StudyRoom(
-            id = UUID.randomUUID(),
-            schoolId = userStub.schoolId,
-            name = requestStub.name,
-            floor = requestStub.floor,
-            widthSize = requestStub.totalWidthSize,
-            heightSize = requestStub.totalHeightSize,
+        createStudyRoomStub(
             availableHeadcount = requestStub.seats.count {
                 SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
-            },
-            availableSex = Sex.valueOf(requestStub.availableSex),
-            availableGrade = requestStub.availableGrade,
-            eastDescription = requestStub.eastDescription,
-            westDescription = requestStub.westDescription,
-            southDescription = requestStub.southDescription,
-            northDescription = requestStub.northDescription,
+            }
         )
     }
 
@@ -90,11 +77,8 @@ class CreateStudyRoomUseCaseTests {
     }
 
     private val timeSlotStub by lazy {
-        TimeSlot(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
+        createTimeSlotStub(
+            schoolId = schoolId
         )
     }
 

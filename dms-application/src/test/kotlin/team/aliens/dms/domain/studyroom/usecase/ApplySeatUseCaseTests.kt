@@ -2,12 +2,11 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
@@ -17,18 +16,16 @@ import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createSeatStub
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
+import team.aliens.dms.domain.user.stub.createUserStub
 
 class ApplySeatUseCaseTests {
 
@@ -50,52 +47,30 @@ class ApplySeatUseCaseTests {
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "test password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = userId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 1,
-            classRoom = 3,
-            number = 10,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 
     private val seatStub by lazy {
-        Seat(
+        createSeatStub(
             id = seatId,
-            studyRoomId = studyRoomId,
-            typeId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE
+            studyRoomId = studyRoomId
         )
     }
 
     private val timeSlotStub by lazy {
-        TimeSlot(
+        createTimeSlotStub(
             id = timeSlotId,
-            schoolId = schoolId,
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
+            schoolId = schoolId
         )
     }
 
