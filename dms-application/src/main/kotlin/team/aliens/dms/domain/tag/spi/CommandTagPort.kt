@@ -7,8 +7,10 @@ import java.util.UUID
 interface CommandTagPort {
 
     fun saveAllStudentTags(studentTags: List<StudentTag>)
-    
+
     fun saveTag(tag: Tag): Tag
 
     fun deleteStudentTagById(studentId: UUID, tagId: UUID)
+
+    fun deleteTagById(tagId: UUID)
 }
