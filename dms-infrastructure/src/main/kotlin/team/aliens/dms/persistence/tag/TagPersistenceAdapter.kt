@@ -28,11 +28,15 @@ class TagPersistenceAdapter(
                 tagMapper.toDomain(it)!!
             }
     }
+    override fun queryTagById(tagId: UUID): Tag? {
+        return tagMapper.toDomain(
+            tagRepository.findByIdOrNull(tagId)
+        )
+    }
 
-    override fun queryTagById(tagId: UUID) = tagMapper.toDomain(
-        tagRepository.findByIdOrNull(tagId)
-    )
-
+    override fun deleteTagById(tagId: UUID) {
+        tagRepository.deleteById(tagId)
+    }
     override fun deleteStudentTagById(studentId: UUID, tagId: UUID) {
         val id = StudentTagId(
             studentId =  studentId,
@@ -59,4 +63,5 @@ class TagPersistenceAdapter(
             tagRepository.save(tagMapper.toEntity(tag))
         )!!
     }
+
 }

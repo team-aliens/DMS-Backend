@@ -12,3 +12,5 @@ interface CommandTagPort {
 
     fun deleteStudentTagById(studentId: UUID, tagId: UUID)
 }
+
+    fun deleteTagById(tagId: UUID)
