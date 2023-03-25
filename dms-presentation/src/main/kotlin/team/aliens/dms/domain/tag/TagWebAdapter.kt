@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.tag.dto.CreateTagWebRequest
+import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
 import team.aliens.dms.domain.tag.dto.QueryTagsResponse
+import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.GrantTagUseCase
 import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import javax.validation.Valid
@@ -20,7 +23,8 @@ import javax.validation.Valid
 @RestController
 class TagWebAdapter(
     private val queryTagsUseCase: QueryTagsUseCase,
-    private val grantTagUseCase: GrantTagUseCase
+    private val grantTagUseCase: GrantTagUseCase,
+    private val createTagUseCase: CreateTagUseCase
 ) {
 
     @GetMapping
@@ -37,5 +41,15 @@ class TagWebAdapter(
                 studentIds = request.studentIds!!
             )
         )
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
+        val tagId = createTagUseCase.execute(
+            name = webRequest.name!!,
+            color = webRequest.color!!
+        )
+
+        return CreateTagWebResponse(tagId)
     }
 }
