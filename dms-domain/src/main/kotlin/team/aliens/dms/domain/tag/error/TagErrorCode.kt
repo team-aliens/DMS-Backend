@@ -8,7 +8,8 @@ enum class TagErrorCode(
     private val message: String
 ) : ErrorProperty {
 
-    TAG_NOT_FOUND(ErrorStatus.NOT_FOUND, "Tag Not Found")
+    TAG_NOT_FOUND(ErrorStatus.NOT_FOUND, "Tag Not Found"),
+    TAG_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Tag Already Exists")
     ;
 
     override fun status(): Int = status

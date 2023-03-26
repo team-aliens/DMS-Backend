@@ -3,20 +3,17 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
+import team.aliens.dms.domain.user.stub.createUserStub
 
 class RemoveTimeSlotUseCaseTests {
 
@@ -34,24 +31,15 @@ class RemoveTimeSlotUseCaseTests {
     private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "test password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
     private val timeSlotStub by lazy {
-        TimeSlot(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
+        createTimeSlotStub(
+            schoolId = schoolId
         )
     }
 

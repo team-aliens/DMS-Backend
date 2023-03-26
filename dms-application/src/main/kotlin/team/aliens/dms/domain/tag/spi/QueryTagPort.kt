@@ -6,4 +6,8 @@ import java.util.UUID
 interface QueryTagPort {
 
     fun queryTagsBySchoolId(schoolId: UUID): List<Tag>
+
+    fun queryTagById(tagId: UUID): Tag?
+
+    fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 }

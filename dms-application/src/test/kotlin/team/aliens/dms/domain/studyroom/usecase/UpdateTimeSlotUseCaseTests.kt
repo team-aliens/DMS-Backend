@@ -3,12 +3,13 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import java.time.LocalTime
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
@@ -17,11 +18,9 @@ import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
+import team.aliens.dms.domain.user.stub.createUserStub
 
 class UpdateTimeSlotUseCaseTests {
 
@@ -38,24 +37,15 @@ class UpdateTimeSlotUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = "test password",
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
     private val timeSlotStub by lazy {
-        TimeSlot(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
+        createTimeSlotStub(
+            schoolId = schoolId
         )
     }
     private val newStartTime = LocalTime.of(1, 1)

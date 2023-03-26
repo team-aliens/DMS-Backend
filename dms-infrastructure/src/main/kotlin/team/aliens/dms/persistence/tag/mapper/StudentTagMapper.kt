@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.tag.mapper
 
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Component
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
@@ -8,6 +9,7 @@ import team.aliens.dms.persistence.tag.entity.StudentTagId
 import team.aliens.dms.persistence.tag.entity.StudentTagJpaEntity
 import team.aliens.dms.persistence.tag.repository.TagJpaRepository
 
+@Component
 class StudentTagMapper(
     private val studentRepository: StudentJpaRepository,
     private val tagRepository: TagJpaRepository
