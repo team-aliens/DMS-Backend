@@ -11,12 +11,18 @@ data class GetStudentDetailsResponse(
     val bonusPoint: Int,
     val minusPoint: Int,
     val roomNumber: String,
-    val roomMates: List<RoomMate>
-
+    val roomMates: List<RoomMate>,
+    val tags: List<TagResponse>
 ) {
     data class RoomMate(
         val id: UUID,
         val name: String,
         val profileImageUrl: String
+    )
+
+    data class TagResponse(
+        val id: UUID,
+        val name: String,
+        val color: String
     )
 }
