@@ -4,6 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import java.io.File
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -22,6 +24,7 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.stub.createUserStub
 
 class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
@@ -78,22 +81,10 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
     private val studentSeatApplicationVOStub by lazy {
         StudentSeatApplicationVO(
             studentId = studentId,
-            studyRoomName = "",
+            studyRoomName = "z",
             studyRoomFloor = 1,
             seatNumber = 1,
-            seatTypeName = "",
-            timeSlotId = timeSlotStub.id
-        )
-    }
-
-    private val studentSeatInfoStub by lazy {
-        StudentSeatInfo(
-            studentId = UUID.randomUUID(),
-            studentName = "",
-            studentGrade = 1,
-            studentClassRoom = 2,
-            studentNumber = 3,
-            seatFullName = "",
+            seatTypeName = "z",
             timeSlotId = timeSlotStub.id
         )
     }

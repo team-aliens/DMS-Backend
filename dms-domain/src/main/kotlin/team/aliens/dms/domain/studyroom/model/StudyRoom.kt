@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.model
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatchException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
-import java.util.UUID
 
 @Aggregate
 data class StudyRoom(
@@ -47,6 +47,6 @@ data class StudyRoom(
     }
 
     companion object {
-        fun precessFullName(floor: Int, name: String) = "${floor}층 $name"
+        fun precessName(floor: Int, name: String) = "$floor-${name}"
     }
 }

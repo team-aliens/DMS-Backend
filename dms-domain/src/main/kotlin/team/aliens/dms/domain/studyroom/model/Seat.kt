@@ -20,7 +20,6 @@ data class Seat(
 
 ) {
     companion object {
-        fun processFullName(seatNumber: Int, typeName: String?) =
-            " ${seatNumber}번 ${typeName ?: "일반"}자리"
+        fun processName(seatNumber: Int, typeName: String) = "${seatNumber}($typeName)"
     }
 }

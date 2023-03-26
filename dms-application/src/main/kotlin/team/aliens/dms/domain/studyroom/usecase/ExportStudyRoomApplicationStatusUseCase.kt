@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
@@ -17,6 +16,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
@@ -46,8 +46,8 @@ class ExportStudyRoomApplicationStatusUseCase(
                 studentClassRoom = student.classRoom,
                 studentNumber = student.number,
                 seatFullName = seat?.let {
-                    StudyRoom.precessFullName(it.studyRoomFloor, it.studyRoomName) +
-                        Seat.processFullName(it.seatNumber, it.seatTypeName)
+                    StudyRoom.precessName(it.studyRoomFloor, it.studyRoomName) +
+                        " " + Seat.processName(it.seatNumber, it.seatTypeName)
                 },
                 timeSlotId = seat?.timeSlotId
             )

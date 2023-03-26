@@ -1,5 +1,9 @@
 package team.aliens.dms.domain.studyroom
 
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -16,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import team.aliens.dms.common.util.FileUtil
-import team.aliens.dms.common.util.FileUtil.setExcelContentDisposition
+import team.aliens.dms.common.util.setExcelContentDisposition
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
@@ -55,10 +59,6 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
-import java.util.UUID
-import javax.servlet.http.HttpServletResponse
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/study-rooms")
@@ -285,10 +285,10 @@ class StudyRoomWebAdapter(
     @PostMapping("/students/file")
     fun exportStudyRoomStudentsApplicationStatus(
         @RequestPart file: MultipartFile?,
-        httpResponse: HttpServletResponse,
+        httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportStudyRoomApplicationStatusUseCase.execute(
-            file?.let(FileUtil.transferFile)
+            file = file?.let(FileUtil.transferFile)
         )
         httpResponse.setExcelContentDisposition(response.fileName)
         return response.file

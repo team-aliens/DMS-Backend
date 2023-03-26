@@ -41,5 +41,4 @@ interface QueryStudyRoomPort {
     fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
 
     fun querySeatApplicationsByStudentIdIn(studentIds: List<UUID>): List<StudentSeatApplicationVO>
-
 }

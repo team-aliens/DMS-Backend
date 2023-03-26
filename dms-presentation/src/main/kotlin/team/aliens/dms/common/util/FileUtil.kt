@@ -18,11 +18,12 @@ object FileUtil {
             it
         }
     }
+}
 
-    fun HttpServletResponse.setExcelContentDisposition(fileName: String) {
-        setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=${URLEncoder.encode(fileName, "UTF-8")}.xlsx"
-        )
-    }
+
+fun HttpServletResponse.setExcelContentDisposition(fileName: String) {
+    setHeader(
+        HttpHeaders.CONTENT_DISPOSITION,
+        "attachment; filename=${URLEncoder.encode(fileName, "UTF-8")}.xlsx"
+    )
 }
