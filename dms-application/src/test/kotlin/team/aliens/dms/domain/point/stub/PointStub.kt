@@ -1,9 +1,11 @@
 package team.aliens.dms.domain.point.stub
 
-import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.domain.point.model.Phrase
+import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.model.PointOption
+import team.aliens.dms.domain.point.model.PointType
 
 internal fun createPointHistoryStub(
     id: UUID = UUID.randomUUID(),
@@ -29,4 +31,30 @@ internal fun createPointHistoryStub(
     pointType = pointType,
     createdAt = createdAt,
     schoolId = schoolId
+)
+
+internal fun createPointOptionStub(
+    id: UUID = UUID.randomUUID(),
+    schoolId: UUID = UUID.randomUUID(),
+    name: String = "기숙사 봉사 활동",
+    score: Int = 5,
+    type: PointType = PointType.BONUS
+) = PointOption(
+    id = id,
+    schoolId = schoolId,
+    name = name,
+    score = score,
+    type = type
+)
+
+internal fun createPhraseStub(
+    id: UUID = UUID.randomUUID(),
+    content: String = "내용",
+    type: PointType = PointType.BONUS,
+    standard: Int = 0
+) = Phrase(
+    id = id,
+    content = content,
+    type = type,
+    standard = standard
 )

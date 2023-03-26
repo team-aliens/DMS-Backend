@@ -2,21 +2,20 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
+import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
-import java.util.UUID
 
 class UpdateStudyRoomUseCaseTests {
 
@@ -41,20 +40,10 @@ class UpdateStudyRoomUseCaseTests {
     }
 
     private val studyRoomStub by lazy {
-        StudyRoom(
-            id = studyRoomId,
+        createStudyRoomStub(
             schoolId = schoolId,
-            name = requestStub.name,
             floor = requestStub.floor,
-            widthSize = requestStub.totalWidthSize,
-            heightSize = requestStub.totalHeightSize,
-            availableSex = Sex.valueOf(requestStub.availableSex),
-            availableHeadcount = 1,
-            availableGrade = requestStub.availableGrade,
-            eastDescription = requestStub.eastDescription,
-            westDescription = requestStub.westDescription,
-            southDescription = requestStub.southDescription,
-            northDescription = requestStub.northDescription,
+            name = requestStub.name,
         )
     }
 
