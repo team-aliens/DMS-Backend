@@ -29,6 +29,7 @@ import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import team.aliens.dms.common.validator.NotNullElements
 
 @Validated
 @RequestMapping("/managers")
@@ -74,14 +75,16 @@ class ManagerWebAdapter(
         @RequestParam @NotNull sort: Sort?,
         @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
         @RequestParam(name = "min_point", required = false) minPoint: Int?,
-        @RequestParam(name = "max_point", required = false) maxPoint: Int?
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?,
+        @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,
             sort = sort!!,
             filterType = filterType,
             minPoint = minPoint,
-            maxPoint = maxPoint
+            maxPoint = maxPoint,
+            tags = tagIds
         )
     }
 
