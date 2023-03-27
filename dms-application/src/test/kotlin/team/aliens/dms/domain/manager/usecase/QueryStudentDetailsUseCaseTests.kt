@@ -13,12 +13,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryTagPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.stub.createStudentStub
+import team.aliens.dms.domain.tag.stub.createTagStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -36,12 +38,15 @@ class QueryStudentDetailsUseCaseTests {
     @MockBean
     private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
+    @MockBean
+    private lateinit var queryTagPort: ManagerQueryTagPort
+
     private lateinit var queryStudentDetailsUseCase: QueryStudentDetailsUseCase
 
     @BeforeEach
     fun setUp() {
         queryStudentDetailsUseCase = QueryStudentDetailsUseCase(
-            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort
+            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort, queryTagPort
         )
     }
 
@@ -69,6 +74,12 @@ class QueryStudentDetailsUseCaseTests {
         createStudentStub(schoolId = schoolId)
     }
 
+    private val tagsStub by lazy {
+        listOf(
+            createTagStub(schoolId = schoolId)
+        )
+    }
+
     @Test
     fun `학생 상세조회 성공`() {
         // given
@@ -86,6 +97,9 @@ class QueryStudentDetailsUseCaseTests {
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(listOf(studentStub, roomMateStub))
+
+        given(queryTagPort.queryTagsByStudentId(studentId))
+            .willReturn(tagsStub)
 
         // when
         val response = queryStudentDetailsUseCase.execute(studentId)
