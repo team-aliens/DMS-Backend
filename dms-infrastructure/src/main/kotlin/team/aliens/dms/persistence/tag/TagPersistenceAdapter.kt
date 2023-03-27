@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.spi.TagPort
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.entity.StudentTagId
@@ -73,6 +71,7 @@ class TagPersistenceAdapter(
     override fun queryTagsByStudentId(studentId: UUID): List<Tag> {
         return queryFactory
             .selectFrom(tagJpaEntity)
+            .distinct()
             .join(studentTagJpaEntity)
             .on(studentTagJpaEntity.student.id.eq(studentId))
             .fetch()
