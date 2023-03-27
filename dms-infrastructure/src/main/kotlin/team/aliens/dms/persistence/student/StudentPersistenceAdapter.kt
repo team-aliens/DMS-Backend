@@ -120,7 +120,7 @@ class StudentPersistenceAdapter(
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
-        tags: List<UUID>?
+        tagIds: List<UUID>?
     ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -135,7 +135,7 @@ class StudentPersistenceAdapter(
                 nameContains(name),
                 pointTotalBetween(pointFilter),
                 schoolEq(schoolId),
-                studentHavingTags(tags)
+                studentHavingTags(tagIds)
             )
             .orderBy(
                 sortFilter(sort),

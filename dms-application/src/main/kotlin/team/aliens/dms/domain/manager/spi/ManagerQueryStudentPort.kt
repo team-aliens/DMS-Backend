@@ -15,7 +15,7 @@ interface ManagerQueryStudentPort {
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
-        tags: List<UUID>?
+        tagIds: List<UUID>?
     ): List<StudentWithTag>
 
     fun queryUserByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student>

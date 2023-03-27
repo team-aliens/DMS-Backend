@@ -84,7 +84,7 @@ class ManagerWebAdapter(
             filterType = filterType,
             minPoint = minPoint,
             maxPoint = maxPoint,
-            tags = tagIds
+            tagIds = tagIds
         )
     }
 

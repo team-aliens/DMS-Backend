@@ -24,7 +24,7 @@ class QueryStudentsUseCase(
         filterType: PointFilterType?,
         minPoint: Int?,
         maxPoint: Int?,
-        tags: List<UUID>?
+        tagIds: List<UUID>?
     ): QueryStudentsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
@@ -40,7 +40,7 @@ class QueryStudentsUseCase(
             sort = sort,
             schoolId = manager.schoolId,
             pointFilter = pointFilter,
-            tags = tags
+            tagIds = tagIds
         ).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,
