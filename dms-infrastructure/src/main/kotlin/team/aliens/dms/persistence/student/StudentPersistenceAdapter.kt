@@ -9,6 +9,7 @@ import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
+import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -119,6 +120,7 @@ class StudentPersistenceAdapter(
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
+        tags: List<UUID>?
     ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
@@ -132,7 +134,8 @@ class StudentPersistenceAdapter(
             .where(
                 nameContains(name),
                 pointTotalBetween(pointFilter),
-                schoolEq(schoolId)
+                schoolEq(schoolId),
+                studentHavingTags(tags)
             )
             .orderBy(
                 sortFilter(sort),
@@ -174,6 +177,14 @@ class StudentPersistenceAdapter(
                 )
             }
     }
+
+    private fun studentHavingTags(tagIds: List<UUID>?): BooleanExpression? =
+        tagIds?.let { studentJpaEntity.id.`in`(
+            select(studentJpaEntity.id)
+                .from(studentTagJpaEntity)
+                .join(studentTagJpaEntity.student, studentJpaEntity)
+                .where(studentTagJpaEntity.tag.id.`in`(tagIds)))
+        }
 
     private fun eqTag(): BooleanExpression? {
         return tagJpaEntity.id.`in`(
