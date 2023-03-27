@@ -17,6 +17,7 @@ data class QueryStudentsResponse(
     )
 
     data class StudentTagElement(
+        val id: UUID,
         val name: String,
         val color: String
     )

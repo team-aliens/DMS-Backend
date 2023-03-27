@@ -50,6 +50,7 @@ class QueryStudentsUseCase(
                     .map {
                             tag ->
                         QueryStudentsResponse.StudentTagElement(
+                            id = tag.id,
                             name = tag.name,
                             color = tag.color
                         )
