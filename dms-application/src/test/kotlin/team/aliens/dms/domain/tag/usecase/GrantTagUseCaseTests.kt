@@ -29,7 +29,6 @@ class GrantTagUseCaseTests {
     private val queryStudentPort: TagQueryStudentPort = mockk(relaxed = true)
     private val commandTagPort: CommandTagPort = mockk(relaxed = true)
 
-
     private val grantTagUseCase = GrantTagUseCase(
         securityPort, queryUserPort, queryTagPort, queryStudentPort, commandTagPort
     )

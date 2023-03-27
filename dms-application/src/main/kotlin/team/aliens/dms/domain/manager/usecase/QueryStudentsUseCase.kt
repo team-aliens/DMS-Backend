@@ -44,8 +44,17 @@ class QueryStudentsUseCase(
                 name = it.name,
                 gcn = it.gcn,
                 roomNumber = it.roomNumber,
-                profileImageUrl = it.profileImageUrl!!,
-                sex = it.sex
+                profileImageUrl = it.profileImageUrl,
+                sex = it.sex,
+                tags = it.tags
+                    .map {
+                            tag ->
+                        QueryStudentsResponse.StudentTagElement(
+                            id = tag.id,
+                            name = tag.name,
+                            color = tag.color
+                        )
+                    }
             )
         }
 

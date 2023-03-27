@@ -12,6 +12,13 @@ data class QueryStudentsResponse(
         val gcn: String,
         val sex: Sex,
         val roomNumber: String,
-        val profileImageUrl: String
+        val profileImageUrl: String,
+        val tags: List<StudentTagElement>
+    )
+
+    data class StudentTagElement(
+        val id: UUID,
+        val name: String,
+        val color: String
     )
 }
