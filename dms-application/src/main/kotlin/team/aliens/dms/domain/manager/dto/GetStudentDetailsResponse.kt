@@ -5,6 +5,7 @@ import team.aliens.dms.domain.tag.dto.TagResponse
 import java.util.UUID
 
 data class GetStudentDetailsResponse(
+    val id: UUID,
     val name: String,
     val gcn: String,
     val profileImageUrl: String,

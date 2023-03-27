@@ -56,6 +56,7 @@ class QueryStudentDetailsUseCase(
             }
 
         return GetStudentDetailsResponse(
+            id = student.id,
             name = student.name,
             gcn = student.gcn,
             profileImageUrl = student.profileImageUrl!!,
