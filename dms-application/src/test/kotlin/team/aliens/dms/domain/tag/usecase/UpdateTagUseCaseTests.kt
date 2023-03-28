@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
@@ -71,7 +72,7 @@ class UpdateTagUseCaseTests {
     }
 
     @Test
-    fun `태그가 존재하지 않음`() {
+    fun `태그를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
@@ -105,7 +106,7 @@ class UpdateTagUseCaseTests {
     }
 
     @Test
-    fun `유저가 존재하지 않음`() {
+    fun `유저를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns null
@@ -115,6 +116,23 @@ class UpdateTagUseCaseTests {
             updateTagUseCase.execute(
                 tagId = tagId,
                 newName = newName,
+                newColor = newColor
+            )
+        }
+    }
+
+    @Test
+    fun `태그가 이미 존재함`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns currentUserId
+        every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.queryTagById(tagId) } returns tagStub
+
+        // when & then
+        assertThrows<TagAlreadyExistsException> {
+            updateTagUseCase.execute(
+                tagId = tagId,
+                newName = "1OUT",
                 newColor = newColor
             )
         }
