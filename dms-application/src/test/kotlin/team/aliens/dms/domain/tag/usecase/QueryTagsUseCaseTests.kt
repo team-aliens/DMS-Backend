@@ -16,7 +16,7 @@ import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-class QueryTagsUseCaseTest {
+class QueryTagsUseCaseTests {
 
     private val queryTagPort: QueryTagPort = mockk()
     private val securityPort: TagSecurityPort = mockk()

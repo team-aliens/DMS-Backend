@@ -17,10 +17,13 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
+<<<<<<< develop:dms-application/src/test/kotlin/team/aliens/dms/domain/tag/usecase/RemoveTagUseCaseTest.kt
 import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
+=======
+>>>>>>> style: (#394) 테스트 이름 변경:dms-application/src/test/kotlin/team/aliens/dms/domain/tag/usecase/RemoveTagUseCaseTests.kt
 
 @ExtendWith(SpringExtension::class)
-class RemoveTagUseCaseTest {
+class RemoveTagUseCaseTests {
 
     private val securityPort: TagSecurityPort = mockk()
     private val queryUserPort: TagQueryUserPort = mockk()
