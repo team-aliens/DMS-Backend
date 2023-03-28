@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,17 +17,16 @@ import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
 import team.aliens.dms.domain.tag.dto.QueryTagsResponse
+import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.GrantTagUseCase
 import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import team.aliens.dms.domain.tag.usecase.RemoveTagUseCase
+import team.aliens.dms.domain.tag.usecase.UpdateTagUseCase
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
-import org.springframework.web.bind.annotation.PatchMapping
-import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
-import team.aliens.dms.domain.tag.usecase.UpdateTagUseCase
 
 @Validated
 @RequestMapping("/tags")
