@@ -2,7 +2,6 @@ package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
@@ -22,10 +21,6 @@ class UpdateTagUseCase(
     fun execute(tagId: UUID, newName: String, newColor: String) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-
-        if (queryTagPort.existsByNameAndSchoolId(newName, manager.schoolId)) {
-            throw TagAlreadyExistsException
-        }
         
         val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
         validateSameSchool(tag.schoolId, manager.schoolId)

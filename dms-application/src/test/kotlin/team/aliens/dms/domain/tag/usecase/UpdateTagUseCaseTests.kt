@@ -17,7 +17,6 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 
 @ExtendWith(SpringExtension::class)
 class UpdateTagUseCaseTests {
@@ -60,7 +59,6 @@ class UpdateTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryTagPort.queryTagById(tagId) } returns tagStub
-        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
@@ -77,7 +75,6 @@ class UpdateTagUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns null
 
         // when & then
@@ -95,28 +92,10 @@ class UpdateTagUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns diffSchoolTagStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            updateTagUseCase.execute(
-                tagId = tagId,
-                newName = newName,
-                newColor = newColor
-            )
-        }
-    }
-
-    @Test
-    fun `변경할 태그 이름이 중복됨`() {
-        // given
-        every { securityPort.getCurrentUserId() } returns currentUserId
-        every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns true
-
-        // when & then
-        assertThrows<TagAlreadyExistsException> {
             updateTagUseCase.execute(
                 tagId = tagId,
                 newName = newName,
