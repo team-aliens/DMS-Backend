@@ -17,6 +17,7 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
+import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 
 @ExtendWith(SpringExtension::class)
 class UpdateTagUseCaseTests {
@@ -33,6 +34,8 @@ class UpdateTagUseCaseTests {
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
     private val tagId = UUID.randomUUID()
+    private val newName = "Updated"
+    private val newColor = "FFFFFFF"
 
     private val userStub = createUserStub(
         id = currentUserId,
@@ -57,14 +60,14 @@ class UpdateTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryTagPort.queryTagById(tagId) } returns tagStub
-        every { queryTagPort.existsByNameAndSchoolId(tagStub.name, schoolId) } returns false
+        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
             updateTagUseCase.execute(
                 tagId = tagId,
-                name = "Updated",
-                color = "FFFFFFF"
+                newName = newName,
+                newColor = newColor
             )
         }
     }
@@ -74,14 +77,15 @@ class UpdateTagUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns null
 
         // when & then
         assertThrows<TagNotFoundException> {
             updateTagUseCase.execute(
                 tagId = tagId,
-                name = "Updated",
-                color = "FFFFFFF"
+                newName = newName,
+                newColor = newColor
             )
         }
     }
@@ -91,14 +95,32 @@ class UpdateTagUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns diffSchoolTagStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
             updateTagUseCase.execute(
                 tagId = tagId,
-                name = "Updated",
-                color = "FFFFFFF"
+                newName = newName,
+                newColor = newColor
+            )
+        }
+    }
+
+    @Test
+    fun `변경할 태그 이름이 중복됨`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns currentUserId
+        every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns true
+
+        // when & then
+        assertThrows<TagAlreadyExistsException> {
+            updateTagUseCase.execute(
+                tagId = tagId,
+                newName = newName,
+                newColor = newColor
             )
         }
     }
@@ -113,8 +135,8 @@ class UpdateTagUseCaseTests {
         assertThrows<UserNotFoundException> {
             updateTagUseCase.execute(
                 tagId = tagId,
-                name = "Updated",
-                color = "FFFFFFF"
+                newName = newName,
+                newColor = newColor
             )
         }
     }
