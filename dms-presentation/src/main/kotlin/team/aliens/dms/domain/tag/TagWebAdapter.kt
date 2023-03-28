@@ -93,8 +93,8 @@ class TagWebAdapter(
     ) {
         updateTagUseCase.execute(
             tagId = tagId!!,
-            name = webRequest.name!!,
-            color = webRequest.color!!
+            newName = webRequest.name!!,
+            newColor = webRequest.color!!
         )
     }
 }

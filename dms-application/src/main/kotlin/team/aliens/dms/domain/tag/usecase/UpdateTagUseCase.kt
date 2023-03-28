@@ -19,11 +19,11 @@ class UpdateTagUseCase(
     private val queryTagPort: QueryTagPort
 ) {
 
-    fun execute(tagId: UUID, name: String, color: String) {
+    fun execute(tagId: UUID, newName: String, newColor: String) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        if (queryTagPort.existsByNameAndSchoolId(name, manager.schoolId)) {
+        if (queryTagPort.existsByNameAndSchoolId(newName, manager.schoolId)) {
             throw TagAlreadyExistsException
         }
         
@@ -32,8 +32,8 @@ class UpdateTagUseCase(
 
         commandTagPort.saveTag(
             tag.copy(
-                name = name,
-                color = color
+                name = newName,
+                color = newColor
             )
         )
     }
