@@ -23,12 +23,12 @@ class UpdateTagUseCase(
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
-        validateSameSchool(tag.schoolId, manager.schoolId)
-
         if (queryTagPort.existsByNameAndSchoolId(name, manager.schoolId)) {
             throw TagAlreadyExistsException
         }
+        
+        val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
+        validateSameSchool(tag.schoolId, manager.schoolId)
 
         commandTagPort.saveTag(
             tag.copy(
