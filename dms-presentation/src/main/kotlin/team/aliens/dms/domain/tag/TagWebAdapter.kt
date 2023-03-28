@@ -24,6 +24,9 @@ import team.aliens.dms.domain.tag.usecase.RemoveTagUseCase
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
+import org.springframework.web.bind.annotation.PatchMapping
+import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
+import team.aliens.dms.domain.tag.usecase.UpdateTagUseCase
 
 @Validated
 @RequestMapping("/tags")
@@ -33,7 +36,8 @@ class TagWebAdapter(
     private val cancelGrantedTagUseCase: CancelGrantedTagUseCase,
     private val grantTagUseCase: GrantTagUseCase,
     private val removeTagUseCase: RemoveTagUseCase,
-    private val createTagUseCase: CreateTagUseCase
+    private val createTagUseCase: CreateTagUseCase,
+    private val updateTagUseCase: UpdateTagUseCase
 ) {
 
     @GetMapping
@@ -79,5 +83,18 @@ class TagWebAdapter(
         )
 
         return CreateTagWebResponse(tagId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{tag-id}")
+    fun updateTag(
+        @RequestBody @Valid webRequest: UpdateTagWebRequest,
+        @PathVariable("tag-id") @NotNull tagId: UUID?
+    ) {
+        updateTagUseCase.execute(
+            tagId = tagId!!,
+            name = webRequest.name!!,
+            color = webRequest.color!!
+        )
     }
 }
