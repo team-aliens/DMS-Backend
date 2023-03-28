@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,11 +17,13 @@ import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
 import team.aliens.dms.domain.tag.dto.QueryTagsResponse
+import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.GrantTagUseCase
 import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import team.aliens.dms.domain.tag.usecase.RemoveTagUseCase
+import team.aliens.dms.domain.tag.usecase.UpdateTagUseCase
 import java.util.UUID
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -33,7 +36,8 @@ class TagWebAdapter(
     private val cancelGrantedTagUseCase: CancelGrantedTagUseCase,
     private val grantTagUseCase: GrantTagUseCase,
     private val removeTagUseCase: RemoveTagUseCase,
-    private val createTagUseCase: CreateTagUseCase
+    private val createTagUseCase: CreateTagUseCase,
+    private val updateTagUseCase: UpdateTagUseCase
 ) {
 
     @GetMapping
@@ -79,5 +83,18 @@ class TagWebAdapter(
         )
 
         return CreateTagWebResponse(tagId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{tag-id}")
+    fun updateTag(
+        @RequestBody @Valid webRequest: UpdateTagWebRequest,
+        @PathVariable("tag-id") @NotNull tagId: UUID?
+    ) {
+        updateTagUseCase.execute(
+            tagId = tagId!!,
+            newName = webRequest.name!!,
+            newColor = webRequest.color!!
+        )
     }
 }

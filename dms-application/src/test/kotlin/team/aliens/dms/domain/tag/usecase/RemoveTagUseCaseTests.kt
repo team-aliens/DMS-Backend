@@ -7,72 +7,98 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.tag.spi.TagQueryUserPort
 import team.aliens.dms.domain.tag.spi.TagSecurityPort
+import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
+import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
 
 @ExtendWith(SpringExtension::class)
-class CreateTagUseCaseTest {
+class RemoveTagUseCaseTests {
 
     private val securityPort: TagSecurityPort = mockk()
     private val queryUserPort: TagQueryUserPort = mockk()
-    private val commandTagPort: CommandTagPort = mockk(relaxed = true)
     private val queryTagPort: QueryTagPort = mockk()
+    private val commandTagPort: CommandTagPort = mockk(relaxed = true)
+    private val commandStudentTagPort: CommandStudentTagPort = mockk(relaxed = true)
 
-    private val createTagUseCase = CreateTagUseCase(
-        securityPort, queryUserPort, commandTagPort, queryTagPort
+    private val removeTagUseCase = RemoveTagUseCase(
+        securityPort, queryUserPort, queryTagPort, commandTagPort, commandStudentTagPort
     )
 
     private val currentUserId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val name = "소프트웨어개발과"
-    private val color = "FFFFFFF"
+    private val tagId = UUID.randomUUID()
 
     private val userStub = createUserStub(
         id = currentUserId,
         schoolId = schoolId
     )
 
+    private val tagStub = createTagStub(
+        id = tagId,
+        name = "1OUT",
+        schoolId = schoolId
+    )
+
     @Test
-    fun `태그 생성 성공`() {
+    fun `태그 삭제 성공`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId(name, schoolId) } returns false
+        every { queryTagPort.queryTagById(tagId) } returns tagStub
 
         // when & then
         assertDoesNotThrow {
-            createTagUseCase.execute(name, color)
+            removeTagUseCase.execute(tagId)
         }
     }
 
     @Test
-    fun `태그가 존재함`() {
+    fun `태그가 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId(name, schoolId) } returns true
+        every { queryTagPort.queryTagById(tagId) } returns null
 
         // when & then
-        assertThrows<TagAlreadyExistsException> {
-            createTagUseCase.execute(name, color)
+        assertThrows<TagNotFoundException> {
+            removeTagUseCase.execute(tagId)
         }
     }
 
     @Test
-    fun `사용자를 찾을 수 없음`() {
+    fun `학교가 일치하지 않음`() {
+        // given
+        val diffSchoolTag = createTagStub(
+            id = tagId,
+            name = "1OUT"
+        )
+        every { securityPort.getCurrentUserId() } returns currentUserId
+        every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.queryTagById(tagId) } returns diffSchoolTag
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
+            removeTagUseCase.execute(tagId)
+        }
+    }
+
+    @Test
+    fun `유저가 존재하지 않음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns null
 
         // when & then
         assertThrows<UserNotFoundException> {
-            createTagUseCase.execute(name, color)
+            removeTagUseCase.execute(tagId)
         }
     }
 }
