@@ -2,7 +2,6 @@ package team.aliens.dms.domain.tag.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -17,7 +16,8 @@ import team.aliens.dms.domain.tag.spi.TagSecurityPort
 import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
-
+import java.util.UUID
+import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
 
 @ExtendWith(SpringExtension::class)
 class RemoveTagUseCaseTest {
@@ -26,9 +26,10 @@ class RemoveTagUseCaseTest {
     private val queryUserPort: TagQueryUserPort = mockk()
     private val queryTagPort: QueryTagPort = mockk()
     private val commandTagPort: CommandTagPort = mockk(relaxed = true)
+    private val commandStudentTagPort: CommandStudentTagPort = mockk(relaxed = true)
 
     private val removeTagUseCase = RemoveTagUseCase(
-        securityPort, queryUserPort, queryTagPort, commandTagPort
+        securityPort, queryUserPort, queryTagPort, commandTagPort, commandStudentTagPort
     )
 
     private val currentUserId = UUID.randomUUID()
