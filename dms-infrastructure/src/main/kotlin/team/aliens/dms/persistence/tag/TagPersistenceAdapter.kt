@@ -70,10 +70,10 @@ class TagPersistenceAdapter(
 
     override fun queryTagsByStudentId(studentId: UUID): List<Tag> {
         return queryFactory
-            .selectFrom(tagJpaEntity)
-            .distinct()
-            .join(studentTagJpaEntity)
-            .on(studentTagJpaEntity.student.id.eq(studentId))
+            .select(tagJpaEntity)
+            .from(studentTagJpaEntity)
+            .join(studentTagJpaEntity.tag, tagJpaEntity)
+            .where(studentTagJpaEntity.student.id.eq(studentId))
             .fetch()
             .map {
                 tagMapper.toDomain(it)!!
