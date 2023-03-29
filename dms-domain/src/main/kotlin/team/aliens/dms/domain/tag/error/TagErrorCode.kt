@@ -9,7 +9,8 @@ enum class TagErrorCode(
 ) : ErrorProperty {
 
     TAG_NOT_FOUND(ErrorStatus.NOT_FOUND, "Tag Not Found"),
-    TAG_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Tag Already Exists")
+    TAG_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Tag Already Exists"),
+    STUDENT_TAG_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Student Tag Already Exists")
     ;
 
     override fun status(): Int = status
