@@ -26,7 +26,7 @@ class UpdateTagUseCase(
         val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
         validateSameSchool(tag.schoolId, manager.schoolId)
 
-        if (newName == tag.name) {
+        if (newName != tag.name && queryTagPort.existsByNameAndSchoolId(newName, manager.schoolId)) {
             throw TagAlreadyExistsException
         }
 
