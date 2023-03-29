@@ -183,7 +183,6 @@ class StudentPersistenceAdapter(
 
     private fun tagIdsIn(tagIds: List<UUID>?) =
         tagIds?.run { studentTagJpaEntity.tag.id.`in`(tagIds) }
-        //if (tagIds?.isNotEmpty() == true) studentTagJpaEntity.tag.id.`in`(tagIds) else null
 
     private fun eqTag(): BooleanExpression? {
         return tagJpaEntity.id.`in`(
