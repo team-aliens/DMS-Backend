@@ -22,7 +22,7 @@ class UpdateTagUseCase(
     fun execute(tagId: UUID, newName: String, newColor: String) {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-        
+
         val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
         validateSameSchool(tag.schoolId, manager.schoolId)
 

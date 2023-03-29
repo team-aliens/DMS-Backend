@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.remain.stub
 
+import team.aliens.dms.domain.remain.model.RemainAvailableTime
+import team.aliens.dms.domain.remain.model.RemainOption
+import team.aliens.dms.domain.remain.model.RemainStatus
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
-import team.aliens.dms.domain.remain.model.RemainAvailableTime
-import team.aliens.dms.domain.remain.model.RemainOption
-import team.aliens.dms.domain.remain.model.RemainStatus
 
 internal fun createRemainAvailableTimeStub(
     id: UUID = UUID.randomUUID(),

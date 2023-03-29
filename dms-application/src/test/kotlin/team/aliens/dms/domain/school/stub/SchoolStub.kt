@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.school.stub
 
-import java.time.LocalDate
-import java.util.UUID
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
+import java.time.LocalDate
+import java.util.UUID
 
 internal fun createSchoolStub(
     id: UUID = UUID.randomUUID(),

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.manager.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
@@ -10,6 +9,7 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(

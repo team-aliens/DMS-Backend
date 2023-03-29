@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.student.stub
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
+import java.time.LocalDateTime
+import java.util.UUID
 
 internal fun createStudentStub(
     id: UUID = UUID.randomUUID(),
