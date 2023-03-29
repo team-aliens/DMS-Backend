@@ -60,6 +60,7 @@ class UpdateTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryTagPort.queryTagById(tagId) } returns tagStub
+        every { queryTagPort.existsByNameAndSchoolId(newName, userStub.schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
@@ -127,12 +128,13 @@ class UpdateTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryTagPort.queryTagById(tagId) } returns tagStub
+        every { queryTagPort.existsByNameAndSchoolId(newName, userStub.schoolId) } returns true
 
         // when & then
         assertThrows<TagAlreadyExistsException> {
             updateTagUseCase.execute(
                 tagId = tagId,
-                newName = "1OUT",
+                newName = newName,
                 newColor = newColor
             )
         }
