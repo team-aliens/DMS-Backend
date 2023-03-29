@@ -26,23 +26,8 @@ class StudentTagPersistenceAdapter(
         return queryFactory
             .selectFrom(studentTagJpaEntity)
             .where(
-                Expressions.list(studentTagJpaEntity.student, studentTagJpaEntity.tag)
-                    .`in`(*queryStudentTagIn(tagId, studentIds))
+                studentTagJpaEntity.tag.id.eq(tagId),
+                studentTagJpaEntity.student.id.`in`(studentIds)
             ).fetchFirst() != null
-    }
-
-    private fun queryStudentTagIn(tagId: UUID, studentIdList: List<UUID>): Array<Expression<Tuple>> {
-        val tuple: MutableList<Expression<Tuple>> = ArrayList()
-        for (studentId in studentIdList) {
-            tuple.add(
-                Expressions.template(
-                    Tuple::class.java,
-                    "(({0}, {1}))",
-                    tagId, studentId
-                )
-            )
-        }
-
-        return tuple.toTypedArray()
     }
 }
