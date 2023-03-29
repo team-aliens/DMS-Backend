@@ -33,7 +33,7 @@ class GrantTagUseCase(
         val tag = queryTagPort.queryTagById(request.tagId) ?: throw TagNotFoundException
         validateSameSchool(currentManager.schoolId, tag.schoolId)
 
-        if (!queryStudentTagPort.existsByTagIdAndStudentIdList(tag.id, request.studentIds)) {
+        if (!queryStudentTagPort.existsByTagIdAndStudentIds(tag.id, request.studentIds)) {
             throw StudentTagAlreadyExistsException
         }
 

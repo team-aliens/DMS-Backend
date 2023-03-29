@@ -22,12 +22,12 @@ class StudentTagPersistenceAdapter(
         studentTagRepository.deleteByTagId(tagId)
     }
 
-    override fun existsByTagIdAndStudentIdList(tagId: UUID, studentIdList: List<UUID>): Boolean {
+    override fun existsByTagIdAndStudentIds(tagId: UUID, studentIds: List<UUID>): Boolean {
         return queryFactory
             .selectFrom(studentTagJpaEntity)
             .where(
                 Expressions.list(studentTagJpaEntity.student, studentTagJpaEntity.tag)
-                    .`in`(*queryStudentTagIn(tagId, studentIdList))
+                    .`in`(*queryStudentTagIn(tagId, studentIds))
             ).fetchFirst() != null
     }
 
