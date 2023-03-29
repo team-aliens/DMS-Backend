@@ -20,6 +20,7 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
+import team.aliens.dms.domain.tag.spi.QueryStudentTagPort
 
 class GrantTagUseCaseTests {
 
@@ -28,9 +29,10 @@ class GrantTagUseCaseTests {
     private val queryTagPort: QueryTagPort = mockk(relaxed = true)
     private val queryStudentPort: TagQueryStudentPort = mockk(relaxed = true)
     private val commandTagPort: CommandTagPort = mockk(relaxed = true)
+    private val queryStudentTagPort: QueryStudentTagPort = mockk()
 
     private val grantTagUseCase = GrantTagUseCase(
-        securityPort, queryUserPort, queryTagPort, queryStudentPort, commandTagPort
+        securityPort, queryUserPort, queryTagPort, queryStudentPort, commandTagPort, queryStudentTagPort
     )
 
     private val userId = UUID.randomUUID()
@@ -78,6 +80,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
+        every { queryStudentTagPort.existsByTagIdAndStudentIdList(requestStub.tagId, requestStub.studentIds) } returns true
         every { queryStudentPort.queryAllStudentsByIdsIn(requestStub.studentIds) } returns studentsStub
 
         // when & then
@@ -117,6 +120,7 @@ class GrantTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
         every { queryTagPort.queryTagById(requestStub.tagId) } returns tagStub
+        every { queryStudentTagPort.existsByTagIdAndStudentIdList(requestStub.tagId, requestStub.studentIds) } returns true
         every { queryStudentPort.queryAllStudentsByIdsIn(requestStub.studentIds) } returns emptyList()
 
         // when & then
