@@ -4,17 +4,17 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
+import team.aliens.dms.domain.tag.exception.StudentTagAlreadyExistsException
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.spi.CommandTagPort
+import team.aliens.dms.domain.tag.spi.QueryStudentTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.tag.spi.TagQueryStudentPort
 import team.aliens.dms.domain.tag.spi.TagQueryUserPort
 import team.aliens.dms.domain.tag.spi.TagSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
-import team.aliens.dms.domain.tag.exception.StudentTagAlreadyExistsException
-import team.aliens.dms.domain.tag.spi.QueryStudentTagPort
 
 @UseCase
 class GrantTagUseCase(
@@ -33,7 +33,7 @@ class GrantTagUseCase(
         val tag = queryTagPort.queryTagById(request.tagId) ?: throw TagNotFoundException
         validateSameSchool(currentManager.schoolId, tag.schoolId)
 
-        if (!queryStudentTagPort.existsByTagIdAndStudentIds(tag.id, request.studentIds)) {
+        if (queryStudentTagPort.existsByTagIdAndStudentIds(tag.id, request.studentIds)) {
             throw StudentTagAlreadyExistsException
         }
 
