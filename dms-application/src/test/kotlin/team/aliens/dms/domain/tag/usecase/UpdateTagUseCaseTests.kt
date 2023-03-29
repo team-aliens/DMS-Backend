@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
@@ -17,7 +18,6 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 
 @ExtendWith(SpringExtension::class)
 class UpdateTagUseCaseTests {
@@ -60,7 +60,7 @@ class UpdateTagUseCaseTests {
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
         every { queryTagPort.queryTagById(tagId) } returns tagStub
-        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
+        every { queryTagPort.existsByNameAndSchoolId(newName, userStub.schoolId) } returns false
 
         // when & then
         assertDoesNotThrow {
@@ -73,11 +73,10 @@ class UpdateTagUseCaseTests {
     }
 
     @Test
-    fun `태그가 존재하지 않음`() {
+    fun `태그를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId(newName, schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns null
 
         // when & then
@@ -95,7 +94,6 @@ class UpdateTagUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
         every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns false
         every { queryTagPort.queryTagById(tagId) } returns diffSchoolTagStub
 
         // when & then
@@ -109,14 +107,13 @@ class UpdateTagUseCaseTests {
     }
 
     @Test
-    fun `변경할 태그 이름이 중복됨`() {
+    fun `유저를 찾을 수 없음`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
-        every { queryUserPort.queryUserById(currentUserId) } returns userStub
-        every { queryTagPort.existsByNameAndSchoolId("Updated", schoolId) } returns true
+        every { queryUserPort.queryUserById(currentUserId) } returns null
 
         // when & then
-        assertThrows<TagAlreadyExistsException> {
+        assertThrows<UserNotFoundException> {
             updateTagUseCase.execute(
                 tagId = tagId,
                 newName = newName,
@@ -126,13 +123,15 @@ class UpdateTagUseCaseTests {
     }
 
     @Test
-    fun `유저가 존재하지 않음`() {
+    fun `태그가 이미 존재함`() {
         // given
         every { securityPort.getCurrentUserId() } returns currentUserId
-        every { queryUserPort.queryUserById(currentUserId) } returns null
+        every { queryUserPort.queryUserById(currentUserId) } returns userStub
+        every { queryTagPort.queryTagById(tagId) } returns tagStub
+        every { queryTagPort.existsByNameAndSchoolId(newName, userStub.schoolId) } returns true
 
         // when & then
-        assertThrows<UserNotFoundException> {
+        assertThrows<TagAlreadyExistsException> {
             updateTagUseCase.execute(
                 tagId = tagId,
                 newName = newName,
