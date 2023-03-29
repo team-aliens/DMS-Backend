@@ -36,6 +36,8 @@ import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
+import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity
 
 @Component
 class StudentPersistenceAdapter(
@@ -119,20 +121,24 @@ class StudentPersistenceAdapter(
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
+        tagIds: List<UUID>?
     ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
             .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
-            .leftJoin(tagJpaEntity)
+            .leftJoin(studentTagJpaEntity)
+            .on(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
+            .leftJoin(tagJpaEntity).distinct()
             .on(eqTag())
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
                 nameContains(name),
                 pointTotalBetween(pointFilter),
-                schoolEq(schoolId)
+                schoolEq(schoolId),
+                tagIdsIn(tagIds)
             )
             .orderBy(
                 sortFilter(sort),
@@ -175,11 +181,14 @@ class StudentPersistenceAdapter(
             }
     }
 
+    private fun tagIdsIn(tagIds: List<UUID>?) =
+        tagIds?.run { studentTagJpaEntity.tag.id.`in`(tagIds) }
+
     private fun eqTag(): BooleanExpression? {
         return tagJpaEntity.id.`in`(
             select(studentTagJpaEntity.tag.id)
                 .from(studentTagJpaEntity)
-                .where(studentTagJpaEntity.student.eq(studentJpaEntity))
+                .where(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
         )
     }
 

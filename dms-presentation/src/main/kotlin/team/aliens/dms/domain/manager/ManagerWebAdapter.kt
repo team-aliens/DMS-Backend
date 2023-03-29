@@ -74,14 +74,16 @@ class ManagerWebAdapter(
         @RequestParam @NotNull sort: Sort?,
         @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
         @RequestParam(name = "min_point", required = false) minPoint: Int?,
-        @RequestParam(name = "max_point", required = false) maxPoint: Int?
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?,
+        @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,
             sort = sort!!,
             filterType = filterType,
             minPoint = minPoint,
-            maxPoint = maxPoint
+            maxPoint = maxPoint,
+            tagIds = tagIds
         )
     }
 

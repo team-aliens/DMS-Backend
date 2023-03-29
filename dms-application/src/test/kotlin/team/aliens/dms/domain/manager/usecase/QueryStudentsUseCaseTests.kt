@@ -72,6 +72,8 @@ class QueryStudentsUseCaseTests {
         )
     }
 
+    private var tagIdListStub = arrayListOf<UUID>(UUID.randomUUID())
+
     @Test
     fun `학생 목록 조회 성공`() {
         // given
@@ -97,12 +99,12 @@ class QueryStudentsUseCaseTests {
 
         given(
             queryStudentPort.queryStudentsByNameAndSortAndFilter(
-                name, sort, managerStub.schoolId, pointFilterStub
+                name, sort, managerStub.schoolId, pointFilterStub, tagIdListStub
             )
         ).willReturn(listOf(studentWitTagStub))
 
         // when
-        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
+        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10, tagIdListStub)
 
         assertThat(result).isNotNull
     }
@@ -119,7 +121,7 @@ class QueryStudentsUseCaseTests {
         // when & then
         assertThrows<InvalidPointFilterRangeException> {
             queryStudentsUseCase.execute(
-                name, sort, filterType, null, null
+                name, sort, filterType, null, null, tagIdListStub
             )
         }
     }
@@ -136,7 +138,7 @@ class QueryStudentsUseCaseTests {
         // when & then
         assertThrows<InvalidPointFilterRangeException> {
             queryStudentsUseCase.execute(
-                name, sort, filterType, 20, 10
+                name, sort, filterType, 20, 10, tagIdListStub
             )
         }
     }
@@ -151,7 +153,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(null)
 
         assertThrows<ManagerNotFoundException> {
-            queryStudentsUseCase.execute(name, sort, null, null, null)
+            queryStudentsUseCase.execute(name, sort, null, null, null, tagIdListStub)
         }
     }
 }
