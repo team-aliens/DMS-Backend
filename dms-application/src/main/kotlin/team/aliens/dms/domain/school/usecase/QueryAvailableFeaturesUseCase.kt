@@ -17,9 +17,9 @@ class QueryAvailableFeaturesUseCase(
 
     fun execute(): QueryAvailableFeaturesResponse {
         val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(manager.schoolId)
+        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException
 
         return QueryAvailableFeaturesResponse(
