@@ -2,7 +2,6 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import io.mockk.every
 import io.mockk.mockk
-import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -15,6 +14,7 @@ import team.aliens.dms.domain.studyroom.stub.createSeatApplicationStub
 import team.aliens.dms.domain.studyroom.stub.createSeatStub
 import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
 import team.aliens.dms.domain.user.stub.createUserStub
+import java.util.UUID
 
 class QueryCurrentAppliedStudyRoomUseCaseTests {
 

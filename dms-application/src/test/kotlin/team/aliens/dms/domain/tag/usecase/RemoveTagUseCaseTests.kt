@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
+import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.tag.spi.TagQueryUserPort
@@ -17,7 +18,6 @@ import team.aliens.dms.domain.tag.stub.createTagStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
-import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
 
 @ExtendWith(SpringExtension::class)
 class RemoveTagUseCaseTests {

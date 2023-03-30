@@ -20,11 +20,8 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.io.File
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
 class ExportStudyRoomStudentsApplicationStatusUseCaseTests {

@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.point.stub
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
+import java.time.LocalDateTime
+import java.util.UUID
 
 internal fun createPointHistoryStub(
     id: UUID = UUID.randomUUID(),

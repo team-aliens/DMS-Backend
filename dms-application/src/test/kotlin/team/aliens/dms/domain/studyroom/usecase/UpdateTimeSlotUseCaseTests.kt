@@ -3,8 +3,6 @@ package team.aliens.dms.domain.studyroom.usecase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import java.time.LocalTime
-import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -21,6 +19,8 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.stub.createUserStub
+import java.time.LocalTime
+import java.util.UUID
 
 class UpdateTimeSlotUseCaseTests {
 

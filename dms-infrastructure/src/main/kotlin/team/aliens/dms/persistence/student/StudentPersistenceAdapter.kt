@@ -36,8 +36,6 @@ import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
-import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity
 
 @Component
 class StudentPersistenceAdapter(

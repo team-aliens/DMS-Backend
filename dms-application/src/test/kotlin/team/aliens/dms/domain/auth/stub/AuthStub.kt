@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.auth.stub
 
-import java.util.UUID
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.model.RefreshToken
+import java.util.UUID
 
 internal fun createAuthCodeStub(
     code: String = "123546",

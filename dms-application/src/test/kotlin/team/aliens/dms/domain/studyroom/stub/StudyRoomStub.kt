@@ -1,13 +1,13 @@
 package team.aliens.dms.domain.studyroom.stub
 
-import java.time.LocalTime
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
+import java.time.LocalTime
+import java.util.UUID
 
 internal fun createStudyRoomStub(
     id: UUID = UUID.randomUUID(),
