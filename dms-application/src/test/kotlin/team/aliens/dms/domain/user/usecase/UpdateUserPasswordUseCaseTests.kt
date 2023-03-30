@@ -9,14 +9,12 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.user.dto.UpdateUserPasswordRequest
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import team.aliens.dms.domain.user.spi.UserSecurityPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -52,15 +50,7 @@ class UpdateUserPasswordUseCaseTests {
     }
 
     private val userStub by lazy {
-        User(
-            schoolId = UUID.randomUUID(),
-            accountId = "계정아이디",
-            password = oldPassword,
-            email = "이메일",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(password = oldPassword)
     }
 
     @Test

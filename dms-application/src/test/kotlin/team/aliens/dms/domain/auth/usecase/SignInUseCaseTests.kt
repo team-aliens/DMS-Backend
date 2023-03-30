@@ -17,11 +17,10 @@ import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.model.AvailableFeature
+import team.aliens.dms.domain.school.stub.createAvailableFeatureStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
-import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class SignInUseCaseTests {
@@ -58,27 +57,11 @@ class SignInUseCaseTests {
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            accountId = accountId,
-            password = password,
-            email = "email",
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub()
     }
 
     private val featureStub by lazy {
-        AvailableFeature(
-            schoolId = userStub.schoolId,
-            mealService = true,
-            noticeService = true,
-            pointService = true,
-            studyRoomService = false,
-            remainService = true
-        )
+        createAvailableFeatureStub()
     }
 
     private val tokenResponse = TokenResponse(

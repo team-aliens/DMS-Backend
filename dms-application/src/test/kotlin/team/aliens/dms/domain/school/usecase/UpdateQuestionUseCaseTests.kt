@@ -11,15 +11,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDate
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -56,29 +54,15 @@ class UpdateQuestionUseCaseTests {
     }
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = currentUserId,
             schoolId = schoolStub.id,
-            accountId = "계정아이디",
-            password = "test password",
-            email = "이메일",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+            authority = Authority.MANAGER
         )
     }
 
     private val schoolStub by lazy {
-        School(
-            id = UUID.randomUUID(),
-            name = "test name",
-            code = "test code",
-            question = "test question",
-            answer = "test answer",
-            address = "test address",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now(),
-        )
+        createSchoolStub()
     }
 
     @Test

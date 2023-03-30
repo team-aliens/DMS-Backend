@@ -9,9 +9,8 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import java.time.LocalDate
+import team.aliens.dms.domain.school.stub.createSchoolStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -31,15 +30,9 @@ class CheckSchoolCodeUseCaseTests {
     private val schoolCode = "AUTH1234"
 
     private val schoolStub by lazy {
-        School(
+        createSchoolStub(
             id = schoolId,
-            name = "이정윤",
-            code = schoolCode,
-            question = "질문입니다",
-            answer = "답변입니다",
-            address = "주소입니다",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = LocalDate.now()
+            code = schoolCode
         )
     }
 

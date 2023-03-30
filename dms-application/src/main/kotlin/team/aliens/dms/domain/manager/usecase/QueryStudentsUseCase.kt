@@ -9,6 +9,7 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
@@ -22,7 +23,8 @@ class QueryStudentsUseCase(
         sort: Sort,
         filterType: PointFilterType?,
         minPoint: Int?,
-        maxPoint: Int?
+        maxPoint: Int?,
+        tagIds: List<UUID>?
     ): QueryStudentsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
@@ -37,15 +39,25 @@ class QueryStudentsUseCase(
             name = name,
             sort = sort,
             schoolId = manager.schoolId,
-            pointFilter = pointFilter
+            pointFilter = pointFilter,
+            tagIds = tagIds
         ).map {
             QueryStudentsResponse.StudentElement(
                 id = it.id,
                 name = it.name,
                 gcn = it.gcn,
                 roomNumber = it.roomNumber,
-                profileImageUrl = it.profileImageUrl!!,
-                sex = it.sex
+                profileImageUrl = it.profileImageUrl,
+                sex = it.sex,
+                tags = it.tags
+                    .map {
+                            tag ->
+                        QueryStudentsResponse.StudentTagElement(
+                            id = tag.id,
+                            name = tag.name,
+                            color = tag.color
+                        )
+                    }
             )
         }
 

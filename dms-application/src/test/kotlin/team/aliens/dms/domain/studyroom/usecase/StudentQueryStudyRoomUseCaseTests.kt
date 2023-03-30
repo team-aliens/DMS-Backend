@@ -1,341 +1,173 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.SeatStatus
-import team.aliens.dms.domain.studyroom.model.StudyRoom
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
-import team.aliens.dms.domain.studyroom.spi.vo.SeatVO
+import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
+import java.time.LocalTime
 import java.util.UUID
 
-@ExtendWith(SpringExtension::class)
 class StudentQueryStudyRoomUseCaseTests {
 
-    @MockBean
-    private lateinit var securityPort: StudyRoomSecurityPort
+    private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
+    private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
+    private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
 
-    @MockBean
-    private lateinit var queryUserPort: StudyRoomQueryUserPort
+    private val studentQueryRoomUseCase = StudentQueryStudyRoomUseCase(
+        securityPort, queryUserPort, queryStudyRoomPort
+    )
 
-    @MockBean
-    private lateinit var queryStudyRoomPort: QueryStudyRoomPort
-
-    private lateinit var studentQueryStudyRoomUseCase: StudentQueryStudyRoomUseCase
-
-    @BeforeEach
-    fun setUp() {
-        studentQueryStudyRoomUseCase = StudentQueryStudyRoomUseCase(
-            securityPort, queryUserPort, queryStudyRoomPort
-        )
-    }
-
-    private val studyRoomId = UUID.randomUUID()
-    private val currentUserId = UUID.randomUUID()
+    private val userId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
+    private val studyRoomId = UUID.randomUUID()
+    private val timeSlotId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
-            id = currentUserId,
-            schoolId = schoolId,
-            accountId = "계정 아이디",
-            password = "비밀번호",
-            email = "이메일",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+        createUserStub(
+            id = userId,
+            schoolId = schoolId
         )
     }
 
     private val studyRoomStub by lazy {
-        StudyRoom(
+        createStudyRoomStub(
             id = studyRoomId,
-            schoolId = schoolId,
-            name = "이름",
-            floor = 1,
-            widthSize = 1,
-            heightSize = 1,
-            inUseHeadcount = 1,
-            availableHeadcount = 1,
-            availableSex = Sex.ALL,
-            availableGrade = 1,
-            eastDescription = "동쪽",
-            westDescription = "서쪽",
-            southDescription = "남쪽",
-            northDescription = "북쪽"
+            schoolId = schoolId
         )
     }
 
-    private val seatVOStub by lazy {
-        SeatVO(
-            seatId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE,
-            typeId = UUID.randomUUID(),
-            typeName = "타입 이름",
-            typeColor = "색깔",
-            studentId = UUID.randomUUID(),
-            studentName = "학생 이름",
-            studentGrade = null,
-            studentClassRoom = null,
-            studentNumber = null,
-            studentProfileImageUrl = null
+    private val timeSlotStub by lazy {
+        createTimeSlotStub(
+            id = timeSlotId,
+            schoolId = schoolId
         )
     }
 
     @Test
     fun `자습실 조회 성공`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
-            .willReturn(listOf(seatVOStub))
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns timeSlotStub
 
         // when & then
         assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
     @Test
-    fun `자리 상태 신청 가능`() {
+    fun `유저가 존재하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = number,
-                            status = SeatStatus.AVAILABLE,
-                            typeId = typeId,
-                            typeName = typeName,
-                            typeColor = typeColor,
-                            studentId = null,
-                            studentName = null,
-                            studentGrade = null,
-                            studentClassRoom = null,
-                            studentNumber = null,
-                            studentProfileImageUrl = null
-                        )
-                    }
-                )
-            )
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
-    @Test
-    fun `자리 상태 신청 불가능`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = null,
-                            status = SeatStatus.UNAVAILABLE,
-                            typeId = null,
-                            typeName = null,
-                            typeColor = null,
-                            studentId = null,
-                            studentName = null,
-                            studentGrade = null,
-                            studentClassRoom = null,
-                            studentNumber = null,
-                            studentProfileImageUrl = null
-                        )
-                    }
-                )
-            )
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
-    @Test
-    fun `자리 상태 사용중`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = number,
-                            status = SeatStatus.IN_USE,
-                            typeId = typeId,
-                            typeName = typeName,
-                            typeColor = typeColor,
-                            studentId = studentId,
-                            studentName = studentName,
-                            studentGrade = studentGrade,
-                            studentClassRoom = studentClassRoom,
-                            studentNumber = studentNumber,
-                            studentProfileImageUrl = studentProfileImageUrl
-                        )
-                    }
-                )
-            )
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
-    @Test
-    fun `자리 상태 빈 자리`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub)
-
-        given(queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoomId))
-            .willReturn(
-                listOf(
-                    seatVOStub.run {
-                        SeatVO(
-                            seatId = seatId,
-                            widthLocation = widthLocation,
-                            heightLocation = heightLocation,
-                            number = null,
-                            status = SeatStatus.EMPTY,
-                            typeId = null,
-                            typeName = null,
-                            typeColor = null,
-                            studentId = null,
-                            studentName = null,
-                            studentGrade = null,
-                            studentClassRoom = null,
-                            studentNumber = null,
-                            studentProfileImageUrl = null
-                        )
-                    }
-                )
-            )
-
-        // when & then
-        assertDoesNotThrow {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
-        }
-    }
-
-    @Test
-    fun `사용자 미존재`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(null)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns null
 
         // when & then
         assertThrows<UserNotFoundException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
     @Test
-    fun `자습실 미존재`() {
+    fun `자습실이 존재하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
-
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(null)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns null
 
         // when & then
         assertThrows<StudyRoomNotFoundException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 
     @Test
-    fun `학교 불일치`() {
+    fun `자습실에 대한 이용시간이 존재하지 않음`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(currentUserId)
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns false
 
-        given(queryUserPort.queryUserById(currentUserId))
-            .willReturn(userStub)
+        // when & then
+        assertThrows<StudyRoomTimeSlotNotFoundException> {
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
 
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(studyRoomStub.copy(schoolId = UUID.randomUUID()))
+    @Test
+    fun `이용시간이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns null
+
+        // when & then
+        assertThrows<TimeSlotNotFoundException> {
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    private val otherUserId = UUID.randomUUID()
+    private val otherUserStub by lazy {
+        createUserStub(
+            id = otherUserId,
+            schoolId = schoolId
+        )
+    }
+
+    @Test
+    fun `다른 학교의 자습실임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns otherUserId
+        every { queryUserPort.queryUserById(userId) } returns otherUserStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            studentQueryStudyRoomUseCase.execute(studyRoomId)
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
+        }
+    }
+
+    private val otherTimeSlotStub by lazy {
+        TimeSlot(
+            id = timeSlotId,
+            schoolId = UUID.randomUUID(),
+            startTime = LocalTime.of(0, 0),
+            endTime = LocalTime.of(0, 0)
+        )
+    }
+
+    @Test
+    fun `다른 학교의 이용시간임`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudyRoomPort.queryStudyRoomById(studyRoomId) } returns studyRoomStub
+        every { queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId) } returns true
+        every { queryStudyRoomPort.queryTimeSlotById(timeSlotId) } returns otherTimeSlotStub
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId) } returns listOf(otherTimeSlotStub)
+
+        // when & then
+        assertThrows<SchoolMismatchException> {
+            studentQueryRoomUseCase.execute(studyRoomId, timeSlotId)
         }
     }
 }

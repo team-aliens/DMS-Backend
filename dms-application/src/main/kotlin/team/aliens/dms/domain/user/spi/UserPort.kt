@@ -11,6 +11,7 @@ import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
+import team.aliens.dms.domain.tag.spi.TagQueryUserPort
 
 interface UserPort :
     QueryUserPort,
@@ -21,6 +22,7 @@ interface UserPort :
     ManagerCommandUserPort,
     AuthQueryUserPort,
     NoticeQueryUserPort,
+    TagQueryUserPort,
     SchoolQueryUserPort,
     PointQueryUserPort,
     StudyRoomQueryUserPort,

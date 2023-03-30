@@ -10,11 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.notice.exception.IsNotWriterException
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
-import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.notice.stub.createNoticeStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -44,13 +43,9 @@ class RemoveNoticeUseCaseTests {
     private val noticeId = UUID.randomUUID()
 
     private val noticeStub by lazy {
-        Notice(
+        createNoticeStub(
             id = noticeId,
-            managerId = managerId,
-            title = "test title",
-            content = "test content",
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now()
+            managerId = managerId
         )
     }
 

@@ -8,6 +8,8 @@ import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
@@ -21,43 +23,60 @@ class ManagerQueryStudyRoomUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(studyRoomId: UUID): ManagerQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID): ManagerQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
-            SeatElement(
-                id = it.seatId,
-                widthLocation = it.widthLocation,
-                heightLocation = it.heightLocation,
-                number = it.number,
-                type = it.typeId?.run {
-                    TypeElement(
-                        id = it.typeId,
-                        name = it.typeName!!,
-                        color = it.typeColor!!
-                    )
-                },
-                status = it.status,
-                student = it.studentId?.run {
-                    StudentElement(
-                        id = it.studentId,
-                        name = it.studentName!!,
-                        gcn = Student.processGcn(it.studentGrade!!, it.studentClassRoom!!, it.studentNumber!!),
-                        profileImageUrl = it.studentProfileImageUrl!!
-                    )
+        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
+        validateSameSchool(user.schoolId, timeSlot.schoolId)
+
+        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoom.id)
+            .apply {
+                if (none { it.id == timeSlotId }) {
+                    throw StudyRoomTimeSlotNotFoundException
                 }
-            )
-        }
+            }
+
+        val seats =
+            queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
+                SeatElement(
+                    id = it.seatId,
+                    widthLocation = it.widthLocation,
+                    heightLocation = it.heightLocation,
+                    number = it.number,
+                    type = it.typeId?.run {
+                        TypeElement(
+                            id = it.typeId,
+                            name = it.typeName!!,
+                            color = it.typeColor!!
+                        )
+                    },
+                    status = it.status,
+                    student = it.studentId?.run {
+                        StudentElement(
+                            id = it.studentId,
+                            name = it.studentName!!,
+                            gcn = Student.processGcn(it.studentGrade!!, it.studentClassRoom!!, it.studentNumber!!),
+                            profileImageUrl = it.studentProfileImageUrl!!
+                        )
+                    }
+                )
+            }
 
         return studyRoom.run {
             ManagerQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
+                timeSlots = timeSlots.map {
+                    ManagerQueryStudyRoomResponse.TimeSlotElement(
+                        id = it.id,
+                        startTime = it.startTime,
+                        endTime = it.endTime
+                    )
+                },
                 totalAvailableSeat = availableHeadcount,
                 availableSex = availableSex,
                 availableGrade = availableGrade,

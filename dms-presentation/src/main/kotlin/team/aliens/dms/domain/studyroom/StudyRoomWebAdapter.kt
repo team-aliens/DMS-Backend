@@ -10,38 +10,53 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import team.aliens.dms.common.util.FileUtil
+import team.aliens.dms.common.util.setExcelContentDisposition
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.CreateTimeSlotWebRequest
+import team.aliens.dms.domain.studyroom.dto.CreateTimeSlotWebResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
 import team.aliens.dms.domain.studyroom.dto.QueryCurrentAppliedStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
+import team.aliens.dms.domain.studyroom.dto.QueryTimeSlotsResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.CreateStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.CreateTimeSlotUseCase
+import team.aliens.dms.domain.studyroom.usecase.ExportStudyRoomApplicationStatusUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.ManagerQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.QueryCurrentAppliedStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.QuerySeatTypesUseCase
+import team.aliens.dms.domain.studyroom.usecase.QueryTimeSlotsUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveSeatTypeUseCase
 import team.aliens.dms.domain.studyroom.usecase.RemoveStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.RemoveTimeSlotUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
 import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -63,7 +78,12 @@ class StudyRoomWebAdapter(
     private val studentQueryStudyRoomsUseCase: StudentQueryStudyRoomsUseCase,
     private val managerQueryStudyRoomsUseCase: ManagerQueryStudyRoomsUseCase,
     private val removeSeatTypeUseCase: RemoveSeatTypeUseCase,
-    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase
+    private val queryCurrentAppliedStudyRoomUseCase: QueryCurrentAppliedStudyRoomUseCase,
+    private val exportStudyRoomApplicationStatusUseCase: ExportStudyRoomApplicationStatusUseCase,
+    private val queryTimeSlotsUseCase: QueryTimeSlotsUseCase,
+    private val createTimeSlotUseCase: CreateTimeSlotUseCase,
+    private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
+    private val removeTimeSlotUseCase: RemoveTimeSlotUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -96,14 +116,20 @@ class StudyRoomWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/seats/{seat-id}")
-    fun applySeat(@PathVariable("seat-id") @NotNull seatId: UUID?) {
-        return applySeatUseCase.execute(seatId!!)
+    fun applySeat(
+        @PathVariable("seat-id") @NotNull seatId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ) {
+        return applySeatUseCase.execute(
+            seatId = seatId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun unApplySeat() {
-        unApplySeatUseCase.execute()
+    fun unApplySeat(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?) {
+        unApplySeatUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -122,6 +148,7 @@ class StudyRoomWebAdapter(
                     northDescription = northDescription!!,
                     availableSex = availableSex!!.name,
                     availableGrade = availableGrade!!,
+                    timeSlotIds = timeSlotIds!!,
                     seats = seats.map {
                         CreateStudyRoomRequest.SeatRequest(
                             widthLocation = it.widthLocation!!,
@@ -158,6 +185,7 @@ class StudyRoomWebAdapter(
                     northDescription = northDescription!!,
                     availableSex = availableSex!!.name,
                     availableGrade = availableGrade!!,
+                    timeSlotIds = timeSlotIds!!,
                     seats = seats.map {
                         UpdateStudyRoomRequest.SeatRequest(
                             widthLocation = it.widthLocation!!,
@@ -173,13 +201,25 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/{study-room-id}/students")
-    fun studentGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): StudentQueryStudyRoomResponse {
-        return studentQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun studentGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ): StudentQueryStudyRoomResponse {
+        return studentQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @GetMapping("/{study-room-id}/managers")
-    fun managerGetStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?): ManagerQueryStudyRoomResponse {
-        return managerQueryStudyRoomUseCase.execute(studyRoomId!!)
+    fun managerGetStudyRoom(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+    ): ManagerQueryStudyRoomResponse {
+        return managerQueryStudyRoomUseCase.execute(
+            studyRoomId = studyRoomId!!,
+            timeSlotId = timeSlotId!!
+        )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -189,13 +229,13 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/list/students")
-    fun studentGetStudyRooms(): StudentQueryStudyRoomsResponse {
-        return studentQueryStudyRoomsUseCase.execute()
+    fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @GetMapping("/list/managers")
-    fun managerGetStudyRooms(): ManagerQueryStudyRoomsResponse {
-        return managerQueryStudyRoomsUseCase.execute()
+    fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId!!)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -207,5 +247,50 @@ class StudyRoomWebAdapter(
     @GetMapping("/my")
     fun getMyStudyRoom(): QueryCurrentAppliedStudyRoomResponse {
         return queryCurrentAppliedStudyRoomUseCase.execute()
+    }
+
+    @GetMapping("/time-slots")
+    fun queryTimeSlots(): QueryTimeSlotsResponse {
+        return queryTimeSlotsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/time-slots")
+    fun createTimeSlotUseCase(
+        @RequestBody @Valid request: CreateTimeSlotWebRequest
+    ): CreateTimeSlotWebResponse {
+        val id = createTimeSlotUseCase.execute(request.startTime!!, request.endTime!!)
+        return CreateTimeSlotWebResponse(id)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/time-slots/{time-slot-id}")
+    fun updateTimeSlot(
+        @PathVariable("time-slot-id") @NotNull timeSlotId: UUID?,
+        @RequestBody @Valid request: UpdateTimeSlotWebRequest
+    ) {
+        updateTimeSlotUseCase.execute(
+            timeSlotId = timeSlotId!!,
+            startTime = request.startTime!!,
+            endTime = request.endTime!!
+        )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/time-slots/{time-slot-id}")
+    fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID?) {
+        removeTimeSlotUseCase.execute(timeSlotId!!)
+    }
+
+    @PostMapping("/students/file")
+    fun exportStudyRoomStudentsApplicationStatus(
+        @RequestPart file: MultipartFile?,
+        httpResponse: HttpServletResponse
+    ): ByteArray {
+        val response = exportStudyRoomApplicationStatusUseCase.execute(
+            file = file?.let(FileUtil.transferFile)
+        )
+        httpResponse.setExcelContentDisposition(response.fileName)
+        return response.file
     }
 }

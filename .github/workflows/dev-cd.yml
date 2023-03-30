@@ -3,6 +3,7 @@ name: CD for Dev
 on:
   push:
     branches:
+      - main
       - develop
 
 jobs:

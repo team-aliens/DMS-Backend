@@ -5,10 +5,12 @@ import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryTagPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.tag.dto.TagResponse
 import java.util.UUID
 
 @ReadOnlyUseCase
@@ -16,7 +18,8 @@ class QueryStudentDetailsUseCase(
     private val securityPort: ManagerSecurityPort,
     private val queryManagerPort: QueryManagerPort,
     private val queryStudentPort: ManagerQueryStudentPort,
-    private val queryPointHistoryPort: ManagerQueryPointHistoryPort
+    private val queryPointHistoryPort: ManagerQueryPointHistoryPort,
+    private val queryTagPort: ManagerQueryTagPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
@@ -43,7 +46,17 @@ class QueryStudentDetailsUseCase(
             )
         }
 
+        val tags = queryTagPort.queryTagsByStudentId(studentId)
+            .map {
+                TagResponse(
+                    id = it.id,
+                    name = it.name,
+                    color = it.color
+                )
+            }
+
         return GetStudentDetailsResponse(
+            id = student.id,
             name = student.name,
             gcn = student.gcn,
             profileImageUrl = student.profileImageUrl!!,
@@ -51,7 +64,8 @@ class QueryStudentDetailsUseCase(
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomNumber = student.roomNumber,
-            roomMates = roomMates
+            roomMates = roomMates,
+            tags = tags
         )
     }
 }

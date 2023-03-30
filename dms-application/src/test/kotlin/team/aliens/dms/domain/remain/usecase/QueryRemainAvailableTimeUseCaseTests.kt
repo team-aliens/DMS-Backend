@@ -7,16 +7,13 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
-import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
+import team.aliens.dms.domain.remain.stub.createRemainAvailableTimeStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.DayOfWeek
-import java.time.LocalTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -34,26 +31,14 @@ class QueryRemainAvailableTimeUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val userStub by lazy {
-        User(
+        createUserStub(
             id = userId,
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
+            schoolId = schoolId
         )
     }
 
     private val remainAvailableTimeStub by lazy {
-        RemainAvailableTime(
-            id = schoolId,
-            startDayOfWeek = DayOfWeek.WEDNESDAY,
-            startTime = LocalTime.of(0, 0),
-            endDayOfWeek = DayOfWeek.FRIDAY,
-            endTime = LocalTime.of(23, 59)
-        )
+        createRemainAvailableTimeStub(id = schoolId)
     }
 
     @Test

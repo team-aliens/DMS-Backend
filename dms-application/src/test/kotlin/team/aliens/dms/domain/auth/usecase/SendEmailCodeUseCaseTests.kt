@@ -11,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
@@ -19,7 +18,7 @@ import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -60,16 +59,7 @@ class SendEmailCodeUseCaseTests {
     private val request2 = SendEmailCodeRequest(email, EmailType.SIGNUP)
 
     private val userStub by lazy {
-        User(
-            id = id,
-            schoolId = id,
-            accountId = "accountId",
-            password = "password",
-            email = email,
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub()
     }
 
     @Test

@@ -12,13 +12,14 @@ import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.point.exception.InvalidPointFilterRangeException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
+import team.aliens.dms.domain.tag.stub.createTagStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -50,27 +51,16 @@ class QueryStudentsUseCaseTests {
     private val filterType = PointFilterType.BONUS
 
     private val managerStub by lazy {
-        Manager(
+        createManagerStub(
             id = currentUserId,
-            schoolId = schoolId,
-            name = "관리자 이름",
-            profileImageUrl = "https://~~"
+            schoolId = schoolId
         )
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 20,
-            name = name,
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 
@@ -82,9 +72,25 @@ class QueryStudentsUseCaseTests {
         )
     }
 
+    private var tagIdListStub = arrayListOf<UUID>(UUID.randomUUID())
+
     @Test
     fun `학생 목록 조회 성공`() {
         // given
+        val studentWitTagStub = StudentWithTag(
+            id = studentStub.id,
+            name = studentStub.name,
+            grade = studentStub.grade,
+            classRoom = studentStub.classRoom,
+            number = studentStub.number,
+            roomNumber = studentStub.roomNumber,
+            profileImageUrl = studentStub.profileImageUrl!!,
+            sex = studentStub.sex,
+            tags = listOf(
+                createTagStub(name = "1OUT")
+            )
+        )
+
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
@@ -93,12 +99,12 @@ class QueryStudentsUseCaseTests {
 
         given(
             queryStudentPort.queryStudentsByNameAndSortAndFilter(
-                name, sort, managerStub.schoolId, pointFilterStub
+                name, sort, managerStub.schoolId, pointFilterStub, tagIdListStub
             )
-        ).willReturn(listOf(studentStub))
+        ).willReturn(listOf(studentWitTagStub))
 
         // when
-        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10)
+        val result = queryStudentsUseCase.execute(name, sort, filterType, 0, 10, tagIdListStub)
 
         assertThat(result).isNotNull
     }
@@ -115,7 +121,7 @@ class QueryStudentsUseCaseTests {
         // when & then
         assertThrows<InvalidPointFilterRangeException> {
             queryStudentsUseCase.execute(
-                name, sort, filterType, null, null
+                name, sort, filterType, null, null, tagIdListStub
             )
         }
     }
@@ -132,7 +138,7 @@ class QueryStudentsUseCaseTests {
         // when & then
         assertThrows<InvalidPointFilterRangeException> {
             queryStudentsUseCase.execute(
-                name, sort, filterType, 20, 10
+                name, sort, filterType, 20, 10, tagIdListStub
             )
         }
     }
@@ -147,7 +153,7 @@ class QueryStudentsUseCaseTests {
             .willReturn(null)
 
         assertThrows<ManagerNotFoundException> {
-            queryStudentsUseCase.execute(name, sort, null, null, null)
+            queryStudentsUseCase.execute(name, sort, null, null, null, tagIdListStub)
         }
     }
 }

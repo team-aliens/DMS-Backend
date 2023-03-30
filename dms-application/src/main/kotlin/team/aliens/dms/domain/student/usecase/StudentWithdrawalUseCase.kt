@@ -7,10 +7,8 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
-import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
 
@@ -20,7 +18,6 @@ class StudentWithdrawalUseCase(
     private val queryStudentPort: QueryStudentPort,
     private val queryUserPort: StudentQueryUserPort,
     private val commandRemainStatusPort: StudentCommandRemainStatusPort,
-    private val queryStudyRoomPort: StudentQueryStudyRoomPort,
     private val commandStudyRoomPort: StudentCommandStudyRoomPort,
     private val commandStudentPort: CommandStudentPort,
     private val commandUserPort: StudentCommandUserPort
@@ -31,19 +28,8 @@ class StudentWithdrawalUseCase(
         val student = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
         val studentUser = queryUserPort.queryUserById(currentStudentId) ?: throw UserNotFoundException
 
-        // 잔류 내역 삭제
         commandRemainStatusPort.deleteByStudentId(currentStudentId)
-
-        // 자습실 신청 상태 제거
-        queryStudyRoomPort.querySeatByStudentId(currentStudentId)?.let { seat ->
-            val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
-            commandStudyRoomPort.saveSeat(
-                seat.unUse()
-            )
-            commandStudyRoomPort.saveStudyRoom(
-                studyRoom.unApply()
-            )
-        }
+        commandStudyRoomPort.deleteSeatApplicationByStudentId(currentStudentId)
 
         commandStudentPort.saveStudent(
             student.copy(deletedAt = LocalDateTime.now())
