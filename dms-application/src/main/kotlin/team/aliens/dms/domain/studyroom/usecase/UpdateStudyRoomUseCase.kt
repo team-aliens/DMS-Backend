@@ -8,6 +8,7 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsExceptio
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -24,17 +25,11 @@ class UpdateStudyRoomUseCase(
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
-        val (
-            _, _, totalWidthSize, totalHeightSize,
-            eastDescription, westDescription, southDescription, northDescription,
-            _, availableGrade, seatRequests
-        ) = request
 
         val currentUserId = securityPort.getCurrentUserId()
         val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(currentUser.schoolId, studyRoom.schoolId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
@@ -43,24 +38,20 @@ class UpdateStudyRoomUseCase(
                 name = request.name,
                 schoolId = currentUser.schoolId
             )
-
             if (isAlreadyExists) {
                 throw StudyRoomAlreadyExistsException
             }
         }
 
-        val availableHeadCount = seatRequests.count {
-            SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
-        }
-
-        commandStudyRoomPort.saveStudyRoom(
+        val newStudyRoom = request.run {
             studyRoom.copy(
-                name = request.name,
-                floor = request.floor,
+                name = name,
+                floor = floor,
                 widthSize = totalWidthSize,
                 heightSize = totalHeightSize,
-                inUseHeadcount = 0,
-                availableHeadcount = availableHeadCount,
+                availableHeadcount = seats.count {
+                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+                },
                 availableSex = Sex.valueOf(request.availableSex),
                 availableGrade = availableGrade,
                 eastDescription = eastDescription,
@@ -68,13 +59,23 @@ class UpdateStudyRoomUseCase(
                 southDescription = southDescription,
                 northDescription = northDescription
             )
-        )
+        }
+        val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(newStudyRoom)
 
-        commandStudyRoomPort.deleteAllSeatsByStudyRoomId(studyRoomId)
-        val seats = seatRequests.map {
+        commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
+        val studyRoomTimeSlots = request.timeSlotIds.map {
+            StudyRoomTimeSlot(
+                studyRoomId = savedStudyRoom.id,
+                timeSlotId = it
+            )
+        }
+        commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
+
+        commandStudyRoomPort.deleteSeatApplicationByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.deleteSeatByStudyRoomId(studyRoomId)
+        val seats = request.seats.map {
             Seat(
-                studyRoomId = studyRoomId,
-                studentId = null,
+                studyRoomId = studyRoom.id,
                 typeId = it.typeId,
                 widthLocation = it.widthLocation,
                 heightLocation = it.heightLocation,
@@ -82,6 +83,6 @@ class UpdateStudyRoomUseCase(
                 status = SeatStatus.valueOf(it.status)
             )
         }
-        commandStudyRoomPort.saveAllSeat(seats)
+        commandStudyRoomPort.saveAllSeats(seats)
     }
 }

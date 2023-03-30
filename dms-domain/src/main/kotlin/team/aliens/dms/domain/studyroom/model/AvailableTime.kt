@@ -13,4 +13,19 @@ data class AvailableTime(
 
     val endAt: LocalTime
 
-)
+) {
+    fun isAvailable(): Boolean {
+        val now = LocalTime.now()
+
+        if (isBeforeStartTime(now) || isAfterEndTime(now)) {
+            return false
+        }
+        return true
+    }
+
+    private fun isBeforeStartTime(now: LocalTime) =
+        (now < startAt)
+
+    private fun isAfterEndTime(now: LocalTime) =
+        (endAt < now)
+}

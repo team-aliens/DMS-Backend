@@ -10,6 +10,7 @@ import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.school.spi.SchoolSecurityPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.tag.spi.TagSecurityPort
 import team.aliens.dms.domain.user.spi.UserSecurityPort
 
 interface SecurityPort :
@@ -21,6 +22,7 @@ interface SecurityPort :
     NoticeSecurityPort,
     SchoolSecurityPort,
     PointSecurityPort,
+    TagSecurityPort,
     StudyRoomSecurityPort,
     RemainSecurityPort,
     FileSecurityPort

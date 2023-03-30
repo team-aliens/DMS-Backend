@@ -1,15 +1,13 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.slot
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
@@ -18,80 +16,45 @@ import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.stub.createStudyRoomStub
+import team.aliens.dms.domain.studyroom.stub.createTimeSlotStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
-@ExtendWith(SpringExtension::class)
 class CreateStudyRoomUseCaseTests {
 
-    @MockBean
-    private lateinit var queryStudyRoomPort: QueryStudyRoomPort
+    private val queryStudyRoomPort: QueryStudyRoomPort = mockk(relaxed = true)
+    private val commandStudyRoomPort: CommandStudyRoomPort = mockk(relaxed = true)
+    private val securityPort: StudyRoomSecurityPort = mockk(relaxed = true)
+    private val queryUserPort: StudyRoomQueryUserPort = mockk(relaxed = true)
 
-    @MockBean
-    private lateinit var commandStudyRoomPort: CommandStudyRoomPort
+    private val createStudyRoomUseCase = CreateStudyRoomUseCase(
+        queryStudyRoomPort, commandStudyRoomPort, securityPort, queryUserPort
+    )
 
-    @MockBean
-    private lateinit var securityPort: StudyRoomSecurityPort
-
-    @MockBean
-    private lateinit var queryUserPort: StudyRoomQueryUserPort
-
-    private lateinit var createStudyRoomUseCase: CreateStudyRoomUseCase
-
-    @BeforeEach
-    fun setUp() {
-        createStudyRoomUseCase = CreateStudyRoomUseCase(
-            queryStudyRoomPort,
-            commandStudyRoomPort,
-            securityPort,
-            queryUserPort
-        )
-    }
-
-    private val studyRoomId = UUID.randomUUID()
-    private val userId = UUID.randomUUID()
+    private val managerId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val password = "test password"
-    private val floor = 1
-    private val studyRoomName = "test study room"
 
     private val userStub by lazy {
-        User(
-            id = userId,
-            schoolId = schoolId,
-            accountId = "test account id",
-            password = password,
-            email = "test email",
-            authority = Authority.STUDENT,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
+        createUserStub(
+            id = managerId,
+            schoolId = schoolId
         )
     }
 
     private val studyRoomStub by lazy {
-        StudyRoom(
-            schoolId = userStub.schoolId,
-            name = requestStub.name,
-            floor = requestStub.floor,
-            widthSize = requestStub.totalWidthSize,
-            heightSize = requestStub.totalHeightSize,
-            inUseHeadcount = 0,
-            availableHeadcount = requestStub.seats.count { SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status) },
-            availableSex = Sex.valueOf(requestStub.availableSex),
-            availableGrade = requestStub.availableGrade,
-            eastDescription = requestStub.eastDescription,
-            westDescription = requestStub.westDescription,
-            southDescription = requestStub.southDescription,
-            northDescription = requestStub.northDescription,
+        createStudyRoomStub(
+            availableHeadcount = requestStub.seats.count {
+                SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+            }
         )
     }
 
     private val requestStub by lazy {
         CreateStudyRoomRequest(
-            floor = floor,
-            name = studyRoomName,
+            floor = 1,
+            name = "studyRoomName",
             totalWidthSize = 10,
             totalHeightSize = 10,
             eastDescription = "eastDescription",
@@ -100,6 +63,7 @@ class CreateStudyRoomUseCaseTests {
             northDescription = "northDescription",
             availableSex = "FEMALE",
             availableGrade = 2,
+            timeSlotIds = listOf(UUID.randomUUID()),
             seats = listOf(
                 CreateStudyRoomRequest.SeatRequest(
                     widthLocation = 1,
@@ -112,38 +76,50 @@ class CreateStudyRoomUseCaseTests {
         )
     }
 
-    @Test
-    fun `자습실 생성 성공`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, studyRoomName, schoolId))
-            .willReturn(false)
-
-        given(commandStudyRoomPort.saveStudyRoom(studyRoomStub))
-            .willReturn(
-                studyRoomStub.copy(id = studyRoomId)
-            )
-
-        // when
-        val response = createStudyRoomUseCase.execute(requestStub)
-
-        // then
-        assertThat(response).isEqualTo(studyRoomId)
+    private val timeSlotStub by lazy {
+        createTimeSlotStub(
+            schoolId = schoolId
+        )
     }
 
     @Test
-    fun `유저를 찾을 수 없음`() {
+    fun `자습실 생성 성공`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
+        every { securityPort.getCurrentUserId() } returns managerId
+        every { queryUserPort.queryUserById(managerId) } returns userStub
+        every {
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+                requestStub.floor,
+                requestStub.name,
+                schoolId
+            )
+        } returns false
 
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(null)
+        val studyRoomSlot = slot<StudyRoom>()
+        every { commandStudyRoomPort.saveStudyRoom(capture(studyRoomSlot)) } returns studyRoomStub
+        every { queryStudyRoomPort.queryTimeSlotsBySchoolId(schoolId) } returns listOf(timeSlotStub)
+
+        // when & then
+        assertAll(
+            {
+                assertDoesNotThrow {
+                    createStudyRoomUseCase.execute(requestStub)
+                }
+            },
+            {
+                assertEquals(
+                    studyRoomSlot.captured.availableHeadcount,
+                    requestStub.seats.count { it.status == SeatStatus.AVAILABLE.name }
+                )
+            }
+        )
+    }
+
+    @Test
+    fun `유저가 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns managerId
+        every { queryUserPort.queryUserById(managerId) } returns null
 
         // when & then
         assertThrows<UserNotFoundException> {
@@ -152,16 +128,13 @@ class CreateStudyRoomUseCaseTests {
     }
 
     @Test
-    fun `같은 층, 이름의 자습실이 이미 존재함`() {
+    fun `같은 이름, 층의 자습실이 이미 존재함`() {
         // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(userId)
-
-        given(queryUserPort.queryUserById(userId))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(floor, studyRoomName, schoolId))
-            .willReturn(true)
+        every { securityPort.getCurrentUserId() } returns managerId
+        every { queryUserPort.queryUserById(managerId) } returns userStub
+        every {
+            queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(requestStub.floor, requestStub.name, schoolId)
+        } returns true
 
         // when & then
         assertThrows<StudyRoomAlreadyExistsException> {

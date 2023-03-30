@@ -10,16 +10,15 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.exception.RefreshTokenNotFoundException
-import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.domain.auth.spi.AuthQuerySchoolPort
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
+import team.aliens.dms.domain.auth.stub.createRefreshToken
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.model.AvailableFeature
+import team.aliens.dms.domain.school.stub.createAvailableFeatureStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -51,36 +50,15 @@ class ReissueTokenUseCaseTests {
     private val userId = UUID.randomUUID()
 
     private val refreshTokenStub by lazy {
-        RefreshToken(
-            token = token,
-            userId = userId,
-            authority = Authority.MANAGER,
-            expirationTime = 1800
-        )
+        createRefreshToken(userId = userId)
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub(id = userId)
     }
 
     private val featureStub by lazy {
-        AvailableFeature(
-            schoolId = userStub.schoolId,
-            mealService = true,
-            noticeService = true,
-            pointService = true,
-            studyRoomService = false,
-            remainService = true
-        )
+        createAvailableFeatureStub(schoolId = userStub.schoolId)
     }
 
     private val tokenResponseStub by lazy {

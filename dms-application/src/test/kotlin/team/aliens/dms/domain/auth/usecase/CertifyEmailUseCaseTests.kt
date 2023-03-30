@@ -10,11 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
 import team.aliens.dms.domain.auth.exception.EmailMismatchException
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
-import java.util.UUID
+import team.aliens.dms.domain.user.stub.createUserStub
 
 @ExtendWith(SpringExtension::class)
 class CertifyEmailUseCaseTests {
@@ -29,21 +27,11 @@ class CertifyEmailUseCaseTests {
         certifyEmailUseCase = CertifyEmailUseCase(queryUserPort)
     }
 
-    private val id = UUID.randomUUID()
     private val email = "email@dsm.hs.kr"
     private val accountId = "accountId"
 
     private val userStub by lazy {
-        User(
-            id = id,
-            schoolId = id,
-            accountId = accountId,
-            password = "password",
-            email = email,
-            authority = Authority.STUDENT,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub()
     }
 
     @Test

@@ -11,15 +11,16 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.domain.manager.spi.ManagerQueryPointHistoryPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
+import team.aliens.dms.domain.manager.spi.ManagerQueryTagPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.manager.stub.createManagerStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.stub.createStudentStub
+import team.aliens.dms.domain.tag.stub.createTagStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -37,12 +38,15 @@ class QueryStudentDetailsUseCaseTests {
     @MockBean
     private lateinit var queryPointHistoryPort: ManagerQueryPointHistoryPort
 
+    @MockBean
+    private lateinit var queryTagPort: ManagerQueryTagPort
+
     private lateinit var queryStudentDetailsUseCase: QueryStudentDetailsUseCase
 
     @BeforeEach
     fun setUp() {
         queryStudentDetailsUseCase = QueryStudentDetailsUseCase(
-            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort
+            securityPort, queryManagerPort, queryStudentPort, queryPointHistoryPort, queryTagPort
         )
     }
 
@@ -53,27 +57,13 @@ class QueryStudentDetailsUseCaseTests {
     private val minusPoint = 23
 
     private val managerStub by lazy {
-        Manager(
-            id = currentUserId,
-            schoolId = schoolId,
-            name = "관리자 이름",
-            profileImageUrl = "https://~~"
-        )
+        createManagerStub(schoolId = schoolId)
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 20,
-            name = "김범진",
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
+            schoolId = schoolId
         )
     }
 
@@ -81,18 +71,12 @@ class QueryStudentDetailsUseCaseTests {
     private val name = studentStub.name
 
     private val roomMateStub by lazy {
-        Student(
-            id = UUID.randomUUID(),
-            roomId = UUID.randomUUID(),
-            roomNumber = "216",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 1,
-            number = 21,
-            name = "김철수",
-            profileImageUrl = "profile image url",
-            sex = Sex.FEMALE
+        createStudentStub(schoolId = schoolId)
+    }
+
+    private val tagsStub by lazy {
+        listOf(
+            createTagStub(schoolId = schoolId)
         )
     }
 
@@ -113,6 +97,9 @@ class QueryStudentDetailsUseCaseTests {
 
         given(queryStudentPort.queryUserByRoomNumberAndSchoolId(studentStub.roomNumber, studentStub.schoolId))
             .willReturn(listOf(studentStub, roomMateStub))
+
+        given(queryTagPort.queryTagsByStudentId(studentId))
+            .willReturn(tagsStub)
 
         // when
         val response = queryStudentDetailsUseCase.execute(studentId)

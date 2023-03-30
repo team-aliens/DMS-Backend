@@ -6,4 +6,6 @@ import java.util.UUID
 interface StudyRoomQueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
+
+    fun queryStudentsBySchoolId(schoolId: UUID): List<Student>
 }

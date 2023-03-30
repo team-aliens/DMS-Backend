@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
@@ -16,17 +15,12 @@ import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
-import team.aliens.dms.domain.student.spi.StudentQueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
-import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -46,9 +40,6 @@ class RemoveStudentUseCaseTests {
     private lateinit var commandRemainStatusPort: StudentCommandRemainStatusPort
 
     @MockBean
-    private lateinit var queryStudyRoomPort: StudentQueryStudyRoomPort
-
-    @MockBean
     private lateinit var commandStudyRoomPort: StudentCommandStudyRoomPort
 
     @MockBean
@@ -63,56 +54,24 @@ class RemoveStudentUseCaseTests {
     fun setUp() {
         removeStudentUseCase = RemoveStudentUseCase(
             securityPort, queryUserPort, queryStudentPort, commandRemainStatusPort,
-            queryStudyRoomPort, commandStudyRoomPort, commandStudentPort, commandUserPort
+            commandStudyRoomPort, commandStudentPort, commandUserPort
         )
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            accountId = "아이디",
-            password = "비밀번호",
-            email = "이메일",
-            authority = Authority.MANAGER,
-            createdAt = LocalDateTime.now(),
-            deletedAt = null
-        )
+        createUserStub(schoolId = schoolId)
     }
 
     private val studentStub by lazy {
-        Student(
+        createStudentStub(
             id = studentId,
-            roomId = UUID.randomUUID(),
-            roomNumber = "123",
-            roomLocation = "A",
-            schoolId = schoolId,
-            grade = 2,
-            classRoom = 3,
-            number = 10,
-            name = "이름",
-            profileImageUrl = "https://~",
-            sex = Sex.FEMALE
-        )
-    }
-
-    private val seatStub by lazy {
-        Seat(
-            id = UUID.randomUUID(),
-            studyRoomId = studyRoomId,
-            studentId = studentId,
-            typeId = UUID.randomUUID(),
-            widthLocation = 1,
-            heightLocation = 1,
-            number = 1,
-            status = SeatStatus.AVAILABLE
+            schoolId = schoolId
         )
     }
 
     private val managerId = UUID.randomUUID()
     private val studentId = UUID.randomUUID()
     private val schoolId = UUID.randomUUID()
-    private val studyRoomId = UUID.randomUUID()
 
     @Test
     fun `학생 삭제 성공`() {
@@ -128,9 +87,6 @@ class RemoveStudentUseCaseTests {
 
         given(queryUserPort.queryUserById(studentStub.id))
             .willReturn(userStub)
-
-        given(queryStudyRoomPort.querySeatByStudentId(studentId))
-            .willReturn(null)
 
         given(commandUserPort.saveUser(userStub.copy(deletedAt = LocalDateTime.now())))
             .willReturn(userStub)
@@ -212,33 +168,6 @@ class RemoveStudentUseCaseTests {
 
         // when & then
         assertThrows<SchoolMismatchException> {
-            removeStudentUseCase.execute(studentId)
-        }
-    }
-
-    @Test
-    fun `자습실 존재하지 않음`() {
-        // given
-        given(securityPort.getCurrentUserId())
-            .willReturn(managerId)
-
-        given(queryUserPort.queryUserById(managerId))
-            .willReturn(userStub)
-
-        given(queryStudentPort.queryStudentById(studentId))
-            .willReturn(studentStub)
-
-        given(queryUserPort.queryUserById(studentStub.id))
-            .willReturn(userStub)
-
-        given(queryStudyRoomPort.querySeatByStudentId(studentId))
-            .willReturn(seatStub)
-
-        given(queryStudyRoomPort.queryStudyRoomById(studyRoomId))
-            .willReturn(null)
-
-        // when & then
-        assertThrows<StudyRoomNotFoundException> {
             removeStudentUseCase.execute(studentId)
         }
     }

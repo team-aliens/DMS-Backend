@@ -2,10 +2,13 @@ package team.aliens.dms.domain.studyroom.dto
 
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import java.time.LocalTime
 import java.util.UUID
 
 data class StudentQueryStudyRoomResponse(
     val floor: Int,
+    val startTime: LocalTime,
+    val endTime: LocalTime,
     val name: String,
     val totalAvailableSeat: Int,
     val inUseHeadcount: Int,

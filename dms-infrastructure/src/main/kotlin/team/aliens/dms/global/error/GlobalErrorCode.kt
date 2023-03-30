@@ -12,7 +12,6 @@ enum class GlobalErrorCode(
     BAD_REQUEST(400, "Bad Request"),
     INVALID_FILE(400, "Invalid File"),
 
-    SEX_MISMATCH(401, "Sex Mismatch"),
     EXTENSION_MISMATCH(401, "File Extension Mismatch"),
 
     INTERNAL_SERVER_ERROR(500, "Internal Server Error")

@@ -15,9 +15,8 @@ import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
 import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.user.model.User
-import java.time.LocalDate
+import team.aliens.dms.domain.school.stub.createSchoolStub
+import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -44,29 +43,14 @@ class FindManagerAccountIdUseCaseTests {
     private val schoolId = UUID.randomUUID()
 
     private val schoolStub by lazy {
-        School(
+        createSchoolStub(
             id = schoolId,
-            name = "대덕소프트웨어마이스터고등학교",
-            code = "&AND@P",
-            question = "전 교장선생님 이름은?",
-            answer = "안희명",
-            address = "대전광역시 유성구 가정북로 76",
-            contractStartedAt = LocalDate.now(),
-            contractEndedAt = null
+            answer = "안희명"
         )
     }
 
     private val userStub by lazy {
-        User(
-            id = UUID.randomUUID(),
-            schoolId = schoolId,
-            accountId = "accountId",
-            password = "password",
-            email = "email@dsm.hs.kr",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub(schoolId = schoolId)
     }
 
     @Test

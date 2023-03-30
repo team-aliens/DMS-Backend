@@ -7,6 +7,8 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatEl
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement.TypeElement
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
@@ -21,15 +23,21 @@ class StudentQueryStudyRoomUseCase(
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
-    fun execute(studyRoomId: UUID): StudentQueryStudyRoomResponse {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID): StudentQueryStudyRoomResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 
-        val seats = queryStudyRoomPort.queryAllSeatsByStudyRoomId(studyRoom.id).map {
+        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
+            throw StudyRoomTimeSlotNotFoundException
+        }
+
+        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
+        validateSameSchool(user.schoolId, timeSlot.schoolId)
+
+        val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
                 id = it.seatId,
                 widthLocation = it.widthLocation,
@@ -43,7 +51,7 @@ class StudentQueryStudyRoomUseCase(
                     )
                 },
                 status = it.status,
-                isMine(
+                isMine = this.isMine(
                     studentId = it.studentId,
                     currentUserId = currentUserId,
                     status = it.status
@@ -61,8 +69,10 @@ class StudentQueryStudyRoomUseCase(
             StudentQueryStudyRoomResponse(
                 floor = floor,
                 name = name,
+                startTime = timeSlot.startTime,
+                endTime = timeSlot.endTime,
                 totalAvailableSeat = availableHeadcount,
-                inUseHeadcount = inUseHeadcount!!,
+                inUseHeadcount = seats.count { it.student != null },
                 availableSex = availableSex,
                 availableGrade = availableGrade,
                 eastDescription = eastDescription,

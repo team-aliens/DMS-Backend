@@ -9,12 +9,11 @@ import org.mockito.BDDMockito.given
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.remain.exception.RemainStatusNotFound
-import team.aliens.dms.domain.remain.model.RemainOption
-import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
 import team.aliens.dms.domain.remain.spi.RemainSecurityPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.remain.stub.createRemainOptionStub
+import team.aliens.dms.domain.remain.stub.createRemainStatusStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -44,20 +43,11 @@ class QueryCurrentAppliedRemainOptionUseCaseTests {
     private val remainOptionId = UUID.randomUUID()
 
     private val remainOptionStub by lazy {
-        RemainOption(
-            id = remainOptionId,
-            schoolId = UUID.randomUUID(),
-            title = "title",
-            description = "description"
-        )
+        createRemainOptionStub(id = remainOptionId)
     }
 
     private val remainStatusStub by lazy {
-        RemainStatus(
-            id = UUID.randomUUID(),
-            remainOptionId = remainOptionId,
-            createdAt = LocalDateTime.MIN
-        )
+        createRemainStatusStub(remainOptionId = remainOptionId)
     }
 
     @Test

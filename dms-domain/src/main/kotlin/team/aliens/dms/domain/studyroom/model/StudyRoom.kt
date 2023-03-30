@@ -2,6 +2,8 @@ package team.aliens.dms.domain.studyroom.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableGradeMismatchException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomAvailableSexMismatchException
 import java.util.UUID
 
 @Aggregate
@@ -19,8 +21,6 @@ data class StudyRoom(
 
     val heightSize: Int,
 
-    val inUseHeadcount: Int? = 0,
-
     val availableHeadcount: Int,
 
     val availableSex: Sex,
@@ -36,12 +36,17 @@ data class StudyRoom(
     val northDescription: String
 
 ) {
+    fun checkIsAvailableGradeAndSex(grade: Int, sex: Sex) {
+        if (availableGrade != 0 && availableGrade != grade) {
+            throw StudyRoomAvailableGradeMismatchException
+        }
 
-    fun apply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.inc()
-    )
+        if (availableSex != Sex.ALL && availableSex != sex) {
+            throw StudyRoomAvailableSexMismatchException
+        }
+    }
 
-    fun unApply() = this.copy(
-        inUseHeadcount = inUseHeadcount!!.dec()
-    )
+    companion object {
+        fun precessName(floor: Int, name: String) = "$floor-${name}"
+    }
 }

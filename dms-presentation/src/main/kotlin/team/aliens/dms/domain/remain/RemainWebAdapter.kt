@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.remain
 
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.common.util.setExcelContentDisposition
 import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
@@ -30,7 +30,6 @@ import team.aliens.dms.domain.remain.usecase.QueryRemainOptionsUseCase
 import team.aliens.dms.domain.remain.usecase.RemoveRemainOptionUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainAvailableTimeUseCase
 import team.aliens.dms.domain.remain.usecase.UpdateRemainOptionUseCase
-import java.net.URLEncoder
 import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
@@ -117,10 +116,7 @@ class RemainWebAdapter(
         httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportRemainStatusUseCase.execute()
-        httpResponse.setHeader(
-            HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=${URLEncoder.encode(response.fileName, "UTF-8")}.xlsx"
-        )
+        httpResponse.setExcelContentDisposition(response.fileName)
         return response.file
     }
 }
