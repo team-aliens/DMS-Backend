@@ -2,8 +2,8 @@ name: CD for Prod
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - v*.*.*
 
 jobs:
   build:

@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.point.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
@@ -12,7 +13,6 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportAllPointHistoryUseCase(
@@ -49,11 +49,15 @@ class ExportAllPointHistoryUseCase(
         school: School,
         pointHistories: List<PointHistory>
     ): String {
-        val startDateString = (start ?: pointHistories.last().createdAt)
-            .format(File.FILE_DATE_FORMAT)
+
+        val startDate = start ?:
+            if (pointHistories.isNotEmpty()) {
+                pointHistories.last().createdAt
+            } else end
+        val startDateString = startDate.format(File.FILE_DATE_FORMAT)
 
         val endDateString = end.format(File.FILE_DATE_FORMAT)
 
-        return "${school.name.replace(" ","")}_상벌점_부여내역_${startDateString}_$endDateString"
+        return "${school.name.replace(" ", "")}_상벌점_부여내역_${startDateString}_$endDateString"
     }
 }
