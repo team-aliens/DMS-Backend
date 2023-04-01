@@ -32,7 +32,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: codecov gradle
-        run: ./gradlew test jacocoRootReport --stacktrace
+        run: ./gradlew test jacocoRootReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
