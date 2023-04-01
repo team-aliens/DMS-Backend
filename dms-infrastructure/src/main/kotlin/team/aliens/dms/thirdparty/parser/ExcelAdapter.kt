@@ -1,7 +1,11 @@
 package team.aliens.dms.thirdparty.parser
 
 import com.fasterxml.uuid.Generators
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.time.format.DateTimeFormatter
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
@@ -28,9 +32,6 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.time.format.DateTimeFormatter
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -43,7 +44,10 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         try {
             val worksheet = workbook.getSheetAt(0)
             for (i in 1..worksheet.lastRowNum) {
-                val excelData = worksheet.getRow(i).run {
+                val row = worksheet.getRow(i)
+                if (row.cellIterator().next().cellType == Cell.CELL_TYPE_BLANK) continue
+
+                val excelData = row.run {
                     VerifiedStudent(
                         id = Generators.timeBasedGenerator().generate(),
                         schoolName = schoolName,
@@ -151,6 +155,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         for (i in 1..worksheet.lastRowNum) {
             val row = worksheet.getRow(i)
+            if (row.cellIterator().next().cellType == Cell.CELL_TYPE_BLANK) continue
             val studentSeat = row.run {
                 try {
                     studentSeatsMap[
