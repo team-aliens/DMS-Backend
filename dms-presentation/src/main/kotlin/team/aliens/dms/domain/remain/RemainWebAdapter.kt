@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.common.util.setExcelContentDisposition
+import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
