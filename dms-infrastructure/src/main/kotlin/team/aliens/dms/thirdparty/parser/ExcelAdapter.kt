@@ -45,7 +45,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             val worksheet = workbook.getSheetAt(0)
             for (i in 1..worksheet.lastRowNum) {
                 val row = worksheet.getRow(i)
-                if (row.cellIterator().next().cellType == Cell.CELL_TYPE_BLANK) continue
+                if (row.isFirstCellBlank()) continue
 
                 val excelData = row.run {
                     VerifiedStudent(
@@ -73,6 +73,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         return verifiedStudents
     }
+
+    private fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK
 
     private fun Row.getStringValue(idx: Int) = getCell(idx, CREATE_NULL_AS_BLANK).stringCellValue
 
@@ -155,7 +157,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         for (i in 1..worksheet.lastRowNum) {
             val row = worksheet.getRow(i)
-            if (row.cellIterator().next().cellType == Cell.CELL_TYPE_BLANK) continue
+            if (row.isFirstCellBlank()) continue
+
             val studentSeat = row.run {
                 try {
                     studentSeatsMap[
