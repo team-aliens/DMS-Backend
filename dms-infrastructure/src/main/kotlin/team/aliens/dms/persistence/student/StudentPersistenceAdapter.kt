@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -35,7 +36,6 @@ import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpa
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
-import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -127,16 +127,16 @@ class StudentPersistenceAdapter(
             .join(studentJpaEntity.user, userJpaEntity)
             .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(studentTagJpaEntity)
-            .on(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
-            .leftJoin(tagJpaEntity).distinct()
-            .on(eqTag())
+                .on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id)).fetchJoin()
+            .leftJoin(tagJpaEntity)
+                .on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
             .leftJoin(pointHistoryJpaEntity)
-            .on(eqStudentRecentPointHistory())
+                .on(eqStudentRecentPointHistory())
             .where(
+                userJpaEntity.school.id.eq(schoolId),
                 nameContains(name),
                 pointTotalBetween(pointFilter),
-                schoolEq(schoolId),
-                tagIdsIn(tagIds)
+                hasAllTags(tagIds)
             )
             .orderBy(
                 sortFilter(sort),
@@ -171,23 +171,11 @@ class StudentPersistenceAdapter(
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
                     tags = it.tags
-                        .map {
-                                tag ->
+                        .map { tag ->
                             tagMapper.toDomain(tag)!!
                         }
                 )
             }
-    }
-
-    private fun tagIdsIn(tagIds: List<UUID>?) =
-        tagIds?.run { studentTagJpaEntity.tag.id.`in`(tagIds) }
-
-    private fun eqTag(): BooleanExpression? {
-        return tagJpaEntity.id.`in`(
-            select(studentTagJpaEntity.tag.id)
-                .from(studentTagJpaEntity)
-                .where(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
-        )
     }
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
@@ -221,7 +209,16 @@ class StudentPersistenceAdapter(
         }
     }
 
-    private fun schoolEq(schoolId: UUID) = userJpaEntity.school.id.eq(schoolId)
+    private fun hasAllTags(tagIds: List<UUID>?): BooleanExpression? =
+        tagIds?.run {
+            studentJpaEntity.id.`in`(
+                select(studentTagJpaEntity.student.id)
+                    .from(studentTagJpaEntity)
+                    .where(studentTagJpaEntity.tag.id.`in`(tagIds))
+                    .groupBy(studentTagJpaEntity.student)
+                    .having(studentTagJpaEntity.count().eq(tagIds.size.toLong()))
+            )
+        }
 
     private fun sortFilter(sort: Sort): OrderSpecifier<*>? {
         return when (sort) {
