@@ -15,7 +15,7 @@ class QuerySeatTypesUseCase(
     private val querySeatTypePort: QuerySeatTypePort
 ) {
 
-    fun execute(): QuerySeatTypesResponse {
+    fun execute(studyRoomId: UUID?): QuerySeatTypesResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
