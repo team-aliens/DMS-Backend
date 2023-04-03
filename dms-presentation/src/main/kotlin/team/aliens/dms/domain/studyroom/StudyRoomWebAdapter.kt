@@ -282,7 +282,7 @@ class StudyRoomWebAdapter(
         removeTimeSlotUseCase.execute(timeSlotId!!)
     }
 
-    @GetMapping("/students/file")
+    @PostMapping("/students/file")
     fun exportStudyRoomStudentsApplicationStatus(
         @RequestPart file: MultipartFile?,
         httpResponse: HttpServletResponse

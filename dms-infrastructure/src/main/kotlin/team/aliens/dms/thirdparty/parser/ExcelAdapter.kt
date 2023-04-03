@@ -93,6 +93,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             }.also {
                 file.delete()
             }.onFailure {
+                it.printStackTrace()
                 throw ExcelInvalidFileException
             }.getOrThrow()
         }
