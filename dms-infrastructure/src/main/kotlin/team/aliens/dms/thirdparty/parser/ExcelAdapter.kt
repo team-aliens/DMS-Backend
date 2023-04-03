@@ -29,7 +29,6 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 
@@ -93,6 +92,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             }.also {
                 file.delete()
             }.onFailure {
+                it.printStackTrace()
                 throw ExcelInvalidFileException
             }.getOrThrow()
         }
@@ -171,9 +171,9 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                     e.printStackTrace()
                     throw BadExcelFormatException
                 }
-            } ?: throw UserNotFoundException
+            }
 
-            val timeSlotIdx = studentSeat.timeSlotId?.let {
+            val timeSlotIdx = studentSeat?.timeSlotId?.let {
                 timeSlots.indexOfFirst { it.id == studentSeat.timeSlotId }
             }
             insertDatasAtRow(
@@ -203,7 +203,11 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             createFreezePane(0, 1)
             // 데이터에 맞춰 폭 조정
             (0 until lastCellNum)
-                .map { autoSizeColumn(it) }
+                .map {
+                    autoSizeColumn(it)
+                    val width = getColumnWidth(it)
+                    setColumnWidth(it, width + 500)
+                }
         }
     }
 
