@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
-import team.aliens.dms.common.util.FileUtil
-import team.aliens.dms.common.util.setExcelContentDisposition
+import team.aliens.dms.common.extension.setExcelContentDisposition
+import team.aliens.dms.common.extension.toFile
 import team.aliens.dms.domain.studyroom.dto.CreateSeatTypeWebRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomResponse
@@ -101,8 +101,8 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/types")
-    fun getSeatTypes(): QuerySeatTypesResponse {
-        return querySeatTypesUseCase.execute()
+    fun getSeatTypes(@RequestParam(name = "study_room_id", required = false) studyRoomId: UUID?): QuerySeatTypesResponse {
+        return querySeatTypesUseCase.execute(studyRoomId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -288,7 +288,7 @@ class StudyRoomWebAdapter(
         httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportStudyRoomApplicationStatusUseCase.execute(
-            file = file?.let(FileUtil.transferFile)
+            file = file?.toFile()
         )
         httpResponse.setExcelContentDisposition(response.fileName)
         return response.file

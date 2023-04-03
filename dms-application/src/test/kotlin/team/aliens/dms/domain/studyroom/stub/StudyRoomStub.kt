@@ -1,13 +1,14 @@
 package team.aliens.dms.domain.studyroom.stub
 
+import java.time.LocalTime
+import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.SeatStatus
+import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
-import java.time.LocalTime
-import java.util.UUID
 
 internal fun createStudyRoomStub(
     id: UUID = UUID.randomUUID(),
@@ -77,4 +78,16 @@ internal fun createSeatApplicationStub(
     seatId = seatId,
     timeSlotId = timeSlotId,
     studentId = studentId
+)
+
+internal fun createSeatTypeStub(
+    id: UUID = UUID.randomUUID(),
+    schoolId: UUID = UUID.randomUUID(),
+    name: String = "자리",
+    color: String = "#FFFFFF",
+) = SeatType(
+    id = id,
+    schoolId = schoolId,
+    name = name,
+    color = color
 )
