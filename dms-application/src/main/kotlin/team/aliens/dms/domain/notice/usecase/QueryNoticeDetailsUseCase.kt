@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notice.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
@@ -9,7 +10,6 @@ import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryNoticeDetailsUseCase(
@@ -28,6 +28,7 @@ class QueryNoticeDetailsUseCase(
         validateSameSchool(writer.schoolId, viewer.schoolId)
 
         return QueryNoticeDetailsResponse(
+            id = notice.id,
             title = notice.title,
             content = notice.content,
             createdAt = notice.createdAt!!
