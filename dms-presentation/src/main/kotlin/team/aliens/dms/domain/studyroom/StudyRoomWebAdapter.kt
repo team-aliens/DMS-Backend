@@ -101,8 +101,8 @@ class StudyRoomWebAdapter(
     }
 
     @GetMapping("/types")
-    fun getSeatTypes(): QuerySeatTypesResponse {
-        return querySeatTypesUseCase.execute()
+    fun getSeatTypes(@RequestParam(name = "study_room_id", required = false) studyRoomId: UUID?): QuerySeatTypesResponse {
+        return querySeatTypesUseCase.execute(studyRoomId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
 import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse.TypeElement
@@ -15,19 +16,22 @@ class QuerySeatTypesUseCase(
     private val querySeatTypePort: QuerySeatTypePort
 ) {
 
-    fun execute(): QuerySeatTypesResponse {
+    fun execute(studyRoomId: UUID?): QuerySeatTypesResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val seatTypes = querySeatTypePort
-            .queryAllSeatTypeBySchoolId(user.schoolId).map {
+        val seatTypes = studyRoomId?.let {
+            querySeatTypePort.queryAllSeatTypeByStudyRoomId(studyRoomId)
+        } ?: querySeatTypePort.queryAllSeatTypeBySchoolId(user.schoolId)
+
+        return QuerySeatTypesResponse(
+            seatTypes.map {
                 TypeElement(
                     id = it.id,
                     name = it.name,
                     color = it.color
                 )
             }
-
-        return QuerySeatTypesResponse(seatTypes)
+        )
     }
 }
