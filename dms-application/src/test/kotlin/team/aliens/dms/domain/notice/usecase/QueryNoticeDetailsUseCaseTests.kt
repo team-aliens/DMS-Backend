@@ -70,6 +70,7 @@ class QueryNoticeDetailsUseCaseTests {
 
     private val queryNoticeDetailsResponseStub by lazy {
         QueryNoticeDetailsResponse(
+            id = noticeStub.id,
             title = noticeStub.title,
             content = noticeStub.content,
             createdAt = createdAt
