@@ -56,6 +56,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_IMAGE }}
             docker rm -f dms-server || true
             docker run -d --name dms-server -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_IMAGE }}
+            docker network connect dms_net dms-server
             sleep 20
             is_healthy=$(docker inspect --format '{{ .State.Health.Status }}' dms-server)
             echo $is_healthy
