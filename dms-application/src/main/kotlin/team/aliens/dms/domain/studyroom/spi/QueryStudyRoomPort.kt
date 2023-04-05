@@ -1,5 +1,8 @@
 package team.aliens.dms.domain.studyroom.spi
 
+import java.time.LocalTime
+import java.util.UUID
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -7,8 +10,6 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
-import java.time.LocalTime
-import java.util.UUID
 
 interface QueryStudyRoomPort {
 
@@ -25,6 +26,8 @@ interface QueryStudyRoomPort {
     fun queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): List<SeatApplicationVO>
 
     fun queryAllStudyRoomsByTimeSlotId(timeSlotId: UUID): List<StudyRoomVO>
+
+    fun queryAllStudyRoomsByTimeSlotIdAndGradeAndSex(timeSlotId: UUID, grade: Int, sex: Sex): List<StudyRoomVO>
 
     fun queryTimeSlotsBySchoolId(schoolId: UUID): List<TimeSlot>
 
