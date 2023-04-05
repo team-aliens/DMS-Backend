@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.stub.createStudentStub
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
@@ -112,6 +113,19 @@ class StudentQueryStudyRoomsUseCaseTests {
 
         // when & then
         assertThrows<UserNotFoundException> {
+            studentQueryRoomsUseCase.execute(timeSlotId)
+        }
+    }
+
+    @Test
+    fun `학생이 존재하지 않음`() {
+        // given
+        every { securityPort.getCurrentUserId() } returns userId
+        every { queryUserPort.queryUserById(userId) } returns userStub
+        every { queryStudentPort.queryStudentById(userId) } returns null
+
+        // when & then
+        assertThrows<StudentNotFoundException> {
             studentQueryRoomsUseCase.execute(timeSlotId)
         }
     }
