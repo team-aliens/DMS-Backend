@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.studyroom
 
 import com.querydsl.core.types.Expression
+import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -36,6 +37,8 @@ import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QStudentSeatApplicationVO
 import java.time.LocalTime
 import java.util.UUID
+import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.persistence.studyroom.repository.vo.QueryStudyRoomVO
 
 @Component
 class StudyRoomPersistenceAdapter(
@@ -110,7 +113,29 @@ class StudyRoomPersistenceAdapter(
     }
 
     override fun queryAllStudyRoomsByTimeSlotId(timeSlotId: UUID): List<StudyRoomVO> {
-        return jpaQueryFactory
+        return selectStudyRoomVOByTimeSlotId(timeSlotId)
+            .orderBy(
+                studyRoomJpaEntity.floor.asc(),
+                studyRoomJpaEntity.name.asc()
+            )
+            .fetch()
+    }
+
+    override fun queryAllStudyRoomsByTimeSlotIdAndGradeAndSex(timeSlotId: UUID, grade: Int, sex: Sex): List<StudyRoomVO> {
+        return selectStudyRoomVOByTimeSlotId(timeSlotId)
+            .where(
+                studyRoomJpaEntity.availableGrade.`in`(grade, 0),
+                studyRoomJpaEntity.availableSex.`in`(sex, Sex.ALL)
+            )
+            .orderBy(
+                studyRoomJpaEntity.floor.asc(),
+                studyRoomJpaEntity.name.asc()
+            )
+            .fetch()
+    }
+
+    private fun selectStudyRoomVOByTimeSlotId(timeSlotId: UUID): JPAQuery<QueryStudyRoomVO> =
+        jpaQueryFactory
             .select(
                 QQueryStudyRoomVO(
                     studyRoomJpaEntity.id,
@@ -136,12 +161,6 @@ class StudyRoomPersistenceAdapter(
                 seatApplicationJpaEntity.timeSlot.id.eq(timeSlotId)
             )
             .groupBy(studyRoomJpaEntity.id)
-            .orderBy(
-                studyRoomJpaEntity.floor.asc(),
-                studyRoomJpaEntity.name.asc()
-            )
-            .fetch()
-    }
 
     override fun queryTimeSlotsBySchoolId(schoolId: UUID) =
         timeSlotRepository.findBySchoolId(schoolId)

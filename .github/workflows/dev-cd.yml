@@ -56,7 +56,8 @@ jobs:
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.DOCKER_DEV_IMAGE }}
             docker pull ${{ secrets.DOCKER_DEV_IMAGE }}
             docker rm -f dms-dev || true
-            docker run -d --name dms-dev -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_DEV_IMAGE }} --network dms_net
+            docker run -d --name dms-dev -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_DEV_IMAGE }}
+            docker network connect dms_net dms-dev
             sleep 20
             is_healthy=$(docker inspect --format '{{ .State.Health.Status }}' dms-dev)
             echo $is_healthy
