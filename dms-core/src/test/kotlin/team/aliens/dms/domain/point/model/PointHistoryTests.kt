@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.point.model
 
-import java.time.LocalDateTime
-import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import team.aliens.dms.domain.point.exception.PointHistoryCanNotCancelException
+import java.time.LocalDateTime
+import java.util.UUID
 
 class PointHistoryTests {
 
@@ -63,4 +63,3 @@ class PointHistoryTests {
         }
     }
 }
-
