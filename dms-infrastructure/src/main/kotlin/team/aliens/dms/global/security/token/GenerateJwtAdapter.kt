@@ -6,10 +6,10 @@ import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.model.RefreshToken
+import team.aliens.dms.domain.auth.spi.CommandRefreshTokenPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.global.security.SecurityProperties
-import team.aliens.dms.persistence.auth.entity.RefreshTokenEntity
-import team.aliens.dms.persistence.auth.repository.RefreshTokenRepository
 import java.time.LocalDateTime
 import java.util.Date
 import java.util.UUID
@@ -17,7 +17,7 @@ import java.util.UUID
 @Component
 class GenerateJwtAdapter(
     private val securityProperties: SecurityProperties,
-    private val refreshTokenRepository: RefreshTokenRepository
+    private val commandRefreshTokenPort: CommandRefreshTokenPort
 ) : JwtPort {
 
     override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
@@ -45,13 +45,13 @@ class GenerateJwtAdapter(
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
 
-        val refreshToken = RefreshTokenEntity(
+        val refreshToken = RefreshToken(
             token = token,
             userId = userId,
             authority = authority,
             expirationTime = securityProperties.refreshExp
         )
-        refreshTokenRepository.save(refreshToken)
+        commandRefreshTokenPort.save(refreshToken)
 
         return token
     }
