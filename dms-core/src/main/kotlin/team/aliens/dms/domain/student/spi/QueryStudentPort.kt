@@ -11,7 +11,9 @@ interface QueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
 
-    fun existsStudentById(studentId: UUID): Boolean
+    fun queryStudentByUserId(userId: UUID): Student?
+
+    fun existsStudentByUserId(studentId: UUID): Boolean
 
     fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean
 }
