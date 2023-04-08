@@ -17,8 +17,8 @@ class QueryPointHistoryUseCase(
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
-        val currentStudentId = securityPort.getCurrentUserId()
-        val currentStudent = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
+        val currentUserId = securityPort.getCurrentUserId()
+        val currentStudent = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
 
         val gcn = currentStudent.gcn
         val name = currentStudent.name

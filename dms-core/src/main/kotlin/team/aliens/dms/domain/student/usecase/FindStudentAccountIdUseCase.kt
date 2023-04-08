@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.spi.SendEmailPort
@@ -9,7 +10,6 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.util.UUID
 
 /**
  *
@@ -34,7 +34,7 @@ class FindStudentAccountIdUseCase(
             number = request.number
         ) ?: throw StudentNotFoundException
 
-        val user = queryUserPort.queryUserById(student.id) ?: throw UserNotFoundException
+        val user = student.userId?.let { queryUserPort.queryUserById(it) } ?: throw UserNotFoundException
 
         if (student.name != request.name) {
             throw StudentInfoMismatchException

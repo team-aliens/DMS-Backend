@@ -24,7 +24,7 @@ class StudentMyPageUseCase(
 
     fun execute(): StudentMyPageResponse {
         val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
         val (bonusPoint, minusPoint) =

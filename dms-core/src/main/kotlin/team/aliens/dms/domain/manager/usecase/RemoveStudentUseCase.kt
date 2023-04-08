@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
+import java.time.LocalDateTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
@@ -12,8 +14,6 @@ import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.time.LocalDateTime
-import java.util.UUID
 
 @UseCase
 class RemoveStudentUseCase(
@@ -31,7 +31,7 @@ class RemoveStudentUseCase(
 
         val manager = queryUserPort.queryUserById(currentManagerId) ?: throw ManagerNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
-        val studentUser = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
+        val studentUser = student.userId?.let { queryUserPort.queryUserById(it) } ?: throw UserNotFoundException
 
         validateSameSchool(student.schoolId, manager.schoolId)
 

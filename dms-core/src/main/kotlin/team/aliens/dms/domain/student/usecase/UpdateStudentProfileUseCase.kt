@@ -15,7 +15,7 @@ class UpdateStudentProfileUseCase(
 
     fun execute(profileImageUrl: String) {
         val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
 
         commandStudentPort.saveStudent(
             student.copy(profileImageUrl = profileImageUrl)

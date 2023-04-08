@@ -27,7 +27,7 @@ class ResetStudentPasswordUseCase(
 
     fun execute(request: ResetStudentPasswordRequest) {
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
-        val student = queryStudentPort.queryStudentById(user.id) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(user.id) ?: throw StudentNotFoundException
 
         if (checkUserAuthority.execute(user.id) != Authority.STUDENT) {
             throw InvalidRoleException
