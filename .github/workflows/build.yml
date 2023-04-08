@@ -30,8 +30,5 @@ jobs:
             --build-cache
             --no-daemon
 
-      - name: Run Detekt Application
-        run: ./gradlew :dms-application:detekt
-
       - name: Run Detekt Domain
-        run: ./gradlew :dms-domain:detekt
+        run: ./gradlew :dms-core:detekt
