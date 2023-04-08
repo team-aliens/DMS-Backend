@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -35,7 +36,6 @@ import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpa
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
-import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -65,6 +65,9 @@ class StudentPersistenceAdapter(
     override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
         studentRepository.findByIdOrNull(studentId)
     )
+
+    override fun existsStudentById(studentId: UUID) =
+        studentRepository.existsById(studentId)
 
     override fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean {
         return queryFactory
