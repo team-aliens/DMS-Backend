@@ -34,21 +34,3 @@ internal fun createStudentStub(
     sex = sex,
     deletedAt = deletedAt
 )
-
-internal fun createVerifiedStudentStub(
-    id: UUID = UUID.randomUUID(),
-    schoolName: String = "대덕소마고",
-    name: String = "이름",
-    roomNumber: String = "415",
-    roomLocation: String = "C",
-    gcn: String = "2201",
-    sex: Sex = Sex.MALE
-) = VerifiedStudent(
-    id = id,
-    schoolName = schoolName,
-    name = name,
-    roomNumber = roomNumber,
-    roomLocation = roomLocation,
-    gcn = gcn,
-    sex = sex
-)
