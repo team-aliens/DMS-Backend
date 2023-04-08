@@ -42,9 +42,6 @@ dependencies {
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
-
-    // jpa
-    implementation(Dependencies.SPRING_DATA_JPA)
 }
 
 kapt {
