@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
@@ -114,7 +113,7 @@ class PointWebAdapter(
     @GetMapping("/history")
     fun getPointHistories(
         @RequestParam @NotNull type: PointRequestType?,
-        @ModelAttribute pageData: PageWebData
+        @ModelAttribute pageData: PageData
     ): QueryAllPointHistoryResponse {
         return queryAllPointHistoryUseCase.execute(
             type = type!!,

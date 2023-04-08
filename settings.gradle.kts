@@ -1,6 +1,6 @@
 rootProject.name = "DMS-Backend"
 
-include("dms-application")
-include("dms-domain")
+include("dms-core")
+include("dms-persistence")
 include("dms-infrastructure")
 include("dms-presentation")

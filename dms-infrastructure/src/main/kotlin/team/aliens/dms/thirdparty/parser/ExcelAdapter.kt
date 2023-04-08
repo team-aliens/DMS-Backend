@@ -1,9 +1,5 @@
 package team.aliens.dms.thirdparty.parser
 
-import com.fasterxml.uuid.Generators
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.time.format.DateTimeFormatter
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -31,6 +27,9 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.time.format.DateTimeFormatter
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -48,7 +47,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
                 val excelData = row.run {
                     VerifiedStudent(
-                        id = Generators.timeBasedGenerator().generate(),
                         schoolName = schoolName,
                         gcn = Student.processGcn(
                             grade = getIntValue(0),
