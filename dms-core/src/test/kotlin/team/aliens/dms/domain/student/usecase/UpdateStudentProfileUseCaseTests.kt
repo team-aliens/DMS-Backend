@@ -49,7 +49,7 @@ class UpdateStudentProfileUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
         given(commandStudentPort.saveStudent(studentStub.copy(profileImageUrl = "바뀐 사진 url")))

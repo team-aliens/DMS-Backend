@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -12,10 +11,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.stub.createStudentStub
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 class CheckStudentGcnUseCaseTests {
@@ -49,7 +50,9 @@ class CheckStudentGcnUseCaseTests {
     }
 
     private val studentStub by lazy {
-        createStudentStub()
+        createStudentStub(
+            userId = null
+        )
     }
 
     @Test
@@ -65,14 +68,34 @@ class CheckStudentGcnUseCaseTests {
                 classRoom = requestStub.classRoom,
                 number = requestStub.number
             )
-        )
-            .willReturn(studentStub)
+        ).willReturn(studentStub)
 
         // when
         val response = checkStudentGcnUseCase.execute(requestStub)
 
         // then
         assertEquals(response, studentStub.name)
+    }
+
+    @Test
+    fun `이미 가입한 학생임`() {
+        // given
+        given(querySchoolPort.querySchoolById(requestStub.schoolId))
+            .willReturn(schoolStub)
+
+        given(
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId = schoolStub.id,
+                grade = requestStub.grade,
+                classRoom = requestStub.classRoom,
+                number = requestStub.number
+            )
+        ).willReturn(createStudentStub())
+
+        // when & then
+        assertThrows<StudentAlreadyExistsException> {
+            checkStudentGcnUseCase.execute(requestStub)
+        }
     }
 
     @Test

@@ -83,7 +83,7 @@ class StudentWithdrawalUseCaseTests {
 
         every { queryUserPort.queryUserById(currentStudentId) } returns userStub
 
-        every { queryStudentPort.queryStudentById(currentStudentId) } returns null
+        every { queryStudentPort.queryStudentByUserId(currentStudentId) } returns null
 
         // when & then
         assertThrows<StudentNotFoundException> {
