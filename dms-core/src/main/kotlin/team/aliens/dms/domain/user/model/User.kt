@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.user.model
 
-import team.aliens.dms.common.annotation.Aggregate
-import team.aliens.dms.domain.auth.model.Authority
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.auth.model.Authority
 
 @Aggregate
 data class User(
@@ -20,8 +20,8 @@ data class User(
 
     val authority: Authority,
 
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    val deletedAt: LocalDateTime?
+    val deletedAt: LocalDateTime? = null
 
 )
