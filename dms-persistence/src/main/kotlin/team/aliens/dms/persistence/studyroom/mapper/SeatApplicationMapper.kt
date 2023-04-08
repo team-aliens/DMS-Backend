@@ -22,7 +22,7 @@ class SeatApplicationMapper(
             SeatApplication(
                 seatId = it.seat!!.id!!,
                 timeSlotId = it.timeSlot!!.id!!,
-                studentId = it.student!!.id
+                studentId = it.student!!.id!!
             )
         }
     }

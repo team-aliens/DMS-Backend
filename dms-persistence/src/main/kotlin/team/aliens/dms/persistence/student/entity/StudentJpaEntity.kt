@@ -1,9 +1,5 @@
 package team.aliens.dms.persistence.student.entity
 
-import org.hibernate.annotations.Where
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.persistence.room.entity.RoomJpaEntity
-import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -12,34 +8,28 @@ import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.FetchType
-import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
-import javax.persistence.MapsId
 import javax.persistence.OneToOne
 import javax.persistence.Table
-import javax.persistence.UniqueConstraint
+import org.hibernate.annotations.Where
+import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.room.entity.RoomJpaEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Entity
-@Table(
-    name = "tbl_student",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = arrayOf("grade", "class_room", "number"))
-    ]
-)
+@Table(name = "tbl_student")
 @Where(clause = "deleted_at is null")
 class StudentJpaEntity(
 
-    @Id
-    @Column(name = "user_id")
-    val id: UUID,
+    override val id: UUID?,
 
-    @MapsId
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
-    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = true)
     val user: UserJpaEntity?,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", columnDefinition = "BINARY(16)", nullable = false)
     val room: RoomJpaEntity?,
 
@@ -67,4 +57,4 @@ class StudentJpaEntity(
 
     @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?
-)
+): BaseUUIDEntity(id)
