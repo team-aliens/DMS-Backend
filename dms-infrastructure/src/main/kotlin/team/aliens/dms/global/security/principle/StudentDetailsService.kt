@@ -13,9 +13,10 @@ class StudentDetailsService(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-
-        val student = queryStudentPort.queryStudentById(UUID.fromString(username)) ?: throw InvalidTokenException
-
-        return StudentDetails(student.id)
+        val studentId = UUID.fromString(username)
+        if (!queryStudentPort.existsStudentById(studentId)) {
+            throw InvalidTokenException
+        }
+        return StudentDetails(studentId)
     }
 }
