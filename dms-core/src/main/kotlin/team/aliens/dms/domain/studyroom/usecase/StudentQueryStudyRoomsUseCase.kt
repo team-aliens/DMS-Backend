@@ -30,17 +30,22 @@ class StudentQueryStudyRoomsUseCase(
         validateSameSchool(timeSlot.schoolId, user.schoolId)
 
         val seatApplications = queryStudyRoomPort.querySeatApplicationsByStudentId(currentUserId)
-        val userStudyRoomIds = queryStudyRoomPort.queryAllSeatsById(seatApplications.map { it.seatId }).map { it.studyRoomId }
+        val userStudyRoomIds = queryStudyRoomPort.queryAllSeatsById(
+            seatApplications
+                .filter { it.timeSlotId == timeSlotId }
+                .map { it.seatId }
+        ).map { it.studyRoomId }
 
-        val studyRooms = queryStudyRoomPort.queryAllStudyRoomsByTimeSlotIdAndGradeAndSex(timeSlotId, student.grade, student.sex)
-            .map {
-                StudyRoomElement(
-                    id = it.id,
-                    floor = it.floor,
-                    name = it.name,
-                    availableGrade = it.availableGrade,
-                    availableSex = it.availableSex,
-                    inUseHeadcount = it.inUseHeadcount,
+        val studyRooms =
+            queryStudyRoomPort.queryAllStudyRoomsByTimeSlotIdAndGradeAndSex(timeSlotId, student.grade, student.sex)
+                .map {
+                    StudyRoomElement(
+                        id = it.id,
+                        floor = it.floor,
+                        name = it.name,
+                        availableGrade = it.availableGrade,
+                        availableSex = it.availableSex,
+                        inUseHeadcount = it.inUseHeadcount,
                     totalAvailableSeat = it.totalAvailableSeat,
                     isMine = userStudyRoomIds.contains(it.id)
                 )
