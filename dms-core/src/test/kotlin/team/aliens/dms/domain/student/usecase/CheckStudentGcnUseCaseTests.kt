@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.student.usecase
 
+import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -11,12 +12,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
-import team.aliens.dms.domain.student.stub.createVerifiedStudentStub
-import java.util.UUID
+import team.aliens.dms.domain.student.stub.createStudentStub
 
 @ExtendWith(SpringExtension::class)
 class CheckStudentGcnUseCaseTests {
@@ -25,14 +24,14 @@ class CheckStudentGcnUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
+    private lateinit var queryStudentPort: QueryStudentPort
 
     private lateinit var checkStudentGcnUseCase: CheckStudentGcnUseCase
 
     @BeforeEach
     fun setUp() {
         checkStudentGcnUseCase = CheckStudentGcnUseCase(
-            querySchoolPort, queryVerifiedStudentPort
+            querySchoolPort, queryStudentPort
         )
     }
 
@@ -49,8 +48,8 @@ class CheckStudentGcnUseCaseTests {
         createSchoolStub()
     }
 
-    private val verifiedStudent by lazy {
-        createVerifiedStudentStub(schoolName = schoolStub.name)
+    private val studentStub by lazy {
+        createStudentStub()
     }
 
     @Test
@@ -60,18 +59,20 @@ class CheckStudentGcnUseCaseTests {
             .willReturn(schoolStub)
 
         given(
-            queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-                gcn = Student.processGcn(requestStub.grade, requestStub.classRoom, requestStub.number),
-                schoolName = schoolStub.name
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId = schoolStub.id,
+                grade = requestStub.grade,
+                classRoom = requestStub.classRoom,
+                number = requestStub.number
             )
         )
-            .willReturn(verifiedStudent)
+            .willReturn(studentStub)
 
         // when
         val response = checkStudentGcnUseCase.execute(requestStub)
 
         // then
-        assertEquals(response, verifiedStudent.name)
+        assertEquals(response, studentStub.name)
     }
 
     @Test
@@ -93,15 +94,16 @@ class CheckStudentGcnUseCaseTests {
             .willReturn(schoolStub)
 
         given(
-            queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-                gcn = Student.processGcn(requestStub.grade, requestStub.classRoom, requestStub.number),
-                schoolName = schoolStub.name
+            queryStudentPort.queryStudentBySchoolIdAndGcn(
+                schoolId = schoolStub.id,
+                grade = requestStub.grade,
+                classRoom = requestStub.classRoom,
+                number = requestStub.number
             )
-        )
-            .willReturn(null)
+        ).willReturn(null)
 
         // when & then
-        assertThrows<VerifiedStudentNotFoundException> {
+        assertThrows<StudentNotFoundException> {
             checkStudentGcnUseCase.execute(requestStub)
         }
     }

@@ -1,13 +1,13 @@
 package team.aliens.dms.domain.student.stub
 
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.student.model.Student
 
 internal fun createStudentStub(
     id: UUID = UUID.randomUUID(),
+    userId: UUID = UUID.randomUUID(),
     roomId: UUID = UUID.randomUUID(),
     roomNumber: String = "415",
     roomLocation: String = "C",
@@ -21,6 +21,7 @@ internal fun createStudentStub(
     deletedAt: LocalDateTime? = null
 ) = Student(
     id = id,
+    userId = userId,
     roomId = roomId,
     roomNumber = roomNumber,
     roomLocation = roomLocation,
