@@ -67,6 +67,10 @@ class StudyRoomPersistenceAdapter(
         seatApplicationRepository.queryByStudentId(studentId)
             .map { seatApplicationMapper.toDomain(it)!! }
 
+    override fun querySeatApplicationsByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID) = seatApplicationMapper.toDomain(
+        seatApplicationRepository.queryByStudentIdAndTimeSlotId(studentId, timeSlotId)
+    )
+
     override fun queryAllSeatsById(seatIds: List<UUID>) =
         seatRepository.findAllById(seatIds)
             .map { seatMapper.toDomain(it)!! }
