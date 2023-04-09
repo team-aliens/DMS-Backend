@@ -12,46 +12,46 @@ data class CreateStudyRoomWebRequest(
 
     @field:NotNull
     @field:Min(1)
-    val floor: Int?,
+    val floor: Int,
 
     @field:NotBlank
     @field:Size(max = 10)
-    val name: String?,
+    val name: String,
 
     @field:NotNull
     @field:Min(0)
-    val totalWidthSize: Int?,
+    val totalWidthSize: Int,
 
     @field:NotNull
     @field:Min(0)
-    val totalHeightSize: Int?,
+    val totalHeightSize: Int,
 
     @field:NotBlank
     @field:Size(max = 20)
-    val eastDescription: String?,
+    val eastDescription: String,
 
     @field:NotBlank
     @field:Size(max = 20)
-    val westDescription: String?,
+    val westDescription: String,
 
     @field:NotBlank
     @field:Size(max = 20)
-    val southDescription: String?,
+    val southDescription: String,
 
     @field:NotBlank
     @field:Size(max = 20)
-    val northDescription: String?,
+    val northDescription: String,
 
     @field:NotNull
-    val availableSex: WebSex?,
+    val availableSex: WebSex,
 
     @field:NotNull
     @field:Min(0)
-    val availableGrade: Int?,
+    val availableGrade: Int,
 
     @field:Size(min = 1)
     @field:NotNullElements
-    val timeSlotIds: List<UUID>?,
+    val timeSlotIds: List<UUID>,
 
     @field:Valid
     val seats: List<SeatRequest>
@@ -62,18 +62,18 @@ data class CreateStudyRoomWebRequest(
 
         @field:NotNull
         @field:Min(0)
-        val widthLocation: Int?,
+        val widthLocation: Int,
 
         @field:NotNull
         @field:Min(0)
-        val heightLocation: Int?,
+        val heightLocation: Int,
 
-        val number: Int?,
+        val number: Int,
 
-        val typeId: UUID?,
+        val typeId: UUID,
 
         @field:NotNull
-        val status: WebSeatStatus?
+        val status: WebSeatStatus
 
     )
 }

@@ -25,16 +25,16 @@ class UserWebAdapter(
 ) {
 
     @GetMapping("/password")
-    fun passwordCompare(@RequestParam @NotBlank password: String?) {
-        userPasswordCompareUseCase.execute(password!!)
+    fun passwordCompare(@RequestParam @NotBlank password: String) {
+        userPasswordCompareUseCase.execute(password)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/password")
     fun updatePassword(@RequestBody @Valid webRequest: UpdateUserPasswordWebRequest) {
         val request = UpdateUserPasswordRequest(
-            currentPassword = webRequest.currentPassword!!,
-            newPassword = webRequest.newPassword!!
+            currentPassword = webRequest.currentPassword,
+            newPassword = webRequest.newPassword
         )
 
         updateUserPasswordUseCase.execute(request)

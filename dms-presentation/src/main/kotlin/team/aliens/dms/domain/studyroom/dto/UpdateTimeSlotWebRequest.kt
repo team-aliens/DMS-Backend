@@ -6,8 +6,8 @@ import javax.validation.constraints.NotNull
 data class UpdateTimeSlotWebRequest(
 
     @field:NotNull
-    val startTime: LocalTime?,
+    val startTime: LocalTime,
 
     @field:NotNull
-    val endTime: LocalTime?
+    val endTime: LocalTime
 )

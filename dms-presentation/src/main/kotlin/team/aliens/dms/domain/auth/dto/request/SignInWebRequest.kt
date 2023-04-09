@@ -7,10 +7,10 @@ data class SignInWebRequest(
 
     @field:NotBlank
     @field:Size(min = 4, max = 20)
-    val accountId: String?,
+    val accountId: String,
 
     @field:NotBlank
     @field:Size(min = 8, max = 20)
-    val password: String?
+    val password: String
 
 )

@@ -95,13 +95,13 @@ class StudyRoomWebAdapter(
     @PutMapping("/available-time")
     fun updateAvailableTime(@RequestBody @Valid request: UpdateAvailableTimeWebRequest) {
         updateAvailableTimeUseCase.execute(
-            startAt = request.startAt!!,
-            endAt = request.endAt!!
+            startAt = request.startAt,
+            endAt = request.endAt
         )
     }
 
     @GetMapping("/types")
-    fun getSeatTypes(@RequestParam(name = "study_room_id", required = false) studyRoomId: UUID?): QuerySeatTypesResponse {
+    fun getSeatTypes(@RequestParam(name = "study_room_id", required = false) studyRoomId: UUID): QuerySeatTypesResponse {
         return querySeatTypesUseCase.execute(studyRoomId)
     }
 
@@ -109,27 +109,27 @@ class StudyRoomWebAdapter(
     @PostMapping("/types")
     fun createSeatType(@RequestBody @Valid request: CreateSeatTypeWebRequest) {
         return createSeatTypeUseCase.execute(
-            name = request.name!!,
-            color = request.color!!
+            name = request.name,
+            color = request.color
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/seats/{seat-id}")
     fun applySeat(
-        @PathVariable("seat-id") @NotNull seatId: UUID?,
-        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+        @PathVariable("seat-id") @NotNull seatId: UUID,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID
     ) {
         return applySeatUseCase.execute(
-            seatId = seatId!!,
-            timeSlotId = timeSlotId!!
+            seatId = seatId,
+            timeSlotId = timeSlotId
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/seats")
-    fun unApplySeat(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?) {
-        unApplySeatUseCase.execute(timeSlotId!!)
+    fun unApplySeat(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID) {
+        unApplySeatUseCase.execute(timeSlotId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -138,24 +138,24 @@ class StudyRoomWebAdapter(
         val studyRoomId = createStudyRoomUseCase.execute(
             request.run {
                 CreateStudyRoomRequest(
-                    floor = floor!!,
-                    name = name!!,
-                    totalWidthSize = totalWidthSize!!,
-                    totalHeightSize = totalHeightSize!!,
-                    eastDescription = eastDescription!!,
-                    westDescription = westDescription!!,
-                    southDescription = southDescription!!,
-                    northDescription = northDescription!!,
-                    availableSex = availableSex!!.name,
-                    availableGrade = availableGrade!!,
-                    timeSlotIds = timeSlotIds!!,
+                    floor = floor,
+                    name = name,
+                    totalWidthSize = totalWidthSize,
+                    totalHeightSize = totalHeightSize,
+                    eastDescription = eastDescription,
+                    westDescription = westDescription,
+                    southDescription = southDescription,
+                    northDescription = northDescription,
+                    availableSex = availableSex.name,
+                    availableGrade = availableGrade,
+                    timeSlotIds = timeSlotIds,
                     seats = seats.map {
                         CreateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation!!,
-                            heightLocation = it.heightLocation!!,
+                            widthLocation = it.widthLocation,
+                            heightLocation = it.heightLocation,
                             number = it.number,
                             typeId = it.typeId,
-                            status = it.status!!.name
+                            status = it.status.name
                         )
                     }
                 )
@@ -168,31 +168,31 @@ class StudyRoomWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{study-room-id}")
     fun updateStudyRoom(
-        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
         @RequestBody @Valid request: UpdateStudyRoomWebRequest
     ) {
         updateStudyRoomUseCase.execute(
-            studyRoomId!!,
+            studyRoomId,
             request.run {
                 UpdateStudyRoomRequest(
-                    floor = floor!!,
-                    name = name!!,
-                    totalWidthSize = totalWidthSize!!,
-                    totalHeightSize = totalHeightSize!!,
-                    eastDescription = eastDescription!!,
-                    westDescription = westDescription!!,
-                    southDescription = southDescription!!,
-                    northDescription = northDescription!!,
-                    availableSex = availableSex!!.name,
-                    availableGrade = availableGrade!!,
-                    timeSlotIds = timeSlotIds!!,
+                    floor = floor,
+                    name = name,
+                    totalWidthSize = totalWidthSize,
+                    totalHeightSize = totalHeightSize,
+                    eastDescription = eastDescription,
+                    westDescription = westDescription,
+                    southDescription = southDescription,
+                    northDescription = northDescription,
+                    availableSex = availableSex.name,
+                    availableGrade = availableGrade,
+                    timeSlotIds = timeSlotIds,
                     seats = seats.map {
                         UpdateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation!!,
-                            heightLocation = it.heightLocation!!,
+                            widthLocation = it.widthLocation,
+                            heightLocation = it.heightLocation,
                             number = it.number,
                             typeId = it.typeId,
-                            status = it.status!!.name
+                            status = it.status.name
                         )
                     }
                 )
@@ -202,46 +202,46 @@ class StudyRoomWebAdapter(
 
     @GetMapping("/{study-room-id}/students")
     fun studentGetStudyRoom(
-        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
-        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID
     ): StudentQueryStudyRoomResponse {
         return studentQueryStudyRoomUseCase.execute(
-            studyRoomId = studyRoomId!!,
-            timeSlotId = timeSlotId!!
+            studyRoomId = studyRoomId,
+            timeSlotId = timeSlotId
         )
     }
 
     @GetMapping("/{study-room-id}/managers")
     fun managerGetStudyRoom(
-        @PathVariable("study-room-id") @NotNull studyRoomId: UUID?,
-        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
+        @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID
     ): ManagerQueryStudyRoomResponse {
         return managerQueryStudyRoomUseCase.execute(
-            studyRoomId = studyRoomId!!,
-            timeSlotId = timeSlotId!!
+            studyRoomId = studyRoomId,
+            timeSlotId = timeSlotId
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{study-room-id}")
-    fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID?) {
-        removeStudyRoomUseCase.execute(studyRoomId!!)
+    fun removeStudyRoom(@PathVariable("study-room-id") @NotNull studyRoomId: UUID) {
+        removeStudyRoomUseCase.execute(studyRoomId)
     }
 
     @GetMapping("/list/students")
-    fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): StudentQueryStudyRoomsResponse {
-        return studentQueryStudyRoomsUseCase.execute(timeSlotId!!)
+    fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID): StudentQueryStudyRoomsResponse {
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @GetMapping("/list/managers")
-    fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID?): ManagerQueryStudyRoomsResponse {
-        return managerQueryStudyRoomsUseCase.execute(timeSlotId!!)
+    fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID): ManagerQueryStudyRoomsResponse {
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/types/{type-id}")
-    fun removeSeatType(@PathVariable("type-id") @NotNull seatTypeId: UUID?) {
-        return removeSeatTypeUseCase.execute(seatTypeId!!)
+    fun removeSeatType(@PathVariable("type-id") @NotNull seatTypeId: UUID) {
+        return removeSeatTypeUseCase.execute(seatTypeId)
     }
 
     @GetMapping("/my")
@@ -259,32 +259,32 @@ class StudyRoomWebAdapter(
     fun createTimeSlotUseCase(
         @RequestBody @Valid request: CreateTimeSlotWebRequest
     ): CreateTimeSlotWebResponse {
-        val id = createTimeSlotUseCase.execute(request.startTime!!, request.endTime!!)
+        val id = createTimeSlotUseCase.execute(request.startTime, request.endTime)
         return CreateTimeSlotWebResponse(id)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/time-slots/{time-slot-id}")
     fun updateTimeSlot(
-        @PathVariable("time-slot-id") @NotNull timeSlotId: UUID?,
+        @PathVariable("time-slot-id") @NotNull timeSlotId: UUID,
         @RequestBody @Valid request: UpdateTimeSlotWebRequest
     ) {
         updateTimeSlotUseCase.execute(
-            timeSlotId = timeSlotId!!,
-            startTime = request.startTime!!,
-            endTime = request.endTime!!
+            timeSlotId = timeSlotId,
+            startTime = request.startTime,
+            endTime = request.endTime
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/time-slots/{time-slot-id}")
-    fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID?) {
-        removeTimeSlotUseCase.execute(timeSlotId!!)
+    fun removeTimeSlot(@PathVariable("time-slot-id") @NotNull timeSlotId: UUID) {
+        removeTimeSlotUseCase.execute(timeSlotId)
     }
 
     @PostMapping("/students/file")
     fun exportStudyRoomStudentsApplicationStatus(
-        @RequestPart file: MultipartFile?,
+        @RequestPart @NotNull file: MultipartFile?,
         httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportStudyRoomApplicationStatusUseCase.execute(

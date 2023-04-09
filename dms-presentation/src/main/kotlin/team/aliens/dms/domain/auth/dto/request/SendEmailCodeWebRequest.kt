@@ -10,9 +10,9 @@ data class SendEmailCodeWebRequest(
     @field:NotBlank
     @field:Size(max = 255)
     @field:Email
-    val email: String?,
+    val email: String,
 
     @field:NotNull
-    val type: WebEmailType?
+    val type: WebEmailType
 
 )
