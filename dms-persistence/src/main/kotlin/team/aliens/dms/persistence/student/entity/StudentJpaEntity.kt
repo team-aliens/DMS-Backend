@@ -29,7 +29,7 @@ class StudentJpaEntity(
     @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = true)
     val user: UserJpaEntity?,
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", columnDefinition = "BINARY(16)", nullable = false)
     val room: RoomJpaEntity?,
 
@@ -57,4 +57,4 @@ class StudentJpaEntity(
 
     @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?
-): BaseUUIDEntity(id)
+) : BaseUUIDEntity(id)
