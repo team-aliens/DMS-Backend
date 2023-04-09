@@ -34,20 +34,20 @@ class ImportStudentUseCase(
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
-        val excelStudentVOs = parseFilePort.getExcelStudentVO(file)
+        val parsedStudentInfos = parseFilePort.getExcelStudentVO(file)
 
-        val gcnList = excelStudentVOs.map { Triple(it.grade, it.classRoom, it.number) }
+        val gcnList = parsedStudentInfos.map { Triple(it.grade, it.classRoom, it.number) }
         if (queryStudentPort.existsBySchoolIdAndGcnList(school.id, gcnList)) {
             throw StudentAlreadyExistsException
         }
 
         val roomMap = saveNotExistsRooms(
-            roomNumbers = excelStudentVOs.map { it.roomNumber }.distinctBy { it },
+            roomNumbers = parsedStudentInfos.map { it.roomNumber }.distinctBy { it },
             schoolId = school.id
         )
 
         commandStudentPort.saveAllStudent(
-            excelStudentVOs.map {
+            parsedStudentInfos.map {
                 Student(
                     roomId = roomMap[it.roomNumber]!!.id,
                     roomNumber = it.roomNumber,
