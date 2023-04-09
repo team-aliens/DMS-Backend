@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 plugins {
     id("org.springframework.boot") version PluginVersions.SPRING_BOOT_VERSION
     id("io.spring.dependency-management") version PluginVersions.DEPENDENCY_MANAGER_VERSION
@@ -42,6 +44,12 @@ dependencies {
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
+
+    // aop
+    implementation(Dependencies.SPRING_AOP)
+
+    // sentry
+    implementation("io.sentry:sentry-spring-boot-starter:6.2.1")
 }
 
 kapt {

@@ -1,6 +1,7 @@
 package team.aliens.dms.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.sentry.Sentry
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.common.error.DmsException
@@ -27,10 +28,12 @@ class ExceptionFilter(
             errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
             when (e.cause) {
-                is DmsException -> errorToJson((e.cause as DmsException).errorProperty, response)
+                is DmsException -> {
+                    errorToJson((e.cause as DmsException).errorProperty, response)
+                }
                 else -> {
                     errorToJson(InternalServerErrorException.errorProperty, response)
-                    e.printStackTrace()
+                    Sentry.captureException(e)
                 }
             }
         }
