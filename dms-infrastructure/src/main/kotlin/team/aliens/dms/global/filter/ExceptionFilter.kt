@@ -31,6 +31,7 @@ class ExceptionFilter(
             when (e.cause) {
                 is DmsException -> {
                     errorToJson((e.cause as DmsException).errorProperty, response)
+                    Sentry.captureException(e)
                 }
                 else -> {
                     errorToJson(InternalServerErrorException.errorProperty, response)
