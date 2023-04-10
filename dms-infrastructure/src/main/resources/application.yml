@@ -63,7 +63,7 @@ cloud:
       source: ${SES_SENDER:asdf}
 
 sentry:
-  dsn: ${SENTRY_DSN:asdf}
+  dsn: https://82854e0f26344e188797f05b43e25673@o4504645237276672.ingest.sentry.io/4504977952210944
   traces-sample-rate: 1.0
 
 logging:

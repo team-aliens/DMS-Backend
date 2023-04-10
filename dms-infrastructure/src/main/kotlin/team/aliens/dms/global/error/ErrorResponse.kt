@@ -8,8 +8,8 @@ import javax.validation.ConstraintViolationException
 
 data class ErrorResponse(
     val status: Int,
-    val code: String,
-    val message: String
+    val message: String,
+    val code: String
 ) {
 
     companion object {
