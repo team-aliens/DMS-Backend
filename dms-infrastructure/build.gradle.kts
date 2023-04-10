@@ -42,6 +42,12 @@ dependencies {
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
+
+    // aop
+    implementation(Dependencies.SPRING_AOP)
+
+    // logging
+    implementation(Dependencies.SENTRY)
 }
 
 kapt {

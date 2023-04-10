@@ -66,4 +66,7 @@ object Dependencies {
 
     // gson
     const val GSON = "com.google.code.gson:gson"
+
+    // sentry
+    const val SENTRY = "io.sentry:sentry-spring-boot-starter:${DependencyVersions.SENTRY_VERSION}"
 }
