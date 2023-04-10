@@ -5,12 +5,14 @@ import team.aliens.dms.common.error.ErrorStatus
 
 enum class AvailableTimeErrorCode(
     private val status: Int,
-    private val message: String
+    private val message: String,
+    private val code: String
 ) : ErrorProperty {
 
-    AVAILABLE_TIME_NOT_FOUND(ErrorStatus.NOT_FOUND, "Study Room Available Time Not Found")
+    AVAILABLE_TIME_NOT_FOUND(ErrorStatus.NOT_FOUND, "Study Room Available Time Not Found", "STUDY-ROOM-404-1")
     ;
 
     override fun status(): Int = status
     override fun message(): String = message
+    override fun code(): String = code
 }
