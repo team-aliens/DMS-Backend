@@ -26,6 +26,7 @@ class ExceptionFilter(
             filterChain.doFilter(request, response)
         } catch (e: DmsException) {
             errorToJson(e.errorProperty, response)
+            Sentry.captureException(e)
         } catch (e: Exception) {
             when (e.cause) {
                 is DmsException -> {
