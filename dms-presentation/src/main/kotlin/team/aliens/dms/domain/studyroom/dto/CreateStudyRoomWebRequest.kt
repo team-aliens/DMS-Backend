@@ -68,9 +68,9 @@ data class CreateStudyRoomWebRequest(
         @field:Min(0)
         val heightLocation: Int,
 
-        val number: Int,
+        val number: Int?,
 
-        val typeId: UUID,
+        val typeId: UUID?,
 
         @field:NotNull
         val status: WebSeatStatus

@@ -70,12 +70,12 @@ class ManagerWebAdapter(
 
     @GetMapping("/students")
     fun getStudents(
-        @RequestParam(required = false) name: String,
+        @RequestParam(required = false) name: String?,
         @RequestParam @NotNull sort: Sort,
-        @RequestParam(name = "filter_type", required = false) filterType: PointFilterType,
-        @RequestParam(name = "min_point", required = false) minPoint: Int,
-        @RequestParam(name = "max_point", required = false) maxPoint: Int,
-        @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>
+        @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
+        @RequestParam(name = "min_point", required = false) minPoint: Int?,
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?,
+        @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
     ): QueryStudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,

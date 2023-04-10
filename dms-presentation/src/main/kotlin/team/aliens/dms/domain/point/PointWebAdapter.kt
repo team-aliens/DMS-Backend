@@ -139,7 +139,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/options")
-    fun getAllPointOptions(@RequestParam(required = false) keyword: String): QueryPointOptionsResponse {
+    fun getAllPointOptions(@RequestParam(required = false) keyword: String?): QueryPointOptionsResponse {
         return queryPointOptionsUseCase.execute(keyword)
     }
 
