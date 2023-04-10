@@ -54,6 +54,6 @@ data class SignUpWebRequest(
     val password: String,
 
     @field:Size(max = 500)
-    val profileImageUrl: String
+    val profileImageUrl: String?
 
 )

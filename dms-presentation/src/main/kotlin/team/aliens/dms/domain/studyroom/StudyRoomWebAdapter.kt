@@ -284,7 +284,7 @@ class StudyRoomWebAdapter(
 
     @PostMapping("/students/file")
     fun exportStudyRoomStudentsApplicationStatus(
-        @RequestPart @NotNull file: MultipartFile?,
+        @RequestPart file: MultipartFile?,
         httpResponse: HttpServletResponse
     ): ByteArray {
         val response = exportStudyRoomApplicationStatusUseCase.execute(
