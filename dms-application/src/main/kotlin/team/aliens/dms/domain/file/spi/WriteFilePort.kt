@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.file.spi
 
+import java.io.File
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
-import java.io.File
 
 interface WriteFilePort {
 
