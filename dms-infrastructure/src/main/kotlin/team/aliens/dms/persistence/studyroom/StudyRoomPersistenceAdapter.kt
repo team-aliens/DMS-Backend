@@ -3,8 +3,11 @@ package team.aliens.dms.persistence.studyroom
 import com.querydsl.core.types.Expression
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalTime
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.StudyRoom
@@ -35,9 +38,6 @@ import team.aliens.dms.persistence.studyroom.repository.TimeSlotJpaRepository
 import team.aliens.dms.persistence.studyroom.repository.vo.QQuerySeatApplicationVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QQueryStudyRoomVO
 import team.aliens.dms.persistence.studyroom.repository.vo.QStudentSeatApplicationVO
-import java.time.LocalTime
-import java.util.UUID
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.persistence.studyroom.repository.vo.QueryStudyRoomVO
 
 @Component
@@ -66,6 +66,10 @@ class StudyRoomPersistenceAdapter(
     override fun querySeatApplicationsByStudentId(studentId: UUID) =
         seatApplicationRepository.queryByStudentId(studentId)
             .map { seatApplicationMapper.toDomain(it)!! }
+
+    override fun querySeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID) = seatApplicationMapper.toDomain(
+        seatApplicationRepository.queryByStudentIdAndTimeSlotId(studentId, timeSlotId)
+    )
 
     override fun queryAllSeatsById(seatIds: List<UUID>) =
         seatRepository.findAllById(seatIds)

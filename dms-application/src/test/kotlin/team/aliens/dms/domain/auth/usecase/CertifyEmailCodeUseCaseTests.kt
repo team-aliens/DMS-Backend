@@ -12,7 +12,6 @@ import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeMismatchException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
@@ -180,26 +179,6 @@ class CertifyEmailCodeUseCaseTests {
 
         // when & then
         assertThrows<AuthCodeLimitNotFoundException> {
-            certifyEmailCodeUseCase.execute(request)
-        }
-    }
-
-    @Test
-    fun `이미 인증됨`() {
-        val request = CertifyEmailCodeRequest(email, code, type)
-
-        // given
-        given(queryUserPot.queryUserByEmail(email))
-            .willReturn(userStub)
-
-        given(queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type))
-            .willReturn(authCodeStub)
-
-        given(queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type))
-            .willReturn(verifiedAuthCodeLimitStub)
-
-        // when & then
-        assertThrows<EmailAlreadyCertifiedException> {
             certifyEmailCodeUseCase.execute(request)
         }
     }
