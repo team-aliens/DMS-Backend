@@ -251,9 +251,8 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
-            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
             .where(
-                userJpaEntity.school.id.eq(schoolId)
+                roomJpaEntity.school.id.eq(schoolId)
             )
             .orderBy(roomJpaEntity.number.asc())
             .fetch()
