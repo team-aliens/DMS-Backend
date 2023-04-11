@@ -120,9 +120,9 @@ class ExcelAdapterTests {
         listOf(
             StudentSeatInfo(
                 studentName = "",
-                grade = 1,
-                classRoom = 2,
-                number = 3,
+                studentGrade = 1,
+                studentClassRoom = 2,
+                studentNumber = 3,
                 seats = listOf(
                     StudentSeatInfo.SeatInfo(
                         seatFullName = "",

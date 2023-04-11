@@ -14,9 +14,11 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQuerySchoolPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.time.LocalDateTime
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
@@ -33,23 +35,21 @@ class ExportStudyRoomApplicationStatusUseCase(
         val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
         val students = queryStudentPort.queryStudentsBySchoolId(manager.schoolId)
-        val studentSeatApplicationsMap = queryStudyRoomPort.querySeatApplicationsByStudentIdIn(
-            studentIds = students.map { it.id }
-        ).associateBy { it.studentId }
+        val studentSeatApplicationsMap = getStudentSeatApplicationsMap(students)
 
         val studentSeats = students.map { student ->
-            val seat = studentSeatApplicationsMap[student.id]
             StudentSeatInfo(
-                studentId = student.id,
-                studentName = student.name,
                 studentGrade = student.grade,
                 studentClassRoom = student.classRoom,
                 studentNumber = student.number,
-                seatFullName = seat?.let {
-                    StudyRoom.precessName(it.studyRoomFloor, it.studyRoomName) +
-                        " " + Seat.processName(it.seatNumber, it.seatTypeName)
-                },
-                timeSlotId = seat?.timeSlotId
+                studentName = student.name,
+                seats = studentSeatApplicationsMap[student.id]?.map {
+                    StudentSeatInfo.SeatInfo(
+                        seatFullName = StudyRoom.precessName(it.studyRoomFloor, it.studyRoomName) +
+                            " " + Seat.processName(it.seatNumber, it.seatTypeName),
+                        timeSlotId = it.timeSlotId
+                    )
+                }
             )
         }
 
@@ -62,6 +62,17 @@ class ExportStudyRoomApplicationStatusUseCase(
         )
     }
 
+    private fun getStudentSeatApplicationsMap(students: List<Student>): MutableMap<UUID, MutableList<StudentSeatApplicationVO>> {
+        val map = mutableMapOf<UUID, MutableList<StudentSeatApplicationVO>>()
+        queryStudyRoomPort.querySeatApplicationsByStudentIdIn(
+            studentIds = students.map { it.id }
+        ).map {
+            map[it.studentId]
+                ?.run { this.add(it) } ?: map.put(it.studentId, mutableListOf(it))
+        }
+        return map
+    }
+
     private fun getStudyRoomApplicationStatusFile(
         file: java.io.File?,
         timeSlots: List<TimeSlot>,
@@ -71,10 +82,7 @@ class ExportStudyRoomApplicationStatusUseCase(
             baseFile = file,
             timeSlots = timeSlots,
             studentSeatsMap = studentSeats.associateBy {
-                Pair(
-                    Student.processGcn(it.studentGrade, it.studentClassRoom, it.studentNumber),
-                    it.studentName
-                )
+                Pair(Student.processGcn(it.studentGrade, it.studentClassRoom, it.studentNumber), it.studentName)
             }
         )
     } ?: writeFilePort.writeStudyRoomApplicationStatusExcelFile(

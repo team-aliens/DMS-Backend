@@ -3,9 +3,9 @@ package team.aliens.dms.domain.studyroom.spi.vo
 import java.util.UUID
 
 class StudentSeatInfo(
-    val grade: Int,
-    val classRoom: Int,
-    val number: Int,
+    val studentGrade: Int,
+    val studentClassRoom: Int,
+    val studentNumber: Int,
     val studentName: String,
     val seats: List<SeatInfo>?
 ) {
