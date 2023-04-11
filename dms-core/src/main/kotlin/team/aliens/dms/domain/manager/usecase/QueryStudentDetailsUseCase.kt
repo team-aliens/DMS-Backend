@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.manager.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
@@ -12,6 +11,7 @@ import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.tag.dto.TagResponse
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(

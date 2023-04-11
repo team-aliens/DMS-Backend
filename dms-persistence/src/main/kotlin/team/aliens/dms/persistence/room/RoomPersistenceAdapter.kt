@@ -1,11 +1,11 @@
 package team.aliens.dms.persistence.room
 
-import java.util.UUID
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.RoomPort
 import team.aliens.dms.persistence.room.mapper.RoomMapper
 import team.aliens.dms.persistence.room.repository.RoomJpaRepository
+import java.util.UUID
 
 @Component
 class RoomPersistenceAdapter(

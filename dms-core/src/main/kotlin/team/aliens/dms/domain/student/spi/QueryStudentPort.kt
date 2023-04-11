@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.spi
 
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Student
+import java.util.UUID
 
 interface QueryStudentPort {
 

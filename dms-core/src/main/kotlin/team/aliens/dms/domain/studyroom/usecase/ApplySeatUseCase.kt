@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -20,6 +19,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @UseCase
 class ApplySeatUseCase(

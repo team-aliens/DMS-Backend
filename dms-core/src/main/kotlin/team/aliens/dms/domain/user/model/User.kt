@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.user.model
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.auth.model.Authority
+import java.time.LocalDateTime
+import java.util.UUID
 
 @Aggregate
 data class User(

@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.file.usecase
 
-import java.io.File
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.file.spi.FileQueryRoomPort
 import team.aliens.dms.domain.file.spi.FileQuerySchoolPort
@@ -16,6 +14,8 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.io.File
+import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(

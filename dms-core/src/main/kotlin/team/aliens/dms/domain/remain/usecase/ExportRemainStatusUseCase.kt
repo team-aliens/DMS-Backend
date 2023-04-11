@@ -33,7 +33,7 @@ class ExportRemainStatusUseCase(
 
         val studentList = queryStudentPort.queryStudentsBySchoolId(manager.schoolId)
 
-        val remainStatusMap = queryRemainStatusPort.queryByStudentIdIn(
+        val remainStatusMap = queryRemainStatusPort.queryAllByStudentId(
             studentIds = studentList.map { it.id }
         ).associateBy { it.studentId }
 
