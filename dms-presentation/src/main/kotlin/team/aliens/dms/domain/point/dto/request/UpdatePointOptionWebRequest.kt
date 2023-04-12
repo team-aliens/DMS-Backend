@@ -7,8 +7,8 @@ import javax.validation.constraints.Size
 data class UpdatePointOptionWebRequest(
     @field:NotBlank
     @field:Size(max = 20)
-    val name: String?,
+    val name: String,
 
     @field:NotNull
-    val score: Int?
+    val score: Int
 )

@@ -6,8 +6,8 @@ import javax.validation.constraints.NotNull
 
 data class GrantPointWebRequest(
     @field:NotNull
-    val pointOptionId: UUID?,
+    val pointOptionId: UUID,
 
     @field:NotNullElements
-    val studentIdList: List<UUID>?
+    val studentIdList: List<UUID>
 )

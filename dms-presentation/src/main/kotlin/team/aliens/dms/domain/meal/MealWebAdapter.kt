@@ -19,7 +19,7 @@ class MealWebAdapter(
 ) {
 
     @GetMapping("/{date}")
-    fun getMeals(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull mealDate: LocalDate?): QueryMealsResponse {
-        return queryMealsUseCase.execute(mealDate!!)
+    fun getMeals(@PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull mealDate: LocalDate): QueryMealsResponse {
+        return queryMealsUseCase.execute(mealDate)
     }
 }

@@ -4,13 +4,12 @@ import team.aliens.dms.domain.manager.dto.request.Password
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
-import kotlin.math.min
 
 data class UpdateUserPasswordWebRequest(
 
     @field:NotBlank
     @field:Size(min = 8, max = 20)
-    val currentPassword: String?,
+    val currentPassword: String,
 
     @field:NotBlank
     @field:Size(min = 8, max = 20)
@@ -18,6 +17,6 @@ data class UpdateUserPasswordWebRequest(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val newPassword: String?
+    val newPassword: String
 
 )
