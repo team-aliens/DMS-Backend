@@ -177,7 +177,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 row = row,
                 startIdx = columnCount,
                 datas = timeSlots.map { timeSlot ->
-                    studentSeats?.firstOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
+                    studentSeats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 },
                 style = getDefaultCellStyle(workbook)
             )
@@ -221,7 +221,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 studentSeat.studentNumber.toString(),
                 studentSeat.studentName,
                 *timeSlots.map { timeSlot ->
-                    studentSeat.seats?.firstOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
+                    studentSeat.seats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 }.toTypedArray(),
             )
         }
