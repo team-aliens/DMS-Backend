@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -13,6 +12,7 @@ import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
 import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import java.util.UUID
 
 @ReadOnlyUseCase
 class StudentQueryStudyRoomsUseCase(
@@ -41,10 +41,10 @@ class StudentQueryStudyRoomsUseCase(
                         availableGrade = it.availableGrade,
                         availableSex = it.availableSex,
                         inUseHeadcount = it.inUseHeadcount,
-                    totalAvailableSeat = it.totalAvailableSeat,
-                    isMine = appliedSeat?.studyRoomId == it.id
-                )
-            }
+                        totalAvailableSeat = it.totalAvailableSeat,
+                        isMine = appliedSeat?.studyRoomId == it.id
+                    )
+                }
 
         return StudentQueryStudyRoomsResponse(
             studyRooms = studyRooms
