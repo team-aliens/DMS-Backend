@@ -1,10 +1,10 @@
 package team.aliens.dms.persistence.studyroom.repository
 
-import java.util.UUID
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.SeatApplicationJpaEntityId
+import java.util.UUID
 
 @Repository
 interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity, SeatApplicationJpaEntityId> {

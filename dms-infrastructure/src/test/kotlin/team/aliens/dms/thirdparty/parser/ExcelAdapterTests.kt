@@ -3,9 +3,6 @@ package team.aliens.dms.thirdparty.parser
 import io.mockk.every
 import io.mockk.slot
 import io.mockk.spyk
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
@@ -15,6 +12,9 @@ import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.UUID
 
 class ExcelAdapterTests {
 
