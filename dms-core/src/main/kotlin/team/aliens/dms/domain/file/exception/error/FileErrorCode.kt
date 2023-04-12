@@ -6,15 +6,15 @@ import team.aliens.dms.common.error.ErrorStatus
 enum class FileErrorCode(
     private val status: Int,
     private val message: String,
-    private val code: String
+    private val sequence: Int
 ) : ErrorProperty {
 
-    INVALID_EXTENSION(ErrorStatus.BAD_REQUEST, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)", "FILE-400-1"),
-    BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "Bad Excel Format", "FILE-400-2"),
-    IO_INTERRUPTED(ErrorStatus.INTERNAL_SERVER_ERROR, "Interrupted File IO", "FILE-500-1")
+    INVALID_EXTENSION(ErrorStatus.BAD_REQUEST, "Allowed Extension : jpg(JPG), jpeg(JPEG), png(PNG), heic(HEIC)", 1),
+    BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "Bad Excel Format", 2),
+    IO_INTERRUPTED(ErrorStatus.INTERNAL_SERVER_ERROR, "Interrupted File IO", 1)
     ;
 
     override fun status(): Int = status
     override fun message(): String = message
-    override fun code(): String = code
+    override fun code(): String = "FILE-$status-$sequence"
 }
