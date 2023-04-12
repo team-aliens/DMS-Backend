@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull
 data class GrantTagWebRequest(
 
     @field:NotNull
-    val tagId: UUID?,
+    val tagId: UUID,
 
     @field:NotNullElements
-    val studentIds: List<UUID>?
+    val studentIds: List<UUID>
 
 )

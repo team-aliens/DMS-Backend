@@ -8,7 +8,9 @@ object DependencyVersions {
     const val UUID_TIME_VERSION = "3.1.4"
     const val SPRING_TRANSACTION = "5.3.22"
     const val QUERYDSL = "5.0.0"
+    const val MYSQL = "8.0.28"
     const val APACHE_POI_VERSION = "3.7"
     const val MOCKK_VERSION = "1.13.2"
     const val OPEN_FEIGN_VERSION = "3.1.4"
+    const val SENTRY_VERSION = "6.2.1"
 }

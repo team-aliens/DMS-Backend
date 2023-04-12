@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.file
 
-import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,6 +16,7 @@ import team.aliens.dms.domain.file.dto.response.UploadFileResponse
 import team.aliens.dms.domain.file.usecase.GetFileUploadUrlUseCase
 import team.aliens.dms.domain.file.usecase.ImportVerifiedStudentUseCase
 import team.aliens.dms.domain.file.usecase.UploadFileUseCase
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/files")

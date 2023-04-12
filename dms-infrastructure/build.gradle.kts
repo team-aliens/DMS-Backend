@@ -7,8 +7,8 @@ plugins {
 
 dependencies {
     // impl project
-    implementation(project(":dms-domain"))
-    implementation(project(":dms-application"))
+    implementation(project(":dms-persistence"))
+    implementation(project(":dms-core"))
     implementation(project(":dms-presentation"))
 
     // validation
@@ -19,19 +19,6 @@ dependencies {
 
     // security
     implementation(Dependencies.SPRING_SECURITY)
-
-    // database
-    implementation(Dependencies.SPRING_DATA_JPA)
-    runtimeOnly(Dependencies.MYSQL_CONNECTOR)
-    implementation(Dependencies.REDIS)
-    implementation(Dependencies.SPRING_REDIS)
-
-    // querydsl
-    implementation(Dependencies.QUERYDSL)
-    kapt(Dependencies.QUERYDSL_PROCESSOR)
-
-    // time based uuid
-    implementation(Dependencies.UUID_TIME)
 
     // jwt
     implementation(Dependencies.JWT)
@@ -55,6 +42,12 @@ dependencies {
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
+
+    // aop
+    implementation(Dependencies.SPRING_AOP)
+
+    // logging
+    implementation(Dependencies.SENTRY)
 }
 
 kapt {
@@ -62,18 +55,6 @@ kapt {
         arg("mapstruct.defaultComponentModel", "spring")
         arg("mapstruct.unmappedTargetPolicy", "ignore")
     }
-}
-
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
-
-noArg {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
 }
 
 tasks.getByName<Jar>("jar") {

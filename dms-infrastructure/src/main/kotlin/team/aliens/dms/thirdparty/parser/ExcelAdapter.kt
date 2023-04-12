@@ -1,9 +1,5 @@
 package team.aliens.dms.thirdparty.parser
 
-import com.fasterxml.uuid.Generators
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.time.format.DateTimeFormatter
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -31,6 +27,10 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -48,7 +48,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
                 val excelData = row.run {
                     VerifiedStudent(
-                        id = Generators.timeBasedGenerator().generate(),
+                        id = UUID.randomUUID(),
                         schoolName = schoolName,
                         gcn = Student.processGcn(
                             grade = getIntValue(0),
@@ -177,7 +177,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 row = row,
                 startIdx = columnCount,
                 datas = timeSlots.map { timeSlot ->
-                    studentSeats?.firstOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
+                    studentSeats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 },
                 style = getDefaultCellStyle(workbook)
             )
@@ -216,12 +216,12 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         val seatInfosList = studentSeats.map { studentSeat ->
             listOf(
-                studentSeat.grade.toString(),
-                studentSeat.classRoom.toString(),
-                studentSeat.number.toString(),
+                studentSeat.studentGrade.toString(),
+                studentSeat.studentClassRoom.toString(),
+                studentSeat.studentNumber.toString(),
                 studentSeat.studentName,
                 *timeSlots.map { timeSlot ->
-                    studentSeat.seats?.firstOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
+                    studentSeat.seats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 }.toTypedArray()
             )
         }

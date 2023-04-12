@@ -7,15 +7,15 @@ import javax.validation.constraints.NotNull
 data class UpdateRemainAvailableTimeWebRequest(
 
     @field:NotNull
-    val startDayOfWeek: DayOfWeek?,
+    val startDayOfWeek: DayOfWeek,
 
     @field:NotNull
-    val startTime: LocalTime?,
+    val startTime: LocalTime,
 
     @field:NotNull
-    val endDayOfWeek: DayOfWeek?,
+    val endDayOfWeek: DayOfWeek,
 
     @field:NotNull
-    val endTime: LocalTime?
+    val endTime: LocalTime
 
 )

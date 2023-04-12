@@ -62,6 +62,10 @@ cloud:
     ses:
       source: ${SES_SENDER:asdf}
 
+sentry:
+  dsn: ${SENTRY_DSN:asdf}
+  traces-sample-rate: 1.0
+
 logging:
   level:
     com:

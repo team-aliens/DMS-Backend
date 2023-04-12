@@ -50,31 +50,31 @@ class NoticeWebAdapter(
     }
 
     @GetMapping("/{notice-id}")
-    fun getDetails(@PathVariable("notice-id") @NotNull noticeId: UUID?): QueryNoticeDetailsResponse {
-        return queryNoticeDetailsUseCase.execute(noticeId!!)
+    fun getDetails(@PathVariable("notice-id") @NotNull noticeId: UUID): QueryNoticeDetailsResponse {
+        return queryNoticeDetailsUseCase.execute(noticeId)
     }
 
     @GetMapping
-    fun queryAllNotices(@RequestParam("order") @NotNull orderType: WebOrderType?): QueryAllNoticesResponse {
-        return queryAllNoticesUseCase.execute(orderType!!.name)
+    fun queryAllNotices(@RequestParam("order") @NotNull orderType: WebOrderType): QueryAllNoticesResponse {
+        return queryAllNoticesUseCase.execute(orderType.name)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{notice-id}")
-    fun removeNotice(@PathVariable("notice-id") @NotNull noticeId: UUID?) {
-        removeNoticeUseCase.execute(noticeId!!)
+    fun removeNotice(@PathVariable("notice-id") @NotNull noticeId: UUID) {
+        removeNoticeUseCase.execute(noticeId)
     }
 
     @PatchMapping("/{notice-id}")
     fun updateNotice(
-        @PathVariable("notice-id") @NotNull noticeId: UUID?,
+        @PathVariable("notice-id") @NotNull noticeId: UUID,
         @RequestBody @Valid request: UpdateNoticeWebRequest
     ): UpdateNoticeResponse {
         return UpdateNoticeResponse(
             updateNoticeUseCase.execute(
-                noticeId = noticeId!!,
-                title = request.title!!,
-                content = request.content!!
+                noticeId = noticeId,
+                title = request.title,
+                content = request.content
             )
         )
     }
@@ -84,8 +84,8 @@ class NoticeWebAdapter(
     fun createNotice(@RequestBody @Valid request: CreateNoticeWebRequest): CreateNoticeResponse {
         return CreateNoticeResponse(
             createNoticeUseCase.execute(
-                title = request.title!!,
-                content = request.content!!
+                title = request.title,
+                content = request.content
             )
         )
     }

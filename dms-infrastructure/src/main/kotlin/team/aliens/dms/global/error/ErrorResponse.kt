@@ -1,6 +1,5 @@
 package team.aliens.dms.global.error
 
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import team.aliens.dms.common.error.ErrorProperty
@@ -9,13 +8,15 @@ import javax.validation.ConstraintViolationException
 
 data class ErrorResponse(
     val status: Int,
-    val message: String
+    val message: String,
+    val code: String
 ) {
 
     companion object {
         fun of(errorProperty: ErrorProperty) = ErrorResponse(
             errorProperty.status(),
-            errorProperty.message()
+            errorProperty.message(),
+            errorProperty.code()
         )
 
         fun of(e: BindingResult): ValidationErrorResponse {
@@ -49,13 +50,6 @@ data class ErrorResponse(
             return ValidationErrorResponse(
                 status = GlobalErrorCode.BAD_REQUEST.status(),
                 fieldError = errorMap
-            )
-        }
-
-        fun of(e: DataIntegrityViolationException): ErrorResponse {
-            return ErrorResponse(
-                status = GlobalErrorCode.BAD_REQUEST.status(),
-                message = e.message ?: ""
             )
         }
     }

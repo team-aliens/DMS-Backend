@@ -124,7 +124,7 @@ class SecurityConfiguration(
             .antMatchers(HttpMethod.GET, "/study-rooms/types").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.POST, "/study-rooms/types").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/study-rooms/seats/{seat-id}").hasAuthority(STUDENT.name)
-            .antMatchers(HttpMethod.DELETE, "/study-rooms/seats").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.DELETE, "/study-rooms/seats/{seat-id}").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.POST, "/study-rooms").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/study-rooms/{study-room-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/study-rooms/{study-room-id}").hasAuthority(MANAGER.name)

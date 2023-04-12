@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.common.dto.PageWebData
 import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
@@ -63,10 +62,10 @@ class PointWebAdapter(
 
     @GetMapping
     fun getPointHistory(
-        @RequestParam @NotNull type: PointRequestType?,
+        @RequestParam @NotNull type: PointRequestType,
         @ModelAttribute pageData: PageData
     ): QueryPointHistoryResponse {
-        return queryPointHistoryUseCase.execute(type!!, pageData)
+        return queryPointHistoryUseCase.execute(type, pageData)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -74,29 +73,29 @@ class PointWebAdapter(
     fun createPointOption(@RequestBody @Valid request: CreatePointOptionWebRequest): CreatePointOptionResponse {
         return createPointOptionUseCase.execute(
             CreatePointOptionRequest(
-                name = request.name!!,
-                score = request.score!!,
-                type = request.type!!.name
+                name = request.name,
+                score = request.score,
+                type = request.type.name
             )
         )
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/options/{point-option-id}")
-    fun removePointOption(@PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID?) {
-        removePointOptionUseCase.execute(pointOptionId!!)
+    fun removePointOption(@PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID) {
+        removePointOptionUseCase.execute(pointOptionId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/options/{point-option-id}")
     fun updatePointOption(
-        @PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID?,
+        @PathVariable(name = "point-option-id") @NotNull pointOptionId: UUID,
         @RequestBody @Valid webRequest: UpdatePointOptionWebRequest
     ) {
         updatePointOptionUseCase.execute(
-            pointOptionId = pointOptionId!!,
-            name = webRequest.name!!,
-            score = webRequest.score!!
+            pointOptionId = pointOptionId,
+            name = webRequest.name,
+            score = webRequest.score
         )
     }
 
@@ -105,19 +104,19 @@ class PointWebAdapter(
     fun grantPoint(@RequestBody @Valid webRequest: GrantPointWebRequest) {
         grantPointUseCase.execute(
             GrantPointRequest(
-                pointOptionId = webRequest.pointOptionId!!,
-                studentIdList = webRequest.studentIdList!!
+                pointOptionId = webRequest.pointOptionId,
+                studentIdList = webRequest.studentIdList
             )
         )
     }
 
     @GetMapping("/history")
     fun getPointHistories(
-        @RequestParam @NotNull type: PointRequestType?,
-        @ModelAttribute pageData: PageWebData
+        @RequestParam @NotNull type: PointRequestType,
+        @ModelAttribute pageData: PageData
     ): QueryAllPointHistoryResponse {
         return queryAllPointHistoryUseCase.execute(
-            type = type!!,
+            type = type,
             pageData = PageData(pageData.page, pageData.size)
         )
     }
@@ -125,8 +124,8 @@ class PointWebAdapter(
     @GetMapping("/history/file")
     fun exportAllPointHistory(
         httpResponse: HttpServletResponse,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime?,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime?
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) start: LocalDateTime,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime
     ): ByteArray {
         val response = exportAllPointHistoryUseCase.execute(start, end)
         httpResponse.setExcelContentDisposition(response.fileName)
@@ -135,8 +134,8 @@ class PointWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/history/{point-history-id}")
-    fun cancelGrantedPoint(@PathVariable("point-history-id") @NotNull pointHistoryId: UUID?) {
-        cancelGrantedPointUseCase.execute(pointHistoryId!!)
+    fun cancelGrantedPoint(@PathVariable("point-history-id") @NotNull pointHistoryId: UUID) {
+        cancelGrantedPointUseCase.execute(pointHistoryId)
     }
 
     @GetMapping("/options")
@@ -146,9 +145,9 @@ class PointWebAdapter(
 
     @GetMapping("/history/students/{student-id}")
     fun getStudentsPointHistory(
-        @PathVariable("student-id") @NotNull studentId: UUID?,
+        @PathVariable("student-id") @NotNull studentId: UUID,
         @ModelAttribute pageData: PageData
     ): QueryStudentPointHistoryResponse {
-        return queryStudentPointHistoryUseCase.execute(studentId!!, pageData)
+        return queryStudentPointHistoryUseCase.execute(studentId, pageData)
     }
 }

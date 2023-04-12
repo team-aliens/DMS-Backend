@@ -15,6 +15,7 @@ object Dependencies {
     // validation
     const val SPRING_VALIDATION = "org.springframework.boot:spring-boot-starter-validation"
 
+    // thymeleaf
     const val SPRING_THYMELEAF = "org.springframework.boot:spring-boot-starter-thymeleaf"
 
     // transaction
@@ -24,9 +25,9 @@ object Dependencies {
     const val CONFIGURATION_PROCESSOR = "org.springframework.boot:spring-boot-configuration-processor"
 
     // database
-    const val SPRING_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa"
-    const val MYSQL_CONNECTOR = "mysql:mysql-connector-java"
-    const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis"
+    const val SPRING_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa:${PluginVersions.SPRING_BOOT_VERSION}"
+    const val MYSQL_CONNECTOR = "mysql:mysql-connector-java:${DependencyVersions.MYSQL}"
+    const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis:${PluginVersions.SPRING_BOOT_VERSION}"
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
 
     // querydsl
@@ -65,4 +66,7 @@ object Dependencies {
 
     // gson
     const val GSON = "com.google.code.gson:gson"
+
+    // sentry
+    const val SENTRY = "io.sentry:sentry-spring-boot-starter:${DependencyVersions.SENTRY_VERSION}"
 }
