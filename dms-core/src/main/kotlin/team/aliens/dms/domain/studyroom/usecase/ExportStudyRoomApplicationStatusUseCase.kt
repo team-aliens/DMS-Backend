@@ -62,16 +62,15 @@ class ExportStudyRoomApplicationStatusUseCase(
         )
     }
 
-    private fun getStudentSeatApplicationsMap(students: List<Student>): MutableMap<UUID, MutableList<StudentSeatApplicationVO>> {
-        val map = mutableMapOf<UUID, MutableList<StudentSeatApplicationVO>>()
-        queryStudyRoomPort.querySeatApplicationsByStudentIdIn(
-            studentIds = students.map { it.id }
-        ).map {
-            map[it.studentId]
-                ?.run { this.add(it) } ?: map.put(it.studentId, mutableListOf(it))
+    private fun getStudentSeatApplicationsMap(students: List<Student>) =
+        mutableMapOf<UUID, MutableList<StudentSeatApplicationVO>>().apply {
+            queryStudyRoomPort.querySeatApplicationsByStudentIdIn(
+                studentIds = students.map { it.id }
+            ).map {
+                get(it.studentId)
+                    ?.run { this.add(it) } ?: put(it.studentId, mutableListOf(it))
+            }
         }
-        return map
-    }
 
     private fun getStudyRoomApplicationStatusFile(
         file: java.io.File?,
