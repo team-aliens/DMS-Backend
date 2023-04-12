@@ -7,10 +7,10 @@ data class UpdateQuestionWebRequest(
 
     @field:NotBlank
     @field:Size(max = 100)
-    val question: String?,
+    val question: String,
 
     @field:NotBlank
     @field:Size(max = 100)
-    val answer: String?
+    val answer: String
 
 )

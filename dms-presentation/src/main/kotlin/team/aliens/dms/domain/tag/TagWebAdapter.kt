@@ -47,19 +47,19 @@ class TagWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{tag-id}")
-    fun removeTag(@PathVariable("tag-id") @NotNull tagId: UUID?) {
-        removeTagUseCase.execute(tagId!!)
+    fun removeTag(@PathVariable("tag-id") @NotNull tagId: UUID) {
+        removeTagUseCase.execute(tagId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/students")
     fun cancelGrantedTag(
-        @RequestParam(name = "student_id") @NotNull studentId: UUID?,
-        @RequestParam(name = "tag_id") @NotNull tagId: UUID?
+        @RequestParam(name = "student_id") @NotNull studentId: UUID,
+        @RequestParam(name = "tag_id") @NotNull tagId: UUID
     ) {
         cancelGrantedTagUseCase.execute(
-            studentId = studentId!!,
-            tagId = tagId!!
+            studentId = studentId,
+            tagId = tagId
         )
     }
 
@@ -68,8 +68,8 @@ class TagWebAdapter(
     fun grantTag(@RequestBody @Valid request: GrantTagWebRequest) {
         grantTagUseCase.execute(
             GrantTagRequest(
-                tagId = request.tagId!!,
-                studentIds = request.studentIds!!
+                tagId = request.tagId,
+                studentIds = request.studentIds
             )
         )
     }
@@ -78,8 +78,8 @@ class TagWebAdapter(
     @PostMapping
     fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
         val tagId = createTagUseCase.execute(
-            name = webRequest.name!!,
-            color = webRequest.color!!
+            name = webRequest.name,
+            color = webRequest.color
         )
 
         return CreateTagWebResponse(tagId)
@@ -89,12 +89,12 @@ class TagWebAdapter(
     @PatchMapping("/{tag-id}")
     fun updateTag(
         @RequestBody @Valid webRequest: UpdateTagWebRequest,
-        @PathVariable("tag-id") @NotNull tagId: UUID?
+        @PathVariable("tag-id") @NotNull tagId: UUID
     ) {
         updateTagUseCase.execute(
-            tagId = tagId!!,
-            newName = webRequest.name!!,
-            newColor = webRequest.color!!
+            tagId = tagId,
+            newName = webRequest.name,
+            newColor = webRequest.color
         )
     }
 }

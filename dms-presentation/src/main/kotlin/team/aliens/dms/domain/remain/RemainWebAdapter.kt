@@ -51,16 +51,16 @@ class RemainWebAdapter(
 ) {
 
     @PutMapping("/{remain-option-id}")
-    fun applyRemainOption(@PathVariable("remain-option-id") @NotNull remainOptionId: UUID?) {
-        applyRemainUseCase.execute(remainOptionId!!)
+    fun applyRemainOption(@PathVariable("remain-option-id") @NotNull remainOptionId: UUID) {
+        applyRemainUseCase.execute(remainOptionId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/options")
     fun createRemainOption(@RequestBody @Valid request: CreateRemainOptionWebRequest): CreateRemainOptionResponse {
         val remainOptionId = createRemainOptionUseCase.execute(
-            title = request.title!!,
-            description = request.description!!
+            title = request.title,
+            description = request.description
         )
         return CreateRemainOptionResponse(remainOptionId)
     }
@@ -68,13 +68,13 @@ class RemainWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/options/{remain-option-id}")
     fun updateRemainOption(
-        @PathVariable("remain-option-id") @NotNull remainOptionId: UUID?,
+        @PathVariable("remain-option-id") @NotNull remainOptionId: UUID,
         @RequestBody @Valid request: UpdateRemainOptionWebRequest
     ) {
         updateRemainOptionUseCase.execute(
-            remainOptionId = remainOptionId!!,
-            title = request.title!!,
-            description = request.description!!
+            remainOptionId = remainOptionId,
+            title = request.title,
+            description = request.description
         )
     }
 
@@ -95,18 +95,18 @@ class RemainWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/options/{remain-option-id}")
-    fun removeRemainOption(@PathVariable("remain-option-id") @NotNull remainOptionId: UUID?) {
-        removeRemainOptionUseCase.execute(remainOptionId!!)
+    fun removeRemainOption(@PathVariable("remain-option-id") @NotNull remainOptionId: UUID) {
+        removeRemainOptionUseCase.execute(remainOptionId)
     }
 
     @PutMapping("/available-time")
     fun updateRemainAvailableTime(@RequestBody @Valid request: UpdateRemainAvailableTimeWebRequest) {
         updateRemainAvailableTimeUseCase.execute(
             UpdateRemainAvailableTimeRequest(
-                startDayOfWeek = request.startDayOfWeek!!,
-                startTime = request.startTime!!,
-                endDayOfWeek = request.endDayOfWeek!!,
-                endTime = request.endTime!!
+                startDayOfWeek = request.startDayOfWeek,
+                startTime = request.startTime,
+                endDayOfWeek = request.endDayOfWeek,
+                endTime = request.endTime
             )
         )
     }

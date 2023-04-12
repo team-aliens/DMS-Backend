@@ -10,20 +10,20 @@ data class ResetStudentPasswordWebRequest(
 
     @field:NotBlank
     @field:Size(min = 4, max = 20)
-    val accountId: String?,
+    val accountId: String,
 
     @field:NotBlank
     @field:Size(max = 10)
-    val name: String?,
+    val name: String,
 
     @field:NotBlank
     @field:Size(max = 255)
     @field:Email
-    val email: String?,
+    val email: String,
 
     @field:NotBlank
     @field:Size(min = 6, max = 6, message = "인증코드는 8글자 이여야 합니다.")
-    val authCode: String?,
+    val authCode: String,
 
     @field:NotBlank
     @field:Size(min = 8, max = 20)
@@ -31,6 +31,6 @@ data class ResetStudentPasswordWebRequest(
         regexp = Password.PATTERN,
         message = Password.MESSAGE
     )
-    val newPassword: String?
+    val newPassword: String
 
 )
