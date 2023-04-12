@@ -11,9 +11,9 @@ enum class PointOptionErrorCode(
 
     POINT_OPTION_NAME_EXISTS(ErrorStatus.CONFLICT, "Point Option Exists", 1),
 
-    POINT_OPTION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Point Option Not Found", 2),
+    POINT_OPTION_SCHOOL_MISMATCH(ErrorStatus.UNAUTHORIZED, "Point Option School Mismatch", 1),
 
-    POINT_OPTION_SCHOOL_MISMATCH(ErrorStatus.UNAUTHORIZED, "Point Option School Mismatch", 1)
+    POINT_OPTION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Point Option Not Found", 2),
     ;
 
     override fun status(): Int = status
