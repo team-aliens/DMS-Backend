@@ -8,13 +8,15 @@ import javax.validation.ConstraintViolationException
 
 data class ErrorResponse(
     val status: Int,
-    val message: String
+    val message: String,
+    val code: String
 ) {
 
     companion object {
         fun of(errorProperty: ErrorProperty) = ErrorResponse(
             errorProperty.status(),
-            errorProperty.message()
+            errorProperty.message(),
+            errorProperty.code()
         )
 
         fun of(e: BindingResult): ValidationErrorResponse {

@@ -279,6 +279,10 @@ class StudyRoomPersistenceAdapter(
         seatApplicationRepository.deleteByStudentIdAndTimeSlotId(studentId, timeSlotId)
     }
 
+    override fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, studentId: UUID, timeSlotId: UUID) {
+        seatApplicationRepository.deleteBySeatIdAndStudentIdAndTimeSlotId(seatId, studentId, timeSlotId)
+    }
+
     override fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID) {
         seatApplicationRepository.deleteByTimeSlotId(timeSlotId)
     }
