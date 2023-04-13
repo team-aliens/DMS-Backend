@@ -1,8 +1,9 @@
 package team.aliens.dms.domain.auth.spi
 
-import team.aliens.dms.domain.student.spi.StudentJwtPort
-import team.aliens.dms.domain.user.spi.UserJwtPort
+import java.util.UUID
+import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.model.Authority
 
-interface JwtPort :
-    UserJwtPort,
-    StudentJwtPort
+interface JwtPort {
+    fun receiveToken(userId: UUID, authority: Authority): TokenResponse
+}

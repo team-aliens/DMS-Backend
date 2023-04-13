@@ -20,6 +20,7 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
+<<<<<<< develop
 import team.aliens.dms.domain.student.spi.StudentJwtPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
 import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
@@ -27,6 +28,8 @@ import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
 import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentSecurityPort
+=======
+>>>>>>> refactor: (#441) jwt port
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
@@ -34,6 +37,7 @@ import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.domain.auth.spi.JwtPort
 
 /**
  *
@@ -54,7 +58,7 @@ class SignUpUseCase(
     private val queryVerifiedStudentPort: QueryVerifiedStudentPort,
     private val queryRoomPort: QueryRoomPort,
     private val securityPort: SecurityPort,
-    private val jwtPort: StudentJwtPort
+    private val jwtPort: JwtPort
 ) {
 
     fun execute(request: SignUpRequest): SignUpResponse {
