@@ -124,7 +124,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -160,7 +160,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -178,7 +178,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -196,7 +196,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -214,7 +214,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -232,7 +232,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))
@@ -253,7 +253,7 @@ class ResetStudentPasswordUseCaseTests {
         given(queryUserPort.queryUserByAccountId(requestStub.accountId))
             .willReturn(userStub)
 
-        given(queryStudentPort.queryStudentById(studentStub.id))
+        given(queryStudentPort.queryStudentByUserId(userStub.id))
             .willReturn(studentStub)
 
         given(checkUserAuthority.execute(userStub.id))

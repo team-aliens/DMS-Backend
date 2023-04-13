@@ -11,7 +11,7 @@ class CheckUserAuthorityService(
     private val queryStudentPort: UserQueryStudentPort
 ) : CheckUserAuthority {
 
-    override fun execute(userId: UUID) = when (queryStudentPort.queryStudentById(userId)) {
+    override fun execute(userId: UUID) = when (queryStudentPort.queryStudentByUserId(userId)) {
         is Student -> Authority.STUDENT
         else -> Authority.MANAGER
     }

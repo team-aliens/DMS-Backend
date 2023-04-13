@@ -25,7 +25,7 @@ class StudentQueryStudyRoomsUseCase(
     fun execute(timeSlotId: UUID): StudentQueryStudyRoomsResponse {
         val currentUserId = securityPort.getCurrentUserId()
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
 
         validateSameSchool(timeSlot.schoolId, user.schoolId)

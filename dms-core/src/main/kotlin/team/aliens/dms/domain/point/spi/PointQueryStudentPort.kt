@@ -8,5 +8,7 @@ interface PointQueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
 
+    fun queryStudentByUserId(userId: UUID): Student?
+
     fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO>
 }

@@ -81,7 +81,7 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryStudentPort.queryStudentById(currentStudentId))
+        given(queryStudentPort.queryStudentByUserId(currentStudentId))
             .willReturn(studentStub)
 
         given(
@@ -132,7 +132,7 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryStudentPort.queryStudentById(currentStudentId))
+        given(queryStudentPort.queryStudentByUserId(currentStudentId))
             .willReturn(studentStub)
 
         given(
@@ -181,7 +181,7 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryStudentPort.queryStudentById(currentStudentId))
+        given(queryStudentPort.queryStudentByUserId(currentStudentId))
             .willReturn(studentStub)
 
         given(
@@ -213,7 +213,7 @@ class QueryPointHistoryUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentStudentId)
 
-        given(queryStudentPort.queryStudentById(currentStudentId))
+        given(queryStudentPort.queryStudentByUserId(currentStudentId))
             .willReturn(null)
 
         // when & then

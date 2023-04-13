@@ -20,8 +20,8 @@ data class User(
 
     val authority: Authority,
 
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    val deletedAt: LocalDateTime?
+    val deletedAt: LocalDateTime? = null
 
 )

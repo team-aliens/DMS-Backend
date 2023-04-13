@@ -122,7 +122,7 @@ class StudentQueryStudyRoomsUseCaseTests {
         // given
         every { securityPort.getCurrentUserId() } returns userId
         every { queryUserPort.queryUserById(userId) } returns userStub
-        every { queryStudentPort.queryStudentById(userId) } returns null
+        every { queryStudentPort.queryStudentByUserId(userId) } returns null
 
         // when & then
         assertThrows<StudentNotFoundException> {

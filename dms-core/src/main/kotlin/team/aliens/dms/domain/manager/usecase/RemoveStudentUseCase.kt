@@ -31,7 +31,7 @@ class RemoveStudentUseCase(
 
         val manager = queryUserPort.queryUserById(currentManagerId) ?: throw ManagerNotFoundException
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
-        val studentUser = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
+        val studentUser = student.userId?.let { queryUserPort.queryUserById(it) } ?: throw UserNotFoundException
 
         validateSameSchool(student.schoolId, manager.schoolId)
 

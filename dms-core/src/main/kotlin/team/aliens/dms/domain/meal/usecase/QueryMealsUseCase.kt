@@ -20,7 +20,7 @@ class QueryMealsUseCase(
 
     fun execute(mealDate: LocalDate): QueryMealsResponse {
         val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
 
         val month = YearMonth.from(mealDate)
         val firstDay = month.atDay(1)

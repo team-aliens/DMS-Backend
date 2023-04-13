@@ -8,7 +8,9 @@ import java.util.UUID
 @Repository
 interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
 
-    fun findByUserSchoolIdAndGradeAndClassRoomAndNumber(
+    fun findByUserId(userId: UUID): StudentJpaEntity
+
+    fun findByRoomSchoolIdAndGradeAndClassRoomAndNumber(
         schoolId: UUID,
         grade: Int,
         classRoom: Int,
@@ -16,6 +18,8 @@ interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
     ): StudentJpaEntity?
 
     fun existsByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
+
+    fun existsByUserId(userId: UUID): Boolean
 
     fun findAllByIdIn(ids: List<UUID>): List<StudentJpaEntity>
 }

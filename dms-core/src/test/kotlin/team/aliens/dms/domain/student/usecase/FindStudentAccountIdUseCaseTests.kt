@@ -72,7 +72,7 @@ class FindStudentAccountIdUseCaseTests {
         )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(userStub)
 
         // when & then
@@ -113,7 +113,7 @@ class FindStudentAccountIdUseCaseTests {
         )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(null)
 
         // when & then
@@ -135,7 +135,7 @@ class FindStudentAccountIdUseCaseTests {
         )
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(userStub)
 
         // when & then

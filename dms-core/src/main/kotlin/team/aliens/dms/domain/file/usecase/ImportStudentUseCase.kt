@@ -9,16 +9,16 @@ import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.RoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import java.io.File
+import java.util.UUID
 
 @UseCase
-class ImportVerifiedStudentUseCase(
+class ImportStudentUseCase(
     private val parseFilePort: ParseFilePort,
     private val securityPort: FileSecurityPort,
     private val queryUserPort: FileQueryUserPort,
@@ -34,36 +34,55 @@ class ImportVerifiedStudentUseCase(
         val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
-        val verifiedStudents = parseFilePort.transferToVerifiedStudent(file, school.name)
-        val gcnList = verifiedStudents
-            .map {
-                it.calculateEachGcn()
-            }
+        val parsedStudentInfos = parseFilePort.getExcelStudentVO(file)
 
+        val gcnList = parsedStudentInfos.map { Triple(it.grade, it.classRoom, it.number) }
         if (queryStudentPort.existsBySchoolIdAndGcnList(school.id, gcnList)) {
             throw StudentAlreadyExistsException
         }
 
-        saveNotExistsRooms(verifiedStudents, school)
+        val roomMap = saveNotExistsRooms(
+            roomNumbers = parsedStudentInfos.map { it.roomNumber }.distinctBy { it },
+            schoolId = school.id
+        )
 
-        commandStudentPort.saveAllVerifiedStudent(verifiedStudents)
+        commandStudentPort.saveAllStudent(
+            parsedStudentInfos.map {
+                Student(
+                    roomId = roomMap[it.roomNumber]!!.id,
+                    roomNumber = it.roomNumber,
+                    roomLocation = it.roomLocation,
+                    schoolId = school.id,
+                    grade = it.grade,
+                    classRoom = it.classRoom,
+                    number = it.number,
+                    sex = it.sex,
+                    name = it.name
+                )
+            }
+        )
     }
 
-    private fun saveNotExistsRooms(verifiedStudents: List<VerifiedStudent>, school: School) {
-        val roomNumbers = verifiedStudents.map { it.roomNumber }.distinctBy { it }
-        val existsRoomsMap = queryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, school.id).associateBy { it.number }
+    private fun saveNotExistsRooms(roomNumbers: List<String>, schoolId: UUID): MutableMap<String, Room> {
 
-        val notExistsRooms = roomNumbers.mapNotNull {
-            if (!existsRoomsMap.containsKey(it)) {
+        val roomMap = queryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
+            .associateBy { it.number }
+            .toMutableMap()
+
+        val notExistsRooms = roomNumbers.mapNotNull { roomNumber ->
+            if (!roomMap.containsKey(roomNumber)) {
                 Room(
-                    number = it,
-                    schoolId = school.id
-                )
+                    number = roomNumber,
+                    schoolId = schoolId
+                ).apply {
+                    roomMap[roomNumber] = this
+                }
             } else {
                 null
             }
         }
 
         commandRoomPort.saveRooms(notExistsRooms)
+        return roomMap
     }
 }

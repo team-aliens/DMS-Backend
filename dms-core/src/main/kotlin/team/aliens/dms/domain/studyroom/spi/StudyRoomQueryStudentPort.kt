@@ -7,5 +7,7 @@ interface StudyRoomQueryStudentPort {
 
     fun queryStudentById(studentId: UUID): Student?
 
+    fun queryStudentByUserId(userId: UUID): Student?
+
     fun queryStudentsBySchoolId(schoolId: UUID): List<Student>
 }

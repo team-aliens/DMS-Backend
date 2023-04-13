@@ -68,7 +68,7 @@ class QueryMealsUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
         given(queryMealPort.queryAllMealsByMonthAndSchoolId(firstDay, lastDay, schoolId))
@@ -102,7 +102,7 @@ class QueryMealsUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(null)
 
         // when & then

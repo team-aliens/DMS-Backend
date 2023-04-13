@@ -15,7 +15,6 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.point.stub.createPointHistoryStub
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.stub.createUserStub
 import java.util.UUID
 
@@ -77,16 +76,7 @@ class CancelGrantedPointUseCaseTests {
     }
 
     private val otherUserStub by lazy {
-        User(
-            id = managerId,
-            schoolId = UUID.randomUUID(),
-            accountId = "accountId",
-            password = "password",
-            email = "email",
-            authority = Authority.MANAGER,
-            createdAt = null,
-            deletedAt = null
-        )
+        createUserStub(id = managerId)
     }
 
     @Test

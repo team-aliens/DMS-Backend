@@ -18,11 +18,11 @@ import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.domain.file.exception.BadExcelFormatException
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
@@ -35,10 +35,9 @@ import java.util.UUID
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
 
-    override fun transferToVerifiedStudent(file: File, schoolName: String): List<VerifiedStudent> {
+    override fun getExcelStudentVO(file: File): List<ExcelStudentVO> {
         val workbook = transferToExcel(file)
-
-        val verifiedStudents = mutableListOf<VerifiedStudent>()
+        val excelStudentVOs = mutableListOf<ExcelStudentVO>()
 
         try {
             val worksheet = workbook.getSheetAt(0)
@@ -47,14 +46,10 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 if (row.isFirstCellBlank()) continue
 
                 val excelData = row.run {
-                    VerifiedStudent(
-                        id = UUID.randomUUID(),
-                        schoolName = schoolName,
-                        gcn = Student.processGcn(
-                            grade = getIntValue(0),
-                            classRoom = getIntValue(1),
-                            number = getIntValue(2)
-                        ),
+                    ExcelStudentVO(
+                        grade = getIntValue(0),
+                        classRoom = getIntValue(1),
+                        number = getIntValue(2),
                         sex = Sex.transferToSex(
                             getStringValue(3)
                         ),
@@ -63,14 +58,14 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                         roomLocation = getStringValue(6)
                     )
                 }
-                verifiedStudents.add(excelData)
+                excelStudentVOs.add(excelData)
             }
         } catch (e: Exception) {
             e.printStackTrace()
             throw BadExcelFormatException
         }
 
-        return verifiedStudents
+        return excelStudentVOs
     }
 
     private fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK

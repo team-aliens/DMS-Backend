@@ -7,7 +7,9 @@ import java.util.UUID
 @Aggregate
 data class Student(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
+
+    val userId: UUID? = null,
 
     val roomId: UUID,
 
@@ -25,7 +27,7 @@ data class Student(
 
     val name: String,
 
-    val profileImageUrl: String? = PROFILE_IMAGE,
+    val profileImageUrl: String = PROFILE_IMAGE,
 
     val sex: Sex,
 

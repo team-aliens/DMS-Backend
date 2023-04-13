@@ -64,7 +64,7 @@ class ApplySeatUseCase(
     }
 
     private fun validateStudyRoomAvailable(studyRoom: StudyRoom, currentUserId: UUID) {
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
         studyRoom.checkIsAvailableGradeAndSex(student.grade, student.sex)
     }
 

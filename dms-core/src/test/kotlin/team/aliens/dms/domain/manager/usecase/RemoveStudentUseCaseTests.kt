@@ -85,7 +85,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(userStub)
 
         given(commandUserPort.saveUser(userStub.copy(deletedAt = LocalDateTime.now())))
@@ -142,7 +142,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(null)
 
         // when & then
@@ -163,7 +163,7 @@ class RemoveStudentUseCaseTests {
         given(queryStudentPort.queryStudentById(studentId))
             .willReturn(studentStub)
 
-        given(queryUserPort.queryUserById(studentStub.id))
+        given(queryUserPort.queryUserById(studentStub.userId!!))
             .willReturn(userStub)
 
         // when & then

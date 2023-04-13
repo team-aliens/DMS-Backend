@@ -24,12 +24,12 @@ class StudentWithdrawalUseCase(
 ) {
 
     fun execute() {
-        val currentStudentId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
-        val studentUser = queryUserPort.queryUserById(currentStudentId) ?: throw UserNotFoundException
+        val currentUserId = securityPort.getCurrentUserId()
+        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
+        val studentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        commandRemainStatusPort.deleteByStudentId(currentStudentId)
-        commandStudyRoomPort.deleteSeatApplicationByStudentId(currentStudentId)
+        commandRemainStatusPort.deleteByStudentId(student.id)
+        commandStudyRoomPort.deleteSeatApplicationByStudentId(student.id)
 
         commandStudentPort.saveStudent(
             student.copy(deletedAt = LocalDateTime.now())

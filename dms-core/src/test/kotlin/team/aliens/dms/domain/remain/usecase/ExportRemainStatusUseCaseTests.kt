@@ -74,7 +74,7 @@ class ExportRemainStatusUseCaseTests {
         every { queryUserPort.queryUserById(managerId) } returns userStub
         every { querySchoolPort.querySchoolById(schoolId) } returns schoolStub
         every { queryStudentPort.queryStudentsBySchoolId(schoolId) } returns listOf(studentStub)
-        every { queryRemainStatusPort.queryByStudentIdIn(listOf(studentId)) } returns listOf(remainStatusInfoStub)
+        every { queryRemainStatusPort.queryAllByStudentId(listOf(studentId)) } returns listOf(remainStatusInfoStub)
 
         val studentRemainInfoSlot = slot<List<StudentRemainInfo>>()
         every { writeFilePort.writeRemainStatusExcelFile(capture(studentRemainInfoSlot)) } returns byteArrayOf()

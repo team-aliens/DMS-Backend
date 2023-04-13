@@ -42,7 +42,7 @@ class QueryStudentDetailsUseCase(
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
-                profileImageUrl = it.profileImageUrl!!
+                profileImageUrl = it.profileImageUrl
             )
         }
 
@@ -59,7 +59,7 @@ class QueryStudentDetailsUseCase(
             id = student.id,
             name = student.name,
             gcn = student.gcn,
-            profileImageUrl = student.profileImageUrl!!,
+            profileImageUrl = student.profileImageUrl,
             sex = student.sex,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,

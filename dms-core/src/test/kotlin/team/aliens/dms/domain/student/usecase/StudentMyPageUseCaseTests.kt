@@ -77,10 +77,7 @@ class StudentMyPageUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
-            .willReturn(studentStub)
-
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
@@ -108,10 +105,10 @@ class StudentMyPageUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
@@ -140,7 +137,7 @@ class StudentMyPageUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(null)
 
         // when & then
@@ -155,10 +152,10 @@ class StudentMyPageUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(null)
 
         // when & then
@@ -173,10 +170,10 @@ class StudentMyPageUseCaseTests {
         given(securityPort.getCurrentUserId())
             .willReturn(currentUserId)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
-        given(queryStudentPort.queryStudentById(currentUserId))
+        given(queryStudentPort.queryStudentByUserId(currentUserId))
             .willReturn(studentStub)
 
         given(querySchoolPort.querySchoolById(studentStub.schoolId))
