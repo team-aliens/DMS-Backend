@@ -4,7 +4,6 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
@@ -32,10 +31,6 @@ class CertifyEmailCodeUseCase(
 
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
             ?: throw AuthCodeLimitNotFoundException
-
-        if (authCodeLimit.isVerified) {
-            throw EmailAlreadyCertifiedException
-        }
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(
             authCodeLimit.certified()

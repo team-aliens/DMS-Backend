@@ -7,10 +7,10 @@ data class CreateRemainOptionWebRequest(
 
     @field:NotBlank
     @field:Size(max = 100)
-    val title: String?,
+    val title: String,
 
     @field:NotBlank
     @field:Size(max = 255)
-    val description: String?
+    val description: String
 
 )

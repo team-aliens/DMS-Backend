@@ -7,10 +7,10 @@ data class CreateNoticeWebRequest(
 
     @field:NotBlank
     @field:Size(max = 100)
-    val title: String?,
+    val title: String,
 
     @field:NotBlank
     @field:Size(max = 1000)
-    val content: String?
+    val content: String
 
 )

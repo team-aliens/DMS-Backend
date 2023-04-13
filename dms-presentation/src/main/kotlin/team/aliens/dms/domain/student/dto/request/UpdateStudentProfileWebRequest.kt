@@ -7,6 +7,6 @@ data class UpdateStudentProfileWebRequest(
 
     @field:NotBlank
     @field:Size(max = 500)
-    val profileImageUrl: String?
+    val profileImageUrl: String
 
 )

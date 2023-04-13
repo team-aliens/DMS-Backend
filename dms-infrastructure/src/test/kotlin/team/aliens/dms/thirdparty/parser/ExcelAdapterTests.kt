@@ -119,13 +119,16 @@ class ExcelAdapterTests {
     private val studentSeatInfosStub by lazy {
         listOf(
             StudentSeatInfo(
-                studentId = UUID.randomUUID(),
                 studentName = "",
                 studentGrade = 1,
                 studentClassRoom = 2,
                 studentNumber = 3,
-                seatFullName = "",
-                timeSlotId = timeSlotStub.id
+                seats = listOf(
+                    StudentSeatInfo.SeatInfo(
+                        seatFullName = "",
+                        timeSlotId = UUID.randomUUID()
+                    )
+                )
             )
         )
     }

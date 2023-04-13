@@ -6,9 +6,9 @@ import javax.validation.constraints.NotNull
 data class UpdateAvailableTimeWebRequest(
 
     @field:NotNull
-    val startAt: LocalTime?,
+    val startAt: LocalTime,
 
     @field:NotNull
-    val endAt: LocalTime?
+    val endAt: LocalTime
 
 )

@@ -12,4 +12,5 @@ object DependencyVersions {
     const val APACHE_POI_VERSION = "3.7"
     const val MOCKK_VERSION = "1.13.2"
     const val OPEN_FEIGN_VERSION = "3.1.4"
+    const val SENTRY_VERSION = "6.2.1"
 }

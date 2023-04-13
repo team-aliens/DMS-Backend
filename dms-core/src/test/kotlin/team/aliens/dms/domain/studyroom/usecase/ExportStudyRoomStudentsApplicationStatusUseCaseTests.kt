@@ -115,7 +115,7 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
             { assertEquals(studentSeatInfo.studentGrade, studentStub.grade) },
             { assertEquals(studentSeatInfo.studentClassRoom, studentStub.classRoom) },
             { assertEquals(studentSeatInfo.studentNumber, studentStub.number) },
-            { assertEquals(studentSeatInfo.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
+            { assertEquals(studentSeatInfo.seats?.get(0)?.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
             { assert(response.fileName.startsWith("${schoolStub.name.replace(" ", "")}_자습실_신청상태_")) }
         )
     }
@@ -152,7 +152,7 @@ class ExportStudyRoomStudentsApplicationStatusUseCaseTests {
             { assertEquals(studentSeatInfo.studentGrade, studentStub.grade) },
             { assertEquals(studentSeatInfo.studentClassRoom, studentStub.classRoom) },
             { assertEquals(studentSeatInfo.studentNumber, studentStub.number) },
-            { assertEquals(studentSeatInfo.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
+            { assertEquals(studentSeatInfo.seats?.get(0)?.timeSlotId, studentSeatApplicationVOStub.timeSlotId) },
             { assert(response.fileName.startsWith("${schoolStub.name.replace(" ", "")}_자습실_신청상태_")) }
         )
     }

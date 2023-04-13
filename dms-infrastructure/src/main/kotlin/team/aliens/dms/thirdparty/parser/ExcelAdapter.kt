@@ -30,6 +30,7 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
@@ -153,7 +154,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             val row = worksheet.getRow(i)
             if (row.isFirstCellBlank()) continue
 
-            val studentSeat = row.run {
+            val studentSeats = row.run {
                 try {
                     studentSeatsMap[
                         Pair(
@@ -165,16 +166,13 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                     e.printStackTrace()
                     throw BadExcelFormatException
                 }
-            }
+            }?.seats
 
-            val timeSlotIdx = studentSeat?.timeSlotId?.let {
-                timeSlots.indexOfFirst { it.id == studentSeat.timeSlotId }
-            }
             insertDatasAtRow(
                 row = row,
                 startIdx = columnCount,
-                datas = (timeSlots.indices).map {
-                    if (it == timeSlotIdx) studentSeat.seatFullName else null
+                datas = timeSlots.map { timeSlot ->
+                    studentSeats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 },
                 style = getDefaultCellStyle(workbook)
             )
@@ -211,22 +209,21 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     ): ByteArray {
         val attributes = listOf("학년", "반", "번호", "이름", *timeSlots.map { it.name }.toTypedArray())
 
-        val remainInfosList = studentSeats.map { studentSeat ->
-            val timeSlotIdx = studentSeat.timeSlotId?.let { timeSlots.indexOfFirst { ts -> ts.id == it } }
+        val seatInfosList = studentSeats.map { studentSeat ->
             listOf(
                 studentSeat.studentGrade.toString(),
                 studentSeat.studentClassRoom.toString(),
                 studentSeat.studentNumber.toString(),
                 studentSeat.studentName,
-                *(timeSlots.indices)
-                    .map { i -> if (i == timeSlotIdx) studentSeat.seatFullName else null }
-                    .toTypedArray(),
+                *timeSlots.map { timeSlot ->
+                    studentSeat.seats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
+                }.toTypedArray()
             )
         }
 
         return createExcelSheet(
             attributes = attributes,
-            datasList = remainInfosList
+            datasList = seatInfosList
         )
     }
 

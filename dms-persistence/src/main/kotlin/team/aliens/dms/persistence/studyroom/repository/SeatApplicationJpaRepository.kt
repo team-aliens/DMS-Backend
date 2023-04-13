@@ -11,11 +11,15 @@ interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity
 
     fun queryByStudentId(studentId: UUID): List<SeatApplicationJpaEntity>
 
+    fun queryByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID): SeatApplicationJpaEntity?
+
     fun deleteByStudentId(studyRoomId: UUID)
 
     fun deleteByTimeSlotId(timeSlotId: UUID)
 
     fun deleteByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID)
+
+    fun deleteBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, studentId: UUID, timeSlotId: UUID)
 
     fun deleteBySeatStudyRoomId(studyRoomId: UUID)
 }
