@@ -1,31 +1,31 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQuerySchoolPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
+import java.time.LocalDateTime
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
-    private val securityPort: StudyRoomSecurityPort,
-    private val queryUserPort: StudyRoomQueryUserPort,
-    private val querySchoolPort: StudyRoomQuerySchoolPort,
-    private val queryStudentPort: StudyRoomQueryStudentPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val querySchoolPort: QuerySchoolPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val writeFilePort: WriteFilePort,
 ) {

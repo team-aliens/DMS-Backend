@@ -1,21 +1,21 @@
 package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.exception.PasswordMismatchException
-import team.aliens.dms.domain.auth.spi.AuthQuerySchoolPort
-import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
-import team.aliens.dms.domain.auth.spi.AuthSecurityPort
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @UseCase
 class SignInUseCase(
-    private val securityPort: AuthSecurityPort,
-    private val queryUserPort: AuthQueryUserPort,
-    private val querySchoolPort: AuthQuerySchoolPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val querySchoolPort: QuerySchoolPort,
     private val jwtPort: JwtPort
 ) {
 

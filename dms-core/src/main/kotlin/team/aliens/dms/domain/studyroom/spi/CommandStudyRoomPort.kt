@@ -36,4 +36,6 @@ interface CommandStudyRoomPort {
     fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID)
 
     fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID)
+
+    fun deleteSeatApplicationByStudentId(studentId: UUID)
 }

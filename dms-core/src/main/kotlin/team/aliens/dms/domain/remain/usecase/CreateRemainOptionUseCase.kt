@@ -1,16 +1,16 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.CommandRemainOptionPort
-import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @UseCase
 class CreateRemainOptionUseCase(
-    private val securityPort: RemainSecurityPort,
+    private val securityPort: SecurityPort,
     private val queryUserPort: QueryUserPort,
     private val commentRemainOptionPort: CommandRemainOptionPort
 ) {

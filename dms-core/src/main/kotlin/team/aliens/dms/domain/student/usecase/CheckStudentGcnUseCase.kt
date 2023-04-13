@@ -2,16 +2,16 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
 
 @ReadOnlyUseCase
 class CheckStudentGcnUseCase(
-    private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryStudentPort: QueryStudentPort
+    private val querySchoolPort: QuerySchoolPort,
+    private val queryVerifiedStudentPort: QueryVerifiedStudentPort
 ) {
 
     fun execute(request: CheckStudentGcnRequest): String {

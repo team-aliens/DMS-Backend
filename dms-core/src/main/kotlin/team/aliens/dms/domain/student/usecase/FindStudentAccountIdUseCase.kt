@@ -7,8 +7,8 @@ import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 /**
@@ -22,7 +22,7 @@ import java.util.UUID
 @ReadOnlyUseCase
 class FindStudentAccountIdUseCase(
     private val queryStudentPort: QueryStudentPort,
-    private val queryUserPort: StudentQueryUserPort,
+    private val queryUserPort: QueryUserPort,
     private val sendEmailPort: SendEmailPort
 ) {
 

@@ -18,6 +18,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentCommandUserPort
 import team.aliens.dms.domain.student.spi.StudentJwtPort
 import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
@@ -48,6 +49,12 @@ class SignUpUseCaseTests {
 
     @MockBean
     private lateinit var queryAuthCodeLimitPort: StudentQueryAuthCodeLimitPort
+
+    @MockBean
+    private lateinit var queryVerifiedStudentPort: QueryVerifiedStudentPort
+
+    @MockBean
+    private lateinit var queryRoomPort: StudentQueryRoomPort
 
     @MockBean
     private lateinit var securityPort: StudentSecurityPort

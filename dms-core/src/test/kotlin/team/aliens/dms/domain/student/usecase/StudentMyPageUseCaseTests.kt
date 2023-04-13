@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
+import team.aliens.dms.domain.point.spi.QueryPhrasePort
 import team.aliens.dms.domain.point.stub.createPhraseStub
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.stub.createSchoolStub
@@ -39,7 +39,7 @@ class StudentMyPageUseCaseTests {
     private lateinit var queryPointHistoryPort: StudentQueryPointHistoryPort
 
     @MockBean
-    private lateinit var queryPhrasePort: StudentQueryPhrasePort
+    private lateinit var queryPhrasePort: QueryPhrasePort
 
     private lateinit var studentMyPageUseCase: StudentMyPageUseCase
 

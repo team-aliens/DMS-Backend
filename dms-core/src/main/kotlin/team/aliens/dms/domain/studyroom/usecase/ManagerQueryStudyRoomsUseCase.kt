@@ -1,20 +1,20 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse.StudyRoomElement
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomsUseCase(
-    private val securityPort: StudyRoomSecurityPort,
-    private val queryUserPort: StudyRoomQueryUserPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 

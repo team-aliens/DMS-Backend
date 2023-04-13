@@ -1,17 +1,17 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
-import team.aliens.dms.domain.school.spi.SchoolSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @ReadOnlyUseCase
 class QueryAvailableFeaturesUseCase(
-    private val securityPort: SchoolSecurityPort,
-    private val queryUserPort: SchoolQueryUserPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
     private val querySchoolPort: QuerySchoolPort
 ) {
 

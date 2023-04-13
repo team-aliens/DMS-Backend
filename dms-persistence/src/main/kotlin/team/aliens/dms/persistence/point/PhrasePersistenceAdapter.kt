@@ -9,7 +9,7 @@ import team.aliens.dms.persistence.point.repository.PhraseJpaRepository
 import kotlin.math.absoluteValue
 
 @Component
-class PhrasePersistenceAdapterStudent(
+class PhrasePersistenceAdapter(
     private val phraseRepository: PhraseJpaRepository,
     private val phraseMapper: PhraseMapper
 ) : PhrasePort {

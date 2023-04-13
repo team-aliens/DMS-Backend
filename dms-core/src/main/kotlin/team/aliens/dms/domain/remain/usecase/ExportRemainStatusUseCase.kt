@@ -1,26 +1,26 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.remain.spi.RemainQuerySchoolPort
-import team.aliens.dms.domain.remain.spi.RemainQueryStudentPort
-import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
-import team.aliens.dms.domain.remain.spi.RemainSecurityPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportRemainStatusUseCase(
-    private val securityPort: RemainSecurityPort,
-    private val queryUserPort: RemainQueryUserPort,
-    private val querySchoolPort: RemainQuerySchoolPort,
-    private val queryStudentPort: RemainQueryStudentPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val querySchoolPort: QuerySchoolPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryRemainStatusPort: QueryRemainStatusPort,
     private val writeFilePort: WriteFilePort
 ) {

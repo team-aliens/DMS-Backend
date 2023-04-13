@@ -1,16 +1,16 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.studyroom.dto.QueryCurrentAppliedStudyRoomResponse
 import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 
 @ReadOnlyUseCase
 class QueryCurrentAppliedStudyRoomUseCase(
-    private val securityPort: StudyRoomSecurityPort,
+    private val securityPort: SecurityPort,
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 

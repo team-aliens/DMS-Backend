@@ -1,24 +1,24 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
-import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryAuthCodePort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.CheckUserAuthority
+import team.aliens.dms.domain.user.spi.CommandUserPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @UseCase
 class ResetManagerPasswordUseCase(
-    private val queryUserPort: ManagerQueryUserPort,
-    private val queryAuthCodePort: ManagerQueryAuthCodePort,
-    private val commandUserPort: ManagerCommandUserPort,
-    private val securityPort: ManagerSecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val queryAuthCodePort: QueryAuthCodePort,
+    private val commandUserPort: CommandUserPort,
+    private val securityPort: SecurityPort,
     private val checkUserAuthority: CheckUserAuthority
 ) {
 

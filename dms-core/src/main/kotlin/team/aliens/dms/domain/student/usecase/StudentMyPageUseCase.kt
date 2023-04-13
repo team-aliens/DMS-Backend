@@ -1,25 +1,25 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
+import team.aliens.dms.domain.point.spi.QueryPhrasePort
+import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
-import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
-    private val securityPort: StudentSecurityPort,
+    private val securityPort: SecurityPort,
     private val queryStudentPort: QueryStudentPort,
-    private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryPointHistoryPort: StudentQueryPointHistoryPort,
-    private val studentQueryPhrasePort: StudentQueryPhrasePort
+    private val querySchoolPort: QuerySchoolPort,
+    private val queryPointHistoryPort: QueryPointHistoryPort,
+    private val queryPhrasePort: QueryPhrasePort
 ) {
 
     fun execute(): StudentMyPageResponse {
@@ -45,10 +45,10 @@ class StudentMyPageUseCase(
     }
 
     private fun randomPhrase(bonusPoint: Int, minusPoint: Int): String {
-        val bonusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
+        val bonusPhrase = queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
             type = PointType.BONUS, point = bonusPoint
         )
-        val minusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
+        val minusPhrase = queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
             type = PointType.MINUS, point = minusPoint
         )
 

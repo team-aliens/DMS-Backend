@@ -11,11 +11,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
+import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.stub.createStudentStub
+import team.aliens.dms.domain.student.stub.createVerifiedStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
@@ -25,7 +25,7 @@ class CheckStudentGcnUseCaseTests {
     private lateinit var querySchoolPort: StudentQuerySchoolPort
 
     @MockBean
-    private lateinit var queryStudentPort: QueryStudentPort
+    private lateinit var queryVerifiedStudentPort: QueryVerifiedStudentPort
 
     private lateinit var checkStudentGcnUseCase: CheckStudentGcnUseCase
 

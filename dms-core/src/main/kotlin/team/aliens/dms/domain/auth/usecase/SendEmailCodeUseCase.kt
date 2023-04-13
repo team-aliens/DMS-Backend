@@ -7,17 +7,17 @@ import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.AuthQueryUserPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @UseCase
 class SendEmailCodeUseCase(
     private val sendEmailPort: SendEmailPort,
-    private val queryUserPort: AuthQueryUserPort,
+    private val queryUserPort: QueryUserPort,
     private val commandAuthCodePort: CommandAuthCodePort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
     private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort

@@ -2,17 +2,17 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryStudentPort: PointQueryStudentPort,
+    private val securityPort: SecurityPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
