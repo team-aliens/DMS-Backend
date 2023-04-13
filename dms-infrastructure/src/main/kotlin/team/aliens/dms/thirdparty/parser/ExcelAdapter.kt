@@ -30,7 +30,6 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {

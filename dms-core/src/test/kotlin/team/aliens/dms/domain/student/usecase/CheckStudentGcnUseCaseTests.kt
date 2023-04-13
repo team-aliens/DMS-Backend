@@ -11,11 +11,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.stub.createSchoolStub
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
 import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.stub.createVerifiedStudentStub
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)

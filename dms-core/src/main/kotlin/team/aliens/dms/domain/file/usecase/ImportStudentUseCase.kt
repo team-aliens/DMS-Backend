@@ -4,14 +4,10 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.room.model.Room
-import team.aliens.dms.domain.room.spi.CommandRoomPort
-import team.aliens.dms.domain.room.spi.QueryRoomPort
+import team.aliens.dms.domain.room.spi.FileCommandRoomPort
+import team.aliens.dms.domain.room.spi.FileQueryRoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-<<<<<<< develop:dms-core/src/main/kotlin/team/aliens/dms/domain/file/usecase/ImportStudentUseCase.kt
-=======
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
->>>>>>> refactor: (#441) 포트 분리:dms-core/src/main/kotlin/team/aliens/dms/domain/file/usecase/ImportVerifiedStudentUseCase.kt
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
@@ -27,8 +23,8 @@ class ImportStudentUseCase(
     private val securityPort: SecurityPort,
     private val queryUserPort: QueryUserPort,
     private val querySchoolPort: QuerySchoolPort,
-    private val commandRoomPort: CommandRoomPort,
-    private val queryRoomPort: QueryRoomPort,
+    private val fileCommandRoomPort: FileCommandRoomPort,
+    private val fileQueryRoomPort: FileQueryRoomPort,
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort
 ) {
@@ -69,7 +65,7 @@ class ImportStudentUseCase(
 
     private fun saveNotExistsRooms(roomNumbers: List<String>, schoolId: UUID): MutableMap<String, Room> {
 
-        val roomMap = queryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
+        val roomMap = fileQueryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
             .associateBy { it.number }
             .toMutableMap()
 
@@ -86,7 +82,7 @@ class ImportStudentUseCase(
             }
         }
 
-        commandRoomPort.saveRooms(notExistsRooms)
+        fileCommandRoomPort.saveRooms(notExistsRooms)
         return roomMap
     }
 }

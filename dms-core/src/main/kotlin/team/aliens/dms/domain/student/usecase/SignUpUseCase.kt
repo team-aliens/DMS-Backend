@@ -5,9 +5,8 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
-import team.aliens.dms.domain.room.exception.RoomNotFoundException
-import team.aliens.dms.domain.room.spi.QueryRoomPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
@@ -19,25 +18,11 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.QueryVerifiedStudentPort
-<<<<<<< develop
-import team.aliens.dms.domain.student.spi.StudentJwtPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodeLimitPort
-import team.aliens.dms.domain.student.spi.StudentQueryRoomPort
-import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
-import team.aliens.dms.domain.student.spi.StudentSecurityPort
-=======
->>>>>>> refactor: (#441) jwt port
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.time.LocalDateTime
-import java.util.UUID
-import team.aliens.dms.domain.auth.spi.JwtPort
 
 /**
  *
@@ -55,8 +40,6 @@ class SignUpUseCase(
     private val querySchoolPort: QuerySchoolPort,
     private val queryUserPort: QueryUserPort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val queryVerifiedStudentPort: QueryVerifiedStudentPort,
-    private val queryRoomPort: QueryRoomPort,
     private val securityPort: SecurityPort,
     private val jwtPort: JwtPort
 ) {
