@@ -7,19 +7,18 @@ import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class SignInUseCase(
     private val securityService: SecurityService,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val querySchoolPort: QuerySchoolPort,
     private val jwtPort: JwtPort
 ) {
 
     fun execute(request: SignInRequest): SignInResponse {
-        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
+        val user = getUserService.queryUserByAccountId(request.accountId)
 
         securityService.checkIsPasswordMatches(request.password, user.password)
 

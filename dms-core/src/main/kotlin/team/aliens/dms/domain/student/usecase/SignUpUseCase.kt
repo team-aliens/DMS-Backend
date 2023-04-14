@@ -18,11 +18,9 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
-import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.CommandUserService
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 /**
  *
@@ -38,7 +36,7 @@ class SignUpUseCase(
     private val queryStudentPort: QueryStudentPort,
     private val commandUserService: CommandUserService,
     private val querySchoolPort: QuerySchoolPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
     private val securityService: SecurityService,
     private val jwtPort: JwtPort
@@ -127,18 +125,7 @@ class SignUpUseCase(
     }
 
     private fun validateUserDuplicated(accountId: String, email: String) {
-        /**
-         * 아이디 중복 검사
-         **/
-        if (queryUserPort.existsUserByAccountId(accountId)) {
-            throw UserAccountIdExistsException
-        }
-
-        /**
-         * 이메일 중복 검사
-         **/
-        if (queryUserPort.existsUserByEmail(email)) {
-            throw UserEmailExistsException
-        }
+        getUserService.queryUserByAccountId(accountId)
+        getUserService.checkUserExistsByEmail(email)
     }
 }

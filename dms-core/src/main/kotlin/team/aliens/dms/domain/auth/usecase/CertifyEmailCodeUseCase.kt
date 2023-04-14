@@ -8,20 +8,19 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class CertifyEmailCodeUseCase(
+    private val getUserService: GetUserService,
     private val queryAuthCodePort: QueryAuthCodePort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val queryUserPort: QueryUserPort,
     private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort
 ) {
 
     fun execute(request: CertifyEmailCodeRequest) {
         if (EmailType.PASSWORD == request.type) {
-            queryUserPort.queryUserByEmail(request.email) ?: throw UserNotFoundException
+            getUserService.queryUserByEmail(request.email)
         }
 
         val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)

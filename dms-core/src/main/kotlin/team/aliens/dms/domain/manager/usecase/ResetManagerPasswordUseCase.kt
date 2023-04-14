@@ -7,27 +7,21 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
-import team.aliens.dms.domain.user.exception.InvalidRoleException
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.CommandUserService
 import team.aliens.dms.domain.user.service.GetUserService
-import team.aliens.dms.domain.user.spi.CommandUserPort
-import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @UseCase
 class ResetManagerPasswordUseCase(
     private val queryAuthCodePort: QueryAuthCodePort,
-    private val commandUserPort: CommandUserPort,
+    private val commandUserService: CommandUserService,
     private val securityService: SecurityService,
-    private val queryUserPort: QueryUserPort,
     private val getUserService: GetUserService
 ) {
 
     fun execute(request: ResetManagerPasswordRequest) {
-        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
 
-        if (getUserService.getUserAuthority(user.id) != Authority.MANAGER) {
-            throw InvalidRoleException
-        }
+        val user = getUserService.queryUserByAccountId(request.accountId)
+        getUserService.checkUserAuthority(user.id, Authority.MANAGER)
 
         if (user.email != request.email) {
             throw ManagerInfoMismatchException
@@ -37,7 +31,7 @@ class ResetManagerPasswordUseCase(
 
         authCode.validateAuthCode(request.authCode)
 
-        commandUserPort.saveUser(
+        commandUserService.saveUser(
             user.copy(password = securityService.encodePassword(request.newPassword))
         )
     }

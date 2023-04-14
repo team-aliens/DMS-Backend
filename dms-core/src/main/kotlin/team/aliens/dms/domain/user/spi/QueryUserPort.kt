@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.user.spi
 
+import java.util.UUID
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.user.model.User
-import java.util.UUID
 
 interface QueryUserPort {
 
