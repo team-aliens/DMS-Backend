@@ -15,9 +15,9 @@ interface GetUserService {
 
     fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority): User
 
-    fun checkUserExistsByEmail(email: String)
+    fun checkUserNotExistsByEmail(email: String)
 
-    fun checkUserExistsByAccountId(accountId: String)
+    fun checkUserNotExistsByAccountId(accountId: String)
 
     fun checkUserAuthority(userId: UUID, expectedAuthority: Authority)
 

@@ -9,6 +9,6 @@ class CheckDuplicatedAccountIdUseCase(
 ) {
 
     fun execute(accountId: String) {
-        getUserService.checkUserExistsByAccountId(accountId)
+        getUserService.checkUserNotExistsByAccountId(accountId)
     }
 }

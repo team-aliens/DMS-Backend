@@ -35,13 +35,13 @@ class GetUserServiceImpl(
         return queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, authority) ?: throw UserNotFoundException
     }
 
-    override fun checkUserExistsByEmail(email: String) {
+    override fun checkUserNotExistsByEmail(email: String) {
         if (queryUserPort.existsUserByEmail(email)) {
             throw UserEmailExistsException
         }
     }
 
-    override fun checkUserExistsByAccountId(accountId: String) {
+    override fun checkUserNotExistsByAccountId(accountId: String) {
         if (queryUserPort.existsUserByAccountId(accountId)) {
             throw UserAccountIdExistsException
         }

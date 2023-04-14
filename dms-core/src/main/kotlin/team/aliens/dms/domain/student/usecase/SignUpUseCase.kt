@@ -125,7 +125,7 @@ class SignUpUseCase(
     }
 
     private fun validateUserDuplicated(accountId: String, email: String) {
-        getUserService.queryUserByAccountId(accountId)
-        getUserService.checkUserExistsByEmail(email)
+        getUserService.checkUserNotExistsByAccountId(accountId)
+        getUserService.checkUserNotExistsByEmail(email)
     }
 }

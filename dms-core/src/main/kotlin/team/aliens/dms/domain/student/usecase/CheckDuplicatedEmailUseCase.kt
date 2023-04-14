@@ -9,6 +9,6 @@ class CheckDuplicatedEmailUseCase(
 ) {
 
     fun execute(email: String) {
-        getUserService.checkUserExistsByEmail(email)
+        getUserService.checkUserNotExistsByEmail(email)
     }
 }

@@ -27,7 +27,6 @@ class FindManagerAccountIdUseCase(
         val manager = getUserService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
 
         sendEmailPort.sendAccountId(manager.email, manager.accountId)
-
         return StringUtil.coveredEmail(manager.email)
     }
 }
