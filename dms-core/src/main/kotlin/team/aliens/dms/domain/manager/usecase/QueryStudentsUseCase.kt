@@ -1,21 +1,21 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
-    private val securityPort: ManagerSecurityPort,
+    private val securityPort: SecurityPort,
     private val queryManagerPort: QueryManagerPort,
-    private val queryStudentPort: ManagerQueryStudentPort
+    private val queryStudentPort: QueryStudentPort
 ) {
 
     fun execute(

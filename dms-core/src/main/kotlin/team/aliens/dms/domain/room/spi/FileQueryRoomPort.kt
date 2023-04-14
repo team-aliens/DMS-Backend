@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.file.spi
+package team.aliens.dms.domain.room.spi
 
 import team.aliens.dms.domain.room.model.Room
 import java.util.UUID

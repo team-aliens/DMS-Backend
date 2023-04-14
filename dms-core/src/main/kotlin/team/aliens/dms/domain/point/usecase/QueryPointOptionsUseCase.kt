@@ -1,16 +1,16 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
-import team.aliens.dms.domain.point.spi.PointQueryManagerPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 
 @ReadOnlyUseCase
 class QueryPointOptionsUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryManagerPort: PointQueryManagerPort,
+    private val securityPort: SecurityPort,
+    private val queryManagerPort: QueryManagerPort,
     private val queryPointOptionPort: QueryPointOptionPort
 ) {
 

@@ -5,16 +5,16 @@ import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.ManagerQuerySchoolPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @ReadOnlyUseCase
 class FindManagerAccountIdUseCase(
-    private val querySchoolPort: ManagerQuerySchoolPort,
-    private val queryUserPort: ManagerQueryUserPort,
+    private val querySchoolPort: QuerySchoolPort,
+    private val queryUserPort: QueryUserPort,
     private val sendEmailPort: SendEmailPort
 ) {
 

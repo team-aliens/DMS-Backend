@@ -5,11 +5,11 @@ import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.CommandMealPort
 import team.aliens.dms.domain.meal.spi.MealFeignClientPort
 import team.aliens.dms.domain.meal.spi.MealFeignClientSchoolPort
-import team.aliens.dms.domain.meal.spi.MealQuerySchoolPort
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 
 @SchedulerUseCase
 class SaveAllMealsUseCase(
-    private val querySchoolPort: MealQuerySchoolPort,
+    private val querySchoolPort: QuerySchoolPort,
     private val commandMealPort: CommandMealPort,
     private val mealFeignClientPort: MealFeignClientPort,
     private val schoolFeignClientPort: MealFeignClientSchoolPort

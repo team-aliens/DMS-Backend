@@ -1,30 +1,30 @@
 package team.aliens.dms.domain.file.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.file.spi.FileQueryRoomPort
-import team.aliens.dms.domain.file.spi.FileQuerySchoolPort
-import team.aliens.dms.domain.file.spi.FileQueryUserPort
-import team.aliens.dms.domain.file.spi.FileSecurityPort
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.room.model.Room
-import team.aliens.dms.domain.room.spi.RoomPort
+import team.aliens.dms.domain.room.spi.FileCommandRoomPort
+import team.aliens.dms.domain.room.spi.FileQueryRoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.io.File
 import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(
     private val parseFilePort: ParseFilePort,
-    private val securityPort: FileSecurityPort,
-    private val queryUserPort: FileQueryUserPort,
-    private val querySchoolPort: FileQuerySchoolPort,
-    private val commandRoomPort: RoomPort,
-    private val queryRoomPort: FileQueryRoomPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val querySchoolPort: QuerySchoolPort,
+    private val fileCommandRoomPort: FileCommandRoomPort,
+    private val fileQueryRoomPort: FileQueryRoomPort,
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort
 ) {
@@ -65,7 +65,7 @@ class ImportStudentUseCase(
 
     private fun saveNotExistsRooms(roomNumbers: List<String>, schoolId: UUID): MutableMap<String, Room> {
 
-        val roomMap = queryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
+        val roomMap = fileQueryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
             .associateBy { it.number }
             .toMutableMap()
 
@@ -82,7 +82,7 @@ class ImportStudentUseCase(
             }
         }
 
-        commandRoomPort.saveRooms(notExistsRooms)
+        fileCommandRoomPort.saveRooms(notExistsRooms)
         return roomMap
     }
 }

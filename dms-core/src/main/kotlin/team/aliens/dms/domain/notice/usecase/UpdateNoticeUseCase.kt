@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
-import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
 import java.util.UUID
 
@@ -11,7 +11,7 @@ import java.util.UUID
 class UpdateNoticeUseCase(
     private val queryNoticePort: QueryNoticePort,
     private val commandNoticePort: CommandNoticePort,
-    private val securityPort: NoticeSecurityPort
+    private val securityPort: SecurityPort
 ) {
 
     fun execute(noticeId: UUID, title: String, content: String): UUID {

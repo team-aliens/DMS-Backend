@@ -1,25 +1,25 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
-import team.aliens.dms.domain.point.spi.PointQueryManagerPort
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import java.time.LocalDateTime
 
 @UseCase
 class GrantPointUseCase(
-    private val queryManagerPort: PointQueryManagerPort,
-    private val securityPort: PointSecurityPort,
+    private val queryManagerPort: QueryManagerPort,
+    private val securityPort: SecurityPort,
     private val queryPointOptionPort: QueryPointOptionPort,
     private val commandPointHistoryPort: CommandPointHistoryPort,
-    private val queryStudentPort: PointQueryStudentPort
+    private val queryStudentPort: QueryStudentPort
 ) {
 
     fun execute(request: GrantPointRequest) {

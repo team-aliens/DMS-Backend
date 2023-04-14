@@ -2,21 +2,21 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
+import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
-import team.aliens.dms.domain.point.spi.PointQueryManagerPort
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryManagerPort: PointQueryManagerPort,
-    private val queryStudentPort: PointQueryStudentPort,
+    private val securityPort: SecurityPort,
+    private val queryManagerPort: QueryManagerPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 

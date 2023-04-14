@@ -1,25 +1,25 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.spi.PointQuerySchoolPort
-import team.aliens.dms.domain.point.spi.PointQueryUserPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportAllPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryUserPort: PointQueryUserPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val querySchoolPort: PointQuerySchoolPort,
+    private val querySchoolPort: QuerySchoolPort,
     private val writeFilePort: WriteFilePort
 ) {
 

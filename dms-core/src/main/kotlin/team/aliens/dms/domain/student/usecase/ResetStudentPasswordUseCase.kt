@@ -1,27 +1,27 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentCommandUserPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.student.spi.StudentSecurityPort
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.CheckUserAuthority
+import team.aliens.dms.domain.user.spi.CommandUserPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @UseCase
 class ResetStudentPasswordUseCase(
-    private val queryUserPort: StudentQueryUserPort,
+    private val queryUserPort: QueryUserPort,
     private val queryStudentPort: QueryStudentPort,
-    private val queryAuthCodePort: StudentQueryAuthCodePort,
-    private val commandUserPort: StudentCommandUserPort,
-    private val securityPort: StudentSecurityPort,
+    private val queryAuthCodePort: QueryAuthCodePort,
+    private val commandUserPort: CommandUserPort,
+    private val securityPort: SecurityPort,
     private val checkUserAuthority: CheckUserAuthority
 ) {
 

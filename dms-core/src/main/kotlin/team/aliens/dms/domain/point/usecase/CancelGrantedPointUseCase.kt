@@ -1,21 +1,21 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
-import team.aliens.dms.domain.point.spi.PointQueryUserPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @UseCase
 class CancelGrantedPointUseCase(
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val securityPort: PointSecurityPort,
-    private val queryUserPort: PointQueryUserPort
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort
 ) {
 
     fun execute(pointHistoryId: UUID) {

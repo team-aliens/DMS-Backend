@@ -1,8 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.studyroom.exception.AvailableTimeNotFoundException
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
@@ -15,17 +17,15 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryStudentPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
 
 @UseCase
 class ApplySeatUseCase(
-    private val securityPort: StudyRoomSecurityPort,
-    private val queryUserPort: StudyRoomQueryUserPort,
-    private val queryStudentPort: StudyRoomQueryStudentPort,
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
     private val queryAvailableTimePort: QueryAvailableTimePort
