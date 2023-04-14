@@ -1,29 +1,26 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.TimeSlotInUseException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class RemoveTimeSlotUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
-    fun execute(timeSlotId: UUID) {
-        val currentManagerId = securityPort.getCurrentUserId()
-        val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
 
+    fun execute(timeSlotId: UUID) {
+
+        val user = getUserService.getCurrentUser()
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
-        validateSameSchool(currentManager.schoolId, timeSlot.schoolId)
+        validateSameSchool(user.schoolId, timeSlot.schoolId)
 
         if (queryStudyRoomPort.existsStudyRoomTimeSlotByTimeSlotId(timeSlotId)) {
             throw TimeSlotInUseException

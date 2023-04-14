@@ -14,9 +14,11 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class CreateStudyRoomUseCase(
+    private val getUserService: GetUserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
     private val securityPort: SecurityPort,

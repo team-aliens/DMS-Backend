@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.time.LocalTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
@@ -7,13 +9,12 @@ import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.GetUserService
 import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.time.LocalTime
-import java.util.UUID
 
 @UseCase
 class UpdateTimeSlotUseCase(
+    private val getUserService: GetUserService,
     private val securityPort: SecurityPort,
     private val queryUserPort: QueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
@@ -21,15 +22,15 @@ class UpdateTimeSlotUseCase(
 ) {
 
     fun execute(timeSlotId: UUID, startTime: LocalTime, endTime: LocalTime) {
-        val currentManagerId = securityPort.getCurrentUserId()
-        val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
+
+        val user = getUserService.getCurrentUser()
 
         if (queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(startTime, endTime)) {
             throw TimeSlotAlreadyExistsException
         }
 
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
-        validateSameSchool(currentManager.schoolId, timeSlot.schoolId)
+        validateSameSchool(user.schoolId, timeSlot.schoolId)
 
         commandStudyRoomPort.saveTimeSlot(
             timeSlot.copy(

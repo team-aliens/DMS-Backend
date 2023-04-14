@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
@@ -12,12 +13,12 @@ import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.GetUserService
 import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
 
 @UseCase
 class UpdateStudyRoomUseCase(
+    private val getUserService: GetUserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
     private val securityPort: SecurityPort,
@@ -26,17 +27,16 @@ class UpdateStudyRoomUseCase(
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = getUserService.getCurrentUser()
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-        validateSameSchool(currentUser.schoolId, studyRoom.schoolId)
+        validateSameSchool(user.schoolId, studyRoom.schoolId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
             val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
                 floor = request.floor,
                 name = request.name,
-                schoolId = currentUser.schoolId
+                schoolId = user.schoolId
             )
             if (isAlreadyExists) {
                 throw StudyRoomAlreadyExistsException

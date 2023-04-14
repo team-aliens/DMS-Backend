@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -17,14 +17,11 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class ApplySeatUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
@@ -32,16 +29,16 @@ class ApplySeatUseCase(
 ) {
 
     fun execute(seatId: UUID, timeSlotId: UUID) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+
+        val student = getUserService.getCurrentStudent()
 
         val seat = queryStudyRoomPort.querySeatById(seatId) ?: throw SeatNotFoundException
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
 
-        validateSameSchool(timeSlot.schoolId, user.schoolId)
-        validateSameSchool(studyRoom.schoolId, user.schoolId)
-        validateStudyRoomAvailable(studyRoom, currentUserId)
+        validateSameSchool(timeSlot.schoolId, student.schoolId)
+        validateSameSchool(studyRoom.schoolId, student.schoolId)
+        validateStudyRoomAvailable(studyRoom, student.id)
         validateTimeAvailable(studyRoom.schoolId)
 
         if (seat.status != SeatStatus.AVAILABLE) {
@@ -52,13 +49,13 @@ class ApplySeatUseCase(
             throw SeatAlreadyAppliedException
         }
 
-        commandStudyRoomPort.deleteSeatApplicationByStudentIdAndTimeSlotId(currentUserId, timeSlotId)
+        commandStudyRoomPort.deleteSeatApplicationByStudentIdAndTimeSlotId(student.id, timeSlotId)
 
         commandStudyRoomPort.saveSeatApplication(
             SeatApplication(
                 seatId = seatId,
                 timeSlotId = timeSlotId,
-                studentId = currentUserId
+                studentId = student.id
             )
         )
     }

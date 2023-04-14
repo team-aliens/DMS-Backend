@@ -1,12 +1,14 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class UnApplySeatUseCase(
+    private val getUserService: GetUserService,
     private val securityPort: SecurityPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
