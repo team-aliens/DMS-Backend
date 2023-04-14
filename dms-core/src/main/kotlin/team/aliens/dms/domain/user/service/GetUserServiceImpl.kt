@@ -48,7 +48,7 @@ class GetUserServiceImpl(
     }
 
     override fun checkUserAuthority(userId: UUID, expectedAuthority: Authority) {
-        if (getUserAuthority(userId) != Authority.MANAGER) {
+        if (getUserAuthority(userId) != expectedAuthority) {
             throw InvalidRoleException
         }
     }
