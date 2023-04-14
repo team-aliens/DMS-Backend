@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.point.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.service.GetUserService
+import java.util.UUID
 
 @UseCase
 class CancelGrantedPointUseCase(

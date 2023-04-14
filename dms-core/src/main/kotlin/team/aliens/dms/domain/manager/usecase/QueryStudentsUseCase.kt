@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.manager.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
@@ -8,6 +7,7 @@ import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.service.GetUserService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(

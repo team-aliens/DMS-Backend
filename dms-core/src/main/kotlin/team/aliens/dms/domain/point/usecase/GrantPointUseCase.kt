@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.point.usecase
 
-import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
@@ -10,6 +9,7 @@ import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.service.GetUserService
+import java.time.LocalDateTime
 
 @UseCase
 class GrantPointUseCase(

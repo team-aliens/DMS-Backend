@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.remain.usecase
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainCanNotAppliedException
@@ -12,6 +10,8 @@ import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.user.service.GetUserService
+import java.time.LocalDateTime
+import java.util.UUID
 
 @UseCase
 class ApplyRemainUseCase(

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
 import team.aliens.dms.domain.student.spi.CommandStudentPort
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.GetUserService
 import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
+import java.time.LocalDateTime
 
 @UseCase
 class StudentWithdrawalUseCase(

@@ -12,9 +12,9 @@ import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.GetUserService
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
-import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class CreateStudyRoomUseCase(

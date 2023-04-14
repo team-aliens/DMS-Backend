@@ -1,13 +1,10 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.CommandRemainOptionPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
 import team.aliens.dms.domain.user.service.GetUserService
+import java.util.UUID
 
 @UseCase
 class CreateRemainOptionUseCase(

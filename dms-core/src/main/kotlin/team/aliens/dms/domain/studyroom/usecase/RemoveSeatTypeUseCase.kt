@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.SeatTypeInUseException
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.studyroom.spi.CommandSeatTypePort
 import team.aliens.dms.domain.studyroom.spi.QuerySeatTypePort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.user.service.GetUserService
+import java.util.UUID
 
 @UseCase
 class RemoveSeatTypeUseCase(
