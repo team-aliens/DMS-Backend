@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.common.service.SecurityService
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
@@ -18,7 +18,7 @@ class ResetStudentPasswordUseCase(
     private val queryStudentPort: QueryStudentPort,
     private val queryAuthCodePort: QueryAuthCodePort,
     private val commandUserPort: CommandUserPort,
-    private val securityPort: SecurityPort,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: ResetStudentPasswordRequest) {
@@ -34,7 +34,7 @@ class ResetStudentPasswordUseCase(
         authCode.validateAuthCode(request.authCode)
 
         commandUserPort.saveUser(
-            user.copy(password = securityPort.encodePassword(request.newPassword))
+            user.copy(password = securityService.encodePassword(request.newPassword))
         )
     }
 }

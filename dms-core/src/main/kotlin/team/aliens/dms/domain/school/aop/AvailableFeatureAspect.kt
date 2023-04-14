@@ -3,19 +3,16 @@ package team.aliens.dms.domain.school.aop
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.exception.FeatureNotAvailableException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 @Aspect
 class AvailableFeatureAspect(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
@@ -75,8 +72,7 @@ class AvailableFeatureAspect(
     }
 
     private fun getAvailableFeature(): AvailableFeature {
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-        return querySchoolPort.queryAvailableFeaturesBySchoolId(currentUser.schoolId) ?: throw FeatureNotFoundException
+        val user = getUserService.getCurrentUser()
+        return querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId) ?: throw FeatureNotFoundException
     }
 }

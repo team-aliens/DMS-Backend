@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
+import java.security.SecureRandom
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.QueryPhrasePort
@@ -9,22 +9,18 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import java.security.SecureRandom
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
-    private val securityPort: SecurityPort,
-    private val queryStudentPort: QueryStudentPort,
+    private val getUserService: GetUserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val queryPhrasePort: QueryPhrasePort
 ) {
 
     fun execute(): StudentMyPageResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
+        val student = getUserService.getCurrentStudent()
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
         val (bonusPoint, minusPoint) =

@@ -2,26 +2,22 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
-    private val securityPort: SecurityPort,
-    private val queryStudentPort: QueryStudentPort,
+    private val getUserService: GetUserService,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentStudent = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
 
-        val gcn = currentStudent.gcn
-        val name = currentStudent.name
+        val student = getUserService.getCurrentStudent()
+        val gcn = student.gcn
+        val name = student.name
         val pointType = PointRequestType.toPointType(type)
 
         val pointHistories =

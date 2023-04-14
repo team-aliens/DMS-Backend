@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.common.service.SecurityService
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
@@ -21,7 +21,7 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.spi.CommandUserPort
+import team.aliens.dms.domain.user.service.CommandUserService
 import team.aliens.dms.domain.user.spi.QueryUserPort
 
 /**
@@ -36,11 +36,11 @@ import team.aliens.dms.domain.user.spi.QueryUserPort
 class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort,
-    private val commandUserPort: CommandUserPort,
+    private val commandUserService: CommandUserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryUserPort: QueryUserPort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val securityPort: SecurityPort,
+    private val securityService: SecurityService,
     private val jwtPort: JwtPort
 ) {
 
@@ -56,11 +56,11 @@ class SignUpUseCase(
         validateAuthCodeLimit(email)
         validateUserDuplicated(accountId, email)
 
-        val user = commandUserPort.saveUser(
+        val user = commandUserService.saveUser(
             User(
                 schoolId = school.id,
                 accountId = accountId,
-                password = securityPort.encodePassword(password),
+                password = securityService.encodePassword(password),
                 email = email,
                 authority = Authority.STUDENT
             )

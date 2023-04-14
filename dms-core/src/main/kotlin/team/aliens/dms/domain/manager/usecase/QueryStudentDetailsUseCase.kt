@@ -1,34 +1,29 @@
 package team.aliens.dms.domain.manager.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.tag.spi.QueryTagPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
-    private val securityPort: SecurityPort,
-    private val queryManagerPort: QueryManagerPort,
+    private val getUserService: GetUserService,
     private val queryStudentPort: QueryStudentPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val queryTagPort: QueryTagPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
-
+        val user = getUserService.getCurrentUser()
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-        validateSameSchool(manager.schoolId, student.schoolId)
+        validateSameSchool(user.schoolId, student.schoolId)
 
         val (bonusPoint, minusPoint) =
             queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)

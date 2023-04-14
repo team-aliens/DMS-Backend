@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
@@ -11,29 +11,23 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.GetUserService
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
 
 @UseCase
 class CreateStudyRoomUseCase(
     private val getUserService: GetUserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort
+    private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(request: CreateStudyRoomRequest): UUID {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = getUserService.getCurrentUser()
 
         val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
             floor = request.floor,
             name = request.name,
-            schoolId = currentUser.schoolId
+            schoolId = user.schoolId
         )
         if (isAlreadyExists) {
             throw StudyRoomAlreadyExistsException
@@ -41,7 +35,7 @@ class CreateStudyRoomUseCase(
 
         val studyRoom = request.run {
             StudyRoom(
-                schoolId = currentUser.schoolId,
+                schoolId = user.schoolId,
                 name = name,
                 floor = floor,
                 widthSize = totalWidthSize,

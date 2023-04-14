@@ -1,22 +1,18 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.time.LocalTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.user.service.GetUserService
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.time.LocalTime
-import java.util.UUID
 
 @UseCase
 class UpdateTimeSlotUseCase(
     private val getUserService: GetUserService,
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {

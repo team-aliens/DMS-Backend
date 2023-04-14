@@ -1,26 +1,22 @@
 package team.aliens.dms.domain.meal.usecase
 
+import java.time.LocalDate
+import java.time.YearMonth
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.extension.iterator
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.spi.QueryMealPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import java.time.LocalDate
-import java.time.YearMonth
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryMealsUseCase(
-    private val securityPort: SecurityPort,
-    private val queryStudentPort: QueryStudentPort,
+    private val getUserService: GetUserService,
     private val queryMealPort: QueryMealPort
 ) {
 
     fun execute(mealDate: LocalDate): QueryMealsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
+        val student = getUserService.getCurrentStudent()
 
         val month = YearMonth.from(mealDate)
         val firstDay = month.atDay(1)
