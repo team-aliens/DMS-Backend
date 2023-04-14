@@ -21,7 +21,7 @@ class ResetManagerPasswordUseCase(
     fun execute(request: ResetManagerPasswordRequest) {
 
         val user = getUserService.queryUserByAccountId(request.accountId)
-        getUserService.checkUserAuthority(user.id, Authority.MANAGER)
+        getUserService.checkUserAuthority(user.authority, Authority.MANAGER)
 
         if (user.email != request.email) {
             throw ManagerInfoMismatchException

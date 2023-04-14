@@ -19,9 +19,7 @@ interface GetUserService {
 
     fun checkUserNotExistsByAccountId(accountId: String)
 
-    fun checkUserAuthority(userId: UUID, expectedAuthority: Authority)
-
-    fun getUserAuthority(userId: UUID): Authority
+    fun checkUserAuthority(authority: Authority, expectedAuthority: Authority)
 
     fun getCurrentUser(): User
 

@@ -47,15 +47,10 @@ class GetUserServiceImpl(
         }
     }
 
-    override fun checkUserAuthority(userId: UUID, expectedAuthority: Authority) {
-        if (getUserAuthority(userId) != expectedAuthority) {
+    override fun checkUserAuthority(authority: Authority, expectedAuthority: Authority) {
+        if (authority != expectedAuthority) {
             throw InvalidRoleException
         }
-    }
-
-    override fun getUserAuthority(userId: UUID) = when (queryStudentPort.queryStudentById(userId)) {
-        is Student -> Authority.STUDENT
-        else -> Authority.MANAGER
     }
 
     override fun getCurrentUser(): User {
