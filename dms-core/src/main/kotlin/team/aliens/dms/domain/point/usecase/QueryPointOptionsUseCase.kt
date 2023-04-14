@@ -6,19 +6,19 @@ import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryPointOptionsUseCase(
-    private val securityPort: SecurityPort,
-    private val queryManagerPort: QueryManagerPort,
+    private val getUserService: GetUserService,
     private val queryPointOptionPort: QueryPointOptionPort
 ) {
 
     fun execute(keyword: String?): QueryPointOptionsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        val pointOptions = queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(manager.schoolId, keyword)
+        val user = getUserService.getCurrentUser()
+
+        val pointOptions = queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(user.schoolId, keyword)
             .map {
                 QueryPointOptionsResponse.PointOptionResponse(
                     pointOptionId = it.id,

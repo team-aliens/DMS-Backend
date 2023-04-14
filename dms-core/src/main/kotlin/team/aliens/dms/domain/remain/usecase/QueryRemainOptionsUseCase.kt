@@ -1,29 +1,26 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse.RemainOptionElement
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryRemainOptionsUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryRemainOptionPort: QueryRemainOptionPort,
     private val queryRemainStatusPort: QueryRemainStatusPort
 ) {
 
     fun execute(): QueryRemainOptionsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val remainStatus = queryRemainStatusPort.queryRemainStatusById(currentUserId)
+        val student = getUserService.getCurrentUser()
 
-        val remainOptions = queryRemainOptionPort.queryAllRemainOptionsBySchoolId(currentUser.schoolId)
+        val remainStatus = queryRemainStatusPort.queryRemainStatusById(student.id)
+
+        val remainOptions = queryRemainOptionPort.queryAllRemainOptionsBySchoolId(student.schoolId)
             .map {
                 RemainOptionElement(
                     id = it.id,

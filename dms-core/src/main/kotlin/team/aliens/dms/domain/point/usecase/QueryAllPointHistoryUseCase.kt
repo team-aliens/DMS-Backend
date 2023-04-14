@@ -7,22 +7,21 @@ import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.GetUserService
 import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @ReadOnlyUseCase
 class QueryAllPointHistoryUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryAllPointHistoryResponse {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = getUserService.getCurrentUser()
 
         val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
-            schoolId = manager.schoolId,
+            schoolId = user.schoolId,
             type = PointRequestType.toPointType(type),
             isCancel = false,
             pageData = pageData

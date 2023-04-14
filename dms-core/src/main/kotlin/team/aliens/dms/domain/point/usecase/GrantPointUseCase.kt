@@ -1,9 +1,7 @@
 package team.aliens.dms.domain.point.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.model.PointHistory
@@ -11,25 +9,24 @@ import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class GrantPointUseCase(
-    private val queryManagerPort: QueryManagerPort,
-    private val securityPort: SecurityPort,
+    private val getUserService: GetUserService,
     private val queryPointOptionPort: QueryPointOptionPort,
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val queryStudentPort: QueryStudentPort
 ) {
 
     fun execute(request: GrantPointRequest) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
+
+        val user = getUserService.getCurrentUser()
 
         val pointOption = queryPointOptionPort.queryPointOptionById(request.pointOptionId)
             ?: throw PointOptionNotFoundException
 
-        pointOption.checkSchoolId(manager.schoolId)
+        pointOption.checkSchoolId(user.schoolId)
 
         val students = queryStudentPort.queryStudentsWithPointHistory(request.studentIdList)
 
@@ -53,7 +50,7 @@ class GrantPointUseCase(
                     pointScore = pointOption.score,
                     pointType = pointOption.type,
                     createdAt = LocalDateTime.now(),
-                    schoolId = manager.schoolId
+                    schoolId = user.schoolId
                 )
             }
 

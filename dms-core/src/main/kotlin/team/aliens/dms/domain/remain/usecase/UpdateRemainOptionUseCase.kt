@@ -1,31 +1,27 @@
 package team.aliens.dms.domain.remain.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
 import team.aliens.dms.domain.remain.spi.CommandRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class UpdateRemainOptionUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryRemainOptionPort: QueryRemainOptionPort,
     private val commendRemainOptionPort: CommandRemainOptionPort
 ) {
 
     fun execute(remainOptionId: UUID, title: String, description: String) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
+        val user = getUserService.getCurrentUser()
         val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId)
             ?: throw RemainOptionNotFoundException
 
-        validateSameSchool(remainOption.schoolId, manager.schoolId)
+        validateSameSchool(remainOption.schoolId, user.schoolId)
 
         commendRemainOptionPort.saveRemainOption(
             remainOption.copy(

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.point.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
@@ -10,14 +10,11 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class ExportAllPointHistoryUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val querySchoolPort: QuerySchoolPort,
     private val writeFilePort: WriteFilePort
@@ -25,14 +22,13 @@ class ExportAllPointHistoryUseCase(
 
     fun execute(start: LocalDateTime?, end: LocalDateTime?): ExportAllPointHistoryResponse {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-        val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
+        val user = getUserService.getCurrentUser()
+        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         val endOrNow = end ?: LocalDateTime.now()
 
         val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
-            schoolId = manager.schoolId,
+            schoolId = user.schoolId,
             startAt = start,
             endAt = endOrNow
         )

@@ -1,7 +1,8 @@
 package team.aliens.dms.domain.remain.usecase
 
+import java.time.LocalDateTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainCanNotAppliedException
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
@@ -10,15 +11,11 @@ import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import java.time.LocalDateTime
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @UseCase
 class ApplyRemainUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val getUserService: GetUserService,
     private val queryRemainOptionPort: QueryRemainOptionPort,
     private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort,
     private val commandRemainStatusPort: CommandRemainStatusPort
@@ -26,15 +23,14 @@ class ApplyRemainUseCase(
 
     fun execute(remainOptionId: UUID) {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = getUserService.getCurrentUser()
 
         val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId)
             ?: throw RemainOptionNotFoundException
 
-        validateSameSchool(remainOption.schoolId, currentUser.schoolId)
+        validateSameSchool(remainOption.schoolId, user.schoolId)
 
-        val remainAvailableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(currentUser.schoolId)
+        val remainAvailableTime = queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(user.schoolId)
             ?: throw RemainAvailableTimeNotFoundException
 
         if (!remainAvailableTime.isAvailable()) {
@@ -43,7 +39,7 @@ class ApplyRemainUseCase(
 
         commandRemainStatusPort.saveRemainStatus(
             RemainStatus(
-                id = currentUser.id,
+                id = user.id,
                 remainOptionId = remainOption.id,
                 createdAt = LocalDateTime.now()
             )

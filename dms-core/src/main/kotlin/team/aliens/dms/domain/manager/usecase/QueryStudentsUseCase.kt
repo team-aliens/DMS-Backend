@@ -1,20 +1,17 @@
 package team.aliens.dms.domain.manager.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import java.util.UUID
+import team.aliens.dms.domain.user.service.GetUserService
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
-    private val securityPort: SecurityPort,
-    private val queryManagerPort: QueryManagerPort,
+    private val getUserService: GetUserService,
     private val queryStudentPort: QueryStudentPort
 ) {
 
@@ -26,8 +23,8 @@ class QueryStudentsUseCase(
         maxPoint: Int?,
         tagIds: List<UUID>?
     ): QueryStudentsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
+
+        val user = getUserService.getCurrentUser()
 
         val pointFilter = PointFilter(
             filterType = filterType,
@@ -38,7 +35,7 @@ class QueryStudentsUseCase(
         val students = queryStudentPort.queryStudentsByNameAndSortAndFilter(
             name = name,
             sort = sort,
-            schoolId = manager.schoolId,
+            schoolId = user.schoolId,
             pointFilter = pointFilter,
             tagIds = tagIds
         ).map {

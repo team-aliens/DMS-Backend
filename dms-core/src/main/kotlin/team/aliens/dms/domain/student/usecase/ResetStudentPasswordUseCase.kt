@@ -3,15 +3,12 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.service.CheckUserAuthority
 import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 
@@ -22,16 +19,11 @@ class ResetStudentPasswordUseCase(
     private val queryAuthCodePort: QueryAuthCodePort,
     private val commandUserPort: CommandUserPort,
     private val securityPort: SecurityPort,
-    private val checkUserAuthority: CheckUserAuthority
 ) {
 
     fun execute(request: ResetStudentPasswordRequest) {
         val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
         val student = queryStudentPort.queryStudentByUserId(user.id) ?: throw StudentNotFoundException
-
-        if (checkUserAuthority.execute(user.id) != Authority.STUDENT) {
-            throw InvalidRoleException
-        }
 
         if (student.name != request.name || user.email != request.email) {
             throw StudentInfoMismatchException
