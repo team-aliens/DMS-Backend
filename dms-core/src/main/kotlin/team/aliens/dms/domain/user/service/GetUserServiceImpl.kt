@@ -17,6 +17,9 @@ class GetUserServiceImpl(
     private val queryStudentPort: QueryStudentPort
 ) : GetUserService {
 
+    override fun queryUserById(userId: UUID) =
+        queryUserPort.queryUserById(userId) ?: throw UserNotFoundException
+
     override fun getUserAuthority(userId: UUID) = when (queryStudentPort.queryStudentById(userId)) {
         is Student -> Authority.STUDENT
         else -> Authority.MANAGER
@@ -24,7 +27,7 @@ class GetUserServiceImpl(
 
     override fun getCurrentUser(): User {
         val currentUserId = securityPort.getCurrentUserId()
-        return queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        return queryUserById(currentUserId)
     }
 
     override fun getCurrentStudent(): Student {
