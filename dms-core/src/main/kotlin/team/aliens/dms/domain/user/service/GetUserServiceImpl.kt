@@ -23,17 +23,14 @@ class GetUserServiceImpl(
     override fun queryUserById(userId: UUID) =
         queryUserPort.queryUserById(userId) ?: throw UserNotFoundException
 
-    override fun queryUserByEmail(email: String): User {
-        return queryUserPort.queryUserByEmail(email) ?: throw UserNotFoundException
-    }
+    override fun queryUserByEmail(email: String) =
+        queryUserPort.queryUserByEmail(email) ?: throw UserNotFoundException
 
-    override fun queryUserByAccountId(accountId: String): User {
-        return queryUserPort.queryUserByAccountId(accountId) ?: throw UserNotFoundException
-    }
+    override fun queryUserByAccountId(accountId: String) =
+        queryUserPort.queryUserByAccountId(accountId) ?: throw UserNotFoundException
 
-    override fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority): User {
-        return queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, authority) ?: throw UserNotFoundException
-    }
+    override fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority) =
+        queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, authority) ?: throw UserNotFoundException
 
     override fun checkUserNotExistsByEmail(email: String) {
         if (queryUserPort.existsUserByEmail(email)) {
