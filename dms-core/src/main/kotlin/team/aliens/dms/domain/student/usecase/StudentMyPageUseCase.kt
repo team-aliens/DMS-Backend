@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import java.security.SecureRandom
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
@@ -10,6 +9,7 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
 import team.aliens.dms.domain.user.service.GetUserService
+import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(

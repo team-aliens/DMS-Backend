@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.manager.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.model.Authority
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.user.service.GetUserService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class FindManagerAccountIdUseCase(
