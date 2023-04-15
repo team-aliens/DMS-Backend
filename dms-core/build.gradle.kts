@@ -15,4 +15,5 @@ allOpen {
     annotation("team.aliens.dms.common.annotation.UseCase")
     annotation("team.aliens.dms.common.annotation.ReadOnlyUseCase")
     annotation("team.aliens.dms.common.annotation.SchedulerUseCase")
+    annotation("team.aliens.dms.common.annotation.Service")
 }

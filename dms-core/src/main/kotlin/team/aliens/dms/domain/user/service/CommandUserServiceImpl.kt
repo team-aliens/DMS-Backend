@@ -6,7 +6,9 @@ import team.aliens.dms.domain.user.spi.CommandUserPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.common.annotation.Service
 
+@Service
 class CommandUserServiceImpl(
     private val queryUserPort: QueryUserPort,
     private val commandUserPort: CommandUserPort
