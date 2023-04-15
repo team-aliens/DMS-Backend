@@ -1,13 +1,13 @@
 package team.aliens.dms.domain.meal.usecase
 
+import java.time.LocalDate
+import java.time.YearMonth
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.extension.iterator
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.spi.QueryMealPort
 import team.aliens.dms.domain.user.service.GetUserService
-import java.time.LocalDate
-import java.time.YearMonth
 
 @ReadOnlyUseCase
 class QueryMealsUseCase(
@@ -16,14 +16,14 @@ class QueryMealsUseCase(
 ) {
 
     fun execute(mealDate: LocalDate): QueryMealsResponse {
-        val student = getUserService.getCurrentStudent()
+        val user = getUserService.getCurrentUser()
 
         val month = YearMonth.from(mealDate)
         val firstDay = month.atDay(1)
         val lastDay = month.atEndOfMonth()
 
         val mealMap = queryMealPort.queryAllMealsByMonthAndSchoolId(
-            firstDay, lastDay, student.schoolId
+            firstDay, lastDay, user.schoolId
         ).associateBy { it.mealDate }
 
         val mealDetails = mutableListOf<MealDetails>()
