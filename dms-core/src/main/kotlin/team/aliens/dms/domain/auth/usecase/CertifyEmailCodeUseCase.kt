@@ -20,7 +20,7 @@ class CertifyEmailCodeUseCase(
 
     fun execute(request: CertifyEmailCodeRequest) {
         if (EmailType.PASSWORD == request.type) {
-            getUserService.queryUserByEmail(request.email)
+            getUserService.checkExistsByEmail(request.email)
         }
 
         val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)
