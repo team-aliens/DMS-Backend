@@ -16,11 +16,11 @@ class QueryRemainOptionsUseCase(
 
     fun execute(): QueryRemainOptionsResponse {
 
-        val student = getUserService.getCurrentUser()
+        val user = getUserService.getCurrentUser()
 
-        val remainStatus = queryRemainStatusPort.queryRemainStatusById(student.id)
+        val remainStatus = queryRemainStatusPort.queryRemainStatusById(user.id)
 
-        val remainOptions = queryRemainOptionPort.queryAllRemainOptionsBySchoolId(student.schoolId)
+        val remainOptions = queryRemainOptionPort.queryAllRemainOptionsBySchoolId(user.schoolId)
             .map {
                 RemainOptionElement(
                     id = it.id,
