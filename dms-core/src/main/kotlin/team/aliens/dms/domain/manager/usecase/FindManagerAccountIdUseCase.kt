@@ -24,9 +24,9 @@ class FindManagerAccountIdUseCase(
             throw AnswerMismatchException
         }
 
-        val manager = getUserService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
+        val user = getUserService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
 
-        sendEmailPort.sendAccountId(manager.email, manager.accountId)
-        return StringUtil.coveredEmail(manager.email)
+        sendEmailPort.sendAccountId(user.email, user.accountId)
+        return StringUtil.coveredEmail(user.email)
     }
 }
