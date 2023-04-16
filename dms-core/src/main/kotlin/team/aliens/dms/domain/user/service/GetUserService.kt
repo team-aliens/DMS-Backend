@@ -15,7 +15,7 @@ interface GetUserService {
 
     fun checkUserNotExistsByEmail(email: String)
 
-    fun checkExistsByEmail(email: String)
+    fun checkUserExistsByEmail(email: String)
 
     fun checkUserNotExistsByAccountId(accountId: String)
 

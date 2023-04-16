@@ -24,7 +24,7 @@ class SendEmailCodeUseCase(
 
     fun execute(request: SendEmailCodeRequest) {
         if (EmailType.PASSWORD == request.type) {
-            getUserService.checkExistsByEmail(request.email)
+            getUserService.checkUserExistsByEmail(request.email)
         }
 
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
