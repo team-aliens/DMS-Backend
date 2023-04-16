@@ -28,24 +28,6 @@ class GetUserServiceImpl(
     override fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority) =
         queryUserPort.queryUserBySchoolIdAndAuthority(schoolId, authority) ?: throw UserNotFoundException
 
-    override fun checkUserNotExistsByEmail(email: String) {
-        if (queryUserPort.existsUserByEmail(email)) {
-            throw UserEmailExistsException
-        }
-    }
-
-    override fun checkUserExistsByEmail(email: String) {
-        if (!queryUserPort.existsUserByEmail(email)) {
-            throw UserNotFoundException
-        }
-    }
-
-    override fun checkUserNotExistsByAccountId(accountId: String) {
-        if (queryUserPort.existsUserByAccountId(accountId)) {
-            throw UserAccountIdExistsException
-        }
-    }
-
     override fun getCurrentUser(): User {
         val currentUserId = securityPort.getCurrentUserId()
         return queryUserById(currentUserId)

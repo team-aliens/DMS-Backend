@@ -4,7 +4,9 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class UserService(
+    checkUserService: CheckUserService,
     getUserService: GetUserService,
     commandUserService: CommandUserService
-) : GetUserService by getUserService,
+) : CheckUserService by checkUserService,
+    GetUserService by getUserService,
     CommandUserService by commandUserService
