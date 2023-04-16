@@ -6,7 +6,6 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.exception.InvalidRoleException
 import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
 import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -44,12 +43,6 @@ class GetUserServiceImpl(
     override fun checkUserNotExistsByAccountId(accountId: String) {
         if (queryUserPort.existsUserByAccountId(accountId)) {
             throw UserAccountIdExistsException
-        }
-    }
-
-    override fun checkUserAuthority(authority: Authority, expectedAuthority: Authority) {
-        if (authority != expectedAuthority) {
-            throw InvalidRoleException
         }
     }
 

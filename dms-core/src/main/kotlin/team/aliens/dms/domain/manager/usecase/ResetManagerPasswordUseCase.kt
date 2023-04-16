@@ -7,6 +7,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
+import team.aliens.dms.domain.user.checkUserAuthority
 import team.aliens.dms.domain.user.service.CommandUserService
 import team.aliens.dms.domain.user.service.GetUserService
 
@@ -21,7 +22,7 @@ class ResetManagerPasswordUseCase(
     fun execute(request: ResetManagerPasswordRequest) {
 
         val user = getUserService.queryUserByAccountId(request.accountId)
-        getUserService.checkUserAuthority(user.authority, Authority.MANAGER)
+        checkUserAuthority(user.authority, Authority.MANAGER)
 
         if (user.email != request.email) {
             throw ManagerInfoMismatchException
