@@ -7,12 +7,12 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CancelGrantedTagUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryTagPort: QueryTagPort,
     private val queryStudentPort: QueryStudentPort,
     private val commandTagPort: CommandTagPort
@@ -20,7 +20,7 @@ class CancelGrantedTagUseCase(
 
     fun execute(studentId: UUID, tagId: UUID) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
 
         validateSameSchool(user.schoolId, tag.schoolId)

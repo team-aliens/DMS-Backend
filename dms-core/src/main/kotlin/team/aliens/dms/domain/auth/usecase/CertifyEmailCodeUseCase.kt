@@ -8,11 +8,11 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class CertifyEmailCodeUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryAuthCodePort: QueryAuthCodePort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
     private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort
@@ -20,7 +20,7 @@ class CertifyEmailCodeUseCase(
 
     fun execute(request: CertifyEmailCodeRequest) {
         if (EmailType.PASSWORD == request.type) {
-            getUserService.checkUserExistsByEmail(request.email)
+            userService.checkUserExistsByEmail(request.email)
         }
 
         val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)

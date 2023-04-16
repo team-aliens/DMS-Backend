@@ -8,12 +8,12 @@ import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
 @UseCase
 class GrantPointUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryPointOptionPort: QueryPointOptionPort,
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val queryStudentPort: QueryStudentPort
@@ -21,7 +21,7 @@ class GrantPointUseCase(
 
     fun execute(request: GrantPointRequest) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val pointOption = queryPointOptionPort.queryPointOptionById(request.pointOptionId)
             ?: throw PointOptionNotFoundException

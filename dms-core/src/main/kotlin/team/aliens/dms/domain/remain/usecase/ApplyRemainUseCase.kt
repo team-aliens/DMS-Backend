@@ -9,13 +9,13 @@ import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 import java.util.UUID
 
 @UseCase
 class ApplyRemainUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryRemainOptionPort: QueryRemainOptionPort,
     private val queryRemainAvailableTimePort: QueryRemainAvailableTimePort,
     private val commandRemainStatusPort: CommandRemainStatusPort
@@ -23,7 +23,7 @@ class ApplyRemainUseCase(
 
     fun execute(remainOptionId: UUID) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId)
             ?: throw RemainOptionNotFoundException

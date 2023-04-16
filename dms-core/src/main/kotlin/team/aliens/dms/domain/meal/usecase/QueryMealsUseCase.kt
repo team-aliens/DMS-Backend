@@ -1,22 +1,22 @@
 package team.aliens.dms.domain.meal.usecase
 
-import java.time.LocalDate
-import java.time.YearMonth
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.extension.iterator
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse.MealDetails
 import team.aliens.dms.domain.meal.spi.QueryMealPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
+import java.time.LocalDate
+import java.time.YearMonth
 
 @ReadOnlyUseCase
 class QueryMealsUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryMealPort: QueryMealPort
 ) {
 
     fun execute(mealDate: LocalDate): QueryMealsResponse {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val month = YearMonth.from(mealDate)
         val firstDay = month.atDay(1)

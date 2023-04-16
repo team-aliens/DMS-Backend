@@ -6,12 +6,12 @@ import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudentPort: QueryStudentPort
 ) {
 
@@ -24,7 +24,7 @@ class QueryStudentsUseCase(
         tagIds: List<UUID>?
     ): QueryStudentsResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val pointFilter = PointFilter(
             filterType = filterType,

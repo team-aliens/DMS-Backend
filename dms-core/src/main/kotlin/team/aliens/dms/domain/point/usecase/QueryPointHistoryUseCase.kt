@@ -5,17 +5,17 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
 
-        val student = getUserService.getCurrentStudent()
+        val student = userService.getCurrentStudent()
         val gcn = student.gcn
         val name = student.name
         val pointType = PointRequestType.toPointType(type)

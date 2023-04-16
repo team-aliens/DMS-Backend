@@ -8,19 +8,19 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val queryPhrasePort: QueryPhrasePort
 ) {
 
     fun execute(): StudentMyPageResponse {
-        val student = getUserService.getCurrentStudent()
+        val student = userService.getCurrentStudent()
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
         val (bonusPoint, minusPoint) =

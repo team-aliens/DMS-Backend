@@ -11,18 +11,18 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
     fun execute(studyRoomId: UUID, timeSlotId: UUID): ManagerQueryStudyRoomResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)

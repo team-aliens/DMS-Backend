@@ -5,19 +5,19 @@ import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class UpdatePointOptionUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryPointOptionPort: QueryPointOptionPort,
     private val commandPointOptionPort: CommandPointOptionPort
 ) {
 
     fun execute(pointOptionId: UUID, name: String, score: Int) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val pointOption = queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException
 

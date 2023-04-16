@@ -4,16 +4,16 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAvailableFeaturesUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
     fun execute(): QueryAvailableFeaturesResponse {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException
 

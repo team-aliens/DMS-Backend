@@ -8,20 +8,18 @@ import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.service.CommandUserService
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ResetStudentPasswordUseCase(
-    private val getUserService: GetUserService,
-    private val commandUserService: CommandUserService,
+    private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
     private val queryAuthCodePort: QueryAuthCodePort,
     private val securityService: SecurityService
 ) {
 
     fun execute(request: ResetStudentPasswordRequest) {
-        val user = getUserService.queryUserByAccountId(request.accountId)
+        val user = userService.queryUserByAccountId(request.accountId)
         val student = queryStudentPort.queryStudentByUserId(user.id) ?: throw StudentNotFoundException
 
         if (student.name != request.name || user.email != request.email) {
@@ -32,7 +30,7 @@ class ResetStudentPasswordUseCase(
 
         authCode.validateAuthCode(request.authCode)
 
-        commandUserService.saveUser(
+        userService.saveUser(
             user.copy(password = securityService.encodePassword(request.newPassword))
         )
     }

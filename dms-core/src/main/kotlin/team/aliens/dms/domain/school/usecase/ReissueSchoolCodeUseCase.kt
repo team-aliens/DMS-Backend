@@ -6,18 +6,18 @@ import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ReissueSchoolCodeUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val commandSchoolPort: CommandSchoolPort
 ) {
 
     fun execute(): String {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
         val code = StringUtil.randomNumber(School.SCHOOL_CODE_SIZE)

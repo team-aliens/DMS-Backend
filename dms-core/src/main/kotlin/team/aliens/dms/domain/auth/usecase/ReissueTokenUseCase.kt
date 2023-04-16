@@ -7,13 +7,13 @@ import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ReissueTokenUseCase(
     private val jwtPort: JwtPort,
     private val queryRefreshTokenPort: QueryRefreshTokenPort,
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
@@ -24,7 +24,7 @@ class ReissueTokenUseCase(
             userId = queryToken.userId, authority = queryToken.authority
         )
 
-        val user = getUserService.queryUserById(queryToken.userId)
+        val user = userService.queryUserById(queryToken.userId)
 
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException

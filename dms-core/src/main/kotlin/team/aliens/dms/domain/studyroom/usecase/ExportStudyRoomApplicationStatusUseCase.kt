@@ -14,13 +14,13 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
@@ -29,7 +29,7 @@ class ExportStudyRoomApplicationStatusUseCase(
 
     fun execute(file: java.io.File?): ExportStudyRoomApplicationStatusResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val students = queryStudentPort.queryStudentsBySchoolId(user.schoolId)
         val studentSeatApplicationsMap = getStudentSeatApplicationsMap(students)

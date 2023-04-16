@@ -11,13 +11,13 @@ import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.io.File
 import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val parseFilePort: ParseFilePort,
     private val querySchoolPort: QuerySchoolPort,
     private val fileCommandRoomPort: FileCommandRoomPort,
@@ -27,7 +27,7 @@ class ImportStudentUseCase(
 ) {
 
     fun execute(file: File) {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         val parsedStudentInfos = parseFilePort.getExcelStudentVO(file)

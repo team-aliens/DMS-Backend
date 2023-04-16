@@ -11,19 +11,19 @@ import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class UpdateStudyRoomUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
         validateSameSchool(user.schoolId, studyRoom.schoolId)
 

@@ -5,16 +5,16 @@ import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse
 import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse.NoticeDetails
 import team.aliens.dms.domain.notice.model.OrderType
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAllNoticesUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryNoticePort: QueryNoticePort
 ) {
 
     fun execute(orderType: String): QueryAllNoticesResponse {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val order = OrderType.valueOf(orderType)
         val notices = queryNoticePort.queryAllNoticesBySchoolIdAndOrder(user.schoolId, order)
 

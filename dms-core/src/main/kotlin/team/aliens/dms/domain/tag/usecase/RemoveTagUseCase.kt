@@ -6,12 +6,12 @@ import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandStudentTagPort
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class RemoveTagUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryTagPort: QueryTagPort,
     private val commandTagPort: CommandTagPort,
     private val commandStudentTagPort: CommandStudentTagPort
@@ -19,7 +19,7 @@ class RemoveTagUseCase(
 
     fun execute(tagId: UUID) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val tag = queryTagPort.queryTagById(tagId) ?: throw TagNotFoundException
         validateSameSchool(user.schoolId, tag.schoolId)

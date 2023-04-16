@@ -7,13 +7,13 @@ import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class FindManagerAccountIdUseCase(
     private val querySchoolPort: QuerySchoolPort,
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val sendEmailPort: SendEmailPort
 ) {
 
@@ -24,7 +24,7 @@ class FindManagerAccountIdUseCase(
             throw AnswerMismatchException
         }
 
-        val user = getUserService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
+        val user = userService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
 
         sendEmailPort.sendAccountId(user.email, user.accountId)
         return StringUtil.coveredEmail(user.email)

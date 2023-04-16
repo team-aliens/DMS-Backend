@@ -7,15 +7,13 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
-import team.aliens.dms.domain.user.service.CommandUserService
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 import java.util.UUID
 
 @UseCase
 class RemoveStudentUseCase(
-    private val getUserService: GetUserService,
-    private val commandUserService: CommandUserService,
+    private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
     private val commandRemainStatusPort: CommandRemainStatusPort,
     private val commandStudyRoomPort: CommandStudyRoomPort,
@@ -24,7 +22,7 @@ class RemoveStudentUseCase(
 
     fun execute(studentId: UUID) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
         validateSameSchool(student.schoolId, user.schoolId)
 
@@ -36,7 +34,7 @@ class RemoveStudentUseCase(
         )
 
         student.userId?.let {
-            commandUserService.deleteUserById(it)
+            userService.deleteUserById(it)
         }
     }
 }

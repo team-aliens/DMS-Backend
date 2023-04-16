@@ -19,8 +19,7 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.service.CommandUserService
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 /**
  *
@@ -34,9 +33,8 @@ import team.aliens.dms.domain.user.service.GetUserService
 class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort,
-    private val commandUserService: CommandUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
-    private val getUserService: GetUserService,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
     private val securityService: SecurityService,
     private val jwtPort: JwtPort
@@ -54,7 +52,7 @@ class SignUpUseCase(
         validateAuthCodeLimit(email)
         validateUserDuplicated(accountId, email)
 
-        val user = commandUserService.saveUser(
+        val user = userService.saveUser(
             User(
                 schoolId = school.id,
                 accountId = accountId,
@@ -125,7 +123,7 @@ class SignUpUseCase(
     }
 
     private fun validateUserDuplicated(accountId: String, email: String) {
-        getUserService.checkUserNotExistsByAccountId(accountId)
-        getUserService.checkUserNotExistsByEmail(email)
+        userService.checkUserNotExistsByAccountId(accountId)
+        userService.checkUserNotExistsByEmail(email)
     }
 }

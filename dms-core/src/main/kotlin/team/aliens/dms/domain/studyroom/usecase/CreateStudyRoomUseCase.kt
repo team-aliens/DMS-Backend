@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
@@ -11,18 +10,19 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
+import java.util.UUID
 
 @UseCase
 class CreateStudyRoomUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(request: CreateStudyRoomRequest): UUID {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
             floor = request.floor,

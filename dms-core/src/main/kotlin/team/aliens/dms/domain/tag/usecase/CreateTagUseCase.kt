@@ -5,19 +5,19 @@ import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CreateTagUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val commandTagPort: CommandTagPort,
     private val queryTagPort: QueryTagPort
 ) {
 
     fun execute(name: String, color: String): UUID {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         if (queryTagPort.existsByNameAndSchoolId(name, user.schoolId)) {
             throw TagAlreadyExistsException

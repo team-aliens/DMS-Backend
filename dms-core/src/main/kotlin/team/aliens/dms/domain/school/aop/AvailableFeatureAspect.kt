@@ -7,12 +7,12 @@ import team.aliens.dms.domain.school.exception.FeatureNotAvailableException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 @Aspect
 class AvailableFeatureAspect(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
@@ -72,7 +72,7 @@ class AvailableFeatureAspect(
     }
 
     private fun getAvailableFeature(): AvailableFeature {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         return querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId) ?: throw FeatureNotFoundException
     }
 }

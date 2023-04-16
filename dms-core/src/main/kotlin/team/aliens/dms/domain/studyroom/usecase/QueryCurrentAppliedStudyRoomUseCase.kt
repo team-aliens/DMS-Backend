@@ -6,17 +6,17 @@ import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.SeatNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryCurrentAppliedStudyRoomUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
     fun execute(): QueryCurrentAppliedStudyRoomResponse {
 
-        val student = getUserService.getCurrentStudent()
+        val student = userService.getCurrentStudent()
 
         val seatApplication = queryStudyRoomPort.querySeatApplicationsByStudentId(student.id).run {
             if (isEmpty()) throw AppliedSeatNotFoundException

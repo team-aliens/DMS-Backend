@@ -11,12 +11,12 @@ import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.SendEmailPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class SendEmailCodeUseCase(
     private val sendEmailPort: SendEmailPort,
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val commandAuthCodePort: CommandAuthCodePort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
     private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort
@@ -24,7 +24,7 @@ class SendEmailCodeUseCase(
 
     fun execute(request: SendEmailCodeRequest) {
         if (EmailType.PASSWORD == request.type) {
-            getUserService.checkUserExistsByEmail(request.email)
+            userService.checkUserExistsByEmail(request.email)
         }
 
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)

@@ -5,20 +5,20 @@ import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryNoticeDetailsUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryNoticePort: QueryNoticePort
 ) {
 
     fun execute(noticeId: UUID): QueryNoticeDetailsResponse {
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
 
-        val writer = getUserService.queryUserById(notice.managerId)
+        val writer = userService.queryUserById(notice.managerId)
 
         validateSameSchool(writer.schoolId, user.schoolId)
 

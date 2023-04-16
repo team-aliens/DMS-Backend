@@ -7,19 +7,19 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentPointHistoryUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
     private val queryPointHistoryPort: QueryPointHistoryPort
 ) {
 
     fun execute(studentId: UUID, pageData: PageData): QueryStudentPointHistoryResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 

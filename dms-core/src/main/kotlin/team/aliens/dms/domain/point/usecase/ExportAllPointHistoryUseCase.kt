@@ -9,12 +9,12 @@ import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportAllPointHistoryUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val querySchoolPort: QuerySchoolPort,
     private val writeFilePort: WriteFilePort
@@ -22,7 +22,7 @@ class ExportAllPointHistoryUseCase(
 
     fun execute(start: LocalDateTime?, end: LocalDateTime?): ExportAllPointHistoryResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
         val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         val endOrNow = end ?: LocalDateTime.now()

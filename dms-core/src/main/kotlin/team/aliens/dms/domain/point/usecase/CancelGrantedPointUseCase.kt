@@ -5,19 +5,19 @@ import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CancelGrantedPointUseCase(
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val getUserService: GetUserService,
+    private val userService: UserService,
 ) {
 
     fun execute(pointHistoryId: UUID) {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         val pointHistory = queryPointHistoryPort.queryPointHistoryById(pointHistoryId)
             ?: throw PointHistoryNotFoundException

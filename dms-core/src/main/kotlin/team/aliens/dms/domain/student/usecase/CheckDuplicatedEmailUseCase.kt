@@ -1,14 +1,14 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class CheckDuplicatedEmailUseCase(
-    private val getUserService: GetUserService
+    private val userService: UserService
 ) {
 
     fun execute(email: String) {
-        getUserService.checkUserNotExistsByEmail(email)
+        userService.checkUserNotExistsByEmail(email)
     }
 }

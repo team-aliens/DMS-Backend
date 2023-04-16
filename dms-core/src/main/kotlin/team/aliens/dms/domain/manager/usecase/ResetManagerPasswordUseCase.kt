@@ -8,20 +8,18 @@ import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
 import team.aliens.dms.domain.user.checkUserAuthority
-import team.aliens.dms.domain.user.service.CommandUserService
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ResetManagerPasswordUseCase(
     private val queryAuthCodePort: QueryAuthCodePort,
-    private val commandUserService: CommandUserService,
-    private val securityService: SecurityService,
-    private val getUserService: GetUserService
+    private val userService: UserService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: ResetManagerPasswordRequest) {
 
-        val user = getUserService.queryUserByAccountId(request.accountId)
+        val user = userService.queryUserByAccountId(request.accountId)
         checkUserAuthority(user.authority, Authority.MANAGER)
 
         if (user.email != request.email) {
@@ -32,7 +30,7 @@ class ResetManagerPasswordUseCase(
 
         authCode.validateAuthCode(request.authCode)
 
-        commandUserService.saveUser(
+        userService.saveUser(
             user.copy(password = securityService.encodePassword(request.newPassword))
         )
     }

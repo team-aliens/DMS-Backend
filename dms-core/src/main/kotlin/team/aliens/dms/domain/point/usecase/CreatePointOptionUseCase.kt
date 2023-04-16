@@ -8,18 +8,18 @@ import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
-import team.aliens.dms.domain.user.service.GetUserService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class CreatePointOptionUseCase(
-    private val getUserService: GetUserService,
+    private val userService: UserService,
     private val commandPointOptionPort: CommandPointOptionPort,
     private val queryPointOptionPort: QueryPointOptionPort
 ) {
 
     fun execute(request: CreatePointOptionRequest): CreatePointOptionResponse {
 
-        val user = getUserService.getCurrentUser()
+        val user = userService.getCurrentUser()
 
         if (queryPointOptionPort.existByNameAndSchoolId(request.name, user.schoolId)) {
             throw PointOptionNameExistsException
