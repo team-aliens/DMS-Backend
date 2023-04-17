@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse.SeatElement
@@ -12,30 +11,28 @@ import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundExcep
 import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class StudentQueryStudyRoomUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
     fun execute(studyRoomId: UUID, timeSlotId: UUID): StudentQueryStudyRoomResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+
+        val student = userService.getCurrentStudent()
 
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-        validateSameSchool(user.schoolId, studyRoom.schoolId)
+        validateSameSchool(student.schoolId, studyRoom.schoolId)
 
         if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
             throw StudyRoomTimeSlotNotFoundException
         }
 
         val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
-        validateSameSchool(user.schoolId, timeSlot.schoolId)
+        validateSameSchool(student.schoolId, timeSlot.schoolId)
 
         val seats = queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
             SeatElement(
@@ -53,7 +50,7 @@ class StudentQueryStudyRoomUseCase(
                 status = it.status,
                 isMine = this.isMine(
                     studentId = it.studentId,
-                    currentUserId = currentUserId,
+                    currentStudentId = student.id,
                     status = it.status
                 ),
                 student = it.studentId?.run {
@@ -86,8 +83,8 @@ class StudentQueryStudyRoomUseCase(
         }
     }
 
-    private fun isMine(studentId: UUID?, currentUserId: UUID, status: SeatStatus) = studentId?.run {
-        studentId == currentUserId
+    private fun isMine(studentId: UUID?, currentStudentId: UUID, status: SeatStatus) = studentId?.run {
+        studentId == currentStudentId
     } ?: run {
         /**
          * student_id 가 NULL 일 경우

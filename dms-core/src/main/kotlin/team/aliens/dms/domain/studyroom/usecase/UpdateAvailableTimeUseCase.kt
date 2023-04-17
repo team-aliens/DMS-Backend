@@ -1,23 +1,20 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.spi.CommandAvailableTimePort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalTime
 
 @UseCase
 class UpdateAvailableTimeUseCase(
-    private val securityPort: SecurityPort,
+    private val userService: UserService,
     private val commandAvailableTimePort: CommandAvailableTimePort,
-    private val queryUserPort: QueryUserPort
 ) {
 
     fun execute(startAt: LocalTime, endAt: LocalTime) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+
+        val user = userService.getCurrentUser()
 
         commandAvailableTimePort.saveAvailableTime(
             AvailableTime(

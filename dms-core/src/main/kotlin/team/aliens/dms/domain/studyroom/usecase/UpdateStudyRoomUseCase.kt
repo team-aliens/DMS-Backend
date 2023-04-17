@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
@@ -12,31 +11,27 @@ import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class UpdateStudyRoomUseCase(
+    private val userService: UserService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort
+    private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-
+        val user = userService.getCurrentUser()
         val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-        validateSameSchool(currentUser.schoolId, studyRoom.schoolId)
+        validateSameSchool(user.schoolId, studyRoom.schoolId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
             val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
                 floor = request.floor,
                 name = request.name,
-                schoolId = currentUser.schoolId
+                schoolId = user.schoolId
             )
             if (isAlreadyExists) {
                 throw StudyRoomAlreadyExistsException

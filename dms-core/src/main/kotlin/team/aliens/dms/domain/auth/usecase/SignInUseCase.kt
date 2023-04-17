@@ -1,30 +1,26 @@
 package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.common.service.SecurityService
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
-import team.aliens.dms.domain.auth.exception.PasswordMismatchException
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class SignInUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val securityService: SecurityService,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val jwtPort: JwtPort
 ) {
 
     fun execute(request: SignInRequest): SignInResponse {
-        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
+        val user = userService.queryUserByAccountId(request.accountId)
 
-        if (!securityPort.isPasswordMatch(request.password, user.password)) {
-            throw PasswordMismatchException
-        }
+        securityService.checkIsPasswordMatches(request.password, user.password)
 
         val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
             userId = user.id, authority = user.authority

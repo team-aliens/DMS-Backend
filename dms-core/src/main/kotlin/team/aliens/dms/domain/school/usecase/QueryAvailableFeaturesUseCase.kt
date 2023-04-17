@@ -1,24 +1,19 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAvailableFeaturesUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort
 ) {
 
     fun execute(): QueryAvailableFeaturesResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-
+        val user = userService.getCurrentUser()
         val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
             ?: throw FeatureNotFoundException
 

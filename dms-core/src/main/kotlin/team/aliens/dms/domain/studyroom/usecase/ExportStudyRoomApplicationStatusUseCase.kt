@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
@@ -15,15 +14,13 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
-    private val securityPort: SecurityPort,
-    private val queryUserPort: QueryUserPort,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
@@ -31,10 +28,10 @@ class ExportStudyRoomApplicationStatusUseCase(
 ) {
 
     fun execute(file: java.io.File?): ExportStudyRoomApplicationStatusResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val students = queryStudentPort.queryStudentsBySchoolId(manager.schoolId)
+        val user = userService.getCurrentUser()
+
+        val students = queryStudentPort.queryStudentsBySchoolId(user.schoolId)
         val studentSeatApplicationsMap = getStudentSeatApplicationsMap(students)
 
         val studentSeats = students.map { student ->
@@ -53,8 +50,8 @@ class ExportStudyRoomApplicationStatusUseCase(
             )
         }
 
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(manager.schoolId)
-        val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
+        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(user.schoolId)
+        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
 
         return ExportStudyRoomApplicationStatusResponse(
             file = getStudyRoomApplicationStatusFile(file, timeSlots, studentSeats),

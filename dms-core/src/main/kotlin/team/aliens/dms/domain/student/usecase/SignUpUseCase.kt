@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.common.service.SecurityService
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
@@ -18,11 +18,8 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
-import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.model.User
-import team.aliens.dms.domain.user.spi.CommandUserPort
-import team.aliens.dms.domain.user.spi.QueryUserPort
+import team.aliens.dms.domain.user.service.UserService
 
 /**
  *
@@ -36,11 +33,10 @@ import team.aliens.dms.domain.user.spi.QueryUserPort
 class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort,
-    private val commandUserPort: CommandUserPort,
+    private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
-    private val queryUserPort: QueryUserPort,
     private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val securityPort: SecurityPort,
+    private val securityService: SecurityService,
     private val jwtPort: JwtPort
 ) {
 
@@ -56,11 +52,11 @@ class SignUpUseCase(
         validateAuthCodeLimit(email)
         validateUserDuplicated(accountId, email)
 
-        val user = commandUserPort.saveUser(
+        val user = userService.saveUser(
             User(
                 schoolId = school.id,
                 accountId = accountId,
-                password = securityPort.encodePassword(password),
+                password = securityService.encodePassword(password),
                 email = email,
                 authority = Authority.STUDENT
             )
@@ -127,18 +123,7 @@ class SignUpUseCase(
     }
 
     private fun validateUserDuplicated(accountId: String, email: String) {
-        /**
-         * 아이디 중복 검사
-         **/
-        if (queryUserPort.existsUserByAccountId(accountId)) {
-            throw UserAccountIdExistsException
-        }
-
-        /**
-         * 이메일 중복 검사
-         **/
-        if (queryUserPort.existsUserByEmail(email)) {
-            throw UserEmailExistsException
-        }
+        userService.checkUserNotExistsByAccountId(accountId)
+        userService.checkUserNotExistsByEmail(email)
     }
 }
