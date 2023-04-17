@@ -1,4 +1,4 @@
-package team.aliens.dms.common.service
+package team.aliens.dms.common.service.security
 
 interface SecurityService {
     fun encodePassword(password: String): String
