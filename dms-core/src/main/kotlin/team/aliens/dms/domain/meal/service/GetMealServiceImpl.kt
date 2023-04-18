@@ -8,9 +8,9 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Service
-class QueryMealServiceImpl(
+class GetMealServiceImpl(
     private val queryMealPort: QueryMealPort
-) : QueryMealService {
+) : GetMealService {
 
     override fun queryMealDetails(
         firstDay: LocalDate,

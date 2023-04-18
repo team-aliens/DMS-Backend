@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class MealService(
-    queryMealService: QueryMealService,
+    getMealService: GetMealService,
     commandMealService: CommandMealService
-) : QueryMealService by queryMealService,
+) : GetMealService by getMealService,
     CommandMealService by commandMealService
