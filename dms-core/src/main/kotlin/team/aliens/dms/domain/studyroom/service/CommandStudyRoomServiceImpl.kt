@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.service
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
@@ -17,7 +18,6 @@ import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import java.util.UUID
 
 @Service
 class CommandStudyRoomServiceImpl(
@@ -96,6 +96,14 @@ class CommandStudyRoomServiceImpl(
 
     override fun deleteAllSeatApplications() {
         commandStudyRoomPort.deleteAllSeatApplications()
+    }
+
+    override fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, id: UUID, timeSlotId: UUID) {
+        commandStudyRoomPort.deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(
+            seatId = seatId,
+            studentId = id,
+            timeSlotId = timeSlotId
+        )
     }
 
     override fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID) {

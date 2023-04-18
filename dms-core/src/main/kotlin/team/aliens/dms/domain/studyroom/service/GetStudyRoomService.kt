@@ -31,7 +31,7 @@ interface GetStudyRoomService {
 
     fun getAppliedSeatApplications(studentId: UUID): List<SeatApplication>
 
-    fun queryAvailableTimeBySchoolId(schoolId: UUID): AvailableTime
+    fun getAvailableTime(schoolId: UUID): AvailableTime
 
     fun getStudyRoomVOs(timeSlotId: UUID, grade: Int? = null, sex: Sex? = null): List<StudyRoomVO>
 
