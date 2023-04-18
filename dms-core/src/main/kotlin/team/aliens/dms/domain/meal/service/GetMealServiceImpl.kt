@@ -11,7 +11,7 @@ class GetMealServiceImpl(
     private val queryMealPort: QueryMealPort
 ) : GetMealService {
 
-    override fun queryMealDetails(
+    override fun getMealDetails(
         firstDay: LocalDate,
         lastDay: LocalDate,
         schoolId: UUID

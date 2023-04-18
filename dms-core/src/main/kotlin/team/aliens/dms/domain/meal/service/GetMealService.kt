@@ -5,5 +5,5 @@ import java.util.UUID
 import team.aliens.dms.domain.meal.model.Meal
 
 interface GetMealService {
-    fun queryMealDetails(firstDay: LocalDate, lastDay: LocalDate, schoolId: UUID): Map<LocalDate, Meal>
+    fun getMealDetails(firstDay: LocalDate, lastDay: LocalDate, schoolId: UUID): Map<LocalDate, Meal>
 }

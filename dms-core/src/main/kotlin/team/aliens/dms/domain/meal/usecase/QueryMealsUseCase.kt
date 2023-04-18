@@ -21,7 +21,7 @@ class QueryMealsUseCase(
         val firstDay = month.atDay(1)
         val lastDay = month.atEndOfMonth()
 
-        val mealMap = mealService.queryMealDetails(
+        val mealMap = mealService.getMealDetails(
             firstDay, lastDay, user.schoolId
         )
 
