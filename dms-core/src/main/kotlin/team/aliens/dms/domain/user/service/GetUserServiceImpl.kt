@@ -1,16 +1,14 @@
 package team.aliens.dms.domain.user.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.exception.UserAccountIdExistsException
-import team.aliens.dms.domain.user.exception.UserEmailExistsException
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.spi.QueryUserPort
+import java.util.UUID
 
 @Service
 class GetUserServiceImpl(

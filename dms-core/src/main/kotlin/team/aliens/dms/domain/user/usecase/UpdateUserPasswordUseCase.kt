@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.user.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.service.SecurityService
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.user.dto.UpdateUserPasswordRequest
 import team.aliens.dms.domain.user.service.UserService
 
