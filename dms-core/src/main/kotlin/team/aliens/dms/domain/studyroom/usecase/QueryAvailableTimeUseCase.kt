@@ -14,7 +14,7 @@ class QueryAvailableTimeUseCase(
     fun execute(): QueryAvailableTimeResponse {
 
         val user = userService.getCurrentUser()
-        val availableTime = studyRoomService.queryAvailableTimeBySchoolId(user.schoolId)
+        val availableTime = studyRoomService.getAvailableTime(user.schoolId)
 
         return QueryAvailableTimeResponse(
             startAt = availableTime.startAt,
