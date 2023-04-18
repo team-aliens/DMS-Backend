@@ -6,6 +6,7 @@ import team.aliens.dms.domain.meal.service.MealService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDate
 import java.time.YearMonth
+import team.aliens.dms.common.extension.iterator
 
 @ReadOnlyUseCase
 class QueryMealsUseCase(
@@ -20,9 +21,20 @@ class QueryMealsUseCase(
         val firstDay = month.atDay(1)
         val lastDay = month.atEndOfMonth()
 
-        val mealDetails = mealService.queryMealDetails(
+        val mealMap = mealService.queryMealDetails(
             firstDay, lastDay, user.schoolId
         )
+
+        val mealDetails = mutableListOf<QueryMealsResponse.MealDetails>()
+        for (date in firstDay..lastDay) {
+            val meal = mealMap[date]
+
+            if (meal == null) {
+                mealDetails.add(QueryMealsResponse.MealDetails.emptyOf(date))
+            } else {
+                mealDetails.add(QueryMealsResponse.MealDetails.of(meal))
+            }
+        }
 
         return QueryMealsResponse(mealDetails)
     }
