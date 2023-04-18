@@ -1,28 +1,24 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse.StudyRoomElement
-import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomsUseCase(
     private val userService: UserService,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val studyRoomService: StudyRoomService
 ) {
 
     fun execute(timeSlotId: UUID): ManagerQueryStudyRoomsResponse {
 
         val user = userService.getCurrentUser()
-        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, user.schoolId)
 
-        validateSameSchool(timeSlot.schoolId, user.schoolId)
-
-        val studyRooms = queryStudyRoomPort.queryAllStudyRoomsByTimeSlotId(timeSlotId).map {
+        val studyRooms = studyRoomService.getStudyRoomVOs(timeSlot.id).map {
             StudyRoomElement(
                 id = it.id,
                 floor = it.floor,
