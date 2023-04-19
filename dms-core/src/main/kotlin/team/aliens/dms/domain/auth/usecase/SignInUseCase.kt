@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.service.SecurityService
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.spi.JwtPort

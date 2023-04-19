@@ -1,4 +1,4 @@
-package team.aliens.dms.common.service
+package team.aliens.dms.common.service.security
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
