@@ -13,10 +13,9 @@ class CheckAuthCodeServiceImpl(
 ) : CheckAuthCodeService {
 
     override fun checkAuthCodeByEmailAndEmailType(email: String, type: EmailType, code: String): AuthCode {
-        val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type)
-            ?: throw AuthCodeNotFoundException
-        authCode.validateAuthCode(code)
-
-        return authCode
+        return (
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type)
+                ?: throw AuthCodeNotFoundException
+            ).apply { validateAuthCode(code) }
     }
 }

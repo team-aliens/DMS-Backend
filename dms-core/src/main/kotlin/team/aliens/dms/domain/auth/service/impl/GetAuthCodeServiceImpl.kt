@@ -17,11 +17,11 @@ class GetAuthCodeServiceImpl(
 ) : GetAuthCodeService {
 
     override fun getAuthCodeLimitByEmailAndEmailType(email: String, type: EmailType): AuthCodeLimit {
-        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type)
-            ?: throw AuthCodeLimitNotFoundException
-        authCodeLimit.checkIsVerified()
-
-        return authCodeLimit
+        return (
+            queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type)
+                ?: throw AuthCodeLimitNotFoundException
+            )
+            .apply { checkIsVerified() }
     }
 
     override fun getRefreshTokenByToken(token: String): RefreshToken {
