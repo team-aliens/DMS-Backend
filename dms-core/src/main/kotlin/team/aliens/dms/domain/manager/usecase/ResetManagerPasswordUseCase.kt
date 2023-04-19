@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
@@ -12,7 +13,7 @@ import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ResetManagerPasswordUseCase(
-    private val queryAuthCodePort: QueryAuthCodePort,
+    private val authService: AuthService,
     private val userService: UserService,
     private val securityService: SecurityService
 ) {
@@ -26,9 +27,7 @@ class ResetManagerPasswordUseCase(
             throw ManagerInfoMismatchException
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByEmail(request.email) ?: throw AuthCodeNotFoundException
-
-        authCode.validateAuthCode(request.authCode)
+        authService.checkAuthCodeByEmail(user.email, request.authCode)
 
         userService.saveUser(
             user.copy(password = securityService.encodePassword(request.newPassword))
