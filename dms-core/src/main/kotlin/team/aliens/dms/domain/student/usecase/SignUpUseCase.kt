@@ -14,6 +14,7 @@ import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.CommandStudentPort
@@ -68,6 +69,10 @@ class SignUpUseCase(
             classRoom = classRoom,
             number = number
         ) ?: throw StudentNotFoundException
+
+        if (student.userId != null) {
+            throw StudentAlreadyExistsException
+        }
 
         commandStudentPort.saveStudent(
             student.copy(
