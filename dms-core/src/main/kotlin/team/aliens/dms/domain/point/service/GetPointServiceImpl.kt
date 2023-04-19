@@ -66,7 +66,7 @@ class GetPointServiceImpl(
     ) = queryPointHistoryPort.queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId = schoolId,
         startAt = startAt,
-        endAt
+        endAt = endAt
     )
 
     override fun getPointOptionById(pointOptionId: UUID, schoolId: UUID): PointOption {
