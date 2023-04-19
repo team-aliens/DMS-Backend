@@ -21,9 +21,7 @@ class SendEmailCodeUseCase(
             userService.checkUserExistsByEmail(request.email)
         }
 
-        val authCodeLimit = authService.getAuthCodeLimitByEmailAndEmailType(request.email, request.type)
-
-        authService.saveAuthCodeLimit(authCodeLimit.increaseCount())
+        authService.saveIncreasedAuthCodeLimitByEmailAndType(request.email, request.type)
 
         val code = StringUtil.randomNumber(AuthCode.AUTH_CODE_SIZE)
         authService.saveAuthCode(
