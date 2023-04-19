@@ -61,10 +61,4 @@ data class AuthCodeLimit(
             expirationTime = EXPIRED
         )
     }
-
-    fun checkIsVerified() {
-        if (isVerified) {
-            throw EmailAlreadyCertifiedException
-        }
-    }
 }
