@@ -21,12 +21,12 @@ class QueryPointHistoryUseCase(
         val pointType = PointRequestType.toPointType(type)
 
         val pointHistories = pointService.queryPointHistoryByStudentGcnAndNameAndType(
-                gcn = gcn,
-                studentName = name,
-                type = pointType,
-                isCancel = false,
-                pageData = pageData
-            )
+            gcn = gcn,
+            studentName = name,
+            type = pointType,
+            isCancel = false,
+            pageData = pageData
+        )
 
         val (bonusTotal, minusTotal) =
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)

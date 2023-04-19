@@ -22,7 +22,7 @@ class GetPointServiceImpl(
     private val queryPhrasePort: QueryPhrasePort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
     private val queryPointOptionPort: QueryPointOptionPort
-)  : GetPointService {
+) : GetPointService {
 
     override fun queryPhraseAllByPointTypeAndStandardPoint(type: PointType, point: Int): List<Phrase> {
         return queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type, point)
@@ -75,7 +75,6 @@ class GetPointServiceImpl(
     override fun getPointOptionById(pointOptionId: UUID, schoolId: UUID): PointOption {
         return (queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException)
             .apply { validateSameSchool(this.schoolId, schoolId) }
-
     }
 
     override fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?) =

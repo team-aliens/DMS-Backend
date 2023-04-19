@@ -15,7 +15,6 @@ class CommandPointServiceImpl(
     override fun savePointHistory(pointHistory: PointHistory) =
         commandPointHistoryPort.savePointHistory(pointHistory)
 
-
     override fun deletePointHistory(pointHistory: PointHistory) {
         commandPointHistoryPort.deletePointHistory(pointHistory)
     }

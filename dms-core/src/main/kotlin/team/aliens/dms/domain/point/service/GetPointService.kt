@@ -48,9 +48,10 @@ interface GetPointService {
 
     fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<PointOption>
 
-    fun getTotalPoint(type: PointRequestType,
-                      bonusTotal: Int,
-                      minusTotal: Int
+    fun getTotalPoint(
+        type: PointRequestType,
+        bonusTotal: Int,
+        minusTotal: Int
     ): Int
 
     fun getPointHistoriesByStudentsAndPointOptionAndSchoolId(
