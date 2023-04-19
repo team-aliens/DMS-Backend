@@ -2,6 +2,7 @@ package team.aliens.dms.domain.auth.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.auth.exception.AuthCodeOverLimitException
+import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import java.util.UUID
 
 @Aggregate
@@ -59,5 +60,11 @@ data class AuthCodeLimit(
             isVerified = false,
             expirationTime = EXPIRED
         )
+    }
+
+    fun checkIsVerified() {
+        if (isVerified) {
+            throw EmailAlreadyCertifiedException
+        }
     }
 }
