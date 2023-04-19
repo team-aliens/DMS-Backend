@@ -2,20 +2,20 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
-import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryPointOptionsUseCase(
     private val userService: UserService,
-    private val queryPointOptionPort: QueryPointOptionPort
+    private val pointService: PointService
 ) {
 
     fun execute(keyword: String?): QueryPointOptionsResponse {
 
         val user = userService.getCurrentUser()
 
-        val pointOptions = queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(user.schoolId, keyword)
+        val pointOptions = pointService.queryPointOptionsBySchoolIdAndKeyword(user.schoolId, keyword)
             .map {
                 QueryPointOptionsResponse.PointOptionResponse(
                     pointOptionId = it.id,

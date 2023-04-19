@@ -4,20 +4,20 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAllPointHistoryUseCase(
     private val userService: UserService,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val pointService: PointService
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryAllPointHistoryResponse {
 
         val user = userService.getCurrentUser()
 
-        val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
+        val pointHistories = pointService.queryPointHistoryBySchoolIdAndType(
             schoolId = user.schoolId,
             type = PointRequestType.toPointType(type),
             isCancel = false,

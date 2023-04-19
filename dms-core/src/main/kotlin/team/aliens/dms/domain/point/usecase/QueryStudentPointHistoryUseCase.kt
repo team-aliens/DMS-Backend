@@ -3,7 +3,7 @@ package team.aliens.dms.domain.point.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -14,7 +14,7 @@ import java.util.UUID
 class QueryStudentPointHistoryUseCase(
     private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val pointService: PointService
 ) {
 
     fun execute(studentId: UUID, pageData: PageData): QueryStudentPointHistoryResponse {
@@ -25,7 +25,7 @@ class QueryStudentPointHistoryUseCase(
 
         validateSameSchool(user.schoolId, student.schoolId)
 
-        val pointHistories = queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+        val pointHistories = pointService.queryPointHistoryByStudentGcnAndNameAndType(
             studentName = student.name,
             gcn = student.gcn,
             pageData = pageData,
