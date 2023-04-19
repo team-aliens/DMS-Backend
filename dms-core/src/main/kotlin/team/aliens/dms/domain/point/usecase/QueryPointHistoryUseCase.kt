@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
+import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -32,7 +33,7 @@ class QueryPointHistoryUseCase(
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
 
         return QueryPointHistoryResponse(
-            totalPoint = pointService.getTotalPoint(type, bonusTotal, minusTotal),
+            totalPoint = PointHistory.getTotalPoint(type, bonusTotal, minusTotal),
             points = pointHistories
         )
     }

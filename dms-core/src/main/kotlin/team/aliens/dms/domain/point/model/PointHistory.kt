@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.point.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.exception.PointHistoryCanNotCancelException
 import java.time.LocalDateTime
 import java.util.UUID
@@ -31,6 +32,18 @@ data class PointHistory(
     val schoolId: UUID
 
 ) {
+
+    companion object {
+        fun getTotalPoint(type: PointRequestType, bonusTotal: Int, minusTotal: Int): Int {
+            val totalPoint = when (type) {
+                PointRequestType.BONUS -> bonusTotal
+                PointRequestType.MINUS -> minusTotal
+                PointRequestType.ALL -> bonusTotal - minusTotal
+            }
+            return totalPoint
+        }
+    }
+
     fun cancelHistory(pointTotal: Pair<Int, Int>): PointHistory {
 
         if (this.isCancel) {

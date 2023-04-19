@@ -18,7 +18,7 @@ class CreatePointOptionUseCase(
 
         val user = userService.getCurrentUser()
 
-        pointService.checkPointOptionByNameAndSchoolId(request.name, user.schoolId)
+        pointService.checkPointOptionExistsByNameAndSchoolId(request.name, user.schoolId)
 
         val pointOption = pointService.savePointOption(
             PointOption(

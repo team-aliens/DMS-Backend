@@ -39,11 +39,11 @@ class StudentMyPageUseCase(
     }
 
     private fun randomPhrase(bonusPoint: Int, minusPoint: Int): String {
-        val bonusPhrase = pointService.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.BONUS, point = bonusPoint
+        val bonusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.BONUS, standardPoint = bonusPoint
         )
-        val minusPhrase = pointService.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.MINUS, point = minusPoint
+        val minusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.MINUS, standardPoint = minusPoint
         )
 
         val phrases = listOf<Phrase>()

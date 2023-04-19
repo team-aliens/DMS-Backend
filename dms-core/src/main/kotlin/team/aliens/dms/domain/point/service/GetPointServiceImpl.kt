@@ -2,10 +2,8 @@ package team.aliens.dms.domain.point.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
 import team.aliens.dms.domain.point.exception.PointOptionNotFoundException
-import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
@@ -24,9 +22,8 @@ class GetPointServiceImpl(
     private val queryPointOptionPort: QueryPointOptionPort
 ) : GetPointService {
 
-    override fun queryPhraseAllByPointTypeAndStandardPoint(type: PointType, point: Int): List<Phrase> {
-        return queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type, point)
-    }
+    override fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int) =
+        queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type, standardPoint)
 
     override fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID): PointHistory {
         return (queryPointHistoryPort.queryPointHistoryById(pointHistoryId) ?: throw PointHistoryNotFoundException)
@@ -79,15 +76,6 @@ class GetPointServiceImpl(
 
     override fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?) =
         queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(schoolId, keyword)
-
-    override fun getTotalPoint(type: PointRequestType, bonusTotal: Int, minusTotal: Int): Int {
-        val totalPoint = when (type) {
-            PointRequestType.BONUS -> bonusTotal
-            PointRequestType.MINUS -> minusTotal
-            PointRequestType.ALL -> bonusTotal - minusTotal
-        }
-        return totalPoint
-    }
 
     override fun getPointHistoriesByStudentsAndPointOptionAndSchoolId(
         students: List<StudentWithPointVO>,

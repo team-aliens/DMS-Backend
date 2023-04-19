@@ -10,7 +10,7 @@ class CheckPointServiceImpl(
     private val queryPointOptionPort: QueryPointOptionPort
 ) : CheckPointService {
 
-    override fun checkPointOptionByNameAndSchoolId(name: String, schoolId: UUID) {
+    override fun checkPointOptionExistsByNameAndSchoolId(name: String, schoolId: UUID) {
         if (queryPointOptionPort.existByNameAndSchoolId(name, schoolId)) {
             throw PointOptionNameExistsException
         }

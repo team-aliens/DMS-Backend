@@ -2,7 +2,6 @@ package team.aliens.dms.domain.point.service
 
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointHistoryDto
-import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
@@ -14,7 +13,7 @@ import java.util.UUID
 
 interface GetPointService {
 
-    fun queryPhraseAllByPointTypeAndStandardPoint(type: PointType, point: Int): List<Phrase>
+    fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int): List<Phrase>
 
     fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID): PointHistory
 
@@ -47,12 +46,6 @@ interface GetPointService {
     fun getPointOptionById(pointOptionId: UUID, schoolId: UUID): PointOption
 
     fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<PointOption>
-
-    fun getTotalPoint(
-        type: PointRequestType,
-        bonusTotal: Int,
-        minusTotal: Int
-    ): Int
 
     fun getPointHistoriesByStudentsAndPointOptionAndSchoolId(
         students: List<StudentWithPointVO>,
