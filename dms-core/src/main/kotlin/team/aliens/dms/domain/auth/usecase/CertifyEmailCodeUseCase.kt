@@ -20,7 +20,7 @@ class CertifyEmailCodeUseCase(
         authService.checkAuthCodeByEmailAndEmailType(request.email, request.type, request.authCode)
 
         val authCodeLimit =
-            authService.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
+            authService.getAuthCodeLimitByEmailAndEmailType(request.email, request.type)
 
         authService.saveAuthCodeLimit(
             authCodeLimit.certified()
