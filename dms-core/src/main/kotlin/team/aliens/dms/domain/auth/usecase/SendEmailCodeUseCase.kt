@@ -3,13 +3,9 @@ package team.aliens.dms.domain.auth.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
-import team.aliens.dms.domain.auth.exception.EmailAlreadyCertifiedException
 import team.aliens.dms.domain.auth.model.AuthCode
-import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
-import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.user.service.UserService
 
@@ -17,9 +13,7 @@ import team.aliens.dms.domain.user.service.UserService
 class SendEmailCodeUseCase(
     private val sendEmailPort: SendEmailPort,
     private val userService: UserService,
-    private val commandAuthCodePort: CommandAuthCodePort,
-    private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort
+    private val authService: AuthService,
 ) {
 
     fun execute(request: SendEmailCodeRequest) {
@@ -27,23 +21,18 @@ class SendEmailCodeUseCase(
             userService.checkUserExistsByEmail(request.email)
         }
 
-        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
-            ?: AuthCodeLimit(request.email, request.type)
+        val authCodeLimit = authService.getAuthCodeLimitByEmailAndEmailType(request.email, request.type)
 
-        commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
-
-        if (authCodeLimit.isVerified) {
-            throw EmailAlreadyCertifiedException
-        }
+        authService.saveAuthCodeLimit(authCodeLimit.increaseCount())
 
         val code = StringUtil.randomNumber(AuthCode.AUTH_CODE_SIZE)
-
-        val authCode = AuthCode(
-            code = code,
-            email = request.email,
-            type = request.type
+        authService.saveAuthCode(
+            AuthCode(
+                code = code,
+                email = request.email,
+                type = request.type
+            )
         )
-        commandAuthCodePort.saveAuthCode(authCode)
 
         sendEmailPort.sendAuthCode(request.email, request.type, code)
     }
