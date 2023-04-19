@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.meal.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.extension.iterator
 import team.aliens.dms.domain.meal.dto.QueryMealsResponse
 import team.aliens.dms.domain.meal.service.MealService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDate
 import java.time.YearMonth
-import team.aliens.dms.common.extension.iterator
 
 @ReadOnlyUseCase
 class QueryMealsUseCase(

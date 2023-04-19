@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.meal.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.meal.model.Meal
 import team.aliens.dms.domain.meal.spi.QueryMealPort
 import java.time.LocalDate
 import java.util.UUID
-import team.aliens.dms.domain.meal.model.Meal
 
 @Service
 class GetMealServiceImpl(
