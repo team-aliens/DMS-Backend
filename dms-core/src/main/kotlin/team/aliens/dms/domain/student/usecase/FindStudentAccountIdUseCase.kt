@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.spi.SendEmailPort
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.UserService
+import java.util.UUID
 
 /**
  *
