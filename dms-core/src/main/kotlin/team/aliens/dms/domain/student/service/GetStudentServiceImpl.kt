@@ -53,4 +53,9 @@ class GetStudentServiceImpl(
 
     override fun queryAllStudentsByIdsIn(studentIds: List<UUID>) =
         queryStudentPort.queryAllStudentsByIdsIn(studentIds)
+            .also { students ->
+                if (!students.map { it.id }.containsAll(studentIds)) {
+                    throw StudentNotFoundException
+                }
+            }
 }
