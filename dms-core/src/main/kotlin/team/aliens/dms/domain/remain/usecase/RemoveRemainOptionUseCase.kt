@@ -17,7 +17,6 @@ class RemoveRemainOptionUseCase(
 
         val remainOption = remainService.getRemainOptionById(remainOptionId, user.schoolId)
 
-        remainService.deleteRemainStatusByRemainOptionId(remainOption.id)
         remainService.deleteRemainOption(remainOption)
     }
 }

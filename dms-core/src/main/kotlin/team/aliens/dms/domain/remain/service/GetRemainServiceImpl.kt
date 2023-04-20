@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.remain.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse.RemainOptionElement
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainStatusNotFound
@@ -28,17 +27,8 @@ class GetRemainServiceImpl(
             .apply { validateSameSchool(this.schoolId, schoolId) }
     }
 
-    override fun getAllRemainOptionsBySchoolId(schoolId: UUID, remainOptionId: UUID?): List<RemainOptionElement> {
-        return queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId)
-            .map {
-                RemainOptionElement(
-                    id = it.id,
-                    title = it.title,
-                    description = it.description,
-                    isApplied = it.id == remainOptionId
-                )
-            }
-    }
+    override fun queryAllRemainOptionsBySchoolId(schoolId: UUID) =
+        queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId)
 
     override fun queryAllByStudentId(studentIds: List<UUID>) =
         queryRemainStatusPort.queryAllByStudentId(studentIds)

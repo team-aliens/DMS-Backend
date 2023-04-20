@@ -23,11 +23,8 @@ class CommandRemainServiceImpl(
         commandRemainOptionPort.saveRemainOption(remainOption)
 
     override fun deleteRemainOption(remainOption: RemainOption) {
+        commandRemainStatusPort.deleteRemainStatusByRemainOptionId(remainOption.id)
         commandRemainOptionPort.deleteRemainOption(remainOption)
-    }
-
-    override fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID) {
-        commandRemainStatusPort.deleteRemainStatusByRemainOptionId(remainOptionId)
     }
 
     override fun saveRemainStatus(remainStatus: RemainStatus) =

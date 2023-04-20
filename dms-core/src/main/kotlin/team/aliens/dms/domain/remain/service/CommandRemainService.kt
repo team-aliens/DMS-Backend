@@ -13,8 +13,6 @@ interface CommandRemainService {
 
     fun deleteRemainOption(remainOption: RemainOption)
 
-    fun deleteRemainStatusByRemainOptionId(remainOptionId: UUID)
-
     fun saveRemainStatus(remainStatus: RemainStatus): RemainStatus
 
     fun deleteRemainStatusByStudentId(studentId: UUID)
