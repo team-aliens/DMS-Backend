@@ -1,17 +1,13 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
-import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.validateSameSchool
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CancelGrantedPointUseCase(
-    private val commandPointHistoryPort: CommandPointHistoryPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort,
+    private val pointService: PointService,
     private val userService: UserService,
 ) {
 
@@ -19,19 +15,14 @@ class CancelGrantedPointUseCase(
 
         val user = userService.getCurrentUser()
 
-        val pointHistory = queryPointHistoryPort.queryPointHistoryById(pointHistoryId)
-            ?: throw PointHistoryNotFoundException
+        val pointHistory = pointService.getPointHistoryById(pointHistoryId, user.schoolId)
 
-        validateSameSchool(user.schoolId, pointHistory.schoolId)
-
-        val pointTotal = queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
+        val pointTotal = pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(
             gcn = pointHistory.studentGcn,
             studentName = pointHistory.studentName
         )
 
-        commandPointHistoryPort.savePointHistory(
-            pointHistory.cancelHistory(pointTotal)
-        )
-        commandPointHistoryPort.deletePointHistory(pointHistory)
+        pointService.savePointHistory(pointHistory.cancelHistory(pointTotal))
+        pointService.deletePointHistory(pointHistory)
     }
 }

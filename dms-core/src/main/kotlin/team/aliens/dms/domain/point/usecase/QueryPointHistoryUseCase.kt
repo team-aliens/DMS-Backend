@@ -4,13 +4,14 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
     private val userService: UserService,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val pointService: PointService
 ) {
 
     fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
@@ -20,34 +21,20 @@ class QueryPointHistoryUseCase(
         val name = student.name
         val pointType = PointRequestType.toPointType(type)
 
-        val pointHistories =
-            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
-                gcn = gcn,
-                studentName = name,
-                type = pointType,
-                isCancel = false,
-                pageData = pageData
-            )
+        val pointHistories = pointService.queryPointHistoryByStudentGcnAndNameAndType(
+            gcn = gcn,
+            studentName = name,
+            type = pointType,
+            isCancel = false,
+            pageData = pageData
+        )
 
         val (bonusTotal, minusTotal) =
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
+            pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
 
         return QueryPointHistoryResponse(
-            totalPoint = getTotalPoint(type, bonusTotal, minusTotal),
+            totalPoint = PointHistory.getTotalPoint(type, bonusTotal, minusTotal),
             points = pointHistories
         )
-    }
-
-    private fun getTotalPoint(
-        type: PointRequestType,
-        bonusTotal: Int,
-        minusTotal: Int
-    ): Int {
-        val totalPoint = when (type) {
-            PointRequestType.BONUS -> bonusTotal
-            PointRequestType.MINUS -> minusTotal
-            PointRequestType.ALL -> bonusTotal - minusTotal
-        }
-        return totalPoint
     }
 }

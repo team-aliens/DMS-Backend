@@ -2,7 +2,7 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -15,7 +15,7 @@ import java.util.UUID
 class QueryStudentDetailsUseCase(
     private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort,
+    private val pointService: PointService,
     private val queryTagPort: QueryTagPort
 ) {
 
@@ -26,7 +26,7 @@ class QueryStudentDetailsUseCase(
         validateSameSchool(user.schoolId, student.schoolId)
 
         val (bonusPoint, minusPoint) =
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
+            pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,

@@ -3,7 +3,6 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.UserService
-import java.time.LocalDateTime
 
 @UseCase
 class StudentWithdrawalUseCase(

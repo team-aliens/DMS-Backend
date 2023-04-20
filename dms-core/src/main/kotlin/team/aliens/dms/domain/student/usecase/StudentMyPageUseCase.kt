@@ -3,8 +3,7 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.QueryPhrasePort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
+import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
@@ -15,8 +14,7 @@ import java.security.SecureRandom
 class StudentMyPageUseCase(
     private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val queryPhrasePort: QueryPhrasePort
+    private val pointService: PointService
 ) {
 
     fun execute(): StudentMyPageResponse {
@@ -24,7 +22,7 @@ class StudentMyPageUseCase(
         val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
 
         val (bonusPoint, minusPoint) =
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
+            pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val phrase = randomPhrase(bonusPoint, minusPoint)
 
@@ -41,11 +39,11 @@ class StudentMyPageUseCase(
     }
 
     private fun randomPhrase(bonusPoint: Int, minusPoint: Int): String {
-        val bonusPhrase = queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.BONUS, point = bonusPoint
+        val bonusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.BONUS, standardPoint = bonusPoint
         )
-        val minusPhrase = queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.MINUS, point = minusPoint
+        val minusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.MINUS, standardPoint = minusPoint
         )
 
         val phrases = listOf<Phrase>()
