@@ -42,12 +42,6 @@ class StudentPersistenceAdapter(
     private val queryFactory: JPAQueryFactory,
 ) : StudentPort {
 
-    override fun existsStudentByGradeAndClassRoomAndNumber(
-        grade: Int,
-        classRoom: Int,
-        number: Int
-    ): Boolean = studentRepository.existsByGradeAndClassRoomAndNumber(grade, classRoom, number)
-
     override fun queryStudentBySchoolIdAndGcn(
         schoolId: UUID,
         grade: Int,
@@ -106,12 +100,6 @@ class StudentPersistenceAdapter(
             students.map {
                 studentMapper.toEntity(it)
             }
-        )
-    }
-
-    override fun deleteStudent(student: Student) {
-        studentRepository.delete(
-            studentMapper.toEntity(student)
         )
     }
 
@@ -233,7 +221,7 @@ class StudentPersistenceAdapter(
         }
     }
 
-    override fun queryUserByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
+    override fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)

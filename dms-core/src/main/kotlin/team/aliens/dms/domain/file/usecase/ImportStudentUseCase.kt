@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.file.usecase
 
+import java.io.File
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.room.model.Room
@@ -7,23 +9,18 @@ import team.aliens.dms.domain.room.spi.FileCommandRoomPort
 import team.aliens.dms.domain.room.spi.FileQueryRoomPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.CommandStudentPort
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
-import java.io.File
-import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(
     private val userService: UserService,
+    private val studentService: StudentService,
     private val parseFilePort: ParseFilePort,
     private val querySchoolPort: QuerySchoolPort,
     private val fileCommandRoomPort: FileCommandRoomPort,
-    private val fileQueryRoomPort: FileQueryRoomPort,
-    private val commandStudentPort: CommandStudentPort,
-    private val queryStudentPort: QueryStudentPort
+    private val fileQueryRoomPort: FileQueryRoomPort
 ) {
 
     fun execute(file: File) {
@@ -33,16 +30,14 @@ class ImportStudentUseCase(
         val parsedStudentInfos = parseFilePort.getExcelStudentVO(file)
 
         val gcnList = parsedStudentInfos.map { Triple(it.grade, it.classRoom, it.number) }
-        if (queryStudentPort.existsBySchoolIdAndGcnList(school.id, gcnList)) {
-            throw StudentAlreadyExistsException
-        }
+        studentService.checkStudentExistsBySchoolIdAndGcnList(school.id, gcnList)
 
         val roomMap = saveNotExistsRooms(
             roomNumbers = parsedStudentInfos.map { it.roomNumber }.distinctBy { it },
             schoolId = school.id
         )
 
-        commandStudentPort.saveAllStudent(
+        studentService.saveAllStudent(
             parsedStudentInfos.map {
                 Student(
                     roomId = roomMap[it.roomNumber]!!.id,

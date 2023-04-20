@@ -4,8 +4,7 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.user.service.UserService
@@ -14,21 +13,21 @@ import java.util.UUID
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
     private val userService: UserService,
-    private val queryStudentPort: QueryStudentPort,
     private val pointService: PointService,
+    private val studentService: StudentService,
     private val queryTagPort: QueryTagPort
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
         val user = userService.getCurrentUser()
-        val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
+        val student = studentService.queryStudentById(studentId)
 
         validateSameSchool(user.schoolId, student.schoolId)
 
         val (bonusPoint, minusPoint) =
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
-        val roomMates = queryStudentPort.queryUserByRoomNumberAndSchoolId(
+        val roomMates = studentService.queryStudentsByRoomNumberAndSchoolId(
             roomNumber = student.roomNumber,
             schoolId = student.schoolId
         ).filter {
