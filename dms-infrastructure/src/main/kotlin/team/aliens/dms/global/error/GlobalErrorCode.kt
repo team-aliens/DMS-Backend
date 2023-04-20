@@ -13,7 +13,7 @@ enum class GlobalErrorCode(
     SIMPLE_EMAIL_SERVICE(ErrorStatus.BAD_REQUEST, "Simple Email Service", 2),
     BAD_REQUEST(ErrorStatus.BAD_REQUEST, "Bad Request", 3),
     INVALID_FILE(ErrorStatus.BAD_REQUEST, "Invalid File", 4),
-    BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "%s행 및 %s개 행의 데이터 형식이 잘못되었습니다.", 5),
+    BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "%s행 등 %s개 행의 데이터 형식이 잘못되었습니다.", 5),
 
     EXTENSION_MISMATCH(401, "File Extension Mismatch", 1),
 
