@@ -13,7 +13,7 @@ class UpdateNoticeUseCase(
 
     fun execute(noticeId: UUID, title: String, content: String): UUID {
         val user = userService.getCurrentUser()
-        val notice = noticeService.queryNoticeByIdAndManagerId(noticeId, user.id)
+        val notice = noticeService.getNoticeByIdAndManagerId(noticeId, user.id)
 
         noticeService.saveNotice(
             notice.copy(

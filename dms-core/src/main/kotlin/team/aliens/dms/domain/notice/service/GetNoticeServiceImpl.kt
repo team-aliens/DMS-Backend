@@ -8,9 +8,10 @@ import team.aliens.dms.domain.notice.spi.QueryNoticePort
 import java.util.UUID
 
 @Service
-class QueryNoticeServiceImpl(
+class GetNoticeServiceImpl(
     private val queryNoticePort: QueryNoticePort
-) : QueryNoticeService {
+) : GetNoticeService {
+
     override fun getAllNoticesBySchoolIdAndOrder(schoolId: UUID, orderType: OrderType): List<Notice> {
         return queryNoticePort.queryAllNoticesBySchoolIdAndOrder(schoolId, orderType)
     }
@@ -20,7 +21,7 @@ class QueryNoticeServiceImpl(
             ?: throw NoticeNotFoundException
     }
 
-    override fun queryNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID): Notice {
+    override fun getNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID): Notice {
         return queryNoticePort.queryNoticeByIdAndManagerId(noticeId, managerId)
             ?: throw NoticeNotFoundException
     }

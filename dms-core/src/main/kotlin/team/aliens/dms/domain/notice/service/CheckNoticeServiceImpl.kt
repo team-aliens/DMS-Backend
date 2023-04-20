@@ -8,6 +8,7 @@ import java.time.LocalDate
 class CheckNoticeServiceImpl(
     private val queryNoticePort: QueryNoticePort
 ) : CheckNoticeService {
+
     override fun existsNoticeByDateBetween(from: LocalDate, to: LocalDate): Boolean {
         return queryNoticePort.existsNoticeByDateBetween(from, to)
     }

@@ -4,9 +4,9 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class NoticeService(
-    queryNoticeService: QueryNoticeService,
+    getNoticeService: GetNoticeService,
     checkNoticeService: CheckNoticeService,
     commandNoticeService: CommandNoticeService
-) : QueryNoticeService by queryNoticeService,
+) : GetNoticeService by getNoticeService,
     CheckNoticeService by checkNoticeService,
     CommandNoticeService by commandNoticeService
