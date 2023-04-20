@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.file.usecase
 
-import java.io.File
-import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.room.model.Room
@@ -12,6 +10,8 @@ import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
+import java.io.File
+import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(

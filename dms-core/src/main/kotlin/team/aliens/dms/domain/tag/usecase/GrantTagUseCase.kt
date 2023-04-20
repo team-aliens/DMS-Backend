@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.tag.usecase
 
-import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.service.StudentService
@@ -10,6 +9,7 @@ import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.user.service.UserService
+import java.time.LocalDateTime
 
 @UseCase
 class GrantTagUseCase(

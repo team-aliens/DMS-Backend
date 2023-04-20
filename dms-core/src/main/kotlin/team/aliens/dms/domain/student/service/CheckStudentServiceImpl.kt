@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.student.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import java.util.UUID
 
 @Service
 class CheckStudentServiceImpl(
