@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.student.service
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -7,7 +8,6 @@ import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import java.util.UUID
 
 @Service
 class GetStudentServiceImpl(
@@ -38,8 +38,12 @@ class GetStudentServiceImpl(
         tagIds: List<UUID>?,
     ) = queryStudentPort.queryStudentsByNameAndSortAndFilter(name, sort, schoolId, pointFilter, tagIds)
 
-    override fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID) =
-        queryStudentPort.queryStudentsByRoomNumberAndSchoolId(roomNumber, schoolId)
+    override fun getRoommates(studentId: UUID, roomNumber: String, schoolId: UUID): List<Student> {
+        return queryStudentPort.queryStudentsByRoomNumberAndSchoolId(roomNumber, schoolId)
+            .filter {
+                it.id != studentId
+            }
+    }
 
     override fun queryStudentsWithPointHistory(studentIds: List<UUID>) =
         queryStudentPort.queryStudentsWithPointHistory(studentIds)

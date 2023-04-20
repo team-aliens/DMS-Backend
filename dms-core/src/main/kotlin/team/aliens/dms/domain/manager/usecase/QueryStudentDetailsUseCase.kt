@@ -1,14 +1,13 @@
 package team.aliens.dms.domain.manager.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.point.service.PointService
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentDetailsUseCase(
@@ -19,20 +18,16 @@ class QueryStudentDetailsUseCase(
 ) {
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
-        val user = userService.getCurrentUser()
-        val student = studentService.queryStudentById(studentId)
 
-        validateSameSchool(user.schoolId, student.schoolId)
-
+        val student = studentService.getCurrentStudent()
         val (bonusPoint, minusPoint) =
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
-        val roomMates = studentService.queryStudentsByRoomNumberAndSchoolId(
+        val roomMates = studentService.getRoommates(
+            studentId = student.id,
             roomNumber = student.roomNumber,
             schoolId = student.schoolId
-        ).filter {
-            it.id != studentId
-        }.map {
+        ).map {
             GetStudentDetailsResponse.RoomMate(
                 id = it.id,
                 name = it.name,
