@@ -1,12 +1,9 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
-import team.aliens.dms.domain.notice.spi.CommandNoticePort
-import team.aliens.dms.domain.notice.spi.QueryNoticePort
+import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
-import team.aliens.dms.domain.notice.service.NoticeService
 
 @UseCase
 class UpdateNoticeUseCase(

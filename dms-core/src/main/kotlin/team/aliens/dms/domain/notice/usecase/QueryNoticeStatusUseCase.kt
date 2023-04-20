@@ -1,9 +1,8 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import java.time.LocalDate
 import team.aliens.dms.domain.notice.service.NoticeService
+import java.time.LocalDate
 
 @ReadOnlyUseCase
 class QueryNoticeStatusUseCase(

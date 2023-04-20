@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.notice.service
 
-import java.util.UUID
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.model.OrderType
+import java.util.UUID
 
 interface QueryNoticeService {
     fun getAllNoticesBySchoolIdAndOrder(schoolId: UUID, orderType: OrderType): List<Notice>

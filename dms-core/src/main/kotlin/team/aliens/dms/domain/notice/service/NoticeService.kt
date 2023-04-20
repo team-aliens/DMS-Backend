@@ -1,5 +1,8 @@
 package team.aliens.dms.domain.notice.service
 
+import team.aliens.dms.common.annotation.Service
+
+@Service
 class NoticeService(
     queryNoticeService: QueryNoticeService,
     checkNoticeService: CheckNoticeService,

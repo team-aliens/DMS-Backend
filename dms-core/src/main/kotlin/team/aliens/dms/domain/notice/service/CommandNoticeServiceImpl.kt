@@ -7,7 +7,7 @@ import team.aliens.dms.domain.notice.spi.CommandNoticePort
 @Service
 class CommandNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort
-) : CommandNoticeService{
+) : CommandNoticeService {
     override fun saveNotice(notice: Notice): Notice {
         return commandNoticePort.saveNotice(notice)
     }
