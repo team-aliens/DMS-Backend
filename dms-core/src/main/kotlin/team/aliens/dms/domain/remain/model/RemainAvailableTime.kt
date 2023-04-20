@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.remain.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.remain.exception.RemainCanNotAppliedException
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -21,16 +22,14 @@ data class RemainAvailableTime(
 
 ) {
 
-    fun isAvailable(): Boolean {
+    fun isAvailable() {
         val currentDateTime = LocalDateTime.now()
         val dayOfWeek = currentDateTime.dayOfWeek.value
         val now = currentDateTime.toLocalTime()
 
         if (isOutOfRangeDay(dayOfWeek) || isBeforeStartTime(dayOfWeek, now) || isAfterEndTime(dayOfWeek, now)) {
-            return false
+            throw RemainCanNotAppliedException
         }
-
-        return true
     }
 
     private fun isOutOfRangeDay(dayOfWeek: Int) =
