@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
+import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.CommandStudentPort
@@ -15,7 +15,7 @@ import java.util.UUID
 class RemoveStudentUseCase(
     private val userService: UserService,
     private val queryStudentPort: QueryStudentPort,
-    private val commandRemainStatusPort: CommandRemainStatusPort,
+    private val remainService: RemainService,
     private val commandStudyRoomPort: CommandStudyRoomPort,
     private val commandStudentPort: CommandStudentPort
 ) {
@@ -26,7 +26,7 @@ class RemoveStudentUseCase(
         val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
         validateSameSchool(student.schoolId, user.schoolId)
 
-        commandRemainStatusPort.deleteByStudentId(studentId)
+        remainService.deleteRemainStatusByStudentId(studentId)
         commandStudyRoomPort.deleteSeatApplicationByStudentId(studentId)
 
         commandStudentPort.saveStudent(

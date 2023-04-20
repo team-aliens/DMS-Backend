@@ -5,7 +5,7 @@ import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
-import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
+import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
@@ -18,7 +18,7 @@ class ExportRemainStatusUseCase(
     private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val queryStudentPort: QueryStudentPort,
-    private val queryRemainStatusPort: QueryRemainStatusPort,
+    private val remainService: RemainService,
     private val writeFilePort: WriteFilePort
 ) {
 
@@ -29,7 +29,7 @@ class ExportRemainStatusUseCase(
 
         val studentList = queryStudentPort.queryStudentsBySchoolId(user.schoolId)
 
-        val remainStatusMap = queryRemainStatusPort.queryAllByStudentId(
+        val remainStatusMap = remainService.queryAllByStudentId(
             studentIds = studentList.map { it.id }
         ).associateBy { it.studentId }
 
