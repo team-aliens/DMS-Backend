@@ -7,22 +7,22 @@ import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notice.spi.QueryNoticePort
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
+import team.aliens.dms.domain.notice.service.NoticeService
 
 @UseCase
 class RemoveNoticeUseCase(
     private val userService: UserService,
-    private val queryNoticePort: QueryNoticePort,
-    private val commandNoticePort: CommandNoticePort
+    private val noticeService: NoticeService
 ) {
 
     fun execute(noticeId: UUID) {
         val user = userService.getCurrentUser()
-        val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
+        val notice = noticeService.getNoticeById(noticeId)
 
         if (notice.managerId != user.id) {
             throw IsNotWriterException
         }
 
-        commandNoticePort.deleteNotice(notice)
+        noticeService.deleteNotice(notice)
     }
 }
