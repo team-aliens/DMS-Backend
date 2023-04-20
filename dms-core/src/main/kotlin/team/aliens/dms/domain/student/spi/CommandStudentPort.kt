@@ -7,6 +7,4 @@ interface CommandStudentPort {
     fun saveStudent(student: Student): Student
 
     fun saveAllStudent(students: List<Student>)
-
-    fun deleteStudent(student: Student)
 }
