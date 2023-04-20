@@ -1,6 +1,7 @@
 package team.aliens.dms.global.error
 
 import team.aliens.dms.common.error.ErrorProperty
+import team.aliens.dms.common.error.ErrorStatus
 
 enum class GlobalErrorCode(
     private val status: Int,
@@ -8,10 +9,11 @@ enum class GlobalErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    SEND_EMAIL_REJECTED(400, "Send Email Rejected", 1),
-    SIMPLE_EMAIL_SERVICE(400, "Simple Email Service", 2),
-    BAD_REQUEST(400, "Bad Request", 3),
-    INVALID_FILE(400, "Invalid File", 4),
+    SEND_EMAIL_REJECTED(ErrorStatus.BAD_REQUEST, "Send Email Rejected", 1),
+    SIMPLE_EMAIL_SERVICE(ErrorStatus.BAD_REQUEST, "Simple Email Service", 2),
+    BAD_REQUEST(ErrorStatus.BAD_REQUEST, "Bad Request", 3),
+    INVALID_FILE(ErrorStatus.BAD_REQUEST, "Invalid File", 4),
+    BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "%s행 및 %s개 행의 데이터 형식이 잘못되었습니다.", 5),
 
     EXTENSION_MISMATCH(401, "File Extension Mismatch", 1),
 
