@@ -25,7 +25,7 @@ interface GetStudentService {
         tagIds: List<UUID>?
     ): List<StudentWithTag>
 
-    fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student>
+    fun getRoommates(studentId: UUID, roomNumber: String, schoolId: UUID): List<Student>
 
     fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO>
 
