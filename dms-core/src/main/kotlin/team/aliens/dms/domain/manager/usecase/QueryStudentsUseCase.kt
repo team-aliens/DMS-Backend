@@ -32,7 +32,7 @@ class QueryStudentsUseCase(
             maxPoint = maxPoint
         )
 
-        val students = studentService.queryStudentsByNameAndSortAndFilter(
+        val students = studentService.getStudentsByNameAndSortAndFilter(
             name = name,
             sort = sort,
             schoolId = user.schoolId,

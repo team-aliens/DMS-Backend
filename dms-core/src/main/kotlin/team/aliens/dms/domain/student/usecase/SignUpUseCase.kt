@@ -60,7 +60,7 @@ class SignUpUseCase(
             )
         )
 
-        val student = studentService.queryStudentBySchoolIdAndGcn(
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,

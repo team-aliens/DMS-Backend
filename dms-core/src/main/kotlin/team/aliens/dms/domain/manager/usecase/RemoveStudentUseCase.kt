@@ -19,7 +19,7 @@ class RemoveStudentUseCase(
     fun execute(studentId: UUID) {
 
         val user = userService.getCurrentUser()
-        val student = studentService.queryStudentById(studentId)
+        val student = studentService.getStudentById(studentId)
         validateSameSchool(student.schoolId, user.schoolId)
 
         commandRemainStatusPort.deleteByStudentId(studentId)

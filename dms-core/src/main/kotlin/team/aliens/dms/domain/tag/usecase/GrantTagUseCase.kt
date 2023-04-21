@@ -26,7 +26,7 @@ class GrantTagUseCase(
 
         validateSameSchool(user.schoolId, tag.schoolId)
 
-        val students = studentService.queryAllStudentsByIdsIn(request.studentIds)
+        val students = studentService.getAllStudentsByIdsIn(request.studentIds)
 
         val studentTags = students.map {
             StudentTag(

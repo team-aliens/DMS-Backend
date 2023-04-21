@@ -17,7 +17,7 @@ class GrantPointUseCase(
     fun execute(request: GrantPointRequest) {
 
         val user = userService.getCurrentUser()
-        val students = studentService.queryStudentsWithPointHistory(request.studentIdList)
+        val students = studentService.getStudentsWithPointHistory(request.studentIdList)
 
         val pointOption = pointService.getPointOptionById(request.pointOptionId, user.schoolId)
 

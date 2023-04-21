@@ -24,7 +24,7 @@ class CancelGrantedTagUseCase(
 
         validateSameSchool(user.schoolId, tag.schoolId)
 
-        val student = studentService.queryStudentById(studentId)
+        val student = studentService.getStudentById(studentId)
 
         commandTagPort.deleteStudentTagById(
             studentId = student.id,

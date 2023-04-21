@@ -26,7 +26,7 @@ class FindStudentAccountIdUseCase(
 ) {
 
     fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
-        val student = studentService.queryStudentBySchoolIdAndGcn(
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = schoolId,
             grade = request.grade,
             classRoom = request.classRoom,
