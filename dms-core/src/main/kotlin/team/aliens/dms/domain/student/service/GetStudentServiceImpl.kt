@@ -5,6 +5,7 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
+import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -24,8 +25,10 @@ class GetStudentServiceImpl(
         queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number)
             ?: throw StudentNotFoundException
 
-    override fun getStudentById(studentId: UUID) =
-        queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
+    override fun getStudentById(studentId: UUID, schoolId: UUID): Student {
+        return (queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException)
+            .apply { validateSameSchool(this.schoolId, schoolId) }
+    }
 
     override fun getStudentByUserId(userId: UUID) =
         queryStudentPort.queryStudentByUserId(userId) ?: throw StudentNotFoundException

@@ -19,7 +19,9 @@ class QueryStudentDetailsUseCase(
 
     fun execute(studentId: UUID): GetStudentDetailsResponse {
 
-        val student = studentService.getCurrentStudent()
+        val user = userService.getCurrentUser()
+        val student = studentService.getStudentById(studentId, user.schoolId)
+
         val (bonusPoint, minusPoint) =
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 

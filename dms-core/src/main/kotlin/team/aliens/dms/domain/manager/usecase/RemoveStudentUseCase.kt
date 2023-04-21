@@ -2,7 +2,6 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.user.service.UserService
@@ -19,8 +18,7 @@ class RemoveStudentUseCase(
     fun execute(studentId: UUID) {
 
         val user = userService.getCurrentUser()
-        val student = studentService.getStudentById(studentId)
-        validateSameSchool(student.schoolId, user.schoolId)
+        val student = studentService.getStudentById(studentId, user.schoolId)
 
         commandRemainStatusPort.deleteByStudentId(studentId)
         commandStudyRoomPort.deleteSeatApplicationByStudentId(studentId)

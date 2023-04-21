@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.tag.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.service.StudentService
@@ -7,7 +8,6 @@ import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.spi.CommandTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @UseCase
 class CancelGrantedTagUseCase(
@@ -24,7 +24,7 @@ class CancelGrantedTagUseCase(
 
         validateSameSchool(user.schoolId, tag.schoolId)
 
-        val student = studentService.getStudentById(studentId)
+        val student = studentService.getStudentById(studentId, user.schoolId)
 
         commandTagPort.deleteStudentTagById(
             studentId = student.id,
