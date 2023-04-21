@@ -19,7 +19,7 @@ class ResetStudentPasswordUseCase(
 
     fun execute(request: ResetStudentPasswordRequest) {
         val user = userService.queryUserByAccountId(request.accountId)
-        val student = studentService.queryStudentByUserId(user.id)
+        val student = studentService.getStudentByUserId(user.id)
 
         if (student.name != request.name || user.email != request.email) {
             throw StudentInfoMismatchException

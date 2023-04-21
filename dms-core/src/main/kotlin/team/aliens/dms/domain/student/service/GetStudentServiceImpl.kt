@@ -20,17 +20,17 @@ class GetStudentServiceImpl(
         return queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
     }
 
-    override fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) =
+    override fun getStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) =
         queryStudentPort.queryStudentBySchoolIdAndGcn(schoolId, grade, classRoom, number)
             ?: throw StudentNotFoundException
 
-    override fun queryStudentById(studentId: UUID) =
+    override fun getStudentById(studentId: UUID) =
         queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
-    override fun queryStudentByUserId(userId: UUID) =
+    override fun getStudentByUserId(userId: UUID) =
         queryStudentPort.queryStudentByUserId(userId) ?: throw StudentNotFoundException
 
-    override fun queryStudentsByNameAndSortAndFilter(
+    override fun getStudentsByNameAndSortAndFilter(
         name: String?,
         sort: Sort,
         schoolId: UUID,
@@ -45,13 +45,13 @@ class GetStudentServiceImpl(
             }
     }
 
-    override fun queryStudentsWithPointHistory(studentIds: List<UUID>) =
+    override fun getStudentsWithPointHistory(studentIds: List<UUID>) =
         queryStudentPort.queryStudentsWithPointHistory(studentIds)
 
-    override fun queryStudentsBySchoolId(schoolId: UUID) =
+    override fun getStudentsBySchoolId(schoolId: UUID) =
         queryStudentPort.queryStudentsBySchoolId(schoolId)
 
-    override fun queryAllStudentsByIdsIn(studentIds: List<UUID>) =
+    override fun getAllStudentsByIdsIn(studentIds: List<UUID>) =
         queryStudentPort.queryAllStudentsByIdsIn(studentIds)
             .also { students ->
                 if (!students.map { it.id }.containsAll(studentIds)) {

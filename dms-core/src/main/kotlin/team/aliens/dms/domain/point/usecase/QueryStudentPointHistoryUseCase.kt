@@ -20,7 +20,7 @@ class QueryStudentPointHistoryUseCase(
 
         val user = userService.getCurrentUser()
 
-        val student = studentService.queryStudentById(studentId)
+        val student = studentService.getStudentById(studentId)
 
         validateSameSchool(user.schoolId, student.schoolId)
 
