@@ -219,7 +219,8 @@ class StudyRoomPersistenceAdapter(
                 seatTypeMapper.toDomain(it)!!
             }
 
-    override fun existsSeatTypeByName(name: String) = seatTypeRepository.existsByName(name)
+    override fun existsSeatTypeByNameAndSchoolId(name: String, schoolId: UUID): Boolean =
+        seatTypeRepository.existsByNameAndSchoolId(name, schoolId)
 
     override fun querySeatTypeById(seatTypeId: UUID) = seatTypeMapper.toDomain(
         seatTypeRepository.findByIdOrNull(seatTypeId)
@@ -250,8 +251,8 @@ class StudyRoomPersistenceAdapter(
             )
         )
 
-    override fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime) =
-        timeSlotRepository.existsByStartTimeAndEndTime(startTime, endTime)
+    override fun existsTimeSlotByStartTimeAndEndTimeAndSchoolId(startTime: LocalTime, endTime: LocalTime, schoolId: UUID): Boolean =
+        timeSlotRepository.existsByStartTimeAndEndTimeAndSchoolId(startTime, endTime, schoolId)
 
     override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =
         studyRoomTimeSlotRepository.existsByTimeSlotId(timeSlotId)

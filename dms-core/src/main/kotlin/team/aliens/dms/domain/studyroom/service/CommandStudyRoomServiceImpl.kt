@@ -37,14 +37,18 @@ class CommandStudyRoomServiceImpl(
     }
 
     override fun saveSeatType(seatType: SeatType): SeatType {
-        if (queryStudyRoomPort.existsSeatTypeByName(seatType.name)) {
+        if (queryStudyRoomPort.existsSeatTypeByNameAndSchoolId(seatType.name, seatType.schoolId)) {
             throw SeatTypeAlreadyExistsException
         }
         return commandStudyRoomPort.saveSeatType(seatType)
     }
 
     override fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot {
-        if (queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTime(timeSlot.startTime, timeSlot.endTime)) {
+        if (queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTimeAndSchoolId(
+                startTime = timeSlot.startTime,
+                endTime = timeSlot.endTime,
+                schoolId = timeSlot.schoolId
+        )) {
             throw TimeSlotAlreadyExistsException
         }
         return commandStudyRoomPort.saveTimeSlot(timeSlot)
@@ -67,7 +71,7 @@ class CommandStudyRoomServiceImpl(
     }
 
     override fun deleteTimeSlot(timeSlotId: UUID) {
-        if (queryStudyRoomPort.existsStudyRoomTimeSlotByTimeSlotId(timeSlotId)) {
+        if (queryStudyRoomPort.existsSeatBySeatTypeId(timeSlotId)) {
             throw TimeSlotInUseException
         }
         commandStudyRoomPort.deleteSeatApplicationByTimeSlotId(timeSlotId)

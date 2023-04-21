@@ -33,7 +33,7 @@ interface QueryStudyRoomPort {
 
     fun queryAllSeatTypeByStudyRoomId(studyRoomId: UUID): List<SeatType>
 
-    fun existsSeatTypeByName(name: String): Boolean
+    fun existsSeatTypeByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 
     fun querySeatTypeById(seatTypeId: UUID): SeatType?
 
@@ -49,7 +49,7 @@ interface QueryStudyRoomPort {
 
     fun existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId: UUID, timeSlotId: UUID): Boolean
 
-    fun existsTimeSlotByStartTimeAndEndTime(startTime: LocalTime, endTime: LocalTime): Boolean
+    fun existsTimeSlotByStartTimeAndEndTimeAndSchoolId(startTime: LocalTime, endTime: LocalTime, schoolId: UUID): Boolean
 
     fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID): Boolean
 
