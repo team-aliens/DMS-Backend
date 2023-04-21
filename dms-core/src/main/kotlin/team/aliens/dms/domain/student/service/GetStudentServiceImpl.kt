@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import java.util.UUID
 
 @Service
 class GetStudentServiceImpl(
