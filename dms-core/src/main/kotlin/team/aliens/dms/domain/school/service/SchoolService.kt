@@ -4,5 +4,9 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class SchoolService(
-    getSchoolService: GetSchoolService
-) : GetSchoolService by getSchoolService
+    checkSchoolService: CheckSchoolService,
+    getSchoolService: GetSchoolService,
+    commandSchoolService: CommandSchoolService
+) : CheckSchoolService by checkSchoolService,
+    GetSchoolService by getSchoolService,
+    CommandSchoolService by commandSchoolService

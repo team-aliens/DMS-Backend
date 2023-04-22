@@ -3,8 +3,7 @@ package team.aliens.dms.domain.studyroom.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.spi.WriteFilePort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
@@ -21,7 +20,7 @@ import java.util.UUID
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
     private val userService: UserService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val schoolService: SchoolService,
     private val queryStudentPort: QueryStudentPort,
     private val queryStudyRoomPort: QueryStudyRoomPort,
     private val writeFilePort: WriteFilePort,
@@ -51,7 +50,7 @@ class ExportStudyRoomApplicationStatusUseCase(
         }
 
         val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(user.schoolId)
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolService.getSchoolById(user.schoolId)
 
         return ExportStudyRoomApplicationStatusResponse(
             file = getStudyRoomApplicationStatusFile(file, timeSlots, studentSeats),

@@ -2,17 +2,11 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
-import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
-import team.aliens.dms.domain.school.exception.AnswerMismatchException
-import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
@@ -36,7 +30,7 @@ class SignUpUseCase(
     private val commandStudentPort: CommandStudentPort,
     private val queryStudentPort: QueryStudentPort,
     private val userService: UserService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val schoolService: SchoolService,
     private val authService: AuthService,
     private val securityService: SecurityService,
     private val jwtPort: JwtPort
@@ -86,8 +80,7 @@ class SignUpUseCase(
             userId = user.id, authority = Authority.STUDENT
         )
 
-        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
-            ?: throw FeatureNotFoundException
+        val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
         return SignUpResponse(
             accessToken = accessToken,
@@ -107,14 +100,8 @@ class SignUpUseCase(
     }
 
     private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
-        val school = querySchoolPort.querySchoolByCode(schoolCode) ?: throw SchoolCodeMismatchException
-
-        /**
-         * 학교 확인 질문 답변 검사
-         **/
-        if (school.answer != schoolAnswer) {
-            throw AnswerMismatchException
-        }
+        val school = schoolService.getSchoolByCode(schoolCode)
+        schoolService.checkSchoolAnswer(school.answer, schoolAnswer)
 
         return school
     }

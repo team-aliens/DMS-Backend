@@ -6,9 +6,8 @@ import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
@@ -16,7 +15,7 @@ import java.time.LocalDateTime
 @ReadOnlyUseCase
 class ExportRemainStatusUseCase(
     private val userService: UserService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val schoolService: SchoolService,
     private val queryStudentPort: QueryStudentPort,
     private val queryRemainStatusPort: QueryRemainStatusPort,
     private val writeFilePort: WriteFilePort
@@ -25,7 +24,7 @@ class ExportRemainStatusUseCase(
     fun execute(): ExportRemainStatusResponse {
 
         val user = userService.getCurrentUser()
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolService.getSchoolById(user.schoolId)
 
         val studentList = queryStudentPort.queryStudentsBySchoolId(user.schoolId)
 
