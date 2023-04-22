@@ -2,7 +2,7 @@ package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.file.service.FileService
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
@@ -17,7 +17,9 @@ import java.time.LocalDateTime
 class ExportRemainStatusUseCase(
     private val userService: UserService,
     private val studentService: StudentService,
+    private val fileService: FileService,
     private val querySchoolPort: QuerySchoolPort,
+    private val queryStudentPort: QueryStudentPort,
     private val queryRemainStatusPort: QueryRemainStatusPort,
     private val writeFilePort: WriteFilePort
 ) {
@@ -44,7 +46,7 @@ class ExportRemainStatusUseCase(
         }
 
         return ExportRemainStatusResponse(
-            file = writeFilePort.writeRemainStatusExcelFile(studentRemainInfos),
+            file = fileService.writeRemainStatusExcelFile(studentRemainInfos),
             fileName = getFileName(school)
         )
     }
