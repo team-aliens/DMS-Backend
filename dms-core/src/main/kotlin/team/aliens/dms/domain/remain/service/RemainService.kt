@@ -4,7 +4,9 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class RemainService(
+    checkRemainService: CheckRemainService,
     getRemainService: GetRemainService,
     commandRemainService: CommandRemainService
-) : GetRemainService by getRemainService,
+) : CheckRemainService by checkRemainService,
+    GetRemainService by getRemainService,
     CommandRemainService by commandRemainService

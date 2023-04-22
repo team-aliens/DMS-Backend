@@ -12,11 +12,11 @@ interface GetRemainService {
 
     fun getRemainOptionById(remainOptionId: UUID, schoolId: UUID): RemainOption
 
-    fun queryAllRemainOptionsBySchoolId(schoolId: UUID): List<RemainOption>
+    fun getAllRemainOptionsBySchoolId(schoolId: UUID): List<RemainOption>
 
-    fun queryAllByStudentId(studentIds: List<UUID>): List<RemainStatusInfo>
+    fun getAllRemainStatusInfoByStudentId(studentIds: List<UUID>): List<RemainStatusInfo>
 
-    fun queryRemainStatusById(userId: UUID): RemainStatus?
+    fun getRemainStatusById(userId: UUID): RemainStatus?
 
-    fun getRemainStatusById(userId: UUID): RemainStatus
+    fun getAppliedRemainOptionByUserId(userId: UUID, schoolId: UUID): RemainOption
 }

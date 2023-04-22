@@ -27,15 +27,17 @@ class GetRemainServiceImpl(
             .apply { validateSameSchool(this.schoolId, schoolId) }
     }
 
-    override fun queryAllRemainOptionsBySchoolId(schoolId: UUID) =
+    override fun getAllRemainOptionsBySchoolId(schoolId: UUID) =
         queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId)
 
-    override fun queryAllByStudentId(studentIds: List<UUID>) =
+    override fun getAllRemainStatusInfoByStudentId(studentIds: List<UUID>) =
         queryRemainStatusPort.queryAllByStudentId(studentIds)
 
-    override fun queryRemainStatusById(userId: UUID) =
+    override fun getRemainStatusById(userId: UUID) =
         queryRemainStatusPort.queryRemainStatusById(userId)
 
-    override fun getRemainStatusById(userId: UUID) =
-        queryRemainStatusPort.queryRemainStatusById(userId) ?: throw RemainStatusNotFound
+    override fun getAppliedRemainOptionByUserId(userId: UUID, schoolId: UUID): RemainOption {
+        val remainStatus = getRemainStatusById(userId) ?: throw RemainStatusNotFound
+        return getRemainOptionById(remainStatus.remainOptionId, schoolId)
+    }
 }

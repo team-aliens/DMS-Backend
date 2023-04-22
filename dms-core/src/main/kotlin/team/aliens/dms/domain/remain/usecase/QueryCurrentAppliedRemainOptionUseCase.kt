@@ -15,9 +15,7 @@ class QueryCurrentAppliedRemainOptionUseCase(
 
         val user = userService.getCurrentUser()
 
-        val remainStatus = remainService.getRemainStatusById(user.id)
-
-        val appliedRemainOption = remainService.getRemainOptionById(remainStatus.remainOptionId, user.schoolId)
+        val appliedRemainOption = remainService.getAppliedRemainOptionByUserId(user.id, user.schoolId)
 
         return QueryCurrentAppliedRemainOptionResponse(
             title = appliedRemainOption.title
