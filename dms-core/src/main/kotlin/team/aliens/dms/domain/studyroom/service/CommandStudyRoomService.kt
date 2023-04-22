@@ -40,4 +40,8 @@ interface CommandStudyRoomService {
     fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, id: UUID, timeSlotId: UUID)
 
     fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID)
+
+    fun updateTimeSlotsByStudyRoom(studyRoomId: UUID, studyRoomTimeSlots: List<StudyRoomTimeSlot>)
+
+    fun updateSeatsByStudyRoom(studyRoomId: UUID, seats: List<Seat>)
 }

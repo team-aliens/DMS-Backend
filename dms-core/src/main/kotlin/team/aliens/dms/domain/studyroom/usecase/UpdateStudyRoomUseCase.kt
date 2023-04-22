@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @UseCase
 class UpdateStudyRoomUseCase(
@@ -24,14 +24,14 @@ class UpdateStudyRoomUseCase(
             request.toStudyRoom(studyRoom)
         )
 
-        studyRoomService.deleteStudyRoomTimeSlotByStudyRoomId(studyRoom.id)
-        studyRoomService.saveAllStudyRoomTimeSlots(
-            request.toStudyRoomTimeSlots(studyRoom.id)
+        studyRoomService.updateTimeSlotsByStudyRoom(
+            studyRoomId = studyRoom.id,
+            studyRoomTimeSlots = request.toStudyRoomTimeSlots(studyRoom.id)
         )
 
-        studyRoomService.deleteSeatByStudyRoomId(studyRoomId)
-        studyRoomService.saveAllSeats(
-            request.toSeats(studyRoom.id)
+        studyRoomService.updateSeatsByStudyRoom(
+            studyRoomId = studyRoom.id,
+            seats = request.toSeats(studyRoom.id)
         )
     }
 }

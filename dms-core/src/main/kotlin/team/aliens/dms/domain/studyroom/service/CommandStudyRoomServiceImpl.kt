@@ -109,4 +109,14 @@ class CommandStudyRoomServiceImpl(
     override fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID) {
         commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
     }
+
+    override fun updateTimeSlotsByStudyRoom(studyRoomId: UUID, studyRoomTimeSlots: List<StudyRoomTimeSlot>) {
+        commandStudyRoomPort.deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
+    }
+
+    override fun updateSeatsByStudyRoom(studyRoomId: UUID, seats: List<Seat>) {
+        commandStudyRoomPort.deleteSeatByStudyRoomId(studyRoomId)
+        commandStudyRoomPort.saveAllSeats(seats)
+    }
 }
