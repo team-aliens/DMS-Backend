@@ -5,6 +5,7 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
 import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
@@ -33,7 +34,7 @@ class SignUpUseCase(
     private val studentService: StudentService,
     private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
-    private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
+    private val authService: AuthService,
     private val securityService: SecurityService,
     private val jwtPort: JwtPort
 ) {
@@ -47,7 +48,7 @@ class SignUpUseCase(
 
         val school = validateSchool(schoolCode, schoolAnswer)
 
-        validateAuthCodeLimit(email)
+        authService.checkAuthCodeLimitIsVerifiedByEmail(email)
         validateUserDuplicated(accountId, email)
 
         val user = userService.saveUser(
@@ -100,15 +101,6 @@ class SignUpUseCase(
                 )
             }
         )
-    }
-
-    private fun validateAuthCodeLimit(email: String) {
-        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email)
-            ?: throw AuthCodeLimitNotFoundException
-
-        if (!authCodeLimit.isVerified) {
-            throw UnverifiedAuthCodeException
-        }
     }
 
     private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
