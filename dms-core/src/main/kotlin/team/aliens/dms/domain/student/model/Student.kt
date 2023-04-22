@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.student.model
 
-import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDateTime
 import java.util.UUID
+import team.aliens.dms.common.annotation.Aggregate
 
 @Aggregate
 data class Student(
@@ -35,6 +35,9 @@ data class Student(
 ) {
 
     val gcn: String = processGcn(this.grade, this.classRoom, this.number)
+
+    val hasUser: Boolean
+        get() = userId != null
 
     companion object {
         private const val DECIMAL_NUMBER = 10

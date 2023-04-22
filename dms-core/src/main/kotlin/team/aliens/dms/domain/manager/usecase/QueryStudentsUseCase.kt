@@ -5,14 +5,14 @@ import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentsUseCase(
     private val userService: UserService,
-    private val queryStudentPort: QueryStudentPort
+    private val studentService: StudentService
 ) {
 
     fun execute(
@@ -32,7 +32,7 @@ class QueryStudentsUseCase(
             maxPoint = maxPoint
         )
 
-        val students = queryStudentPort.queryStudentsByNameAndSortAndFilter(
+        val students = studentService.getStudentsByNameAndSortAndFilter(
             name = name,
             sort = sort,
             schoolId = user.schoolId,
