@@ -12,6 +12,9 @@ class SecurityServiceImpl(
     override fun encodePassword(password: String) =
         securityPort.encodePassword(password)
 
+    override fun getCurrentUserId() =
+        securityPort.getCurrentUserId()
+
     override fun checkIsPasswordMatches(rawPassword: String, encodedPassword: String) {
         if (!securityPort.isPasswordMatch(rawPassword, encodedPassword)) {
             throw PasswordMismatchException
