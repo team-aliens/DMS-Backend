@@ -1,27 +1,22 @@
 package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.model.Tag
-import team.aliens.dms.domain.tag.spi.CommandTagPort
-import team.aliens.dms.domain.tag.spi.QueryTagPort
+import team.aliens.dms.domain.tag.service.TagService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CreateTagUseCase(
     private val userService: UserService,
-    private val commandTagPort: CommandTagPort,
-    private val queryTagPort: QueryTagPort
+    private val tagService: TagService
 ) {
 
     fun execute(name: String, color: String): UUID {
 
         val user = userService.getCurrentUser()
 
-        if (queryTagPort.existsByNameAndSchoolId(name, user.schoolId)) {
-            throw TagAlreadyExistsException
-        }
+        tagService.checkTagExistsByNameAndSchoolId(name, user.schoolId)
 
         val tag = Tag(
             name = name,
@@ -29,7 +24,7 @@ class CreateTagUseCase(
             schoolId = user.schoolId
         )
 
-        val savedTag = commandTagPort.saveTag(tag)
+        val savedTag = tagService.saveTag(tag)
 
         return savedTag.id
     }
