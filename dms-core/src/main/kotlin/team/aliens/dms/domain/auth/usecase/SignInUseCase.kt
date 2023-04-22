@@ -5,15 +5,14 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.SignInResponse
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class SignInUseCase(
     private val securityService: SecurityService,
     private val userService: UserService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val schoolService: SchoolService,
     private val jwtPort: JwtPort
 ) {
 
@@ -26,8 +25,7 @@ class SignInUseCase(
             userId = user.id, authority = user.authority
         )
 
-        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
-            ?: throw FeatureNotFoundException
+        val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
         return SignInResponse(
             accessToken = accessToken,

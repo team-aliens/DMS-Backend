@@ -2,20 +2,14 @@ package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
-import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.EmailType
-import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class CertifyEmailCodeUseCase(
     private val userService: UserService,
-    private val queryAuthCodePort: QueryAuthCodePort,
-    private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
-    private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort
+    private val authService: AuthService
 ) {
 
     fun execute(request: CertifyEmailCodeRequest) {
@@ -23,15 +17,12 @@ class CertifyEmailCodeUseCase(
             userService.checkUserExistsByEmail(request.email)
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByEmailAndEmailType(request.email, request.type)
-            ?: throw AuthCodeNotFoundException
+        authService.checkAuthCodeByEmailAndEmailType(request.email, request.type, request.authCode)
 
-        authCode.validateAuthCode(request.authCode)
+        val authCodeLimit =
+            authService.getAuthCodeLimitByEmailAndEmailType(request.email, request.type)
 
-        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(request.email, request.type)
-            ?: throw AuthCodeLimitNotFoundException
-
-        commandAuthCodeLimitPort.saveAuthCodeLimit(
+        authService.saveAuthCodeLimit(
             authCodeLimit.certified()
         )
     }
