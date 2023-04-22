@@ -11,6 +11,6 @@ class CheckSchoolAnswerUseCase(
 
     fun execute(schoolId: UUID, answer: String) {
         val school = schoolService.getSchoolById(schoolId)
-        schoolService.checkSchoolAnswer(school.answer, answer)
+        school.checkAnswer(answer)
     }
 }

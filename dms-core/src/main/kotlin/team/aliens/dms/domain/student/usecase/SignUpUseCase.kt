@@ -101,7 +101,7 @@ class SignUpUseCase(
 
     private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
         val school = schoolService.getSchoolByCode(schoolCode)
-        schoolService.checkSchoolAnswer(school.answer, schoolAnswer)
+        school.checkAnswer(schoolAnswer)
 
         return school
     }
