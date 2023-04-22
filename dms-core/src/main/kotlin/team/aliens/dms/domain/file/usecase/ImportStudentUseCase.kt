@@ -1,26 +1,22 @@
 package team.aliens.dms.domain.file.usecase
 
+import java.io.File
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.file.spi.ParseFilePort
-import team.aliens.dms.domain.room.model.Room
-import team.aliens.dms.domain.room.spi.FileCommandRoomPort
-import team.aliens.dms.domain.room.spi.FileQueryRoomPort
+import team.aliens.dms.domain.room.service.RoomService
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
-import java.io.File
-import java.util.UUID
 
 @UseCase
 class ImportStudentUseCase(
     private val userService: UserService,
     private val studentService: StudentService,
+    private val roomService: RoomService,
     private val parseFilePort: ParseFilePort,
-    private val querySchoolPort: QuerySchoolPort,
-    private val fileCommandRoomPort: FileCommandRoomPort,
-    private val fileQueryRoomPort: FileQueryRoomPort
+    private val querySchoolPort: QuerySchoolPort
 ) {
 
     fun execute(file: File) {
@@ -32,7 +28,7 @@ class ImportStudentUseCase(
         val gcnList = parsedStudentInfos.map { Triple(it.grade, it.classRoom, it.number) }
         studentService.checkStudentExistsBySchoolIdAndGcnList(school.id, gcnList)
 
-        val roomMap = saveNotExistsRooms(
+        val roomMap = roomService.saveNotExistsRooms(
             roomNumbers = parsedStudentInfos.map { it.roomNumber }.distinctBy { it },
             schoolId = school.id
         )
@@ -52,28 +48,5 @@ class ImportStudentUseCase(
                 )
             }
         )
-    }
-
-    private fun saveNotExistsRooms(roomNumbers: List<String>, schoolId: UUID): MutableMap<String, Room> {
-
-        val roomMap = fileQueryRoomPort.queryRoomsByRoomNumbersIn(roomNumbers, schoolId)
-            .associateBy { it.number }
-            .toMutableMap()
-
-        val notExistsRooms = roomNumbers.mapNotNull { roomNumber ->
-            if (!roomMap.containsKey(roomNumber)) {
-                Room(
-                    number = roomNumber,
-                    schoolId = schoolId
-                ).apply {
-                    roomMap[roomNumber] = this
-                }
-            } else {
-                null
-            }
-        }
-
-        fileCommandRoomPort.saveRooms(notExistsRooms)
-        return roomMap
     }
 }
