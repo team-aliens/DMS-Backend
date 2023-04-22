@@ -3,7 +3,6 @@ package team.aliens.dms.domain.point.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.service.PointService
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -20,10 +19,6 @@ class GrantPointUseCase(
         val students = studentService.getStudentsWithPointHistory(request.studentIdList)
 
         val pointOption = pointService.getPointOptionById(request.pointOptionId, user.schoolId)
-
-        if (students.size != request.studentIdList.size) {
-            throw StudentNotFoundException
-        }
 
         val pointHistories = pointService.getPointHistoriesByStudentsAndPointOptionAndSchoolId(
             students = students,

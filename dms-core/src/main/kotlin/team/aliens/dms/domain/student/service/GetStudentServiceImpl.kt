@@ -50,6 +50,7 @@ class GetStudentServiceImpl(
 
     override fun getStudentsWithPointHistory(studentIds: List<UUID>) =
         queryStudentPort.queryStudentsWithPointHistory(studentIds)
+            .apply { if (size != studentIds.size) throw StudentNotFoundException }
 
     override fun getStudentsBySchoolId(schoolId: UUID) =
         queryStudentPort.queryStudentsBySchoolId(schoolId)
