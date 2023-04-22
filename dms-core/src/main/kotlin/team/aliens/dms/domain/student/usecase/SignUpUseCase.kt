@@ -2,12 +2,9 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
-import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
@@ -68,7 +65,7 @@ class SignUpUseCase(
             number = number
         )
 
-        if (student.userId != null) {
+        if (student.hasUser) {
             throw StudentAlreadyExistsException
         }
 

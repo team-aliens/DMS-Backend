@@ -23,7 +23,7 @@ class CheckStudentGcnUseCase(
             number = request.number
         )
 
-        if (student.userId != null) {
+        if (student.hasUser) {
             throw StudentAlreadyExistsException
         }
 
