@@ -18,7 +18,7 @@ class GetStudentServiceImpl(
 
     override fun getCurrentStudent(): Student {
         val currentUserId = securityPort.getCurrentUserId()
-        return queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
+        return queryStudentPort.queryStudentByUserId(currentUserId) ?: throw StudentNotFoundException
     }
 
     override fun getStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int) =
