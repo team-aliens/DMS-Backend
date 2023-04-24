@@ -13,6 +13,6 @@ class UnApplySeatUseCase(
 
     fun execute(seatId: UUID, timeSlotId: UUID) {
         val student = studentService.getCurrentStudent()
-        commandStudyRoomPort.deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId, student.id, timeSlotId)
+        studyRoomService.deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId, student.id, timeSlotId)
     }
 }

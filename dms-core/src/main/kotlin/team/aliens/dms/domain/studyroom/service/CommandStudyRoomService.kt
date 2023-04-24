@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.studyroom.service
 
-import java.util.UUID
 import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
@@ -8,6 +7,7 @@ import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
+import java.util.UUID
 
 interface CommandStudyRoomService {
 

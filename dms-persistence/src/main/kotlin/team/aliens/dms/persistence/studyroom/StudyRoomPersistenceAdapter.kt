@@ -251,7 +251,11 @@ class StudyRoomPersistenceAdapter(
             )
         )
 
-    override fun existsTimeSlotByStartTimeAndEndTimeAndSchoolId(startTime: LocalTime, endTime: LocalTime, schoolId: UUID): Boolean =
+    override fun existsTimeSlotByStartTimeAndEndTimeAndSchoolId(
+        startTime: LocalTime,
+        endTime: LocalTime,
+        schoolId: UUID
+    ): Boolean =
         timeSlotRepository.existsByStartTimeAndEndTimeAndSchoolId(startTime, endTime, schoolId)
 
     override fun existsStudyRoomTimeSlotByTimeSlotId(timeSlotId: UUID) =

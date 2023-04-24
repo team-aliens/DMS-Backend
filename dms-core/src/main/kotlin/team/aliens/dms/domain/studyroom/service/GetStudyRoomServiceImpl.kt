@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.studyroom.service
 
-import java.io.File
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.school.validateSameSchool
@@ -23,6 +21,8 @@ import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
+import java.io.File
+import java.util.UUID
 
 @Service
 class GetStudyRoomServiceImpl(
