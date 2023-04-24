@@ -6,14 +6,13 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.user.service.UserService
 import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
     private val userService: UserService,
     private val schoolService: SchoolService,
-    private val studentService: StudentService,
     private val pointService: PointService
 ) {
 
