@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.school.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -26,5 +27,11 @@ data class School(
 ) {
     companion object {
         const val SCHOOL_CODE_SIZE: Int = 8
+    }
+
+    fun checkAnswer(answer: String) {
+        if (this.answer != answer) {
+            throw AnswerMismatchException
+        }
     }
 }

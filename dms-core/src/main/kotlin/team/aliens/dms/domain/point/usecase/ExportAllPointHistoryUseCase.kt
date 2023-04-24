@@ -6,9 +6,8 @@ import team.aliens.dms.domain.file.service.FileService
 import team.aliens.dms.domain.point.dto.ExportAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.service.PointService
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
@@ -16,14 +15,14 @@ import java.time.LocalDateTime
 class ExportAllPointHistoryUseCase(
     private val userService: UserService,
     private val pointService: PointService,
-    private val fileService: FileService,
-    private val querySchoolPort: QuerySchoolPort
+    private val schoolService: SchoolService,
+    private val fileService: FileService
 ) {
 
     fun execute(start: LocalDateTime?, end: LocalDateTime?): ExportAllPointHistoryResponse {
 
         val user = userService.getCurrentUser()
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolService.getSchoolById(user.schoolId)
 
         val endOrNow = end ?: LocalDateTime.now()
 
