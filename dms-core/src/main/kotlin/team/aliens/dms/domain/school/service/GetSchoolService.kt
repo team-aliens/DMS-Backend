@@ -5,6 +5,9 @@ import team.aliens.dms.domain.school.model.School
 import java.util.UUID
 
 interface GetSchoolService {
+
+    fun getSchoolById(schoolId: UUID): School
+
     fun queryAllSchools(): List<School>
 
     fun getAvailableFeaturesBySchoolId(schoolId: UUID): AvailableFeature

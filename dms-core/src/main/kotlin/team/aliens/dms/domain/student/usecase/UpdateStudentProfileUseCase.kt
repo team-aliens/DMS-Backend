@@ -1,20 +1,18 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.student.spi.CommandStudentPort
-import team.aliens.dms.domain.user.service.UserService
+import team.aliens.dms.domain.student.service.StudentService
 
 @UseCase
 class UpdateStudentProfileUseCase(
-    private val userService: UserService,
-    private val commandStudentPort: CommandStudentPort
+    private val studentService: StudentService
 ) {
 
     fun execute(profileImageUrl: String) {
 
-        val student = userService.getCurrentStudent()
+        val student = studentService.getCurrentStudent()
 
-        commandStudentPort.saveStudent(
+        studentService.saveStudent(
             student.copy(profileImageUrl = profileImageUrl)
         )
     }

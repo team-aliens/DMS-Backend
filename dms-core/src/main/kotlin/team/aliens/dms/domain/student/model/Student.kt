@@ -36,6 +36,9 @@ data class Student(
 
     val gcn: String = processGcn(this.grade, this.classRoom, this.number)
 
+    val hasUser: Boolean
+        get() = userId != null
+
     companion object {
         private const val DECIMAL_NUMBER = 10
         const val PROFILE_IMAGE = "https://image-dms.s3.ap-northeast-2.amazonaws.com/" +

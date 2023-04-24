@@ -2,12 +2,9 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.auth.exception.AuthCodeLimitNotFoundException
-import team.aliens.dms.domain.auth.exception.UnverifiedAuthCodeException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.school.exception.AnswerMismatchException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
@@ -16,10 +13,8 @@ import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.CommandStudentPort
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.model.User
 import team.aliens.dms.domain.user.service.UserService
 
@@ -33,8 +28,7 @@ import team.aliens.dms.domain.user.service.UserService
  **/
 @UseCase
 class SignUpUseCase(
-    private val commandStudentPort: CommandStudentPort,
-    private val queryStudentPort: QueryStudentPort,
+    private val studentService: StudentService,
     private val userService: UserService,
     private val querySchoolPort: QuerySchoolPort,
     private val authService: AuthService,
@@ -64,18 +58,18 @@ class SignUpUseCase(
             )
         )
 
-        val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = school.id,
             grade = grade,
             classRoom = classRoom,
             number = number
-        ) ?: throw StudentNotFoundException
+        )
 
-        if (student.userId != null) {
+        if (student.hasUser) {
             throw StudentAlreadyExistsException
         }
 
-        commandStudentPort.saveStudent(
+        studentService.saveStudent(
             student.copy(
                 userId = user.id,
                 profileImageUrl = profileImageUrl ?: Student.PROFILE_IMAGE
