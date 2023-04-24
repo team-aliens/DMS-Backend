@@ -1,13 +1,16 @@
-package team.aliens.dms.domain.tag.spi
+package team.aliens.dms.domain.tag.service
 
 import team.aliens.dms.domain.tag.model.StudentTag
+import team.aliens.dms.domain.tag.model.Tag
 import java.util.UUID
 
-interface CommandStudentTagPort {
+interface CommandTagService {
 
     fun deleteStudentTagById(studentId: UUID, tagId: UUID)
 
-    fun deleteStudentTagByTagId(tagId: UUID)
+    fun deleteStudentTagAndTagById(tagId: UUID)
+
+    fun saveTag(tag: Tag): Tag
 
     fun saveAllStudentTags(studentTags: List<StudentTag>)
 }

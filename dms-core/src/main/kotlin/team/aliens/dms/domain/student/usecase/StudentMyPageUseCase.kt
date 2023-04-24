@@ -4,22 +4,22 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.user.service.UserService
 import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
-    private val studentService: StudentService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val userService: UserService,
+    private val schoolService: SchoolService,
     private val pointService: PointService
 ) {
 
     fun execute(): StudentMyPageResponse {
-        val student = studentService.getCurrentStudent()
-        val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
+
+        val student = userService.getCurrentStudent()
+        val school = schoolService.getSchoolById(student.schoolId)
 
         val (bonusPoint, minusPoint) =
             pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)

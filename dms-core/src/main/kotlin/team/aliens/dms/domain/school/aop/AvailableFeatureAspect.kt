@@ -4,16 +4,15 @@ import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.exception.FeatureNotAvailableException
-import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.model.AvailableFeature
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 @Aspect
 class AvailableFeatureAspect(
     private val userService: UserService,
-    private val querySchoolPort: QuerySchoolPort
+    private val schoolService: SchoolService
 ) {
 
     @Before(
@@ -73,6 +72,6 @@ class AvailableFeatureAspect(
 
     private fun getAvailableFeature(): AvailableFeature {
         val user = userService.getCurrentUser()
-        return querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId) ?: throw FeatureNotFoundException
+        return schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
     }
 }
