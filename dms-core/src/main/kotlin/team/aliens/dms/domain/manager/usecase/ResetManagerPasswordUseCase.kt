@@ -2,10 +2,8 @@ package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
-import team.aliens.dms.domain.auth.spi.QueryAuthCodePort
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.exception.ManagerInfoMismatchException
 import team.aliens.dms.domain.user.checkUserAuthority

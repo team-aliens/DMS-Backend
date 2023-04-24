@@ -16,17 +16,17 @@ class CheckAuthCodeServiceImpl(
 
     override fun checkAuthCodeByEmailAndEmailType(email: String, type: EmailType, code: String) {
         (
-        queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type)
-            ?: throw AuthCodeNotFoundException
+            queryAuthCodePort.queryAuthCodeByEmailAndEmailType(email, type)
+                ?: throw AuthCodeNotFoundException
             )
             .apply { validateAuthCode(code) }
     }
 
     override fun checkAuthCodeByEmail(email: String, code: String) {
         (
-                queryAuthCodePort.queryAuthCodeByEmail(email)
-                    ?: throw AuthCodeNotFoundException
-                )
+            queryAuthCodePort.queryAuthCodeByEmail(email)
+                ?: throw AuthCodeNotFoundException
+            )
             .apply { validateAuthCode(code) }
     }
 
