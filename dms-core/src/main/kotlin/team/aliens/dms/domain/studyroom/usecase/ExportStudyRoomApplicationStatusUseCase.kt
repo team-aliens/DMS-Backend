@@ -2,8 +2,8 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.file.service.FileService
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
@@ -21,9 +21,9 @@ import java.util.UUID
 class ExportStudyRoomApplicationStatusUseCase(
     private val userService: UserService,
     private val schoolService: SchoolService,
+    private val fileService: FileService,
     private val queryStudentPort: QueryStudentPort,
-    private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val writeFilePort: WriteFilePort,
+    private val queryStudyRoomPort: QueryStudyRoomPort
 ) {
 
     fun execute(file: java.io.File?): ExportStudyRoomApplicationStatusResponse {
@@ -73,14 +73,14 @@ class ExportStudyRoomApplicationStatusUseCase(
         timeSlots: List<TimeSlot>,
         studentSeats: List<StudentSeatInfo>,
     ) = file?.let {
-        writeFilePort.addStudyRoomApplicationStatusExcelFile(
+        fileService.addStudyRoomApplicationStatusExcelFile(
             baseFile = file,
             timeSlots = timeSlots,
             studentSeatsMap = studentSeats.associateBy {
                 Pair(Student.processGcn(it.studentGrade, it.studentClassRoom, it.studentNumber), it.studentName)
             }
         )
-    } ?: writeFilePort.writeStudyRoomApplicationStatusExcelFile(
+    } ?: fileService.writeStudyRoomApplicationStatusExcelFile(
         timeSlots = timeSlots,
         studentSeats = studentSeats
     )

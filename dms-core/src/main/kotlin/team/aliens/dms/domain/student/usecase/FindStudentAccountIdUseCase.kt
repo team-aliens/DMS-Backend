@@ -5,8 +5,7 @@ import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
@@ -21,20 +20,22 @@ import java.util.UUID
  **/
 @ReadOnlyUseCase
 class FindStudentAccountIdUseCase(
-    private val queryStudentPort: QueryStudentPort,
+    private val studentService: StudentService,
     private val userService: UserService,
     private val sendEmailPort: SendEmailPort
 ) {
 
     fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
-        val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = schoolId,
             grade = request.grade,
             classRoom = request.classRoom,
             number = request.number
-        ) ?: throw StudentNotFoundException
+        )
 
-        val user = student.userId?.let { userService.queryUserById(it) } ?: throw UserNotFoundException
+        val user = student.userId?.let {
+            userService.queryUserById(it)
+        } ?: throw UserNotFoundException
 
         if (student.name != request.name) {
             throw StudentInfoMismatchException

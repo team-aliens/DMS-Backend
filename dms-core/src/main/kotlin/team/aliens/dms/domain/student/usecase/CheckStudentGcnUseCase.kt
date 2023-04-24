@@ -4,26 +4,25 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 
 @ReadOnlyUseCase
 class CheckStudentGcnUseCase(
     private val schoolService: SchoolService,
-    private val queryStudentPort: QueryStudentPort
+    private val studentService: StudentService
 ) {
 
     fun execute(request: CheckStudentGcnRequest): String {
         val school = schoolService.getSchoolById(request.schoolId)
 
-        val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = school.id,
             grade = request.grade,
             classRoom = request.classRoom,
             number = request.number
-        ) ?: throw StudentNotFoundException
+        )
 
-        if (student.userId != null) {
+        if (student.hasUser) {
             throw StudentAlreadyExistsException
         }
 

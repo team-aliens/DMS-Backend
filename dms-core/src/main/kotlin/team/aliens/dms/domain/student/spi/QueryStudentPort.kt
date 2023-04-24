@@ -9,8 +9,6 @@ import java.util.UUID
 
 interface QueryStudentPort {
 
-    fun existsStudentByGradeAndClassRoomAndNumber(grade: Int, classRoom: Int, number: Int): Boolean
-
     fun queryStudentBySchoolIdAndGcn(schoolId: UUID, grade: Int, classRoom: Int, number: Int): Student?
 
     fun queryStudentById(studentId: UUID): Student?
@@ -29,7 +27,7 @@ interface QueryStudentPort {
         tagIds: List<UUID>?
     ): List<StudentWithTag>
 
-    fun queryUserByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student>
+    fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student>
 
     fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO>
 

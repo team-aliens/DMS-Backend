@@ -2,8 +2,7 @@ package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.model.StudentTag
@@ -15,8 +14,8 @@ import java.time.LocalDateTime
 @UseCase
 class GrantTagUseCase(
     private val userService: UserService,
+    private val studentService: StudentService,
     private val queryTagPort: QueryTagPort,
-    private val queryStudentPort: QueryStudentPort,
     private val commandTagPort: CommandTagPort
 ) {
 
@@ -27,10 +26,7 @@ class GrantTagUseCase(
 
         validateSameSchool(user.schoolId, tag.schoolId)
 
-        val students = queryStudentPort.queryAllStudentsByIdsIn(request.studentIds)
-        if (!students.map { it.id }.containsAll(request.studentIds)) {
-            throw StudentNotFoundException
-        }
+        val students = studentService.getAllStudentsByIdsIn(request.studentIds)
 
         val studentTags = students.map {
             StudentTag(
