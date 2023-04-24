@@ -19,9 +19,7 @@ class CancelGrantedTagUseCase(
     fun execute(studentId: UUID, tagId: UUID) {
 
         val user = userService.getCurrentUser()
-        val tag = tagService.getTagById(tagId)
-
-        validateSameSchool(user.schoolId, tag.schoolId)
+        val tag = tagService.getTagById(tagId, user.schoolId)
 
         val student = studentService.getStudentById(studentId, user.schoolId)
 

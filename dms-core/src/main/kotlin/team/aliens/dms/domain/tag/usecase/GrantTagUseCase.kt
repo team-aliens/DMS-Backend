@@ -19,9 +19,7 @@ class GrantTagUseCase(
     fun execute(request: GrantTagRequest) {
 
         val user = userService.getCurrentUser()
-        val tag = tagService.getTagById(request.tagId)
-
-        validateSameSchool(user.schoolId, tag.schoolId)
+        val tag = tagService.getTagById(request.tagId, user.schoolId)
 
         val students = studentService.getAllStudentsByIdsIn(request.studentIds)
 

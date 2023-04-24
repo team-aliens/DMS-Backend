@@ -16,8 +16,7 @@ class RemoveTagUseCase(
 
         val user = userService.getCurrentUser()
 
-        val tag = tagService.getTagById(tagId)
-        validateSameSchool(user.schoolId, tag.schoolId)
+        val tag = tagService.getTagById(tagId, user.schoolId)
 
         tagService.deleteStudentTagAndTagById(tag.id)
     }
