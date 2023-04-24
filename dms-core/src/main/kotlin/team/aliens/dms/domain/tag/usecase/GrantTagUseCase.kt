@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.model.StudentTag
