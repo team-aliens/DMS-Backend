@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import java.io.File
@@ -12,6 +13,9 @@ import java.io.File
 class WriteFileServiceImpl(
     private val writeFilePort: WriteFilePort
 ) : WriteFileService {
+
+    override fun writeStudentExcelFile(students: List<Student>) =
+        writeFilePort.writeStudentExcelFile(students)
 
     override fun writePointHistoryExcelFile(pointHistories: List<PointHistory>) =
         writeFilePort.writePointHistoryExcelFile(pointHistories)
