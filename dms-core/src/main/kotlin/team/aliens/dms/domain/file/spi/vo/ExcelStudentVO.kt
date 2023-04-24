@@ -16,5 +16,11 @@ data class ExcelStudentVO(
 
     val name: String,
 
-    val sex: Sex,
-)
+    val sex: Sex
+) {
+    val tripleGcn
+        get() = Triple(grade, classRoom, number)
+
+    val pairRoomNumberAndLocation
+        get() = Pair(roomNumber, roomLocation)
+}

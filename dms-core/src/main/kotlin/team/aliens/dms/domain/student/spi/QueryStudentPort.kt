@@ -19,6 +19,10 @@ interface QueryStudentPort {
 
     fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean
 
+    fun queryBySchoolIdAndGcnIn(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): List<Student>
+
+    fun queryBySchoolIdAndRoomNumberAndRoomLocationIn(schoolId: UUID, roomNumberLocations: List<Pair<String, String>>): List<Student>
+
     fun queryStudentsByNameAndSortAndFilter(
         name: String?,
         sort: Sort,

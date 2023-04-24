@@ -1,16 +1,24 @@
 package team.aliens.dms.domain.manager
 
+import java.util.UUID
+import javax.validation.Valid
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import team.aliens.dms.common.extension.toFile
 import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
 import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
 import team.aliens.dms.domain.manager.dto.PointFilterType
@@ -25,10 +33,8 @@ import team.aliens.dms.domain.manager.usecase.QueryStudentDetailsUseCase
 import team.aliens.dms.domain.manager.usecase.QueryStudentsUseCase
 import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
-import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
+import team.aliens.dms.domain.manager.usecase.UpdateStudentGcnByFileUseCase
+import team.aliens.dms.domain.manager.usecase.UpdateStudentRoomByFileUseCase
 
 @Validated
 @RequestMapping("/managers")
@@ -39,7 +45,9 @@ class ManagerWebAdapter(
     private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
     private val queryStudentsUseCase: QueryStudentsUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
-    private val managerMyPageUseCase: ManagerMyPageUseCase
+    private val managerMyPageUseCase: ManagerMyPageUseCase,
+    private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
+    private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase
 ) {
 
     @GetMapping("/account-id/{school-id}")
@@ -101,5 +109,17 @@ class ManagerWebAdapter(
     @GetMapping("/profile")
     fun myPage(): ManagerMyPageResponse {
         return managerMyPageUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/students/file/room")
+    fun updateStudentRoomByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentRoomByFileUseCase.execute(file!!.toFile())
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/students/file/gcn")
+    fun updateStudentGcnByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentGcnByFileUseCase.execute(file!!.toFile())
     }
 }

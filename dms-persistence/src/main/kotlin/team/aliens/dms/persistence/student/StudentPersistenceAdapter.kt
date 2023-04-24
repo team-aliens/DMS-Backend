@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -32,7 +33,6 @@ import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpa
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
-import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -101,6 +101,51 @@ class StudentPersistenceAdapter(
                 studentMapper.toEntity(it)
             }
         )
+    }
+
+    override fun queryBySchoolIdAndGcnIn(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): List<Student> {
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
+            .where(
+                roomJpaEntity.school.id.eq(schoolId),
+                Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
+                    .`in`(*queryStudentGcnIn(gcnList))
+            )
+            .fetch()
+            .mapNotNull { studentMapper.toDomain(it) }
+    }
+
+    override fun queryBySchoolIdAndRoomNumberAndRoomLocationIn(
+        schoolId: UUID,
+        roomNumberLocations: List<Pair<String, String>>
+    ): List<Student> {
+
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
+            .where(
+                roomJpaEntity.school.id.eq(schoolId),
+                Expressions.list(roomJpaEntity.number, studentJpaEntity.roomLocation)
+                    .`in`(*queryRoomNumberAndRoomLocationIn(roomNumberLocations))
+            )
+            .fetch()
+            .mapNotNull { studentMapper.toDomain(it) }
+    }
+
+    private fun queryRoomNumberAndRoomLocationIn(roomNumberLocations: List<Pair<String, String>>): Array<Expression<Tuple>> {
+        val tuple: MutableList<Expression<Tuple>> = ArrayList()
+        for (roomNumberLocation in roomNumberLocations) {
+            tuple.add(
+                Expressions.template(
+                    Tuple::class.java,
+                    "(({0}, {1}))",
+                    roomNumberLocation.first, roomNumberLocation.second
+                )
+            )
+        }
+
+        return tuple.toTypedArray()
     }
 
     override fun queryStudentsByNameAndSortAndFilter(
