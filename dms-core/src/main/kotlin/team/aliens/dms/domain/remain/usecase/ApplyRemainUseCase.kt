@@ -18,8 +18,8 @@ class ApplyRemainUseCase(
         val user = userService.getCurrentUser()
 
         val remainOption = remainService.getRemainOptionById(remainOptionId, user.schoolId)
-        val remainAvailableTime = remainService.getRemainAvailableTimeBySchoolId(user.schoolId)
-        remainAvailableTime.checkAvailable()
+        remainService.getRemainAvailableTimeBySchoolId(user.schoolId)
+            .apply { checkAvailable() }
 
         remainService.saveRemainStatus(
             RemainStatus(
