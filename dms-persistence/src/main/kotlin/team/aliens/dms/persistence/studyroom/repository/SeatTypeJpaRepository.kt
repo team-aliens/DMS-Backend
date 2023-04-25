@@ -10,5 +10,5 @@ interface SeatTypeJpaRepository : CrudRepository<SeatTypeJpaEntity, UUID> {
 
     fun findAllBySchoolId(schoolId: UUID): List<SeatTypeJpaEntity>
 
-    fun existsByName(name: String): Boolean
+    fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 }

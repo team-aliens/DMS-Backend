@@ -1,44 +1,38 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.StudentElement
 import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomResponse.SeatElement.TypeElement
-import team.aliens.dms.domain.studyroom.exception.StudyRoomNotFoundException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.exception.TimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
     private val userService: UserService,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val studyRoomService: StudyRoomService
 ) {
 
     fun execute(studyRoomId: UUID, timeSlotId: UUID): ManagerQueryStudyRoomResponse {
 
         val user = userService.getCurrentUser()
+        val studyRoom = studyRoomService.getStudyRoom(studyRoomId, user.schoolId)
 
-        val studyRoom = queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
-        validateSameSchool(user.schoolId, studyRoom.schoolId)
-
-        val timeSlot = queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
-        validateSameSchool(user.schoolId, timeSlot.schoolId)
-
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(user.schoolId, studyRoom.id)
-            .apply {
-                if (none { it.id == timeSlotId }) {
-                    throw StudyRoomTimeSlotNotFoundException
-                }
+        val timeSlots = studyRoomService.getTimeSlots(
+            schoolId = user.schoolId,
+            studyRoomId = studyRoom.id
+        ).apply {
+            if (none { it.id == timeSlotId }) {
+                throw StudyRoomTimeSlotNotFoundException
             }
+        }
 
         val seats =
-            queryStudyRoomPort.queryAllSeatApplicationVOsByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId).map {
+            studyRoomService.getSeatApplicationVOs(studyRoomId, timeSlotId).map {
                 SeatElement(
                     id = it.seatId,
                     widthLocation = it.widthLocation,

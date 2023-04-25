@@ -17,6 +17,8 @@ interface SeatApplicationJpaRepository : CrudRepository<SeatApplicationJpaEntity
 
     fun deleteByTimeSlotId(timeSlotId: UUID)
 
+    fun deleteByStudentIdAndSeatIdAndTimeSlotId(studentId: UUID, seatId: UUID, timeSlotId: UUID)
+
     fun deleteByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID)
 
     fun deleteBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, studentId: UUID, timeSlotId: UUID)
