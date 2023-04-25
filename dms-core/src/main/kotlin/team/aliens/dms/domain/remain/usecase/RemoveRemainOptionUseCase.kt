@@ -1,32 +1,22 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
-import team.aliens.dms.domain.remain.spi.CommandRemainOptionPort
-import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
-import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
-import team.aliens.dms.domain.school.validateSameSchool
+import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class RemoveRemainOptionUseCase(
     private val userService: UserService,
-    private val queryRemainOptionPort: QueryRemainOptionPort,
-    private val commandRemainOptionPort: CommandRemainOptionPort,
-    private val commandRemainStatusPort: CommandRemainStatusPort
+    private val remainService: RemainService
 ) {
 
     fun execute(remainOptionId: UUID) {
 
         val user = userService.getCurrentUser()
 
-        val remainOption = queryRemainOptionPort.queryRemainOptionById(remainOptionId)
-            ?: throw RemainOptionNotFoundException
+        val remainOption = remainService.getRemainOptionById(remainOptionId, user.schoolId)
 
-        validateSameSchool(remainOption.schoolId, user.schoolId)
-
-        commandRemainStatusPort.deleteRemainStatusByRemainOptionId(remainOption.id)
-        commandRemainOptionPort.deleteRemainOption(remainOption)
+        remainService.deleteRemainOption(remainOption)
     }
 }

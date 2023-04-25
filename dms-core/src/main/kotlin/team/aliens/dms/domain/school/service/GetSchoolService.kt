@@ -6,9 +6,11 @@ import java.util.UUID
 
 interface GetSchoolService {
 
+    fun getAllSchools(): List<School>
+
     fun getSchoolById(schoolId: UUID): School
 
-    fun queryAllSchools(): List<School>
+    fun getSchoolByCode(code: String): School
 
     fun getAvailableFeaturesBySchoolId(schoolId: UUID): AvailableFeature
 }

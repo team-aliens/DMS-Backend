@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.remain.spi.CommandRemainStatusPort
+import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.user.service.UserService
@@ -10,9 +10,9 @@ import java.util.UUID
 @UseCase
 class RemoveStudentUseCase(
     private val userService: UserService,
+    private val remainService: RemainService,
+    private val commandStudyRoomPort: CommandStudyRoomPort,
     private val studentService: StudentService,
-    private val commandRemainStatusPort: CommandRemainStatusPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(studentId: UUID) {
@@ -20,7 +20,7 @@ class RemoveStudentUseCase(
         val user = userService.getCurrentUser()
         val student = studentService.getStudentById(studentId, user.schoolId)
 
-        commandRemainStatusPort.deleteByStudentId(studentId)
+        remainService.deleteRemainStatusByStudentId(studentId)
         commandStudyRoomPort.deleteSeatApplicationByStudentId(studentId)
 
         studentService.deleteStudent(student)

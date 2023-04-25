@@ -107,6 +107,28 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         }
     }
 
+    override fun writeStudentExcelFile(students: List<Student>): ByteArray {
+
+        val attributes = listOf("학년", "반", "번호", "성별 (ex. 남, 여)", "이름", "호실번호 (ex. 301,  501)", "호실자리위치 (ex. A, B, C)")
+
+        val studentsList: List<List<String>> = students.map {
+            listOf(
+                it.grade.toString(),
+                it.classRoom.toString(),
+                it.number.toString(),
+                it.sex.korean,
+                it.name,
+                it.roomNumber,
+                it.roomLocation
+            )
+        }
+
+        return createExcelSheet(
+            attributes = attributes,
+            datasList = studentsList
+        )
+    }
+
     override fun writePointHistoryExcelFile(pointHistories: List<PointHistory>): ByteArray {
 
         val attributes = listOf("날짜", "학생 이름", "학번", "항목", "상/벌점", "부여 점수")
