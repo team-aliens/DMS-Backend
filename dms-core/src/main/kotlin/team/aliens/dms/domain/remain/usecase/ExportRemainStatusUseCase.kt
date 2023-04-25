@@ -2,13 +2,12 @@ package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.file.service.FileService
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
@@ -16,16 +15,16 @@ import java.time.LocalDateTime
 @ReadOnlyUseCase
 class ExportRemainStatusUseCase(
     private val userService: UserService,
-    private val studentService: StudentService,
-    private val querySchoolPort: QuerySchoolPort,
+    private val schoolService: SchoolService,
     private val queryRemainStatusPort: QueryRemainStatusPort,
-    private val writeFilePort: WriteFilePort
+    private val studentService: StudentService,
+    private val fileService: FileService
 ) {
 
     fun execute(): ExportRemainStatusResponse {
 
         val user = userService.getCurrentUser()
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolService.getSchoolById(user.schoolId)
 
         val students = studentService.getStudentsBySchoolId(user.schoolId)
 
@@ -44,7 +43,7 @@ class ExportRemainStatusUseCase(
         }
 
         return ExportRemainStatusResponse(
-            file = writeFilePort.writeRemainStatusExcelFile(studentRemainInfos),
+            file = fileService.writeRemainStatusExcelFile(studentRemainInfos),
             fileName = getFileName(school)
         )
     }

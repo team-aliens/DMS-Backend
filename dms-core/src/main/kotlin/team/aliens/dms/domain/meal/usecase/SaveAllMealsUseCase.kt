@@ -16,7 +16,7 @@ class SaveAllMealsUseCase(
     fun execute() {
         val meals = mutableListOf<Meal>()
 
-        schoolService.queryAllSchools().map { school ->
+        schoolService.getAllSchools().map { school ->
             val neisSchool = feignService.getNeisSchoolInfo(
                 schoolName = school.name,
                 schoolAddress = school.address

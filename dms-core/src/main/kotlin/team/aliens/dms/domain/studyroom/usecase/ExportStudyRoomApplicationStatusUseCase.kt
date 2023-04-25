@@ -1,19 +1,18 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.time.LocalDateTime
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.studyroom.dto.ExportStudyRoomApplicationStatusResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
-import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportStudyRoomApplicationStatusUseCase(
     private val userService: UserService,
     private val studyRoomService: StudyRoomService,
-    private val querySchoolPort: QuerySchoolPort
+    private val schoolService: SchoolService
 ) {
 
     fun execute(file: java.io.File?): ExportStudyRoomApplicationStatusResponse {
@@ -22,8 +21,7 @@ class ExportStudyRoomApplicationStatusUseCase(
 
         val timeSlots = studyRoomService.getTimeSlots(user.schoolId)
         val studentSeats = studyRoomService.getStudentSeatInfos(user.schoolId)
-
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolService.getSchoolById(user.schoolId)
 
         return ExportStudyRoomApplicationStatusResponse(
             file = studyRoomService.getStudyRoomApplicationStatusFile(
