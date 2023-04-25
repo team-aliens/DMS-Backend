@@ -10,7 +10,7 @@ class CheckSchoolAnswerUseCase(
 ) {
 
     fun execute(schoolId: UUID, answer: String) {
-        val school = schoolService.getSchoolById(schoolId)
-        school.checkAnswer(answer)
+        schoolService.getSchoolById(schoolId)
+            .apply { checkAnswer(answer) }
     }
 }
