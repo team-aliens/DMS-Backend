@@ -36,6 +36,7 @@ data class StudyRoom(
     val northDescription: String
 
 ) {
+
     fun checkIsAvailableGradeAndSex(grade: Int, sex: Sex) {
         if (availableGrade != 0 && availableGrade != grade) {
             throw StudyRoomAvailableGradeMismatchException

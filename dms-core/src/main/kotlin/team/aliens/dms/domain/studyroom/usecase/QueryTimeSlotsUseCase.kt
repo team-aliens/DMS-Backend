@@ -2,18 +2,18 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.QueryTimeSlotsResponse
-import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryTimeSlotsUseCase(
     private val userService: UserService,
-    private val queryStudyRoomPort: QueryStudyRoomPort
+    private val studyRoomService: StudyRoomService
 ) {
     fun execute(): QueryTimeSlotsResponse {
 
         val user = userService.getCurrentUser()
-        val timeSlots = queryStudyRoomPort.queryTimeSlotsBySchoolId(user.schoolId)
+        val timeSlots = studyRoomService.getTimeSlots(user.schoolId)
 
         return QueryTimeSlotsResponse(
             timeSlots = timeSlots.map {

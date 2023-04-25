@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.studyroom.spi
+package team.aliens.dms.domain.studyroom.service
 
 import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
@@ -9,43 +9,39 @@ import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import java.util.UUID
 
-interface CommandStudyRoomPort {
+interface CommandStudyRoomService {
 
-    fun saveAllSeats(seats: List<Seat>): List<Seat>
+    fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
+
+    fun saveSeatType(seatType: SeatType): SeatType
 
     fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot
 
     fun saveSeatApplication(seatApplication: SeatApplication): SeatApplication
 
-    fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
-
     fun saveAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>): List<StudyRoomTimeSlot>
+
+    fun saveAllSeats(seats: List<Seat>): List<Seat>
 
     fun saveAvailableTime(availableTime: AvailableTime): AvailableTime
 
-    fun saveSeatType(seatType: SeatType): SeatType
+    fun deleteStudyRoom(studyRoomId: UUID)
 
-    fun deleteStudyRoomById(studyRoomId: UUID)
+    fun deleteTimeSlot(timeSlotId: UUID)
 
-    fun deleteTimeSlotById(timeSlotId: UUID)
+    fun deleteSeatApplication(studentId: UUID, seatId: UUID, timeSlotId: UUID)
 
-    fun deleteSeatApplicationByStudyRoomId(studyRoomId: UUID)
+    fun deleteSeatType(seatTypeId: UUID, schoolId: UUID)
 
     fun deleteSeatByStudyRoomId(studyRoomId: UUID)
 
     fun deleteAllSeatApplications()
 
-    fun deleteSeatType(seatType: SeatType)
-
-    fun deleteSeatApplicationByStudentIdAndSeatIdAndTimeSlotId(studentId: UUID, seatId: UUID, timeSlotId: UUID)
-
-    fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID)
-
-    fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, studentId: UUID, timeSlotId: UUID)
-
-    fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID)
+    fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, id: UUID, timeSlotId: UUID)
 
     fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID)
 
-    fun deleteSeatApplicationByStudentId(studentId: UUID)
+    fun updateTimeSlotsByStudyRoom(studyRoomId: UUID, studyRoomTimeSlots: List<StudyRoomTimeSlot>)
+
+    fun updateSeatsByStudyRoom(studyRoomId: UUID, seats: List<Seat>)
 }
