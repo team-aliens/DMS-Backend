@@ -16,8 +16,8 @@ class FindManagerAccountIdUseCase(
 ) {
 
     fun execute(schoolId: UUID, answer: String): String {
-        val school = schoolService.getSchoolById(schoolId)
-        school.checkAnswer(answer)
+        schoolService.getSchoolById(schoolId)
+            .apply { checkAnswer(answer) }
 
         val user = userService.queryUserBySchoolIdAndAuthority(schoolId, Authority.MANAGER)
 

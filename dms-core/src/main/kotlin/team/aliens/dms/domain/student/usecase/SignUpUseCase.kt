@@ -5,7 +5,6 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.SignUpRequest
 import team.aliens.dms.domain.student.dto.SignUpResponse
@@ -96,12 +95,10 @@ class SignUpUseCase(
         )
     }
 
-    private fun validateSchool(schoolCode: String, schoolAnswer: String): School {
-        val school = schoolService.getSchoolByCode(schoolCode)
-        school.checkAnswer(schoolAnswer)
+    private fun validateSchool(schoolCode: String, schoolAnswer: String) =
+        schoolService.getSchoolByCode(schoolCode)
+            .apply { checkAnswer(schoolAnswer) }
 
-        return school
-    }
 
     private fun validateUserDuplicated(accountId: String, email: String) {
         userService.checkUserNotExistsByAccountId(accountId)
