@@ -22,7 +22,10 @@ class UpdateStudentGcnByFileUseCase(
         ).associateBy { Pair(it.roomNumber, it.roomLocation) }
 
         studentService.saveAllStudent(
-            students = studentService.getGcnUpdatedStudent(studentMap, parsedStudentVOs)
+            students = studentService.getGcnUpdatedStudent(
+                studentMap = studentMap,
+                studentVOs = parsedStudentVOs
+            )
         )
     }
 }

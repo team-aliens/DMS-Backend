@@ -29,7 +29,11 @@ class UpdateStudentRoomByFileUseCase(
         ).associateBy { Triple(it.grade, it.classRoom, it.number) }
 
         studentService.saveAllStudent(
-            students = studentService.getRoomUpdatedStudent(roomMap, studentMap, parsedStudentVOs)
+            students = studentService.getRoomUpdatedStudent(
+                roomMap = roomMap,
+                studentMap = studentMap,
+                studentVOs = parsedStudentVOs
+            )
         )
     }
 }
