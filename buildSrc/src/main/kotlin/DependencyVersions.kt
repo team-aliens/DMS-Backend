@@ -13,4 +13,5 @@ object DependencyVersions {
     const val MOCKK_VERSION = "1.13.2"
     const val OPEN_FEIGN_VERSION = "3.1.4"
     const val SENTRY_VERSION = "6.2.1"
+    const val ASPECTJ_VERSION = "1.9.7"
 }
