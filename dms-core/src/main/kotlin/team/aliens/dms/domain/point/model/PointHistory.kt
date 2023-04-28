@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.point.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.exception.PointHistoryCanNotCancelException
 import java.time.LocalDateTime
@@ -29,9 +30,9 @@ data class PointHistory(
 
     val createdAt: LocalDateTime,
 
-    val schoolId: UUID
+    override val schoolId: UUID
 
-) {
+) : SchoolIdDomain {
 
     companion object {
         fun getTotalPoint(type: PointRequestType, bonusTotal: Int, minusTotal: Int): Int {
