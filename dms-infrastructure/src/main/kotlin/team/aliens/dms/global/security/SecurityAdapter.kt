@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.global.security.principle.CustomDetails
 import java.util.UUID
 
 @Component
@@ -12,7 +13,11 @@ class SecurityAdapter(
 ) : SecurityPort {
 
     override fun getCurrentUserId(): UUID {
-        return UUID.fromString(SecurityContextHolder.getContext().authentication.name)
+        return (SecurityContextHolder.getContext().authentication.principal as CustomDetails).userId
+    }
+
+    override fun getCurrentUserSchoolId(): UUID {
+        return (SecurityContextHolder.getContext().authentication.principal as CustomDetails).schoolId
     }
 
     override fun isPasswordMatch(rawPassword: String, encodedPassword: String) = passwordEncoder.matches(

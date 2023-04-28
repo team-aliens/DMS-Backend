@@ -8,5 +8,7 @@ interface SecurityPort {
 
     fun getCurrentUserId(): UUID
 
+    fun getCurrentUserSchoolId(): UUID
+
     fun encodePassword(password: String): String
 }

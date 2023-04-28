@@ -3,20 +3,23 @@ package team.aliens.dms.global.security.principle
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.manager.spi.QueryManagerPort
+import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import java.util.UUID
 
 @Component
 class ManagerDetailsService(
-    private val queryManagerPort: QueryManagerPort
+    private val queryUserPort: QueryUserPort
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        val managerId = UUID.fromString(username)
-        if (!queryManagerPort.existsManagerById(managerId)) {
-            throw InvalidTokenException
+        queryUserPort.queryUserById(UUID.fromString(username)).apply {
+            if (this == null || authority != Authority.MANAGER) throw InvalidTokenException
+            return ManagerDetails(
+                userId = id,
+                schoolId = schoolId
+            )
         }
-        return ManagerDetails(managerId)
     }
 }
