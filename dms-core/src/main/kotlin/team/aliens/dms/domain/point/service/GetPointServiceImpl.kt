@@ -24,7 +24,7 @@ class GetPointServiceImpl(
     override fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int) =
         queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type, standardPoint)
 
-    override fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID) =
+    override fun getPointHistoryById(pointHistoryId: UUID) =
         queryPointHistoryPort.queryPointHistoryById(pointHistoryId) ?: throw PointHistoryNotFoundException
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(gcn: String, studentName: String) =

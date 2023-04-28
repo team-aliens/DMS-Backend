@@ -37,7 +37,7 @@ class GetStudentServiceImpl(
         roomNumberLocations: List<Pair<String, String>>,
     ) = queryStudentPort.queryBySchoolIdAndRoomNumberAndRoomLocationIn(schoolId, roomNumberLocations)
 
-    override fun getStudentById(studentId: UUID, schoolId: UUID) =
+    override fun getStudentById(studentId: UUID) =
         queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
 
     override fun getStudentByUserId(userId: UUID) =

@@ -1,29 +1,29 @@
 package team.aliens.dms.domain.remain.usecase
 
+import java.time.LocalDateTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.remain.model.RemainStatus
 import team.aliens.dms.domain.remain.service.RemainService
-import team.aliens.dms.domain.user.service.UserService
-import java.time.LocalDateTime
-import java.util.UUID
+import team.aliens.dms.domain.student.service.StudentService
 
 @UseCase
 class ApplyRemainUseCase(
-    private val userService: UserService,
+    private val studentService: StudentService,
     private val remainService: RemainService
 ) {
 
     fun execute(remainOptionId: UUID) {
 
-        val user = userService.getCurrentUser()
+        val student = studentService.getCurrentStudent()
 
-        val remainOption = remainService.getRemainOptionById(remainOptionId, user.schoolId)
-        remainService.getRemainAvailableTimeBySchoolId(user.schoolId)
+        val remainOption = remainService.getRemainOptionById(remainOptionId)
+        remainService.getRemainAvailableTimeBySchoolId(student.schoolId)
             .apply { checkAvailable() }
 
         remainService.saveRemainStatus(
             RemainStatus(
-                id = user.id,
+                id = student.id,
                 remainOptionId = remainOption.id,
                 createdAt = LocalDateTime.now()
             )
