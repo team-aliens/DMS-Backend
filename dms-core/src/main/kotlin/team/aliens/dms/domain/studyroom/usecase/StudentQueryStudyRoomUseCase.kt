@@ -20,9 +20,9 @@ class StudentQueryStudyRoomUseCase(
 
         val student = studentService.getCurrentStudent()
 
-        val studyRoom = studyRoomService.getStudyRoom(studyRoomId, student.schoolId)
+        val studyRoom = studyRoomService.getStudyRoom(studyRoomId)
 
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, student.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
         studyRoomService.checkStudyRoomTimeSlotExistsById(studyRoomId, timeSlotId)
 
         val seats = studyRoomService.getSeatApplicationVOs(studyRoomId, timeSlotId).map {

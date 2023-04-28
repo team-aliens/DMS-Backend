@@ -19,11 +19,11 @@ class ApplySeatUseCase(
         val seat = studyRoomService.getSeatById(seatId)
             .apply { checkAvailable() }
 
-        val studyRoom = studyRoomService.getStudyRoom(seat.studyRoomId, student.schoolId)
+        val studyRoom = studyRoomService.getStudyRoom(seat.studyRoomId)
             .apply { checkIsAvailableGradeAndSex(student.grade, student.sex) }
         studyRoomService.checkStudyRoomApplicationTimeAvailable(studyRoom.schoolId)
 
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, student.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
 
         studyRoomService.saveSeatApplication(
             SeatApplication(

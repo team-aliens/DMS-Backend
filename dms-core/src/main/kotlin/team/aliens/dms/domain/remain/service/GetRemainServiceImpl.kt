@@ -8,7 +8,6 @@ import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.school.validateSameSchool
 import java.util.UUID
 
 @Service
@@ -22,10 +21,8 @@ class GetRemainServiceImpl(
         queryRemainAvailableTimePort.queryRemainAvailableTimeBySchoolId(schoolId)
             ?: throw RemainAvailableTimeNotFoundException
 
-    override fun getRemainOptionById(remainOptionId: UUID, schoolId: UUID): RemainOption {
-        return (queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException)
-            .apply { validateSameSchool(this.schoolId, schoolId) }
-    }
+    override fun getRemainOptionById(remainOptionId: UUID, schoolId: UUID) =
+        queryRemainOptionPort.queryRemainOptionById(remainOptionId) ?: throw RemainOptionNotFoundException
 
     override fun getAllRemainOptionsBySchoolId(schoolId: UUID) =
         queryRemainOptionPort.queryAllRemainOptionsBySchoolId(schoolId)

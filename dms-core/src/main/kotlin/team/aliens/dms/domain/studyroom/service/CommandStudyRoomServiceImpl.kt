@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.studyroom.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeInUseException
@@ -85,7 +84,6 @@ class CommandStudyRoomServiceImpl(
 
     override fun deleteSeatType(seatTypeId: UUID, schoolId: UUID) {
         val seatType = queryStudyRoomPort.querySeatTypeById(seatTypeId) ?: throw SeatTypeNotFoundException
-        validateSameSchool(schoolId, seatType.schoolId)
 
         if (queryStudyRoomPort.existsSeatBySeatTypeId(seatTypeId)) {
             throw SeatTypeInUseException

@@ -1,8 +1,9 @@
 package team.aliens.dms.domain.studyroom.service
 
+import java.io.File
+import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
-import team.aliens.dms.domain.school.validateSameSchool
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
@@ -21,8 +22,6 @@ import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
-import java.io.File
-import java.util.UUID
 
 @Service
 class GetStudyRoomServiceImpl(
@@ -31,20 +30,16 @@ class GetStudyRoomServiceImpl(
     private val writeFilePort: WriteFilePort,
 ) : GetStudyRoomService {
 
-    override fun getStudyRoom(studyRoomId: UUID, schoolId: UUID): StudyRoom {
-        return (queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw TimeSlotNotFoundException)
-            .apply { validateSameSchool(this.schoolId, schoolId) }
-    }
+    override fun getStudyRoom(studyRoomId: UUID) =
+        queryStudyRoomPort.queryStudyRoomById(studyRoomId) ?: throw StudyRoomNotFoundException
 
     override fun getStudyRoomBySeatId(seatId: UUID): StudyRoom {
         val seat = queryStudyRoomPort.querySeatById(seatId) ?: throw SeatNotFoundException
         return queryStudyRoomPort.queryStudyRoomById(seat.studyRoomId) ?: throw StudyRoomNotFoundException
     }
 
-    override fun getTimeSlot(timeSlotId: UUID, schoolId: UUID): TimeSlot {
-        return (queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException)
-            .apply { validateSameSchool(this.schoolId, schoolId) }
-    }
+    override fun getTimeSlot(timeSlotId: UUID) =
+        queryStudyRoomPort.queryTimeSlotById(timeSlotId) ?: throw TimeSlotNotFoundException
 
     override fun getTimeSlots(schoolId: UUID, studyRoomId: UUID?): List<TimeSlot> {
         return queryStudyRoomPort.queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId, studyRoomId)

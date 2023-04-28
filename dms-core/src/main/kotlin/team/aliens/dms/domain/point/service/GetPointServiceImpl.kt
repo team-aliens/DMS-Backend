@@ -11,7 +11,6 @@ import team.aliens.dms.domain.point.spi.QueryPhrasePort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
-import team.aliens.dms.domain.school.validateSameSchool
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -25,10 +24,8 @@ class GetPointServiceImpl(
     override fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int) =
         queryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(type, standardPoint)
 
-    override fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID): PointHistory {
-        return (queryPointHistoryPort.queryPointHistoryById(pointHistoryId) ?: throw PointHistoryNotFoundException)
-            .apply { validateSameSchool(this.schoolId, schoolId) }
-    }
+    override fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID) =
+        queryPointHistoryPort.queryPointHistoryById(pointHistoryId) ?: throw PointHistoryNotFoundException
 
     override fun queryBonusAndMinusTotalPointByStudentGcnAndName(gcn: String, studentName: String) =
         queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, studentName)
@@ -69,10 +66,8 @@ class GetPointServiceImpl(
         endAt = endAt
     )
 
-    override fun getPointOptionById(pointOptionId: UUID, schoolId: UUID): PointOption {
-        return (queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException)
-            .apply { validateSameSchool(this.schoolId, schoolId) }
-    }
+    override fun getPointOptionById(pointOptionId: UUID, schoolId: UUID) =
+        queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException
 
     override fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?) =
         queryPointOptionPort.queryPointOptionsBySchoolIdAndKeyword(schoolId, keyword)

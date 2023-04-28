@@ -15,11 +15,11 @@ import java.util.UUID
 
 interface GetStudyRoomService {
 
-    fun getStudyRoom(studyRoomId: UUID, schoolId: UUID): StudyRoom
+    fun getStudyRoom(studyRoomId: UUID): StudyRoom
 
     fun getStudyRoomBySeatId(seatId: UUID): StudyRoom
 
-    fun getTimeSlot(timeSlotId: UUID, schoolId: UUID): TimeSlot
+    fun getTimeSlot(timeSlotId: UUID): TimeSlot
 
     fun getTimeSlots(schoolId: UUID, studyRoomId: UUID? = null): List<TimeSlot>
 
