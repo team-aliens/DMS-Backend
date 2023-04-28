@@ -17,9 +17,10 @@ class QueryNoticeDetailsUseCase(
         val user = userService.getCurrentUser()
         val notice = noticeService.getNoticeById(noticeId)
 
-        val writer = userService.queryUserById(notice.managerId)
-        if (user.schoolId != writer.schoolId) {
-            throw SchoolMismatchException
+        userService.queryUserById(notice.managerId).let { writer ->
+            if (user.schoolId != writer.schoolId) {
+                throw SchoolMismatchException
+            }
         }
 
         return QueryNoticeDetailsResponse(
