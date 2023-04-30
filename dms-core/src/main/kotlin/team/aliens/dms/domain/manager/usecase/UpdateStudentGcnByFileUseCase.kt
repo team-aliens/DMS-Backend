@@ -18,7 +18,7 @@ class UpdateStudentGcnByFileUseCase(
 
         val studentMap = studentService.getStudentsByRoomNumberAndRoomLocationIn(
             schoolId = user.schoolId,
-            roomNumberLocations = parsedStudentVOs.map { it.pairRoomNumberAndLocation  }
+            roomNumberLocations = parsedStudentVOs.map { it.pairRoomNumberAndLocation }
         ).associateBy { Pair(it.roomNumber, it.roomLocation) }
 
         studentService.saveAllStudent(

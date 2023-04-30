@@ -99,7 +99,6 @@ class SignUpUseCase(
         schoolService.getSchoolByCode(schoolCode)
             .apply { checkAnswer(schoolAnswer) }
 
-
     private fun validateUserDuplicated(accountId: String, email: String) {
         userService.checkUserNotExistsByAccountId(accountId)
         userService.checkUserNotExistsByEmail(email)

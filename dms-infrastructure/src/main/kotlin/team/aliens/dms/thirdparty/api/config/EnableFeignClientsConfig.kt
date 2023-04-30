@@ -9,7 +9,7 @@ import team.aliens.dms.thirdparty.api.error.FeignClientErrorDecoder
 
 @EnableFeignClients(basePackages = ["team.aliens.dms.thirdparty.api"])
 @Configuration
-class EnableFeignClientsConfiguration {
+class EnableFeignClientsConfig {
 
     @Bean
     @ConditionalOnMissingBean(value = [ErrorDecoder::class])
