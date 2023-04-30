@@ -16,4 +16,4 @@ import team.aliens.dms.thirdparty.storage.AwsS3Properties
     ]
 )
 @Configuration
-class PropertiesScanConfiguration
+class PropertiesScanConfig
