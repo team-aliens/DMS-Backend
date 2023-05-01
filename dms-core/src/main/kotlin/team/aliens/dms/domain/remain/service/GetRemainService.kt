@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.remain.service
 
-import java.util.UUID
 import team.aliens.dms.domain.remain.dto.RemainStatusInfo
 import team.aliens.dms.domain.remain.model.RemainAvailableTime
 import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.model.RemainStatus
+import java.util.UUID
 
 interface GetRemainService {
 

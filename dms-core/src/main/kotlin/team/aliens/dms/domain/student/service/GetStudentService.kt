@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.service
 
-import java.util.UUID
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
@@ -8,6 +7,7 @@ import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.student.model.Student
+import java.util.UUID
 
 interface GetStudentService {
 

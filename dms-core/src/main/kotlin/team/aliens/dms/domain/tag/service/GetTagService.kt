@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.tag.service
 
-import java.util.UUID
 import team.aliens.dms.domain.tag.model.Tag
+import java.util.UUID
 
 interface GetTagService {
 

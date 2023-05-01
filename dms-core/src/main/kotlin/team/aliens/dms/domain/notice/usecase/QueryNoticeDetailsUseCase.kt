@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.notice.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.service.UserService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryNoticeDetailsUseCase(

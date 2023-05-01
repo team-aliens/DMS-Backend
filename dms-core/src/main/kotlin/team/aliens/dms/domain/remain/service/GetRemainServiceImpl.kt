@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.remain.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.remain.exception.RemainAvailableTimeNotFoundException
 import team.aliens.dms.domain.remain.exception.RemainOptionNotFoundException
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.remain.model.RemainOption
 import team.aliens.dms.domain.remain.spi.QueryRemainAvailableTimePort
 import team.aliens.dms.domain.remain.spi.QueryRemainOptionPort
 import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
+import java.util.UUID
 
 @Service
 class GetRemainServiceImpl(
