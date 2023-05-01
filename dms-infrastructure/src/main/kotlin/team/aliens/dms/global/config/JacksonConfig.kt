@@ -1,5 +1,6 @@
 package team.aliens.dms.global.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
@@ -18,5 +19,6 @@ class JacksonConfig {
             .serializers(LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm")))
             .serializers(LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            .serializationInclusion(JsonInclude.Include.NON_NULL)
     }
 }
