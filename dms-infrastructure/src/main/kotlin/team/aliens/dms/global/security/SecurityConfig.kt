@@ -14,7 +14,7 @@ import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
 @Configuration
-class SecurityConfiguration(
+class SecurityConfig(
     private val jwtParser: JwtParser,
     private val objectMapper: ObjectMapper,
     private val authenticationEntryPoint: CustomAuthenticationEntryPoint,

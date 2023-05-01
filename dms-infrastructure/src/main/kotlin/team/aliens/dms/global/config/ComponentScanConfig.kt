@@ -26,4 +26,4 @@ import team.aliens.dms.common.annotation.UseCase
         )
     ]
 )
-class ComponentScanConfiguration
+class ComponentScanConfig

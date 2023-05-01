@@ -10,7 +10,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.time.format.DateTimeFormatter
 
 @Configuration
-class JacksonConfiguration {
+class JacksonConfig {
     @Bean
     fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
         return Jackson2ObjectMapperBuilder()
