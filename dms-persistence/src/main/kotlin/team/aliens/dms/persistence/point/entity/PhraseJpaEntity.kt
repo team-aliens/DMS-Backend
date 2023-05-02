@@ -13,7 +13,7 @@ import javax.persistence.Table
 @Table(name = "tbl_phrase")
 class PhraseJpaEntity(
 
-    override val id: UUID,
+    id: UUID?,
 
     @Column(columnDefinition = "VARCHAR(30)", nullable = false)
     val content: String,

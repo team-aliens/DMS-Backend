@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint
 )
 class SeatJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_room_id", columnDefinition = "BINARY(16)", nullable = false)
