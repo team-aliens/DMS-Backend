@@ -188,7 +188,7 @@ data class StudyRoomsResponse(
     val studyRooms: List<StudyRoomResponse>,
 ) {
     companion object {
-        fun of(studyRooms: List<StudyRoomVO>, appliedStudyRoomId: UUID? = null) = StudyRoomsResponse(
+        fun of(studyRooms: List<StudyRoomVO>) = StudyRoomsResponse(
             studyRooms = studyRooms.map {
                 it.run {
                     StudyRoomResponse(
@@ -198,12 +198,19 @@ data class StudyRoomsResponse(
                         availableGrade = availableGrade,
                         availableSex = availableSex,
                         inUseHeadcount = inUseHeadcount,
-                        totalAvailableSeat = totalAvailableSeat,
-                        isMine = appliedStudyRoomId == id
+                        totalAvailableSeat = totalAvailableSeat
                     )
                 }
             }
         )
+
+        fun of(studyRooms: List<StudyRoomVO>, appliedStudyRoomId: UUID? = null) =
+            StudyRoomsResponse(
+                studyRooms = of(studyRooms).studyRooms
+                    .map {
+                        it.copy(isMine = appliedStudyRoomId != it.id)
+                    }
+            )
     }
 }
 
