@@ -13,9 +13,7 @@ class RemoveTimeSlotUseCase(
 
     fun execute(timeSlotId: UUID) {
 
-        val user = userService.getCurrentUser()
-
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, user.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
         studyRoomService.deleteTimeSlot(timeSlot.id)
     }
 }

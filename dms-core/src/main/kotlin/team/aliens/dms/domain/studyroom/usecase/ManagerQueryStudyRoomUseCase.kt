@@ -18,7 +18,7 @@ class ManagerQueryStudyRoomUseCase(
     fun execute(studyRoomId: UUID, timeSlotId: UUID): Triple<StudyRoom, List<SeatApplicationVO>, List<TimeSlot>> {
 
         val user = userService.getCurrentUser()
-        val studyRoom = studyRoomService.getStudyRoom(studyRoomId, user.schoolId)
+        val studyRoom = studyRoomService.getStudyRoom(studyRoomId)
 
         val timeSlots = studyRoomService.getTimeSlots(
             schoolId = user.schoolId,

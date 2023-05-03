@@ -8,14 +8,12 @@ import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomsUseCase(
-    private val userService: UserService,
     private val studyRoomService: StudyRoomService
 ) {
 
     fun execute(timeSlotId: UUID): List<StudyRoomVO> {
 
-        val user = userService.getCurrentUser()
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, user.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
 
         return studyRoomService.getStudyRoomVOs(timeSlot.id)
     }

@@ -19,7 +19,7 @@ interface GetStudentService {
 
     fun getStudentsByRoomNumberAndRoomLocationIn(schoolId: UUID, roomNumberLocations: List<Pair<String, String>>): List<Student>
 
-    fun getStudentById(studentId: UUID, schoolId: UUID): Student
+    fun getStudentById(studentId: UUID): Student
 
     fun getStudentByUserId(userId: UUID): Student
 

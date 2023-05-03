@@ -10,7 +10,7 @@ interface GetRemainService {
 
     fun getRemainAvailableTimeBySchoolId(schoolId: UUID): RemainAvailableTime
 
-    fun getRemainOptionById(remainOptionId: UUID, schoolId: UUID): RemainOption
+    fun getRemainOptionById(remainOptionId: UUID): RemainOption
 
     fun getAllRemainOptionsBySchoolId(schoolId: UUID): List<RemainOption>
 
@@ -18,5 +18,5 @@ interface GetRemainService {
 
     fun getRemainStatusById(userId: UUID): RemainStatus?
 
-    fun getAppliedRemainOptionByUserId(userId: UUID, schoolId: UUID): RemainOption
+    fun getAppliedRemainOptionByUserId(userId: UUID): RemainOption
 }

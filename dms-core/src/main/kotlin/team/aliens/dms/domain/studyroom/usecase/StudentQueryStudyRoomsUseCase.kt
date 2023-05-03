@@ -15,7 +15,7 @@ class StudentQueryStudyRoomsUseCase(
     fun execute(timeSlotId: UUID): Pair<List<StudyRoomVO>, UUID?> {
 
         val student = studentService.getCurrentStudent()
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, student.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
 
         val appliedStudyRoomId = studyRoomService.getAppliedSeat(student.id, timeSlot.id)?.studyRoomId
         val studyRooms = studyRoomService.getStudyRoomVOs(timeSlot.id, student.grade, student.sex)

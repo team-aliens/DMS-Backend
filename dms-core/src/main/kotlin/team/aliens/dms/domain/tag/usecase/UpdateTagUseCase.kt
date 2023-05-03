@@ -14,7 +14,7 @@ class UpdateTagUseCase(
     fun execute(tagId: UUID, newName: String, newColor: String) {
 
         val user = userService.getCurrentUser()
-        val tag = tagService.getTagById(tagId, user.schoolId)
+        val tag = tagService.getTagById(tagId)
 
         if (newName != tag.name) {
             tagService.checkTagExistsByNameAndSchoolId(newName, user.schoolId)

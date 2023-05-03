@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.student.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -17,7 +18,7 @@ data class Student(
 
     val roomLocation: String,
 
-    val schoolId: UUID,
+    override val schoolId: UUID,
 
     val grade: Int,
 
@@ -32,7 +33,7 @@ data class Student(
     val sex: Sex,
 
     val deletedAt: LocalDateTime? = null
-) {
+) : SchoolIdDomain {
 
     val gcn: String = processGcn(this.grade, this.classRoom, this.number)
 

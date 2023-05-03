@@ -1,10 +1,5 @@
 package team.aliens.dms.domain.manager
 
-import java.util.UUID
-import javax.servlet.http.HttpServletResponse
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -38,6 +33,11 @@ import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.domain.manager.usecase.UpdateStudentGcnByFileUseCase
 import team.aliens.dms.domain.manager.usecase.UpdateStudentRoomByFileUseCase
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
+import javax.validation.Valid
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/managers")

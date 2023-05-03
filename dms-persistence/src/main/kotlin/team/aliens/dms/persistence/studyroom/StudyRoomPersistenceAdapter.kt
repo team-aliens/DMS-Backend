@@ -167,11 +167,12 @@ class StudyRoomPersistenceAdapter(
         return queryFactory.selectFrom(timeSlotJpaEntity)
             .join(studyRoomTimeSlotJpaEntity)
             .on(
-                studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotJpaEntity.id),
-                studyRoomId?.let { studyRoomTimeSlotJpaEntity.studyRoom.id.eq(it) }
+                studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotJpaEntity.id)
+                    .and(studyRoomId?.let { studyRoomTimeSlotJpaEntity.studyRoom.id.eq(it) })
             )
-            .join(studyRoomTimeSlotJpaEntity.studyRoom, studyRoomJpaEntity)
-            .where(
+            .join(studyRoomJpaEntity)
+            .on(
+                studyRoomTimeSlotJpaEntity.studyRoom.id.eq(studyRoomJpaEntity.id),
                 studyRoomJpaEntity.school.id.eq(schoolId)
             )
             .fetch()

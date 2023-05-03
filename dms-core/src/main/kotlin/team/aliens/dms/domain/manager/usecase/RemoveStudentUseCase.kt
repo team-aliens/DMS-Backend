@@ -10,15 +10,14 @@ import java.util.UUID
 @UseCase
 class RemoveStudentUseCase(
     private val userService: UserService,
-    private val remainService: RemainService,
-    private val commandStudyRoomPort: CommandStudyRoomPort,
     private val studentService: StudentService,
+    private val remainService: RemainService,
+    private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(studentId: UUID) {
 
-        val user = userService.getCurrentUser()
-        val student = studentService.getStudentById(studentId, user.schoolId)
+        val student = studentService.getStudentById(studentId)
 
         remainService.deleteRemainStatusByStudentId(studentId)
         commandStudyRoomPort.deleteSeatApplicationByStudentId(studentId)
