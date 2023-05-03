@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.model.SeatType
+import team.aliens.dms.domain.studyroom.dto.SeatTypesResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @ReadOnlyUseCase
 class QuerySeatTypesUseCase(
@@ -12,9 +12,11 @@ class QuerySeatTypesUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(studyRoomId: UUID?): List<SeatType> {
+    fun execute(studyRoomId: UUID?): SeatTypesResponse {
 
         val user = userService.getCurrentUser()
-        return studyRoomService.getSeatTypes(user.schoolId, studyRoomId)
+        val seatTypes = studyRoomService.getSeatTypes(user.schoolId, studyRoomId)
+
+        return SeatTypesResponse.of(seatTypes)
     }
 }

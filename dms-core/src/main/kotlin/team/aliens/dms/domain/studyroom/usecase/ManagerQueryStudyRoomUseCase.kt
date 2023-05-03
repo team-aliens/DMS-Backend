@@ -1,13 +1,11 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
-import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.TimeSlot
-import team.aliens.dms.domain.studyroom.service.StudyRoomService
-import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
-import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
+import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
@@ -15,7 +13,7 @@ class ManagerQueryStudyRoomUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(studyRoomId: UUID, timeSlotId: UUID): Triple<StudyRoom, List<SeatApplicationVO>, List<TimeSlot>> {
+    fun execute(studyRoomId: UUID, timeSlotId: UUID): StudyRoomResponse {
 
         val user = userService.getCurrentUser()
         val studyRoom = studyRoomService.getStudyRoom(studyRoomId)
@@ -31,6 +29,11 @@ class ManagerQueryStudyRoomUseCase(
 
         val seats = studyRoomService.getSeatApplicationVOs(studyRoomId, timeSlotId)
 
-        return Triple(studyRoom, seats, timeSlots)
+        return StudyRoomResponse
+            .StudyRoomResponseBuilder(studyRoom)
+            .withStudyRoomDetail()
+            .withTimeSlots(timeSlots)
+            .withSeats(seats)
+            .build()
     }
 }

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.model.AvailableTime
+import team.aliens.dms.domain.studyroom.dto.AvailableTimeResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -11,9 +11,11 @@ class QueryAvailableTimeUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(): AvailableTime {
+    fun execute(): AvailableTimeResponse {
 
         val user = userService.getCurrentUser()
-        return studyRoomService.getAvailableTime(user.schoolId)
+        val availableTime = studyRoomService.getAvailableTime(user.schoolId)
+
+        return AvailableTimeResponse.of(availableTime)
     }
 }

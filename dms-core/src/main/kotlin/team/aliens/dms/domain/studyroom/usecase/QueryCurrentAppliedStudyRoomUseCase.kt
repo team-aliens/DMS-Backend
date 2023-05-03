@@ -2,8 +2,8 @@ package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
 import team.aliens.dms.domain.studyroom.exception.AppliedSeatNotFoundException
-import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 
 @ReadOnlyUseCase
@@ -12,7 +12,7 @@ class QueryCurrentAppliedStudyRoomUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(): StudyRoom {
+    fun execute(): StudyRoomResponse {
 
         val student = studentService.getCurrentStudent()
 
@@ -21,6 +21,10 @@ class QueryCurrentAppliedStudyRoomUseCase(
             else get(0)
         }
 
-        return studyRoomService.getStudyRoomBySeatId(seatApplication.seatId)
+        val studyRoom = studyRoomService.getStudyRoomBySeatId(seatApplication.seatId)
+
+        return StudyRoomResponse
+            .StudyRoomResponseBuilder(studyRoom)
+            .build()
     }
 }

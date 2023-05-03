@@ -1,5 +1,9 @@
 package team.aliens.dms.domain.studyroom
 
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
+import javax.validation.Valid
+import javax.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -25,7 +29,6 @@ import team.aliens.dms.domain.studyroom.dto.CreateTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.dto.SeatTypesResponse
 import team.aliens.dms.domain.studyroom.dto.StudyRoomIdResponse
 import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
-import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse.StudyRoomResponseBuilder
 import team.aliens.dms.domain.studyroom.dto.StudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.TimeSlotIdResponse
 import team.aliens.dms.domain.studyroom.dto.TimeSlotsResponse
@@ -53,10 +56,6 @@ import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
-import java.util.UUID
-import javax.servlet.http.HttpServletResponse
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/study-rooms")
@@ -86,9 +85,7 @@ class StudyRoomWebAdapter(
 
     @GetMapping("/available-time")
     fun getAvailableTime(): AvailableTimeResponse {
-        return AvailableTimeResponse.of(
-            availableTime = queryAvailableTimeUseCase.execute()
-        )
+        return queryAvailableTimeUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -102,9 +99,7 @@ class StudyRoomWebAdapter(
 
     @GetMapping("/types")
     fun getSeatTypes(@RequestParam(name = "study_room_id", required = false) studyRoomId: UUID?): SeatTypesResponse {
-        return SeatTypesResponse.of(
-            types = querySeatTypesUseCase.execute(studyRoomId)
-        )
+        return querySeatTypesUseCase.execute(studyRoomId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -140,7 +135,7 @@ class StudyRoomWebAdapter(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun createStudyRoom(@RequestBody @Valid request: CreateStudyRoomWebRequest): StudyRoomIdResponse {
-        val studyRoomId = createStudyRoomUseCase.execute(
+        return createStudyRoomUseCase.execute(
             request.run {
                 CreateStudyRoomRequest(
                     floor = floor,
@@ -166,8 +161,6 @@ class StudyRoomWebAdapter(
                 )
             }
         )
-
-        return StudyRoomIdResponse(studyRoomId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -210,17 +203,10 @@ class StudyRoomWebAdapter(
         @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
         @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID,
     ): StudyRoomResponse {
-
-        val (studyRoom, timeSlot, seats, studentId) = studentQueryStudyRoomUseCase.execute(
+        return studentQueryStudyRoomUseCase.execute(
             studyRoomId = studyRoomId,
             timeSlotId = timeSlotId
         )
-
-        return StudyRoomResponseBuilder(studyRoom)
-            .withStudyRoomDetail()
-            .withTimeSlot(timeSlot)
-            .withSeats(seats, studentId)
-            .build()
     }
 
     @GetMapping("/{study-room-id}/managers")
@@ -228,17 +214,10 @@ class StudyRoomWebAdapter(
         @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
         @RequestParam(name = "time_slot") @NotNull timeSlotId: UUID,
     ): StudyRoomResponse {
-
-        val (studyRoom, seats, timeSlots) = managerQueryStudyRoomUseCase.execute(
+        return managerQueryStudyRoomUseCase.execute(
             studyRoomId = studyRoomId,
             timeSlotId = timeSlotId
         )
-
-        return StudyRoomResponseBuilder(studyRoom)
-            .withStudyRoomDetail()
-            .withTimeSlots(timeSlots)
-            .withSeats(seats)
-            .build()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -249,14 +228,12 @@ class StudyRoomWebAdapter(
 
     @GetMapping("/list/students")
     fun studentGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID): StudyRoomsResponse {
-        val (studyRooms, appliedStudyRoomId) = studentQueryStudyRoomsUseCase.execute(timeSlotId)
-        return StudyRoomsResponse.of(studyRooms, appliedStudyRoomId)
+        return studentQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @GetMapping("/list/managers")
     fun managerGetStudyRooms(@RequestParam(name = "time_slot") @NotNull timeSlotId: UUID): StudyRoomsResponse {
-        val studyRooms = managerQueryStudyRoomsUseCase.execute(timeSlotId)
-        return StudyRoomsResponse.of(studyRooms)
+        return managerQueryStudyRoomsUseCase.execute(timeSlotId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -267,14 +244,12 @@ class StudyRoomWebAdapter(
 
     @GetMapping("/my")
     fun getMyStudyRoom(): StudyRoomResponse {
-        val studyRoom = queryCurrentAppliedStudyRoomUseCase.execute()
-        return StudyRoomResponseBuilder(studyRoom).build()
+        return queryCurrentAppliedStudyRoomUseCase.execute()
     }
 
     @GetMapping("/time-slots")
     fun queryTimeSlots(): TimeSlotsResponse {
-        val timeSlots = queryTimeSlotsUseCase.execute()
-        return TimeSlotsResponse.of(timeSlots)
+        return queryTimeSlotsUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -282,8 +257,7 @@ class StudyRoomWebAdapter(
     fun createTimeSlotUseCase(
         @RequestBody @Valid request: CreateTimeSlotWebRequest
     ): TimeSlotIdResponse {
-        val timeSlotId = createTimeSlotUseCase.execute(request.startTime, request.endTime)
-        return TimeSlotIdResponse(timeSlotId)
+        return createTimeSlotUseCase.execute(request.startTime, request.endTime)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.studyroom.dto.StudyRoomsResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
-import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
-import java.util.UUID
 
 @ReadOnlyUseCase
 class StudentQueryStudyRoomsUseCase(
@@ -12,7 +12,7 @@ class StudentQueryStudyRoomsUseCase(
     private val studyRoomService: StudyRoomService,
 ) {
 
-    fun execute(timeSlotId: UUID): Pair<List<StudyRoomVO>, UUID?> {
+    fun execute(timeSlotId: UUID): StudyRoomsResponse {
 
         val student = studentService.getCurrentStudent()
         val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
@@ -20,6 +20,6 @@ class StudentQueryStudyRoomsUseCase(
         val appliedStudyRoomId = studyRoomService.getAppliedSeat(student.id, timeSlot.id)?.studyRoomId
         val studyRooms = studyRoomService.getStudyRoomVOs(timeSlot.id, student.grade, student.sex)
 
-        return Pair(studyRooms, appliedStudyRoomId)
+        return StudyRoomsResponse.of(studyRooms, appliedStudyRoomId)
     }
 }
