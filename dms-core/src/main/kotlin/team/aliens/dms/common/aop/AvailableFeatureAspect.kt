@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.school.aop
+package team.aliens.dms.common.aop
 
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before

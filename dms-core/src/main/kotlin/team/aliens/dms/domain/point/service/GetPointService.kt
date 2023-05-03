@@ -15,7 +15,7 @@ interface GetPointService {
 
     fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int): List<Phrase>
 
-    fun getPointHistoryById(pointHistoryId: UUID, schoolId: UUID): PointHistory
+    fun getPointHistoryById(pointHistoryId: UUID): PointHistory
 
     fun queryBonusAndMinusTotalPointByStudentGcnAndName(
         gcn: String,

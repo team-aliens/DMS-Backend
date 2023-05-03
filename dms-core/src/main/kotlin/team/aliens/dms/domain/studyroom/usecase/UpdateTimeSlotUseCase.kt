@@ -16,7 +16,7 @@ class UpdateTimeSlotUseCase(
 
         val user = userService.getCurrentUser()
 
-        val timeSlot = studyRoomService.getTimeSlot(timeSlotId, user.schoolId)
+        val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
         studyRoomService.saveTimeSlot(
             timeSlot.copy(
                 startTime = startTime,

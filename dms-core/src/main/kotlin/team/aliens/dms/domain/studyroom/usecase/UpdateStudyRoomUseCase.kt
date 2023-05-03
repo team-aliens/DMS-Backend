@@ -15,7 +15,7 @@ class UpdateStudyRoomUseCase(
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
 
         val user = userService.getCurrentUser()
-        val studyRoom = studyRoomService.getStudyRoom(studyRoomId, user.schoolId)
+        val studyRoom = studyRoomService.getStudyRoom(studyRoomId)
 
         if (request.floor != studyRoom.floor || request.name != studyRoom.name) {
             studyRoomService.checkStudyRoomExistsByFloorAndName(request.floor, request.name, user.schoolId)

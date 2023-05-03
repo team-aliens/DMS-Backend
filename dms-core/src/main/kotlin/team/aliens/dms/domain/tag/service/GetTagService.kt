@@ -5,7 +5,7 @@ import java.util.UUID
 
 interface GetTagService {
 
-    fun getTagById(tagId: UUID, schoolId: UUID): Tag
+    fun getTagById(tagId: UUID): Tag
 
     fun getTagsBySchoolId(schoolId: UUID): List<Tag>
 }

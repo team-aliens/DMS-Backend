@@ -8,7 +8,7 @@ dependencies {
     implementation(Dependencies.SPRING_TRANSACTION)
 
     // aop
-    implementation(Dependencies.SPRING_AOP)
+    implementation(Dependencies.AOP)
 }
 
 allOpen {
