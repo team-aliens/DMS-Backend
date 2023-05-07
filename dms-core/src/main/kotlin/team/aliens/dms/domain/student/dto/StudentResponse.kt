@@ -73,10 +73,11 @@ data class StudentsResponse(
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
                     tags = it.tags.map {
-                        tag -> TagResponse(
-                        id = tag.id,
-                        name = tag.name,
-                        color = tag.color
+                            tag ->
+                        TagResponse(
+                            id = tag.id,
+                            name = tag.name,
+                            color = tag.color
                         )
                     }
                 )
