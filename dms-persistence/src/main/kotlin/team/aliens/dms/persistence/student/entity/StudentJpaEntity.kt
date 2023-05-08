@@ -23,7 +23,7 @@ import javax.persistence.Table
 @Where(clause = "deleted_at is null")
 class StudentJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
     @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = true)

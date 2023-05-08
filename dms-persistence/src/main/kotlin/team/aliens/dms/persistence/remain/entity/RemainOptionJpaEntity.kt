@@ -14,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "tbl_remain_option")
 class RemainOptionJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)

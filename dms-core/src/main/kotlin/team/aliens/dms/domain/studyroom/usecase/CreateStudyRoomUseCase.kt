@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @UseCase
 class CreateStudyRoomUseCase(
@@ -18,15 +18,15 @@ class CreateStudyRoomUseCase(
 
         studyRoomService.checkStudyRoomExistsByFloorAndName(request.floor, request.name, user.schoolId)
         val studyRoom = studyRoomService.saveStudyRoom(
-            request.toStudyRoom(user.id)
+            request.toStudyRoom(schoolId = user.schoolId)
         )
 
         studyRoomService.saveAllStudyRoomTimeSlots(
-            request.toStudyRoomTimeSlots(studyRoom.id)
+            request.toStudyRoomTimeSlots(studyRoomId = studyRoom.id)
         )
 
         studyRoomService.saveAllSeats(
-            request.toSeats(studyRoom.id)
+            request.toSeats(studyRoomId = studyRoom.id)
         )
 
         return studyRoom.id
