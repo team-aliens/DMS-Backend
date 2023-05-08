@@ -2,12 +2,12 @@ package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.SignUpRequest
-import team.aliens.dms.domain.student.dto.SignUpResponse
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
@@ -32,7 +32,7 @@ class SignUpUseCase(
     private val jwtPort: JwtPort
 ) {
 
-    fun execute(request: SignUpRequest): SignUpResponse {
+    fun execute(request: SignUpRequest): TokenFeatureResponse {
         val (
             schoolCode, schoolAnswer, _,
             grade, classRoom, number,
@@ -72,27 +72,12 @@ class SignUpUseCase(
             )
         )
 
-        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
+        val token = jwtPort.receiveToken(
             userId = user.id, authority = Authority.STUDENT
         )
-
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        return SignUpResponse(
-            accessToken = accessToken,
-            accessTokenExpiredAt = accessTokenExpiredAt,
-            refreshToken = refreshToken,
-            refreshTokenExpiredAt = refreshTokenExpiredAt,
-            features = availableFeatures.run {
-                SignUpResponse.Features(
-                    mealService = mealService,
-                    noticeService = noticeService,
-                    pointService = pointService,
-                    studyRoomService = studyRoomService,
-                    remainService = remainService
-                )
-            }
-        )
+        return TokenFeatureResponse.of(token, availableFeatures)
     }
 
     private fun validateSchool(schoolCode: String, schoolAnswer: String) =

@@ -5,7 +5,7 @@ import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.school.service.SchoolService
-import team.aliens.dms.domain.student.dto.StudentMyPageResponse
+import team.aliens.dms.domain.student.dto.StudentResponse
 import team.aliens.dms.domain.user.service.UserService
 import java.security.SecureRandom
 
@@ -16,7 +16,7 @@ class StudentMyPageUseCase(
     private val pointService: PointService
 ) {
 
-    fun execute(): StudentMyPageResponse {
+    fun execute(): StudentResponse {
 
         val student = userService.getCurrentStudent()
         val school = schoolService.getSchoolById(student.schoolId)
@@ -26,12 +26,9 @@ class StudentMyPageUseCase(
 
         val phrase = randomPhrase(bonusPoint, minusPoint)
 
-        return StudentMyPageResponse(
+        return StudentResponse.of(
             schoolName = school.name,
-            name = student.name,
-            gcn = student.gcn,
-            profileImageUrl = student.profileImageUrl,
-            sex = student.sex,
+            student = student,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             phrase = phrase
