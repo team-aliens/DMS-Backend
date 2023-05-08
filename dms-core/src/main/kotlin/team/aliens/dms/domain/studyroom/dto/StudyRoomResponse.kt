@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.studyroom.dto
 
-import java.time.LocalTime
-import java.util.UUID
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.studyroom.model.AvailableTime
@@ -11,6 +9,8 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.SeatApplicationVO
 import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
+import java.time.LocalTime
+import java.util.UUID
 
 data class StudyRoomIdResponse(
     val studyRoomId: UUID,
@@ -37,10 +37,8 @@ data class StudyRoomResponse(
     val isMine: Boolean? = null,
 ) {
 
-    class StudyRoomResponseBuilder(
-        private val studyRoom: StudyRoom,
-    ) {
-        private var studyRoomResponse: StudyRoomResponse = studyRoom.run {
+    companion object {
+        fun of(studyRoom: StudyRoom) = studyRoom.run {
             StudyRoomResponse(
                 id = id,
                 floor = floor,
@@ -51,8 +49,8 @@ data class StudyRoomResponse(
             )
         }
 
-        fun withStudyRoomDetail() = this.apply {
-            this.studyRoomResponse = studyRoomResponse.copy(
+        fun ofDetail(studyRoom: StudyRoom) = studyRoom.run {
+            of(this).copy(
                 eastDescription = studyRoom.eastDescription,
                 westDescription = studyRoom.westDescription,
                 southDescription = studyRoom.southDescription,
@@ -61,29 +59,24 @@ data class StudyRoomResponse(
                 totalHeightSize = studyRoom.widthSize
             )
         }
-
-        fun withSeats(seats: List<SeatApplicationVO>, studentId: UUID? = null) = this.apply {
-            this.studyRoomResponse = studyRoomResponse.copy(
-                inUseHeadcount = seats.count { it.studentId != null },
-                seats = seats.map { SeatResponse.of(it, studentId) }
-            )
-        }
-
-        fun withTimeSlots(timeSlots: List<TimeSlot>) = this.apply {
-            this.studyRoomResponse = studyRoomResponse.copy(
-                timeSlots = timeSlots.map { TimeSlotResponse.of(it) }
-            )
-        }
-
-        fun withTimeSlot(timeSlot: TimeSlot) = this.apply {
-            this.studyRoomResponse = studyRoomResponse.copy(
-                startTime = timeSlot.startTime,
-                endTime = timeSlot.endTime
-            )
-        }
-
-        fun build() = studyRoomResponse
     }
+
+    fun withSeats(seats: List<SeatApplicationVO>, studentId: UUID? = null) =
+        this.copy(
+            inUseHeadcount = seats.count { it.studentId != null },
+            seats = seats.map { SeatResponse.of(it, studentId) }
+        )
+
+    fun withTimeSlots(timeSlots: List<TimeSlot>) =
+        this.copy(
+            timeSlots = timeSlots.map { TimeSlotResponse.of(it) }
+        )
+
+    fun withTimeSlot(timeSlot: TimeSlot) =
+        this.copy(
+            startTime = timeSlot.startTime,
+            endTime = timeSlot.endTime
+        )
 }
 
 data class SeatResponse(

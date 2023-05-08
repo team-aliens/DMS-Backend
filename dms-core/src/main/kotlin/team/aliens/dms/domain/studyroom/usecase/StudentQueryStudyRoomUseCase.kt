@@ -23,10 +23,8 @@ class StudentQueryStudyRoomUseCase(
         val seats = studyRoomService.getSeatApplicationVOs(studyRoomId, timeSlot.id)
 
         return StudyRoomResponse
-            .StudyRoomResponseBuilder(studyRoom)
-            .withStudyRoomDetail()
+            .ofDetail(studyRoom)
             .withTimeSlot(timeSlot)
             .withSeats(seats, student.id)
-            .build()
     }
 }

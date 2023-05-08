@@ -22,9 +22,6 @@ class QueryCurrentAppliedStudyRoomUseCase(
         }
 
         val studyRoom = studyRoomService.getStudyRoomBySeatId(seatApplication.seatId)
-
-        return StudyRoomResponse
-            .StudyRoomResponseBuilder(studyRoom)
-            .build()
+        return StudyRoomResponse.of(studyRoom)
     }
 }

@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
 import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomUseCase(
@@ -30,10 +30,8 @@ class ManagerQueryStudyRoomUseCase(
         val seats = studyRoomService.getSeatApplicationVOs(studyRoomId, timeSlotId)
 
         return StudyRoomResponse
-            .StudyRoomResponseBuilder(studyRoom)
-            .withStudyRoomDetail()
+            .ofDetail(studyRoom)
             .withTimeSlots(timeSlots)
             .withSeats(seats)
-            .build()
     }
 }
