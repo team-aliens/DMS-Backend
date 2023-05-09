@@ -43,6 +43,7 @@ object Dependencies {
     // aws
     const val SPRING_AWS = "org.springframework.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
     const val AWS_SES = "com.amazonaws:aws-java-sdk-ses:${DependencyVersions.SES_VERSION}"
+    const val AWS_KMS = "com.amazonaws:aws-java-sdk-kms:${DependencyVersions.KMS_VERSION}"
 
     // test
     const val SPRING_TEST = "org.springframework.boot:spring-boot-starter-test:${PluginVersions.SPRING_BOOT_VERSION}"
