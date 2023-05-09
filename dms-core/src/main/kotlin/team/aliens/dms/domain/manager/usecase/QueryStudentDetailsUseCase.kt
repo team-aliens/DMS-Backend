@@ -34,7 +34,7 @@ class QueryStudentDetailsUseCase(
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomMates = roomMates,
-            tags = tags
+            tags = TagResponse.of(tags)
         )
     }
 }

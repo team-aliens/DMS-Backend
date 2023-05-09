@@ -16,7 +16,7 @@ import team.aliens.dms.domain.tag.dto.CreateTagWebRequest
 import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
 import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
-import team.aliens.dms.domain.tag.dto.QueryTagsResponse
+import team.aliens.dms.domain.tag.dto.TagsResponse
 import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
@@ -41,7 +41,7 @@ class TagWebAdapter(
 ) {
 
     @GetMapping
-    fun queryTags(): QueryTagsResponse {
+    fun queryTags(): TagsResponse {
         return queryTagsUseCase.execute()
     }
 
