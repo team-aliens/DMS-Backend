@@ -61,6 +61,8 @@ cloud:
       bucket: ${BUCKET_NAME:dms}
     ses:
       source: ${SES_SENDER:asdf}
+    kms:
+      key: ${KMS_ARN:asdf}
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}
