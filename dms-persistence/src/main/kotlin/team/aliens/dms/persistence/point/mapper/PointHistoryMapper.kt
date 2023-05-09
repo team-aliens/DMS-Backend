@@ -3,14 +3,14 @@ package team.aliens.dms.persistence.point.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.persistence.GenericMapper
+import team.aliens.dms.persistence.EncryptableGenericMapper
 import team.aliens.dms.persistence.point.entity.PointHistoryJpaEntity
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
 class PointHistoryMapper(
     private val schoolRepository: SchoolJpaRepository
-) : GenericMapper<PointHistory, PointHistoryJpaEntity> {
+) : EncryptableGenericMapper<PointHistory, PointHistoryJpaEntity> {
 
     override fun toDomain(entity: PointHistoryJpaEntity?): PointHistory? {
         return entity?.let {

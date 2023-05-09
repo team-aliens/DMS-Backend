@@ -3,7 +3,7 @@ package team.aliens.dms.persistence.student.mapper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.persistence.GenericMapper
+import team.aliens.dms.persistence.EncryptableGenericMapper
 import team.aliens.dms.persistence.room.repository.RoomJpaRepository
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import team.aliens.dms.persistence.user.repository.UserJpaRepository
@@ -12,7 +12,7 @@ import team.aliens.dms.persistence.user.repository.UserJpaRepository
 class StudentMapper(
     private val roomRepository: RoomJpaRepository,
     private val userRepository: UserJpaRepository
-) : GenericMapper<Student, StudentJpaEntity> {
+) : EncryptableGenericMapper<Student, StudentJpaEntity> {
 
     override fun toDomain(entity: StudentJpaEntity?): Student? {
         return entity?.let {
@@ -47,7 +47,7 @@ class StudentMapper(
             classRoom = domain.classRoom,
             number = domain.number,
             name = domain.name,
-            profileImageUrl = domain.profileImageUrl!!,
+            profileImageUrl = domain.profileImageUrl,
             sex = domain.sex,
             deletedAt = domain.deletedAt
         )

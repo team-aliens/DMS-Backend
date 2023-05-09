@@ -1,10 +1,5 @@
 package team.aliens.dms.persistence.student.entity
 
-import org.hibernate.annotations.Where
-import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.persistence.BaseUUIDEntity
-import team.aliens.dms.persistence.room.entity.RoomJpaEntity
-import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -17,6 +12,13 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Table
+import org.hibernate.annotations.Where
+import team.aliens.dms.common.annotation.EncryptType
+import team.aliens.dms.common.annotation.EncryptedColumn
+import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.room.entity.RoomJpaEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Entity
 @Table(name = "tbl_student")
@@ -45,7 +47,8 @@ class StudentJpaEntity(
     @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
     val number: Int,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @EncryptedColumn(type = EncryptType.SYMMETRIC)
+    @Column(columnDefinition = "TEXT", nullable = false)
     val name: String,
 
     @Column(columnDefinition = "VARCHAR(500)", nullable = false)
@@ -57,4 +60,5 @@ class StudentJpaEntity(
 
     @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?
+
 ) : BaseUUIDEntity(id)

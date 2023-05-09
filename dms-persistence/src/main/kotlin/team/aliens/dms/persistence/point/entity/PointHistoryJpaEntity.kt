@@ -1,8 +1,5 @@
 package team.aliens.dms.persistence.point.entity
 
-import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
@@ -13,6 +10,11 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
+import team.aliens.dms.common.annotation.EncryptType
+import team.aliens.dms.common.annotation.EncryptedColumn
+import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.persistence.BaseEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 
 @Entity
 @Table(name = "tbl_point_history")
@@ -20,10 +22,12 @@ class PointHistoryJpaEntity(
 
     id: UUID?,
 
+    @EncryptedColumn(type = EncryptType.SYMMETRIC)
     @Column(columnDefinition = "VARCHAR(30)", nullable = false)
     val studentName: String,
 
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @EncryptedColumn(type = EncryptType.SYMMETRIC)
+    @Column(columnDefinition = "TEXT", nullable = false)
     val studentGcn: String,
 
     @Column(columnDefinition = "INT", nullable = false)
