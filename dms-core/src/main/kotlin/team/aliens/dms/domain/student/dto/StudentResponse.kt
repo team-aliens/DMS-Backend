@@ -23,7 +23,17 @@ data class StudentDetailsResponse(
         val id: UUID,
         val name: String,
         val profileImageUrl: String
-    )
+    ) {
+        companion object {
+            fun of(roomMates: List<Student>) = roomMates.map {
+                RoomMate(
+                    id = it.id,
+                    name = it.name,
+                    profileImageUrl = it.profileImageUrl
+                )
+            }
+        }
+    }
 
     companion object {
         fun of(
@@ -41,13 +51,7 @@ data class StudentDetailsResponse(
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             roomNumber = student.roomNumber,
-            roomMates = roomMates.map {
-                RoomMate(
-                    id = it.id,
-                    name = it.name,
-                    profileImageUrl = it.profileImageUrl
-                )
-            },
+            roomMates = RoomMate.of(roomMates = roomMates),
             tags = tags.map {
                 TagResponse(
                     id = it.id,
