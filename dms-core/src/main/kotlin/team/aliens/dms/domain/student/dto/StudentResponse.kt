@@ -72,8 +72,7 @@ data class StudentsResponse(
                     roomNumber = it.roomNumber,
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
-                    tags = it.tags.map {
-                            tag ->
+                    tags = it.tags.map { tag ->
                         TagResponse(
                             id = tag.id,
                             name = tag.name,
