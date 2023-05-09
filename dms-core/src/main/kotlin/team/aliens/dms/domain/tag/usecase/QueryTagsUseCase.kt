@@ -2,7 +2,6 @@ package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.tag.dto.TagsResponse
-import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.tag.service.TagService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -18,5 +17,4 @@ class QueryTagsUseCase(
 
         return TagsResponse.of(tags)
     }
-
 }

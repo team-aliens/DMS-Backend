@@ -108,7 +108,7 @@ class SecurityConfig(
             .antMatchers(HttpMethod.POST, "/tags/students").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/tags/students").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/tags/{tag-id}").hasAuthority(MANAGER.name)
-
+            
             // /study-rooms
             .antMatchers(HttpMethod.GET, "/study-rooms/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/study-rooms/available-time").hasAuthority(MANAGER.name)

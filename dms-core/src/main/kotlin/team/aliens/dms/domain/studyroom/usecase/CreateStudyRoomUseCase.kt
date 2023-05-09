@@ -5,6 +5,7 @@ import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.dto.StudyRoomIdResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
+import java.util.UUID
 
 @UseCase
 class CreateStudyRoomUseCase(

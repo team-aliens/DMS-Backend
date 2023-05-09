@@ -5,7 +5,6 @@ import team.aliens.dms.domain.tag.dto.TagIdResponse
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.service.TagService
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @UseCase
 class CreateTagUseCase(

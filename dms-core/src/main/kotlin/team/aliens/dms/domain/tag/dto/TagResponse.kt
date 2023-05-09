@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.tag.dto
 
-import java.util.UUID
 import team.aliens.dms.domain.tag.model.Tag
+import java.util.UUID
 
 data class TagResponse(
     val id: UUID,
@@ -9,14 +9,12 @@ data class TagResponse(
     val color: String?
 ) {
     companion object {
-        fun of(tags: List<Tag>): List<TagResponse> {
-            return tags.map {
-                TagResponse(
-                    id = it.id,
-                    name = it.name,
-                    color = it.color
-                )
-            }
+        fun of(tag: Tag): TagResponse {
+            return TagResponse(
+                id = tag.id,
+                name = tag.name,
+                color = tag.color
+            )
         }
     }
 }
@@ -25,15 +23,15 @@ data class TagsResponse(
     val tags: List<TagResponse>
 ) {
     companion object {
-        fun of(tags:List<Tag>): TagsResponse {
+        fun of(tags: List<Tag>): TagsResponse {
             return TagsResponse(
-                    tags.map {
-                        TagResponse(
-                                id = it.id,
-                                name = it.name,
-                                color = it.color
-                        )
-                    }
+                tags.map {
+                    TagResponse(
+                        id = it.id,
+                        name = it.name,
+                        color = it.color
+                    )
+                }
             )
         }
     }
