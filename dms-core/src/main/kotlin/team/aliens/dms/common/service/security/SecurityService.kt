@@ -9,4 +9,6 @@ interface SecurityService {
     fun getCurrentUserId(): UUID
 
     fun checkIsPasswordMatches(rawPassword: String, encodedPassword: String)
+
+    fun createSchoolSecretBySchoolId(schoolId: UUID)
 }
