@@ -11,13 +11,15 @@ data class ManagerDetailsResponse(
     val answer: String
 ) {
     companion object {
-        fun of(school: School) = ManagerDetailsResponse(
-            schoolId = school.id,
-            schoolName = school.name,
-            code = school.code,
-            question = school.question,
-            answer = school.answer
-        )
+        fun of(school: School) = school.run {
+            ManagerDetailsResponse(
+                schoolId = id,
+                schoolName = name,
+                code = code,
+                question = question,
+                answer = answer
+            )
+        }
     }
 }
 
