@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.school.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.CommandSchoolPort
 
@@ -11,4 +12,7 @@ class CommandSchoolServiceImpl(
 
     override fun saveSchool(school: School) =
         commandSchoolPort.saveSchool(school)
+
+    override fun saveAvailableFeature(availableFeature: AvailableFeature) =
+        commandSchoolPort.saveAvailableFeature(availableFeature)
 }

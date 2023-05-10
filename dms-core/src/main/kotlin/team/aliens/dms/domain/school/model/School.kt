@@ -22,7 +22,7 @@ data class School(
 
     val contractStartedAt: LocalDate,
 
-    val contractEndedAt: LocalDate?
+    val contractEndedAt: LocalDate? = null
 
 ) {
     companion object {

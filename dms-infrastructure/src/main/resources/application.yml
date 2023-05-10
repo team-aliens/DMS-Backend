@@ -39,6 +39,9 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
+  cache:
+    type: redis
+
 secret:
   secret-key: ${SECRET_KEY:asdfghgfds}
   access-exp: ${ACCESS_EXP:1800}
@@ -61,6 +64,12 @@ cloud:
       bucket: ${BUCKET_NAME:dms}
     ses:
       source: ${SES_SENDER:asdf}
+    kms:
+      key: ${KMS_ARN:asdf}
+
+encrypt:
+  transformation: ${ENCRYPT_TRANSFORMATION}
+  algorithm: ${ENCRYPT_ALGORITHM}
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}

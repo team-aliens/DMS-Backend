@@ -5,9 +5,9 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.tag.model.Tag
 import java.util.UUID
 
-data class StudentWithTag(
+open class StudentWithTag(
     val id: UUID,
-    val name: String,
+    open val name: String,
     val grade: Int,
     val classRoom: Int,
     val number: Int,

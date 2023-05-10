@@ -11,8 +11,10 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.common.annotation.Decrypt
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
@@ -32,7 +34,6 @@ import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpa
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
-import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -148,6 +149,7 @@ class StudentPersistenceAdapter(
         return tuple.toTypedArray()
     }
 
+    @Decrypt
     override fun queryStudentsByNameAndSortAndFilter(
         name: String?,
         sort: Sort,
@@ -158,8 +160,7 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
-            .join(userJpaEntity.school, schoolJpaEntity)
+            .join(roomJpaEntity.school, schoolJpaEntity)
             .leftJoin(studentTagJpaEntity)
             .on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id)).fetchJoin()
             .leftJoin(tagJpaEntity)
@@ -167,7 +168,7 @@ class StudentPersistenceAdapter(
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
-                userJpaEntity.school.id.eq(schoolId),
+                roomJpaEntity.school.id.eq(schoolId),
                 nameContains(name),
                 pointTotalBetween(pointFilter),
                 hasAllTags(tagIds)
@@ -194,22 +195,6 @@ class StudentPersistenceAdapter(
                         )
                     )
             )
-            .map {
-                StudentWithTag(
-                    id = it.id,
-                    name = it.name,
-                    grade = it.grade,
-                    classRoom = it.classRoom,
-                    number = it.number,
-                    roomNumber = it.roomNumber,
-                    profileImageUrl = it.profileImageUrl,
-                    sex = it.sex,
-                    tags = it.tags
-                        .map { tag ->
-                            tagMapper.toDomain(tag)!!
-                        }
-                )
-            }
     }
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
@@ -294,6 +279,7 @@ class StudentPersistenceAdapter(
             }
     }
 
+    @Decrypt
     override fun queryStudentsWithPointHistory(studentIds: List<UUID>): List<StudentWithPointVO> {
         return queryFactory
             .select(
@@ -314,16 +300,6 @@ class StudentPersistenceAdapter(
                 studentJpaEntity.id.`in`(studentIds)
             )
             .fetch()
-            .map {
-                StudentWithPointVO(
-                    name = it.name,
-                    grade = it.grade,
-                    classRoom = it.classRoom,
-                    number = it.number,
-                    bonusTotal = it.bonusTotal ?: 0,
-                    minusTotal = it.minusTotal ?: 0
-                )
-            }
     }
 
     private fun eqStudentRecentPointHistory(): BooleanExpression? {

@@ -3,8 +3,8 @@ package team.aliens.dms.domain.point.spi.vo
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.student.model.Student
 
-data class StudentWithPointVO(
-    val name: String,
+open class StudentWithPointVO(
+    open val name: String,
     val grade: Int,
     val classRoom: Int,
     val number: Int,

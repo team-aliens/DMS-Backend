@@ -14,6 +14,7 @@ enum class GlobalErrorCode(
     BAD_REQUEST(ErrorStatus.BAD_REQUEST, "Bad Request", 3),
     INVALID_FILE(ErrorStatus.BAD_REQUEST, "Invalid File", 4),
     BAD_EXCEL_FORMAT(ErrorStatus.BAD_REQUEST, "%s행 등 %s개 행의 데이터 형식이 잘못되었습니다.", 5),
+    KEY_MANAGEMENT_SERVICE(ErrorStatus.BAD_REQUEST, "Key processing failed", 6),
 
     EXTENSION_MISMATCH(401, "File Extension Mismatch", 1),
 
