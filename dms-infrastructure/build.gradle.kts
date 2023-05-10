@@ -49,6 +49,9 @@ dependencies {
 
     // logging
     implementation(Dependencies.SENTRY)
+
+    // redis
+    implementation(Dependencies.REDIS)
 }
 
 kapt {

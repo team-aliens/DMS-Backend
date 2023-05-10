@@ -4,14 +4,14 @@ import com.amazonaws.services.kms.AWSKMSAsync
 import com.amazonaws.services.kms.model.DecryptRequest
 import com.amazonaws.services.kms.model.EncryptRequest
 import com.amazonaws.services.kms.model.EncryptionAlgorithmSpec
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.stereotype.Component
-import team.aliens.dms.common.spi.EncryptPort
-import team.aliens.dms.thirdparty.encrypt.exception.KMSException
 import java.nio.ByteBuffer
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.stereotype.Component
+import team.aliens.dms.common.spi.EncryptPort
+import team.aliens.dms.thirdparty.encrypt.exception.KMSException
 
 @Component
 class AwsKMSAdapter(
@@ -40,7 +40,7 @@ class AwsKMSAdapter(
         )
     }
 
-    @Cacheable("cipher")
+    @Cacheable("cipher", cacheManager = "redisCacheManager")
     protected fun getCipher(opmode: Int, key: String): Cipher =
         Cipher.getInstance(encryptProperties.transformation).apply {
             init(opmode, SecretKeySpec(key.toByteArray(), encryptProperties.algorithm))
@@ -65,7 +65,6 @@ class AwsKMSAdapter(
         )
     }
 
-    @Cacheable("decryptedText")
     override fun asymmetricDecrypt(cipherText: String): String {
 
         val request = DecryptRequest()

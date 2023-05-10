@@ -15,10 +15,10 @@ class SchoolSecretPersistenceAdapter(
     private val schoolSecretMapper: SchoolSecretMapper
 ) : SchoolSecretPort {
 
-    @Cacheable("schoolSecret")
+    @Cacheable("schoolSecret", cacheManager = "redisCacheManager")
     override fun querySchoolSecretBySchoolId(schoolId: UUID) =
         schoolSecretRepository.findByIdOrNull(schoolId)
-            ?.let { schoolSecretMapper.toDomain(it) }
+            ?.let { schoolSecretMapper.toDomain(it)?.secretKey }
 
     override fun saveSchoolSecret(schoolSecret: SchoolSecret) {
         schoolSecretRepository.save(

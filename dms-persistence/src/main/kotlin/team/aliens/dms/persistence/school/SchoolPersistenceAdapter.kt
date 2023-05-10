@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.school
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.spi.SchoolPort
 import team.aliens.dms.persistence.school.mapper.AvailableFeatureMapper
@@ -25,6 +26,12 @@ class SchoolPersistenceAdapter(
     override fun saveSchool(school: School) = schoolMapper.toDomain(
         schoolRepository.save(
             schoolMapper.toEntity(school)
+        )
+    )!!
+
+    override fun saveAvailableFeature(availableFeature: AvailableFeature) = availableFeatureMapper.toDomain(
+        availableFeatureRepository.save(
+            availableFeatureMapper.toEntity(availableFeature)
         )
     )!!
 

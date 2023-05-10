@@ -7,5 +7,5 @@ interface SchoolSecretPort {
 
     fun saveSchoolSecret(schoolSecret: SchoolSecret)
 
-    fun querySchoolSecretBySchoolId(schoolId: UUID): SchoolSecret?
+    fun querySchoolSecretBySchoolId(schoolId: UUID): String?
 }

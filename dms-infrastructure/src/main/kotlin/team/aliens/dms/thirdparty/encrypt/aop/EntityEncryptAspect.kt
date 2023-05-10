@@ -1,5 +1,8 @@
 package team.aliens.dms.thirdparty.encrypt.aop
 
+import java.lang.reflect.Field
+import java.util.function.Consumer
+import java.util.function.Function
 import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.AfterReturning
@@ -14,9 +17,6 @@ import team.aliens.dms.common.spi.EncryptPort
 import team.aliens.dms.common.spi.SchoolSecretPort
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import java.lang.reflect.Field
-import java.util.function.Consumer
-import java.util.function.Function
 
 @UseCase
 @Aspect
@@ -117,6 +117,6 @@ class EntityEncryptAspect(
     private fun getSchoolKey(): String {
         val schoolId = securityPort.getCurrentUserSchoolId()
         val schoolSecret = schoolSecretPort.querySchoolSecretBySchoolId(schoolId) ?: throw SchoolNotFoundException
-        return encryptPort.asymmetricDecrypt(schoolSecret.secretKey)
+        return encryptPort.asymmetricDecrypt(schoolSecret)
     }
 }
