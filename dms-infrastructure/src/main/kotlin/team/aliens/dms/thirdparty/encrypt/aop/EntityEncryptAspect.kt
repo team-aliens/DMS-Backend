@@ -83,10 +83,10 @@ class EntityEncryptAspect(
             when (f.getAnnotation(EncryptedColumn::class.java).type) {
                 EncryptType.SYMMETRIC -> encryptPort.symmetricEncrypt(
                     secretKey = getSchoolKey(),
-                    plainText = f.get(obj) as String
+                    plainText = f[obj] as String
                 )
                 EncryptType.ASYMMETRIC -> encryptPort.asymmetricEncrypt(
-                    plainText = f.get(obj) as String
+                    plainText = f[obj] as String
                 )
             }
         }
@@ -97,10 +97,10 @@ class EntityEncryptAspect(
             when (f.getAnnotation(EncryptedColumn::class.java).type) {
                 EncryptType.SYMMETRIC -> encryptPort.symmetricDecrypt(
                     secretKey = getSchoolKey(),
-                    cipherText = f.get(obj) as String
+                    cipherText = f[obj] as String
                 )
                 EncryptType.ASYMMETRIC -> encryptPort.asymmetricDecrypt(
-                    cipherText = f.get(obj) as String
+                    cipherText = f[obj] as String
                 )
             }
         }

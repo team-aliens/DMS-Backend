@@ -8,7 +8,6 @@ import java.nio.ByteBuffer
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.EncryptPort
 import team.aliens.dms.thirdparty.encrypt.exception.KMSException
@@ -40,7 +39,6 @@ class AwsKMSAdapter(
         )
     }
 
-    @Cacheable("cipher", cacheManager = "redisCacheManager")
     protected fun getCipher(opmode: Int, key: String): Cipher =
         Cipher.getInstance(encryptProperties.transformation).apply {
             init(opmode, SecretKeySpec(key.toByteArray(), encryptProperties.algorithm))
