@@ -23,15 +23,5 @@ class UpdateStudyRoomUseCase(
         studyRoomService.saveStudyRoom(
             request.toStudyRoom(studyRoom)
         )
-
-        studyRoomService.updateTimeSlotsByStudyRoom(
-            studyRoomId = studyRoom.id,
-            studyRoomTimeSlots = request.toStudyRoomTimeSlots(studyRoom.id)
-        )
-
-        studyRoomService.updateSeatsByStudyRoom(
-            studyRoomId = studyRoom.id,
-            seats = request.toSeats(studyRoom.id)
-        )
     }
 }

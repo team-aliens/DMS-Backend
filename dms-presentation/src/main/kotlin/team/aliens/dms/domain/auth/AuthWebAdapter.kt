@@ -1,9 +1,5 @@
 package team.aliens.dms.domain.auth
 
-import javax.validation.Valid
-import javax.validation.constraints.Email
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import org.hibernate.validator.constraints.Length
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,6 +25,10 @@ import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
 import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
 import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.SignInUseCase
+import javax.validation.Valid
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/auth")
