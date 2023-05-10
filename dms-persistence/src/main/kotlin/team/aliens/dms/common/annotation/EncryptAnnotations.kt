@@ -17,7 +17,7 @@ enum class EncryptType {
 }
 
 /**
- * 메서드의 반환값에서 EncryptedColmn이 붙은 필드을 암호화하는 어노테이션
+ * 메서드의 반환값에서 EncryptedColumn이 붙은 필드을 암호화하는 어노테이션
  * @see EncryptedColumn
  * @see team.aliens.dms.persistence.EncryptableGenericMapper
  */
@@ -27,7 +27,7 @@ enum class EncryptType {
 annotation class Encrypt
 
 /**
- * 메서드의 반환값에서 EncryptedColmn이 붙은 필드을 복호화하는 어노테이션
+ * 메서드의 반환값에서 EncryptedColumn이 붙은 필드을 복호화하는 어노테이션
  * @see EncryptedColumn
  */
 @Inherited

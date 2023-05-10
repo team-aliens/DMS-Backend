@@ -67,6 +67,10 @@ cloud:
     kms:
       key: ${KMS_ARN:asdf}
 
+encrypt:
+  transformation: ${ENCRYPT_TRANSFORMATION}
+  algorithm: ${ENCRYPT_ALGORITHM}
+
 sentry:
   dsn: ${SENTRY_DSN:asdf}
   traces-sample-rate: 1.0
