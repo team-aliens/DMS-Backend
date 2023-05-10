@@ -33,6 +33,10 @@ import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomResponse
 import team.aliens.dms.domain.studyroom.dto.StudentQueryStudyRoomsResponse
 import team.aliens.dms.domain.studyroom.dto.UpdateAvailableTimeWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomSeatsRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomSeatsWebRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomTimeSlotRequest
+import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomWebRequest
 import team.aliens.dms.domain.studyroom.dto.UpdateTimeSlotWebRequest
 import team.aliens.dms.domain.studyroom.usecase.ApplySeatUseCase
@@ -53,6 +57,8 @@ import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.StudentQueryStudyRoomsUseCase
 import team.aliens.dms.domain.studyroom.usecase.UnApplySeatUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateAvailableTimeUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomSeatsUseCase
+import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomTimeSlotUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateStudyRoomUseCase
 import team.aliens.dms.domain.studyroom.usecase.UpdateTimeSlotUseCase
 import java.util.UUID
@@ -83,7 +89,9 @@ class StudyRoomWebAdapter(
     private val queryTimeSlotsUseCase: QueryTimeSlotsUseCase,
     private val createTimeSlotUseCase: CreateTimeSlotUseCase,
     private val updateTimeSlotUseCase: UpdateTimeSlotUseCase,
-    private val removeTimeSlotUseCase: RemoveTimeSlotUseCase
+    private val removeTimeSlotUseCase: RemoveTimeSlotUseCase,
+    private val updateStudyRoomSeatsUseCase: UpdateStudyRoomSeatsUseCase,
+    private val updateStudyRoomTimeSlotUseCase: UpdateStudyRoomTimeSlotUseCase
 ) {
 
     @GetMapping("/available-time")
@@ -187,19 +195,43 @@ class StudyRoomWebAdapter(
                     southDescription = southDescription,
                     northDescription = northDescription,
                     availableSex = availableSex.name,
-                    availableGrade = availableGrade,
-                    timeSlotIds = timeSlotIds,
-                    seats = seats.map {
-                        UpdateStudyRoomRequest.SeatRequest(
-                            widthLocation = it.widthLocation,
-                            heightLocation = it.heightLocation,
-                            number = it.number,
-                            typeId = it.typeId,
-                            status = it.status.name
-                        )
-                    }
+                    availableGrade = availableGrade
                 )
             }
+        )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{study-room-id}/seats")
+    fun updateStudyRoomSeats(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
+        @RequestBody @Valid webRequest: UpdateStudyRoomSeatsWebRequest
+    ) {
+        updateStudyRoomSeatsUseCase.execute(
+            request = UpdateStudyRoomSeatsRequest(
+                webRequest.seats.map {
+                    UpdateStudyRoomSeatsRequest.SeatRequest(
+                        widthLocation = it.widthLocation,
+                        heightLocation = it.heightLocation,
+                        number = it.number,
+                        typeId = it.typeId,
+                        status = it.status.name
+                    )
+                }
+            ),
+            studyRoomId = studyRoomId
+        )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{study-room-id}/time-slot")
+    fun updateStudyRoomTimeSlot(
+        @PathVariable("study-room-id") @NotNull studyRoomId: UUID,
+        @RequestBody @Valid webRequest: UpdateStudyRoomTimeSlotWebRequest
+    ) {
+        updateStudyRoomTimeSlotUseCase.execute(
+            request = UpdateStudyRoomTimeSlotRequest(webRequest.timeSlotIds),
+            studyRoomId = studyRoomId
         )
     }
 
