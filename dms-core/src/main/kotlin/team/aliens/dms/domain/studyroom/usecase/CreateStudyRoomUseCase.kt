@@ -3,6 +3,7 @@ package team.aliens.dms.domain.studyroom.usecase
 import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
+import team.aliens.dms.domain.studyroom.dto.StudyRoomIdResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -12,7 +13,7 @@ class CreateStudyRoomUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(request: CreateStudyRoomRequest): UUID {
+    fun execute(request: CreateStudyRoomRequest): StudyRoomIdResponse {
 
         val user = userService.getCurrentUser()
 
@@ -29,6 +30,6 @@ class CreateStudyRoomUseCase(
             request.toSeats(studyRoomId = studyRoom.id)
         )
 
-        return studyRoom.id
+        return StudyRoomIdResponse(studyRoom.id)
     }
 }
