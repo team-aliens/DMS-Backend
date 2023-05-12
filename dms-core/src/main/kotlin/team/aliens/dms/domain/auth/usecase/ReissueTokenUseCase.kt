@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.dto.ReissueResponse
+import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.auth.spi.JwtPort
 import team.aliens.dms.domain.school.service.SchoolService
@@ -15,31 +15,16 @@ class ReissueTokenUseCase(
     private val authService: AuthService
 ) {
 
-    fun execute(token: String): ReissueResponse {
+    fun execute(token: String): TokenFeatureResponse {
         val queryToken = authService.getRefreshTokenByToken(token)
 
-        val (accessToken, accessTokenExpiredAt, refreshToken, refreshTokenExpiredAt) = jwtPort.receiveToken(
+        val tokenResponse = jwtPort.receiveToken(
             userId = queryToken.userId, authority = queryToken.authority
         )
 
         val user = userService.queryUserById(queryToken.userId)
-
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        return ReissueResponse(
-            accessToken = accessToken,
-            accessTokenExpiredAt = accessTokenExpiredAt,
-            refreshToken = refreshToken,
-            refreshTokenExpiredAt = refreshTokenExpiredAt,
-            features = availableFeatures.run {
-                ReissueResponse.Features(
-                    mealService = mealService,
-                    noticeService = noticeService,
-                    pointService = pointService,
-                    studyRoomService = studyRoomService,
-                    remainService = remainService
-                )
-            }
-        )
+        return TokenFeatureResponse.of(tokenResponse, availableFeatures)
     }
 }

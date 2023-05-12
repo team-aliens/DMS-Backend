@@ -1,34 +1,20 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse
-import team.aliens.dms.domain.studyroom.dto.ManagerQueryStudyRoomsResponse.StudyRoomElement
-import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import java.util.UUID
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.studyroom.dto.StudyRoomsResponse
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomsUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(timeSlotId: UUID): ManagerQueryStudyRoomsResponse {
+    fun execute(timeSlotId: UUID): StudyRoomsResponse {
 
         val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
+        val studyRooms = studyRoomService.getStudyRoomVOs(timeSlot.id)
 
-        val studyRooms = studyRoomService.getStudyRoomVOs(timeSlot.id).map {
-            StudyRoomElement(
-                id = it.id,
-                floor = it.floor,
-                name = it.name,
-                availableGrade = it.availableGrade,
-                availableSex = it.availableSex,
-                inUseHeadcount = it.inUseHeadcount,
-                totalAvailableSeat = it.totalAvailableSeat
-            )
-        }
-
-        return ManagerQueryStudyRoomsResponse(
-            studyRooms = studyRooms
-        )
+        return StudyRoomsResponse.of(studyRooms)
     }
 }

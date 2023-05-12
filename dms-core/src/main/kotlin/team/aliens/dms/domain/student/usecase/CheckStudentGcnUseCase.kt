@@ -3,6 +3,7 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
+import team.aliens.dms.domain.student.dto.StudentNameResponse
 import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
 import team.aliens.dms.domain.student.service.StudentService
 
@@ -12,7 +13,7 @@ class CheckStudentGcnUseCase(
     private val studentService: StudentService
 ) {
 
-    fun execute(request: CheckStudentGcnRequest): String {
+    fun execute(request: CheckStudentGcnRequest): StudentNameResponse {
         val school = schoolService.getSchoolById(request.schoolId)
 
         val student = studentService.getStudentBySchoolIdAndGcn(
@@ -26,6 +27,6 @@ class CheckStudentGcnUseCase(
             throw StudentAlreadyExistsException
         }
 
-        return student.name
+        return StudentNameResponse(student.name)
     }
 }

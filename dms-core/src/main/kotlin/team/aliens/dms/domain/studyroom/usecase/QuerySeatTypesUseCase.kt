@@ -1,11 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
+import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse
-import team.aliens.dms.domain.studyroom.dto.QuerySeatTypesResponse.TypeElement
+import team.aliens.dms.domain.studyroom.dto.SeatTypesResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
-import java.util.UUID
 
 @ReadOnlyUseCase
 class QuerySeatTypesUseCase(
@@ -13,19 +12,11 @@ class QuerySeatTypesUseCase(
     private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(studyRoomId: UUID?): QuerySeatTypesResponse {
+    fun execute(studyRoomId: UUID?): SeatTypesResponse {
 
         val user = userService.getCurrentUser()
         val seatTypes = studyRoomService.getSeatTypes(user.schoolId, studyRoomId)
 
-        return QuerySeatTypesResponse(
-            seatTypes.map {
-                TypeElement(
-                    id = it.id,
-                    name = it.name,
-                    color = it.color
-                )
-            }
-        )
+        return SeatTypesResponse.of(seatTypes)
     }
 }
