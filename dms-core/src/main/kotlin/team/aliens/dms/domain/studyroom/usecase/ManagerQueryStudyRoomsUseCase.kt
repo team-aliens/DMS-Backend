@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.studyroom.dto.StudyRoomsResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class ManagerQueryStudyRoomsUseCase(
