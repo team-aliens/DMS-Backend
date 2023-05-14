@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.point.service
 
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.PointHistoryDto
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.AllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
@@ -28,14 +28,14 @@ interface GetPointService {
         type: PointType? = null,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<PointHistoryDto>
+    ): List<PointHistoryResponse.PointHistoryDto>
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
         type: PointType?,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<QueryAllPointHistoryResponse.PointHistory>
+    ): List<AllPointHistoryResponse.PointHistory>
 
     fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

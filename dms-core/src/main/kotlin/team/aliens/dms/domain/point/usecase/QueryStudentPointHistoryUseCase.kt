@@ -2,7 +2,7 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.student.service.StudentService
 import java.util.UUID
@@ -13,7 +13,7 @@ class QueryStudentPointHistoryUseCase(
     private val pointService: PointService
 ) {
 
-    fun execute(studentId: UUID, pageData: PageData): QueryStudentPointHistoryResponse {
+    fun execute(studentId: UUID, pageData: PageData): PointHistoryResponse {
 
         val student = studentService.getStudentById(studentId)
 
@@ -24,6 +24,6 @@ class QueryStudentPointHistoryUseCase(
             isCancel = false
         )
 
-        return QueryStudentPointHistoryResponse(pointHistories)
+        return PointHistoryResponse(pointHistories = pointHistories)
     }
 }

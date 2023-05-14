@@ -4,8 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.PointHistoryDto
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.AllPointHistoryResponse
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
@@ -65,7 +65,7 @@ class PointHistoryPersistenceAdapter(
         type: PointType?,
         isCancel: Boolean?,
         pageData: PageData
-    ): List<PointHistoryDto> {
+    ): List<PointHistoryResponse.PointHistoryDto> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
@@ -88,7 +88,7 @@ class PointHistoryPersistenceAdapter(
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
-                PointHistoryDto(
+                PointHistoryResponse.PointHistoryDto(
                     pointHistoryId = it.id,
                     date = it.date.toLocalDate(),
                     type = it.pointType,
@@ -103,7 +103,7 @@ class PointHistoryPersistenceAdapter(
         type: PointType?,
         isCancel: Boolean?,
         pageData: PageData
-    ): List<QueryAllPointHistoryResponse.PointHistory> {
+    ): List<AllPointHistoryResponse.PointHistory> {
         return queryFactory
             .select(
                 QQueryAllPointHistoryVO(
@@ -127,7 +127,7 @@ class PointHistoryPersistenceAdapter(
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
             .map {
-                QueryAllPointHistoryResponse.PointHistory(
+                AllPointHistoryResponse.PointHistory(
                     pointHistoryId = it.pointHistoryId,
                     studentName = it.studentName,
                     studentGcn = it.studentGcn,
