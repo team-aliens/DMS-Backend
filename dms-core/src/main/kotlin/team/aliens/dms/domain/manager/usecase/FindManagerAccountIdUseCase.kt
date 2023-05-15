@@ -25,7 +25,7 @@ class FindManagerAccountIdUseCase(
         sendEmailPort.sendAccountId(user.email, user.accountId)
 
         return ManagerEmailResponse(
-             email = StringUtil.coveredEmail(user.email)
-         )
+            email = StringUtil.coveredEmail(user.email)
+        )
     }
 }

@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.time.LocalTime
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.dto.TimeSlotIdResponse
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import team.aliens.dms.domain.user.service.UserService
+import java.time.LocalTime
 
 @UseCase
 class CreateTimeSlotUseCase(
