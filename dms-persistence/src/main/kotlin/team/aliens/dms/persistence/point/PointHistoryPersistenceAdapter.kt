@@ -4,11 +4,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.AllPointHistoryResponse
-import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
+import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
@@ -65,7 +65,7 @@ class PointHistoryPersistenceAdapter(
         type: PointType?,
         isCancel: Boolean?,
         pageData: PageData
-    ): List<PointHistoryResponse.PointHistoryDto> {
+    ): List<PointHistoryVO> {
         return queryFactory
             .select(
                 QQueryPointHistoryVO(
@@ -87,15 +87,6 @@ class PointHistoryPersistenceAdapter(
             .limit(pageData.size)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
-            .map {
-                PointHistoryResponse.PointHistoryDto(
-                    pointHistoryId = it.id,
-                    date = it.date.toLocalDate(),
-                    type = it.pointType,
-                    name = it.pointName,
-                    score = it.pointScore
-                )
-            }
     }
 
     override fun queryPointHistoryBySchoolIdAndType(
@@ -103,7 +94,7 @@ class PointHistoryPersistenceAdapter(
         type: PointType?,
         isCancel: Boolean?,
         pageData: PageData
-    ): List<AllPointHistoryResponse.PointHistory> {
+    ): List<AllPointHistoryVO> {
         return queryFactory
             .select(
                 QQueryAllPointHistoryVO(
@@ -126,17 +117,6 @@ class PointHistoryPersistenceAdapter(
             .limit(pageData.size)
             .orderBy(pointHistoryJpaEntity.createdAt.desc())
             .fetch()
-            .map {
-                AllPointHistoryResponse.PointHistory(
-                    pointHistoryId = it.pointHistoryId,
-                    studentName = it.studentName,
-                    studentGcn = it.studentGcn,
-                    date = it.date.toLocalDate(),
-                    pointName = it.pointName,
-                    pointType = it.pointType,
-                    pointScore = it.pointScore
-                )
-            }
     }
 
     override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
