@@ -24,6 +24,6 @@ class QueryAllPointHistoryUseCase(
             pageData = pageData
         )
 
-        return AllPointHistoryResponse(pointHistories = pointHistories)
+        return AllPointHistoryResponse(pointHistories)
     }
 }

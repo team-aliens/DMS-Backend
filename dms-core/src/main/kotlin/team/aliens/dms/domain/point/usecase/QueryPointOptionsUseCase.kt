@@ -17,6 +17,6 @@ class QueryPointOptionsUseCase(
 
         val pointOptions = pointService.queryPointOptionsBySchoolIdAndKeyword(user.schoolId, keyword)
 
-        return PointOptionsResponse.of(pointOptions = pointOptions)
+        return PointOptionsResponse.of(pointOptions)
     }
 }
