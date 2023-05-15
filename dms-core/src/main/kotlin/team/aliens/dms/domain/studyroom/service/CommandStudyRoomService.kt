@@ -14,7 +14,7 @@ interface CommandStudyRoomService {
 
     fun createStudyRoom(studyRoom: StudyRoom): StudyRoom
 
-    fun updateStudyRoom(studyRoomId: UUID, updateFunction: Function<StudyRoom, StudyRoom>)
+    fun updateStudyRoom(studyRoom: StudyRoom, updateFunction: Function<StudyRoom, StudyRoom>)
 
     fun createSeatType(seatType: SeatType): SeatType
 

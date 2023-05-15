@@ -4,19 +4,17 @@ import java.util.UUID
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.studyroom.dto.UpdateStudyRoomRequest
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
-import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class UpdateStudyRoomUseCase(
-    private val userService: UserService,
     private val studyRoomService: StudyRoomService
 ) {
 
     fun execute(studyRoomId: UUID, request: UpdateStudyRoomRequest) {
 
         studyRoomService.updateStudyRoom(
-            studyRoomId = studyRoomId,
-            updateFunction = request.toStudyRoom()
+            studyRoom = studyRoomService.getStudyRoom(studyRoomId),
+            updateFunction = request.toStudyRoomUpdateFunction()
         )
 
         studyRoomService.updateTimeSlotsByStudyRoom(

@@ -22,10 +22,8 @@ import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 
 @Service
 class CommandStudyRoomServiceImpl(
-    private val getStudyRoomService: GetStudyRoomService,
-    private val checkStudyRoomService: CheckStudyRoomService,
     private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort,
+    private val commandStudyRoomPort: CommandStudyRoomPort
 ) : CommandStudyRoomService {
 
     override fun createStudyRoom(studyRoom: StudyRoom): StudyRoom {
@@ -35,8 +33,7 @@ class CommandStudyRoomServiceImpl(
         return commandStudyRoomPort.saveStudyRoom(studyRoom)
     }
 
-    override fun updateStudyRoom(studyRoomId: UUID, updateFunction: Function<StudyRoom, StudyRoom>) {
-        val studyRoom = getStudyRoomService.getStudyRoom(studyRoomId)
+    override fun updateStudyRoom(studyRoom: StudyRoom, updateFunction: Function<StudyRoom, StudyRoom>) {
         val updatedStudyRoom = updateFunction.apply(studyRoom)
             .also {
                 if (
