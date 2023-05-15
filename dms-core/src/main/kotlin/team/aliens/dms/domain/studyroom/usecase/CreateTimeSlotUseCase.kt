@@ -17,7 +17,7 @@ class CreateTimeSlotUseCase(
 
         val user = userService.getCurrentUser()
 
-        val timeSlot = studyRoomService.saveTimeSlot(
+        val timeSlot = studyRoomService.createTimeSlot(
             TimeSlot(
                 schoolId = user.schoolId,
                 startTime = startTime,
