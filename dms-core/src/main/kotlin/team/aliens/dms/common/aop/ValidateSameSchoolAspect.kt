@@ -18,7 +18,7 @@ class ValidateSameSchoolAspect(
         returning = "ret"
     )
     fun validateSameSchool(joinPoint: JoinPoint, ret: SchoolIdDomain) {
-        if (ret.schoolId != securityPort.getCurrentUserSchoolId()) {
+        if (securityPort.isAuthenticated() && ret.schoolId != securityPort.getCurrentUserSchoolId()) {
             throw SchoolMismatchException
         }
     }
