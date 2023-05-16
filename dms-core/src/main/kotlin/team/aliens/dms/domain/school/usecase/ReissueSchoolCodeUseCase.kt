@@ -2,6 +2,7 @@ package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.util.StringUtil
+import team.aliens.dms.domain.school.dto.ReissueSchoolCodeResponse
 import team.aliens.dms.domain.school.model.School
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
@@ -12,7 +13,7 @@ class ReissueSchoolCodeUseCase(
     private val schoolService: SchoolService
 ) {
 
-    fun execute(): String {
+    fun execute(): ReissueSchoolCodeResponse {
 
         val user = userService.getCurrentUser()
 
@@ -23,6 +24,6 @@ class ReissueSchoolCodeUseCase(
             school.copy(code = code)
         )
 
-        return code
+        return ReissueSchoolCodeResponse(code = code)
     }
 }

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
+import team.aliens.dms.domain.school.dto.AvailableFeaturesResponse
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -11,11 +11,11 @@ class QueryAvailableFeaturesUseCase(
     private val schoolService: SchoolService
 ) {
 
-    fun execute(): QueryAvailableFeaturesResponse {
+    fun execute(): AvailableFeaturesResponse {
         val user = userService.getCurrentUser()
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        return QueryAvailableFeaturesResponse(
+        return AvailableFeaturesResponse(
             mealService = availableFeatures.mealService,
             noticeService = availableFeatures.noticeService,
             pointService = availableFeatures.pointService,

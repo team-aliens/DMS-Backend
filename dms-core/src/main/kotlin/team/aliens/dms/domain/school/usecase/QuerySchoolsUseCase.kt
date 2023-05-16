@@ -12,14 +12,6 @@ class QuerySchoolsUseCase(
     fun execute(): SchoolsResponse {
         val schools = schoolService.getAllSchools()
 
-        val result = schools.map {
-            SchoolsResponse.SchoolElement(
-                id = it.id,
-                name = it.name,
-                address = it.address,
-            )
-        }
-
-        return SchoolsResponse(result)
+        return SchoolsResponse.of(schools = schools)
     }
 }
