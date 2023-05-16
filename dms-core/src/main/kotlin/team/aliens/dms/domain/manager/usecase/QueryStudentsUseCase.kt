@@ -6,7 +6,6 @@ import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.dto.StudentsResponse
 import team.aliens.dms.domain.student.service.StudentService
-import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
