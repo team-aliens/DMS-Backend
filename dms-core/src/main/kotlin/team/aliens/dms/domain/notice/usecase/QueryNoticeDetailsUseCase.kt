@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
+import team.aliens.dms.domain.notice.dto.NoticeResponse
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.school.exception.SchoolMismatchException
 import team.aliens.dms.domain.user.service.UserService
@@ -13,7 +13,7 @@ class QueryNoticeDetailsUseCase(
     private val noticeService: NoticeService
 ) {
 
-    fun execute(noticeId: UUID): QueryNoticeDetailsResponse {
+    fun execute(noticeId: UUID): NoticeResponse {
         val user = userService.getCurrentUser()
         val notice = noticeService.getNoticeById(noticeId)
 
@@ -23,11 +23,6 @@ class QueryNoticeDetailsUseCase(
             }
         }
 
-        return QueryNoticeDetailsResponse(
-            id = notice.id,
-            title = notice.title,
-            content = notice.content,
-            createdAt = notice.createdAt!!
-        )
+        return NoticeResponse.detailOf(notice)
     }
 }

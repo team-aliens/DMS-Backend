@@ -18,15 +18,15 @@ class CreateStudyRoomUseCase(
 
         studyRoomService.checkStudyRoomExistsByFloorAndName(request.floor, request.name, user.schoolId)
         val studyRoom = studyRoomService.saveStudyRoom(
-            request.toStudyRoom(user.id)
+            request.toStudyRoom(schoolId = user.schoolId)
         )
 
         studyRoomService.saveAllStudyRoomTimeSlots(
-            request.toStudyRoomTimeSlots(studyRoom.id)
+            request.toStudyRoomTimeSlots(studyRoomId = studyRoom.id)
         )
 
         studyRoomService.saveAllSeats(
-            request.toSeats(studyRoom.id)
+            request.toSeats(studyRoomId = studyRoom.id)
         )
 
         return StudyRoomIdResponse(studyRoom.id)

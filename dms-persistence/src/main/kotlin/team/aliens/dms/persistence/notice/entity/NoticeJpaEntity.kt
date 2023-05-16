@@ -15,7 +15,7 @@ import javax.persistence.Table
 @Table(name = "tbl_notice")
 class NoticeJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)

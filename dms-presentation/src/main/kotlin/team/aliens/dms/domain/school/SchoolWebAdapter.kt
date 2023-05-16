@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
+import team.aliens.dms.domain.school.dto.AvailableFeaturesResponse
+import team.aliens.dms.domain.school.dto.ReissueSchoolCodeResponse
+import team.aliens.dms.domain.school.dto.SchoolIdResponse
+import team.aliens.dms.domain.school.dto.SchoolQuestionResponse
 import team.aliens.dms.domain.school.dto.SchoolsResponse
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
 import team.aliens.dms.domain.school.dto.request.UpdateQuestionWebRequest
-import team.aliens.dms.domain.school.dto.response.ReissueSchoolCodeResponse
-import team.aliens.dms.domain.school.dto.response.SchoolIdResponse
-import team.aliens.dms.domain.school.dto.response.SchoolQuestionResponse
 import team.aliens.dms.domain.school.usecase.CheckSchoolAnswerUseCase
 import team.aliens.dms.domain.school.usecase.CheckSchoolCodeUseCase
 import team.aliens.dms.domain.school.usecase.QueryAvailableFeaturesUseCase
@@ -50,9 +50,7 @@ class SchoolWebAdapter(
 
     @GetMapping("/question/{school-id}")
     fun getQuestion(@PathVariable("school-id") @NotNull schoolId: UUID): SchoolQuestionResponse {
-        val result = querySchoolQuestionUseCase.execute(schoolId)
-
-        return SchoolQuestionResponse(result)
+        return querySchoolQuestionUseCase.execute(schoolId)
     }
 
     @GetMapping("/answer/{school-id}")
@@ -70,21 +68,17 @@ class SchoolWebAdapter(
     fun checkCode(
         @RequestParam("school_code") @NotBlank @Size(max = 8) schoolCode: String
     ): SchoolIdResponse {
-        val result = checkSchoolCodeUseCase.execute(schoolCode)
-
-        return SchoolIdResponse(result)
+        return checkSchoolCodeUseCase.execute(schoolCode)
     }
 
     @GetMapping("/available-features")
-    fun queryAvailableFeatures(): QueryAvailableFeaturesResponse {
+    fun queryAvailableFeatures(): AvailableFeaturesResponse {
         return queryAvailableFeaturesUseCase.execute()
     }
 
     @PatchMapping("/code")
     fun reissueCode(): ReissueSchoolCodeResponse {
-        val result = reissueSchoolCodeUseCase.execute()
-
-        return ReissueSchoolCodeResponse(result)
+        return reissueSchoolCodeUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

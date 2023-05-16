@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.point.service
 
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.point.dto.PointHistoryDto
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import java.time.LocalDateTime
 import java.util.UUID
@@ -28,14 +28,14 @@ interface GetPointService {
         type: PointType? = null,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<PointHistoryDto>
+    ): List<PointHistoryVO>
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
         type: PointType?,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<QueryAllPointHistoryResponse.PointHistory>
+    ): List<AllPointHistoryVO>
 
     fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

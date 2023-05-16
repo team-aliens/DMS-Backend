@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.extension.setExcelContentDisposition
-import team.aliens.dms.domain.remain.dto.QueryCurrentAppliedRemainOptionResponse
-import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
-import team.aliens.dms.domain.remain.dto.QueryRemainOptionsResponse
+import team.aliens.dms.domain.remain.dto.CurrentAppliedRemainOptionResponse
+import team.aliens.dms.domain.remain.dto.RemainAvailableTimeResponse
+import team.aliens.dms.domain.remain.dto.RemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
 import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
 import team.aliens.dms.domain.remain.dto.request.UpdateRemainAvailableTimeWebRequest
@@ -79,17 +79,17 @@ class RemainWebAdapter(
     }
 
     @GetMapping("/my")
-    fun getCurrentAppliedRemainOption(): QueryCurrentAppliedRemainOptionResponse {
+    fun getCurrentAppliedRemainOption(): CurrentAppliedRemainOptionResponse {
         return queryCurrentAppliedRemainOptionUseCase.execute()
     }
 
     @GetMapping("/options")
-    fun getRemainOptions(): QueryRemainOptionsResponse {
+    fun getRemainOptions(): RemainOptionsResponse {
         return queryRemainOptionsUseCase.execute()
     }
 
     @GetMapping("/available-time")
-    fun getRemainAvailableTime(): QueryRemainAvailableTimeResponse {
+    fun getRemainAvailableTime(): RemainAvailableTimeResponse {
         return queryRemainAvailableTimeUseCase.execute()
     }
 

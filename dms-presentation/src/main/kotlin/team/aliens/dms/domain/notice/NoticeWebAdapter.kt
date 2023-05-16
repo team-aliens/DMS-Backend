@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.notice.dto.QueryAllNoticesResponse
-import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
+import team.aliens.dms.domain.notice.dto.NoticeIdResponse
+import team.aliens.dms.domain.notice.dto.NoticeResponse
+import team.aliens.dms.domain.notice.dto.NoticesResponse
 import team.aliens.dms.domain.notice.dto.request.CreateNoticeWebRequest
 import team.aliens.dms.domain.notice.dto.request.UpdateNoticeWebRequest
 import team.aliens.dms.domain.notice.dto.request.WebOrderType
-import team.aliens.dms.domain.notice.dto.response.CreateNoticeResponse
 import team.aliens.dms.domain.notice.dto.response.GetNoticeStatusResponse
-import team.aliens.dms.domain.notice.dto.response.UpdateNoticeResponse
 import team.aliens.dms.domain.notice.usecase.CreateNoticeUseCase
 import team.aliens.dms.domain.notice.usecase.QueryAllNoticesUseCase
 import team.aliens.dms.domain.notice.usecase.QueryNoticeDetailsUseCase
@@ -50,12 +49,12 @@ class NoticeWebAdapter(
     }
 
     @GetMapping("/{notice-id}")
-    fun getDetails(@PathVariable("notice-id") @NotNull noticeId: UUID): QueryNoticeDetailsResponse {
+    fun getDetails(@PathVariable("notice-id") @NotNull noticeId: UUID): NoticeResponse {
         return queryNoticeDetailsUseCase.execute(noticeId)
     }
 
     @GetMapping
-    fun queryAllNotices(@RequestParam("order") @NotNull orderType: WebOrderType): QueryAllNoticesResponse {
+    fun queryAllNotices(@RequestParam("order") @NotNull orderType: WebOrderType): NoticesResponse {
         return queryAllNoticesUseCase.execute(orderType.name)
     }
 
@@ -69,24 +68,20 @@ class NoticeWebAdapter(
     fun updateNotice(
         @PathVariable("notice-id") @NotNull noticeId: UUID,
         @RequestBody @Valid request: UpdateNoticeWebRequest
-    ): UpdateNoticeResponse {
-        return UpdateNoticeResponse(
-            updateNoticeUseCase.execute(
-                noticeId = noticeId,
-                title = request.title,
-                content = request.content
-            )
+    ): NoticeIdResponse {
+        return updateNoticeUseCase.execute(
+            noticeId = noticeId,
+            title = request.title,
+            content = request.content
         )
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun createNotice(@RequestBody @Valid request: CreateNoticeWebRequest): CreateNoticeResponse {
-        return CreateNoticeResponse(
-            createNoticeUseCase.execute(
-                title = request.title,
-                content = request.content
-            )
+    fun createNotice(@RequestBody @Valid request: CreateNoticeWebRequest): NoticeIdResponse {
+        return createNoticeUseCase.execute(
+            title = request.title,
+            content = request.content
         )
     }
 }

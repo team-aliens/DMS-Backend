@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
+import team.aliens.dms.domain.student.dto.StudentEmailResponse
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.exception.UserNotFoundException
@@ -25,7 +26,7 @@ class FindStudentAccountIdUseCase(
     private val sendEmailPort: SendEmailPort
 ) {
 
-    fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
+    fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): StudentEmailResponse {
         val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = schoolId,
             grade = request.grade,
@@ -43,6 +44,8 @@ class FindStudentAccountIdUseCase(
 
         sendEmailPort.sendAccountId(user.email, user.accountId)
 
-        return StringUtil.coveredEmail(user.email)
+        return StudentEmailResponse(
+            email = StringUtil.coveredEmail(user.email)
+        )
     }
 }
