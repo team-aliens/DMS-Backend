@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.studyroom.model
 
+import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import java.util.UUID
 
 data class Seat(
@@ -19,6 +20,13 @@ data class Seat(
     val status: SeatStatus
 
 ) {
+
+    fun checkAvailable() {
+        if (status != SeatStatus.AVAILABLE) {
+            throw SeatCanNotAppliedException
+        }
+    }
+
     companion object {
         fun processName(seatNumber: Int, typeName: String) = "$seatNumber($typeName)"
     }

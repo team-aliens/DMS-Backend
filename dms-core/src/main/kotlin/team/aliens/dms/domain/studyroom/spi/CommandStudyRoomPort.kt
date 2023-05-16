@@ -1,7 +1,9 @@
 package team.aliens.dms.domain.studyroom.spi
 
+import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
+import team.aliens.dms.domain.studyroom.model.SeatType
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
@@ -19,6 +21,10 @@ interface CommandStudyRoomPort {
 
     fun saveAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>): List<StudyRoomTimeSlot>
 
+    fun saveAvailableTime(availableTime: AvailableTime): AvailableTime
+
+    fun saveSeatType(seatType: SeatType): SeatType
+
     fun deleteStudyRoomById(studyRoomId: UUID)
 
     fun deleteTimeSlotById(timeSlotId: UUID)
@@ -29,6 +35,10 @@ interface CommandStudyRoomPort {
 
     fun deleteAllSeatApplications()
 
+    fun deleteSeatType(seatType: SeatType)
+
+    fun deleteSeatApplicationByStudentIdAndSeatIdAndTimeSlotId(studentId: UUID, seatId: UUID, timeSlotId: UUID)
+
     fun deleteSeatApplicationByStudentIdAndTimeSlotId(studentId: UUID, timeSlotId: UUID)
 
     fun deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId: UUID, studentId: UUID, timeSlotId: UUID)
@@ -36,4 +46,6 @@ interface CommandStudyRoomPort {
     fun deleteSeatApplicationByTimeSlotId(timeSlotId: UUID)
 
     fun deleteStudyRoomTimeSlotByStudyRoomId(studyRoomId: UUID)
+
+    fun deleteSeatApplicationByStudentId(studentId: UUID)
 }

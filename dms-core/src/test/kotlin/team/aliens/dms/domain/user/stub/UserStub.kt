@@ -12,7 +12,7 @@ internal fun createUserStub(
     password: String = "password",
     email: String = "email@dsm.hs.kr",
     authority: Authority = Authority.STUDENT,
-    createdAt: LocalDateTime? = null,
+    createdAt: LocalDateTime = LocalDateTime.now(),
     deletedAt: LocalDateTime? = null
 ) = User(
     id = id,

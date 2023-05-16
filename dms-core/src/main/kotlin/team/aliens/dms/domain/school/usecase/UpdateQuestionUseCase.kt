@@ -2,28 +2,22 @@ package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.school.dto.UpdateQuestionRequest
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.school.spi.CommandSchoolPort
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
-import team.aliens.dms.domain.school.spi.SchoolSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class UpdateQuestionUseCase(
-    private val querySchoolPort: QuerySchoolPort,
-    private val commandSchoolPort: CommandSchoolPort,
-    private val securityPort: SchoolSecurityPort,
-    private val queryUserPort: SchoolQueryUserPort
+    private val schoolService: SchoolService,
+    private val userService: UserService,
 ) {
 
     fun execute(request: UpdateQuestionRequest) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val user = userService.getCurrentUser()
 
-        commandSchoolPort.saveSchool(
+        val school = schoolService.getSchoolById(user.schoolId)
+
+        schoolService.saveSchool(
             school.copy(
                 question = request.question,
                 answer = request.answer

@@ -1,39 +1,23 @@
 package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.dto.GrantTagRequest
-import team.aliens.dms.domain.tag.exception.TagNotFoundException
 import team.aliens.dms.domain.tag.model.StudentTag
-import team.aliens.dms.domain.tag.spi.CommandTagPort
-import team.aliens.dms.domain.tag.spi.QueryTagPort
-import team.aliens.dms.domain.tag.spi.TagQueryStudentPort
-import team.aliens.dms.domain.tag.spi.TagQueryUserPort
-import team.aliens.dms.domain.tag.spi.TagSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.tag.service.TagService
 import java.time.LocalDateTime
 
 @UseCase
 class GrantTagUseCase(
-    private val securityPort: TagSecurityPort,
-    private val queryUserPort: TagQueryUserPort,
-    private val queryTagPort: QueryTagPort,
-    private val queryStudentPort: TagQueryStudentPort,
-    private val commandTagPort: CommandTagPort
+    private val tagService: TagService,
+    private val studentService: StudentService,
 ) {
 
     fun execute(request: GrantTagRequest) {
-        val currentManagerId = securityPort.getCurrentUserId()
-        val currentManager = queryUserPort.queryUserById(currentManagerId) ?: throw UserNotFoundException
-        val tag = queryTagPort.queryTagById(request.tagId) ?: throw TagNotFoundException
 
-        validateSameSchool(currentManager.schoolId, tag.schoolId)
+        val tag = tagService.getTagById(request.tagId)
 
-        val students = queryStudentPort.queryAllStudentsByIdsIn(request.studentIds)
-        if (!students.map { it.id }.containsAll(request.studentIds)) {
-            throw StudentNotFoundException
-        }
+        val students = studentService.getAllStudentsByIdsIn(request.studentIds)
 
         val studentTags = students.map {
             StudentTag(
@@ -43,6 +27,6 @@ class GrantTagUseCase(
             )
         }
 
-        commandTagPort.saveAllStudentTags(studentTags)
+        tagService.saveAllStudentTags(studentTags)
     }
 }

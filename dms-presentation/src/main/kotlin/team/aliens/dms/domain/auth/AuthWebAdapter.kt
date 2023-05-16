@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.auth.dto.CertifyEmailCodeRequest
 import team.aliens.dms.domain.auth.dto.CertifyEmailRequest
-import team.aliens.dms.domain.auth.dto.ReissueResponse
 import team.aliens.dms.domain.auth.dto.SendEmailCodeRequest
 import team.aliens.dms.domain.auth.dto.SignInRequest
-import team.aliens.dms.domain.auth.dto.SignInResponse
+import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
 import team.aliens.dms.domain.auth.dto.request.WebEmailType
@@ -44,7 +43,7 @@ class AuthWebAdapter(
 ) {
 
     @PostMapping("/tokens")
-    fun singIn(@RequestBody @Valid request: SignInWebRequest): SignInResponse {
+    fun singIn(@RequestBody @Valid request: SignInWebRequest): TokenFeatureResponse {
         return signInUseCase.execute(
             SignInRequest(
                 accountId = request.accountId,
@@ -92,7 +91,7 @@ class AuthWebAdapter(
     }
 
     @PutMapping("/reissue")
-    fun reissueToken(@RequestHeader("refresh-token") @NotBlank refreshToken: String): ReissueResponse {
+    fun reissueToken(@RequestHeader("refresh-token") @NotBlank refreshToken: String): TokenFeatureResponse {
         return reissueTokenUseCase.execute(refreshToken)
     }
 

@@ -1,30 +1,28 @@
 package team.aliens.dms.domain.meal.usecase
 
 import team.aliens.dms.common.annotation.SchedulerUseCase
+import team.aliens.dms.common.service.feign.FeignService
 import team.aliens.dms.domain.meal.model.Meal
-import team.aliens.dms.domain.meal.spi.CommandMealPort
-import team.aliens.dms.domain.meal.spi.MealFeignClientPort
-import team.aliens.dms.domain.meal.spi.MealFeignClientSchoolPort
-import team.aliens.dms.domain.meal.spi.MealQuerySchoolPort
+import team.aliens.dms.domain.meal.service.MealService
+import team.aliens.dms.domain.school.service.SchoolService
 
 @SchedulerUseCase
 class SaveAllMealsUseCase(
-    private val querySchoolPort: MealQuerySchoolPort,
-    private val commandMealPort: CommandMealPort,
-    private val mealFeignClientPort: MealFeignClientPort,
-    private val schoolFeignClientPort: MealFeignClientSchoolPort
+    private val schoolService: SchoolService,
+    private val mealService: MealService,
+    private val feignService: FeignService
 ) {
 
     fun execute() {
         val meals = mutableListOf<Meal>()
 
-        querySchoolPort.queryAllSchools().map { school ->
-            val neisSchool = schoolFeignClientPort.getNeisSchoolInfo(
+        schoolService.getAllSchools().map { school ->
+            val neisSchool = feignService.getNeisSchoolInfo(
                 schoolName = school.name,
                 schoolAddress = school.address
             )
 
-            mealFeignClientPort.getNeisMealServiceDietInfo(
+            feignService.getNeisMealServiceDietInfo(
                 sdSchoolCode = neisSchool.sdSchoolCode,
                 regionCode = neisSchool.regionCode
             ).mealServiceDietInfos.map { mealDietInfo ->
@@ -40,6 +38,6 @@ class SaveAllMealsUseCase(
             }
         }
 
-        commandMealPort.saveAllMeals(meals)
+        mealService.saveAllMeals(meals)
     }
 }

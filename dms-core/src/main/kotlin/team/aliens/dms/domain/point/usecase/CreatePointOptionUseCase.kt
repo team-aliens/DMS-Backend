@@ -1,40 +1,31 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
-import team.aliens.dms.domain.point.exception.PointOptionNameExistsException
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.CommandPointOptionPort
-import team.aliens.dms.domain.point.spi.PointQueryManagerPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class CreatePointOptionUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryManagerPort: PointQueryManagerPort,
-    private val commandPointOptionPort: CommandPointOptionPort,
-    private val queryPointOptionPort: QueryPointOptionPort
+    private val userService: UserService,
+    private val pointService: PointService
 ) {
 
     fun execute(request: CreatePointOptionRequest): CreatePointOptionResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
 
-        if (queryPointOptionPort.existByNameAndSchoolId(request.name, manager.schoolId)) {
-            throw PointOptionNameExistsException
-        }
+        val user = userService.getCurrentUser()
 
-        val pointType = PointType.valueOf(request.type)
-        val pointOption = commandPointOptionPort.savePointOption(
+        pointService.checkPointOptionExistsByNameAndSchoolId(request.name, user.schoolId)
+
+        val pointOption = pointService.savePointOption(
             PointOption(
-                schoolId = manager.schoolId,
+                schoolId = user.schoolId,
                 name = request.name,
                 score = request.score,
-                type = pointType
+                type = PointType.valueOf(request.type)
             )
         )
 

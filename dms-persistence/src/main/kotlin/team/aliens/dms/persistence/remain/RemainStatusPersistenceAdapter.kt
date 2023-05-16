@@ -20,7 +20,7 @@ class RemainStatusPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : RemainStatusPort {
 
-    override fun queryByStudentIdIn(studentIds: List<UUID>): List<RemainStatusInfo> {
+    override fun queryAllByStudentId(studentIds: List<UUID>): List<RemainStatusInfo> {
         return queryFactory
             .select(
                 QRemainStatusInfoVO(

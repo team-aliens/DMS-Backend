@@ -17,11 +17,12 @@ class StudentMapper(
     override fun toDomain(entity: StudentJpaEntity?): Student? {
         return entity?.let {
             Student(
-                id = it.id,
+                id = it.id!!,
+                userId = it.user?.id,
                 roomId = it.room!!.id!!,
                 roomNumber = it.room!!.number,
                 roomLocation = it.roomLocation,
-                schoolId = it.user!!.school!!.id!!,
+                schoolId = it.room!!.school!!.id!!,
                 grade = it.grade,
                 classRoom = it.classRoom,
                 number = it.number,
@@ -34,7 +35,7 @@ class StudentMapper(
     }
 
     override fun toEntity(domain: Student): StudentJpaEntity {
-        val user = userRepository.findByIdOrNull(domain.id)
+        val user = domain.userId?.let { userRepository.findByIdOrNull(it) }
         val room = roomRepository.findByIdOrNull(domain.roomId)
 
         return StudentJpaEntity(

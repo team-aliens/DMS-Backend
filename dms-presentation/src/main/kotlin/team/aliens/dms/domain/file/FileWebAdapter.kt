@@ -14,7 +14,7 @@ import team.aliens.dms.common.extension.toFile
 import team.aliens.dms.domain.file.dto.GetFileUploadUrlResponse
 import team.aliens.dms.domain.file.dto.response.UploadFileResponse
 import team.aliens.dms.domain.file.usecase.GetFileUploadUrlUseCase
-import team.aliens.dms.domain.file.usecase.ImportVerifiedStudentUseCase
+import team.aliens.dms.domain.file.usecase.ImportStudentUseCase
 import team.aliens.dms.domain.file.usecase.UploadFileUseCase
 import javax.validation.constraints.NotNull
 
@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull
 class FileWebAdapter(
     private val uploadFileUseCase: UploadFileUseCase,
     private val getFileUploadUrlUseCase: GetFileUploadUrlUseCase,
-    private val importVerifiedStudentUseCase: ImportVerifiedStudentUseCase
+    private val importStudentUseCase: ImportStudentUseCase
 ) {
 
     @PostMapping
@@ -45,7 +45,7 @@ class FileWebAdapter(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/verified-student")
     fun importVerifiedStudentFromExcel(@RequestPart @NotNull file: MultipartFile?) {
-        importVerifiedStudentUseCase.execute(
+        importStudentUseCase.execute(
             file!!.toFile()
         )
     }

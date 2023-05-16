@@ -1,9 +1,9 @@
 package team.aliens.dms.persistence.studyroom.repository
 
-import java.util.UUID
 import org.springframework.data.repository.CrudRepository
 import team.aliens.dms.persistence.studyroom.entity.StudyRoomTimeSlotJpaEntity
 import team.aliens.dms.persistence.studyroom.entity.StudyRoomTimeSlotJpaEntityId
+import java.util.UUID
 
 interface StudyRoomTimeSlotJpaRepository : CrudRepository<StudyRoomTimeSlotJpaEntity, StudyRoomTimeSlotJpaEntityId> {
 

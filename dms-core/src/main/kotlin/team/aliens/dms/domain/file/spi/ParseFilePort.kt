@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.file.spi
 
-import team.aliens.dms.domain.student.model.VerifiedStudent
+import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import java.io.File
 
 interface ParseFilePort {
-    fun transferToVerifiedStudent(file: File, schoolName: String): List<VerifiedStudent>
+    fun getExcelStudentVO(file: File): List<ExcelStudentVO>
 }
