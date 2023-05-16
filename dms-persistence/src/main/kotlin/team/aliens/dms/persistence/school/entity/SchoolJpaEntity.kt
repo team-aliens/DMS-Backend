@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint
 )
 class SchoolJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String,

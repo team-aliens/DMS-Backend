@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.dto.SignUpRequest
-import team.aliens.dms.domain.student.dto.SignUpResponse
-import team.aliens.dms.domain.student.dto.StudentMyPageResponse
+import team.aliens.dms.domain.student.dto.StudentEmailResponse
+import team.aliens.dms.domain.student.dto.StudentNameResponse
+import team.aliens.dms.domain.student.dto.StudentResponse
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
-import team.aliens.dms.domain.student.dto.response.CheckStudentGcnResponse
-import team.aliens.dms.domain.student.dto.response.FindStudentAccountIdResponse
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
@@ -55,7 +55,7 @@ class StudentWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    fun signUp(@RequestBody @Valid request: SignUpWebRequest): SignUpResponse {
+    fun signUp(@RequestBody @Valid request: SignUpWebRequest): TokenFeatureResponse {
         val signUpRequest = SignUpRequest(
             schoolCode = request.schoolCode,
             schoolAnswer = request.schoolAnswer,
@@ -89,7 +89,7 @@ class StudentWebAdapter(
         @RequestParam @NotNull grade: Int,
         @RequestParam("class_room") @NotNull classRoom: Int,
         @RequestParam @NotNull number: Int
-    ): FindStudentAccountIdResponse {
+    ): StudentEmailResponse {
         val request = FindStudentAccountIdRequest(
             name = name,
             grade = grade,
@@ -97,9 +97,7 @@ class StudentWebAdapter(
             number = number
         )
 
-        val result = findStudentAccountIdUseCase.execute(schoolId, request)
-
-        return FindStudentAccountIdResponse(result)
+        return findStudentAccountIdUseCase.execute(schoolId, request)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -122,7 +120,7 @@ class StudentWebAdapter(
         @RequestParam @NotNull grade: Int,
         @RequestParam("class_room") @NotNull classRoom: Int,
         @RequestParam @NotNull number: Int
-    ): CheckStudentGcnResponse {
+    ): StudentNameResponse {
         val request = CheckStudentGcnRequest(
             schoolId = schoolId,
             grade = grade,
@@ -130,9 +128,7 @@ class StudentWebAdapter(
             number = number
         )
 
-        val result = checkStudentGcnUseCase.execute(request)
-
-        return CheckStudentGcnResponse(result)
+        return checkStudentGcnUseCase.execute(request)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -142,7 +138,7 @@ class StudentWebAdapter(
     }
 
     @GetMapping("/profile")
-    fun myPage(): StudentMyPageResponse {
+    fun myPage(): StudentResponse {
         return studentMyPageUseCase.execute()
     }
 

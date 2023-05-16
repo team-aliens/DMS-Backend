@@ -3,41 +3,32 @@ package team.aliens.dms.domain.student.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.StudentQueryPhrasePort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
-import team.aliens.dms.domain.student.dto.StudentMyPageResponse
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryPointHistoryPort
-import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentSecurityPort
+import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.student.dto.StudentResponse
+import team.aliens.dms.domain.user.service.UserService
 import java.security.SecureRandom
 
 @ReadOnlyUseCase
 class StudentMyPageUseCase(
-    private val securityPort: StudentSecurityPort,
-    private val queryStudentPort: QueryStudentPort,
-    private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryPointHistoryPort: StudentQueryPointHistoryPort,
-    private val studentQueryPhrasePort: StudentQueryPhrasePort
+    private val userService: UserService,
+    private val schoolService: SchoolService,
+    private val pointService: PointService
 ) {
 
-    fun execute(): StudentMyPageResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val student = queryStudentPort.queryStudentById(currentUserId) ?: throw StudentNotFoundException
-        val school = querySchoolPort.querySchoolById(student.schoolId) ?: throw SchoolNotFoundException
+    fun execute(): StudentResponse {
+
+        val student = userService.getCurrentStudent()
+        val school = schoolService.getSchoolById(student.schoolId)
 
         val (bonusPoint, minusPoint) =
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
+            pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(student.gcn, student.name)
 
         val phrase = randomPhrase(bonusPoint, minusPoint)
 
-        return StudentMyPageResponse(
+        return StudentResponse.of(
             schoolName = school.name,
-            name = student.name,
-            gcn = student.gcn,
-            profileImageUrl = student.profileImageUrl!!,
-            sex = student.sex,
+            student = student,
             bonusPoint = bonusPoint,
             minusPoint = minusPoint,
             phrase = phrase
@@ -45,11 +36,11 @@ class StudentMyPageUseCase(
     }
 
     private fun randomPhrase(bonusPoint: Int, minusPoint: Int): String {
-        val bonusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.BONUS, point = bonusPoint
+        val bonusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.BONUS, standardPoint = bonusPoint
         )
-        val minusPhrase = studentQueryPhrasePort.queryPhraseAllByPointTypeAndStandardPoint(
-            type = PointType.MINUS, point = minusPoint
+        val minusPhrase = pointService.queryAllPhraseByPointTypeAndStandardPoint(
+            type = PointType.MINUS, standardPoint = minusPoint
         )
 
         val phrases = listOf<Phrase>()

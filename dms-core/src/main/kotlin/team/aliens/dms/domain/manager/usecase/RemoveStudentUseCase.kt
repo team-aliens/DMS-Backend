@@ -1,49 +1,28 @@
 package team.aliens.dms.domain.manager.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.manager.spi.ManagerCommandUserPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryStudentPort
-import team.aliens.dms.domain.manager.spi.ManagerQueryUserPort
-import team.aliens.dms.domain.manager.spi.ManagerSecurityPort
-import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.CommandStudentPort
-import team.aliens.dms.domain.student.spi.StudentCommandRemainStatusPort
-import team.aliens.dms.domain.student.spi.StudentCommandStudyRoomPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.time.LocalDateTime
+import team.aliens.dms.domain.remain.service.RemainService
+import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class RemoveStudentUseCase(
-    private val securityPort: ManagerSecurityPort,
-    private val queryUserPort: ManagerQueryUserPort,
-    private val queryStudentPort: ManagerQueryStudentPort,
-    private val commandRemainStatusPort: StudentCommandRemainStatusPort,
-    private val commandStudyRoomPort: StudentCommandStudyRoomPort,
-    private val commandStudentPort: CommandStudentPort,
-    private val commandUserPort: ManagerCommandUserPort
+    private val userService: UserService,
+    private val studentService: StudentService,
+    private val remainService: RemainService,
+    private val commandStudyRoomPort: CommandStudyRoomPort
 ) {
 
     fun execute(studentId: UUID) {
-        val currentManagerId = securityPort.getCurrentUserId()
 
-        val manager = queryUserPort.queryUserById(currentManagerId) ?: throw ManagerNotFoundException
-        val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
-        val studentUser = queryUserPort.queryUserById(studentId) ?: throw UserNotFoundException
+        val student = studentService.getStudentById(studentId)
 
-        validateSameSchool(student.schoolId, manager.schoolId)
-
-        commandRemainStatusPort.deleteByStudentId(studentId)
+        remainService.deleteRemainStatusByStudentId(studentId)
         commandStudyRoomPort.deleteSeatApplicationByStudentId(studentId)
 
-        commandStudentPort.saveStudent(
-            student.copy(deletedAt = LocalDateTime.now())
-        )
-
-        commandUserPort.saveUser(
-            studentUser.copy(deletedAt = LocalDateTime.now())
-        )
+        studentService.deleteStudent(student)
+        student.userId?.let { userService.deleteUserById(it) }
     }
 }

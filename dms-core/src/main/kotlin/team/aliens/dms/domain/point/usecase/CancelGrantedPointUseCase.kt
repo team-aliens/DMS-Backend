@@ -1,40 +1,24 @@
 package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
-import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
-import team.aliens.dms.domain.point.spi.PointQueryUserPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.point.service.PointService
 import java.util.UUID
 
 @UseCase
 class CancelGrantedPointUseCase(
-    private val commandPointHistoryPort: CommandPointHistoryPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val securityPort: PointSecurityPort,
-    private val queryUserPort: PointQueryUserPort
+    private val pointService: PointService
 ) {
 
     fun execute(pointHistoryId: UUID) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        val pointHistory = queryPointHistoryPort.queryPointHistoryById(pointHistoryId)
-            ?: throw PointHistoryNotFoundException
+        val pointHistory = pointService.getPointHistoryById(pointHistoryId)
 
-        validateSameSchool(manager.schoolId, pointHistory.schoolId)
-
-        val pointTotal = queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
+        val pointTotal = pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(
             gcn = pointHistory.studentGcn,
             studentName = pointHistory.studentName
         )
 
-        commandPointHistoryPort.savePointHistory(
-            pointHistory.cancelHistory(pointTotal)
-        )
-        commandPointHistoryPort.deletePointHistory(pointHistory)
+        pointService.savePointHistory(pointHistory.cancelHistory(pointTotal))
+        pointService.deletePointHistory(pointHistory)
     }
 }

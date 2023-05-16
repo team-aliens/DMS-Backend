@@ -4,11 +4,11 @@ import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.util.StringUtil
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
+import team.aliens.dms.domain.student.dto.StudentEmailResponse
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
+import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 /**
@@ -21,20 +21,22 @@ import java.util.UUID
  **/
 @ReadOnlyUseCase
 class FindStudentAccountIdUseCase(
-    private val queryStudentPort: QueryStudentPort,
-    private val queryUserPort: StudentQueryUserPort,
+    private val studentService: StudentService,
+    private val userService: UserService,
     private val sendEmailPort: SendEmailPort
 ) {
 
-    fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): String {
-        val student = queryStudentPort.queryStudentBySchoolIdAndGcn(
+    fun execute(schoolId: UUID, request: FindStudentAccountIdRequest): StudentEmailResponse {
+        val student = studentService.getStudentBySchoolIdAndGcn(
             schoolId = schoolId,
             grade = request.grade,
             classRoom = request.classRoom,
             number = request.number
-        ) ?: throw StudentNotFoundException
+        )
 
-        val user = queryUserPort.queryUserById(student.id) ?: throw UserNotFoundException
+        val user = student.userId?.let {
+            userService.queryUserById(it)
+        } ?: throw UserNotFoundException
 
         if (student.name != request.name) {
             throw StudentInfoMismatchException
@@ -42,6 +44,8 @@ class FindStudentAccountIdUseCase(
 
         sendEmailPort.sendAccountId(user.email, user.accountId)
 
-        return StringUtil.coveredEmail(user.email)
+        return StudentEmailResponse(
+            email = StringUtil.coveredEmail(user.email)
+        )
     }
 }

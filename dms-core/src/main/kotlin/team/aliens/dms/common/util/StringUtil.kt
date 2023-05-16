@@ -29,4 +29,6 @@ object StringUtil {
 
         return authCodeList.toString().replace("[^0-9]".toRegex(), "")
     }
+
+    fun <T> List<T>.toStringWithoutBracket() = toString().replace("[\\[\\]]".toRegex(), "")
 }

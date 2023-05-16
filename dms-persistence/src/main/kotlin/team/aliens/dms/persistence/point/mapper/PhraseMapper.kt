@@ -11,7 +11,7 @@ class PhraseMapper : GenericMapper<Phrase, PhraseJpaEntity> {
     override fun toDomain(entity: PhraseJpaEntity?): Phrase? {
         return entity?.let {
             Phrase(
-                id = entity.id,
+                id = entity.id!!,
                 content = entity.content,
                 type = entity.type,
                 standard = entity.standard

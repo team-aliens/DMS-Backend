@@ -44,7 +44,7 @@ dependencies {
     implementation(Dependencies.JACKSON_TYPE)
 
     // aop
-    implementation(Dependencies.SPRING_AOP)
+    implementation(Dependencies.AOP)
 
     // logging
     implementation(Dependencies.SENTRY)

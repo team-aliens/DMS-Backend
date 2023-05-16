@@ -2,39 +2,28 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
-import team.aliens.dms.domain.point.spi.PointQueryManagerPort
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
+import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.student.service.StudentService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryStudentPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryManagerPort: PointQueryManagerPort,
-    private val queryStudentPort: PointQueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val studentService: StudentService,
+    private val pointService: PointService
 ) {
 
-    fun execute(studentId: UUID, pageData: PageData): QueryStudentPointHistoryResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryManagerPort.queryManagerById(currentUserId) ?: throw ManagerNotFoundException
+    fun execute(studentId: UUID, pageData: PageData): PointHistoryResponse {
 
-        val student = queryStudentPort.queryStudentById(studentId) ?: throw StudentNotFoundException
+        val student = studentService.getStudentById(studentId)
 
-        validateSameSchool(manager.schoolId, student.schoolId)
-
-        val pointHistories = queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
+        val pointHistories = pointService.queryPointHistoryByStudentGcnAndNameAndType(
             studentName = student.name,
             gcn = student.gcn,
             pageData = pageData,
             isCancel = false
         )
 
-        return QueryStudentPointHistoryResponse(pointHistories)
+        return PointHistoryResponse(pointHistories = pointHistories)
     }
 }
