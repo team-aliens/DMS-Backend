@@ -201,7 +201,7 @@ data class StudyRoomsResponse(
             StudyRoomsResponse(
                 studyRooms = of(studyRooms).studyRooms
                     .map {
-                        it.copy(isMine = appliedStudyRoomId != it.id)
+                        it.copy(isMine = appliedStudyRoomId == it.id)
                     }
             )
     }
