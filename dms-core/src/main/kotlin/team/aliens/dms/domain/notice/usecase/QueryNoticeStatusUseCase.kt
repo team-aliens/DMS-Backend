@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.notice.spi.QueryNoticePort
+import team.aliens.dms.domain.notice.service.NoticeService
 import java.time.LocalDate
 
 @ReadOnlyUseCase
 class QueryNoticeStatusUseCase(
-    private val queryNoticePort: QueryNoticePort
+    private val noticeService: NoticeService
 ) {
 
     /**
@@ -16,7 +16,7 @@ class QueryNoticeStatusUseCase(
         val now = LocalDate.now()
         val from = now.minusDays(NOTICE_PERIOD)
 
-        return queryNoticePort.existsNoticeByDateBetween(from, now)
+        return noticeService.existsNoticeByDateBetween(from, now)
     }
 
     companion object {

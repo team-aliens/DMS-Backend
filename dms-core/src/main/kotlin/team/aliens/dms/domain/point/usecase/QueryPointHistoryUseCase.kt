@@ -2,56 +2,39 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.dto.PointRequestType
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.spi.PointQueryStudentPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.student.service.StudentService
 
 @ReadOnlyUseCase
 class QueryPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryStudentPort: PointQueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val studentService: StudentService,
+    private val pointService: PointService
 ) {
 
-    fun execute(type: PointRequestType, pageData: PageData): QueryPointHistoryResponse {
-        val currentStudentId = securityPort.getCurrentUserId()
-        val currentStudent = queryStudentPort.queryStudentById(currentStudentId) ?: throw StudentNotFoundException
+    fun execute(type: PointRequestType, pageData: PageData): PointHistoryResponse {
 
-        val gcn = currentStudent.gcn
-        val name = currentStudent.name
+        val student = studentService.getCurrentStudent()
+        val gcn = student.gcn
+        val name = student.name
         val pointType = PointRequestType.toPointType(type)
 
-        val pointHistories =
-            queryPointHistoryPort.queryPointHistoryByStudentGcnAndNameAndType(
-                gcn = gcn,
-                studentName = name,
-                type = pointType,
-                isCancel = false,
-                pageData = pageData
-            )
+        val pointHistories = pointService.queryPointHistoryByStudentGcnAndNameAndType(
+            gcn = gcn,
+            studentName = name,
+            type = pointType,
+            isCancel = false,
+            pageData = pageData
+        )
 
         val (bonusTotal, minusTotal) =
-            queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
+            pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(gcn, name)
 
-        return QueryPointHistoryResponse(
-            totalPoint = getTotalPoint(type, bonusTotal, minusTotal),
-            points = pointHistories
+        return PointHistoryResponse(
+            totalPoint = PointHistory.getTotalPoint(type, bonusTotal, minusTotal),
+            pointHistories = pointHistories
         )
-    }
-
-    private fun getTotalPoint(
-        type: PointRequestType,
-        bonusTotal: Int,
-        minusTotal: Int
-    ): Int {
-        val totalPoint = when (type) {
-            PointRequestType.BONUS -> bonusTotal
-            PointRequestType.MINUS -> minusTotal
-            PointRequestType.ALL -> bonusTotal - minusTotal
-        }
-        return totalPoint
     }
 }

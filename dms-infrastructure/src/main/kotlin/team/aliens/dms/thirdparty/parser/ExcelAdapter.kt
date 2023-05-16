@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.Row.CREATE_NULL_AS_BLANK
+import org.apache.poi.ss.usermodel.Row.RETURN_BLANK_AS_NULL
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
@@ -15,69 +15,78 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
 import team.aliens.dms.domain.file.FileExtension.XLSX
-import team.aliens.dms.domain.file.exception.BadExcelFormatException
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
+import team.aliens.dms.thirdparty.parser.exception.BadExcelFormatException
 import team.aliens.dms.thirdparty.parser.exception.ExcelExtensionMismatchException
 import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.format.DateTimeFormatter
-import java.util.UUID
+import java.util.function.Function
 
 @Component
 class ExcelAdapter : ParseFilePort, WriteFilePort {
 
-    override fun transferToVerifiedStudent(file: File, schoolName: String): List<VerifiedStudent> {
+    override fun getExcelStudentVO(file: File): List<ExcelStudentVO> {
         val workbook = transferToExcel(file)
 
-        val verifiedStudents = mutableListOf<VerifiedStudent>()
+        val worksheet = workbook.getSheetAt(0)
 
-        try {
-            val worksheet = workbook.getSheetAt(0)
-            for (i in 1..worksheet.lastRowNum) {
-                val row = worksheet.getRow(i)
-                if (row.isFirstCellBlank()) continue
-
-                val excelData = row.run {
-                    VerifiedStudent(
-                        id = UUID.randomUUID(),
-                        schoolName = schoolName,
-                        gcn = Student.processGcn(
-                            grade = getIntValue(0),
-                            classRoom = getIntValue(1),
-                            number = getIntValue(2)
-                        ),
-                        sex = Sex.transferToSex(
-                            getStringValue(3)
-                        ),
-                        name = getStringValue(4),
-                        roomNumber = getIntValue(5).toString(),
-                        roomLocation = getStringValue(6)
-                    )
-                }
-                verifiedStudents.add(excelData)
+        val excelStudentVOs = getExcelInfo(worksheet) { row ->
+            row.run {
+                ExcelStudentVO(
+                    grade = getIntValue(0),
+                    classRoom = getIntValue(1),
+                    number = getIntValue(2),
+                    sex = Sex.transferToSex(
+                        getStringValue(3)
+                    ),
+                    name = getStringValue(4),
+                    roomNumber = getIntValue(5).toString(),
+                    roomLocation = getStringValue(6)
+                )
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw BadExcelFormatException
         }
 
-        return verifiedStudents
+        return excelStudentVOs.filterNotNull()
+    }
+
+    private fun <T> getExcelInfo(worksheet: Sheet, function: Function<Row, T>): List<T?> {
+
+        val invalidRowIdxes = mutableListOf<Int>()
+
+        val results = (1..worksheet.lastRowNum).map { i ->
+            val row = worksheet.getRow(i)
+            if (row.isFirstCellBlank()) return@map null
+
+            try {
+                function.apply(row)
+            } catch (e: Exception) {
+                invalidRowIdxes.add(i + 1) // poi idx 0부터 시작, 엑셀 행은 1부터 시작
+                null
+            }
+        }
+
+        if (invalidRowIdxes.isNotEmpty()) {
+            throw BadExcelFormatException(invalidRowIdxes = invalidRowIdxes)
+        }
+
+        return results
     }
 
     private fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK
 
-    private fun Row.getStringValue(idx: Int) = getCell(idx, CREATE_NULL_AS_BLANK).stringCellValue
+    private fun Row.getStringValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).stringCellValue
 
-    private fun Row.getIntValue(idx: Int) = getCell(idx, CREATE_NULL_AS_BLANK).numericCellValue.toInt()
+    private fun Row.getIntValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).numericCellValue.toInt()
 
     private fun transferToExcel(file: File): Workbook {
         val inputStream = file.inputStream()
@@ -96,6 +105,28 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 throw ExcelInvalidFileException
             }.getOrThrow()
         }
+    }
+
+    override fun writeStudentExcelFile(students: List<Student>): ByteArray {
+
+        val attributes = listOf("학년", "반", "번호", "성별 (ex. 남, 여)", "이름", "호실번호 (ex. 301,  501)", "호실자리위치 (ex. A, B, C)")
+
+        val studentsList: List<List<String>> = students.map {
+            listOf(
+                it.grade.toString(),
+                it.classRoom.toString(),
+                it.number.toString(),
+                it.sex.korean,
+                it.name,
+                it.roomNumber,
+                it.roomLocation
+            )
+        }
+
+        return createExcelSheet(
+            attributes = attributes,
+            datasList = studentsList
+        )
     }
 
     override fun writePointHistoryExcelFile(pointHistories: List<PointHistory>): ByteArray {
@@ -155,24 +186,20 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             style = getHeaderCellStyle(workbook)
         )
 
+        val gcns = getExcelInfo(worksheet) { row ->
+            row.run {
+                Pair(
+                    Student.processGcn(getIntValue(0), getIntValue(1), getIntValue(2)),
+                    getStringValue(3)
+                )
+            }
+        }
+
         for (i in 1..worksheet.lastRowNum) {
             val row = worksheet.getRow(i)
             if (row.isFirstCellBlank()) continue
 
-            val studentSeats = row.run {
-                try {
-                    studentSeatsMap[
-                        Pair(
-                            Student.processGcn(getIntValue(0), getIntValue(1), getIntValue(2)),
-                            getStringValue(3)
-                        )
-                    ]
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    throw BadExcelFormatException
-                }
-            }?.seats
-
+            val studentSeats = studentSeatsMap[gcns[i - 1]]?.seats
             insertDatasAtRow(
                 row = row,
                 startIdx = columnCount,

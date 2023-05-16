@@ -8,11 +8,12 @@ dependencies {
     implementation(Dependencies.SPRING_TRANSACTION)
 
     // aop
-    implementation(Dependencies.SPRING_AOP)
+    implementation(Dependencies.AOP)
 }
 
 allOpen {
     annotation("team.aliens.dms.common.annotation.UseCase")
     annotation("team.aliens.dms.common.annotation.ReadOnlyUseCase")
     annotation("team.aliens.dms.common.annotation.SchedulerUseCase")
+    annotation("team.aliens.dms.common.annotation.Service")
 }

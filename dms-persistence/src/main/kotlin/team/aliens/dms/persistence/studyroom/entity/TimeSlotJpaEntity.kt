@@ -15,7 +15,7 @@ import javax.persistence.Table
 @Table(name = "tbl_time_slot")
 class TimeSlotJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @Column(columnDefinition = "TIME", nullable = false)
     val startTime: LocalTime,

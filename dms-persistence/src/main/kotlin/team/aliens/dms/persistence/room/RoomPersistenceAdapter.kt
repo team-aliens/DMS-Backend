@@ -13,13 +13,6 @@ class RoomPersistenceAdapter(
     private val roomRepository: RoomJpaRepository
 ) : RoomPort {
 
-    override fun queryRoomBySchoolIdAndNumber(schoolId: UUID, number: String) = roomMapper.toDomain(
-        roomRepository.findBySchoolIdAndNumber(
-            schoolId = schoolId,
-            number = number
-        )
-    )
-
     override fun queryRoomsByRoomNumbersIn(roomNumbers: List<String>, schoolId: UUID): List<Room> {
         return roomRepository.findAllByNumberIsInAndSchoolId(
             numbers = roomNumbers,

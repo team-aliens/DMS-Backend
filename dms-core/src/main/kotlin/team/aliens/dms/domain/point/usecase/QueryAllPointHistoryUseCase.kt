@@ -2,32 +2,28 @@ package team.aliens.dms.domain.point.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.point.dto.AllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.PointRequestType
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.spi.PointQueryUserPort
-import team.aliens.dms.domain.point.spi.PointSecurityPort
-import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAllPointHistoryUseCase(
-    private val securityPort: PointSecurityPort,
-    private val queryUserPort: PointQueryUserPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val userService: UserService,
+    private val pointService: PointService
 ) {
 
-    fun execute(type: PointRequestType, pageData: PageData): QueryAllPointHistoryResponse {
+    fun execute(type: PointRequestType, pageData: PageData): AllPointHistoryResponse {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = userService.getCurrentUser()
 
-        val pointHistories = queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
-            schoolId = manager.schoolId,
+        val pointHistories = pointService.queryPointHistoryBySchoolIdAndType(
+            schoolId = user.schoolId,
             type = PointRequestType.toPointType(type),
             isCancel = false,
             pageData = pageData
         )
 
-        return QueryAllPointHistoryResponse(pointHistories)
+        return AllPointHistoryResponse(pointHistories)
     }
 }

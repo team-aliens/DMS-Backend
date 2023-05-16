@@ -7,8 +7,9 @@ import team.aliens.dms.domain.auth.model.Authority
 import java.util.UUID
 
 class StudentDetails(
-    private val studentId: UUID
-) : UserDetails {
+    override val userId: UUID,
+    override val schoolId: UUID
+) : UserDetails, CustomDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(Authority.STUDENT.name))
@@ -16,7 +17,7 @@ class StudentDetails(
 
     override fun getPassword(): String? = null
 
-    override fun getUsername(): String = studentId.toString()
+    override fun getUsername(): String = userId.toString()
 
     override fun isAccountNonExpired(): Boolean = true
 

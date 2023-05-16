@@ -1,30 +1,21 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.studyroom.dto.QueryAvailableTimeResponse
-import team.aliens.dms.domain.studyroom.exception.AvailableTimeNotFoundException
-import team.aliens.dms.domain.studyroom.spi.QueryAvailableTimePort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.studyroom.dto.AvailableTimeResponse
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAvailableTimeUseCase(
-    private val securityPort: StudyRoomSecurityPort,
-    private val queryAvailableTimePort: QueryAvailableTimePort,
-    private val queryUserPort: StudyRoomQueryUserPort
+    private val userService: UserService,
+    private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(): QueryAvailableTimeResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+    fun execute(): AvailableTimeResponse {
 
-        val availableTime = queryAvailableTimePort
-            .queryAvailableTimeBySchoolId(user.schoolId) ?: throw AvailableTimeNotFoundException
+        val user = userService.getCurrentUser()
+        val availableTime = studyRoomService.getAvailableTime(user.schoolId)
 
-        return QueryAvailableTimeResponse(
-            startAt = availableTime.startAt.withSecond(0),
-            endAt = availableTime.endAt.withSecond(0)
-        )
+        return AvailableTimeResponse.of(availableTime)
     }
 }

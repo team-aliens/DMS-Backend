@@ -37,7 +37,7 @@ class UserMapper(
             password = domain.password,
             email = domain.email,
             authority = domain.authority,
-            createdAt = domain.createdAt!!,
+            createdAt = domain.createdAt,
             deletedAt = domain.deletedAt
         )
     }

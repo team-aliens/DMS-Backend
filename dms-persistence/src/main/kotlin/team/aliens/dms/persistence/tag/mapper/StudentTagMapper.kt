@@ -18,7 +18,7 @@ class StudentTagMapper(
     override fun toDomain(entity: StudentTagJpaEntity?): StudentTag? {
         return entity?.let {
             StudentTag(
-                studentId = it.student!!.id,
+                studentId = it.student!!.id!!,
                 tagId = it.tag!!.id!!,
                 createdAt = it.createdAt
             )
