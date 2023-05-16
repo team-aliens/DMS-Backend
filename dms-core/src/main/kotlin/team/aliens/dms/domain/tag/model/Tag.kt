@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.tag.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import java.util.UUID
 
 @Aggregate
@@ -12,6 +13,6 @@ data class Tag(
 
     val color: String,
 
-    val schoolId: UUID
+    override val schoolId: UUID
 
-)
+) : SchoolIdDomain

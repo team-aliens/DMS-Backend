@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.extension.setExcelContentDisposition
+import team.aliens.dms.domain.point.dto.AllPointHistoryResponse
 import team.aliens.dms.domain.point.dto.CreatePointOptionRequest
 import team.aliens.dms.domain.point.dto.CreatePointOptionResponse
 import team.aliens.dms.domain.point.dto.GrantPointRequest
+import team.aliens.dms.domain.point.dto.PointHistoryResponse
+import team.aliens.dms.domain.point.dto.PointOptionsResponse
 import team.aliens.dms.domain.point.dto.PointRequestType
-import team.aliens.dms.domain.point.dto.QueryAllPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryPointHistoryResponse
-import team.aliens.dms.domain.point.dto.QueryPointOptionsResponse
-import team.aliens.dms.domain.point.dto.QueryStudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
@@ -64,7 +63,7 @@ class PointWebAdapter(
     fun getPointHistory(
         @RequestParam @NotNull type: PointRequestType,
         @ModelAttribute pageData: PageData
-    ): QueryPointHistoryResponse {
+    ): PointHistoryResponse {
         return queryPointHistoryUseCase.execute(type, pageData)
     }
 
@@ -114,7 +113,7 @@ class PointWebAdapter(
     fun getPointHistories(
         @RequestParam @NotNull type: PointRequestType,
         @ModelAttribute pageData: PageData
-    ): QueryAllPointHistoryResponse {
+    ): AllPointHistoryResponse {
         return queryAllPointHistoryUseCase.execute(
             type = type,
             pageData = PageData(pageData.page, pageData.size)
@@ -139,7 +138,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/options")
-    fun getAllPointOptions(@RequestParam(required = false) keyword: String?): QueryPointOptionsResponse {
+    fun getAllPointOptions(@RequestParam(required = false) keyword: String?): PointOptionsResponse {
         return queryPointOptionsUseCase.execute(keyword)
     }
 
@@ -147,7 +146,7 @@ class PointWebAdapter(
     fun getStudentsPointHistory(
         @PathVariable("student-id") @NotNull studentId: UUID,
         @ModelAttribute pageData: PageData
-    ): QueryStudentPointHistoryResponse {
+    ): PointHistoryResponse {
         return queryStudentPointHistoryUseCase.execute(studentId, pageData)
     }
 }

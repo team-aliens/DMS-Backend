@@ -1,31 +1,23 @@
 package team.aliens.dms.domain.user.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.PasswordMismatchException
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.user.dto.UpdateUserPasswordRequest
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.spi.CommandUserPort
-import team.aliens.dms.domain.user.spi.QueryUserPort
-import team.aliens.dms.domain.user.spi.UserSecurityPort
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class UpdateUserPasswordUseCase(
-    private val securityPort: UserSecurityPort,
-    private val queryUserPort: QueryUserPort,
-    private val commandUserPort: CommandUserPort
+    private val userService: UserService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: UpdateUserPasswordRequest) {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = userService.getCurrentUser()
 
-        if (!securityPort.isPasswordMatch(request.currentPassword, user.password)) {
-            throw PasswordMismatchException
-        }
+        securityService.checkIsPasswordMatches(request.currentPassword, user.password)
 
-        val newEncodedPassword = securityPort.encodePassword(request.newPassword)
-
-        commandUserPort.saveUser(
+        val newEncodedPassword = securityService.encodePassword(request.newPassword)
+        userService.saveUser(
             user.copy(password = newEncodedPassword)
         )
     }

@@ -1,38 +1,30 @@
 package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.tag.exception.TagAlreadyExistsException
 import team.aliens.dms.domain.tag.model.Tag
-import team.aliens.dms.domain.tag.spi.CommandTagPort
-import team.aliens.dms.domain.tag.spi.QueryTagPort
-import team.aliens.dms.domain.tag.spi.TagQueryUserPort
-import team.aliens.dms.domain.tag.spi.TagSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.tag.service.TagService
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @UseCase
 class CreateTagUseCase(
-    private val securityPort: TagSecurityPort,
-    private val queryUserPort: TagQueryUserPort,
-    private val commandTagPort: CommandTagPort,
-    private val queryTagPort: QueryTagPort
+    private val userService: UserService,
+    private val tagService: TagService
 ) {
 
     fun execute(name: String, color: String): UUID {
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
 
-        if (queryTagPort.existsByNameAndSchoolId(name, manager.schoolId)) {
-            throw TagAlreadyExistsException
-        }
+        val user = userService.getCurrentUser()
+
+        tagService.checkTagExistsByNameAndSchoolId(name, user.schoolId)
 
         val tag = Tag(
             name = name,
             color = color,
-            schoolId = manager.schoolId
+            schoolId = user.schoolId
         )
 
-        val savedTag = commandTagPort.saveTag(tag)
+        val savedTag = tagService.saveTag(tag)
 
         return savedTag.id
     }

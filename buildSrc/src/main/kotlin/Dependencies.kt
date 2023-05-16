@@ -56,7 +56,7 @@ object Dependencies {
     const val APACHE_POI_OOXML = "org.apache.poi:poi-ooxml:${DependencyVersions.APACHE_POI_VERSION}"
 
     // aop
-    const val SPRING_AOP = "org.springframework.boot:spring-boot-starter-aop:${PluginVersions.SPRING_BOOT_VERSION}"
+    const val AOP = "org.aspectj:aspectjweaver:${DependencyVersions.ASPECTJ_VERSION}"
 
     // detekt
     const val DETEKT = "io.gitlab.arturbosch.detekt:detekt-formatting:${PluginVersions.DETEKT_VERSION}"

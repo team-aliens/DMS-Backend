@@ -1,37 +1,28 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.manager.exception.ManagerNotFoundException
-import team.aliens.dms.domain.notice.dto.QueryNoticeDetailsResponse
-import team.aliens.dms.domain.notice.exception.NoticeNotFoundException
-import team.aliens.dms.domain.notice.spi.NoticeQueryUserPort
-import team.aliens.dms.domain.notice.spi.NoticeSecurityPort
-import team.aliens.dms.domain.notice.spi.QueryNoticePort
-import team.aliens.dms.domain.school.validateSameSchool
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.notice.dto.NoticeResponse
+import team.aliens.dms.domain.notice.service.NoticeService
+import team.aliens.dms.domain.school.exception.SchoolMismatchException
+import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
 
 @ReadOnlyUseCase
 class QueryNoticeDetailsUseCase(
-    private val securityPort: NoticeSecurityPort,
-    private val queryNoticePort: QueryNoticePort,
-    private val queryUserPort: NoticeQueryUserPort
+    private val userService: UserService,
+    private val noticeService: NoticeService
 ) {
 
-    fun execute(noticeId: UUID): QueryNoticeDetailsResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val notice = queryNoticePort.queryNoticeById(noticeId) ?: throw NoticeNotFoundException
+    fun execute(noticeId: UUID): NoticeResponse {
+        val user = userService.getCurrentUser()
+        val notice = noticeService.getNoticeById(noticeId)
 
-        val writer = queryUserPort.queryUserById(notice.managerId) ?: throw ManagerNotFoundException
-        val viewer = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        userService.queryUserById(notice.managerId).let { writer ->
+            if (user.schoolId != writer.schoolId) {
+                throw SchoolMismatchException
+            }
+        }
 
-        validateSameSchool(writer.schoolId, viewer.schoolId)
-
-        return QueryNoticeDetailsResponse(
-            id = notice.id,
-            title = notice.title,
-            content = notice.content,
-            createdAt = notice.createdAt!!
-        )
+        return NoticeResponse.detailOf(notice)
     }
 }

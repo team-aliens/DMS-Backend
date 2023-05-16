@@ -1,48 +1,33 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.auth.exception.AuthCodeNotFoundException
-import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.exception.StudentInfoMismatchException
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.student.spi.StudentCommandUserPort
-import team.aliens.dms.domain.student.spi.StudentQueryAuthCodePort
-import team.aliens.dms.domain.student.spi.StudentQueryUserPort
-import team.aliens.dms.domain.student.spi.StudentSecurityPort
-import team.aliens.dms.domain.user.exception.InvalidRoleException
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import team.aliens.dms.domain.user.service.CheckUserAuthority
+import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ResetStudentPasswordUseCase(
-    private val queryUserPort: StudentQueryUserPort,
-    private val queryStudentPort: QueryStudentPort,
-    private val queryAuthCodePort: StudentQueryAuthCodePort,
-    private val commandUserPort: StudentCommandUserPort,
-    private val securityPort: StudentSecurityPort,
-    private val checkUserAuthority: CheckUserAuthority
+    private val userService: UserService,
+    private val studentService: StudentService,
+    private val authService: AuthService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: ResetStudentPasswordRequest) {
-        val user = queryUserPort.queryUserByAccountId(request.accountId) ?: throw UserNotFoundException
-        val student = queryStudentPort.queryStudentById(user.id) ?: throw StudentNotFoundException
-
-        if (checkUserAuthority.execute(user.id) != Authority.STUDENT) {
-            throw InvalidRoleException
-        }
+        val user = userService.queryUserByAccountId(request.accountId)
+        val student = studentService.getStudentByUserId(user.id)
 
         if (student.name != request.name || user.email != request.email) {
             throw StudentInfoMismatchException
         }
 
-        val authCode = queryAuthCodePort.queryAuthCodeByEmail(user.email) ?: throw AuthCodeNotFoundException
+        authService.checkAuthCodeByEmail(user.email, request.authCode)
 
-        authCode.validateAuthCode(request.authCode)
-
-        commandUserPort.saveUser(
-            user.copy(password = securityPort.encodePassword(request.newPassword))
+        userService.saveUser(
+            user.copy(password = securityService.encodePassword(request.newPassword))
         )
     }
 }

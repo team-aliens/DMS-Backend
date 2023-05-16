@@ -1,18 +1,18 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
+import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
 import java.util.UUID
 
 @UseCase
 class UnApplySeatUseCase(
-    private val securityPort: StudyRoomSecurityPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort
+    private val studentService: StudentService,
+    private val studyRoomService: StudyRoomService
 ) {
 
     fun execute(seatId: UUID, timeSlotId: UUID) {
-        val currentUserId = securityPort.getCurrentUserId()
-        commandStudyRoomPort.deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId, currentUserId, timeSlotId)
+        val student = studentService.getCurrentStudent()
+        studyRoomService.deleteSeatApplicationBySeatIdAndStudentIdAndTimeSlotId(seatId, student.id, timeSlotId)
     }
 }

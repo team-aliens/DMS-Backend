@@ -2,33 +2,28 @@ package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.util.StringUtil
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.dto.ReissueSchoolCodeResponse
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.school.spi.CommandSchoolPort
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
-import team.aliens.dms.domain.school.spi.SchoolSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class ReissueSchoolCodeUseCase(
-    private val securityPort: SchoolSecurityPort,
-    private val queryUserPort: SchoolQueryUserPort,
-    private val querySchoolPort: QuerySchoolPort,
-    private val commandSchoolPort: CommandSchoolPort
+    private val userService: UserService,
+    private val schoolService: SchoolService
 ) {
 
-    fun execute(): String {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+    fun execute(): ReissueSchoolCodeResponse {
 
-        val school = querySchoolPort.querySchoolById(user.schoolId) ?: throw SchoolNotFoundException
+        val user = userService.getCurrentUser()
+
+        val school = schoolService.getSchoolById(user.schoolId)
         val code = StringUtil.randomNumber(School.SCHOOL_CODE_SIZE)
 
-        commandSchoolPort.saveSchool(
+        schoolService.saveSchool(
             school.copy(code = code)
         )
 
-        return code
+        return ReissueSchoolCodeResponse(code = code)
     }
 }

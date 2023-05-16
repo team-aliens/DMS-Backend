@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.user.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.auth.model.Authority
 import java.time.LocalDateTime
 import java.util.UUID
@@ -10,7 +11,7 @@ data class User(
 
     val id: UUID = UUID(0, 0),
 
-    val schoolId: UUID,
+    override val schoolId: UUID,
 
     val accountId: String,
 
@@ -20,8 +21,8 @@ data class User(
 
     val authority: Authority,
 
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    val deletedAt: LocalDateTime?
+    val deletedAt: LocalDateTime? = null
 
-)
+) : SchoolIdDomain

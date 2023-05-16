@@ -1,28 +1,21 @@
 package team.aliens.dms.domain.school.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.dto.QueryAvailableFeaturesResponse
-import team.aliens.dms.domain.school.exception.FeatureNotFoundException
-import team.aliens.dms.domain.school.spi.QuerySchoolPort
-import team.aliens.dms.domain.school.spi.SchoolQueryUserPort
-import team.aliens.dms.domain.school.spi.SchoolSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.school.dto.AvailableFeaturesResponse
+import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryAvailableFeaturesUseCase(
-    private val securityPort: SchoolSecurityPort,
-    private val queryUserPort: SchoolQueryUserPort,
-    private val querySchoolPort: QuerySchoolPort
+    private val userService: UserService,
+    private val schoolService: SchoolService
 ) {
 
-    fun execute(): QueryAvailableFeaturesResponse {
-        val currentUserId = securityPort.getCurrentUserId()
-        val user = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+    fun execute(): AvailableFeaturesResponse {
+        val user = userService.getCurrentUser()
+        val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        val availableFeatures = querySchoolPort.queryAvailableFeaturesBySchoolId(user.schoolId)
-            ?: throw FeatureNotFoundException
-
-        return QueryAvailableFeaturesResponse(
+        return AvailableFeaturesResponse(
             mealService = availableFeatures.mealService,
             noticeService = availableFeatures.noticeService,
             pointService = availableFeatures.pointService,

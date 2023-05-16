@@ -19,16 +19,13 @@ import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.model.VerifiedStudent
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
 import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
-import team.aliens.dms.persistence.student.mapper.VerifiedStudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
-import team.aliens.dms.persistence.student.repository.VerifiedStudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
@@ -42,16 +39,8 @@ class StudentPersistenceAdapter(
     private val studentMapper: StudentMapper,
     private val tagMapper: TagMapper,
     private val studentRepository: StudentJpaRepository,
-    private val verifiedStudentRepository: VerifiedStudentJpaRepository,
-    private val verifiedStudentMapper: VerifiedStudentMapper,
     private val queryFactory: JPAQueryFactory,
 ) : StudentPort {
-
-    override fun existsStudentByGradeAndClassRoomAndNumber(
-        grade: Int,
-        classRoom: Int,
-        number: Int
-    ): Boolean = studentRepository.existsByGradeAndClassRoomAndNumber(grade, classRoom, number)
 
     override fun queryStudentBySchoolIdAndGcn(
         schoolId: UUID,
@@ -59,23 +48,26 @@ class StudentPersistenceAdapter(
         classRoom: Int,
         number: Int,
     ) = studentMapper.toDomain(
-        studentRepository.findByUserSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
+        studentRepository.findByRoomSchoolIdAndGradeAndClassRoomAndNumber(schoolId, grade, classRoom, number)
     )
 
     override fun queryStudentById(studentId: UUID) = studentMapper.toDomain(
         studentRepository.findByIdOrNull(studentId)
     )
 
-    override fun existsStudentById(studentId: UUID) =
-        studentRepository.existsById(studentId)
+    override fun queryStudentByUserId(userId: UUID) = studentMapper.toDomain(
+        studentRepository.findByUserId(userId)
+    )
+
+    override fun existsStudentByUserId(studentId: UUID) =
+        studentRepository.existsByUserId(studentId)
 
     override fun existsBySchoolIdAndGcnList(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): Boolean {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
-            .join(userJpaEntity.school, schoolJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
             .where(
-                schoolJpaEntity.id.eq(schoolId),
+                roomJpaEntity.school.id.eq(schoolId),
                 Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
                     .`in`(*queryStudentGcnIn(gcnList))
             )
@@ -103,18 +95,57 @@ class StudentPersistenceAdapter(
         )
     )!!
 
-    override fun saveAllVerifiedStudent(verifiedStudents: List<VerifiedStudent>) {
-        verifiedStudentRepository.saveAll(
-            verifiedStudents.map {
-                verifiedStudentMapper.toEntity(it)
+    override fun saveAllStudent(students: List<Student>) {
+        studentRepository.saveAll(
+            students.map {
+                studentMapper.toEntity(it)
             }
         )
     }
 
-    override fun deleteVerifiedStudent(verifiedStudent: VerifiedStudent) {
-        verifiedStudentRepository.delete(
-            verifiedStudentMapper.toEntity(verifiedStudent)
-        )
+    override fun queryBySchoolIdAndGcnIn(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): List<Student> {
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
+            .where(
+                roomJpaEntity.school.id.eq(schoolId),
+                Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
+                    .`in`(*queryStudentGcnIn(gcnList))
+            )
+            .fetch()
+            .mapNotNull { studentMapper.toDomain(it) }
+    }
+
+    override fun queryBySchoolIdAndRoomNumberAndRoomLocationIn(
+        schoolId: UUID,
+        roomNumberLocations: List<Pair<String, String>>
+    ): List<Student> {
+
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
+            .where(
+                roomJpaEntity.school.id.eq(schoolId),
+                Expressions.list(roomJpaEntity.number, studentJpaEntity.roomLocation)
+                    .`in`(*queryRoomNumberAndRoomLocationIn(roomNumberLocations))
+            )
+            .fetch()
+            .mapNotNull { studentMapper.toDomain(it) }
+    }
+
+    private fun queryRoomNumberAndRoomLocationIn(roomNumberLocations: List<Pair<String, String>>): Array<Expression<Tuple>> {
+        val tuple: MutableList<Expression<Tuple>> = ArrayList()
+        for (roomNumberLocation in roomNumberLocations) {
+            tuple.add(
+                Expressions.template(
+                    Tuple::class.java,
+                    "(({0}, {1}))",
+                    roomNumberLocation.first, roomNumberLocation.second
+                )
+            )
+        }
+
+        return tuple.toTypedArray()
     }
 
     override fun queryStudentsByNameAndSortAndFilter(
@@ -235,7 +266,7 @@ class StudentPersistenceAdapter(
         }
     }
 
-    override fun queryUserByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
+    override fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
@@ -253,9 +284,8 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
-            .join(studentJpaEntity.user, userJpaEntity).fetchJoin()
             .where(
-                userJpaEntity.school.id.eq(schoolId)
+                roomJpaEntity.school.id.eq(schoolId)
             )
             .orderBy(roomJpaEntity.number.asc())
             .fetch()
@@ -278,7 +308,6 @@ class StudentPersistenceAdapter(
             )
             .from(studentJpaEntity)
             .join(studentJpaEntity.user, userJpaEntity)
-            .join(userJpaEntity.school, schoolJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(

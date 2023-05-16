@@ -18,7 +18,7 @@ import javax.persistence.Table
 @Table(name = "tbl_point_history")
 class PointHistoryJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @Column(columnDefinition = "VARCHAR(30)", nullable = false)
     val studentName: String,

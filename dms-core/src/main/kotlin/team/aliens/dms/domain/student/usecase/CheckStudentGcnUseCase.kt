@@ -1,27 +1,32 @@
 package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
-import team.aliens.dms.domain.student.exception.VerifiedStudentNotFoundException
-import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.StudentQuerySchoolPort
-import team.aliens.dms.domain.student.spi.StudentQueryVerifiedStudentPort
+import team.aliens.dms.domain.student.dto.StudentNameResponse
+import team.aliens.dms.domain.student.exception.StudentAlreadyExistsException
+import team.aliens.dms.domain.student.service.StudentService
 
 @ReadOnlyUseCase
 class CheckStudentGcnUseCase(
-    private val querySchoolPort: StudentQuerySchoolPort,
-    private val queryVerifiedStudentPort: StudentQueryVerifiedStudentPort
+    private val schoolService: SchoolService,
+    private val studentService: StudentService
 ) {
 
-    fun execute(request: CheckStudentGcnRequest): String {
-        val school = querySchoolPort.querySchoolById(request.schoolId) ?: throw SchoolNotFoundException
+    fun execute(request: CheckStudentGcnRequest): StudentNameResponse {
+        val school = schoolService.getSchoolById(request.schoolId)
 
-        val verifiedStudent = queryVerifiedStudentPort.queryVerifiedStudentByGcnAndSchoolName(
-            gcn = Student.processGcn(request.grade, request.classRoom, request.number),
-            schoolName = school.name
-        ) ?: throw VerifiedStudentNotFoundException
+        val student = studentService.getStudentBySchoolIdAndGcn(
+            schoolId = school.id,
+            grade = request.grade,
+            classRoom = request.classRoom,
+            number = request.number
+        )
 
-        return verifiedStudent.name
+        if (student.hasUser) {
+            throw StudentAlreadyExistsException
+        }
+
+        return StudentNameResponse(student.name)
     }
 }

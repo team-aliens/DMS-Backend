@@ -1,13 +1,16 @@
 package team.aliens.dms.domain.student.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Aggregate
 data class Student(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
+
+    val userId: UUID? = null,
 
     val roomId: UUID,
 
@@ -15,7 +18,7 @@ data class Student(
 
     val roomLocation: String,
 
-    val schoolId: UUID,
+    override val schoolId: UUID,
 
     val grade: Int,
 
@@ -25,14 +28,17 @@ data class Student(
 
     val name: String,
 
-    val profileImageUrl: String? = PROFILE_IMAGE,
+    val profileImageUrl: String = PROFILE_IMAGE,
 
     val sex: Sex,
 
     val deletedAt: LocalDateTime? = null
-) {
+) : SchoolIdDomain {
 
     val gcn: String = processGcn(this.grade, this.classRoom, this.number)
+
+    val hasUser: Boolean
+        get() = userId != null
 
     companion object {
         private const val DECIMAL_NUMBER = 10

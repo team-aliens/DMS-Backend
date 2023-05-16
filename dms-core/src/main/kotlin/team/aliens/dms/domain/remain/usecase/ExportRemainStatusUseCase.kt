@@ -2,42 +2,37 @@ package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
-import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.file.service.FileService
+import team.aliens.dms.domain.remain.dto.ExportRemainStatusResponse
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
-import team.aliens.dms.domain.remain.dto.response.ExportRemainStatusResponse
-import team.aliens.dms.domain.remain.spi.QueryRemainStatusPort
-import team.aliens.dms.domain.remain.spi.RemainQuerySchoolPort
-import team.aliens.dms.domain.remain.spi.RemainQueryStudentPort
-import team.aliens.dms.domain.remain.spi.RemainQueryUserPort
-import team.aliens.dms.domain.remain.spi.RemainSecurityPort
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.user.exception.UserNotFoundException
+import team.aliens.dms.domain.school.service.SchoolService
+import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportRemainStatusUseCase(
-    private val securityPort: RemainSecurityPort,
-    private val queryUserPort: RemainQueryUserPort,
-    private val querySchoolPort: RemainQuerySchoolPort,
-    private val queryStudentPort: RemainQueryStudentPort,
-    private val queryRemainStatusPort: QueryRemainStatusPort,
-    private val writeFilePort: WriteFilePort
+    private val userService: UserService,
+    private val schoolService: SchoolService,
+    private val studentService: StudentService,
+    private val remainService: RemainService,
+    private val fileService: FileService
 ) {
 
     fun execute(): ExportRemainStatusResponse {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val manager = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
-        val school = querySchoolPort.querySchoolById(manager.schoolId) ?: throw SchoolNotFoundException
+        val user = userService.getCurrentUser()
+        val school = schoolService.getSchoolById(user.schoolId)
 
-        val studentList = queryStudentPort.queryStudentsBySchoolId(manager.schoolId)
+        val students = studentService.getStudentsBySchoolId(user.schoolId)
 
-        val remainStatusMap = queryRemainStatusPort.queryByStudentIdIn(
-            studentIds = studentList.map { it.id }
+        val remainStatusMap = remainService.getAllRemainStatusInfoByStudentId(
+            studentIds = students.map { it.id }
         ).associateBy { it.studentId }
 
-        val studentRemainInfos = studentList.map { student ->
+        val studentRemainInfos = students.map { student ->
             StudentRemainInfo(
                 studentName = student.name,
                 studentGcn = student.gcn,
@@ -48,7 +43,7 @@ class ExportRemainStatusUseCase(
         }
 
         return ExportRemainStatusResponse(
-            file = writeFilePort.writeRemainStatusExcelFile(studentRemainInfos),
+            file = fileService.writeRemainStatusExcelFile(studentRemainInfos),
             fileName = getFileName(school)
         )
     }

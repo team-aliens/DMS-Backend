@@ -1,82 +1,34 @@
 package team.aliens.dms.domain.studyroom.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.dto.CreateStudyRoomRequest
-import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
-import team.aliens.dms.domain.studyroom.model.Seat
-import team.aliens.dms.domain.studyroom.model.SeatStatus
-import team.aliens.dms.domain.studyroom.model.StudyRoom
-import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
-import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomQueryUserPort
-import team.aliens.dms.domain.studyroom.spi.StudyRoomSecurityPort
-import team.aliens.dms.domain.user.exception.UserNotFoundException
-import java.util.UUID
+import team.aliens.dms.domain.studyroom.dto.StudyRoomIdResponse
+import team.aliens.dms.domain.studyroom.service.StudyRoomService
+import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class CreateStudyRoomUseCase(
-    private val queryStudyRoomPort: QueryStudyRoomPort,
-    private val commandStudyRoomPort: CommandStudyRoomPort,
-    private val securityPort: StudyRoomSecurityPort,
-    private val queryUserPort: StudyRoomQueryUserPort
+    private val userService: UserService,
+    private val studyRoomService: StudyRoomService
 ) {
 
-    fun execute(request: CreateStudyRoomRequest): UUID {
+    fun execute(request: CreateStudyRoomRequest): StudyRoomIdResponse {
 
-        val currentUserId = securityPort.getCurrentUserId()
-        val currentUser = queryUserPort.queryUserById(currentUserId) ?: throw UserNotFoundException
+        val user = userService.getCurrentUser()
 
-        val isAlreadyExists = queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
-            floor = request.floor,
-            name = request.name,
-            schoolId = currentUser.schoolId
+        studyRoomService.checkStudyRoomExistsByFloorAndName(request.floor, request.name, user.schoolId)
+        val studyRoom = studyRoomService.saveStudyRoom(
+            request.toStudyRoom(schoolId = user.schoolId)
         )
-        if (isAlreadyExists) {
-            throw StudyRoomAlreadyExistsException
-        }
 
-        val studyRoom = request.run {
-            StudyRoom(
-                schoolId = currentUser.schoolId,
-                name = name,
-                floor = floor,
-                widthSize = totalWidthSize,
-                heightSize = totalHeightSize,
-                availableHeadcount = request.seats.count {
-                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
-                },
-                availableSex = Sex.valueOf(availableSex),
-                availableGrade = availableGrade,
-                eastDescription = eastDescription,
-                westDescription = westDescription,
-                southDescription = southDescription,
-                northDescription = northDescription
-            )
-        }
-        val savedStudyRoom = commandStudyRoomPort.saveStudyRoom(studyRoom)
+        studyRoomService.saveAllStudyRoomTimeSlots(
+            request.toStudyRoomTimeSlots(studyRoomId = studyRoom.id)
+        )
 
-        val studyRoomTimeSlots = request.timeSlotIds.map {
-            StudyRoomTimeSlot(
-                studyRoomId = savedStudyRoom.id,
-                timeSlotId = it
-            )
-        }
-        commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
+        studyRoomService.saveAllSeats(
+            request.toSeats(studyRoomId = studyRoom.id)
+        )
 
-        val seats = request.seats.map {
-            Seat(
-                studyRoomId = savedStudyRoom.id,
-                typeId = it.typeId,
-                widthLocation = it.widthLocation,
-                heightLocation = it.heightLocation,
-                number = it.number,
-                status = SeatStatus.valueOf(it.status)
-            )
-        }
-        commandStudyRoomPort.saveAllSeats(seats)
-
-        return savedStudyRoom.id
+        return StudyRoomIdResponse(studyRoom.id)
     }
 }
