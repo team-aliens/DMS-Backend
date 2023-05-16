@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.domain.notice.dto.NoticeIdResponse
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.user.service.UserService
 import java.util.UUID
@@ -11,7 +12,7 @@ class UpdateNoticeUseCase(
     private val noticeService: NoticeService
 ) {
 
-    fun execute(noticeId: UUID, title: String, content: String): UUID {
+    fun execute(noticeId: UUID, title: String, content: String): NoticeIdResponse {
         val user = userService.getCurrentUser()
         val notice = noticeService.getNoticeByIdAndManagerId(noticeId, user.id)
 
@@ -22,6 +23,6 @@ class UpdateNoticeUseCase(
             )
         )
 
-        return notice.id
+        return NoticeIdResponse(notice.id)
     }
 }

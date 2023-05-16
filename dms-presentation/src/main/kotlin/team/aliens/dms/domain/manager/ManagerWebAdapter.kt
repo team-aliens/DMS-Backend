@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.common.extension.toFile
-import team.aliens.dms.domain.manager.dto.GetStudentDetailsResponse
-import team.aliens.dms.domain.manager.dto.ManagerMyPageResponse
+import team.aliens.dms.domain.manager.dto.ManagerDetailsResponse
+import team.aliens.dms.domain.manager.dto.ManagerEmailResponse
 import team.aliens.dms.domain.manager.dto.PointFilterType
-import team.aliens.dms.domain.manager.dto.QueryStudentsResponse
 import team.aliens.dms.domain.manager.dto.ResetManagerPasswordRequest
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.dto.request.ResetPasswordManagerWebRequest
-import team.aliens.dms.domain.manager.dto.response.FindManagerAccountIdResponse
 import team.aliens.dms.domain.manager.usecase.ExportStudentUseCase
 import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.ManagerMyPageUseCase
@@ -33,6 +31,8 @@ import team.aliens.dms.domain.manager.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import team.aliens.dms.domain.manager.usecase.UpdateStudentGcnByFileUseCase
 import team.aliens.dms.domain.manager.usecase.UpdateStudentRoomByFileUseCase
+import team.aliens.dms.domain.student.dto.StudentDetailsResponse
+import team.aliens.dms.domain.student.dto.StudentsResponse
 import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
@@ -58,13 +58,11 @@ class ManagerWebAdapter(
     fun findAccountId(
         @PathVariable("school-id") @NotNull schoolId: UUID,
         @RequestParam @NotBlank answer: String
-    ): FindManagerAccountIdResponse {
-        val result = findManagerAccountIdUseCase.execute(
+    ): ManagerEmailResponse {
+        return findManagerAccountIdUseCase.execute(
             schoolId = schoolId,
             answer = answer
         )
-
-        return FindManagerAccountIdResponse(result)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -88,7 +86,7 @@ class ManagerWebAdapter(
         @RequestParam(name = "min_point", required = false) minPoint: Int?,
         @RequestParam(name = "max_point", required = false) maxPoint: Int?,
         @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
-    ): QueryStudentsResponse {
+    ): StudentsResponse {
         return queryStudentsUseCase.execute(
             name = name,
             sort = sort,
@@ -100,7 +98,7 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/students/{student-id}")
-    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): GetStudentDetailsResponse {
+    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): StudentDetailsResponse {
         return queryStudentDetailsUseCase.execute(studentId)
     }
 
@@ -111,7 +109,7 @@ class ManagerWebAdapter(
     }
 
     @GetMapping("/profile")
-    fun myPage(): ManagerMyPageResponse {
+    fun myPage(): ManagerDetailsResponse {
         return managerMyPageUseCase.execute()
     }
 

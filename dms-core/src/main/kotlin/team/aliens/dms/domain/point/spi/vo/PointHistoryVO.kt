@@ -1,10 +1,10 @@
-package team.aliens.dms.domain.point.dto
+package team.aliens.dms.domain.point.spi.vo
 
 import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDate
 import java.util.UUID
 
-data class PointHistoryDto(
+open class PointHistoryVO(
     val pointHistoryId: UUID,
     val date: LocalDate,
     val type: PointType,

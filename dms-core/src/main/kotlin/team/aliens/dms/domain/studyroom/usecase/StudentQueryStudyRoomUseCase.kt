@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.studyroom.usecase
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
 import team.aliens.dms.domain.studyroom.service.StudyRoomService
+import java.util.UUID
 
 @ReadOnlyUseCase
 class StudentQueryStudyRoomUseCase(

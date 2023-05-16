@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.remain.dto.response
+package team.aliens.dms.domain.remain.dto
 
 class ExportRemainStatusResponse(
     val fileName: String,

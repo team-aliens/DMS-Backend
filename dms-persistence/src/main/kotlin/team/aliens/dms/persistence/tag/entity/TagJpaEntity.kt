@@ -22,7 +22,7 @@ import javax.persistence.UniqueConstraint
 )
 class TagJpaEntity(
 
-    override val id: UUID?,
+    id: UUID?,
 
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,

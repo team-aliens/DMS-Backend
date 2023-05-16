@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.remain.dto.QueryRemainAvailableTimeResponse
+import team.aliens.dms.domain.remain.dto.RemainAvailableTimeResponse
 import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -11,13 +11,13 @@ class QueryRemainAvailableTimeUseCase(
     private val remainService: RemainService
 ) {
 
-    fun execute(): QueryRemainAvailableTimeResponse {
+    fun execute(): RemainAvailableTimeResponse {
 
         val user = userService.getCurrentUser()
 
         val availableTime = remainService.getRemainAvailableTimeBySchoolId(user.schoolId)
 
-        return QueryRemainAvailableTimeResponse(
+        return RemainAvailableTimeResponse(
             startDayOfWeek = availableTime.startDayOfWeek,
             startTime = availableTime.startTime,
             endDayOfWeek = availableTime.endDayOfWeek,
