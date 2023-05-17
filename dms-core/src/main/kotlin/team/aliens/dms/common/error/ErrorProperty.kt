@@ -7,4 +7,12 @@ interface ErrorProperty {
     fun message(): String
 
     fun code(): String
+
+    fun formatMessage(vararg datas: String): ErrorProperty {
+        return object : ErrorProperty {
+            override fun status(): Int = this.status()
+            override fun message(): String = this.message().format(datas)
+            override fun code(): String = this.code()
+        }
+    }
 }
