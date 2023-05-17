@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.model.Authority
-import team.aliens.dms.global.exception.InternalServerErrorException
+import team.aliens.dms.global.error.InternalServerError
 import team.aliens.dms.global.security.SecurityProperties
 import team.aliens.dms.global.security.exception.ExpiredTokenException
 import team.aliens.dms.global.security.exception.InvalidRoleException
@@ -50,7 +50,7 @@ class JwtParser(
                 is InvalidClaimException -> throw InvalidTokenException
                 is ExpiredJwtException -> throw ExpiredTokenException
                 is JwtException -> throw UnexpectedTokenException
-                else -> throw InternalServerErrorException
+                else -> throw InternalServerError
             }
         }
     }
