@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.room.exception.error
+package team.aliens.dms.domain.room.exception
 
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.common.error.ErrorStatus

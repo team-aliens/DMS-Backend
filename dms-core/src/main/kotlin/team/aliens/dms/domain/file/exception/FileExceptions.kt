@@ -6,3 +6,7 @@ import team.aliens.dms.domain.file.exception.error.FileErrorCode
 object FileInvalidExtensionException : DmsException(
     FileErrorCode.INVALID_EXTENSION
 )
+
+object FileIOInterruptedException : DmsException(
+    FileErrorCode.IO_INTERRUPTED
+)
