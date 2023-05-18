@@ -3,9 +3,6 @@ package team.aliens.dms.thirdparty.api.error
 import feign.FeignException
 import feign.Response
 import feign.codec.ErrorDecoder
-import team.aliens.dms.thirdparty.api.exception.OtherServerBadRequestException
-import team.aliens.dms.thirdparty.api.exception.OtherServerForbiddenException
-import team.aliens.dms.thirdparty.api.exception.OtherServerUnauthorizedException
 
 class FeignClientErrorDecoder : ErrorDecoder {
 

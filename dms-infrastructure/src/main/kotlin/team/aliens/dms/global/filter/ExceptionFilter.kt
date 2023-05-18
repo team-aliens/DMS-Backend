@@ -7,7 +7,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.global.error.ErrorResponse
-import team.aliens.dms.global.exception.InternalServerErrorException
+import team.aliens.dms.global.error.GlobalErrorCode
 import java.nio.charset.StandardCharsets
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
@@ -34,7 +34,7 @@ class ExceptionFilter(
                     Sentry.captureException(e)
                 }
                 else -> {
-                    errorToJson(InternalServerErrorException.errorProperty, response)
+                    errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
                     Sentry.captureException(e)
                 }
             }
