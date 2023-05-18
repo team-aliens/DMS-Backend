@@ -165,6 +165,7 @@ class StudyRoomPersistenceAdapter(
 
     override fun queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId: UUID, studyRoomId: UUID?): List<TimeSlot> {
         return queryFactory.selectFrom(timeSlotJpaEntity)
+            .distinct()
             .join(studyRoomTimeSlotJpaEntity)
             .on(
                 studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotJpaEntity.id)
