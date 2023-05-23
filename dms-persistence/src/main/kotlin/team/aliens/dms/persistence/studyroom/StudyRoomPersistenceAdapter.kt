@@ -166,12 +166,12 @@ class StudyRoomPersistenceAdapter(
     override fun queryTimeSlotsBySchoolIdAndStudyRoomId(schoolId: UUID, studyRoomId: UUID?): List<TimeSlot> {
         return queryFactory.selectFrom(timeSlotJpaEntity)
             .distinct()
-            .join(studyRoomTimeSlotJpaEntity)
+            .leftJoin(studyRoomTimeSlotJpaEntity)
             .on(
                 studyRoomTimeSlotJpaEntity.timeSlot.id.eq(timeSlotJpaEntity.id)
                     .and(studyRoomId?.let { studyRoomTimeSlotJpaEntity.studyRoom.id.eq(it) })
             )
-            .join(studyRoomJpaEntity)
+            .leftJoin(studyRoomJpaEntity)
             .on(
                 studyRoomTimeSlotJpaEntity.studyRoom.id.eq(studyRoomJpaEntity.id),
                 studyRoomJpaEntity.school.id.eq(schoolId)

@@ -71,7 +71,7 @@ class CommandStudyRoomServiceImpl(
     }
 
     override fun deleteTimeSlot(timeSlotId: UUID) {
-        if (queryStudyRoomPort.existsSeatBySeatTypeId(timeSlotId)) {
+        if (queryStudyRoomPort.existsStudyRoomTimeSlotByTimeSlotId(timeSlotId)) {
             throw TimeSlotInUseException
         }
         commandStudyRoomPort.deleteSeatApplicationByTimeSlotId(timeSlotId)

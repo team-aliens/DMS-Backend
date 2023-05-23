@@ -22,7 +22,6 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
-import team.aliens.dms.persistence.school.entity.QSchoolJpaEntity.schoolJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
@@ -158,16 +157,11 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
-            .join(userJpaEntity.school, schoolJpaEntity)
-            .leftJoin(studentTagJpaEntity)
-            .on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id)).fetchJoin()
-            .leftJoin(tagJpaEntity)
-            .on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
-            .leftJoin(pointHistoryJpaEntity)
-            .on(eqStudentRecentPointHistory())
+            .leftJoin(studentTagJpaEntity).on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id)).fetchJoin()
+            .leftJoin(tagJpaEntity).on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
+            .leftJoin(pointHistoryJpaEntity).on(eqStudentRecentPointHistory())
             .where(
-                userJpaEntity.school.id.eq(schoolId),
+                roomJpaEntity.school.id.eq(schoolId),
                 nameContains(name),
                 pointTotalBetween(pointFilter),
                 hasAllTags(tagIds)
@@ -270,10 +264,9 @@ class StudentPersistenceAdapter(
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
             .where(
                 roomJpaEntity.number.eq(roomNumber),
-                userJpaEntity.school.id.eq(schoolId)
+                roomJpaEntity.school.id.eq(schoolId)
             ).fetch()
             .map {
                 studentMapper.toDomain(it)!!
@@ -307,7 +300,7 @@ class StudentPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .join(studentJpaEntity.user, userJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
@@ -334,7 +327,7 @@ class StudentPersistenceAdapter(
                     select(pointHistoryJpaEntity.createdAt.max())
                         .from(pointHistoryJpaEntity)
                         .where(
-                            pointHistoryJpaEntity.school.id.eq(schoolJpaEntity.id),
+                            pointHistoryJpaEntity.school.id.eq(roomJpaEntity.school.id),
                             pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
                             eqGcn()
                         )
