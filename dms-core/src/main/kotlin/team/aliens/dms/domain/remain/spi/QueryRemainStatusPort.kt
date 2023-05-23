@@ -8,5 +8,5 @@ interface QueryRemainStatusPort {
 
     fun queryAllByStudentId(studentIds: List<UUID>): List<RemainStatusInfo>
 
-    fun queryRemainStatusById(userId: UUID): RemainStatus?
+    fun queryRemainStatusById(studentId: UUID): RemainStatus?
 }
