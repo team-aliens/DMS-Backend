@@ -30,11 +30,11 @@ class GetRemainServiceImpl(
     override fun getAllRemainStatusInfoByStudentId(studentIds: List<UUID>) =
         queryRemainStatusPort.queryAllByStudentId(studentIds)
 
-    override fun getRemainStatusById(userId: UUID) =
-        queryRemainStatusPort.queryRemainStatusById(userId)
+    override fun getRemainStatusById(studentId: UUID) =
+        queryRemainStatusPort.queryRemainStatusById(studentId)
 
-    override fun getAppliedRemainOptionByUserId(userId: UUID): RemainOption {
-        val remainStatus = getRemainStatusById(userId) ?: throw RemainStatusNotFound
+    override fun getAppliedRemainOptionByStudentId(studentId: UUID): RemainOption {
+        val remainStatus = getRemainStatusById(studentId) ?: throw RemainStatusNotFound
         return getRemainOptionById(remainStatus.remainOptionId)
     }
 }

@@ -16,7 +16,7 @@ interface GetRemainService {
 
     fun getAllRemainStatusInfoByStudentId(studentIds: List<UUID>): List<RemainStatusInfo>
 
-    fun getRemainStatusById(userId: UUID): RemainStatus?
+    fun getRemainStatusById(studentId: UUID): RemainStatus?
 
-    fun getAppliedRemainOptionByUserId(userId: UUID): RemainOption
+    fun getAppliedRemainOptionByStudentId(studentId: UUID): RemainOption
 }
