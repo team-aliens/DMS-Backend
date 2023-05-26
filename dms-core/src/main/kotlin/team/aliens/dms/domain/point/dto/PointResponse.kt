@@ -1,14 +1,15 @@
 package team.aliens.dms.domain.point.dto
 
+import java.util.UUID
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
-import java.util.UUID
 
 data class PointHistoryResponse(
     val totalPoint: Int? = null,
-    val pointHistories: List<PointHistoryVO>
+    val pointHistories: List<PointHistoryVO>,
+    val points: List<PointHistoryVO> = pointHistories // TODO: 상벌점 내역 조회 api에 사용, 앱과 협의 후 삭제
 )
 
 data class AllPointHistoryResponse(
