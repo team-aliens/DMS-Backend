@@ -9,7 +9,8 @@ import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 data class PointHistoryResponse(
     val totalPoint: Int? = null,
     val pointHistories: List<PointHistoryVO>,
-    val points: List<PointHistoryVO> = pointHistories // TODO: 상벌점 내역 조회 api에 사용, 앱과 협의 후 삭제
+    @Deprecated("상벌점 내역 조회 api에 사용, 앱과 협의 후 삭제")
+    val points: List<PointHistoryVO> = pointHistories
 )
 
 data class AllPointHistoryResponse(
