@@ -56,7 +56,7 @@ class RemainStatusPersistenceAdapter(
         )
     )!!
 
-    override fun queryRemainStatusById(userId: UUID) = remainStatusMapper.toDomain(
-        remainStatusRepository.findByIdOrNull(userId)
+    override fun queryRemainStatusById(studentId: UUID) = remainStatusMapper.toDomain(
+        remainStatusRepository.findByIdOrNull(studentId)
     )
 }
