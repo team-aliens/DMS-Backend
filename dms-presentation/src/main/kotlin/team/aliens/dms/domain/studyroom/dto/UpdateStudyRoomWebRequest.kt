@@ -1,8 +1,5 @@
 package team.aliens.dms.domain.studyroom.dto
 
-import team.aliens.dms.common.validator.NotNullElements
-import java.util.UUID
-import javax.validation.Valid
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -47,33 +44,6 @@ data class UpdateStudyRoomWebRequest(
 
     @field:NotNull
     @field:Min(0)
-    val availableGrade: Int,
+    val availableGrade: Int
 
-    @field:Size(min = 1)
-    @field:NotNullElements
-    val timeSlotIds: List<UUID>,
-
-    @field:Valid
-    val seats: List<SeatRequest>
-
-) {
-
-    data class SeatRequest(
-
-        @field:NotNull
-        @field:Min(0)
-        val widthLocation: Int,
-
-        @field:NotNull
-        @field:Min(0)
-        val heightLocation: Int,
-
-        val number: Int?,
-
-        val typeId: UUID?,
-
-        @field:NotNull
-        val status: WebSeatStatus
-
-    )
-}
+)
