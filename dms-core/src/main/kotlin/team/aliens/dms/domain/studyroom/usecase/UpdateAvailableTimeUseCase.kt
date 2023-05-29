@@ -16,7 +16,7 @@ class UpdateAvailableTimeUseCase(
 
         val user = userService.getCurrentUser()
 
-        studyRoomService.saveAvailableTime(
+        studyRoomService.createAvailableTime(
             AvailableTime(
                 schoolId = user.schoolId,
                 startAt = startAt,

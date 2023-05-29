@@ -13,7 +13,7 @@ class UpdateTimeSlotUseCase(
     fun execute(timeSlotId: UUID, startTime: LocalTime, endTime: LocalTime) {
 
         val timeSlot = studyRoomService.getTimeSlot(timeSlotId)
-        studyRoomService.saveTimeSlot(
+        studyRoomService.updateTimeSlot(
             timeSlot.copy(
                 startTime = startTime,
                 endTime = endTime
