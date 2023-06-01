@@ -36,5 +36,6 @@ data class RemainAvailableTimeResponse(
 )
 
 data class CurrentAppliedRemainOptionResponse(
+    val remainOptionId: UUID,
     val title: String
 )

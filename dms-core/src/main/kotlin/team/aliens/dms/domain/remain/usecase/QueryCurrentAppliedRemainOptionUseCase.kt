@@ -16,6 +16,9 @@ class QueryCurrentAppliedRemainOptionUseCase(
         val student = studentService.getCurrentStudent()
         val appliedRemainOption = remainService.getAppliedRemainOptionByStudentId(student.id)
 
-        return CurrentAppliedRemainOptionResponse(appliedRemainOption.title)
+        return CurrentAppliedRemainOptionResponse(
+            remainOptionId = appliedRemainOption.id,
+            title = appliedRemainOption.title
+        )
     }
 }
