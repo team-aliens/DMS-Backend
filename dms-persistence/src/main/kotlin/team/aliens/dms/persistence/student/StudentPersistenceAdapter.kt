@@ -30,7 +30,6 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
-import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
 
 @Component
