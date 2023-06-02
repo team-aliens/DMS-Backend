@@ -20,7 +20,8 @@ class ManagerDetailsService(
             }
             return ManagerDetails(
                 userId = id,
-                schoolId = schoolId
+                schoolId = schoolId,
+                authority = authority
             )
         }
     }
