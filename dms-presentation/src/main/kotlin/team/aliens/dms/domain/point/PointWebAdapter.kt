@@ -154,7 +154,7 @@ class PointWebAdapter(
     }
 
     @GetMapping("/history/students/{student-id}/recent")
-    fun getStudentsPointHistory(
+    fun getStudentRecentPointHistory
         @PathVariable("student-id") @NotNull studentId: UUID
     ): StudentPointHistoryResponse {
         return queryStudentRecentPointHistoryUseCase.execute(studentId)
