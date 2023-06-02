@@ -2,8 +2,8 @@ package team.aliens.dms.domain.point.dto
 
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
+import java.time.LocalDate
 import java.util.UUID
 
 data class PointHistoryResponse(
@@ -14,7 +14,17 @@ data class PointHistoryResponse(
 )
 
 data class AllPointHistoryResponse(
-    val pointHistories: List<AllPointHistoryVO>
+    val pointHistories: List<StudentPointHistoryResponse>
+)
+
+open class StudentPointHistoryResponse(
+    val pointHistoryId: UUID? = null,
+    val studentName: String,
+    val studentGcn: String,
+    val date: LocalDate? = null,
+    val pointName: String? = null,
+    val pointType: PointType? = null,
+    val pointScore: Int? = null
 )
 
 data class PointOptionsResponse(
