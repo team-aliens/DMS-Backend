@@ -3,21 +3,21 @@ package team.aliens.dms.domain.remain.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.remain.dto.RemainOptionsResponse
 import team.aliens.dms.domain.remain.service.RemainService
-import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.user.service.UserService
 
 @ReadOnlyUseCase
 class QueryRemainOptionsUseCase(
-    private val studentService: StudentService,
+    private val userService: UserService,
     private val remainService: RemainService
 ) {
 
     fun execute(): RemainOptionsResponse {
 
-        val student = studentService.getCurrentStudent()
+        val user = userService.getCurrentUser()
 
-        val remainStatus = remainService.getRemainStatusById(student.id)
+        val remainStatus = remainService.getRemainStatusByUserId(user.id)
 
-        val remainOptions = remainService.getAllRemainOptionsBySchoolId(student.schoolId)
+        val remainOptions = remainService.getAllRemainOptionsBySchoolId(user.schoolId)
 
         return RemainOptionsResponse.of(
             remainOptions = remainOptions,
