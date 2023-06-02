@@ -18,5 +18,7 @@ interface GetRemainService {
 
     fun getRemainStatusById(studentId: UUID): RemainStatus?
 
+    fun getRemainStatusByUserId(userId: UUID): RemainStatus?
+
     fun getAppliedRemainOptionByStudentId(studentId: UUID): RemainOption
 }

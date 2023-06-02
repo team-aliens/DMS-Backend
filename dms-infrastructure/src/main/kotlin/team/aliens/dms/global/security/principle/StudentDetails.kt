@@ -8,7 +8,8 @@ import java.util.UUID
 
 class StudentDetails(
     override val userId: UUID,
-    override val schoolId: UUID
+    override val schoolId: UUID,
+    override val authority: Authority
 ) : UserDetails, CustomDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {

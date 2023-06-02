@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.extension.setExcelContentDisposition
-import team.aliens.dms.domain.remain.dto.CurrentAppliedRemainOptionResponse
 import team.aliens.dms.domain.remain.dto.RemainAvailableTimeResponse
+import team.aliens.dms.domain.remain.dto.RemainOptionResponse
 import team.aliens.dms.domain.remain.dto.RemainOptionsResponse
 import team.aliens.dms.domain.remain.dto.UpdateRemainAvailableTimeRequest
 import team.aliens.dms.domain.remain.dto.request.CreateRemainOptionWebRequest
@@ -79,7 +79,7 @@ class RemainWebAdapter(
     }
 
     @GetMapping("/my")
-    fun getCurrentAppliedRemainOption(): CurrentAppliedRemainOptionResponse {
+    fun getCurrentAppliedRemainOption(): RemainOptionResponse {
         return queryCurrentAppliedRemainOptionUseCase.execute()
     }
 

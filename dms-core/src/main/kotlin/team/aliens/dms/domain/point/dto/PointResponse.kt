@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.point.dto
 
-import java.util.UUID
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
+import java.util.UUID
 
 data class PointHistoryResponse(
     val totalPoint: Int? = null,
