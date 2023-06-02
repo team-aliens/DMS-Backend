@@ -14,6 +14,9 @@ dependencies {
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
 
+    // transaction
+    implementation(Dependencies.SPRING_TRANSACTION)
+
     // thymeleaf
     implementation(Dependencies.SPRING_THYMELEAF)
 
@@ -48,6 +51,9 @@ dependencies {
 
     // logging
     implementation(Dependencies.SENTRY)
+
+    // notification
+    implementation(Dependencies.FCM)
 }
 
 kapt {
