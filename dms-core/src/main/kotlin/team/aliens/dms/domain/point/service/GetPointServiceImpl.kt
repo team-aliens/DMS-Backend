@@ -61,13 +61,13 @@ class GetPointServiceImpl(
         schoolId: UUID,
         studentName: String?,
         studentGcn: String?
-    ): StudentPointHistoryVO =
+    ): StudentPointHistoryVO? =
         queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
             schoolId = schoolId,
             studentName = studentName,
             studentGcn = studentGcn,
             pageData = PageData.LIMIT1
-        )[0]
+        ).getOrNull(0)
 
     override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

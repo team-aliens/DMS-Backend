@@ -20,6 +20,9 @@ class QueryStudentRecentPointHistoryUseCase(
             schoolId = student.schoolId,
             studentName = student.name,
             studentGcn = student.gcn
+        ) ?: StudentPointHistoryResponse(
+            studentName = student.name,
+            studentGcn = student.gcn
         )
     }
 }

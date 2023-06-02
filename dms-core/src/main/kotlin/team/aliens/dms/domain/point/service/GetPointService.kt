@@ -41,7 +41,7 @@ interface GetPointService {
         schoolId: UUID,
         studentName: String? = null,
         studentGcn: String? = null
-    ): StudentPointHistoryVO
+    ): StudentPointHistoryVO?
 
     fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

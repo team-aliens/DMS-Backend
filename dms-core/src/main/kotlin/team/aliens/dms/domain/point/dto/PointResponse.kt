@@ -18,13 +18,13 @@ data class AllPointHistoryResponse(
 )
 
 open class StudentPointHistoryResponse(
-    val pointHistoryId: UUID,
+    val pointHistoryId: UUID? = null,
     val studentName: String,
     val studentGcn: String,
-    val date: LocalDate,
-    val pointName: String,
-    val pointType: PointType,
-    val pointScore: Int
+    val date: LocalDate? = null,
+    val pointName: String? = null,
+    val pointType: PointType? = null,
+    val pointScore: Int? = null
 )
 
 data class PointOptionsResponse(
