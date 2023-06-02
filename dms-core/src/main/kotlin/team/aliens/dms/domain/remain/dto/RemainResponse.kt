@@ -12,10 +12,7 @@ data class RemainOptionsResponse(
 
         fun of(remainOptions: List<RemainOption>, remainOptionId: UUID?) = RemainOptionsResponse(
             remainOptions = remainOptions.map {
-                RemainOptionResponse.of(it.id, it.title).copy(
-                    description = it.description,
-                    isApplied = it.id == remainOptionId
-                )
+                RemainOptionResponse.ofDetail(it, remainOptionId)
             }
         )
     }
@@ -29,10 +26,19 @@ data class RemainOptionResponse(
 ) {
     companion object {
 
-        fun of(remainOptionId: UUID, title: String) = RemainOptionResponse(
-            id = remainOptionId,
-            title = title
-        )
+        fun of(remainOption: RemainOption) = remainOption.run {
+            RemainOptionResponse(
+                id = id,
+                title = title
+            )
+        }
+
+        fun ofDetail(remainOption: RemainOption, remainOptionId: UUID?) = remainOption.run {
+            of(this).copy(
+                description = description,
+                isApplied = id == remainOptionId
+            )
+        }
     }
 }
 
