@@ -6,24 +6,32 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class RemainOptionsResponse(
-    val remainOptions: List<RemainOptionElement>
+    val remainOptions: List<RemainOptionResponse>
 ) {
-    data class RemainOptionElement(
-        val id: UUID,
-        val title: String,
-        val description: String,
-        val isApplied: Boolean
-    )
     companion object {
+
         fun of(remainOptions: List<RemainOption>, remainOptionId: UUID?) = RemainOptionsResponse(
             remainOptions = remainOptions.map {
-                RemainOptionElement(
-                    id = it.id,
-                    title = it.title,
+                RemainOptionResponse.of(it.id, it.title).copy(
                     description = it.description,
                     isApplied = it.id == remainOptionId
                 )
             }
+        )
+    }
+}
+
+data class RemainOptionResponse(
+    val id: UUID,
+    val title: String,
+    val description: String? = null,
+    val isApplied: Boolean? = null
+) {
+    companion object {
+
+        fun of(remainOptionId: UUID, title: String) = RemainOptionResponse(
+            id = remainOptionId,
+            title = title
         )
     }
 }
@@ -33,9 +41,4 @@ data class RemainAvailableTimeResponse(
     val startTime: LocalTime,
     val endDayOfWeek: DayOfWeek,
     val endTime: LocalTime
-)
-
-data class CurrentAppliedRemainOptionResponse(
-    val remainOptionId: UUID,
-    val title: String
 )

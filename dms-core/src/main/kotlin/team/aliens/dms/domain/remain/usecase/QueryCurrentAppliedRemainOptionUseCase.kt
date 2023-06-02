@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.remain.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.remain.dto.CurrentAppliedRemainOptionResponse
+import team.aliens.dms.domain.remain.dto.RemainOptionResponse
 import team.aliens.dms.domain.remain.service.RemainService
 import team.aliens.dms.domain.student.service.StudentService
 
@@ -11,12 +11,12 @@ class QueryCurrentAppliedRemainOptionUseCase(
     private val remainService: RemainService,
 ) {
 
-    fun execute(): CurrentAppliedRemainOptionResponse {
+    fun execute(): RemainOptionResponse {
 
         val student = studentService.getCurrentStudent()
         val appliedRemainOption = remainService.getAppliedRemainOptionByStudentId(student.id)
 
-        return CurrentAppliedRemainOptionResponse(
+        return RemainOptionResponse.of(
             remainOptionId = appliedRemainOption.id,
             title = appliedRemainOption.title
         )
