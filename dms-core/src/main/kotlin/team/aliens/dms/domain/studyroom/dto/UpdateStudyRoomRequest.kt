@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.studyroom.dto
 
-import java.util.UUID
-import java.util.function.Function
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
+import java.util.UUID
+import java.util.function.Function
 
 data class UpdateStudyRoomRequest(
     val floor: Int,

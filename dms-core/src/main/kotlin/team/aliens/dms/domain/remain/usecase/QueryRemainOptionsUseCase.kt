@@ -15,7 +15,7 @@ class QueryRemainOptionsUseCase(
 
         val user = userService.getCurrentUser()
 
-        val remainStatus = remainService.getRemainStatusById(user.id)
+        val remainStatus = remainService.getRemainStatusByUserId(user.id)
 
         val remainOptions = remainService.getAllRemainOptionsBySchoolId(user.schoolId)
 

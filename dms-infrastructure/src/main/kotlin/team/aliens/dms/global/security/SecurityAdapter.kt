@@ -4,6 +4,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.SecurityPort
+import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.global.security.principle.CustomDetails
 import java.util.UUID
 
@@ -28,4 +29,9 @@ class SecurityAdapter(
     }
 
     override fun encodePassword(password: String): String = passwordEncoder.encode(password)
+
+    override fun isStudent(): Boolean {
+        val authority = (SecurityContextHolder.getContext().authentication.principal as CustomDetails).authority
+        return authority == Authority.STUDENT
+    }
 }

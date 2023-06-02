@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.point.service
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.model.Phrase
 import team.aliens.dms.domain.point.model.PointHistory
@@ -10,6 +8,8 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
+import java.time.LocalDateTime
+import java.util.UUID
 
 interface GetPointService {
 
@@ -37,7 +37,7 @@ interface GetPointService {
         pageData: PageData = PageData.DEFAULT
     ): List<StudentPointHistoryVO>
 
-    fun queryRecentPointHistoryBySchoolId
+    fun queryRecentPointHistoryBySchoolId(
         schoolId: UUID,
         studentName: String? = null,
         studentGcn: String? = null
