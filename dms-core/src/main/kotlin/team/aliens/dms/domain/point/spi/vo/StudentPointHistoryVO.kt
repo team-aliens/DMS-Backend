@@ -1,24 +1,23 @@
-package team.aliens.dms.persistence.point.repository.vo
+package team.aliens.dms.domain.point.spi.vo
 
-import com.querydsl.core.annotations.QueryProjection
+import team.aliens.dms.domain.point.dto.StudentPointHistoryResponse
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.UUID
 
-class QueryAllPointHistoryVO @QueryProjection constructor(
+open class StudentPointHistoryVO(
     pointHistoryId: UUID,
     studentName: String,
     studentGcn: String,
-    date: LocalDateTime,
+    date: LocalDate,
     pointName: String,
     pointType: PointType,
     pointScore: Int
-) : StudentPointHistoryVO(
+) : StudentPointHistoryResponse(
     pointHistoryId = pointHistoryId,
     studentName = studentName,
     studentGcn = studentGcn,
-    date = date.toLocalDate(),
+    date = date,
     pointName = pointName,
     pointType = pointType,
     pointScore = pointScore
