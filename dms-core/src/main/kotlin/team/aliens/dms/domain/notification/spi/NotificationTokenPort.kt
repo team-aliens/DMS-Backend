@@ -8,6 +8,6 @@ interface NotificationTokenPort {
     fun saveNotificationToken(deviceToken: DeviceToken): DeviceToken
 
     fun deleteNotificationTokenById(userId: UUID)
-    
+
     fun queryNotificationTokenById(userId: UUID): DeviceToken?
 }
