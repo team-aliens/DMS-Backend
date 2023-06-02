@@ -37,7 +37,7 @@ interface GetPointService {
         pageData: PageData = PageData.DEFAULT
     ): List<StudentPointHistoryVO>
 
-    fun queryCurrentPointHistoryBySchoolId(
+    fun queryRecentPointHistoryBySchoolId
         schoolId: UUID,
         studentName: String? = null,
         studentGcn: String? = null
