@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.point.spi
 
+import java.time.LocalDateTime
+import java.util.UUID
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
-import java.time.LocalDateTime
-import java.util.UUID
+import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 
 interface QueryPointHistoryPort {
 
@@ -27,10 +27,12 @@ interface QueryPointHistoryPort {
 
     fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
-        type: PointType?,
+        type: PointType? = null,
+        studentName: String? = null,
+        studentGcn: String? = null,
         isCancel: Boolean? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<AllPointHistoryVO>
+    ): List<StudentPointHistoryVO>
 
     fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

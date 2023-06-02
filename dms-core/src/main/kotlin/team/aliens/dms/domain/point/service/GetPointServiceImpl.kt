@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.point.service
 
+import java.time.LocalDateTime
+import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.exception.PointHistoryNotFoundException
@@ -10,9 +12,8 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.QueryPhrasePort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
-import java.time.LocalDateTime
-import java.util.UUID
 
 @Service
 class GetPointServiceImpl(
@@ -55,6 +56,18 @@ class GetPointServiceImpl(
         isCancel = isCancel,
         pageData = pageData
     )
+
+    override fun queryCurrentPointHistoryBySchoolId(
+        schoolId: UUID,
+        studentName: String?,
+        studentGcn: String?
+    ): StudentPointHistoryVO =
+        queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
+            schoolId = schoolId,
+            studentName = studentName,
+            studentGcn = studentGcn,
+            pageData = PageData.LIMIT1
+        )[0]
 
     override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,

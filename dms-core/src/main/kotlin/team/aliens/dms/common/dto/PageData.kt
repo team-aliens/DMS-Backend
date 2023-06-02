@@ -12,6 +12,9 @@ class PageData(
         get() = page * size
 
     companion object {
+
+        val LIMIT1 = PageData(0, 1)
+
         private const val PAGE_NUM: Long = 0
         private const val PAGE_SIZE: Long = 500
 

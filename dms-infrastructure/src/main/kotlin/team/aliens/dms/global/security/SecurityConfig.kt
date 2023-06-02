@@ -102,6 +102,7 @@ class SecurityConfig(
             .antMatchers(HttpMethod.POST, "/points/history").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history/students/{student-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/points/history/students/{student-id}/recent").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/history/file").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PUT, "/points/history/{point-history-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/points/options").hasAuthority(MANAGER.name)
