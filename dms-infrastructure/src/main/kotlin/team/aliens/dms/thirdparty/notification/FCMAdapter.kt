@@ -12,7 +12,8 @@ import team.aliens.dms.domain.notification.spi.NotificationPort
 @Component
 class FCMAdapter : NotificationPort {
 
-    private val firebaseInstance: FirebaseMessaging = FirebaseMessaging.getInstance()
+    private val firebaseInstance: FirebaseMessaging
+        get() = FirebaseMessaging.getInstance()
 
     override fun subscribeTopic(deviceToken: String, topic: Topic) {
         firebaseInstance.subscribeToTopicAsync(listOf(deviceToken), topic.toString())
