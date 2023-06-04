@@ -20,7 +20,7 @@ class FCMAdapter : NotificationPort {
     }
 
     override fun subscribeAllTopics(deviceToken: String) {
-        Topic.values().map {
+        Topic.values().forEach {
             firebaseInstance.subscribeToTopicAsync(listOf(deviceToken), it.toString())
         }
     }
