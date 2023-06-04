@@ -9,10 +9,12 @@ interface ErrorProperty {
     fun code(): String
 
     fun formatMessage(vararg datas: String): ErrorProperty {
-        return object : ErrorProperty {
-            override fun status(): Int = this.status()
-            override fun message(): String = this.message().format(datas)
-            override fun code(): String = this.code()
+        return this.let {
+            object : ErrorProperty {
+                override fun status(): Int = it.status()
+                override fun message(): String = it.message().format(*datas)
+                override fun code(): String = it.code()
+            }
         }
     }
 }
