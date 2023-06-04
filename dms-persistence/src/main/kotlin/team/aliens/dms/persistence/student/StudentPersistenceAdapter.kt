@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -30,7 +31,6 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
-import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -299,6 +299,7 @@ class StudentPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
