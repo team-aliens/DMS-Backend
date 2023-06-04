@@ -91,11 +91,7 @@ data class StudentDetailsResponse(
             roomNumber = student.roomNumber,
             roomMates = RoomMate.of(roomMates = roomMates),
             tags = tags.map {
-                TagResponse(
-                    id = it.id,
-                    name = it.name,
-                    color = it.color
-                )
+                TagResponse.of(it)
             }
         )
     }
@@ -115,11 +111,7 @@ data class StudentsResponse(
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
                     tags = it.tags.map { tag ->
-                        TagResponse(
-                            id = tag.id,
-                            name = tag.name,
-                            color = tag.color
-                        )
+                        TagResponse.of(tag)
                     }
                 )
             }

@@ -5,6 +5,7 @@ import team.aliens.dms.domain.studyroom.exception.SeatAlreadyAppliedException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeInUseException
 import team.aliens.dms.domain.studyroom.exception.SeatTypeNotFoundException
+import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.TimeSlotInUseException
 import team.aliens.dms.domain.studyroom.model.AvailableTime
@@ -17,6 +18,7 @@ import team.aliens.dms.domain.studyroom.model.TimeSlot
 import team.aliens.dms.domain.studyroom.spi.CommandStudyRoomPort
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
 import java.util.UUID
+import java.util.function.Function
 
 @Service
 class CommandStudyRoomServiceImpl(
@@ -24,25 +26,56 @@ class CommandStudyRoomServiceImpl(
     private val commandStudyRoomPort: CommandStudyRoomPort
 ) : CommandStudyRoomService {
 
-    override fun saveStudyRoom(studyRoom: StudyRoom) =
-        commandStudyRoomPort.saveStudyRoom(studyRoom)
+    override fun createStudyRoom(studyRoom: StudyRoom): StudyRoom {
+        if (existsStudyRoomByFloorAndName(studyRoom)) {
+            throw StudyRoomAlreadyExistsException
+        }
+        return commandStudyRoomPort.saveStudyRoom(studyRoom)
+    }
 
-    override fun saveSeatApplication(seatApplication: SeatApplication): SeatApplication {
-        if (queryStudyRoomPort.existsSeatApplicationBySeatIdAndTimeSlotId(seatApplication.seatId, seatApplication.timeSlotId)) {
+    override fun updateStudyRoom(studyRoom: StudyRoom, updateFunction: Function<StudyRoom, StudyRoom>) {
+        val updatedStudyRoom = updateFunction.apply(studyRoom)
+            .also {
+                if (
+                    (studyRoom.floor != it.floor || studyRoom.name != it.name) &&
+                    existsStudyRoomByFloorAndName(studyRoom)
+                ) {
+                    throw StudyRoomAlreadyExistsException
+                }
+            }
+        commandStudyRoomPort.saveStudyRoom(updatedStudyRoom)
+    }
+
+    private fun existsStudyRoomByFloorAndName(studyRoom: StudyRoom) =
+        queryStudyRoomPort.existsStudyRoomByFloorAndNameAndSchoolId(
+            floor = studyRoom.floor,
+            name = studyRoom.name,
+            schoolId = studyRoom.schoolId
+        )
+
+    override fun createSeatApplication(seatApplication: SeatApplication): SeatApplication {
+        if (queryStudyRoomPort.existsSeatApplicationBySeatIdAndTimeSlotId(
+                seatApplication.seatId,
+                seatApplication.timeSlotId
+            )
+        ) {
             throw SeatAlreadyAppliedException
         }
-        commandStudyRoomPort.deleteSeatApplicationByStudentIdAndTimeSlotId(seatApplication.studentId, seatApplication.timeSlotId)
+        commandStudyRoomPort.deleteSeatApplicationByStudentIdAndTimeSlotId(
+            seatApplication.studentId,
+            seatApplication.timeSlotId
+        )
         return commandStudyRoomPort.saveSeatApplication(seatApplication)
     }
 
-    override fun saveSeatType(seatType: SeatType): SeatType {
+    override fun createSeatType(seatType: SeatType): SeatType {
         if (queryStudyRoomPort.existsSeatTypeByNameAndSchoolId(seatType.name, seatType.schoolId)) {
             throw SeatTypeAlreadyExistsException
         }
         return commandStudyRoomPort.saveSeatType(seatType)
     }
 
-    override fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot {
+    override fun createTimeSlot(timeSlot: TimeSlot): TimeSlot {
         if (queryStudyRoomPort.existsTimeSlotByStartTimeAndEndTimeAndSchoolId(
                 startTime = timeSlot.startTime,
                 endTime = timeSlot.endTime,
@@ -54,13 +87,15 @@ class CommandStudyRoomServiceImpl(
         return commandStudyRoomPort.saveTimeSlot(timeSlot)
     }
 
-    override fun saveAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>) =
+    override fun updateTimeSlot(timeSlot: TimeSlot) = createTimeSlot(timeSlot)
+
+    override fun createAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>) =
         commandStudyRoomPort.saveAllStudyRoomTimeSlots(studyRoomTimeSlots)
 
-    override fun saveAllSeats(seats: List<Seat>) =
+    override fun createAllSeats(seats: List<Seat>) =
         commandStudyRoomPort.saveAllSeats(seats)
 
-    override fun saveAvailableTime(availableTime: AvailableTime) =
+    override fun createAvailableTime(availableTime: AvailableTime) =
         commandStudyRoomPort.saveAvailableTime(availableTime)
 
     override fun deleteStudyRoom(studyRoomId: UUID) {

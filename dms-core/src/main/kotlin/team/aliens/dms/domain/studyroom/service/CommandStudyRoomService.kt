@@ -8,22 +8,27 @@ import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import team.aliens.dms.domain.studyroom.model.TimeSlot
 import java.util.UUID
+import java.util.function.Function
 
 interface CommandStudyRoomService {
 
-    fun saveStudyRoom(studyRoom: StudyRoom): StudyRoom
+    fun createStudyRoom(studyRoom: StudyRoom): StudyRoom
 
-    fun saveSeatType(seatType: SeatType): SeatType
+    fun updateStudyRoom(studyRoom: StudyRoom, updateFunction: Function<StudyRoom, StudyRoom>)
 
-    fun saveTimeSlot(timeSlot: TimeSlot): TimeSlot
+    fun createSeatType(seatType: SeatType): SeatType
 
-    fun saveSeatApplication(seatApplication: SeatApplication): SeatApplication
+    fun createTimeSlot(timeSlot: TimeSlot): TimeSlot
 
-    fun saveAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>): List<StudyRoomTimeSlot>
+    fun updateTimeSlot(timeSlot: TimeSlot): TimeSlot
 
-    fun saveAllSeats(seats: List<Seat>): List<Seat>
+    fun createSeatApplication(seatApplication: SeatApplication): SeatApplication
 
-    fun saveAvailableTime(availableTime: AvailableTime): AvailableTime
+    fun createAllStudyRoomTimeSlots(studyRoomTimeSlots: List<StudyRoomTimeSlot>): List<StudyRoomTimeSlot>
+
+    fun createAllSeats(seats: List<Seat>): List<Seat>
+
+    fun createAvailableTime(availableTime: AvailableTime): AvailableTime
 
     fun deleteStudyRoom(studyRoomId: UUID)
 

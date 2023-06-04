@@ -7,8 +7,8 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
-import team.aliens.dms.domain.point.spi.vo.AllPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
@@ -92,9 +92,11 @@ class PointHistoryPersistenceAdapter(
     override fun queryPointHistoryBySchoolIdAndType(
         schoolId: UUID,
         type: PointType?,
+        studentName: String?,
+        studentGcn: String?,
         isCancel: Boolean?,
         pageData: PageData
-    ): List<AllPointHistoryVO> {
+    ): List<StudentPointHistoryVO> {
         return queryFactory
             .select(
                 QQueryAllPointHistoryVO(
@@ -110,6 +112,8 @@ class PointHistoryPersistenceAdapter(
             .from(pointHistoryJpaEntity)
             .where(
                 pointHistoryJpaEntity.school.id.eq(schoolId),
+                studentName?.let { pointHistoryJpaEntity.studentName.eq(it) },
+                studentGcn?.let { pointHistoryJpaEntity.studentGcn.eq(it) },
                 type?.let { pointHistoryJpaEntity.pointType.eq(it) },
                 isCancel?.let { pointHistoryJpaEntity.isCancel.eq(it) }
             )

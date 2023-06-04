@@ -6,6 +6,7 @@ import team.aliens.dms.domain.studyroom.model.SeatStatus
 import team.aliens.dms.domain.studyroom.model.StudyRoom
 import team.aliens.dms.domain.studyroom.model.StudyRoomTimeSlot
 import java.util.UUID
+import java.util.function.Function
 
 data class UpdateStudyRoomRequest(
     val floor: Int,
@@ -27,25 +28,27 @@ data class UpdateStudyRoomRequest(
         val heightLocation: Int,
         val number: Int?,
         val typeId: UUID?,
-        val status: String
+        val status: String,
     )
 
-    fun toStudyRoom(studyRoom: StudyRoom) =
-        studyRoom.copy(
-            name = name,
-            floor = floor,
-            widthSize = totalWidthSize,
-            heightSize = totalHeightSize,
-            availableHeadcount = seats.count {
-                SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
-            },
-            availableSex = Sex.valueOf(availableSex),
-            availableGrade = availableGrade,
-            eastDescription = eastDescription,
-            westDescription = westDescription,
-            southDescription = southDescription,
-            northDescription = northDescription
-        )
+    fun toStudyRoomUpdateFunction() =
+        Function<StudyRoom, StudyRoom> {
+            it.copy(
+                name = name,
+                floor = floor,
+                widthSize = totalWidthSize,
+                heightSize = totalHeightSize,
+                availableHeadcount = seats.count {
+                    SeatStatus.AVAILABLE == SeatStatus.valueOf(it.status)
+                },
+                availableSex = Sex.valueOf(availableSex),
+                availableGrade = availableGrade,
+                eastDescription = eastDescription,
+                westDescription = westDescription,
+                southDescription = southDescription,
+                northDescription = northDescription
+            )
+        }
 
     fun toStudyRoomTimeSlots(studyRoomId: UUID) =
         timeSlotIds.map {

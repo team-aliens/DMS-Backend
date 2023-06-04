@@ -14,7 +14,7 @@ class CreateSeatTypeUseCase(
     fun execute(name: String, color: String) {
         val user = userService.getCurrentUser()
 
-        studyRoomService.saveSeatType(
+        studyRoomService.createSeatType(
             SeatType(
                 schoolId = user.schoolId,
                 name = name,

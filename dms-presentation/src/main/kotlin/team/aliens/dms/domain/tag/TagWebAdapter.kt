@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.tag.dto.CreateTagWebRequest
-import team.aliens.dms.domain.tag.dto.CreateTagWebResponse
-import team.aliens.dms.domain.tag.dto.GrantTagRequest
-import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
-import team.aliens.dms.domain.tag.dto.QueryTagsResponse
-import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
+import team.aliens.dms.domain.tag.dto.*
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.GrantTagUseCase
@@ -41,7 +36,7 @@ class TagWebAdapter(
 ) {
 
     @GetMapping
-    fun queryTags(): QueryTagsResponse {
+    fun queryTags(): TagsResponse {
         return queryTagsUseCase.execute()
     }
 
@@ -76,13 +71,11 @@ class TagWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): CreateTagWebResponse {
-        val tagId = createTagUseCase.execute(
+    fun createTag(@RequestBody @Valid webRequest: CreateTagWebRequest): TagIdResponse {
+        return createTagUseCase.execute(
             name = webRequest.name,
             color = webRequest.color
         )
-
-        return CreateTagWebResponse(tagId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

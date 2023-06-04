@@ -13,4 +13,6 @@ interface SecurityPort {
     fun getCurrentUserSchoolId(): UUID
 
     fun encodePassword(password: String): String
+
+    fun isStudent(): Boolean
 }

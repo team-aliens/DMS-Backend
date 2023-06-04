@@ -24,6 +24,7 @@ import team.aliens.dms.domain.point.dto.GrantPointRequest
 import team.aliens.dms.domain.point.dto.PointHistoryResponse
 import team.aliens.dms.domain.point.dto.PointOptionsResponse
 import team.aliens.dms.domain.point.dto.PointRequestType
+import team.aliens.dms.domain.point.dto.StudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
@@ -35,6 +36,7 @@ import team.aliens.dms.domain.point.usecase.QueryAllPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.QueryPointOptionsUseCase
 import team.aliens.dms.domain.point.usecase.QueryStudentPointHistoryUseCase
+import team.aliens.dms.domain.point.usecase.QueryStudentRecentPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.RemovePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.UpdatePointOptionUseCase
 import java.time.LocalDateTime
@@ -52,6 +54,7 @@ class PointWebAdapter(
     private val removePointOptionUseCase: RemovePointOptionUseCase,
     private val grantPointUseCase: GrantPointUseCase,
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
+    private val queryStudentRecentPointHistoryUseCase: QueryStudentRecentPointHistoryUseCase,
     private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
     private val queryPointOptionsUseCase: QueryPointOptionsUseCase,
@@ -148,5 +151,12 @@ class PointWebAdapter(
         @ModelAttribute pageData: PageData
     ): PointHistoryResponse {
         return queryStudentPointHistoryUseCase.execute(studentId, pageData)
+    }
+
+    @GetMapping("/history/students/{student-id}/recent")
+    fun getStudentRecentPointHistory(
+        @PathVariable("student-id") @NotNull studentId: UUID
+    ): StudentPointHistoryResponse {
+        return queryStudentRecentPointHistoryUseCase.execute(studentId)
     }
 }

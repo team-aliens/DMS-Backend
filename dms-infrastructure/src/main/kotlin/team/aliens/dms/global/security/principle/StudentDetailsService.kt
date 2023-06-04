@@ -20,7 +20,8 @@ class StudentDetailsService(
             }
             return StudentDetails(
                 userId = id,
-                schoolId = schoolId
+                schoolId = schoolId,
+                authority = authority
             )
         }
     }

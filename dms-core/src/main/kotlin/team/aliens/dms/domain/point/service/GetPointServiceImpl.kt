@@ -10,6 +10,7 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.QueryPhrasePort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
+import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import java.time.LocalDateTime
 import java.util.UUID
@@ -55,6 +56,18 @@ class GetPointServiceImpl(
         isCancel = isCancel,
         pageData = pageData
     )
+
+    override fun queryRecentPointHistoryBySchoolId(
+        schoolId: UUID,
+        studentName: String?,
+        studentGcn: String?
+    ): StudentPointHistoryVO? =
+        queryPointHistoryPort.queryPointHistoryBySchoolIdAndType(
+            schoolId = schoolId,
+            studentName = studentName,
+            studentGcn = studentGcn,
+            pageData = PageData.LIMIT1
+        ).getOrNull(0)
 
     override fun queryPointHistoryBySchoolIdAndCreatedAtBetween(
         schoolId: UUID,
