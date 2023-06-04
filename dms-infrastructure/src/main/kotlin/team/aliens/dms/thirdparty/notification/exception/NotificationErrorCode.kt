@@ -1,7 +1,6 @@
 package team.aliens.dms.thirdparty.notification.exception
 
 import team.aliens.dms.common.error.ErrorProperty
-import team.aliens.dms.common.error.ErrorStatus
 
 enum class NotificationErrorCode(
     private val status: Int,
@@ -9,7 +8,6 @@ enum class NotificationErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    NOTIFICATION_PROCESS_FAILED(ErrorStatus.BAD_REQUEST, "Notification process failed", 1)
     ;
 
     override fun status(): Int = status
