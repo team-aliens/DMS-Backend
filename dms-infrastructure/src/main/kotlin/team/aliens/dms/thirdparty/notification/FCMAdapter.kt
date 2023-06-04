@@ -4,6 +4,7 @@ import com.google.firebase.messaging.ApnsConfig
 import com.google.firebase.messaging.Aps
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import com.google.firebase.messaging.MulticastMessage
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
@@ -39,7 +40,7 @@ class FCMAdapter : NotificationPort {
         firebaseInstance.sendAsync(message)
     }
 
-    override fun sendGroupMessage(
+    override fun sendToAll(
         notification: Notification
     ) {
         val message = this.getMassageBuilderByNotification(notification).build()
@@ -58,11 +59,34 @@ class FCMAdapter : NotificationPort {
                         .setBody(content)
                         .build()
                 )
-                .withApnsConfig(threadId)
+                .setApnsConfig(getApnsConfig(threadId))
         }
 
-    private fun Message.Builder.withApnsConfig(threadId: String) =
-        setApnsConfig(
+    override fun sendMessages(
+        deviceTokens: List<String>,
+        notification: Notification
+    ) {
+        val message = this.getMulticastMassageBuilderByNotification(notification)
+            .addAllTokens(deviceTokens)
+            .build()
+        firebaseInstance.sendMulticastAsync(message)
+    }
+
+    private fun getMulticastMassageBuilderByNotification(notification: Notification) =
+        with(notification) {
+            MulticastMessage
+                .builder()
+                .setNotification(
+                    com.google.firebase.messaging.Notification
+                        .builder()
+                        .setTitle(title)
+                        .setBody(content)
+                        .build()
+                )
+                .setApnsConfig(getApnsConfig(threadId))
+        }
+
+    private fun getApnsConfig(threadId: String) =
             ApnsConfig
                 .builder()
                 .setAps(
@@ -71,5 +95,5 @@ class FCMAdapter : NotificationPort {
                         .setThreadId(threadId)
                         .build()
                 ).build()
-        )
+
 }

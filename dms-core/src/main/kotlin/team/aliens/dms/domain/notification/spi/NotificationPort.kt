@@ -10,7 +10,7 @@ interface NotificationPort {
         notification: Notification
     )
 
-    fun sendGroupMessage(
+    fun sendToAll(
         notification: Notification
     )
 
@@ -19,4 +19,6 @@ interface NotificationPort {
     fun subscribeAllTopics(deviceToken: String)
 
     fun unsubscribeTopic(deviceToken: String, topic: Topic)
+
+    fun sendMessages(deviceTokens: List<String>, notification: Notification)
 }
