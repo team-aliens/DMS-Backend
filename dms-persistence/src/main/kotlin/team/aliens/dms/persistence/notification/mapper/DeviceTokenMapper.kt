@@ -19,7 +19,8 @@ class DeviceTokenMapper(
     override fun toDomain(entity: DeviceTokenJpaEntity?): DeviceToken? {
         return entity?.let {
             DeviceToken(
-                userId = it.userId,
+                id = it.id!!,
+                userId = it.user!!.id!!,
                 schoolId = it.school!!.id!!,
                 deviceToken = it.deviceToken
             )
@@ -32,7 +33,7 @@ class DeviceTokenMapper(
         val school = schoolRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
 
         return DeviceTokenJpaEntity(
-            userId = domain.userId,
+            id = domain.id,
             user = user,
             school = school,
             deviceToken = domain.deviceToken
