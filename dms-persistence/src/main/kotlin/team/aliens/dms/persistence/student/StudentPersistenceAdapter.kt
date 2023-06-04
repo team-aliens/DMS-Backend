@@ -104,7 +104,7 @@ class StudentPersistenceAdapter(
     override fun queryBySchoolIdAndGcnIn(schoolId: UUID, gcnList: List<Triple<Int, Int, Int>>): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.room, roomJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
             .where(
                 roomJpaEntity.school.id.eq(schoolId),
                 Expressions.list(studentJpaEntity.grade, studentJpaEntity.classRoom, studentJpaEntity.number)
@@ -121,7 +121,7 @@ class StudentPersistenceAdapter(
 
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.room, roomJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
             .where(
                 roomJpaEntity.school.id.eq(schoolId),
                 Expressions.list(roomJpaEntity.number, studentJpaEntity.roomLocation)
@@ -262,7 +262,7 @@ class StudentPersistenceAdapter(
     override fun queryStudentsByRoomNumberAndSchoolId(roomNumber: String, schoolId: UUID): List<Student> {
         return queryFactory
             .selectFrom(studentJpaEntity)
-            .join(studentJpaEntity.room, roomJpaEntity)
+            .join(studentJpaEntity.room, roomJpaEntity).fetchJoin()
             .where(
                 roomJpaEntity.number.eq(roomNumber),
                 roomJpaEntity.school.id.eq(schoolId)
@@ -299,7 +299,6 @@ class StudentPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .join(studentJpaEntity.room, roomJpaEntity)
             .leftJoin(pointHistoryJpaEntity)
             .on(eqStudentRecentPointHistory())
             .where(
