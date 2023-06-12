@@ -69,4 +69,8 @@ object Dependencies {
 
     // sentry
     const val SENTRY = "io.sentry:sentry-spring-boot-starter:${DependencyVersions.SENTRY_VERSION}"
+
+    // notification
+    const val FCM = "com.google.firebase:firebase-admin:${DependencyVersions.FCM_VERSION}"
+
 }
