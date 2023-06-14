@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.notification.dto.SetNotificationTokenRequest
+import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscribesWebRequest
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.usecase.SetNotificationTokenUseCase
+import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscribesUseCase
@@ -20,16 +20,16 @@ import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscribesUseCase
 @RequestMapping("/notifications")
 @RestController
 class NotificationWebAdapter(
-    private val setNotificationTokenUseCase: SetNotificationTokenUseCase,
+    private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
     private val updateTopicSubscribesUseCase: UpdateTopicSubscribesUseCase
 ) {
 
     @PostMapping("/token")
-    fun setNotificationToken(@RequestParam("token") @NotNull deviceToken: String) {
-        setNotificationTokenUseCase.execute(
-            SetNotificationTokenRequest(deviceToken = deviceToken)
+    fun setDeviceToken(@RequestParam("token") @NotNull deviceToken: String) {
+        setDeviceTokenUseCase.execute(
+            SetDeviceTokenRequest(deviceToken = deviceToken)
         )
     }
 

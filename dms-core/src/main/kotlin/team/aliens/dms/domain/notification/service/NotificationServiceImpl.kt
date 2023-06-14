@@ -23,10 +23,10 @@ class NotificationServiceImpl(
     }
 
     override fun sendNotificationByUserId(userId: UUID, notification: Notification) {
-        val notificationToken = this.getDeviceTokenByUserId(userId)
+        val deviceToken = this.getDeviceTokenByUserId(userId)
         notificationPort.sendMessage(
             notification = notification,
-            deviceToken = notificationToken.deviceToken
+            deviceToken = deviceToken.deviceToken
         )
     }
 
