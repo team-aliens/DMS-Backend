@@ -3,9 +3,9 @@ package team.aliens.dms.domain.notification.dto.request
 import team.aliens.dms.domain.notification.model.Topic
 
 data class UpdateTopicSubscribesWebRequest(
-    val topicSubscribes: List<TopicSubscribes>
+    val topicsToSubscribe: List<TopicsToSubscribe>
 ) {
-    data class TopicSubscribes(
+    data class TopicsToSubscribe(
         val topic: Topic,
         val isSubscribe: Boolean
     ) {

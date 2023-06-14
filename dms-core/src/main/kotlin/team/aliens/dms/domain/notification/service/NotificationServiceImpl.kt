@@ -52,9 +52,9 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun updateSubscribes(userId: UUID, topicSubscribes: List<Pair<Topic, Boolean>>) {
+    override fun updateSubscribes(userId: UUID, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
         val deviceToken = this.getDeviceTokenByUserId(userId)
-        topicSubscribes.forEach { (topic, isSubscribe) ->
+        topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {
                 notificationPort.subscribeTopic(
                     deviceToken = deviceToken.deviceToken,

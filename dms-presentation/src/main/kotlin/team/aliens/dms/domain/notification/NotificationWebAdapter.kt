@@ -46,7 +46,7 @@ class NotificationWebAdapter(
     @PatchMapping("/topic")
     fun updateTopicSubscribes(@RequestParam @NotNull request: UpdateTopicSubscribesWebRequest) {
         updateTopicSubscribesUseCase.execute(
-            topicSubscribes = request.topicSubscribes.map{it.toPair()}
+            topicsToSubscribe = request.topicsToSubscribe.map{it.toPair()}
         )
     }
 }

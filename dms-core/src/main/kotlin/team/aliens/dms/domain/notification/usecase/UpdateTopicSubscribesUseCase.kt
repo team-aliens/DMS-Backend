@@ -11,12 +11,12 @@ class UpdateTopicSubscribesUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(topicSubscribes: List<Pair<Topic, Boolean>>) {
+    fun execute(topicsToSubscribe: List<Pair<Topic, Boolean>>) {
         val user = userService.getCurrentUser()
 
         notificationService.updateSubscribes(
             userId = user.id,
-            topicSubscribes = topicSubscribes
+            topicsToSubscribe = topicsToSubscribe
         )
     }
 }

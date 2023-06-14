@@ -17,7 +17,7 @@ interface NotificationService {
 
     fun subscribeTopic(userId: UUID, topic: Topic)
 
-    fun updateSubscribes(userId: UUID, topicSubscribes: List<Pair<Topic, Boolean>>)
+    fun updateSubscribes(userId: UUID, topicsToSubscribe: List<Pair<Topic, Boolean>>)
 
     fun publishNotification(deviceToken: String, notification: Notification)
 
