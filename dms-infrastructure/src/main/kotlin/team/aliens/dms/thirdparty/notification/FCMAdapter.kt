@@ -40,7 +40,7 @@ class FCMAdapter : NotificationPort {
         firebaseInstance.sendAsync(message)
     }
 
-    override fun sendToAll(
+    override fun sendByTopic(
         notification: Notification
     ) {
         val message = this.getMassageBuilderByNotification(notification).build()

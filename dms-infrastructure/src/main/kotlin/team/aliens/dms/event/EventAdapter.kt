@@ -26,7 +26,7 @@ class EventAdapter(
         notification: Notification
     ) {
         eventPublisher.publishEvent(
-            GroupNotificationEvent(
+            TopicNotificationEvent(
                 notification = notification
             )
         )

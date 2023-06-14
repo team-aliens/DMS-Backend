@@ -33,7 +33,7 @@ class NotificationServiceImpl(
     }
 
     override fun sendNotificationToAll(notification: Notification) {
-        notificationPort.sendToAll(notification)
+        notificationPort.sendByTopic(notification)
     }
 
     override fun subscribeTopic(userId: UUID, topic: Topic) {
@@ -53,6 +53,7 @@ class NotificationServiceImpl(
     }
 
     override fun updateSubscribes(userId: UUID, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
+
         val deviceToken = this.getDeviceTokenByUserId(userId)
         topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {

@@ -10,7 +10,7 @@ interface NotificationPort {
         notification: Notification
     )
 
-    fun sendToAll(
+    fun sendByTopic(
         notification: Notification
     )
 
