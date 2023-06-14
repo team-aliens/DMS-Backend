@@ -1,10 +1,12 @@
 package team.aliens.dms.domain.notification
 
+import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -44,9 +46,9 @@ class NotificationWebAdapter(
     }
 
     @PatchMapping("/topic")
-    fun updateTopicSubscribes(@RequestParam @NotNull request: UpdateTopicSubscribesWebRequest) {
+    fun updateTopicSubscribes(@RequestBody @Valid request: UpdateTopicSubscribesWebRequest) {
         updateTopicSubscribesUseCase.execute(
-            topicsToSubscribe = request.topicsToSubscribe.map{it.toPair()}
+            topicsToSubscribe = request.topicsToSubscribe.map { it.toPair() }
         )
     }
 }
