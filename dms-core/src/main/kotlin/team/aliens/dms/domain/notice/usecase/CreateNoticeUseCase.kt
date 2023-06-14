@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.notice.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.service.event.EventService
 import team.aliens.dms.domain.notice.dto.NoticeIdResponse
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.notification.model.Notification
+import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 class CreateNoticeUseCase(
     private val userService: UserService,
     private val noticeService: NoticeService,
-    private val eventService: EventService
+    private val notificationService: NotificationService
 ) {
 
     fun execute(title: String, content: String): NoticeIdResponse {
@@ -28,7 +28,7 @@ class CreateNoticeUseCase(
         )
         val savedNotice = noticeService.saveNotice(notice)
 
-        eventService.publishNotificationToAll(
+        notificationService.publishNotificationToAll(
             Notification.NoticeNotification(notice)
         )
 
