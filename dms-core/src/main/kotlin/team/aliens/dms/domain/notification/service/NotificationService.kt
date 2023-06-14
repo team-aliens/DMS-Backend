@@ -9,10 +9,6 @@ interface NotificationService {
 
     fun saveDeviceToken(deviceToken: DeviceToken)
 
-    fun sendNotificationByUserId(userId: UUID, notification: Notification)
-
-    fun sendNotificationToAll(notification: Notification)
-
     fun unsubscribeTopic(userId: UUID, topic: Topic)
 
     fun subscribeTopic(userId: UUID, topic: Topic)
