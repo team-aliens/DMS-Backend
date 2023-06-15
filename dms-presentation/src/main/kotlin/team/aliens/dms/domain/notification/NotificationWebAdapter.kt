@@ -30,7 +30,7 @@ class NotificationWebAdapter(
     @PostMapping("/token")
     fun setDeviceToken(@RequestBody @Valid request: DeviceTokenRequest) {
         setDeviceTokenUseCase.execute(
-            SetDeviceTokenRequest(deviceToken = request.token)
+            SetDeviceTokenRequest(deviceToken = request.deviceToken)
         )
     }
 
