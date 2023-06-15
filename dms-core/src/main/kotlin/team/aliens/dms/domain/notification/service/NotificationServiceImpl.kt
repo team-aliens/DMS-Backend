@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification.service
 
-import java.util.UUID
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.EventPort
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
@@ -24,25 +23,23 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun subscribeTopic(userId: UUID, topic: Topic) {
-        val deviceToken = this.getDeviceTokenByUserId(userId)
+    override fun subscribeTopic(deviceToken: String, topic: Topic) {
         notificationPort.subscribeTopic(
-            deviceToken = deviceToken.deviceToken,
+            deviceToken = this.getDeviceTokenByDeviceToken(deviceToken).deviceToken,
             topic = topic
         )
     }
 
-    override fun unsubscribeTopic(userId: UUID, topic: Topic) {
-        val deviceToken = this.getDeviceTokenByUserId(userId)
+    override fun unsubscribeTopic(deviceToken: String, topic: Topic) {
         notificationPort.unsubscribeTopic(
-            deviceToken = deviceToken.deviceToken,
+            deviceToken = this.getDeviceTokenByDeviceToken(deviceToken).deviceToken,
             topic = topic
         )
     }
 
-    override fun updateSubscribes(userId: UUID, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
+    override fun updateSubscribes(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
 
-        val deviceToken = this.getDeviceTokenByUserId(userId)
+        val deviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
         topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {
                 notificationPort.subscribeTopic(
@@ -58,8 +55,8 @@ class NotificationServiceImpl(
         }
     }
 
-    private fun getDeviceTokenByUserId(userId: UUID) =
-        deviceTokenPort.queryDeviceTokenById(userId) ?: throw DeviceTokenNotFoundException
+    private fun getDeviceTokenByDeviceToken(deviceToken: String) =
+        deviceTokenPort.queryDeviceToenByDeviceToken(deviceToken) ?: throw DeviceTokenNotFoundException
 
     override fun publishNotification(
         deviceToken: String,

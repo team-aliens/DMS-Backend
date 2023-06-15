@@ -36,17 +36,24 @@ class NotificationWebAdapter(
 
     @PostMapping("/topic")
     fun subscribeTopic(@RequestBody @Valid request: TopicRequest) {
-        subscribeTopicUseCase.execute(request.topic)
+        subscribeTopicUseCase.execute(
+            deviceToken = request.deviceToken,
+            topic = request.topic
+        )
     }
 
     @DeleteMapping("/topic")
     fun unsubscribeTopic(@RequestBody @Valid request: TopicRequest) {
-        unsubscribeTopicUseCase.execute(request.topic)
+        unsubscribeTopicUseCase.execute(
+            deviceToken = request.deviceToken,
+            topic = request.topic
+        )
     }
 
     @PatchMapping("/topic")
     fun updateTopicSubscribes(@RequestBody @Valid request: UpdateTopicSubscribesWebRequest) {
         updateTopicSubscribesUseCase.execute(
+            deviceToken = request.deviceToken,
             topicsToSubscribe = request.topicsToSubscribe.map { it.toPair() }
         )
     }

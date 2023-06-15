@@ -27,4 +27,8 @@ class DeviceTokenPersistenceAdapter(
     override fun queryDeviceTokenById(userId: UUID) = notificationMapper.toDomain(
         deviceTokenRepository.findByIdOrNull(userId)
     )
+
+    override fun queryDeviceToenByDeviceToken(deviceToken: String) = notificationMapper.toDomain(
+        deviceTokenRepository.queryByDeviceToken(deviceToken)
+    )
 }
