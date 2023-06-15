@@ -1,11 +1,13 @@
 package team.aliens.dms.persistence.notification.repository
 
-import java.util.UUID
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.notification.entity.DeviceTokenJpaEntity
+import java.util.UUID
 
 @Repository
 interface DeviceTokenJpaRepository : CrudRepository<DeviceTokenJpaEntity, UUID> {
     fun queryByDeviceToken(deviceToken: String): DeviceTokenJpaEntity?
+    fun queryByUserId(userId: UUID): DeviceTokenJpaEntity?
+    fun deleteByUserId(userId: UUID)
 }
