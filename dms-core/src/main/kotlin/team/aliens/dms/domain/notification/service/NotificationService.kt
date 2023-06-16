@@ -1,8 +1,10 @@
 package team.aliens.dms.domain.notification.service
 
+import team.aliens.dms.domain.notification.dto.TopicSubscribeResponse
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
+import java.util.UUID
 
 interface NotificationService {
 
@@ -24,4 +26,6 @@ interface NotificationService {
     fun sendMessagesByTopic(
         notification: Notification
     )
+
+    fun getTopicSubscribesByUserId(userId: UUID): List<TopicSubscribeResponse>
 }

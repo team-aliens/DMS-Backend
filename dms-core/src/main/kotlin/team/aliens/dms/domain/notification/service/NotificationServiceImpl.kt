@@ -75,4 +75,22 @@ class NotificationServiceImpl(
             notification = notification
         )
     }
+
+    override fun getTopicSubscribesByUserId(userId: UUID): List<TopicSubscribeResponse> {
+        return topicSubscribePort.queryTopicSubscribesByUserId(userId).map {
+            TopicSubscribeResponse(
+                topic = it.topic,
+                isSubscribed = true
+            )
+        }.toMutableList().also {
+            Topic.values().forEach { topic ->
+                it.add(
+                    TopicSubscribeResponse(
+                        topic = topic,
+                        isSubscribed = false
+                    )
+                )
+            }
+        }
+    }
 }
