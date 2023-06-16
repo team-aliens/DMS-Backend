@@ -14,7 +14,15 @@ interface NotificationService {
 
     fun updateSubscribes(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>)
 
-    fun publishNotification(deviceToken: String, notification: Notification)
+    fun sendMessage(
+        deviceToken: String,
+        notification: Notification
+    )
 
-    fun publishNotificationToAll(notification: Notification)
+    fun sendMessages(deviceTokens: List<String>, notification: Notification)
+
+    fun sendByTopic(
+        notification: Notification
+    )
+
 }

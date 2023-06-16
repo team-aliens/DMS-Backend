@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.common.spi.EventPort
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
@@ -12,8 +11,7 @@ import team.aliens.dms.domain.notification.spi.NotificationPort
 @Component
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
-    private val deviceTokenPort: DeviceTokenPort,
-    private val eventPort: EventPort
+    private val deviceTokenPort: DeviceTokenPort
 ) : NotificationService {
 
     override fun saveDeviceToken(deviceToken: DeviceToken) {
@@ -56,22 +54,24 @@ class NotificationServiceImpl(
     }
 
     private fun getDeviceTokenByDeviceToken(deviceToken: String) =
-        deviceTokenPort.queryDeviceToenByDeviceToken(deviceToken) ?: throw DeviceTokenNotFoundException
+        deviceTokenPort.queryDeviceTokenByDeviceToken(deviceToken) ?: throw DeviceTokenNotFoundException
 
-    override fun publishNotification(
-        deviceToken: String,
-        notification: Notification
-    ) {
-        eventPort.publishNotification(
+    override fun sendMessage(deviceToken: String, notification: Notification) {
+        notificationPort.sendMessage(
             deviceToken = deviceToken,
             notification = notification
         )
     }
 
-    override fun publishNotificationToAll(
-        notification: Notification
-    ) {
-        eventPort.publishNotificationToAll(
+    override fun sendMessages(deviceTokens: List<String>, notification: Notification) {
+        notificationPort.sendMessages(
+            deviceTokens = deviceTokens,
+            notification = notification
+        )
+    }
+
+    override fun sendByTopic(notification: Notification) {
+        notificationPort.sendByTopic(
             notification = notification
         )
     }
