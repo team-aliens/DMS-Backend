@@ -4,7 +4,6 @@ import team.aliens.dms.domain.notification.dto.TopicSubscribeResponse
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
-import java.util.UUID
 
 interface NotificationService {
 
@@ -27,5 +26,5 @@ interface NotificationService {
         notification: Notification
     )
 
-    fun getTopicSubscribesByUserId(userId: UUID): List<TopicSubscribeResponse>
+    fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribeResponse>
 }

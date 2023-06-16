@@ -7,6 +7,8 @@ import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
+import team.aliens.dms.domain.notification.spi.TopicSubscribePort
+import java.util.UUID
 
 @Component
 class NotificationServiceImpl(
@@ -22,6 +24,13 @@ class NotificationServiceImpl(
     }
 
     override fun subscribeTopic(deviceToken: String, topic: Topic) {
+        val savedToken = this.getDeviceTokenByDeviceToken(deviceToken)
+        topicSubscribePort.saveTopicSubscribe(
+            TopicSubscribe(
+                deviceTokenId = savedToken.id,
+                topic = topic
+            )
+        )
         notificationPort.subscribeTopic(
             deviceToken = this.getDeviceTokenByDeviceToken(deviceToken).deviceToken,
             topic = topic
@@ -29,6 +38,13 @@ class NotificationServiceImpl(
     }
 
     override fun unsubscribeTopic(deviceToken: String, topic: Topic) {
+        val savedToken = this.getDeviceTokenByDeviceToken(deviceToken)
+        topicSubscribePort.saveTopicSubscribe(
+            TopicSubscribe(
+                deviceTokenId = savedToken.id,
+                topic = topic
+            )
+        )
         notificationPort.unsubscribeTopic(
             deviceToken = this.getDeviceTokenByDeviceToken(deviceToken).deviceToken,
             topic = topic
@@ -76,20 +92,23 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun getTopicSubscribesByUserId(userId: UUID): List<TopicSubscribeResponse> {
-        return topicSubscribePort.queryTopicSubscribesByUserId(userId).map {
+    override fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribeResponse> {
+        val savedToken = getDeviceTokenByDeviceToken(deviceToken)
+        return topicSubscribePort.queryTopicSubscribesByDeviceTokenId(savedToken.id).map {
             TopicSubscribeResponse(
                 topic = it.topic,
                 isSubscribed = true
             )
         }.toMutableList().also {
             Topic.values().forEach { topic ->
-                it.add(
-                    TopicSubscribeResponse(
-                        topic = topic,
-                        isSubscribed = false
+                if (!it.any { it.topic == topic }) {
+                    it.add(
+                        TopicSubscribeResponse(
+                            topic = topic,
+                            isSubscribed = false
+                        )
                     )
-                )
+                }
             }
         }
     }
