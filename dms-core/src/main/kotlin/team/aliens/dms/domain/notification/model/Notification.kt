@@ -4,7 +4,7 @@ import team.aliens.dms.domain.notice.model.Notice
 
 sealed class Notification(
     val topic: Topic,
-    val identifier: String,
+    val identifier: String?,
     val title: String,
     val content: String,
     val threadId: String
