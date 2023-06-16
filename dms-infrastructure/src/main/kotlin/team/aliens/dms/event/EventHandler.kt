@@ -27,7 +27,7 @@ class NotificationEventHandler(
                 )
             }
             else -> {
-                notificationService.sendByTopic(
+                notificationService.sendMessagesByTopic(
                     notification = event.notification
                 )
             }

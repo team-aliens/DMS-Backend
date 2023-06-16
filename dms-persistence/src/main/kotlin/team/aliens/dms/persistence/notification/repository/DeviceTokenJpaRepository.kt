@@ -7,7 +7,7 @@ import java.util.UUID
 
 @Repository
 interface DeviceTokenJpaRepository : CrudRepository<DeviceTokenJpaEntity, UUID> {
-    fun queryByDeviceToken(deviceToken: String): DeviceTokenJpaEntity?
-    fun queryByUserId(userId: UUID): DeviceTokenJpaEntity?
+    fun findByDeviceToken(deviceToken: String): DeviceTokenJpaEntity?
+    fun findByUserId(userId: UUID): DeviceTokenJpaEntity?
     fun deleteByUserId(userId: UUID)
 }

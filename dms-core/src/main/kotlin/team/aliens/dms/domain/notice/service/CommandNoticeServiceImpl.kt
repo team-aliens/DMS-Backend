@@ -13,7 +13,7 @@ class CommandNoticeServiceImpl(
 ) : CommandNoticeService {
 
     override fun saveNotice(notice: Notice): Notice {
-        notificationEventPort.publishNotificationToAll(
+        notificationEventPort.publishNotificationToAllByTopic(
             Notification.NoticeNotification(notice)
         )
         return commandNoticePort.saveNotice(notice)

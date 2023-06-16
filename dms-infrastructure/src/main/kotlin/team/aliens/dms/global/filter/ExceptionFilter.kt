@@ -26,18 +26,15 @@ class ExceptionFilter(
             filterChain.doFilter(request, response)
         } catch (e: DmsException) {
             errorToJson(e.errorProperty, response)
-            e.printStackTrace()
             Sentry.captureException(e)
         } catch (e: Exception) {
             when (e.cause) {
                 is DmsException -> {
                     errorToJson((e.cause as DmsException).errorProperty, response)
-                    e.printStackTrace()
                     Sentry.captureException(e)
                 }
                 else -> {
                     errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
-                    e.printStackTrace()
                     Sentry.captureException(e)
                 }
             }

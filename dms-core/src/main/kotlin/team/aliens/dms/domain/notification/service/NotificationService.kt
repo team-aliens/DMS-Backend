@@ -21,7 +21,7 @@ interface NotificationService {
 
     fun sendMessages(deviceTokens: List<String>, notification: Notification)
 
-    fun sendByTopic(
+    fun sendMessagesByTopic(
         notification: Notification
     )
 }

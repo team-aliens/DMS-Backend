@@ -70,7 +70,7 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun sendByTopic(notification: Notification) {
+    override fun sendMessagesByTopic(notification: Notification) {
         notificationPort.sendByTopic(
             notification = notification
         )

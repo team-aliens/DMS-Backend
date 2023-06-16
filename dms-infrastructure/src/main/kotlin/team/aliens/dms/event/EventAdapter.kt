@@ -22,7 +22,7 @@ class EventAdapter(
         )
     }
 
-    override fun publishNotificationToAll(
+    override fun publishNotificationToAllByTopic(
         notification: Notification
     ) {
         eventPublisher.publishEvent(
