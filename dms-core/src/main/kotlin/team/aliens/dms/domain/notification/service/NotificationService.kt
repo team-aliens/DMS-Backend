@@ -24,5 +24,4 @@ interface NotificationService {
     fun sendByTopic(
         notification: Notification
     )
-
 }

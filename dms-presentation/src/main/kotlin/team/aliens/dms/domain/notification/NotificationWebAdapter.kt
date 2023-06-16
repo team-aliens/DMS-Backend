@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification
 
-import javax.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,6 +15,7 @@ import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscribesUseCase
+import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")

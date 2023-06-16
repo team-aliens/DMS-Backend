@@ -1,5 +1,8 @@
 package team.aliens.dms.persistence.notification.entity
 
+import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -7,9 +10,6 @@ import javax.persistence.FetchType
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
-import team.aliens.dms.persistence.BaseUUIDEntity
-import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
-import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Entity
 @Table(name = "tbl_device_token")

@@ -141,7 +141,6 @@ class SecurityConfig(
             .antMatchers(HttpMethod.GET, "/remains/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/remains/status/file").hasAuthority(MANAGER.name)
-
             .antMatchers(HttpMethod.GET, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
             .antMatchers(HttpMethod.DELETE, "/notifications/token").authenticated()
