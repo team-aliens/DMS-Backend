@@ -12,12 +12,13 @@ class CommandNoticeServiceImpl(
     private val notificationEventPort: NotificationEventPort
 ) : CommandNoticeService {
 
-    override fun saveNotice(notice: Notice): Notice {
-        notificationEventPort.publishNotificationToAllByTopic(
-            Notification.NoticeNotification(notice)
-        )
-        return commandNoticePort.saveNotice(notice)
-    }
+    override fun saveNotice(notice: Notice) =
+        commandNoticePort.saveNotice(notice)
+            .also {
+                notificationEventPort.publishNotificationToAllByTopic(
+                    Notification.NoticeNotification(notice)
+                )
+            }
 
     override fun deleteNotice(notice: Notice) {
         commandNoticePort.deleteNotice(notice)
