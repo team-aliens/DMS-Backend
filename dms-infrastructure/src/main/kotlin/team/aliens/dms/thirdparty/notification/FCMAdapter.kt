@@ -40,7 +40,7 @@ class FCMAdapter : NotificationPort {
         firebaseInstance.sendAsync(message)
     }
 
-    override fun sendToAll(
+    override fun sendByTopic(
         notification: Notification
     ) {
         val message = this.getMassageBuilderByNotification(notification).build()
@@ -51,7 +51,7 @@ class FCMAdapter : NotificationPort {
         with(notification) {
             Message
                 .builder()
-                .setTopic(notification.topic.toString())
+                .setTopic(topic.toString())
                 .setNotification(
                     com.google.firebase.messaging.Notification
                         .builder()
@@ -87,13 +87,12 @@ class FCMAdapter : NotificationPort {
         }
 
     private fun getApnsConfig(threadId: String) =
-            ApnsConfig
-                .builder()
-                .setAps(
-                    Aps.builder()
-                        .setSound("default")
-                        .setThreadId(threadId)
-                        .build()
-                ).build()
-
+        ApnsConfig
+            .builder()
+            .setAps(
+                Aps.builder()
+                    .setSound("default")
+                    .setThreadId(threadId)
+                    .build()
+            ).build()
 }

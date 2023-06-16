@@ -3,11 +3,11 @@ package team.aliens.dms.thirdparty.notification
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.io.IOException
 import javax.annotation.PostConstruct
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Configuration
 
 @Configuration
 class FCMConfig(

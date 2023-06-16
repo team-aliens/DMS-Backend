@@ -6,4 +6,8 @@ import team.aliens.dms.persistence.notification.entity.DeviceTokenJpaEntity
 import java.util.UUID
 
 @Repository
-interface DeviceTokenJpaRepository : CrudRepository<DeviceTokenJpaEntity, UUID>
+interface DeviceTokenJpaRepository : CrudRepository<DeviceTokenJpaEntity, UUID> {
+    fun findByDeviceToken(deviceToken: String): DeviceTokenJpaEntity?
+    fun findByUserId(userId: UUID): DeviceTokenJpaEntity?
+    fun deleteByUserId(userId: UUID)
+}

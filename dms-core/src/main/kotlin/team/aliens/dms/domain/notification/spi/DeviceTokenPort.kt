@@ -1,13 +1,15 @@
 package team.aliens.dms.domain.notification.spi
 
-import java.util.UUID
 import team.aliens.dms.domain.notification.model.DeviceToken
+import java.util.UUID
 
 interface DeviceTokenPort {
 
     fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken
 
-    fun deleteDeviceTokenById(userId: UUID)
+    fun queryDeviceTokenByUserId(userId: UUID): DeviceToken?
 
-    fun queryDeviceTokenById(userId: UUID): DeviceToken?
+    fun queryDeviceTokenByDeviceToken(deviceToken: String): DeviceToken?
+
+    fun deleteDeviceTokenByUserId(userId: UUID)
 }
