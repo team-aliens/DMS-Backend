@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.notification.service
 
-import team.aliens.dms.domain.notification.dto.TopicSubscribeResponse
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.domain.notification.model.TopicSubscribe
 
 interface NotificationService {
 
@@ -26,5 +26,5 @@ interface NotificationService {
         notification: Notification
     )
 
-    fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribeResponse>
+    fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribe>
 }

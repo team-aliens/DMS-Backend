@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
-import team.aliens.dms.domain.notification.dto.TopicSubscribesResponse
+import team.aliens.dms.domain.notification.dto.TopicSubscribeGroupsResponse
 import team.aliens.dms.domain.notification.dto.request.DeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscribesWebRequest
@@ -63,7 +63,7 @@ class NotificationWebAdapter(
     }
 
     @GetMapping("/topic")
-    fun queryTopicSubscribes(@RequestBody @Valid request: DeviceTokenRequest): TopicSubscribesResponse {
+    fun queryTopicSubscribes(@RequestBody @Valid request: DeviceTokenRequest): TopicSubscribeGroupsResponse {
         return queryTopicSubscribesUseCase.execute(request.deviceToken)
     }
 }

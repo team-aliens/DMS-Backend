@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.notification.dto.TopicSubscribeResponse
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
@@ -10,7 +9,6 @@ import team.aliens.dms.domain.notification.model.TopicSubscribe
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.TopicSubscribePort
-import java.util.UUID
 
 @Component
 class NotificationServiceImpl(
@@ -102,24 +100,8 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribeResponse> {
+    override fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribe> {
         val savedToken = getDeviceTokenByDeviceToken(deviceToken)
-        return topicSubscribePort.queryTopicSubscribesByDeviceTokenId(savedToken.id).map {
-            TopicSubscribeResponse(
-                topic = it.topic,
-                isSubscribed = true
-            )
-        }.toMutableList().also {
-            Topic.values().forEach { topic ->
-                if (!it.any { it.topic == topic }) {
-                    it.add(
-                        TopicSubscribeResponse(
-                            topic = topic,
-                            isSubscribed = false
-                        )
-                    )
-                }
-            }
-        }
+        return topicSubscribePort.queryTopicSubscribesByDeviceTokenId(savedToken.id)
     }
 }
