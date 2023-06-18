@@ -20,7 +20,7 @@ enum class Topic(
     STUDY_ROOM_TIME_SLOT(
         topicGroup = TopicGroup.STUDY_ROOM,
         title = "이용 시간 알림",
-        content = "자습실 이용 시작 10분 전에 알림을 발송합니다."
+        content = "자습실 이용 시작 10분 전에 알림을 받을 수 있습니다."
     ),
     STUDY_ROOM_APPLY(
         topicGroup = TopicGroup.STUDY_ROOM,
