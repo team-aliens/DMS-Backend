@@ -29,7 +29,8 @@ class NotificationServiceImpl(
         topicSubscribePort.saveTopicSubscribe(
             TopicSubscribe(
                 deviceTokenId = savedDeviceToken.id,
-                topic = topic
+                topic = topic,
+                isSubscribed = true
             )
         )
         notificationPort.subscribeTopic(
@@ -39,6 +40,14 @@ class NotificationServiceImpl(
     }
 
     override fun unsubscribeTopic(deviceToken: String, topic: Topic) {
+        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
+        topicSubscribePort.saveTopicSubscribe(
+            TopicSubscribe(
+                deviceTokenId = savedDeviceToken.id,
+                topic = topic,
+                isSubscribed = false
+            )
+        )
         notificationPort.unsubscribeTopic(
             deviceToken = deviceToken,
             topic = topic
@@ -49,31 +58,28 @@ class NotificationServiceImpl(
 
         val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
 
-        val subscribeTopics = mutableListOf<Topic>()
-        val unsubscribeTopics = mutableListOf<Topic>()
-
         topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {
                 notificationPort.subscribeTopic(
                     deviceToken = deviceToken,
                     topic = topic
                 )
-                subscribeTopics.add(topic)
             } else {
                 notificationPort.unsubscribeTopic(
                     deviceToken = deviceToken,
                     topic = topic
                 )
-                unsubscribeTopics.add(topic)
             }
         }
 
         topicSubscribePort.saveAllTopicSubscribes(
-            subscribeTopics.map { TopicSubscribe(savedDeviceToken.id, it) }
-        )
-        topicSubscribePort.deleteByDeviceTokenIdAndTopics(
-            deviceTokenId = savedDeviceToken.id,
-            topics = unsubscribeTopics
+            topicsToSubscribe.map {
+                TopicSubscribe(
+                    deviceTokenId = savedDeviceToken.id,
+                    topic = it.first,
+                    isSubscribed = it.second
+                )
+            }
         )
     }
 

@@ -10,17 +10,13 @@ data class TopicSubscribeGroupsResponse(
     companion object {
         fun of(topicSubscribes: List<TopicSubscribe>): TopicSubscribeGroupsResponse {
 
-            val topicSubscribesSet = topicSubscribes
-                .map { it.topic }
-                .toSet()
-
             return TopicSubscribeGroupsResponse(
                 TopicGroup.values()
                     .associateWith { mutableListOf<TopicSubscribeResponse>() }
                     .also {
                         addTopicSubscribesToTopicGroupsMap(
                             topicGroupsMap = it,
-                            topicSubscribesSet = topicSubscribesSet
+                            topicSubscribesMap = topicSubscribes.associateBy { it.topic }
                         )
                     }
                     .map {
@@ -34,13 +30,13 @@ data class TopicSubscribeGroupsResponse(
 
         private fun addTopicSubscribesToTopicGroupsMap(
             topicGroupsMap: Map<TopicGroup, MutableList<TopicSubscribeResponse>>,
-            topicSubscribesSet: Set<Topic>
+            topicSubscribesMap: Map<Topic, TopicSubscribe>
         ) {
             Topic.values().forEach {
                 topicGroupsMap[it.topicGroup]?.add(
                     TopicSubscribeResponse(
                         topic = it,
-                        isSubscribed = topicSubscribesSet.contains(it)
+                        isSubscribed = topicSubscribesMap[it]?.isSubscribed ?: false
                     )
                 )
             }

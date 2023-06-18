@@ -18,7 +18,8 @@ class TopicSubscribeMapper(
         return entity?.let {
             TopicSubscribe(
                 deviceTokenId = it.deviceToken.id!!,
-                topic = it.id.topic
+                topic = it.id.topic,
+                isSubscribed = it.isSubscribed
             )
         }
     }
@@ -32,7 +33,8 @@ class TopicSubscribeMapper(
                 deviceTokenId = domain.deviceTokenId,
                 topic = domain.topic
             ),
-            deviceToken = deviceToken
+            deviceToken = deviceToken,
+            isSubscribed = domain.isSubscribed
         )
     }
 }

@@ -25,7 +25,10 @@ class TopicSubscribeJpaEntity(
     @MapsId("deviceTokenId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_token_id", columnDefinition = "BINARY(16)", nullable = false)
-    val deviceToken: DeviceTokenJpaEntity
+    val deviceToken: DeviceTokenJpaEntity,
+
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    val isSubscribed: Boolean
 
 )
 
