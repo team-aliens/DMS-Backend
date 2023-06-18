@@ -25,10 +25,10 @@ class NotificationServiceImpl(
     }
 
     override fun subscribeTopic(deviceToken: String, topic: Topic) {
-        val savedToken = this.getDeviceTokenByDeviceToken(deviceToken)
+        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
         topicSubscribePort.saveTopicSubscribe(
             TopicSubscribe(
-                deviceTokenId = savedToken.id,
+                deviceTokenId = savedDeviceToken.id,
                 topic = topic
             )
         )
@@ -47,10 +47,10 @@ class NotificationServiceImpl(
 
     override fun updateSubscribes(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
 
-        val savedToken = this.getDeviceTokenByDeviceToken(deviceToken)
+        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
 
-        val subscribes = mutableListOf<Topic>()
-        val unsubscribes = mutableListOf<Topic>()
+        val subscribeTopics = mutableListOf<Topic>()
+        val unsubscribeTopics = mutableListOf<Topic>()
 
         topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {
@@ -58,22 +58,22 @@ class NotificationServiceImpl(
                     deviceToken = deviceToken,
                     topic = topic
                 )
-                subscribes.add(topic)
+                subscribeTopics.add(topic)
             } else {
                 notificationPort.unsubscribeTopic(
                     deviceToken = deviceToken,
                     topic = topic
                 )
-                unsubscribes.add(topic)
+                unsubscribeTopics.add(topic)
             }
         }
 
         topicSubscribePort.saveAllTopicSubscribes(
-            subscribes.map { TopicSubscribe(savedToken.id, it) }
+            subscribeTopics.map { TopicSubscribe(savedDeviceToken.id, it) }
         )
         topicSubscribePort.deleteByUserIdAndTopics(
-            userId = savedToken.id,
-            topics = unsubscribes
+            userId = savedDeviceToken.id,
+            topics = unsubscribeTopics
         )
     }
 
