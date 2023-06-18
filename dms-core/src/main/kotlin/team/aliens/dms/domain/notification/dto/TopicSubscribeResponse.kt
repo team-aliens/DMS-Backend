@@ -8,29 +8,43 @@ data class TopicSubscribeGroupsResponse(
     val topicGroups: List<TopicGroupSubscribeResponse>
 ) {
     companion object {
-        fun of(topicSubscribes: List<TopicSubscribe>) = TopicSubscribeGroupsResponse(
-            TopicGroup.values()
-                .associateWith { mutableListOf<TopicSubscribeResponse>() }
-                .also { topicGroups ->
-                    val topicSubscribesSet = topicSubscribes
-                        .map { it.topic }
-                        .toSet()
-                    Topic.values().forEach {
-                        topicGroups[it.topicGroup]?.add(
-                            TopicSubscribeResponse(
-                                topic = it,
-                                isSubscribed = topicSubscribesSet.contains(it)
-                            )
+        fun of(topicSubscribes: List<TopicSubscribe>): TopicSubscribeGroupsResponse {
+
+            val topicSubscribesSet = topicSubscribes
+                .map { it.topic }
+                .toSet()
+
+            return TopicSubscribeGroupsResponse(
+                TopicGroup.values()
+                    .associateWith { mutableListOf<TopicSubscribeResponse>() }
+                    .also {
+                        addTopicSubscribesToTopicGroupsMap(
+                            topicGroupsMap = it,
+                            topicSubscribesSet = topicSubscribesSet
                         )
                     }
-                }
-                .map { topicGroup ->
-                    TopicGroupSubscribeResponse(
-                        topicGroup = topicGroup.key,
-                        topicSubscribes = topicGroup.value
+                    .map {
+                        TopicGroupSubscribeResponse(
+                            topicGroup = it.key,
+                            topicSubscribes = it.value
+                        )
+                    }
+            )
+        }
+
+        private fun addTopicSubscribesToTopicGroupsMap(
+            topicGroupsMap: Map<TopicGroup, MutableList<TopicSubscribeResponse>>,
+            topicSubscribesSet: Set<Topic>
+        ) {
+            Topic.values().forEach {
+                topicGroupsMap[it.topicGroup]?.add(
+                    TopicSubscribeResponse(
+                        topic = it,
+                        isSubscribed = topicSubscribesSet.contains(it)
                     )
-                }
-        )
+                )
+            }
+        }
     }
 }
 
