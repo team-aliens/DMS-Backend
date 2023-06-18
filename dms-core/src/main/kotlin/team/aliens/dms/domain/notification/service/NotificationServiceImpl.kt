@@ -71,8 +71,8 @@ class NotificationServiceImpl(
         topicSubscribePort.saveAllTopicSubscribes(
             subscribeTopics.map { TopicSubscribe(savedDeviceToken.id, it) }
         )
-        topicSubscribePort.deleteByUserIdAndTopics(
-            userId = savedDeviceToken.id,
+        topicSubscribePort.deleteByDeviceTokenIdAndTopics(
+            deviceTokenId = savedDeviceToken.id,
             topics = unsubscribeTopics
         )
     }

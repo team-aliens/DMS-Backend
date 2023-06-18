@@ -12,5 +12,5 @@ interface TopicSubscribePort {
 
     fun saveAllTopicSubscribes(topicSubscribes: List<TopicSubscribe>)
 
-    fun deleteByUserIdAndTopics(userId: UUID, topics: List<Topic>)
+    fun deleteByDeviceTokenIdAndTopics(deviceTokenId: UUID, topics: List<Topic>)
 }
