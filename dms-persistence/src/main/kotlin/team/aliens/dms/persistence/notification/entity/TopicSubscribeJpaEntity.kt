@@ -35,7 +35,6 @@ data class TopicSubscribeJpaEntityId(
     @Column
     val deviceTokenId: UUID,
 
-    @MapsId("topic")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val topic: Topic
