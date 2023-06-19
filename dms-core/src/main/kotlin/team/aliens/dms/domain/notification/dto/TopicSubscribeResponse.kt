@@ -46,6 +46,7 @@ data class TopicSubscribeGroupsResponse(
 
 data class TopicGroupSubscribeResponse(
     val topicGroup: TopicGroup,
+    val groupName: String = topicGroup.groupName,
     val topicSubscribes: List<TopicSubscribeResponse>
 )
 

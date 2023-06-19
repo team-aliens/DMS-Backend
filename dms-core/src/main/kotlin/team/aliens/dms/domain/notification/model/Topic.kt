@@ -1,8 +1,10 @@
 package team.aliens.dms.domain.notification.model
 
-enum class TopicGroup {
-    NOTICE,
-    STUDY_ROOM
+enum class TopicGroup(
+    val groupName: String
+) {
+    NOTICE("공지"),
+    STUDY_ROOM("자습실")
 }
 
 enum class Topic(
