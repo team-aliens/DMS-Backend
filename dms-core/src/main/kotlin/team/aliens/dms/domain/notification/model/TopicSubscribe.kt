@@ -10,4 +10,25 @@ data class TopicSubscribe(
 
     val isSubscribed: Boolean
 
-)
+) {
+    companion object {
+
+        fun subscribe(
+            deviceTokenId: UUID,
+            topic: Topic,
+        ) = TopicSubscribe(
+            deviceTokenId = deviceTokenId,
+            topic = topic,
+            isSubscribed = true
+        )
+
+        fun unsubscribe(
+            deviceTokenId: UUID,
+            topic: Topic,
+        ) = TopicSubscribe(
+            deviceTokenId = deviceTokenId,
+            topic = topic,
+            isSubscribed = false
+        )
+    }
+}

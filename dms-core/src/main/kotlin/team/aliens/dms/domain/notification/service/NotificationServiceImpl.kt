@@ -27,10 +27,9 @@ class NotificationServiceImpl(
     override fun subscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
         topicSubscribePort.saveTopicSubscribe(
-            TopicSubscribe(
+            TopicSubscribe.subscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
-                isSubscribed = true
             )
         )
         notificationPort.subscribeTopic(
@@ -42,10 +41,9 @@ class NotificationServiceImpl(
     override fun unsubscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
         topicSubscribePort.saveTopicSubscribe(
-            TopicSubscribe(
+            TopicSubscribe.unsubscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
-                isSubscribed = false
             )
         )
         notificationPort.unsubscribeTopic(
