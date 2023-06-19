@@ -9,9 +9,9 @@ class QueryTopicSubscribesUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(deviceToken: String): TopicSubscribeGroupsResponse {
+    fun execute(token: String): TopicSubscribeGroupsResponse {
         return TopicSubscribeGroupsResponse.of(
-            notificationService.getTopicSubscribesByDeviceToken(deviceToken)
+            notificationService.getTopicSubscribesByToken(token)
         )
     }
 }

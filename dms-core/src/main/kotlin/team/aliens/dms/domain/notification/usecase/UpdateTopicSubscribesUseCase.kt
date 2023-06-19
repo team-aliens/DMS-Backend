@@ -9,9 +9,9 @@ class UpdateTopicSubscribesUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
+    fun execute(token: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
         notificationService.updateSubscribes(
-            deviceToken = deviceToken,
+            token = token,
             topicsToSubscribe = topicsToSubscribe
         )
     }

@@ -20,62 +20,59 @@ class NotificationServiceImpl(
     override fun saveDeviceToken(deviceToken: DeviceToken) {
         deviceTokenPort.saveDeviceToken(deviceToken)
         notificationPort.subscribeAllTopics(
-            deviceToken = deviceToken.deviceToken
+            token = deviceToken.token
         )
     }
 
-    override fun subscribeTopic(deviceToken: String, topic: Topic) {
-        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
+    override fun subscribeTopic(token: String, topic: Topic) {
+        val deviceToken = this.getDeviceTokenByToken(token)
         topicSubscribePort.saveTopicSubscribe(
             TopicSubscribe(
-                deviceTokenId = savedDeviceToken.id,
+                deviceTokenId = deviceToken.id,
                 topic = topic,
                 isSubscribed = true
             )
         )
         notificationPort.subscribeTopic(
-            deviceToken = this.getDeviceTokenByDeviceToken(deviceToken).deviceToken,
+            token = this.getDeviceTokenByToken(token).token,
             topic = topic
         )
     }
 
-    override fun unsubscribeTopic(deviceToken: String, topic: Topic) {
-        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
+    override fun unsubscribeTopic(token: String, topic: Topic) {
+        val deviceToken = this.getDeviceTokenByToken(token)
         topicSubscribePort.saveTopicSubscribe(
             TopicSubscribe(
-                deviceTokenId = savedDeviceToken.id,
+                deviceTokenId = deviceToken.id,
                 topic = topic,
                 isSubscribed = false
             )
         )
         notificationPort.unsubscribeTopic(
-            deviceToken = deviceToken,
+            token = token,
             topic = topic
         )
     }
 
-    override fun updateSubscribes(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
-
-        val savedDeviceToken = this.getDeviceTokenByDeviceToken(deviceToken)
-
+    override fun updateSubscribes(token: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
+        val deviceToken = this.getDeviceTokenByToken(token)
         topicsToSubscribe.forEach { (topic, isSubscribe) ->
             if (isSubscribe) {
                 notificationPort.subscribeTopic(
-                    deviceToken = deviceToken,
+                    token = token,
                     topic = topic
                 )
             } else {
                 notificationPort.unsubscribeTopic(
-                    deviceToken = deviceToken,
+                    token = token,
                     topic = topic
                 )
             }
         }
-
         topicSubscribePort.saveAllTopicSubscribes(
             topicsToSubscribe.map {
                 TopicSubscribe(
-                    deviceTokenId = savedDeviceToken.id,
+                    deviceTokenId = deviceToken.id,
                     topic = it.first,
                     isSubscribed = it.second
                 )
@@ -83,19 +80,19 @@ class NotificationServiceImpl(
         )
     }
 
-    private fun getDeviceTokenByDeviceToken(deviceToken: String) =
-        deviceTokenPort.queryDeviceTokenByDeviceToken(deviceToken) ?: throw DeviceTokenNotFoundException
+    private fun getDeviceTokenByToken(token: String) =
+        deviceTokenPort.queryDeviceTokenByToken(token) ?: throw DeviceTokenNotFoundException
 
-    override fun sendMessage(deviceToken: String, notification: Notification) {
+    override fun sendMessage(token: String, notification: Notification) {
         notificationPort.sendMessage(
-            deviceToken = deviceToken,
+            token = token,
             notification = notification
         )
     }
 
     override fun sendMessages(deviceTokens: List<String>, notification: Notification) {
         notificationPort.sendMessages(
-            deviceTokens = deviceTokens,
+            tokens = deviceTokens,
             notification = notification
         )
     }
@@ -106,8 +103,8 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribe> {
-        val savedToken = getDeviceTokenByDeviceToken(deviceToken)
+    override fun getTopicSubscribesByToken(token: String): List<TopicSubscribe> {
+        val savedToken = getDeviceTokenByToken(token)
         return topicSubscribePort.queryTopicSubscribesByDeviceTokenId(savedToken.id)
     }
 }

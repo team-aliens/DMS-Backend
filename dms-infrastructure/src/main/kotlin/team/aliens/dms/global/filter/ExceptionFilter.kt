@@ -2,16 +2,16 @@ package team.aliens.dms.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.sentry.Sentry
+import java.nio.charset.StandardCharsets
+import javax.servlet.FilterChain
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.global.error.ErrorResponse
 import team.aliens.dms.global.error.GlobalErrorCode
-import java.nio.charset.StandardCharsets
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class ExceptionFilter(
     private val objectMapper: ObjectMapper
@@ -27,7 +27,9 @@ class ExceptionFilter(
         } catch (e: DmsException) {
             errorToJson(e.errorProperty, response)
             Sentry.captureException(e)
+            e.printStackTrace()
         } catch (e: Exception) {
+            e.printStackTrace()
             when (e.cause) {
                 is DmsException -> {
                     errorToJson((e.cause as DmsException).errorProperty, response)

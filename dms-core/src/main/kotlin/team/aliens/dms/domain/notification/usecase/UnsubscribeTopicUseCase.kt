@@ -9,9 +9,9 @@ class UnsubscribeTopicUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(deviceToken: String, topic: Topic) {
+    fun execute(token: String, topic: Topic) {
         notificationService.unsubscribeTopic(
-            deviceToken = deviceToken,
+            token = token,
             topic = topic
         )
     }

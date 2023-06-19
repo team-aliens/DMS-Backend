@@ -9,9 +9,9 @@ class SubscribeTopicUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(deviceToken: String, topic: Topic) {
+    fun execute(token: String, topic: Topic) {
         notificationService.subscribeTopic(
-            deviceToken = deviceToken,
+            token = token,
             topic = topic
         )
     }

@@ -22,7 +22,7 @@ class DeviceTokenMapper(
                 id = it.id!!,
                 userId = it.user!!.id!!,
                 schoolId = it.school!!.id!!,
-                deviceToken = it.deviceToken
+                token = it.token
             )
         }
     }
@@ -36,7 +36,7 @@ class DeviceTokenMapper(
             id = domain.id,
             user = user,
             school = school,
-            deviceToken = domain.deviceToken
+            token = domain.token
         )
     }
 }

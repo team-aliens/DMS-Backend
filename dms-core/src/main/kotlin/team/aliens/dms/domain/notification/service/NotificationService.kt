@@ -9,14 +9,14 @@ interface NotificationService {
 
     fun saveDeviceToken(deviceToken: DeviceToken)
 
-    fun unsubscribeTopic(deviceToken: String, topic: Topic)
+    fun unsubscribeTopic(token: String, topic: Topic)
 
-    fun subscribeTopic(deviceToken: String, topic: Topic)
+    fun subscribeTopic(token: String, topic: Topic)
 
-    fun updateSubscribes(deviceToken: String, topicsToSubscribe: List<Pair<Topic, Boolean>>)
+    fun updateSubscribes(token: String, topicsToSubscribe: List<Pair<Topic, Boolean>>)
 
     fun sendMessage(
-        deviceToken: String,
+        token: String,
         notification: Notification
     )
 
@@ -26,5 +26,5 @@ interface NotificationService {
         notification: Notification
     )
 
-    fun getTopicSubscribesByDeviceToken(deviceToken: String): List<TopicSubscribe>
+    fun getTopicSubscribesByToken(token: String): List<TopicSubscribe>
 }
