@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.notification
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.UUID
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscribe
@@ -9,6 +8,7 @@ import team.aliens.dms.domain.notification.spi.TopicSubscribePort
 import team.aliens.dms.persistence.notification.entity.QTopicSubscribeJpaEntity.topicSubscribeJpaEntity
 import team.aliens.dms.persistence.notification.mapper.TopicSubscribeMapper
 import team.aliens.dms.persistence.notification.repository.TopicSubscribeJpaRepository
+import java.util.UUID
 
 @Component
 class TopicSubscribePersistenceAdapter(

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification.model
 
-
 enum class TopicGroup {
     NOTICE,
     STUDY_ROOM

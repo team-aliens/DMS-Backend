@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.notification.entity
 
+import team.aliens.dms.domain.notification.model.Topic
 import java.io.Serializable
 import java.util.UUID
 import javax.persistence.Column
@@ -13,7 +14,6 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.MapsId
 import javax.persistence.Table
-import team.aliens.dms.domain.notification.model.Topic
 
 @Entity
 @Table(name = "tbl_topic_subscribe")
