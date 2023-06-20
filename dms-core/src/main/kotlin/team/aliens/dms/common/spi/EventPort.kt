@@ -6,7 +6,7 @@ import team.aliens.dms.domain.notification.model.Notification
 interface NotificationEventPort {
 
     fun publishNotification(deviceToken: DeviceToken, notification: Notification)
-    
+
     fun publishNotificationToAllByTopic(notification: Notification)
 }
 

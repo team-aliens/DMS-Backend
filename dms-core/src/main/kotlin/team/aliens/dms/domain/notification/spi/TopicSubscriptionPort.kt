@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notification.spi
 
-import java.util.UUID
 import team.aliens.dms.domain.notification.model.TopicSubscription
+import java.util.UUID
 
 interface TopicSubscriptionPort {
 

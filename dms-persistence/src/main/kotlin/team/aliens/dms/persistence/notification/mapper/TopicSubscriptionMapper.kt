@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.notification.entity.TopicSubscriptionJpaEntityId
 import team.aliens.dms.persistence.notification.entity.TopicSubscriptionJpaEntity
+import team.aliens.dms.persistence.notification.entity.TopicSubscriptionJpaEntityId
 import team.aliens.dms.persistence.notification.repository.DeviceTokenJpaRepository
 
 @Component

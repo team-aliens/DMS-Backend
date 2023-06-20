@@ -1,11 +1,11 @@
 package team.aliens.dms.persistence.notification
 
-import java.util.UUID
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 import team.aliens.dms.persistence.notification.mapper.TopicSubscriptionMapper
 import team.aliens.dms.persistence.notification.repository.TopicSubscriptionJpaRepository
+import java.util.UUID
 
 @Component
 class TopicSubscriptionPersistenceAdapter(

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification.service
 
-import java.util.UUID
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
@@ -10,8 +9,9 @@ import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
-import team.aliens.dms.domain.user.spi.UserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
+import team.aliens.dms.domain.user.spi.UserPort
+import java.util.UUID
 
 @Component
 class NotificationServiceImpl(
@@ -38,7 +38,7 @@ class NotificationServiceImpl(
             )
         )
         notificationPort.subscribeTopic(
-            deviceToken = deviceToken,
+            token = deviceToken.token,
             topic = topic
         )
     }
@@ -52,7 +52,7 @@ class NotificationServiceImpl(
             )
         )
         notificationPort.unsubscribeTopic(
-            deviceToken = deviceToken,
+            token = deviceToken.token,
             topic = topic
         )
     }
@@ -98,11 +98,7 @@ class NotificationServiceImpl(
             )
         }
         notificationPort.sendMessage(
-            deviceToken = deviceToken.deviceToken,
-
-    override fun sendMessage(token: String, notification: Notification) {
-        notificationPort.sendMessage(
-            token = token,
+            token = deviceToken.token,
             notification = notification
         )
     }
@@ -114,7 +110,7 @@ class NotificationServiceImpl(
             )
         }
         notificationPort.sendMessages(
-            deviceTokens = deviceTokens,
+            tokens = deviceTokens.map { it.token },
             notification = notification
         )
     }

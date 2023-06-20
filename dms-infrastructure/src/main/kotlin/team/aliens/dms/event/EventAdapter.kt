@@ -14,7 +14,7 @@ class EventAdapter(
     override fun publishNotification(deviceToken: DeviceToken, notification: Notification) {
         eventPublisher.publishEvent(
             SingleNotificationEvent(
-                token = token,
+                deviceToken = deviceToken,
                 notification = notification
             )
         )
