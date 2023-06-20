@@ -18,7 +18,7 @@ spring:
       order_inserts: true
       order_updates: true
       jdbc:
-        batch_size: 500
+        batch_size: 100
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
