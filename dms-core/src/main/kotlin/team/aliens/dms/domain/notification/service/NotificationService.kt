@@ -2,14 +2,9 @@ package team.aliens.dms.domain.notification.service
 
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.TopicSubscription
-import java.util.UUID
 
 interface NotificationService {
-
-    fun saveDeviceToken(deviceToken: DeviceToken)
 
     fun unsubscribeTopic(token: String, topic: Topic)
 
@@ -27,8 +22,4 @@ interface NotificationService {
     fun sendMessagesByTopic(
         notification: Notification
     )
-
-    fun getNotificationOfUsersByUserId(userId: UUID): List<NotificationOfUser>
-
-    fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription>
 }

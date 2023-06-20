@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.notification
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
@@ -31,4 +32,16 @@ class NotificationOfPersistenceAdapterOfUser(
     override fun queryNotificationOfUserByUserId(userId: UUID) =
         notificationOfUserRepository.findByUserId(userId)
             .map { notificationOfUserMapper.toDomain(it)!! }
+
+    override fun queryNotificationOfUserById(notificationOfUserId: UUID) = notificationOfUserMapper.toDomain(
+        notificationOfUserRepository.findByIdOrNull(notificationOfUserId)
+    )
+
+    override fun deleteNotificationOfUserById(notificationOfUserId: UUID) {
+        notificationOfUserRepository.deleteById(notificationOfUserId)
+    }
+
+    override fun deleteNotificationOfUserByUserId(userId: UUID) {
+        notificationOfUserRepository.deleteByUserId(userId)
+    }
 }
