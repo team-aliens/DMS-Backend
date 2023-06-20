@@ -33,7 +33,7 @@ class NotificationServiceImpl(
             )
         )
         notificationPort.subscribeTopic(
-            token = this.getDeviceTokenByToken(token).token,
+            token = token,
             topic = topic
         )
     }
