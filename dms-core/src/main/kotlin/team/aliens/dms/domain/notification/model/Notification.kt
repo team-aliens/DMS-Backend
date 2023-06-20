@@ -23,8 +23,8 @@ sealed class Notification(
     private val isSaveRequired: Boolean
 
 ) {
-    fun toUserNotification(userId: UUID): UserNotification =
-        UserNotification(
+    fun toNotificationOfUser(userId: UUID): NotificationOfUser =
+        NotificationOfUser(
             userId = userId,
             topic = topic,
             identifier = identifier,

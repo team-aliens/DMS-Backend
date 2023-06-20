@@ -3,7 +3,7 @@ package team.aliens.dms.domain.notification.model
 import java.time.LocalDateTime
 import java.util.UUID
 
-class UserNotification(
+class NotificationOfUser(
 
     val id: UUID = UUID(0, 0),
 

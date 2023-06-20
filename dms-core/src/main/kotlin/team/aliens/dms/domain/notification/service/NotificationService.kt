@@ -3,8 +3,8 @@ package team.aliens.dms.domain.notification.service
 import java.util.UUID
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
+import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.UserNotification
 
 interface NotificationService {
 
@@ -27,5 +27,5 @@ interface NotificationService {
         notification: Notification
     )
 
-    fun getUserNotificationsByUserId(userId: UUID): List<UserNotification>
+    fun getNotificationOfUsersByUserId(userId: UUID): List<NotificationOfUser>
 }

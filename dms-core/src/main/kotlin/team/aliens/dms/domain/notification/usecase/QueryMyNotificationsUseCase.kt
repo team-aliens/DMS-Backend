@@ -14,7 +14,7 @@ class QueryMyNotificationsUseCase(
     fun execute(): NotificationsResponse {
         val user = userService.getCurrentUser()
         return NotificationsResponse.of(
-            notificationService.getUserNotificationsByUserId(user.id)
+            notificationService.getNotificationOfUsersByUserId(user.id)
         )
     }
 }

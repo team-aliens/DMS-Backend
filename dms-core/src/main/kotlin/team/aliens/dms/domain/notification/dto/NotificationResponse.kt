@@ -3,15 +3,15 @@ package team.aliens.dms.domain.notification.dto
 import java.time.LocalDateTime
 import java.util.UUID
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.UserNotification
+import team.aliens.dms.domain.notification.model.NotificationOfUser
 
 data class NotificationsResponse(
     val notifications: List<NotificationResponse>
 ) {
     companion object {
-        fun of(userNotifications: List<UserNotification>) =
+        fun of(notificationOfUsers: List<NotificationOfUser>) =
             NotificationsResponse(
-                userNotifications.map { NotificationResponse.of(it) }
+                notificationOfUsers.map { NotificationResponse.of(it) }
             )
     }
 }
@@ -25,7 +25,7 @@ data class NotificationResponse(
     val createdAt: LocalDateTime
 ) {
     companion object {
-        fun of(userNotification: UserNotification) = userNotification.run {
+        fun of(notificationOfUser: NotificationOfUser) = notificationOfUser.run {
             NotificationResponse(
                 id = id,
                 topic = topic,

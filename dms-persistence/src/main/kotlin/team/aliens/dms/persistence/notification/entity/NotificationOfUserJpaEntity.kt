@@ -16,7 +16,7 @@ import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Entity
 @Table(name = "tbl_user_notification")
-class UserNotificationJpaEntity(
+class NotificationOfUserJpaEntity(
 
     id: UUID?,
 
