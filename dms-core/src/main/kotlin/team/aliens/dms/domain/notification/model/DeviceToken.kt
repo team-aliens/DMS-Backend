@@ -6,5 +6,5 @@ data class DeviceToken(
     val id: UUID = UUID(0, 0),
     val userId: UUID,
     val schoolId: UUID,
-    val deviceToken: String
+    val token: String
 )

@@ -11,12 +11,12 @@ class EventAdapter(
 ) : EventPort {
 
     override fun publishNotification(
-        deviceToken: String,
+        token: String,
         notification: Notification
     ) {
         eventPublisher.publishEvent(
             SingleNotificationEvent(
-                deviceToken = deviceToken,
+                token = token,
                 notification = notification
             )
         )

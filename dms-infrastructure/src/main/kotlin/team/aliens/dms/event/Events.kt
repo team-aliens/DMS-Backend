@@ -8,11 +8,11 @@ open class TopicNotificationEvent(
 ) : ApplicationEvent(notification)
 
 open class GroupNotificationEvent(
-    val deviceTokens: List<String>,
+    val tokens: List<String>,
     notification: Notification
 ) : TopicNotificationEvent(notification)
 
 class SingleNotificationEvent(
-    val deviceToken: String,
+    val token: String,
     notification: Notification
 ) : TopicNotificationEvent(notification)

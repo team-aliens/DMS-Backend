@@ -16,13 +16,13 @@ class NotificationEventHandler(
         when (event) {
             is SingleNotificationEvent -> {
                 notificationService.sendMessage(
-                    deviceToken = event.deviceToken,
+                    token = event.token,
                     notification = event.notification
                 )
             }
             is GroupNotificationEvent -> {
                 notificationService.sendMessages(
-                    deviceTokens = event.deviceTokens,
+                    deviceTokens = event.tokens,
                     notification = event.notification
                 )
             }

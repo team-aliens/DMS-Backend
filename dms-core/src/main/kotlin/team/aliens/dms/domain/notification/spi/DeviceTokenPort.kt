@@ -9,7 +9,7 @@ interface DeviceTokenPort {
 
     fun queryDeviceTokenByUserId(userId: UUID): DeviceToken?
 
-    fun queryDeviceTokenByDeviceToken(deviceToken: String): DeviceToken?
+    fun queryDeviceTokenByToken(token: String): DeviceToken?
 
     fun deleteDeviceTokenByUserId(userId: UUID)
 }

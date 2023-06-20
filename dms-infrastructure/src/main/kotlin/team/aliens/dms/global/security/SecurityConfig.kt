@@ -141,10 +141,12 @@ class SecurityConfig(
             .antMatchers(HttpMethod.GET, "/remains/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/remains/status/file").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.GET, "/notifications/token").authenticated()
+            // /notification
+            .antMatchers(HttpMethod.POST, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
-            .antMatchers(HttpMethod.DELETE, "/notifications/token").authenticated()
-            .antMatchers(HttpMethod.PATCH, "/notifications/token").authenticated()
+            .antMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
+            .antMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
+            .antMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
             .anyRequest().denyAll()
 
         http
