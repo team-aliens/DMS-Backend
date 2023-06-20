@@ -17,6 +17,8 @@ class UserNotification(
 
     val content: String,
 
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+
+    val isRead: Boolean = false
 
 )

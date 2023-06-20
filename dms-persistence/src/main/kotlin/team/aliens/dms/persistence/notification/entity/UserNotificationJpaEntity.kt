@@ -38,6 +38,9 @@ class UserNotificationJpaEntity(
     val content: String,
 
     @Column(columnDefinition = "DATETIME(6)", nullable = false)
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    val isRead: Boolean
 
 ) : BaseUUIDEntity(id)
