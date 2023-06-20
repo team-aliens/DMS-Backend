@@ -26,6 +26,6 @@ class DeviceTokenJpaEntity(
     val school: SchoolJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(500)", nullable = false)
-    val deviceToken: String
+    val token: String
 
 ) : BaseUUIDEntity(id)

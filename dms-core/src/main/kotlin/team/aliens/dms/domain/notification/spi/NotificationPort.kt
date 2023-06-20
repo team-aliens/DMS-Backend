@@ -6,19 +6,19 @@ import team.aliens.dms.domain.notification.model.Topic
 interface NotificationPort {
 
     fun sendMessage(
-        deviceToken: String,
+        token: String,
         notification: Notification
     )
 
-    fun sendMessages(deviceTokens: List<String>, notification: Notification)
+    fun sendMessages(tokens: List<String>, notification: Notification)
 
     fun sendByTopic(
         notification: Notification
     )
 
-    fun subscribeTopic(deviceToken: String, topic: Topic)
+    fun subscribeTopic(token: String, topic: Topic)
 
-    fun subscribeAllTopics(deviceToken: String)
+    fun subscribeAllTopics(token: String)
 
-    fun unsubscribeTopic(deviceToken: String, topic: Topic)
+    fun unsubscribeTopic(token: String, topic: Topic)
 }

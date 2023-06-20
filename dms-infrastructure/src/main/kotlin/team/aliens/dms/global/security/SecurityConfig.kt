@@ -158,9 +158,13 @@ class SecurityConfig(
             // /notifications
             .antMatchers(HttpMethod.POST, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.GET, "/notifications").authenticated()
+
+            // /notification
+            .antMatchers(HttpMethod.POST, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
-            .antMatchers(HttpMethod.DELETE, "/notifications/token").authenticated()
-            .antMatchers(HttpMethod.PATCH, "/notifications/token").authenticated()
+            .antMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
+            .antMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
+            .antMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
             .anyRequest().denyAll()
 
         http

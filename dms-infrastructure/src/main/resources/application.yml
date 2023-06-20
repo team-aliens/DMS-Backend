@@ -7,7 +7,7 @@ spring:
     timeout-per-shutdown-phase: "60s"
 
   datasource:
-    url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false
+    url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:11111111}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,6 +15,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${DDL:validate}
+      order_inserts: true
+      order_updates: true
+      jdbc:
+        batch_size: 100
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
