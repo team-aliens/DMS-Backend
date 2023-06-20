@@ -16,6 +16,7 @@ spring:
     hibernate:
       ddl-auto: ${DDL:validate}
       order_inserts: true
+      order_updates: true
       jdbc:
         batch_size: 500
     properties:
