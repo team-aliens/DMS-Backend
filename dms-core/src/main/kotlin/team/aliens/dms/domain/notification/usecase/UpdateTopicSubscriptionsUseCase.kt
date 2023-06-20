@@ -5,7 +5,7 @@ import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.service.NotificationService
 
 @UseCase
-class UpdateTopicSubscribesUseCase(
+class UpdateTopicSubscriptionsUseCase(
     private val notificationService: NotificationService
 ) {
 

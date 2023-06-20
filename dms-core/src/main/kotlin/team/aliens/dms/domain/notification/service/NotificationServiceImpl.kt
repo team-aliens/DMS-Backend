@@ -5,15 +5,15 @@ import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundExceptio
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.TopicSubscribe
+import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
-import team.aliens.dms.domain.notification.spi.TopicSubscribePort
+import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 
 @Component
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
-    private val topicSubscribePort: TopicSubscribePort,
+    private val topicSubscriptionPort: TopicSubscriptionPort,
     private val deviceTokenPort: DeviceTokenPort
 ) : NotificationService {
 
@@ -26,8 +26,8 @@ class NotificationServiceImpl(
 
     override fun subscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        topicSubscribePort.saveTopicSubscribe(
-            TopicSubscribe.subscribe(
+        topicSubscriptionPort.saveTopicSubscription(
+            TopicSubscription.subscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
             )
@@ -40,8 +40,8 @@ class NotificationServiceImpl(
 
     override fun unsubscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        topicSubscribePort.saveTopicSubscribe(
-            TopicSubscribe.unsubscribe(
+        topicSubscriptionPort.saveTopicSubscription(
+            TopicSubscription.unsubscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
             )
@@ -54,15 +54,15 @@ class NotificationServiceImpl(
 
     override fun updateSubscribes(token: String, topicsToSubscribe: List<Pair<Topic, Boolean>>) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        val topicSubscribes = topicsToSubscribe.map { (topic, isSubscribe) ->
+        val topicSubscriptions = topicsToSubscribe.map { (topic, isSubscribe) ->
             this.subscribeOrUnsubscribeTopic(isSubscribe, token, topic)
-            TopicSubscribe(
+            TopicSubscription(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
                 isSubscribed = isSubscribe
             )
         }
-        topicSubscribePort.saveAllTopicSubscribes(topicSubscribes)
+        topicSubscriptionPort.saveAllTopicSubscriptions(topicSubscriptions)
     }
 
     private fun subscribeOrUnsubscribeTopic(
@@ -106,8 +106,8 @@ class NotificationServiceImpl(
         )
     }
 
-    override fun getTopicSubscribesByToken(token: String): List<TopicSubscribe> {
+    override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
         val savedToken = getDeviceTokenByToken(token)
-        return topicSubscribePort.queryTopicSubscribesByDeviceTokenId(savedToken.id)
+        return topicSubscriptionPort.queryTopicSubscriptionsByDeviceTokenId(savedToken.id)
     }
 }

@@ -3,7 +3,7 @@ package team.aliens.dms.domain.notification.service
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.TopicSubscribe
+import team.aliens.dms.domain.notification.model.TopicSubscription
 
 interface NotificationService {
 
@@ -26,5 +26,5 @@ interface NotificationService {
         notification: Notification
     )
 
-    fun getTopicSubscribesByToken(token: String): List<TopicSubscribe>
+    fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription>
 }

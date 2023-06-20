@@ -2,7 +2,7 @@ package team.aliens.dms.domain.notification.model
 
 import java.util.UUID
 
-data class TopicSubscribe(
+data class TopicSubscription(
 
     val deviceTokenId: UUID,
 
@@ -16,7 +16,7 @@ data class TopicSubscribe(
         fun subscribe(
             deviceTokenId: UUID,
             topic: Topic,
-        ) = TopicSubscribe(
+        ) = TopicSubscription(
             deviceTokenId = deviceTokenId,
             topic = topic,
             isSubscribed = true
@@ -25,7 +25,7 @@ data class TopicSubscribe(
         fun unsubscribe(
             deviceTokenId: UUID,
             topic: Topic,
-        ) = TopicSubscribe(
+        ) = TopicSubscription(
             deviceTokenId = deviceTokenId,
             topic = topic,
             isSubscribed = false
