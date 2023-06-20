@@ -7,12 +7,17 @@ import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
+import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
+import team.aliens.dms.domain.user.spi.UserPort
+import java.util.UUID
 
 @Component
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
+    private val notificationOfUserPort: NotificationOfUserPort,
+    private val userPort: UserPort,
     private val topicSubscriptionPort: TopicSubscriptionPort,
     private val deviceTokenPort: DeviceTokenPort
 ) : NotificationService {
@@ -33,7 +38,7 @@ class NotificationServiceImpl(
             )
         )
         notificationPort.subscribeTopic(
-            token = token,
+            token = deviceToken.token,
             topic = topic
         )
     }
@@ -47,7 +52,7 @@ class NotificationServiceImpl(
             )
         )
         notificationPort.unsubscribeTopic(
-            token = token,
+            token = deviceToken.token,
             topic = topic
         )
     }
@@ -86,25 +91,44 @@ class NotificationServiceImpl(
     private fun getDeviceTokenByToken(token: String) =
         deviceTokenPort.queryDeviceTokenByToken(token) ?: throw DeviceTokenNotFoundException
 
-    override fun sendMessage(token: String, notification: Notification) {
+    override fun sendMessage(deviceToken: DeviceToken, notification: Notification) {
+        notification.runIfSaveRequired {
+            notificationOfUserPort.saveNotificationOfUser(
+                notification.toNotificationOfUser(deviceToken.userId)
+            )
+        }
         notificationPort.sendMessage(
-            token = token,
+            token = deviceToken.token,
             notification = notification
         )
     }
 
-    override fun sendMessages(deviceTokens: List<String>, notification: Notification) {
+    override fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification) {
+        notification.runIfSaveRequired {
+            notificationOfUserPort.saveNotificationsOfUser(
+                deviceTokens.map { notification.toNotificationOfUser(it.userId) }
+            )
+        }
         notificationPort.sendMessages(
-            tokens = deviceTokens,
+            tokens = deviceTokens.map { it.token },
             notification = notification
         )
     }
 
     override fun sendMessagesByTopic(notification: Notification) {
+        notification.runIfSaveRequired {
+            val users = userPort.queryUsersBySchoolId(notification.schoolId)
+            notificationOfUserPort.saveNotificationsOfUser(
+                users.map { notification.toNotificationOfUser(it.id) }
+            )
+        }
         notificationPort.sendByTopic(
             notification = notification
         )
     }
+
+    override fun getNotificationOfUsersByUserId(userId: UUID) =
+        notificationOfUserPort.queryNotificationOfUserByUserId(userId)
 
     override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
         val savedToken = getDeviceTokenByToken(token)

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification
 
-import javax.validation.Valid
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,22 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.notification.dto.NotificationsResponse
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
 import team.aliens.dms.domain.notification.dto.request.DeviceTokenWebRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
+import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
 import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
+import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")
 @RestController
 class NotificationWebAdapter(
     private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
+    private val queryMyNotificationsUseCase: QueryMyNotificationsUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
     private val updateTopicSubscriptionsUseCase: UpdateTopicSubscriptionsUseCase,
@@ -36,6 +39,11 @@ class NotificationWebAdapter(
         setDeviceTokenUseCase.execute(
             SetDeviceTokenRequest(token = request.deviceToken)
         )
+    }
+
+    @GetMapping
+    fun queryMyNotifications(): NotificationsResponse {
+        return queryMyNotificationsUseCase.execute()
     }
 
     @PostMapping("/topic")
