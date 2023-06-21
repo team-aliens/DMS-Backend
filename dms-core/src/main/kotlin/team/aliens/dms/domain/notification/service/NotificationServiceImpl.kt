@@ -1,37 +1,30 @@
 package team.aliens.dms.domain.notification.service
 
-import org.springframework.stereotype.Component
-import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
+import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
-import team.aliens.dms.domain.notification.spi.DeviceTokenPort
-import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.CommandTopicSubscriptionPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
-import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
-import team.aliens.dms.domain.user.spi.UserPort
-import java.util.UUID
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
-@Component
+@Service
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
-    private val notificationOfUserPort: NotificationOfUserPort,
-    private val userPort: UserPort,
-    private val topicSubscriptionPort: TopicSubscriptionPort,
-    private val deviceTokenPort: DeviceTokenPort
-) : NotificationService {
-
-    override fun saveDeviceToken(deviceToken: DeviceToken) {
-        deviceTokenPort.saveDeviceToken(deviceToken)
-        notificationPort.subscribeAllTopics(
-            token = deviceToken.token
-        )
-    }
+    private val queryUserPort: QueryUserPort,
+    private val commandTopicSubscriptionPort: CommandTopicSubscriptionPort,
+    private val notificationOfUserPort: CommandNotificationOfUserPort,
+    getNotificationService: GetNotificationService,
+    commandNotificationService: CommandNotificationService
+) : NotificationService,
+    GetNotificationService by getNotificationService,
+    CommandNotificationService by commandNotificationService{
 
     override fun subscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        topicSubscriptionPort.saveTopicSubscription(
+        commandTopicSubscriptionPort.saveTopicSubscription(
             TopicSubscription.subscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
@@ -45,7 +38,7 @@ class NotificationServiceImpl(
 
     override fun unsubscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        topicSubscriptionPort.saveTopicSubscription(
+        commandTopicSubscriptionPort.saveTopicSubscription(
             TopicSubscription.unsubscribe(
                 deviceTokenId = deviceToken.id,
                 topic = topic,
@@ -67,7 +60,7 @@ class NotificationServiceImpl(
                 isSubscribed = isSubscribe
             )
         }
-        topicSubscriptionPort.saveAllTopicSubscriptions(topicSubscriptions)
+        commandTopicSubscriptionPort.saveAllTopicSubscriptions(topicSubscriptions)
     }
 
     private fun subscribeOrUnsubscribeTopic(
@@ -87,9 +80,6 @@ class NotificationServiceImpl(
             )
         }
     }
-
-    private fun getDeviceTokenByToken(token: String) =
-        deviceTokenPort.queryDeviceTokenByToken(token) ?: throw DeviceTokenNotFoundException
 
     override fun sendMessage(deviceToken: DeviceToken, notification: Notification) {
         notification.runIfSaveRequired {
@@ -117,7 +107,7 @@ class NotificationServiceImpl(
 
     override fun sendMessagesByTopic(notification: Notification) {
         notification.runIfSaveRequired {
-            val users = userPort.queryUsersBySchoolId(notification.schoolId)
+            val users = queryUserPort.queryUsersBySchoolId(notification.schoolId)
             notificationOfUserPort.saveNotificationsOfUser(
                 users.map { notification.toNotificationOfUser(it.id) }
             )
@@ -125,13 +115,5 @@ class NotificationServiceImpl(
         notificationPort.sendByTopic(
             notification = notification
         )
-    }
-
-    override fun getNotificationOfUsersByUserId(userId: UUID) =
-        notificationOfUserPort.queryNotificationOfUserByUserId(userId)
-
-    override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
-        val savedToken = getDeviceTokenByToken(token)
-        return topicSubscriptionPort.queryTopicSubscriptionsByDeviceTokenId(savedToken.id)
     }
 }

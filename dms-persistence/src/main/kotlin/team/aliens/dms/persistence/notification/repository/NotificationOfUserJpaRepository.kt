@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface NotificationOfUserJpaRepository : CrudRepository<NotificationOfUserJpaEntity, UUID> {
     fun findByUserId(userId: UUID): List<NotificationOfUserJpaEntity>
+    fun deleteByUserId(userId: UUID)
 }

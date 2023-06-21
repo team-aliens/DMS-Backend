@@ -32,8 +32,10 @@ class SecurityConfig(
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http
             .authorizeRequests()
+
             // healthcheck
             .antMatchers(HttpMethod.GET, "/").permitAll()
+
             // /auth
             .antMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
             .antMatchers(HttpMethod.GET, "/auth/email").permitAll()
@@ -41,6 +43,7 @@ class SecurityConfig(
             .antMatchers(HttpMethod.POST, "/auth/code").permitAll()
             .antMatchers(HttpMethod.POST, "/auth/tokens").permitAll()
             .antMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
+
             // /users
             .antMatchers(HttpMethod.GET, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/users/password").hasAnyAuthority(STUDENT.name, MANAGER.name)
@@ -156,7 +159,10 @@ class SecurityConfig(
             // /notifications
             .antMatchers(HttpMethod.POST, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.GET, "/notifications").authenticated()
+
             // /notification
+            .antMatchers(HttpMethod.DELETE, "/notifications/{notification-of-user-id}").authenticated()
+            .antMatchers(HttpMethod.DELETE, "/notifications").authenticated()
             .antMatchers(HttpMethod.POST, "/notifications/token").authenticated()
             .antMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
             .antMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()

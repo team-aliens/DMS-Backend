@@ -9,7 +9,8 @@ enum class NotificationErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    DEVICE_TOKEN_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Notification Token Not Found", 1)
+    DEVICE_TOKEN_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Notification Token Not Found", 1),
+    NOTIFICATION_OF_USER_NOT_FOUND(ErrorStatus.BAD_REQUEST, "NotificationOfUser Not Found", 2)
     ;
 
     override fun status(): Int = status
