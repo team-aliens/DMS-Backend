@@ -4,15 +4,15 @@ import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.TopicSubscription
-import team.aliens.dms.domain.notification.spi.DeviceTokenPort
-import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
-import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
+import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
+import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 
 @Service
 class GetNotificationServiceImpl(
-    private val deviceTokenPort: DeviceTokenPort,
-    private val notificationOfUserPort: NotificationOfUserPort,
-    private val topicSubscriptionPort: TopicSubscriptionPort
+    private val deviceTokenPort: QueryDeviceTokenPort,
+    private val notificationOfUserPort: QueryNotificationOfUserPort,
+    private val topicSubscriptionPort: QueryTopicSubscriptionPort
 ): GetNotificationService {
 
     override fun getNotificationOfUsersByUserId(userId: UUID) =

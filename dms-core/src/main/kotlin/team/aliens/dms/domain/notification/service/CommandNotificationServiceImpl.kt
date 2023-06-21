@@ -4,15 +4,17 @@ import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.spi.DeviceTokenPort
-import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.CommandDeviceTokenPort
+import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
+import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 
 @Service
 class CommandNotificationServiceImpl(
-    private val deviceTokenPort: DeviceTokenPort,
+    private val deviceTokenPort: CommandDeviceTokenPort,
     private val notificationPort: NotificationPort,
-    private val notificationOfUserPort: NotificationOfUserPort
+    private val queryNotificationOfUserPort: QueryNotificationOfUserPort,
+    private val commandNotificationOfUserPort: CommandNotificationOfUserPort
 ): CommandNotificationService {
 
     override fun saveDeviceToken(deviceToken: DeviceToken) {
@@ -23,15 +25,15 @@ class CommandNotificationServiceImpl(
     }
 
     override fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID) {
-        notificationOfUserPort.queryNotificationOfUserById(notificationOfUserId).also {
+        queryNotificationOfUserPort.queryNotificationOfUserById(notificationOfUserId).also {
             if (it == null || it.userId != userId) {
                 throw NotificationOfUserNotFoundException
             }
         }
-        notificationOfUserPort.deleteNotificationOfUserById(notificationOfUserId)
+        commandNotificationOfUserPort.deleteNotificationOfUserById(notificationOfUserId)
     }
 
     override fun deleteNotificationOfUserByUserId(userId: UUID) {
-        notificationOfUserPort.deleteNotificationOfUserByUserId(userId)
+        commandNotificationOfUserPort.deleteNotificationOfUserByUserId(userId)
     }
 }
