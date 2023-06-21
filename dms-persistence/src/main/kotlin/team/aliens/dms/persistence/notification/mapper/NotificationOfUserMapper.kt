@@ -19,11 +19,10 @@ class NotificationOfUserMapper(
                 id = it.id!!,
                 userId = it.user!!.id!!,
                 topic = it.topic,
-                identifier = it.identifier,
+                linkIdentifier = it.linkIdentifier,
                 title = it.title,
                 content = it.content,
-                createdAt = it.createdAt,
-                isRead = it.isRead
+                createdAt = it.createdAt
             )
         }
     }
@@ -35,11 +34,10 @@ class NotificationOfUserMapper(
             id = domain.id,
             user = user,
             topic = domain.topic,
-            identifier = domain.identifier,
+            linkIdentifier = domain.linkIdentifier,
             title = domain.title,
             content = domain.content,
-            createdAt = domain.createdAt,
-            isRead = domain.isRead
+            createdAt = domain.createdAt
         )
     }
 }
