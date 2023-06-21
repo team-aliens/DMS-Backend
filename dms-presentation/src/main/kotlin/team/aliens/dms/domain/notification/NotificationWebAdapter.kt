@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.notification
 
+import java.util.UUID
+import javax.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,14 +21,12 @@ import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
 import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
-import team.aliens.dms.domain.notification.usecase.RemoveAllNotificationUseCase
+import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
-import java.util.UUID
-import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")
@@ -39,7 +39,7 @@ class NotificationWebAdapter(
     private val updateTopicSubscriptionsUseCase: UpdateTopicSubscriptionsUseCase,
     private val queryTopicSubscriptionUseCase: QueryTopicSubscriptionUseCase,
     private val removeNotificationUseCase: RemoveNotificationUseCase,
-    private val removeAllNotificationUseCase: RemoveAllNotificationUseCase,
+    private val removeMyAllNotificationUseCase: RemoveMyAllNotificationUseCase,
 ) {
 
     @PostMapping("/token")
@@ -91,7 +91,7 @@ class NotificationWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
-    fun removeAllNotificationOfUser(@RequestBody @Valid request: DeviceTokenWebRequest) {
-        removeAllNotificationUseCase.execute()
+    fun removeMyAllNotificationOfUser() {
+        removeMyAllNotificationUseCase.execute()
     }
 }

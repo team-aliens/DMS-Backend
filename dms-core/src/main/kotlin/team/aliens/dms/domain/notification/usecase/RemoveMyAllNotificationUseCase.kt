@@ -5,7 +5,7 @@ import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
-class RemoveAllNotificationUseCase(
+class RemoveMyAllNotificationUseCase(
     private val userService: UserService,
     private val notificationService: NotificationService
 ) {
