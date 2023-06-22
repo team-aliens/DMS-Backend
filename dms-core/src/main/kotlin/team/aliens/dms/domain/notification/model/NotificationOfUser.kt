@@ -11,14 +11,12 @@ class NotificationOfUser(
 
     val topic: Topic,
 
-    val identifier: String?,
+    val linkIdentifier: String?,
 
     val title: String,
 
     val content: String,
 
-    val createdAt: LocalDateTime,
-
-    val isRead: Boolean = false
+    val createdAt: LocalDateTime
 
 )

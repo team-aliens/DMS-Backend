@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "tbl_user_notification")
+@Table(name = "tbl_notification_of_user")
 class NotificationOfUserJpaEntity(
 
     id: UUID?,
@@ -29,7 +29,7 @@ class NotificationOfUserJpaEntity(
     val topic: Topic,
 
     @Column(columnDefinition = "VARCHAR(500)")
-    val identifier: String?,
+    val linkIdentifier: String?,
 
     @Column(columnDefinition = "VARCHAR(500)", nullable = false)
     val title: String,
@@ -38,9 +38,6 @@ class NotificationOfUserJpaEntity(
     val content: String,
 
     @Column(columnDefinition = "DATETIME(6)", nullable = false)
-    val createdAt: LocalDateTime,
-
-    @Column(columnDefinition = "BIT(1)", nullable = false)
-    val isRead: Boolean
+    val createdAt: LocalDateTime
 
 ) : BaseUUIDEntity(id)
