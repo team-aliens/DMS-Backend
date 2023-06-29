@@ -10,29 +10,44 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import team.aliens.dms.common.extension.setExcelContentDisposition
+import team.aliens.dms.common.extension.toFile
 import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
+import team.aliens.dms.domain.manager.dto.PointFilterType
+import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
 import team.aliens.dms.domain.student.dto.FindStudentAccountIdRequest
 import team.aliens.dms.domain.student.dto.ResetStudentPasswordRequest
 import team.aliens.dms.domain.student.dto.SignUpRequest
+import team.aliens.dms.domain.student.dto.StudentDetailsResponse
 import team.aliens.dms.domain.student.dto.StudentEmailResponse
 import team.aliens.dms.domain.student.dto.StudentNameResponse
 import team.aliens.dms.domain.student.dto.StudentResponse
+import team.aliens.dms.domain.student.dto.StudentsResponse
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
+import team.aliens.dms.domain.student.usecase.ExportStudentUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.QueryStudentDetailsUseCase
+import team.aliens.dms.domain.student.usecase.QueryStudentsUseCase
+import team.aliens.dms.domain.student.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.domain.student.usecase.SignUpUseCase
 import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
 import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentGcnByFileUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentRoomByFileUseCase
 import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -50,7 +65,13 @@ class StudentWebAdapter(
     private val checkStudentGcnUseCase: CheckStudentGcnUseCase,
     private val updateStudentProfileUseCase: UpdateStudentProfileUseCase,
     private val studentMyPageUseCase: StudentMyPageUseCase,
-    private val studentWithdrawalUseCase: StudentWithdrawalUseCase
+    private val studentWithdrawalUseCase: StudentWithdrawalUseCase,
+    private val exportStudentUseCase: ExportStudentUseCase,
+    private val queryStudentsUseCase: QueryStudentsUseCase,
+    private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
+    private val removeStudentUseCase: RemoveStudentUseCase,
+    private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
+    private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -146,5 +167,54 @@ class StudentWebAdapter(
     @DeleteMapping
     fun withdrawal() {
         studentWithdrawalUseCase.execute()
+    }
+
+    @GetMapping("/file")
+    fun exportStudentInfo(httpResponse: HttpServletResponse): ByteArray {
+        val response = exportStudentUseCase.execute()
+        httpResponse.setExcelContentDisposition(response.fileName)
+        return response.file
+    }
+
+    @GetMapping("/students")
+    fun getStudents(
+        @RequestParam(required = false) name: String?,
+        @RequestParam @NotNull sort: Sort,
+        @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
+        @RequestParam(name = "min_point", required = false) minPoint: Int?,
+        @RequestParam(name = "max_point", required = false) maxPoint: Int?,
+        @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
+    ): StudentsResponse {
+        return queryStudentsUseCase.execute(
+            name = name,
+            sort = sort,
+            filterType = filterType,
+            minPoint = minPoint,
+            maxPoint = maxPoint,
+            tagIds = tagIds
+        )
+    }
+
+    @GetMapping("/students/{student-id}")
+    fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): StudentDetailsResponse {
+        return queryStudentDetailsUseCase.execute(studentId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/students/{student-id}")
+    fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
+        removeStudentUseCase.execute(studentId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/students/file/room")
+    fun updateStudentRoomByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentRoomByFileUseCase.execute(file!!.toFile())
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/students/file/gcn")
+    fun updateStudentGcnByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentGcnByFileUseCase.execute(file!!.toFile())
     }
 }
