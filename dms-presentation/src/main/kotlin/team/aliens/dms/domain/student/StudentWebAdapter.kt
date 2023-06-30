@@ -36,6 +36,7 @@ import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
 import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
 import team.aliens.dms.domain.student.usecase.ExportStudentUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.ImportStudentUseCase
 import team.aliens.dms.domain.student.usecase.QueryStudentDetailsUseCase
 import team.aliens.dms.domain.student.usecase.QueryStudentsUseCase
 import team.aliens.dms.domain.student.usecase.RemoveStudentUseCase
@@ -71,7 +72,8 @@ class StudentWebAdapter(
     private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
     private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
-    private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase
+    private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase,
+    private val importStudentUseCase: ImportStudentUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -176,7 +178,7 @@ class StudentWebAdapter(
         return response.file
     }
 
-    @GetMapping("/students")
+    @GetMapping
     fun getStudents(
         @RequestParam(required = false) name: String?,
         @RequestParam @NotNull sort: Sort,
@@ -195,26 +197,34 @@ class StudentWebAdapter(
         )
     }
 
-    @GetMapping("/students/{student-id}")
+    @GetMapping("/{student-id}")
     fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): StudentDetailsResponse {
         return queryStudentDetailsUseCase.execute(studentId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/students/{student-id}")
+    @DeleteMapping("/{student-id}")
     fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
         removeStudentUseCase.execute(studentId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/students/file/room")
+    @PostMapping("/file/room")
     fun updateStudentRoomByFile(@RequestPart @NotNull file: MultipartFile?) {
         updateStudentRoomByFileUseCase.execute(file!!.toFile())
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/students/file/gcn")
+    @PostMapping("/file/gcn")
     fun updateStudentGcnByFile(@RequestPart @NotNull file: MultipartFile?) {
         updateStudentGcnByFileUseCase.execute(file!!.toFile())
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/verified-student")
+    fun importVerifiedStudentFromExcel(@RequestPart @NotNull file: MultipartFile?) {
+        importStudentUseCase.execute(
+            file!!.toFile()
+        )
     }
 }

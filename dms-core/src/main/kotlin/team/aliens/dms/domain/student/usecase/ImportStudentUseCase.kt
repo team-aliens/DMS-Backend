@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.file.usecase
+package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.file.service.FileService
