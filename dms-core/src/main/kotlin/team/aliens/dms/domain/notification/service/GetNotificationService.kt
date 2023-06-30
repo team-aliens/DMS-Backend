@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.notification.service
 
-import java.util.UUID
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.model.TopicSubscription
+import java.util.UUID
 
 interface GetNotificationService {
 

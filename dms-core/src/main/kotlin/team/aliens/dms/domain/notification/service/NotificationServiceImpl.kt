@@ -20,7 +20,7 @@ class NotificationServiceImpl(
     commandNotificationService: CommandNotificationService
 ) : NotificationService,
     GetNotificationService by getNotificationService,
-    CommandNotificationService by commandNotificationService{
+    CommandNotificationService by commandNotificationService {
 
     override fun subscribeTopic(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
