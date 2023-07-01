@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.notification.dto
 
-import java.time.LocalDateTime
-import java.util.UUID
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.model.Topic
+import java.time.LocalDateTime
+import java.util.UUID
 
 data class NotificationsResponse(
     val notifications: List<NotificationResponse>

@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
@@ -8,6 +7,7 @@ import team.aliens.dms.domain.notification.spi.CommandDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
+import java.util.UUID
 
 @Service
 class CommandNotificationServiceImpl(
@@ -15,7 +15,7 @@ class CommandNotificationServiceImpl(
     private val notificationPort: NotificationPort,
     private val queryNotificationOfUserPort: QueryNotificationOfUserPort,
     private val commandNotificationOfUserPort: CommandNotificationOfUserPort
-): CommandNotificationService {
+) : CommandNotificationService {
 
     override fun saveDeviceToken(deviceToken: DeviceToken) {
         deviceTokenPort.saveDeviceToken(deviceToken)

@@ -58,17 +58,18 @@ class SecurityConfig(
             .antMatchers(HttpMethod.PATCH, "/students/password/initialization").permitAll()
             .antMatchers(HttpMethod.PATCH, "/students/profile").hasAuthority(STUDENT.name)
             .antMatchers(HttpMethod.DELETE, "/students").hasAuthority(STUDENT.name)
+            .antMatchers(HttpMethod.GET, "/students").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/students/{student-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.DELETE, "/students/{student-id}").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/students/file").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/students/file/room").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/students/file/gcn").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.POST, "/students/verified-student").hasAuthority(MANAGER.name)
 
             // /managers
             .antMatchers(HttpMethod.GET, "/managers/account-id/{school-id}").permitAll()
-            .antMatchers(HttpMethod.GET, "/managers/students").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.GET, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/managers/profile").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.PATCH, "managers/password/initialization").permitAll()
-            .antMatchers(HttpMethod.DELETE, "/managers/students/{student-id}").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.GET, "/managers/students/file").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.POST, "/managers/students/file/room").hasAuthority(MANAGER.name)
-            .antMatchers(HttpMethod.POST, "/managers/students/file/gcn").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.PATCH, "/managers/password/initialization").permitAll()
 
             // /schools
             .antMatchers(HttpMethod.GET, "/schools").permitAll()
@@ -89,7 +90,6 @@ class SecurityConfig(
 
             // /files
             .antMatchers(HttpMethod.POST, "/files").permitAll()
-            .antMatchers(HttpMethod.POST, "/files/verified-student").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/files/url").permitAll()
 
             // /meals

@@ -4,7 +4,7 @@ import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.Topic
 
-interface NotificationService:
+interface NotificationService :
     GetNotificationService,
     CommandNotificationService {
 

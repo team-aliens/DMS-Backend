@@ -1,19 +1,19 @@
 package team.aliens.dms.domain.notification.service
 
-import java.util.UUID
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
+import java.util.UUID
 
 @Service
 class GetNotificationServiceImpl(
     private val deviceTokenPort: QueryDeviceTokenPort,
     private val notificationOfUserPort: QueryNotificationOfUserPort,
     private val topicSubscriptionPort: QueryTopicSubscriptionPort
-): GetNotificationService {
+) : GetNotificationService {
 
     override fun getNotificationOfUsersByUserId(userId: UUID) =
         notificationOfUserPort.queryNotificationOfUserByUserId(userId)
