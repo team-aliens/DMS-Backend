@@ -4,21 +4,27 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.dto.NotificationsResponse
+import team.aliens.dms.domain.notification.dto.RemoveDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
-import team.aliens.dms.domain.notification.dto.request.DeviceTokenWebRequest
+import team.aliens.dms.domain.notification.dto.request.RemoveDeviceTokenWebRequest
+import team.aliens.dms.domain.notification.dto.request.SetDeviceTokenWebRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
 import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
+import team.aliens.dms.domain.notification.usecase.RemoveDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
@@ -33,6 +39,7 @@ import javax.validation.Valid
 @RestController
 class NotificationWebAdapter(
     private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
+    private val removeDeviceTokenUseCase: RemoveDeviceTokenUseCase,
     private val queryMyNotificationsUseCase: QueryMyNotificationsUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
@@ -43,15 +50,33 @@ class NotificationWebAdapter(
 ) {
 
     @PostMapping("/token")
-    fun setDeviceToken(@RequestBody @Valid request: DeviceTokenWebRequest) {
+    fun setDeviceToken(@RequestBody @Valid request: SetDeviceTokenWebRequest) {
         setDeviceTokenUseCase.execute(
-            SetDeviceTokenRequest(token = request.deviceToken)
+            request.run {
+                SetDeviceTokenRequest(
+                    token = deviceToken,
+                    deviceId = deviceId,
+                    operatingSystem = operatingSystem
+                )
+            }
+        )
+    }
+
+    @DeleteMapping("/token")
+    fun removeDeviceToken(@RequestBody @Valid request: RemoveDeviceTokenWebRequest) {
+        removeDeviceTokenUseCase.execute(
+            request.run {
+                RemoveDeviceTokenRequest(
+                    deviceId = deviceId,
+                    operatingSystem = operatingSystem
+                )
+            }
         )
     }
 
     @GetMapping
-    fun queryMyNotifications(): NotificationsResponse {
-        return queryMyNotificationsUseCase.execute()
+    fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
+        return queryMyNotificationsUseCase.execute(pageData)
     }
 
     @PostMapping("/topic")
@@ -79,8 +104,8 @@ class NotificationWebAdapter(
     }
 
     @GetMapping("/topic")
-    fun queryTopicSubscriptions(@RequestBody @Valid request: DeviceTokenWebRequest): TopicSubscriptionGroupsResponse {
-        return queryTopicSubscriptionUseCase.execute(request.deviceToken)
+    fun queryTopicSubscriptions(@RequestParam deviceToken: String): TopicSubscriptionGroupsResponse {
+        return queryTopicSubscriptionUseCase.execute(deviceToken)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

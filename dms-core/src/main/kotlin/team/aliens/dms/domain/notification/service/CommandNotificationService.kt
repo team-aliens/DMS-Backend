@@ -5,7 +5,9 @@ import java.util.UUID
 
 interface CommandNotificationService {
 
-    fun saveDeviceToken(deviceToken: DeviceToken)
+    fun createOrUpdateDeviceToken(deviceToken: DeviceToken)
+
+    fun deleteDeviceTokenById(deviceTokenId: UUID)
 
     fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID)
 
