@@ -8,6 +8,4 @@ interface CommandDeviceTokenPort {
     fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken
 
     fun deleteDeviceTokenByUserId(userId: UUID)
-
-    fun deleteDeviceTokenById(deviceTokenId: UUID)
 }

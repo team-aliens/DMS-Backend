@@ -13,7 +13,8 @@ class SetDeviceTokenUseCase(
 
     fun execute(request: SetDeviceTokenRequest) {
         val user = userService.getCurrentUser()
-        notificationService.createOrUpdateDeviceToken(
+
+        notificationService.saveDeviceToken(
             request.toDeviceToken(user)
         )
     }

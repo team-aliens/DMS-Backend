@@ -22,9 +22,7 @@ class DeviceTokenMapper(
                 id = it.id!!,
                 userId = it.user!!.id!!,
                 schoolId = it.school!!.id!!,
-                token = it.token,
-                operatingSystem = it.operatingSystem,
-                deviceId = it.deviceId
+                token = it.token
             )
         }
     }
@@ -38,9 +36,7 @@ class DeviceTokenMapper(
             id = domain.id,
             user = user,
             school = school,
-            token = domain.token,
-            operatingSystem = domain.operatingSystem,
-            deviceId = domain.deviceId
+            token = domain.token
         )
     }
 }
