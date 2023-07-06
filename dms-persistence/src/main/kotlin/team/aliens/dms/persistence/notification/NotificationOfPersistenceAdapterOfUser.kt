@@ -1,5 +1,7 @@
 package team.aliens.dms.persistence.notification
 
+import com.querydsl.core.QueryFactory
+import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.NotificationOfUser
@@ -7,11 +9,14 @@ import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.persistence.notification.mapper.NotificationOfUserMapper
 import team.aliens.dms.persistence.notification.repository.NotificationOfUserJpaRepository
 import java.util.UUID
+import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.persistence.notification.entity.QNotificationOfUserJpaEntity.notificationOfUserJpaEntity
 
 @Component
 class NotificationOfPersistenceAdapterOfUser(
     private val notificationOfUserMapper: NotificationOfUserMapper,
-    private val notificationOfUserRepository: NotificationOfUserJpaRepository
+    private val notificationOfUserRepository: NotificationOfUserJpaRepository,
+    private val queryFactory: JPAQueryFactory
 ) : NotificationOfUserPort {
 
     override fun saveNotificationOfUser(notificationOfUser: NotificationOfUser) =
@@ -29,9 +34,14 @@ class NotificationOfPersistenceAdapterOfUser(
         )
     }
 
-    override fun queryNotificationOfUserByUserId(userId: UUID) =
-        notificationOfUserRepository.findByUserId(userId)
-            .map { notificationOfUserMapper.toDomain(it)!! }
+
+    override fun queryNotificationOfUserByUserId(userId: UUID, pageData: PageData) =
+        queryFactory
+            .selectFrom(notificationOfUserJpaEntity)
+            .where(notificationOfUserJpaEntity.user.id.eq(userId))
+            .offset(pageData.offset)
+            .limit(pageData.size)
+            .fetch().map { notificationOfUserMapper.toDomain(it)!! }
 
     override fun queryNotificationOfUserById(notificationOfUserId: UUID) = notificationOfUserMapper.toDomain(
         notificationOfUserRepository.findByIdOrNull(notificationOfUserId)
