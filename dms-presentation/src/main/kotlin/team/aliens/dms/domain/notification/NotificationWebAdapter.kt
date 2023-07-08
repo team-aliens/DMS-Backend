@@ -1,9 +1,12 @@
 package team.aliens.dms.domain.notification
 
+import java.util.UUID
+import javax.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.dto.NotificationsResponse
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
@@ -25,8 +29,6 @@ import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
-import java.util.UUID
-import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")
@@ -50,8 +52,8 @@ class NotificationWebAdapter(
     }
 
     @GetMapping
-    fun queryMyNotifications(): NotificationsResponse {
-        return queryMyNotificationsUseCase.execute()
+    fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
+        return queryMyNotificationsUseCase.execute(pageData)
     }
 
     @PostMapping("/topic")

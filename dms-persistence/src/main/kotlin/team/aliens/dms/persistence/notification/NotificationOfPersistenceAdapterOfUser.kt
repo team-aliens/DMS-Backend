@@ -34,7 +34,6 @@ class NotificationOfPersistenceAdapterOfUser(
         )
     }
 
-
     override fun queryNotificationOfUserByUserId(userId: UUID, pageData: PageData) =
         queryFactory
             .selectFrom(notificationOfUserJpaEntity)

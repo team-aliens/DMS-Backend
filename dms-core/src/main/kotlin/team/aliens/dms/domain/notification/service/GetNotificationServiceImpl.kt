@@ -7,6 +7,7 @@ import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 import java.util.UUID
+import team.aliens.dms.common.dto.PageData
 
 @Service
 class GetNotificationServiceImpl(
@@ -15,8 +16,8 @@ class GetNotificationServiceImpl(
     private val topicSubscriptionPort: QueryTopicSubscriptionPort
 ) : GetNotificationService {
 
-    override fun getNotificationOfUsersByUserId(userId: UUID) =
-        notificationOfUserPort.queryNotificationOfUserByUserId(userId)
+    override fun getNotificationOfUsersByUserId(userId: UUID, pageData: PageData) =
+        notificationOfUserPort.queryNotificationOfUserByUserId(userId, pageData)
 
     override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
         val savedToken = getDeviceTokenByToken(token)
