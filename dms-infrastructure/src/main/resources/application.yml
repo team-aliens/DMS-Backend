@@ -44,7 +44,7 @@ spring:
       max-request-size: 20MB
 
 fcm:
-  file-url: ${FCM_FILE_URL}
+  path: ${FCM_PATH}
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfds}
