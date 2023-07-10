@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
+import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.token.JwtParser
 
@@ -79,6 +80,8 @@ class SecurityConfig(
             .antMatchers(HttpMethod.PATCH, "/schools/question").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.PATCH, "/schools/code").hasAuthority(MANAGER.name)
             .antMatchers(HttpMethod.GET, "/schools/available-features").hasAnyAuthority(MANAGER.name, STUDENT.name)
+            .antMatchers(HttpMethod.PUT, "/schools/available-time").hasAuthority(MANAGER.name)
+            .antMatchers(HttpMethod.GET, "/schools/available-time").hasAnyAuthority(MANAGER.name, STUDENT.name)
 
             // /notices
             .antMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
