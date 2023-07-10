@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.notification.entity
 
+import org.hibernate.annotations.ColumnDefault
 import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
@@ -38,6 +39,10 @@ class NotificationOfUserJpaEntity(
     val content: String,
 
     @Column(columnDefinition = "DATETIME(6)", nullable = false)
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @ColumnDefault("false")
+    val isRead: Boolean
 
 ) : BaseUUIDEntity(id)

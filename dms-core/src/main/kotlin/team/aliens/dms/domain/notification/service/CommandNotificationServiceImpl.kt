@@ -3,6 +3,7 @@ package team.aliens.dms.domain.notification.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
+import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.spi.CommandDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
@@ -17,11 +18,12 @@ class CommandNotificationServiceImpl(
     private val commandNotificationOfUserPort: CommandNotificationOfUserPort
 ) : CommandNotificationService {
 
-    override fun saveDeviceToken(deviceToken: DeviceToken) {
-        deviceTokenPort.saveDeviceToken(deviceToken)
-        notificationPort.subscribeAllTopics(
-            token = deviceToken.token
-        )
+    override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
+        return deviceTokenPort.saveDeviceToken(deviceToken).also {
+            notificationPort.subscribeAllTopics(
+                token = deviceToken.token
+            )
+        }
     }
 
     override fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID) {
@@ -35,5 +37,13 @@ class CommandNotificationServiceImpl(
 
     override fun deleteNotificationOfUserByUserId(userId: UUID) {
         commandNotificationOfUserPort.deleteNotificationOfUserByUserId(userId)
+    }
+
+    override fun saveNotificationOfUser(notificationOfUser: NotificationOfUser): NotificationOfUser {
+        return commandNotificationOfUserPort.saveNotificationOfUser(notificationOfUser)
+    }
+
+    override fun saveNotificationsOfUser(notificationOfUsers: List<NotificationOfUser>) {
+        commandNotificationOfUserPort.saveNotificationsOfUser(notificationOfUsers)
     }
 }

@@ -22,7 +22,8 @@ class NotificationOfUserMapper(
                 linkIdentifier = it.linkIdentifier,
                 title = it.title,
                 content = it.content,
-                createdAt = it.createdAt
+                createdAt = it.createdAt,
+                isRead = it.isRead
             )
         }
     }
@@ -37,7 +38,8 @@ class NotificationOfUserMapper(
             linkIdentifier = domain.linkIdentifier,
             title = domain.title,
             content = domain.content,
-            createdAt = domain.createdAt
+            createdAt = domain.createdAt,
+            isRead = domain.isRead
         )
     }
 }

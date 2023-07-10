@@ -15,7 +15,8 @@ class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
     private val queryUserPort: QueryUserPort,
     private val commandTopicSubscriptionPort: CommandTopicSubscriptionPort,
-    private val notificationOfUserPort: CommandNotificationOfUserPort,
+    private val notificationOfUserPort:
+        CommandNotificationOfUserPort,
     getNotificationService: GetNotificationService,
     commandNotificationService: CommandNotificationService
 ) : NotificationService,

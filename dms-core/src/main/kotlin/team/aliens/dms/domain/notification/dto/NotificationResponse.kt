@@ -22,7 +22,8 @@ data class NotificationResponse(
     val linkIdentifier: String?,
     val title: String,
     val content: String,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val isRead: Boolean
 ) {
     companion object {
         fun of(notificationOfUser: NotificationOfUser) = notificationOfUser.run {
@@ -32,7 +33,8 @@ data class NotificationResponse(
                 linkIdentifier = linkIdentifier,
                 title = title,
                 content = content,
-                createdAt = createdAt
+                createdAt = createdAt,
+                isRead = isRead
             )
         }
     }

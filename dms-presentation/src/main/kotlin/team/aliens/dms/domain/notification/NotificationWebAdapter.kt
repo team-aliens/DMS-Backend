@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.notification
 
-import java.util.UUID
-import javax.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,7 +19,7 @@ import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
 import team.aliens.dms.domain.notification.dto.request.DeviceTokenWebRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
-import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
+import team.aliens.dms.domain.notification.usecase.QueryAndReadMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
@@ -29,13 +27,15 @@ import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
+import java.util.UUID
+import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")
 @RestController
 class NotificationWebAdapter(
     private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
-    private val queryMyNotificationsUseCase: QueryMyNotificationsUseCase,
+    private val queryAndReadMyNotificationsUseCase: QueryAndReadMyNotificationsUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
     private val updateTopicSubscriptionsUseCase: UpdateTopicSubscriptionsUseCase,
@@ -53,7 +53,7 @@ class NotificationWebAdapter(
 
     @GetMapping
     fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
-        return queryMyNotificationsUseCase.execute(pageData)
+        return queryAndReadMyNotificationsUseCase.execute(pageData)
     }
 
     @PostMapping("/topic")
