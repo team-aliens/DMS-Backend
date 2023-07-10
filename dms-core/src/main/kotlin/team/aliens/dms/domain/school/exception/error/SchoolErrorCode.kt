@@ -2,6 +2,7 @@ package team.aliens.dms.domain.school.exception.error
 
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.common.error.ErrorStatus
+import java.lang.Error
 
 enum class SchoolErrorCode(
     private val status: Int,
@@ -15,6 +16,7 @@ enum class SchoolErrorCode(
 
     SCHOOL_NOT_FOUND(ErrorStatus.NOT_FOUND, "School Not Found", 1),
     FEATURE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Feature Not Found", 2),
+    APPLICATION_AVAILABLE_TIME_NOT_FOUND(ErrorStatus.NOT_FOUND, "Application Available Time Not Found", 3),
 
     FEATURE_NOT_AVAILABLE(ErrorStatus.FORBIDDEN, "Feature Not Available", 1)
     ;

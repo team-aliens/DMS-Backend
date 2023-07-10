@@ -26,3 +26,7 @@ object SchoolMismatchException : DmsException(
 object SchoolNotFoundException : DmsException(
     SchoolErrorCode.SCHOOL_NOT_FOUND
 )
+
+object ApplicationAvailableTimeNotFoundException : DmsException(
+    SchoolErrorCode.APPLICATION_AVAILABLE_TIME_NOT_FOUND
+)
