@@ -1,0 +1,7 @@
+package team.aliens.dms.persistence.school.repository
+
+import org.springframework.data.repository.CrudRepository
+import team.aliens.dms.persistence.school.entity.ApplicationAvailableTimeId
+import team.aliens.dms.persistence.school.entity.ApplicationAvailableTimeJpaEntity
+
+interface ApplicationAvailableTimeJpaRepository : CrudRepository<ApplicationAvailableTimeJpaEntity, ApplicationAvailableTimeId>
