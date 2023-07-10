@@ -8,7 +8,8 @@ import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class QueryAndUpdateMyNotificationsUseCase(
-    private val userService: UserService, private val notificationService: NotificationService
+    private val userService: UserService,
+    private val notificationService: NotificationService
 ) {
 
     fun execute(pageData: PageData): NotificationsResponse {
