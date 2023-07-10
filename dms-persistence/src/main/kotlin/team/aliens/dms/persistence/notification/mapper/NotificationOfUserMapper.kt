@@ -22,7 +22,8 @@ class NotificationOfUserMapper(
                 linkIdentifier = it.linkIdentifier,
                 title = it.title,
                 content = it.content,
-                createdAt = it.createdAt
+                createdAt = it.createdAt,
+                isRead = it.isRead
             )
         }
     }

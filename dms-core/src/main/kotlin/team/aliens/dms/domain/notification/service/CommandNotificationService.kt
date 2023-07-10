@@ -12,13 +12,7 @@ interface CommandNotificationService {
 
     fun deleteNotificationOfUserByUserId(userId: UUID)
 
-    fun saveNotificationOfUserByUserId(
-        userId: UUID,
-        notificationOfUser: NotificationOfUser
-    ): NotificationOfUser
+    fun saveNotificationOfUser(notificationOfUser: NotificationOfUser): NotificationOfUser
 
-    fun saveNotificationsOfUserByUserId(
-        userId: UUID,
-        notificationOfUsers: List<NotificationOfUser>
-    )
+    fun saveNotificationsOfUser(notificationOfUsers: List<NotificationOfUser>)
 }

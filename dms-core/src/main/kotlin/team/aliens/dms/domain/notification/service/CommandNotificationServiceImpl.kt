@@ -39,17 +39,11 @@ class CommandNotificationServiceImpl(
         commandNotificationOfUserPort.deleteNotificationOfUserByUserId(userId)
     }
 
-    override fun saveNotificationOfUserByUserId(
-        userId: UUID,
-        notificationOfUser: NotificationOfUser
-    ): NotificationOfUser {
+    override fun saveNotificationOfUser(notificationOfUser: NotificationOfUser): NotificationOfUser {
         return commandNotificationOfUserPort.saveNotificationOfUser(notificationOfUser)
     }
 
-    override fun saveNotificationsOfUserByUserId(
-        userId: UUID,
-        notificationOfUsers: List<NotificationOfUser>
-    ) {
+    override fun saveNotificationsOfUser(notificationOfUsers: List<NotificationOfUser>) {
         commandNotificationOfUserPort.saveNotificationsOfUser(notificationOfUsers)
     }
 }

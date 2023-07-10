@@ -21,7 +21,7 @@ import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
 import team.aliens.dms.domain.notification.dto.request.DeviceTokenWebRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
-import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
+import team.aliens.dms.domain.notification.usecase.QueryAndUpdateMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
@@ -35,7 +35,7 @@ import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCa
 @RestController
 class NotificationWebAdapter(
     private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
-    private val queryMyNotificationsUseCase: QueryMyNotificationsUseCase,
+    private val queryAndUpdateMyNotificationsUseCase: QueryAndUpdateMyNotificationsUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
     private val updateTopicSubscriptionsUseCase: UpdateTopicSubscriptionsUseCase,
@@ -53,7 +53,7 @@ class NotificationWebAdapter(
 
     @GetMapping
     fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
-        return queryMyNotificationsUseCase.execute(pageData)
+        return queryAndUpdateMyNotificationsUseCase.execute(pageData)
     }
 
     @PostMapping("/topic")
