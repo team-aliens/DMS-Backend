@@ -7,7 +7,7 @@ import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
-class QueryAndUpdateMyNotificationsUseCase(
+class QueryAndReadMyNotificationsUseCase(
     private val userService: UserService,
     private val notificationService: NotificationService
 ) {
@@ -15,7 +15,7 @@ class QueryAndUpdateMyNotificationsUseCase(
     fun execute(pageData: PageData): NotificationsResponse {
         val user = userService.getCurrentUser()
         val notificationsOfUser = notificationService.getNotificationOfUsersByUserId(user.id, pageData)
-        notificationService.saveNotificationsOfUser(notificationsOfUser.map { it.copy(isRead = true) })
+        notificationService.saveNotificationsOfUser(notificationsOfUser.map { it.read() })
         return NotificationsResponse.of(notificationsOfUser)
     }
 }
