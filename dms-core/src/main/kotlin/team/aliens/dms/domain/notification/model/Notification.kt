@@ -44,7 +44,7 @@ sealed class Notification(
         schoolId = schoolId,
         topic = Topic.NOTICE,
         linkIdentifier = notice.id.toString(),
-        title = "${notice.title}",
+        title = notice.title,
         content = "기숙사 공지가 등록되었습니다.",
         threadId = notice.id.toString(),
         isSaveRequired = true

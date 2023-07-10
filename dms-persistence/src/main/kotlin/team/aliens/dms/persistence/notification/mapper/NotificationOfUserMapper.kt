@@ -37,7 +37,8 @@ class NotificationOfUserMapper(
             linkIdentifier = domain.linkIdentifier,
             title = domain.title,
             content = domain.content,
-            createdAt = domain.createdAt
+            createdAt = domain.createdAt,
+            isRead = domain.isRead
         )
     }
 }
