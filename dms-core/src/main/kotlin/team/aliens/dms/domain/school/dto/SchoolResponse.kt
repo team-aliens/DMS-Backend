@@ -1,6 +1,8 @@
 package team.aliens.dms.domain.school.dto
 
+import team.aliens.dms.domain.school.model.CustomDayOfWeek
 import team.aliens.dms.domain.school.model.School
+import java.time.LocalTime
 import java.util.UUID
 
 data class SchoolsResponse(
@@ -48,4 +50,11 @@ data class SchoolIdResponse(
 
 data class ReissueSchoolCodeResponse(
     val code: String
+)
+
+data class ApplicationAvailableTimeResponse(
+    val startDayOfWeek: CustomDayOfWeek,
+    val startTime: LocalTime,
+    val endDayOfWeek: CustomDayOfWeek,
+    val endTime: LocalTime
 )
