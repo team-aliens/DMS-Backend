@@ -1,9 +1,11 @@
 package team.aliens.dms.domain.school.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.school.exception.ApplicationAvailableTimeNotFoundException
 import team.aliens.dms.domain.school.exception.FeatureNotFoundException
 import team.aliens.dms.domain.school.exception.SchoolCodeMismatchException
 import team.aliens.dms.domain.school.exception.SchoolNotFoundException
+import team.aliens.dms.domain.school.model.ApplicationAvailableTimeType
 import team.aliens.dms.domain.school.spi.QuerySchoolPort
 import java.util.UUID
 
@@ -23,4 +25,8 @@ class GetSchoolServiceImpl(
 
     override fun getAvailableFeaturesBySchoolId(schoolId: UUID) =
         querySchoolPort.queryAvailableFeaturesBySchoolId(schoolId) ?: throw FeatureNotFoundException
+
+    override fun getApplicationAvailableTimeBySchoolIdAndType(schoolId: UUID, type: ApplicationAvailableTimeType) =
+        querySchoolPort.queryApplicationAvailableTimeBySchoolIdAndType(schoolId, type)
+                ?: throw ApplicationAvailableTimeNotFoundException
 }
