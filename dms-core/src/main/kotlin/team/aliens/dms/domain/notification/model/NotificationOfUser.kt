@@ -21,4 +21,6 @@ data class NotificationOfUser(
 
     val isRead: Boolean = false
 
-)
+) {
+    fun read() = this.copy(isRead = true)
+}
