@@ -28,5 +28,5 @@ class GetSchoolServiceImpl(
 
     override fun getApplicationAvailableTimeBySchoolIdAndType(schoolId: UUID, type: ApplicationAvailableTimeType) =
         querySchoolPort.queryApplicationAvailableTimeBySchoolIdAndType(schoolId, type)
-                ?: throw ApplicationAvailableTimeNotFoundException
+            ?: throw ApplicationAvailableTimeNotFoundException
 }

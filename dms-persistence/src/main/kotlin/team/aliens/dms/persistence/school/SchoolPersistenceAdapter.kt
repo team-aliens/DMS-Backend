@@ -49,19 +49,19 @@ class SchoolPersistenceAdapter(
 
     override fun saveApplicationAvailableTime(applicationAvailableTime: ApplicationAvailableTime) =
         applicationAvailableTimeMapper.toDomain(
-                applicationAvailableTimeRepository.save(
-                        applicationAvailableTimeMapper.toEntity(applicationAvailableTime)
-                )
+            applicationAvailableTimeRepository.save(
+                applicationAvailableTimeMapper.toEntity(applicationAvailableTime)
+            )
         )!!
 
     override fun queryApplicationAvailableTimeBySchoolIdAndType(
-            schoolId: UUID,
-            type: ApplicationAvailableTimeType
+        schoolId: UUID,
+        type: ApplicationAvailableTimeType
     ): ApplicationAvailableTime? {
         val id = ApplicationAvailableTimeId(type = type, schoolId = schoolId)
 
         return applicationAvailableTimeMapper.toDomain(
-                applicationAvailableTimeRepository.findByIdOrNull(id)
+            applicationAvailableTimeRepository.findByIdOrNull(id)
         )
     }
 }

@@ -105,11 +105,11 @@ class SchoolWebAdapter(
     @PutMapping("/available-time")
     fun updateApplicationAvailableTime(@RequestBody @Valid webRequest: UpdateApplicationAvailableTimeWebRequest) {
         val request = UpdateApplicationAvailableTimeRequest(
-                startDayOfWeek = webRequest.startDayOfWeek!!,
-                startTime = webRequest.startTime,
-                endDayOfWeek = webRequest.endDayOfWeek!!,
-                endTime = webRequest.endTime,
-                type = webRequest.type
+            startDayOfWeek = webRequest.startDayOfWeek!!,
+            startTime = webRequest.startTime,
+            endDayOfWeek = webRequest.endDayOfWeek!!,
+            endTime = webRequest.endTime,
+            type = webRequest.type
         )
 
         updateApplicationAvailableTimeUseCase.execute(request)

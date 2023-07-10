@@ -31,8 +31,8 @@ class ApplicationAvailableTimeMapper(
 
         return ApplicationAvailableTimeJpaEntity(
             id = ApplicationAvailableTimeId(
-                    type = domain.type,
-                    schoolId = domain.schoolId
+                type = domain.type,
+                schoolId = domain.schoolId
             ),
             school = school,
             startDayOfWeek = domain.startDayOfWeek,

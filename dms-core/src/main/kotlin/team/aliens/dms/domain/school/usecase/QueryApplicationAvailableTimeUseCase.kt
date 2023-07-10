@@ -18,10 +18,10 @@ class QueryApplicationAvailableTimeUseCase(
         val applicationAvailableTime = schoolService.getApplicationAvailableTimeBySchoolIdAndType(user.schoolId, type)
 
         return ApplicationAvailableTimeResponse(
-                startDayOfWeek = applicationAvailableTime.startDayOfWeek,
-                startTime = applicationAvailableTime.startTime,
-                endDayOfWeek = applicationAvailableTime.endDayOfWeek,
-                endTime = applicationAvailableTime.endTime
+            startDayOfWeek = applicationAvailableTime.startDayOfWeek,
+            startTime = applicationAvailableTime.startTime,
+            endDayOfWeek = applicationAvailableTime.endDayOfWeek,
+            endTime = applicationAvailableTime.endTime
         )
     }
 }

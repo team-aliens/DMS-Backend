@@ -11,8 +11,8 @@ class CommandSchoolServiceImpl(
 ) : CommandSchoolService {
 
     override fun saveSchool(school: School) =
-            commandSchoolPort.saveSchool(school)
+        commandSchoolPort.saveSchool(school)
 
     override fun saveApplicationAvailableTime(applicationAvailableTime: ApplicationAvailableTime) =
-            commandSchoolPort.saveApplicationAvailableTime(applicationAvailableTime)
+        commandSchoolPort.saveApplicationAvailableTime(applicationAvailableTime)
 }

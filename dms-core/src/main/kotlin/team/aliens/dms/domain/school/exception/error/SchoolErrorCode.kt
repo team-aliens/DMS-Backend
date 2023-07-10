@@ -2,7 +2,6 @@ package team.aliens.dms.domain.school.exception.error
 
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.common.error.ErrorStatus
-import java.lang.Error
 
 enum class SchoolErrorCode(
     private val status: Int,

@@ -17,12 +17,12 @@ class UpdateApplicationAvailableTimeUseCase(
 
         schoolService.saveApplicationAvailableTime(
             ApplicationAvailableTime(
-                 schoolId = user.schoolId,
-                 startDayOfWeek = request.startDayOfWeek,
-                 startTime = request.startTime,
-                 endDayOfWeek = request.endDayOfWeek,
-                 endTime = request.endTime,
-                 type = request.type
+                schoolId = user.schoolId,
+                startDayOfWeek = request.startDayOfWeek,
+                startTime = request.startTime,
+                endDayOfWeek = request.endDayOfWeek,
+                endTime = request.endTime,
+                type = request.type
             )
         )
     }
