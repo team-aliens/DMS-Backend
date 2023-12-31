@@ -3,4 +3,4 @@ config:
   service_type: be
   port: 8080
   domain:
-    prod: api.aliens-dms.com
+    prod: dms.xquare.app
