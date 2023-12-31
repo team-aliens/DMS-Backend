@@ -1,0 +1,6 @@
+config:
+  name: dms
+  service_type: be
+  port: 8080
+  domain:
+    prod: api.aliens-dms.com
