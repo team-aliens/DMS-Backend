@@ -55,8 +55,8 @@ data class StudyRoomResponse(
                 westDescription = studyRoom.westDescription,
                 southDescription = studyRoom.southDescription,
                 northDescription = studyRoom.northDescription,
-                totalWidthSize = studyRoom.heightSize,
-                totalHeightSize = studyRoom.widthSize
+                totalWidthSize = studyRoom.widthSize,
+                totalHeightSize = studyRoom.heightSize
             )
         }
     }
