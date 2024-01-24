@@ -4,3 +4,4 @@ config:
   port: 8080
   domain:
     prod: api.aliens-dms.com
+    stag: dev-dms.xquare.app
