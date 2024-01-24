@@ -1,9 +1,10 @@
-name: DMS - xquare deployment
+name: DMS - xquare deployment prod
 
 on:
   push:
-    branches: [ develop ]
-
+    tags:
+      - v*.*.*
+      
 jobs:
   CD:
     permissions:
