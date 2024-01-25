@@ -25,20 +25,17 @@ class ExceptionFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (e: DmsException) {
-            e.printStackTrace()
             errorToJson(e.errorProperty, response)
-            //Sentry.captureException(e)
+            Sentry.captureException(e)
         } catch (e: Exception) {
             when (e.cause) {
                 is DmsException -> {
-                    (e.cause as DmsException).printStackTrace()
                     errorToJson((e.cause as DmsException).errorProperty, response)
-                    //Sentry.captureException(e)
+                    Sentry.captureException(e)
                 }
                 else -> {
-                    e.cause?.printStackTrace()
                     errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
-                    //Sentry.captureException(e)
+                    Sentry.captureException(e)
                 }
             }
         }

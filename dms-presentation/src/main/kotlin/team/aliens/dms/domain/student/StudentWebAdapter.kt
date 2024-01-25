@@ -71,6 +71,8 @@ class StudentWebAdapter(
     private val queryStudentsUseCase: QueryStudentsUseCase,
     private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
+    private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
+    private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase,
     private val importStudentUseCase: ImportStudentUseCase
 ) {
 
@@ -204,6 +206,18 @@ class StudentWebAdapter(
     @DeleteMapping("/{student-id}")
     fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
         removeStudentUseCase.execute(studentId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/file/room")
+    fun updateStudentRoomByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentRoomByFileUseCase.execute(file!!.toFile())
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/file/gcn")
+    fun updateStudentGcnByFile(@RequestPart @NotNull file: MultipartFile?) {
+        updateStudentGcnByFileUseCase.execute(file!!.toFile())
     }
 
     @ResponseStatus(HttpStatus.CREATED)
