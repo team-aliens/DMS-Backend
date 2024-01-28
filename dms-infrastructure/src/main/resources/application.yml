@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL:validate}
+      ddl-auto: ${DDL:create}
       order_inserts: true
       order_updates: true
       jdbc:
@@ -67,7 +67,7 @@ cloud:
     s3:
       bucket: ${BUCKET_NAME:dms}
     ses:
-      source: ${SES_SENDER:asdf}
+      source: ${SES_SENDER:asdf}S
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}
