@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${DDL:create}
+      ddl-auto: create
       order_inserts: true
       order_updates: true
       jdbc:
