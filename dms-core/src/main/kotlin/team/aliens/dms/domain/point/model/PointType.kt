@@ -4,5 +4,5 @@ enum class PointType(
     val korean: String
 ) {
     BONUS("상점"),
-    MINUS("벌점");
+    MINUS("벌점")
 }
