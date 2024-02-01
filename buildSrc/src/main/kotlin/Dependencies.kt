@@ -7,7 +7,7 @@ object Dependencies {
     const val JACKSON_TYPE = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${DependencyVersions.JACKSON_VERSION}"
 
     // java servlet
-    const val JAVA_SERVLET = "javax.servlet:javax.servlet-api:${DependencyVersions.SERVLET_VERSION}"
+    const val JAVA_SERVLET = "jakarta.servlet:jakarta.servlet-api:${DependencyVersions.SERVLET_VERSION}"
 
     // web
     const val SPRING_WEB = "org.springframework.boot:spring-boot-starter-web"
@@ -19,7 +19,7 @@ object Dependencies {
     const val SPRING_THYMELEAF = "org.springframework.boot:spring-boot-starter-thymeleaf"
 
     // transaction
-    const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION}"
+    const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION_VERSION}"
 
     // configuration
     const val CONFIGURATION_PROCESSOR = "org.springframework.boot:spring-boot-configuration-processor"
@@ -31,17 +31,21 @@ object Dependencies {
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
 
     // querydsl
-    const val QUERYDSL = "com.querydsl:querydsl-jpa:${DependencyVersions.QUERYDSL}"
-    const val QUERYDSL_PROCESSOR = "com.querydsl:querydsl-apt:${DependencyVersions.QUERYDSL}:jpa"
+    const val QUERYDSL = "com.querydsl:querydsl-jpa:${DependencyVersions.QUERYDSL_VERSION}:jakarta"
+    const val QUERYDSL_PROCESSOR = "com.querydsl:querydsl-apt:${DependencyVersions.QUERYDSL_VERSION}:jakarta"
+    const val JAKARTA_ANNOTATION_PROCESSOR = "jakarta.annotation:jakarta.annotation-api:${DependencyVersions.JAKARTA_ANNOTATION_VERSION}"
+    const val JAKARTA_PERSISTENCE_PROCESSOR = "jakarta.persistence:jakarta.persistence-api:${DependencyVersions.JAKARTA_PERSISTENCE_VERSION}"
 
     // security
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"
 
     // jwt
     const val JWT = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
+    const val JWT_IMPL = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
+    const val JWT_JACKSON = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
 
     // aws
-    const val SPRING_AWS = "org.springframework.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
+    const val SPRING_AWS = "io.awspring.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
     const val AWS_SES = "com.amazonaws:aws-java-sdk-ses:${DependencyVersions.SES_VERSION}"
 
     // test

@@ -25,6 +25,8 @@ dependencies {
 
     // jwt
     implementation(Dependencies.JWT)
+    runtimeOnly(Dependencies.JWT_IMPL)
+    runtimeOnly(Dependencies.JWT_JACKSON)
 
     // aws
     implementation(Dependencies.AWS_SES)
@@ -54,13 +56,6 @@ dependencies {
 
     // notification
     implementation(Dependencies.FCM)
-}
-
-kapt {
-    arguments {
-        arg("mapstruct.defaultComponentModel", "spring")
-        arg("mapstruct.unmappedTargetPolicy", "ignore")
-    }
 }
 
 tasks.getByName<Jar>("jar") {
