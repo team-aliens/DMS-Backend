@@ -1,5 +1,8 @@
 package team.aliens.dms.domain.manager
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,9 +21,6 @@ import team.aliens.dms.domain.manager.usecase.FindManagerAccountIdUseCase
 import team.aliens.dms.domain.manager.usecase.ManagerMyPageUseCase
 import team.aliens.dms.domain.manager.usecase.ResetManagerPasswordUseCase
 import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/managers")

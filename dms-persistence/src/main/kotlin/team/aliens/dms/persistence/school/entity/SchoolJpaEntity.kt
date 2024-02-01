@@ -1,12 +1,12 @@
 package team.aliens.dms.persistence.school.entity
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import team.aliens.dms.persistence.BaseUUIDEntity
 import java.time.LocalDate
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
-import javax.persistence.UniqueConstraint
 
 @Entity
 @Table(

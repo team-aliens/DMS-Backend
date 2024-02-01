@@ -1,23 +1,23 @@
 package team.aliens.dms.persistence.user.entity
 
-import org.hibernate.annotations.Where
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
+import org.hibernate.annotations.SQLRestriction
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.FetchType
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_user")
-@Where(clause = "deleted_at is null")
+@SQLRestriction("deleted_at is null")
 class UserJpaEntity(
 
     id: UUID?,
@@ -42,6 +42,6 @@ class UserJpaEntity(
     override val createdAt: LocalDateTime,
 
     @Column(columnDefinition = "DATETIME")
-    val deletedAt: LocalDateTime?
+    val deletedAt: LocalDateTime?,
 
 ) : BaseEntity(id)

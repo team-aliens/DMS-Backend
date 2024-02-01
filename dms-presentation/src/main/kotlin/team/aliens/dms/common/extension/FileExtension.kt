@@ -1,12 +1,12 @@
 package team.aliens.dms.common.extension
 
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URLEncoder
 import java.util.UUID
-import javax.servlet.http.HttpServletResponse
 
 fun MultipartFile.toFile() =
     File("${UUID.randomUUID()}||$originalFilename").let {

@@ -1,8 +1,6 @@
 package team.aliens.dms.global.security.token
 
-import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.model.Authority
@@ -29,20 +27,24 @@ class GenerateJwtAdapter(
 
     private fun generateAccessToken(userId: UUID, authority: Authority) =
         Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
-            .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
-            .setId(userId.toString())
+            .signWith(securityProperties.secretKey)
+            .header()
+            .add(JwtProperties.JWT_TYPE, JwtProperties.ACCESS)
+            .and()
+            .id(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
-            .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
+            .issuedAt(Date())
+            .expiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
     private fun generateRefreshToken(userId: UUID, authority: Authority): String {
         val token = Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
-            .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
-            .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
+            .signWith(securityProperties.secretKey)
+            .header()
+            .add(JwtProperties.JWT_TYPE, JwtProperties.REFRESH)
+            .and()
+            .issuedAt(Date())
+            .expiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
 
         val refreshToken = RefreshToken(

@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.notice
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -26,8 +28,6 @@ import team.aliens.dms.domain.notice.usecase.QueryNoticeStatusUseCase
 import team.aliens.dms.domain.notice.usecase.RemoveNoticeUseCase
 import team.aliens.dms.domain.notice.usecase.UpdateNoticeUseCase
 import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/notices")

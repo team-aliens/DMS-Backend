@@ -1,5 +1,7 @@
 package team.aliens.dms.domain.tag
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -20,8 +22,6 @@ import team.aliens.dms.domain.tag.usecase.QueryTagsUseCase
 import team.aliens.dms.domain.tag.usecase.RemoveTagUseCase
 import team.aliens.dms.domain.tag.usecase.UpdateTagUseCase
 import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
 
 @Validated
 @RequestMapping("/tags")

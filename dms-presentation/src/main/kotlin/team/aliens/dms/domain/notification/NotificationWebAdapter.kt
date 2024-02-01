@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification
 
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,7 +29,6 @@ import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
 import java.util.UUID
-import javax.validation.Valid
 
 @Validated
 @RequestMapping("/notifications")

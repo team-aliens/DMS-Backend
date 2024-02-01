@@ -1,15 +1,18 @@
 package team.aliens.dms.global.security
 
+import io.jsonwebtoken.security.Keys
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
 import java.util.Base64
+import javax.crypto.SecretKey
 
 @ConfigurationProperties(prefix = "secret")
-@ConstructorBinding
 class SecurityProperties(
     secretKey: String,
     val accessExp: Int,
-    val refreshExp: Int
+    val refreshExp: Int,
 ) {
-    val secretKey: String = Base64.getEncoder().encodeToString(secretKey.toByteArray())
+    val secretKey: SecretKey = Keys.hmacShaKeyFor(
+        Base64.getEncoder().encodeToString(secretKey.toByteArray())
+            .toByteArray(Charsets.UTF_8)
+    )
 }
