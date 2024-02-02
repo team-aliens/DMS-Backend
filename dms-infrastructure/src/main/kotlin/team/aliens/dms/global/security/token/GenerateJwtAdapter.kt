@@ -17,7 +17,7 @@ import java.util.UUID
 @Component
 class GenerateJwtAdapter(
     private val securityProperties: SecurityProperties,
-    private val commandRefreshTokenPort: CommandRefreshTokenPort
+    private val commandRefreshTokenPort: CommandRefreshTokenPort,
 ) : JwtPort {
 
     override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
@@ -29,7 +29,7 @@ class GenerateJwtAdapter(
 
     private fun generateAccessToken(userId: UUID, authority: Authority) =
         Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
+            .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
             .setId(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
@@ -39,7 +39,7 @@ class GenerateJwtAdapter(
 
     private fun generateRefreshToken(userId: UUID, authority: Authority): String {
         val token = Jwts.builder()
-            .signWith(SignatureAlgorithm.HS512, securityProperties.secretKey)
+            .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))

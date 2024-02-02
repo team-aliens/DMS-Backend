@@ -1,17 +1,17 @@
 package team.aliens.dms.persistence.studyroom.entity
 
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.EmbeddedId
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.MapsId
+import jakarta.persistence.Table
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.io.Serializable
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Embeddable
-import javax.persistence.EmbeddedId
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.MapsId
-import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_seat_application")

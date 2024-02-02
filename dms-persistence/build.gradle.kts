@@ -16,19 +16,15 @@ dependencies {
     // querydsl
     implementation(Dependencies.QUERYDSL)
     kapt(Dependencies.QUERYDSL_PROCESSOR)
+    kapt(Dependencies.JAKARTA_ANNOTATION_PROCESSOR)
+    kapt(Dependencies.JAKARTA_PERSISTENCE_PROCESSOR)
 
     // time based uuid
     implementation(Dependencies.UUID_TIME)
 }
 
 allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
-
-noArg {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }

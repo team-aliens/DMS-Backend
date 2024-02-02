@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.tag.dto
 
+import jakarta.validation.constraints.NotNull
 import team.aliens.dms.common.validator.NotNullElements
 import java.util.UUID
-import javax.validation.constraints.NotNull
 
 data class GrantTagWebRequest(
 

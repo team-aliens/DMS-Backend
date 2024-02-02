@@ -47,7 +47,7 @@ class StudentMapper(
             classRoom = domain.classRoom,
             number = domain.number,
             name = domain.name,
-            profileImageUrl = domain.profileImageUrl!!,
+            profileImageUrl = domain.profileImageUrl,
             sex = domain.sex,
             deletedAt = domain.deletedAt
         )

@@ -348,7 +348,7 @@ formatting:
     active: true
     autoCorrect: true
   NoSemicolons:
-    active: true
+    active: false
     autoCorrect: true
   NoTrailingSpaces:
     active: true

@@ -27,5 +27,5 @@ enum class Topic(
         topicGroup = TopicGroup.STUDY_ROOM,
         title = "신청 시간 알림",
         content = "자습실 신청 시간을 알리는 알림입니다."
-    );
+    )
 }
