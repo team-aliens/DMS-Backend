@@ -16,7 +16,7 @@ class OutingTypeMapper (
     override fun toDomain(entity: OutingTypeJpaEntity?): OutingType? {
         return entity?.let {
             OutingType(
-                outingTitle = it.id.outingTitle,
+                title = it.id.title,
                 schoolId = it.id.schoolId
             )
         }
@@ -27,7 +27,7 @@ class OutingTypeMapper (
 
         return OutingTypeJpaEntity(
             id = OutingTypeJpaEntityId(
-                outingTitle = domain.outingTitle,
+                title = domain.title,
                 schoolId = domain.schoolId
             ),
             school = school

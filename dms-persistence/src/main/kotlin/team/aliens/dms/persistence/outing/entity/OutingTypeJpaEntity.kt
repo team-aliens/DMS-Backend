@@ -2,7 +2,7 @@ package team.aliens.dms.persistence.outing.entity
 
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.io.Serializable
-import java.util.*
+import java.util.UUID
 import javax.persistence.EmbeddedId
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -31,7 +31,7 @@ class OutingTypeJpaEntity(
 data class OutingTypeJpaEntityId(
 
     @Column(columnDefinition = "VARCHAR(20)" ,nullable = false)
-    val outingTitle: String,
+    val title: String,
 
     @Column(nullable = false)
     val schoolId: UUID

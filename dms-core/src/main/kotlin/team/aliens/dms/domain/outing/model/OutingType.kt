@@ -7,7 +7,7 @@ import java.util.UUID
 @Aggregate
 data class OutingType(
 
-    val outingTitle: String,
+    val title: String,
 
     override val schoolId: UUID
 
