@@ -3,7 +3,15 @@ package team.aliens.dms.persistence.outing.entity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.io.Serializable
 import java.util.*
-import javax.persistence.*
+import javax.persistence.EmbeddedId
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.Table
+import javax.persistence.ManyToOne
+import javax.persistence.MapsId
+import javax.persistence.Column
+import javax.persistence.Embeddable
+import javax.persistence.JoinColumn
 
 @Entity
 @Table(name = "tbl_outing_type")
@@ -17,13 +25,13 @@ class OutingTypeJpaEntity(
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
 
-    )
+)
 
 @Embeddable
 data class OutingTypeJpaEntityId(
 
     @Column(columnDefinition = "VARCHAR(20)" ,nullable = false)
-    val outingType: String,
+    val outingTitle: String,
 
     @Column(nullable = false)
     val schoolId: UUID
