@@ -53,7 +53,7 @@ secret:
   refresh-exp: ${REFRESH_EXP:7200}
 
 open-feign:
-  neis-key: ${NEIS_KEY:c285510776f048309a27c343cd0e4290}
+  neis-key: ${NEIS_KEY:asdf}
 
 cloud:
   aws:
@@ -68,10 +68,10 @@ cloud:
     s3:
       bucket: ${BUCKET_NAME:dms}
     ses:
-      source: ${SES_SENDER:asdf}S
+      source: ${SES_SENDER:asdf}
 
 sentry:
-  dsn: ${SENTRY_DSN:https://eb485e17c4db4b4d9e3ab8aee206e040@o4505293230112768.ingest.sentry.io/4505293252984832}
+  dsn: ${SENTRY_DSN:asdf}
   traces-sample-rate: 1.0
 
 logging:

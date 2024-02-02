@@ -40,9 +40,9 @@ object Dependencies {
     const val SPRING_SECURITY = "org.springframework.boot:spring-boot-starter-security"
 
     // jwt
-    const val JWT = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
-    const val JWT_IMPL = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
-    const val JWT_JACKSON = "io.jsonwebtoken:jjwt:${DependencyVersions.JWT_VERSION}"
+    const val JWT = "io.jsonwebtoken:jjwt-api:${DependencyVersions.JWT_VERSION}"
+    const val JWT_IMPL = "io.jsonwebtoken:jjwt-impl:${DependencyVersions.JWT_VERSION}"
+    const val JWT_JACKSON = "io.jsonwebtoken:jjwt-jackson:${DependencyVersions.JWT_VERSION}"
 
     // aws
     const val SPRING_AWS = "io.awspring.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"

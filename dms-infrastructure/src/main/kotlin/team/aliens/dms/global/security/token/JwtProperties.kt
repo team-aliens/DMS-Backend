@@ -6,5 +6,4 @@ object JwtProperties {
     const val ACCESS = "access"
     const val REFRESH = "refresh"
     const val AUTHORITY = "authority"
-    const val JWT_TYPE = "JWT"
 }

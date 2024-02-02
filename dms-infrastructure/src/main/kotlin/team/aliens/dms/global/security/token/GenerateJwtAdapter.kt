@@ -1,6 +1,8 @@
 package team.aliens.dms.global.security.token
 
+import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.dto.TokenResponse
 import team.aliens.dms.domain.auth.model.Authority
@@ -15,7 +17,7 @@ import java.util.UUID
 @Component
 class GenerateJwtAdapter(
     private val securityProperties: SecurityProperties,
-    private val commandRefreshTokenPort: CommandRefreshTokenPort
+    private val commandRefreshTokenPort: CommandRefreshTokenPort,
 ) : JwtPort {
 
     override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
@@ -27,24 +29,20 @@ class GenerateJwtAdapter(
 
     private fun generateAccessToken(userId: UUID, authority: Authority) =
         Jwts.builder()
-            .signWith(securityProperties.secretKey)
-            .header()
-            .add(JwtProperties.JWT_TYPE, JwtProperties.ACCESS)
-            .and()
-            .id(userId.toString())
+            .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
+            .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
+            .setId(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
-            .issuedAt(Date())
-            .expiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
+            .setIssuedAt(Date())
+            .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
     private fun generateRefreshToken(userId: UUID, authority: Authority): String {
         val token = Jwts.builder()
-            .signWith(securityProperties.secretKey)
-            .header()
-            .add(JwtProperties.JWT_TYPE, JwtProperties.REFRESH)
-            .and()
-            .issuedAt(Date())
-            .expiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
+            .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
+            .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
+            .setIssuedAt(Date())
+            .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
 
         val refreshToken = RefreshToken(
