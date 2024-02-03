@@ -7,7 +7,7 @@ spring:
     timeout-per-shutdown-phase: "60s"
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:stag_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:11111111}
     driver-class-name: com.mysql.cj.jdbc.Driver
