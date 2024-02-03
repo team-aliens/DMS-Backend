@@ -3,15 +3,15 @@ package team.aliens.dms.persistence.outing.entity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.io.Serializable
 import java.util.UUID
-import javax.persistence.EmbeddedId
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.Table
-import javax.persistence.ManyToOne
-import javax.persistence.MapsId
-import javax.persistence.Column
-import javax.persistence.Embeddable
-import javax.persistence.JoinColumn
+import jakarta.persistence.EmbeddedId
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.Table
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.MapsId
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.JoinColumn
 
 @Entity
 @Table(name = "tbl_outing_type")
