@@ -28,7 +28,7 @@ data class OutingApplication(
 
     val destination: String,
 
-    val title: String,
+    val outingTypeTitle: String,
 
     override val schoolId: UUID
 

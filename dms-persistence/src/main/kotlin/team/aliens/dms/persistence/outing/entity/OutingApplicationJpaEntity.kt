@@ -3,7 +3,6 @@ package team.aliens.dms.persistence.outing.entity
 import jakarta.persistence.Entity
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinColumns
@@ -48,13 +47,9 @@ class OutingApplicationJpaEntity (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(
-        JoinColumn(name = "title", referencedColumnName = "title"),
-        JoinColumn(name = "outing_type_school_id", referencedColumnName = "school_id"),
+        JoinColumn(name = "outing_type_title", referencedColumnName = "title", nullable = false),
+        JoinColumn(name = "outing_type_school_id", referencedColumnName = "school_id", columnDefinition = "BINARY(16)", nullable = false),
     )
-    val title: OutingTypeJpaEntity?,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
-    val school: SchoolJpaEntity?
+    val outingType: OutingTypeJpaEntity?
 
 ) : BaseEntity(id)
