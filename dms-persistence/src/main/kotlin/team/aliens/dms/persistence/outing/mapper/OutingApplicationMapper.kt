@@ -5,14 +5,13 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.outing.entity.OutingApplicationJpaEntity
-import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntity
 import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntityId
-import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
+import team.aliens.dms.persistence.outing.repository.OutingTypeJpaRepository
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 
 @Component
 class OutingApplicationMapper(
-    private val schoolRepository: SchoolJpaRepository,
+    private val outingTypeRepository: OutingTypeJpaRepository,
     private val studentRepository: StudentJpaRepository,
 ) : GenericMapper<OutingApplication, OutingApplicationJpaEntity> {
 
@@ -28,20 +27,19 @@ class OutingApplicationMapper(
                 status = it.status,
                 reason = it.reason,
                 destination = it.destination,
-                title = it.title?.id?.title!!,
-                schoolId = it.school!!.id!!
+                outingTypeTitle = it.outingType!!.id.title,
+                schoolId = it.outingType!!.id.schoolId
             )
         }
     }
 
     override fun toEntity(domain: OutingApplication): OutingApplicationJpaEntity {
-        val school = schoolRepository.findByIdOrNull(domain.schoolId)
+        val id = OutingTypeJpaEntityId(
+            title = domain.outingTypeTitle,
+            schoolId = domain.schoolId
+        )
+        val outingType = outingTypeRepository.findOutingTypeJpaEntityById(id)
         val student = studentRepository.findByIdOrNull(domain.studentId)
-
-        val outingTypeEntity = domain.title.let {
-            val outingTypeJpaEntityId = OutingTypeJpaEntityId(title = it, schoolId = domain.schoolId)
-            OutingTypeJpaEntity(id = outingTypeJpaEntityId, school = school)
-        }
 
         return OutingApplicationJpaEntity(
             id = domain.id,
@@ -53,8 +51,7 @@ class OutingApplicationMapper(
             status = domain.status,
             reason = domain.reason,
             destination = domain.destination,
-            title = outingTypeEntity,
-            school = school
+            outingType = outingType
         )
     }
 }
