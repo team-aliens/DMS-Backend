@@ -2,9 +2,7 @@ package team.aliens.dms.persistence.outing.mapper
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.outing.exception.OutingNotFoundException
 import team.aliens.dms.domain.outing.model.OutingType
-import team.aliens.dms.domain.school.exception.SchoolNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntity
 import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntityId
@@ -25,7 +23,7 @@ class OutingTypeMapper (
     }
 
     override fun toEntity(domain: OutingType): OutingTypeJpaEntity {
-        val school = schoolRepository.findByIdOrNull(domain.schoolId) ?: throw SchoolNotFoundException
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
 
         return OutingTypeJpaEntity(
             id = OutingTypeJpaEntityId(
