@@ -11,7 +11,7 @@ import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 
 @Component
 class OutingApplicationMapper(
-    private val outingTypeJpaRepository: OutingTypeJpaRepository,
+    private val outingTypeRepository: OutingTypeJpaRepository,
     private val studentRepository: StudentJpaRepository,
 ) : GenericMapper<OutingApplication, OutingApplicationJpaEntity> {
 
@@ -38,8 +38,8 @@ class OutingApplicationMapper(
             title = domain.outingTypeTitle,
             schoolId = domain.schoolId
         )
-        val outingType = outingTypeJpaRepository.findByIdOrNull(id) // 예외처리
-        val student = studentRepository.findByIdOrNull(domain.studentId) // 예외처리
+        val outingType = outingTypeRepository.findByIdOrNull(id)
+        val student = studentRepository.findByIdOrNull(domain.studentId)
 
         return OutingApplicationJpaEntity(
             id = domain.id,
