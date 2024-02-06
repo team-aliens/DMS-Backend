@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.outing.entity
 
+import team.aliens.dms.domain.outing.model.DayOfWeek
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalTime
@@ -10,6 +11,8 @@ import jakarta.persistence.Table
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Column
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 
 @Entity
 @Table(name = "tbl_outing_available_time")
@@ -31,6 +34,7 @@ class OutingAvailableTimeJpaEntity(
     val enabled: Boolean,
 
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
-    val dayOfWeek: String
+    @Enumerated(EnumType.STRING)
+    val dayOfWeek: DayOfWeek
 
 ) : BaseUUIDEntity(id)

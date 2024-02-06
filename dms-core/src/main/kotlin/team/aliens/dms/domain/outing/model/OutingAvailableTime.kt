@@ -3,7 +3,7 @@ package team.aliens.dms.domain.outing.model
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
 import java.time.LocalTime
-import java.util.*
+import java.util.UUID
 
 @Aggregate
 class OutingAvailableTime(
@@ -18,6 +18,6 @@ class OutingAvailableTime(
 
     val enabled: Boolean,
 
-    val dayOfWeek: String
+    val dayOfWeek: DayOfWeek
 
 ) : SchoolIdDomain
