@@ -6,8 +6,6 @@ import java.util.UUID
 @Aggregate
 data class CompanionForOuting(
 
-    val id: UUID = UUID(0, 0),
-
     val outingApplicationId: UUID,
 
     val studentId: UUID
