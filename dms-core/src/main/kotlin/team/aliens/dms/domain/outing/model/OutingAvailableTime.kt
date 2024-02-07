@@ -2,6 +2,7 @@ package team.aliens.dms.domain.outing.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
+import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.UUID
 
