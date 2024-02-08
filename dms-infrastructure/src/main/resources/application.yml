@@ -80,4 +80,3 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
- 
