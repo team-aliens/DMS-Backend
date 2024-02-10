@@ -9,7 +9,7 @@ class CommandOutingServiceImpl(
     private val commandOutingApplicationPort: CommandOutingApplicationPort
 ) : CommandOutingService {
 
-    override fun saveOutingApplication(outing: OutingApplication): OutingApplication =
-        commandOutingApplicationPort.saveOutingApplication(outing)
+    override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication =
+        commandOutingApplicationPort.saveOutingApplication(outingApplication)
 
 }

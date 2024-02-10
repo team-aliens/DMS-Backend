@@ -4,5 +4,5 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 
 interface CommandOutingService {
 
-    fun saveOutingApplication(outing: OutingApplication): OutingApplication
+    fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication
 }
