@@ -171,6 +171,10 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
+
+                //outings
+                .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)
+
                 .anyRequest().denyAll()
             }
         http
