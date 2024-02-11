@@ -40,4 +40,10 @@ class CheckOutingServiceImpl(
             throw OutingApplicationAlreadyExistsException
         }
     }
+
+    override fun checkOutingTypeExists(outingType: OutingType) {
+        if (queryOutingTypePort.exists(outingType)) {
+            throw OutingTypeAlreadyExistsException
+        }
+    }
 }
