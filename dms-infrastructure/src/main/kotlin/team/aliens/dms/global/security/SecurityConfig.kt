@@ -1,29 +1,22 @@
 package team.aliens.dms.global.security
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.Customizer
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.config.web.server.ServerHttpSecurity.http
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
 import team.aliens.dms.global.filter.FilterConfig
-import team.aliens.dms.global.security.token.JwtParser
 
 @Configuration
 class SecurityConfig(
-    private val jwtParser: JwtParser,
-    private val objectMapper: ObjectMapper,
     private val authenticationEntryPoint: CustomAuthenticationEntryPoint,
     private val accessDeniedHandler: CustomAccessDeniedHandler,
-    private val filterConfig: FilterConfig,
+    private val filterConfig: FilterConfig
 ) {
 
     @Bean
@@ -174,6 +167,7 @@ class SecurityConfig(
 
                 //outings
                 .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.POST, "/outings/types").hasAuthority(MANAGER.name)
 
                 .anyRequest().denyAll()
             }
