@@ -14,11 +14,11 @@ import jakarta.persistence.Embeddable
 import jakarta.persistence.JoinColumn
 
 @Entity
-@Table(name = "tbl_companion_for_outing")
-class CompanionForOutingJpaEntity(
+@Table(name = "tbl_outing_companion")
+class OutingCompanionJpaEntity(
 
     @EmbeddedId
-    val id: CompanionForOutingJpaEntityId,
+    val id: OutingCompanionJpaEntityId,
 
     @MapsId("outingApplicationId")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +34,7 @@ class CompanionForOutingJpaEntity(
 )
 
 @Embeddable
-data class CompanionForOutingJpaEntityId(
+data class OutingCompanionJpaEntityId(
 
     @Column
     val outingApplicationId: UUID,
