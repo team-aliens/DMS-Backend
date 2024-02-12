@@ -2,6 +2,7 @@ package team.aliens.dms.domain.outing.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.UUID
@@ -19,6 +20,20 @@ class OutingAvailableTime(
 
     val enabled: Boolean,
 
-    val dayOfWeek: DayOfWeek
+    val dayOfWeek: DayOfWeek,
 
-) : SchoolIdDomain
+    ) : SchoolIdDomain {
+
+    fun checkAvailable(
+        dayOfWeek: DayOfWeek,
+        outingTime: LocalTime,
+        arrivalTime: LocalTime,
+    ) {
+        if (this.dayOfWeek != dayOfWeek ||
+            this.outingTime.isAfter(outingTime) ||
+            this.arrivalTime.isBefore(arrivalTime)
+        ) {
+            throw OutingAvailableTimeMismatchException
+        }
+    }
+}
