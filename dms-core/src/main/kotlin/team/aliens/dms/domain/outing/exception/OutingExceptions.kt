@@ -10,6 +10,6 @@ object OutingApplicationNotFoundException : DmsException(
     OutingErrorCode.OUTING_APPLICATION_NOT_FOUND
 )
 
-object OutingAvailableTimeMismatchException :DmsException(
+object OutingAvailableTimeMismatchException : DmsException(
     OutingErrorCode.OUTING_AVAILABLE_TIME_MISMATCH
 )

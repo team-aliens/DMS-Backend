@@ -22,7 +22,7 @@ class OutingAvailableTime(
 
     val dayOfWeek: DayOfWeek,
 
-    ) : SchoolIdDomain {
+) : SchoolIdDomain {
 
     fun checkAvailable(
         dayOfWeek: DayOfWeek,

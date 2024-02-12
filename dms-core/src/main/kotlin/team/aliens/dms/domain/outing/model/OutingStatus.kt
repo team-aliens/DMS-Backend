@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.outing.model
 
-enum class OutingStatus{
+enum class OutingStatus {
     REQUESTED,
     APPROVED,
     REJECTED,

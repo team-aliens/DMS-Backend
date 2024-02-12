@@ -6,5 +6,4 @@ import java.util.UUID
 interface QueryOutingApplicationPort {
 
     fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID): Boolean
-
 }

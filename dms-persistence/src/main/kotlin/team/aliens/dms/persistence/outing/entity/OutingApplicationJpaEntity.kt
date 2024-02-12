@@ -1,23 +1,23 @@
 package team.aliens.dms.persistence.outing.entity
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinColumns
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinColumns
-import java.util.UUID
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import jakarta.persistence.Column
-import jakarta.persistence.FetchType
+import java.util.UUID
 
 @Entity
 @Table(name = "tbl_outing_application")
-class OutingApplicationJpaEntity (
+class OutingApplicationJpaEntity(
 
     id: UUID?,
 
