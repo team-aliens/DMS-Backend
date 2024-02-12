@@ -6,5 +6,4 @@ import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntity
 import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntityId
 
 @Repository
-interface OutingTypeJpaRepository : CrudRepository<OutingTypeJpaEntity, OutingTypeJpaEntityId> {
-}
+interface OutingTypeJpaRepository : CrudRepository<OutingTypeJpaEntity, OutingTypeJpaEntityId>

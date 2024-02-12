@@ -1,30 +1,29 @@
 package team.aliens.dms.persistence.outing.entity
 
-import team.aliens.dms.persistence.student.entity.StudentJpaEntity
-import java.io.Serializable
-import java.util.UUID
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
-import jakarta.persistence.Table
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.MapsId
-import jakarta.persistence.Column
-import jakarta.persistence.Embeddable
-import jakarta.persistence.JoinColumn
+import jakarta.persistence.Table
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
+import java.io.Serializable
+import java.util.UUID
 
 @Entity
-@Table(name = "tbl_companion_for_outing")
-class CompanionForOutingJpaEntity(
+@Table(name = "tbl_outing_companion")
+class OutingCompanionJpaEntity(
 
     @EmbeddedId
-    val id: CompanionForOutingJpaEntityId,
+    val id: OutingCompanionJpaEntityId,
 
     @MapsId("outingApplicationId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "outing_application_id", columnDefinition = "BINARY(16)", nullable = false)
     val outingApplication: OutingApplicationJpaEntity?,
-
 
     @MapsId("studentId")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +33,7 @@ class CompanionForOutingJpaEntity(
 )
 
 @Embeddable
-data class CompanionForOutingJpaEntityId(
+data class OutingCompanionJpaEntityId(
 
     @Column
     val outingApplicationId: UUID,

@@ -8,7 +8,7 @@ import team.aliens.dms.persistence.outing.entity.OutingAvailableTimeJpaEntity
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
-class OutingAvailableTimeMapper (
+class OutingAvailableTimeMapper(
     private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<OutingAvailableTime, OutingAvailableTimeJpaEntity> {
 

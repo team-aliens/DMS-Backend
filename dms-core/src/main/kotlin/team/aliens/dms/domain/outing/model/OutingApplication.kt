@@ -30,6 +30,8 @@ data class OutingApplication(
 
     val outingTypeTitle: String,
 
-    override val schoolId: UUID
+    override val schoolId: UUID,
+
+    val companionIds: List<UUID>? = null
 
 ) : SchoolIdDomain

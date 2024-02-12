@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-data class CompanionForOuting(
+data class OutingCompanion(
 
     val outingApplicationId: UUID,
 

@@ -9,7 +9,7 @@ import team.aliens.dms.persistence.outing.entity.OutingTypeJpaEntityId
 import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 
 @Component
-class OutingTypeMapper (
+class OutingTypeMapper(
     private val schoolRepository: SchoolJpaRepository
 ) : GenericMapper<OutingType, OutingTypeJpaEntity> {
 
