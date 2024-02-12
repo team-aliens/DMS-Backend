@@ -6,8 +6,9 @@ import jakarta.validation.constraints.Size
 import team.aliens.dms.domain.outing.model.OutingType
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.UUID
 
-data class CreateOutingWebRequest(
+data class CreateOutingApplicationWebRequest(
     @field:NotNull
     val outAt: LocalDate,
 
@@ -19,7 +20,7 @@ data class CreateOutingWebRequest(
 
     @field:NotNull
     @field:Size(max = 15)
-    @NotBlank
+    @field:NotBlank
     val destination: String,
 
     @field:NotNull
@@ -27,6 +28,8 @@ data class CreateOutingWebRequest(
 
     @field:NotNull
     @field:Size(max = 100)
-    @NotBlank
-    val reason: String
+    @field:NotBlank
+    val reason: String,
+
+    val companionId: List<UUID>
 )

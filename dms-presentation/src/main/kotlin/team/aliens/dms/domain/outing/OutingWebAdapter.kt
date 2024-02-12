@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import team.aliens.dms.domain.outing.dto.CreateOutingApplicationRequest
 import team.aliens.dms.domain.outing.dto.CreateOutingApplicationResponse
-import team.aliens.dms.domain.outing.dto.request.CreateOutingWebRequest
+import team.aliens.dms.domain.outing.dto.request.CreateOutingApplicationWebRequest
 import team.aliens.dms.domain.outing.usecase.CreateOutingApplicationUseCase
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,15 +22,16 @@ class OutingWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun createOuting(@RequestBody @Valid request: CreateOutingWebRequest): CreateOutingApplicationResponse {
+    fun createOuting(@RequestBody @Valid webRequest: CreateOutingApplicationWebRequest): CreateOutingApplicationResponse {
         return createOutingUseCase.execute(
             CreateOutingApplicationRequest(
-                outAt = request.outAt,
-                outingTime = request.outingTime,
-                arrivalTime = request.arrivalTime,
-                destination = request.destination,
-                outingTypeId = request.outingTypeId,
-                reason = request.reason
+                outAt = webRequest.outAt,
+                outingTime = webRequest.outingTime,
+                arrivalTime = webRequest.arrivalTime,
+                destination = webRequest.destination,
+                outingTypeId = webRequest.outingTypeId,
+                reason = webRequest.reason,
+                companionId = webRequest.companionId
             )
         )
     }
