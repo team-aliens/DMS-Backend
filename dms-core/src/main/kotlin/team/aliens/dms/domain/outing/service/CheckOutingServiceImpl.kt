@@ -2,7 +2,7 @@ package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationAlreadyExistsException
-import team.aliens.dms.domain.outing.exception.OutingApplicationTimeMismatchException
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -21,7 +21,7 @@ class CheckOutingServiceImpl(
 
     override fun checkOutingApplicationTimeAvailable(outAt: LocalDate) {
         if (outAt.dayOfWeek != DayOfWeek.SUNDAY || outAt.dayOfWeek != DayOfWeek.SATURDAY) {
-            throw OutingApplicationTimeMismatchException
+            throw OutingAvailableTimeMismatchException
         }
     }
 }
