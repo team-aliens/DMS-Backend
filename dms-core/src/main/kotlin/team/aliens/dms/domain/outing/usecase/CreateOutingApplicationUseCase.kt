@@ -21,9 +21,7 @@ class CreateOutingApplicationUseCase(
         val student = studentService.getCurrentStudent()
         val user = userService.getCurrentUser()
 
-        outingService.checkOutingApplicationTimeAvailable(request.outAt)
-
-        outingService.checkOutingApplicationExistsByOutAtAndStudentId(request.outAt, student.id)
+        outingService.checkOutingAvailable(request.outAt, student.id)
 
         val outing = outingService.saveOutingApplication(
             OutingApplication(
@@ -39,7 +37,7 @@ class CreateOutingApplicationUseCase(
                 schoolId = user.schoolId
             )
         )
-
+        
         return CreateOutingApplicationResponse(outing.id)
     }
 }
