@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.outing.exception
 
 import team.aliens.dms.common.error.DmsException
-import team.aliens.dms.domain.outing.exception.error.OutingApplicationErrorCode
+import team.aliens.dms.domain.outing.exception.error.OutingErrorCode
 
 object OutingApplicationNotFoundException : DmsException(
-    OutingApplicationErrorCode.OUTING_APPLICATION_NOT_FOUND
+    OutingErrorCode.OUTING_APPLICATION_NOT_FOUND
 )
