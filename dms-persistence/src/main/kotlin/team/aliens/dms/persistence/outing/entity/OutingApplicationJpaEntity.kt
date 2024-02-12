@@ -2,6 +2,8 @@ package team.aliens.dms.persistence.outing.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinColumns
@@ -36,6 +38,7 @@ class OutingApplicationJpaEntity(
     @Column(columnDefinition = "TIME", nullable = false)
     val arrivalTime: LocalTime,
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(9)", nullable = false)
     val status: OutingStatus,
 

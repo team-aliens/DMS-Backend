@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @Component
-class OutingPersistenceAdapter(
+class OutingApplicationPersistenceAdapter(
     private val outingApplicationMapper: OutingApplicationMapper,
     private val outingApplicationRepository: OutingApplicationJpaRepository
 ) : OutingApplicationPort {
