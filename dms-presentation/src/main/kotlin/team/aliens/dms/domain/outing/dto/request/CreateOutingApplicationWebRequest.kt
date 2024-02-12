@@ -3,7 +3,6 @@ package team.aliens.dms.domain.outing.dto.request
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
-import team.aliens.dms.domain.outing.model.OutingType
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -18,15 +17,14 @@ data class ApplyOutingWebRequest(
     @field:NotNull
     val arrivalTime: LocalTime,
 
-    @field:NotNull
     @field:Size(max = 15)
     @field:NotBlank
     val destination: String,
 
-    @field:NotNull
-    val outingTypeId: OutingType,
+    @field:Size(max = 20)
+    @field:NotBlank
+    val outingTypeTitle: String,
 
-    @field:NotNull
     @field:Size(max = 100)
     @field:NotBlank
     val reason: String,

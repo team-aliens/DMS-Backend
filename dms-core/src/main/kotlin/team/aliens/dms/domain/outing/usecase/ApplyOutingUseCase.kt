@@ -37,7 +37,7 @@ class ApplyOutingUseCase(
                 status = OutingStatus.REQUESTED,
                 reason = request.reason,
                 destination = request.destination,
-                outingTypeTitle = request.outingTypeId.title,
+                outingTypeTitle = request.outingTypeTitle,
                 schoolId = securityService.getCurrentSchoolId(),
                 companionIds = request.companionIds
             )
