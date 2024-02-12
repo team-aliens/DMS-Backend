@@ -1,29 +1,33 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.outing.dto.CreateOutingApplicationRequest
-import team.aliens.dms.domain.outing.dto.CreateOutingApplicationResponse
+import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
+import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.student.service.StudentService
-import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
 
 @UseCase
-class CreateOutingApplicationUseCase(
+class ApplyOutingUseCase(
     private val outingService: OutingService,
     private val studentService: StudentService,
-    private val userService: UserService
+    private val securityService: SecurityService,
 ) {
 
-    fun execute(request: CreateOutingApplicationRequest): CreateOutingApplicationResponse {
+    fun execute(request: ApplyOutingRequest): ApplyOutingResponse {
         val student = studentService.getCurrentStudent()
-        val user = userService.getCurrentUser()
 
-        outingService.checkOutingAvailable(request.outAt, student.id)
+        outingService.checkOutingApplicationAvailable(
+            studentId = student.id,
+            outAt = request.outAt,
+            outingTime = request.outingTime,
+            arrivalTime = request.arrivalTime
+        )
 
-        val outing = outingService.saveOutingApplication(
+        val outing = outingService.apply(
             OutingApplication(
                 studentId = student.id,
                 createdAt = LocalDateTime.now(),
@@ -34,10 +38,11 @@ class CreateOutingApplicationUseCase(
                 reason = request.reason,
                 destination = request.destination,
                 outingTypeTitle = request.outingTypeId.title,
-                schoolId = user.schoolId
+                schoolId = securityService.getCurrentSchoolId(),
+                companionIds = request.companionIds
             )
         )
-        
-        return CreateOutingApplicationResponse(outing.id)
+
+        return ApplyOutingResponse(outing.id)
     }
 }
