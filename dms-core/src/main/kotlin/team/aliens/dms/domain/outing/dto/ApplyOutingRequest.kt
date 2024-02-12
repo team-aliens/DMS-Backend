@@ -5,12 +5,12 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
 
-data class CreateOutingApplicationRequest(
+data class ApplyOutingRequest(
     val outAt: LocalDate,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val destination: String,
     val outingTypeId: OutingType,
     val reason: String,
-    val companionId: List<UUID>
+    val companionIds: List<UUID>?
 )

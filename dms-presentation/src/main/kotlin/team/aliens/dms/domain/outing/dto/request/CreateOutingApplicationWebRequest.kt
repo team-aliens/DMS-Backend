@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
 
-data class CreateOutingApplicationWebRequest(
+data class ApplyOutingWebRequest(
     @field:NotNull
     val outAt: LocalDate,
 
@@ -31,5 +31,5 @@ data class CreateOutingApplicationWebRequest(
     @field:NotBlank
     val reason: String,
 
-    val companionId: List<UUID>
+    val companionIds: List<UUID>?,
 )
