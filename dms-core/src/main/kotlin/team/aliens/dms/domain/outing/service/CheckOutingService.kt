@@ -1,16 +1,15 @@
 package team.aliens.dms.domain.outing.service
 
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 interface CheckOutingService {
 
-    fun checkOutingApplicationExistsByOutAtAndStudentId(outAt: LocalDate, studentId: UUID)
-
-    fun checkOutingApplicationTimeAvailable(outAt: LocalDate)
-
-    fun checkOutingAvailable(outAt: LocalDate, studentId: UUID) {
-        checkOutingApplicationTimeAvailable(outAt)
-        checkOutingApplicationExistsByOutAtAndStudentId(outAt, studentId)
-    }
+    fun checkOutingApplicationAvailable(
+        studentId: UUID,
+        outAt: LocalDate,
+        outingTime: LocalTime,
+        arrivalTime: LocalTime
+    )
 }

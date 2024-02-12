@@ -4,24 +4,40 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
-import java.time.DayOfWeek
+import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 @Service
 class CheckOutingServiceImpl(
-    private val queryOutingApplicationPort: QueryOutingApplicationPort
+    private val queryOutingApplicationPort: QueryOutingApplicationPort,
+    private val queryOutingAvailableTimePort: QueryOutingAvailableTimePort,
 ) : CheckOutingService {
 
-    override fun checkOutingApplicationExistsByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) {
-        if(queryOutingApplicationPort.existOutingApplicationByOutAtAndStudentId(outAt, studentId)) {
-            throw OutingApplicationAlreadyExistsException
-        }
+    override fun checkOutingApplicationAvailable(
+        studentId: UUID,
+        outAt: LocalDate,
+        outingTime: LocalTime,
+        arrivalTime: LocalTime
+    ) {
+        checkOutingAvailableTime(outAt, outingTime, arrivalTime)
+        checkOutingApplicationExistsByOutAtAndStudentId(outAt, studentId)
     }
 
-    override fun checkOutingApplicationTimeAvailable(outAt: LocalDate) {
-        if (outAt.dayOfWeek != DayOfWeek.SUNDAY || outAt.dayOfWeek != DayOfWeek.SATURDAY) {
-            throw OutingAvailableTimeMismatchException
+    private fun checkOutingAvailableTime(
+        outAt: LocalDate,
+        outingTime: LocalTime,
+        arrivalTime: LocalTime
+    ) {
+        queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outAt.dayOfWeek)
+            ?.checkAvailable(outAt.dayOfWeek, outingTime, arrivalTime)
+            ?: throw OutingAvailableTimeMismatchException
+    }
+
+    private fun checkOutingApplicationExistsByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) {
+        if (queryOutingApplicationPort.existOutingApplicationByOutAtAndStudentId(outAt, studentId)) {
+            throw OutingApplicationAlreadyExistsException
         }
     }
 }
