@@ -13,11 +13,9 @@ class CreateOutingTypeUseCase(
 ) {
 
     fun execute(request: CreateOutingTypeRequest) {
-        val schoolId = securityService.getCurrentSchoolId()
-
         val outingType = OutingType(
             title = request.title,
-            schoolId = schoolId
+            schoolId = securityService.getCurrentSchoolId()
         )
 
         outingService.checkOutingTypeExists(outingType)
