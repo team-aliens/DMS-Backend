@@ -168,6 +168,7 @@ class SecurityConfig(
                 //outings
                 .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.POST, "/outings/types").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/outings/types/{title}").hasAuthority(MANAGER.name)
 
                 .anyRequest().denyAll()
             }
