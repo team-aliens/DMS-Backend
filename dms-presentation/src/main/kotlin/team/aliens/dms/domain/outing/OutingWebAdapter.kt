@@ -4,6 +4,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
 import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
+import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
+import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 
 @Validated
@@ -25,7 +28,8 @@ import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 class OutingWebAdapter(
     private val applyOutingUseCase: ApplyOutingUseCase,
     private val createOutingTypeUseCase: CreateOutingTypeUseCase,
-    private val removeOutingTypeUseCase: RemoveOutingTypeUseCase
+    private val removeOutingTypeUseCase: RemoveOutingTypeUseCase,
+    private val getAllOutingTypeTitlesUseCase: GetAllOutingTypeTitlesUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,5 +60,10 @@ class OutingWebAdapter(
     @DeleteMapping("/types/{title}")
     fun removeOutingType(@PathVariable title: String) {
         removeOutingTypeUseCase.execute(title)
+    }
+
+    @GetMapping("/types")
+    fun getAllOutingTypeTitles(): GetAllOutingTypeTitlesResponse {
+        return getAllOutingTypeTitlesUseCase.execute()
     }
 }
