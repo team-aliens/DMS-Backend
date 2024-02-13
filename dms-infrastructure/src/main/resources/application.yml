@@ -49,7 +49,7 @@ fcm:
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
-  access-exp: 30
+  access-exp: ${ACCESS_EXP:1800}
   refresh-exp: ${REFRESH_EXP:7200}
 
 open-feign:
