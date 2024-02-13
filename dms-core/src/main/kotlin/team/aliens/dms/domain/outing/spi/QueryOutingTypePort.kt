@@ -4,5 +4,5 @@ import team.aliens.dms.domain.outing.model.OutingType
 
 interface QueryOutingTypePort {
 
-    fun exists(outingType: OutingType): Boolean
+    fun existsOutingType(outingType: OutingType): Boolean
 }

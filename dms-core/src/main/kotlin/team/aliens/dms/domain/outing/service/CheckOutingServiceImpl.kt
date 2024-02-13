@@ -46,7 +46,7 @@ class CheckOutingServiceImpl(
     }
 
     override fun checkOutingTypeExists(outingType: OutingType) {
-        if (queryOutingTypePort.exists(outingType)) {
+        if (queryOutingTypePort.existsOutingType(outingType)) {
             throw OutingTypeAlreadyExistsException
         }
     }

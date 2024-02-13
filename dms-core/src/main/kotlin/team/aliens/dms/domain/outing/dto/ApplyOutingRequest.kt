@@ -11,5 +11,5 @@ data class ApplyOutingRequest(
     val destination: String,
     val outingTypeTitle: String,
     val reason: String,
-    val companionIds: List<UUID>?,
+    val companionIds: List<UUID>?
 )

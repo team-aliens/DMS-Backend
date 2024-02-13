@@ -13,7 +13,7 @@ class OutingTypePersistenceAdapter(
     private val outingTypeMapper: OutingTypeMapper
 ) : OutingTypePort {
 
-    override fun exists(outingType: OutingType): Boolean {
+    override fun existsOutingType(outingType: OutingType): Boolean {
         val id = OutingTypeJpaEntityId(outingType.title, outingType.schoolId)
         return outingTypeRepository.existsById(id)
     }
