@@ -11,7 +11,7 @@ import team.aliens.dms.domain.outing.spi.CommandOutingTypePort
 @Service
 class CommandOutingServiceImpl(
     private val commandOutingApplicationPort: CommandOutingApplicationPort,
-    private val commandOutingCompanionPort: CommandOutingCompanionPort
+    private val commandOutingCompanionPort: CommandOutingCompanionPort,
     private val commandOutingTypePort: CommandOutingTypePort,
 ) : CommandOutingService {
 

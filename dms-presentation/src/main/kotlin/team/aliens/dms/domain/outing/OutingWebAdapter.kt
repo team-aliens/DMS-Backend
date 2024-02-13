@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
-import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
-import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
+import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
+import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 
 @Validated

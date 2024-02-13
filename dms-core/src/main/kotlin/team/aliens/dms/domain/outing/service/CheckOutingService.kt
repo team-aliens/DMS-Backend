@@ -13,4 +13,6 @@ interface CheckOutingService {
         outingTime: LocalTime,
         arrivalTime: LocalTime
     )
+
+    fun checkOutingTypeExists(outingType: OutingType)
 }
