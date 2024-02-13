@@ -5,6 +5,8 @@ import team.aliens.dms.common.annotation.Service
 @Service
 class OutingService(
     commandOutingService: CommandOutingService,
-    checkOutingService: CheckOutingService
+    checkOutingService: CheckOutingService,
+    getOutingService: GetOutingService
 ) : CommandOutingService by commandOutingService,
-    CheckOutingService by checkOutingService
+    CheckOutingService by checkOutingService,
+    GetOutingService by getOutingService
