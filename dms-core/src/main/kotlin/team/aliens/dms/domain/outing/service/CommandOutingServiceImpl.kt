@@ -38,4 +38,8 @@ class CommandOutingServiceImpl(
 
     override fun saveOutingType(outingType: OutingType): OutingType =
         commandOutingTypePort.saveOutingType(outingType)
+
+    override fun deleteOutingType(outingType: OutingType) {
+        commandOutingTypePort.deleteOutingType(outingType)
+    }
 }
