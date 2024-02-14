@@ -3,6 +3,7 @@ package team.aliens.dms.domain.outing.dto.request
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
+import team.aliens.dms.common.validator.NotNullElements
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -29,5 +30,6 @@ data class ApplyOutingWebRequest(
     @field:NotBlank
     val reason: String,
 
-    val companionIds: List<UUID>?,
+    @field:NotNullElements
+    val companionIds: List<UUID>?
 )

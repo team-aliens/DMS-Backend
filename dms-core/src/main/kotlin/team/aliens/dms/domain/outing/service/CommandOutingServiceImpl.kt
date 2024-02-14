@@ -15,7 +15,7 @@ class CommandOutingServiceImpl(
     private val commandOutingTypePort: CommandOutingTypePort,
 ) : CommandOutingService {
 
-    override fun apply(outingApplication: OutingApplication): OutingApplication {
+    override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication {
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
 
         val companionIds = outingApplication.companionIds
@@ -32,6 +32,7 @@ class CommandOutingServiceImpl(
 
         return savedOutingApplication
     }
+    
     override fun saveOutingType(outingType: OutingType): OutingType =
         commandOutingTypePort.saveOutingType(outingType)
 }

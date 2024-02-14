@@ -27,7 +27,7 @@ class ApplyOutingUseCase(
             arrivalTime = request.arrivalTime
         )
 
-        val outing = outingService.apply(
+        val outing = outingService.saveOutingApplication(
             OutingApplication(
                 studentId = student.id,
                 createdAt = LocalDateTime.now(),
