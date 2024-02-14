@@ -17,22 +17,25 @@ class CommandOutingServiceImpl(
 
     override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication {
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
+        saveAllOutingCompanions(savedOutingApplication)
 
+        return savedOutingApplication
+    }
+
+    private fun saveAllOutingCompanions(outingApplication: OutingApplication) {
         val companionIds = outingApplication.companionIds
         if (!companionIds.isNullOrEmpty()) {
             val outingCompanions = companionIds.map {
                 OutingCompanion(
-                    outingApplicationId = savedOutingApplication.id,
+                    outingApplicationId = outingApplication.id,
                     studentId = it
                 )
             }
 
             commandOutingCompanionPort.saveAllOutingCompanions(outingCompanions)
         }
-
-        return savedOutingApplication
     }
-    
+
     override fun saveOutingType(outingType: OutingType): OutingType =
         commandOutingTypePort.saveOutingType(outingType)
 }
