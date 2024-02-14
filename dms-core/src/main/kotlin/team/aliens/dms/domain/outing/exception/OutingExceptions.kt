@@ -13,3 +13,7 @@ object OutingApplicationNotFoundException : DmsException(
 object OutingAvailableTimeMismatchException : DmsException(
     OutingErrorCode.OUTING_AVAILABLE_TIME_MISMATCH
 )
+
+object OutingTypeAlreadyExistsException : DmsException(
+    OutingErrorCode.OUTING_TYPE_ALREADY_EXISTS
+)
