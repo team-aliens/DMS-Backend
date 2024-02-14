@@ -9,5 +9,5 @@ interface QueryOutingTypePort {
 
     fun queryOutingType(outingType: OutingType): OutingType?
 
-    fun queryAllOutingTypeTitlesBySchoolId(schoolId: UUID): List<String>
+    fun queryAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<String>
 }

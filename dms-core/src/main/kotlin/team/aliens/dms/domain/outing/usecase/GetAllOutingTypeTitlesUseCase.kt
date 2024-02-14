@@ -11,9 +11,9 @@ class GetAllOutingTypeTitlesUseCase(
     private val securityService: SecurityService
 ) {
 
-    fun execute(): GetAllOutingTypeTitlesResponse {
+    fun execute(keyword: String?): GetAllOutingTypeTitlesResponse {
         val schoolId = securityService.getCurrentSchoolId()
-        val titles = outingService.getAllOutingTypeTitlesBySchoolId(schoolId)
+        val titles = outingService.getAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId, keyword)
 
         return GetAllOutingTypeTitlesResponse(titles)
     }
