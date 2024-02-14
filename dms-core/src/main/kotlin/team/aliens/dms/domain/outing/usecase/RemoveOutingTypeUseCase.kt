@@ -15,7 +15,10 @@ class RemoveOutingTypeUseCase(
         val schoolId = securityService.getCurrentSchoolId()
 
         val outingType = outingService.getOutingType(
-            OutingType(title, schoolId)
+            OutingType(
+                title = title,
+                schoolId = schoolId
+            )
         )
 
         outingService.deleteOutingType(outingType)
