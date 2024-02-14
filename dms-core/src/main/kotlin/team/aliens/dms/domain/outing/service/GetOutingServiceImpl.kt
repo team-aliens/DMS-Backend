@@ -14,6 +14,6 @@ class GetOutingServiceImpl(
     override fun getOutingType(outingType: OutingType): OutingType =
         queryOutingTypePort.queryOutingType(outingType) ?: throw OutingTypeNotFoundException
 
-    override fun getAllOutingTypeTitlesBySchoolId(schoolId: UUID): List<String> =
-        queryOutingTypePort.queryAllOutingTypeTitlesBySchoolId(schoolId)
+    override fun getAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<String> =
+        queryOutingTypePort.queryAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId, keyword)
 }

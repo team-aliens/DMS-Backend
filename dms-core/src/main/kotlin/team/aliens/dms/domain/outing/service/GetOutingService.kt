@@ -7,5 +7,5 @@ interface GetOutingService {
 
     fun getOutingType(outingType: OutingType): OutingType
 
-    fun getAllOutingTypeTitlesBySchoolId(schoolId: UUID): List<String>
+    fun getAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<String>
 }

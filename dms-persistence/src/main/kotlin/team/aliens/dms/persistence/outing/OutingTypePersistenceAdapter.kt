@@ -30,11 +30,14 @@ class OutingTypePersistenceAdapter(
         )
     }
 
-    override fun queryAllOutingTypeTitlesBySchoolId(schoolId: UUID): List<String> =
+    override fun queryAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<String> =
         queryFactory
             .select(outingTypeJpaEntity.id.title)
             .from(outingTypeJpaEntity)
-            .where(outingTypeJpaEntity.id.schoolId.eq(schoolId))
+            .where(
+                outingTypeJpaEntity.id.schoolId.eq(schoolId),
+                keyword?.let { outingTypeJpaEntity.id.title.contains(it) }
+            )
             .fetch()
 
     override fun saveOutingType(outingType: OutingType): OutingType =
