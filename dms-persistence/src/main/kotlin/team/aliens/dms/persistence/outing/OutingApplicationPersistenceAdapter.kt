@@ -14,6 +14,10 @@ class OutingApplicationPersistenceAdapter(
     private val outingApplicationRepository: OutingApplicationJpaRepository
 ) : OutingApplicationPort {
 
+    override fun queryOutingApplicationById(outingApplicationId: UUID) = outingApplicationMapper.toDomain(
+        outingApplicationRepository.findByIdOrNull(outingApplicationId)
+    )
+
     override fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) =
         outingApplicationRepository.existsByOutAtAndStudentId(outAt, studentId)
 
