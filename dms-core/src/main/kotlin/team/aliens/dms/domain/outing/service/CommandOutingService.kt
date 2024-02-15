@@ -10,4 +10,6 @@ interface CommandOutingService {
     fun saveOutingType(outingType: OutingType): OutingType
 
     fun deleteOutingType(outingType: OutingType)
+
+    fun deleteOutingApplication(outingApplication: OutingApplication)
 }

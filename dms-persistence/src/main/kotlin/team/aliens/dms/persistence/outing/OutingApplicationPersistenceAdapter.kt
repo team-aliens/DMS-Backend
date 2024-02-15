@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.outing
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
@@ -27,4 +28,10 @@ class OutingApplicationPersistenceAdapter(
                 outingApplicationMapper.toEntity(outingApplication)
             )
         )!!
+
+    override fun deleteOutingApplication(outingApplication: OutingApplication) {
+        outingApplicationRepository.delete(
+            outingApplicationMapper.toEntity(outingApplication)
+        )
+    }
 }

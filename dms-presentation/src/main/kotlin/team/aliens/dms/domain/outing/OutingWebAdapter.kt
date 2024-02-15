@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.outing
 
 import jakarta.validation.Valid
+import org.jetbrains.annotations.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,6 +19,8 @@ import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
+import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
+import java.util.UUID
 
 @Validated
 @RequestMapping("/outings")
@@ -25,7 +28,8 @@ import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 class OutingWebAdapter(
     private val applyOutingUseCase: ApplyOutingUseCase,
     private val createOutingTypeUseCase: CreateOutingTypeUseCase,
-    private val removeOutingTypeUseCase: RemoveOutingTypeUseCase
+    private val removeOutingTypeUseCase: RemoveOutingTypeUseCase,
+    private val unApplyOutingUseCase: UnApplyOutingUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,6 +46,12 @@ class OutingWebAdapter(
                 companionIds = webRequest.companionIds
             )
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{outing-application-id}")
+    fun unApplyOuting(@PathVariable("outing-application-id") @NotNull outingApplicationId: UUID) {
+        unApplyOutingUseCase.execute(outingApplicationId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
