@@ -21,3 +21,7 @@ object OutingTypeAlreadyExistsException : DmsException(
 object OutingTypeNotFoundException : DmsException(
     OutingErrorCode.OUTING_TYPE_NOT_FOUND
 )
+
+object OutingTypeMismatchException : DmsException(
+    OutingErrorCode.OUTING_TYPE_MISMATCH
+)
