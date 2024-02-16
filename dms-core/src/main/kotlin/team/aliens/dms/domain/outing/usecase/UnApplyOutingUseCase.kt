@@ -1,23 +1,21 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.notice.exception.IsNotWriterException
+import team.aliens.dms.domain.outing.exception.OutingTypeMismatchException
+import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.service.OutingService
-import team.aliens.dms.domain.user.service.UserService
-import java.util.*
+import java.util.UUID
 
 @UseCase
 class UnApplyOutingUseCase(
-    private val userService: UserService,
     private val outingService: OutingService
 ) {
 
     fun execute(outingApplicationId: UUID) {
-        val user = userService.getCurrentUser()
         val outing = outingService.getOutingById(outingApplicationId)
 
-        if (outing.studentId != user.id) {
-            throw  IsNotWriterException
+        if (outing.status != OutingStatus.REQUESTED) {
+            throw OutingTypeMismatchException
         }
 
         outingService.deleteOutingApplication(outing)

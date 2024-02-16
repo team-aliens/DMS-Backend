@@ -19,8 +19,6 @@ class GetOutingServiceImpl(
     override fun getOutingType(outingType: OutingType): OutingType =
         queryOutingTypePort.queryOutingType(outingType) ?: throw OutingTypeNotFoundException
 
-    override fun getOutingById(outingApplicationId: UUID): OutingApplication {
-        return queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId)
-            ?: throw OutingApplicationNotFoundException
-    }
+    override fun getOutingById(outingApplicationId: UUID): OutingApplication =
+        queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId) ?: throw OutingApplicationNotFoundException
 }
