@@ -33,7 +33,7 @@ class OutingApplicationPersistenceAdapter(
         start: LocalDate,
         end: LocalDate,
     ): List<OutingApplicationVO> {
-        val studentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
+        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
 
         return queryFactory
