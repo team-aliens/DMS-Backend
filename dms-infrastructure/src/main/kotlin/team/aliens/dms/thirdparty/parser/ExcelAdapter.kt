@@ -270,20 +270,18 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             attributes.addAll(listOf("동행${order} 이름", "동행${order} 학번"))
         }
 
-        val outingApplicationInfosList = outingApplicationVos.map {
-            val details = mutableListOf(
-                it.studentName,
-                it.studentGcn,
-                it.outAt.toString(),
-                it.outingTime.toString(),
-                it.arrivalTime.toString()
-            )
-
-            it.outingCompanionVOs.forEach { outingCompanion ->
-                details.addAll(listOf(outingCompanion.studentName, outingCompanion.studentGcn))
+        val outingApplicationInfosList = outingApplicationVos.map { outingApplication ->
+            mutableListOf(
+                outingApplication.studentName,
+                outingApplication.studentGcn,
+                outingApplication.outAt.toString(),
+                outingApplication.outingTime.toString(),
+                outingApplication.arrivalTime.toString()
+            ).apply {
+                outingApplication.outingCompanionVOs.forEach { outingCompanion ->
+                    addAll(listOf(outingCompanion.studentName, outingCompanion.studentGcn))
+                }
             }
-
-            details
         }
 
         return createExcelSheet(attributes, outingApplicationInfosList)
