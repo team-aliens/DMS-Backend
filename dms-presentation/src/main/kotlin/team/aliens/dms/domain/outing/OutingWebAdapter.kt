@@ -24,15 +24,14 @@ import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.model.OutingStatus
-import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
-import java.util.UUID
 import java.time.LocalDate
+import java.util.UUID
 
 @Validated
 @RequestMapping("/outings")
@@ -42,7 +41,7 @@ class OutingWebAdapter(
     private val createOutingTypeUseCase: CreateOutingTypeUseCase,
     private val removeOutingTypeUseCase: RemoveOutingTypeUseCase,
     private val getAllOutingTypeTitlesUseCase: GetAllOutingTypeTitlesUseCase,
-    private val updateOutingStatusUseCase: UpdateOutingStatusUseCase
+    private val updateOutingStatusUseCase: UpdateOutingStatusUseCase,
     private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase
 ) {
 
@@ -89,7 +88,7 @@ class OutingWebAdapter(
     ) {
         updateOutingStatusUseCase.execute(outingApplicationId, outingStatus)
     }
-    
+
     @GetMapping("/files")
     fun exportAllOutingApplications(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) start: LocalDate,

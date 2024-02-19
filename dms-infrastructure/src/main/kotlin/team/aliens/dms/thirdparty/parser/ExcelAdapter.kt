@@ -267,7 +267,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         for (i in 0 until maxOutingCompanionCount) {
             val order = i + 1 // ex) 동행1 이름, 동행1 학번
-            attributes.addAll(listOf("동행${order} 이름", "동행${order} 학번"))
+            attributes.addAll(listOf("동행$order 이름", "동행$order 학번"))
         }
 
         val outingApplicationInfosList = outingApplicationVos.map { outingApplication ->
