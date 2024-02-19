@@ -8,5 +8,5 @@ interface GetOutingService {
 
     fun getOutingType(outingType: OutingType): OutingType
 
-    fun getOutingById(outingApplicationId: UUID): OutingApplication
+    fun getOutingApplicationById(outingApplicationId: UUID): OutingApplication
 }
