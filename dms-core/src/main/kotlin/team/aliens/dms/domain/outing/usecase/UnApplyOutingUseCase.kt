@@ -14,7 +14,7 @@ class UnApplyOutingUseCase(
 
         outingService.getOutingApplicationById(outingApplicationId)
             .apply {
-                checkOutingType(outing.status)
+                checkCancelable(outing.status)
             }
 
         outingService.deleteOutingApplication(outing)
