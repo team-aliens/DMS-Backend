@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile
 import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.common.extension.toFile
 import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
+import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.student.dto.CheckStudentGcnRequest
@@ -42,11 +43,12 @@ import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
 import team.aliens.dms.domain.student.usecase.ExportStudentUseCase
 import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
 import team.aliens.dms.domain.student.usecase.ImportStudentUseCase
+import team.aliens.dms.domain.student.usecase.ManagerGetAllStudentsUseCase
 import team.aliens.dms.domain.student.usecase.QueryStudentDetailsUseCase
-import team.aliens.dms.domain.student.usecase.QueryStudentsUseCase
 import team.aliens.dms.domain.student.usecase.RemoveStudentUseCase
 import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
 import team.aliens.dms.domain.student.usecase.SignUpUseCase
+import team.aliens.dms.domain.student.usecase.StudentGetAllStudentsUseCase
 import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
 import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentGcnByFileUseCase
@@ -68,12 +70,13 @@ class StudentWebAdapter(
     private val studentMyPageUseCase: StudentMyPageUseCase,
     private val studentWithdrawalUseCase: StudentWithdrawalUseCase,
     private val exportStudentUseCase: ExportStudentUseCase,
-    private val queryStudentsUseCase: QueryStudentsUseCase,
+    private val managerGetAllStudentsUseCase: ManagerGetAllStudentsUseCase,
     private val queryStudentDetailsUseCase: QueryStudentDetailsUseCase,
     private val removeStudentUseCase: RemoveStudentUseCase,
     private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
     private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase,
-    private val importStudentUseCase: ImportStudentUseCase
+    private val importStudentUseCase: ImportStudentUseCase,
+    private val studentGetAllStudentsUseCase: StudentGetAllStudentsUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -178,8 +181,8 @@ class StudentWebAdapter(
         return response.file
     }
 
-    @GetMapping
-    fun getStudents(
+    @GetMapping("/manager")
+    fun managerGetAllStudents(
         @RequestParam(required = false) name: String?,
         @RequestParam @NotNull sort: Sort,
         @RequestParam(name = "filter_type", required = false) filterType: PointFilterType?,
@@ -187,12 +190,14 @@ class StudentWebAdapter(
         @RequestParam(name = "max_point", required = false) maxPoint: Int?,
         @RequestParam(name = "tag_id", required = false) tagIds: List<UUID>?
     ): StudentsResponse {
-        return queryStudentsUseCase.execute(
+        return managerGetAllStudentsUseCase.execute(
             name = name,
             sort = sort,
-            filterType = filterType,
-            minPoint = minPoint,
-            maxPoint = maxPoint,
+            pointFilter = PointFilter(
+                filterType = filterType,
+                minPoint = minPoint,
+                maxPoint = maxPoint
+            ),
             tagIds = tagIds
         )
     }
@@ -226,5 +231,10 @@ class StudentWebAdapter(
         importStudentUseCase.execute(
             file!!.toFile()
         )
+    }
+
+    @GetMapping
+    fun studentGetAllStudents(@RequestParam(required = false) name: String?): StudentsResponse {
+        return studentGetAllStudentsUseCase.execute(name)
     }
 }
