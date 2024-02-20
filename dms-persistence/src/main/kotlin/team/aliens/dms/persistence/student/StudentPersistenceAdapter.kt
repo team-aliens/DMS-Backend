@@ -361,6 +361,7 @@ class StudentPersistenceAdapter(
         return queryFactory
             .select(
                 QQueryAllStudentsVO(
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
