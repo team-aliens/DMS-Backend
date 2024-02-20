@@ -47,7 +47,7 @@ data class StudentNameResponse(
 )
 
 data class StudentDetailsResponse(
-    val id: UUID? = null,
+    val id: UUID,
     val name: String,
     val gcn: String,
     val profileImageUrl: String,
@@ -123,6 +123,7 @@ data class StudentsResponse(
         fun of(students: List<AllStudentsVO>) = StudentsResponse(
             students = students.map {
                 StudentDetailsResponse(
+                    id = it.id,
                     name = it.name,
                     gcn = it.gcn,
                     profileImageUrl = it.profileImageUrl
