@@ -17,6 +17,8 @@ class CommandOutingServiceImpl(
 
     override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication {
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
+            .copy(companionIds = outingApplication.companionIds)
+
         saveAllOutingCompanions(savedOutingApplication)
 
         return savedOutingApplication

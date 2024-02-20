@@ -7,18 +7,25 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
+import java.time.LocalDate
 import java.util.UUID
 
 @Service
 class GetOutingServiceImpl(
-
-    private val queryOutingApplicationPort: QueryOutingApplicationPort,
-    private val queryOutingTypePort: QueryOutingTypePort
+    private val queryOutingTypePort: QueryOutingTypePort,
+    private val queryOutingApplicationPort: QueryOutingApplicationPort
 ) : GetOutingService {
 
-    override fun getOutingType(outingType: OutingType): OutingType =
+    override fun getOutingType(outingType: OutingType) =
         queryOutingTypePort.queryOutingType(outingType) ?: throw OutingTypeNotFoundException
 
+    override fun getAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId: UUID, keyword: String?) =
+        queryOutingTypePort.queryAllOutingTypeTitlesBySchoolIdAndKeyword(schoolId, keyword)
+
     override fun getOutingApplicationById(outingApplicationId: UUID): OutingApplication =
-        queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId) ?: throw OutingApplicationNotFoundException
+        queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId)
+            ?: throw OutingApplicationNotFoundException
+
+    override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate) =
+        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
 }
