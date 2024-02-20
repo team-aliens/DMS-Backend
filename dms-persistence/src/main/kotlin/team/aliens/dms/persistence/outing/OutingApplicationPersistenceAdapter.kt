@@ -79,4 +79,10 @@ class OutingApplicationPersistenceAdapter(
                 outingApplicationMapper.toEntity(outingApplication)
             )
         )!!
+
+    override fun deleteOutingApplication(outingApplication: OutingApplication) {
+        outingApplicationRepository.delete(
+            outingApplicationMapper.toEntity(outingApplication)
+        )
+    }
 }

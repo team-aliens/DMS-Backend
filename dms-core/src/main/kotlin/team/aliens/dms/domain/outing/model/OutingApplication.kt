@@ -2,6 +2,7 @@ package team.aliens.dms.domain.outing.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
+import team.aliens.dms.domain.outing.exception.OutingTypeMismatchException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -34,4 +35,13 @@ data class OutingApplication(
 
     val companionIds: List<UUID>? = null
 
-) : SchoolIdDomain
+) : SchoolIdDomain {
+
+    fun checkCancelable(
+        status: OutingStatus
+    ) {
+        if (status != OutingStatus.REQUESTED) {
+            throw OutingTypeMismatchException
+        }
+    }
+}

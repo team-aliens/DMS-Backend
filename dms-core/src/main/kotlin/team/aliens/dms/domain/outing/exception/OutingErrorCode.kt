@@ -10,12 +10,13 @@ enum class OutingErrorCode(
 ) : ErrorProperty {
 
     OUTING_AVAILABLE_TIME_MISMATCH(ErrorStatus.FORBIDDEN, "Outing Available Time Mismatch", 1),
+    OUTING_TYPE_MISMATCH(ErrorStatus.FORBIDDEN, "Outing Type Mismatch", 2),
 
     OUTING_APPLICATION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Outing Application Not Found", 1),
     OUTING_TYPE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Outing Type Not Found", 2),
 
     OUTING_APPLICATION_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Application Already Exists", 1),
-    OUTING_TYPE_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Type Already Exists", 2)
+    OUTING_TYPE_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Type Already Exists", 2),
     ;
 
     override fun status(): Int = status

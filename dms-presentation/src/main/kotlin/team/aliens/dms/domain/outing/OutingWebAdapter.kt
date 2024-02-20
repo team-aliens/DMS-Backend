@@ -29,6 +29,7 @@ import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
+import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
 import java.time.LocalDate
 import java.util.UUID
@@ -40,6 +41,7 @@ class OutingWebAdapter(
     private val applyOutingUseCase: ApplyOutingUseCase,
     private val createOutingTypeUseCase: CreateOutingTypeUseCase,
     private val removeOutingTypeUseCase: RemoveOutingTypeUseCase,
+    private val unApplyOutingUseCase: UnApplyOutingUseCase,
     private val getAllOutingTypeTitlesUseCase: GetAllOutingTypeTitlesUseCase,
     private val updateOutingStatusUseCase: UpdateOutingStatusUseCase,
     private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase
@@ -59,6 +61,12 @@ class OutingWebAdapter(
                 companionIds = webRequest.companionIds
             )
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{outing-application-id}")
+    fun unApplyOuting(@PathVariable("outing-application-id") @NotNull outingApplicationId: UUID) {
+        unApplyOutingUseCase.execute(outingApplicationId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)

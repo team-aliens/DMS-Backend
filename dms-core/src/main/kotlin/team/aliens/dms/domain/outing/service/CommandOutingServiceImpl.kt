@@ -44,4 +44,8 @@ class CommandOutingServiceImpl(
     override fun deleteOutingType(outingType: OutingType) {
         commandOutingTypePort.deleteOutingType(outingType)
     }
+
+    override fun deleteOutingApplication(outingApplication: OutingApplication) {
+        commandOutingApplicationPort.deleteOutingApplication(outingApplication)
+    }
 }
