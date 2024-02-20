@@ -1,9 +1,9 @@
 package team.aliens.dms.persistence.outing
 
-import com.querydsl.core.group.GroupBy
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
@@ -28,6 +28,11 @@ class OutingApplicationPersistenceAdapter(
 
     override fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) =
         outingApplicationRepository.existsByOutAtAndStudentId(outAt, studentId)
+
+    override fun queryOutingApplicationById(outingApplicationId: UUID) =
+        outingApplicationMapper.toDomain(
+            outingApplicationRepository.findByIdOrNull(outingApplicationId)
+        )
 
     override fun queryAllOutingApplicationVOsBetweenStartAndEnd(
         start: LocalDate,
