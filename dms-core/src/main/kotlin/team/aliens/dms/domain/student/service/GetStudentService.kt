@@ -7,6 +7,7 @@ import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import java.util.UUID
 
 interface GetStudentService {
@@ -49,4 +50,6 @@ interface GetStudentService {
         studentMap: Map<Triple<Int, Int, Int>, Student>,
         studentVOs: List<ExcelStudentVO>,
     ): List<Student>
+
+    fun getAllStudentsByName(name: String?): List<AllStudentsVO>
 }
