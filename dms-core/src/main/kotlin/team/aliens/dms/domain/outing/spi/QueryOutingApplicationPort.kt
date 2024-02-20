@@ -7,8 +7,6 @@ import java.util.UUID
 
 interface QueryOutingApplicationPort {
 
-    fun queryOutingApplicationById(outingApplicationId: UUID): OutingApplication?
-
     fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID): Boolean
 
     fun queryOutingApplicationById(outingApplicationId: UUID): OutingApplication?
