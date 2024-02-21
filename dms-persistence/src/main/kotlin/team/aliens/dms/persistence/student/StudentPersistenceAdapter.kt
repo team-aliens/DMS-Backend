@@ -118,7 +118,7 @@ class StudentPersistenceAdapter(
 
     override fun queryBySchoolIdAndRoomNumberAndRoomLocationIn(
         schoolId: UUID,
-        roomNumberLocations: List<Pair<String, String>>,
+        roomNumberLocations: List<Pair<String, String>>
     ): List<Student> {
 
         return queryFactory
