@@ -119,7 +119,7 @@ data class StudentsResponse(
             }
         )
 
-        @JvmName("ofAllStudents")
+        @JvmName("ofAllStudentsVO")
         fun of(students: List<AllStudentsVO>) = StudentsResponse(
             students = students.map {
                 StudentDetailsResponse(

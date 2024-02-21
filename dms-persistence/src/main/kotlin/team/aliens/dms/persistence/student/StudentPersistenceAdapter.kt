@@ -153,7 +153,7 @@ class StudentPersistenceAdapter(
         sort: Sort,
         schoolId: UUID,
         pointFilter: PointFilter,
-        tagIds: List<UUID>?,
+        tagIds: List<UUID>?
     ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
