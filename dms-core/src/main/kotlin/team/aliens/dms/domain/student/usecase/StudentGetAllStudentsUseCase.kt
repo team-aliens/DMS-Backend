@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.student.usecase
 
-import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.dto.StudentsResponse
 import team.aliens.dms.domain.student.service.StudentService
 
-@UseCase
+@ReadOnlyUseCase
 class StudentGetAllStudentsUseCase(
     private val studentService: StudentService
 ) {
