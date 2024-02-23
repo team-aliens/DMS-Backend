@@ -77,4 +77,7 @@ object Dependencies {
     // notification
     const val FCM = "com.google.firebase:firebase-admin:${DependencyVersions.FCM_VERSION}"
 
+    // flyway
+    const val FLYWAY = "org.flywaydb:flyway-mysql:${DependencyVersions.FLYWAY_VERSION}"
+
 }

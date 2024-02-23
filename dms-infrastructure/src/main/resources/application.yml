@@ -26,6 +26,11 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+
   data:
     redis:
       port: ${REDIS_PORT:6379}
