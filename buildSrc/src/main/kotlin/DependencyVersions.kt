@@ -17,4 +17,5 @@ object DependencyVersions {
     const val SENTRY_VERSION = "6.2.1"
     const val ASPECTJ_VERSION = "1.9.7"
     const val FCM_VERSION = "8.1.0"
+    const val FLYWAY_VERSION = "10.8.1"
 }
