@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.extension.setExcelContentDisposition
+import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
+import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
+import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
 import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
-import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
-import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
-import team.aliens.dms.domain.outing.model.OutingStatus
+import team.aliens.dms.domain.outing.dto.CurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
@@ -31,6 +32,7 @@ import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
+import team.aliens.dms.domain.outing.usecase.QueryCurrentOutingApplicationUseCase
 import java.time.LocalDate
 import java.util.UUID
 
@@ -44,7 +46,8 @@ class OutingWebAdapter(
     private val unApplyOutingUseCase: UnApplyOutingUseCase,
     private val getAllOutingTypeTitlesUseCase: GetAllOutingTypeTitlesUseCase,
     private val updateOutingStatusUseCase: UpdateOutingStatusUseCase,
-    private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase
+    private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase,
+    private val queryCurrentOutingApplicationUseCase: QueryCurrentOutingApplicationUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -105,5 +108,10 @@ class OutingWebAdapter(
         val response = exportAllOutingApplicationsUseCase.execute(start, end)
         httpResponse.setExcelContentDisposition(response.fileName)
         return response.file
+    }
+
+    @GetMapping("/my")
+    fun getCurrentOutingApplication(): CurrentOutingApplicationResponse {
+        return queryCurrentOutingApplicationUseCase.execute()
     }
 }
