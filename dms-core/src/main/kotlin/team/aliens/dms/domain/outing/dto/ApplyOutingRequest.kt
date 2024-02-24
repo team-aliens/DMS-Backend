@@ -8,8 +8,6 @@ data class ApplyOutingRequest(
     val outAt: LocalDate,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
-    val destination: String,
     val outingTypeTitle: String,
-    val reason: String,
     val companionIds: List<UUID>?
 )

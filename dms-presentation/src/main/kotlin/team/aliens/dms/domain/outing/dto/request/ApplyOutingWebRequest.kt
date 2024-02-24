@@ -18,17 +18,9 @@ data class ApplyOutingWebRequest(
     @field:NotNull
     val arrivalTime: LocalTime,
 
-    @field:Size(max = 15)
-    @field:NotBlank
-    val destination: String,
-
     @field:Size(max = 20)
     @field:NotBlank
     val outingTypeTitle: String,
-
-    @field:Size(max = 100)
-    @field:NotBlank
-    val reason: String,
 
     @field:NotNullElements
     val companionIds: List<UUID>?
