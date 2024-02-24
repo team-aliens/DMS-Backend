@@ -97,7 +97,7 @@ class OutingApplicationPersistenceAdapter(
                 .on(outingCompanionJpaEntity.id.studentId.eq(studentJpaEntity.id))
                 .where(
                     outingApplicationJpaEntity.student.id.eq(student.id),
-                    outingApplicationJpaEntity.status.eq(OutingStatus.OUTING)
+                    outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
                 )
                 .fetchOne()
         }

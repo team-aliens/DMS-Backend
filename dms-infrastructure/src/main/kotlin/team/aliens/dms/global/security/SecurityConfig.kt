@@ -174,7 +174,8 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/outings/types").hasAnyAuthority(STUDENT.name, MANAGER.name)
                 .requestMatchers(HttpMethod.PATCH, "/outings/{outing-application-id}").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/outings/files").hasAuthority(MANAGER.name)
-                
+                .requestMatchers(HttpMethod.GET, "/outings/my").hasAuthority(STUDENT.name)
+
                 .anyRequest().denyAll()
             }
         http
