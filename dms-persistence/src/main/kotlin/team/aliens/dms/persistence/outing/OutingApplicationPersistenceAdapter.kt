@@ -8,15 +8,17 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
+import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.outingApplicationJpaEntity
 import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outingCompanionJpaEntity
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
+import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
-import team.aliens.dms.persistence.outing.repository.vo.QueryOutingApplicationVO
+import team.aliens.dms.persistence.outing.repository.vo.QueryCurrentOutingApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
@@ -76,31 +78,30 @@ class OutingApplicationPersistenceAdapter(
             )
     }
 
-        override fun queryCurrentOutingApplication(student: Student): OutingApplicationVO {
-            return queryFactory
-                .select(
-                    QQueryOutingApplicationVO(
-                        outingApplicationJpaEntity.outAt,
-                        outingApplicationJpaEntity.outingType,
-                        outingApplicationJpaEntity.status,
-                        outingApplicationJpaEntity.outingTime,
-                        outingApplicationJpaEntity.arrivalTime,
-                        outingApplicationJpaEntity.destination,
-                        outingApplicationJpaEntity.reason,
-                        outingCompanionJpaEntity.student.name
-                    )
+    override fun queryCurrentOutingApplication(student: Student): QueryCurrentOutingApplicationVO? {
+        return queryFactory
+            .select(
+                QQueryCurrentOutingApplicationVO(
+                    outingApplicationJpaEntity.outAt,
+                    outingApplicationJpaEntity.outingType.id.title,
+                    outingApplicationJpaEntity.status,
+                    outingApplicationJpaEntity.outingTime,
+                    outingApplicationJpaEntity.arrivalTime,
+                    outingCompanionJpaEntity.student.name
                 )
-                .from(outingApplicationJpaEntity)
-                .leftJoin(outingCompanionJpaEntity)
-                .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.id.outingApplicationId))
-                .leftJoin(studentJpaEntity)
-                .on(outingCompanionJpaEntity.id.studentId.eq(studentJpaEntity.id))
-                .where(
-                    outingApplicationJpaEntity.student.id.eq(student.id),
-                    outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
-                )
-                .fetchOne()
-        }
+            )
+            .from(outingApplicationJpaEntity)
+            .leftJoin(outingCompanionJpaEntity)
+            .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.id.outingApplicationId))
+            .leftJoin(studentJpaEntity)
+            .on(outingCompanionJpaEntity.id.studentId.eq(studentJpaEntity.id))
+            .where(
+                outingApplicationJpaEntity.student.id.eq(student.id),
+                outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
+            )
+            .fetchOne()
+    }
+
 
     override fun saveOutingApplication(outingApplication: OutingApplication) =
         outingApplicationMapper.toDomain(

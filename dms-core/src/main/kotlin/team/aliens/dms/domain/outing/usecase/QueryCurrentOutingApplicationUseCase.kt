@@ -5,6 +5,7 @@ import team.aliens.dms.domain.outing.dto.CurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.student.service.StudentService
 
+
 @ReadOnlyUseCase
 class QueryCurrentOutingApplicationUseCase(
     private val outingService: OutingService,
