@@ -10,17 +10,15 @@ import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
-import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.outingApplicationJpaEntity
 import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outingCompanionJpaEntity
+import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingTypeJpaEntity
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
 import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
-import team.aliens.dms.persistence.outing.repository.vo.QueryCurrentOutingApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
 import java.util.UUID
 
@@ -41,7 +39,7 @@ class OutingApplicationPersistenceAdapter(
 
     override fun queryAllOutingApplicationVOsBetweenStartAndEnd(
         start: LocalDate,
-        end: LocalDate,
+        end: LocalDate
     ): List<OutingApplicationVO> {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
@@ -78,30 +76,35 @@ class OutingApplicationPersistenceAdapter(
             )
     }
 
-    override fun queryCurrentOutingApplication(student: Student): QueryCurrentOutingApplicationVO? {
+    override fun queryCurrentOutingApplicationVO(studentId: UUID): CurrentOutingApplicationVO? {
+        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
+        val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
+
         return queryFactory
-            .select(
-                QQueryCurrentOutingApplicationVO(
-                    outingApplicationJpaEntity.outAt,
-                    outingApplicationJpaEntity.outingType.id.title,
-                    outingApplicationJpaEntity.status,
-                    outingApplicationJpaEntity.outingTime,
-                    outingApplicationJpaEntity.arrivalTime,
-                    outingCompanionJpaEntity.student.name
-                )
-            )
-            .from(outingApplicationJpaEntity)
+            .selectFrom(outingApplicationJpaEntity)
             .leftJoin(outingCompanionJpaEntity)
-            .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.id.outingApplicationId))
-            .leftJoin(studentJpaEntity)
-            .on(outingCompanionJpaEntity.id.studentId.eq(studentJpaEntity.id))
+            .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
+            .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
+            .join(outingApplicationJpaEntity.student, studentJpaEntity)
+            .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-                outingApplicationJpaEntity.student.id.eq(student.id),
+                studentJpaEntity.id.eq(studentId),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
-            .fetchOne()
+            .transform(
+                groupBy(outingApplicationJpaEntity.id)
+                    .list(
+                        QQueryCurrentOutingApplicationVO(
+                            outingApplicationJpaEntity.outAt,
+                            outingTypeJpaEntity.id.title,
+                            outingApplicationJpaEntity.status,
+                            outingApplicationJpaEntity.outingTime,
+                            outingApplicationJpaEntity.arrivalTime,
+                            list(outingCompanionStudentJpaEntity.name)
+                        )
+                    )
+            ).firstOrNull()
     }
-
 
     override fun saveOutingApplication(outingApplication: OutingApplication) =
         outingApplicationMapper.toDomain(
