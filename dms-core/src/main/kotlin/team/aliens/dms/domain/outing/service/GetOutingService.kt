@@ -4,7 +4,6 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
-import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
 import java.util.UUID
 
