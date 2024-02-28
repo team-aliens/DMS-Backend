@@ -15,5 +15,5 @@ interface QueryOutingApplicationPort {
 
     fun queryAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationVO>
 
-    fun queryCurrentOutingApplication(student: Student): CurrentOutingApplicationVO
+    fun queryCurrentOutingApplicationVO(studentId: UUID): CurrentOutingApplicationVO?
 }
