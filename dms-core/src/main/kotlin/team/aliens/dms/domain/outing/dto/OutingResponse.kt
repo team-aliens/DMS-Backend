@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.outing.dto
 
 import team.aliens.dms.domain.outing.model.OutingStatus
-import team.aliens.dms.domain.outing.model.OutingType
+import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -14,12 +14,25 @@ data class ExportAllOutingApplicationsResponse(
     val fileName: String
 )
 
-data class CurrentOutingApplicationResponse(
+data class GetCurrentOutingApplicationResponse(
     val outAt: LocalDate,
-    val outingType: OutingType,
+    val outingTypeTitle: String,
     val status: OutingStatus,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
-    val students: List<String>,
-    val reason: String
-)
+    val outingCompanions: List<String>
+) {
+    companion object {
+        fun of(currentOutingApplicationVO: CurrentOutingApplicationVO) =
+            currentOutingApplicationVO.run {
+                GetCurrentOutingApplicationResponse(
+                    outAt = outAt,
+                    outingTypeTitle = outingTypeTitle,
+                    status = status,
+                    outingTime = outingTime,
+                    arrivalTime = arrivalTime,
+                    outingCompanions = outingCompanions
+                )
+            }
+    }
+}

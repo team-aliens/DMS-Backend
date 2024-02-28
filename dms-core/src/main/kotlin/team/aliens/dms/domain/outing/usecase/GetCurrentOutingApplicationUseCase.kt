@@ -1,21 +1,21 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.outing.dto.CurrentOutingApplicationResponse
+import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.student.service.StudentService
 
-
 @ReadOnlyUseCase
-class QueryCurrentOutingApplicationUseCase(
+class GetCurrentOutingApplicationUseCase(
     private val outingService: OutingService,
     private val studentService: StudentService
 ) {
 
-    fun execute(): CurrentOutingApplicationResponse {
-
+    fun execute(): GetCurrentOutingApplicationResponse {
         val student = studentService.getCurrentStudent()
 
-        val outingApplication = outingService.getCurrentOutingApplication(student)
+        val currentOutingApplicationVO = outingService.getCurrentOutingApplication(student.id)
+
+        return GetCurrentOutingApplicationResponse.of(currentOutingApplicationVO)
     }
 }
