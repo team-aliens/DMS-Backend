@@ -36,6 +36,7 @@ jobs:
           access_key: ${{ secrets.ACCESS_KEY }}
           github_token: ${{ secrets.PAT }}
           buildargs: |
+            PROFILE=dev
             MYSQL_HOST=${{ secrets.MYSQL_HOST }}
             MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}

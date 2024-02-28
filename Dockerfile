@@ -5,6 +5,9 @@ ENV TZ=Asia/Seoul
 
 HEALTHCHECK --interval=5s --timeout=3s --retries=4 CMD curl -f http://localhost:8080 || exit 1
 
+ARG PROFILE
+ENV PROFILE ${PROFILE}
+
 ARG MYSQL_HOST
 ENV MYSQL_HOST ${MYSQL_HOST}
 
