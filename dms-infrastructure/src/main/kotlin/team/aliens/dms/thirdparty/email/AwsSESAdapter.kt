@@ -11,7 +11,7 @@ import com.amazonaws.services.simpleemail.model.UpdateTemplateRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.thymeleaf.context.Context
-import org.thymeleaf.spring5.SpringTemplateEngine
+import org.thymeleaf.spring6.SpringTemplateEngine
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.SendEmailPort
 import team.aliens.dms.domain.template.spi.TemplatePort

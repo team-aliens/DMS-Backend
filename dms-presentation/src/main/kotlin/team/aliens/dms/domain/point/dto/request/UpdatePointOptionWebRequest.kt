@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.point.dto.request
 
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
 data class UpdatePointOptionWebRequest(
     @field:NotBlank

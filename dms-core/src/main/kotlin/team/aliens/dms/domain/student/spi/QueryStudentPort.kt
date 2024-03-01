@@ -5,6 +5,7 @@ import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import java.util.UUID
 
 interface QueryStudentPort {
@@ -38,4 +39,6 @@ interface QueryStudentPort {
     fun queryStudentsBySchoolId(schoolId: UUID): List<Student>
 
     fun queryAllStudentsByIdsIn(studentIds: List<UUID>): List<Student>
+
+    fun queryAllStudentsByName(name: String?): List<AllStudentsVO>
 }

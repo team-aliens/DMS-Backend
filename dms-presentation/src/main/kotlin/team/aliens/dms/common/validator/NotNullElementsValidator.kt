@@ -1,8 +1,8 @@
 package team.aliens.dms.common.validator
 
-import javax.validation.Constraint
-import javax.validation.ConstraintValidator
-import javax.validation.ConstraintValidatorContext
+import jakarta.validation.Constraint
+import jakarta.validation.ConstraintValidator
+import jakarta.validation.ConstraintValidatorContext
 import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.FIELD)

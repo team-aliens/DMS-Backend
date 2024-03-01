@@ -20,4 +20,7 @@ class SecurityServiceImpl(
             throw PasswordMismatchException
         }
     }
+
+    override fun getCurrentSchoolId() =
+        securityPort.getCurrentUserSchoolId()
 }

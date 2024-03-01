@@ -11,7 +11,6 @@ import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.manager.dto.PointFilter
@@ -21,16 +20,19 @@ import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
+import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
+import team.aliens.dms.persistence.student.repository.vo.QQueryAllStudentsVO
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentWithPointVO
 import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
+import java.util.UUID
 
 @Component
 class StudentPersistenceAdapter(
@@ -354,4 +356,21 @@ class StudentPersistenceAdapter(
             .map {
                 studentMapper.toDomain(it)!!
             }
+
+    override fun queryAllStudentsByName(name: String?): List<AllStudentsVO> {
+        return queryFactory
+            .select(
+                QQueryAllStudentsVO(
+                    studentJpaEntity.id,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    studentJpaEntity.profileImageUrl,
+                )
+            )
+            .from(studentJpaEntity)
+            .where(name?.let { studentJpaEntity.name.contains(it) })
+            .fetch()
+    }
 }

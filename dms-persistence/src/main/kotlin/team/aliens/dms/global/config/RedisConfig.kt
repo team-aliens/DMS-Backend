@@ -12,13 +12,13 @@ import java.time.Duration
 @Configuration
 class RedisConfig(
 
-    @Value("\${spring.redis.host}")
+    @Value("\${spring.data.redis.host}")
     private val redisHost: String,
 
-    @Value("\${spring.redis.port}")
+    @Value("\${spring.data.redis.port}")
     private val redisPort: Int,
 
-    @Value("\${spring.redis.password}")
+    @Value("\${spring.data.redis.password}")
     private val redisPassword: String
 
 ) {

@@ -1,13 +1,13 @@
 package team.aliens.dms.persistence.point.entity
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Table
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.persistence.BaseUUIDEntity
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.Table
 
 @Entity
 @Table(name = "tbl_phrase")

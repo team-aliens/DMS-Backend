@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.remain.dto.request
 
+import jakarta.validation.constraints.NotNull
 import java.time.DayOfWeek
 import java.time.LocalTime
-import javax.validation.constraints.NotNull
 
 data class UpdateRemainAvailableTimeWebRequest(
 

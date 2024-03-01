@@ -19,6 +19,8 @@ interface UserJpaRepository : CrudRepository<UserJpaEntity, UUID> {
 
     fun findBySchoolIdAndAuthority(schoolId: UUID, authority: Authority): UserJpaEntity?
 
+    fun findBySchoolId(schoolId: UUID): List<UserJpaEntity>
+
     fun findByEmail(email: String): UserJpaEntity?
 
     fun findByAccountId(accountId: String): UserJpaEntity?

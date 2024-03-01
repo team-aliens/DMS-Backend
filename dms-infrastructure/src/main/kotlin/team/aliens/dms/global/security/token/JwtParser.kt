@@ -42,8 +42,9 @@ class JwtParser(
 
     private fun getClaims(token: String): Jws<Claims> {
         return try {
-            Jwts.parser()
+            Jwts.parserBuilder()
                 .setSigningKey(securityProperties.secretKey)
+                .build()
                 .parseClaimsJws(token)
         } catch (e: Exception) {
             when (e) {

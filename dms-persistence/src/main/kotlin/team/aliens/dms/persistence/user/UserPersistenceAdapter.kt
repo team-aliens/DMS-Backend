@@ -37,6 +37,10 @@ class UserPersistenceAdapter(
         userRepository.findBySchoolIdAndAuthority(schoolId, authority)
     )
 
+    override fun queryUsersBySchoolId(schoolId: UUID) =
+        userRepository.findBySchoolId(schoolId)
+            .map { userMapper.toDomain(it)!! }
+
     override fun queryUserByEmail(email: String) = userMapper.toDomain(
         userRepository.findByEmail(email)
     )

@@ -3,6 +3,7 @@ package team.aliens.dms.domain.student.dto
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import team.aliens.dms.domain.tag.dto.TagResponse
 import team.aliens.dms.domain.tag.model.Tag
 import java.util.UUID
@@ -50,12 +51,12 @@ data class StudentDetailsResponse(
     val name: String,
     val gcn: String,
     val profileImageUrl: String,
-    val sex: Sex,
+    val sex: Sex? = null,
     val bonusPoint: Int? = null,
     val minusPoint: Int? = null,
-    val roomNumber: String,
+    val roomNumber: String? = null,
     val roomMates: List<RoomMate>? = null,
-    val tags: List<TagResponse>
+    val tags: List<TagResponse>? = null
 ) {
     data class RoomMate(
         val id: UUID,
@@ -98,9 +99,10 @@ data class StudentDetailsResponse(
 }
 
 data class StudentsResponse(
-    val students: List<StudentDetailsResponse>
+    val students: List<StudentDetailsResponse>,
 ) {
     companion object {
+        @JvmName("ofStudentWithTag")
         fun of(students: List<StudentWithTag>) = StudentsResponse(
             students = students.map {
                 StudentDetailsResponse(
@@ -113,6 +115,18 @@ data class StudentsResponse(
                     tags = it.tags.map { tag ->
                         TagResponse.of(tag)
                     }
+                )
+            }
+        )
+
+        @JvmName("ofAllStudentsVO")
+        fun of(students: List<AllStudentsVO>) = StudentsResponse(
+            students = students.map {
+                StudentDetailsResponse(
+                    id = it.id,
+                    name = it.name,
+                    gcn = it.gcn,
+                    profileImageUrl = it.profileImageUrl
                 )
             }
         )

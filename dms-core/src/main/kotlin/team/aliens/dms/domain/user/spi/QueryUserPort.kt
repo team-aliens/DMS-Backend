@@ -14,6 +14,8 @@ interface QueryUserPort {
 
     fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority): User?
 
+    fun queryUsersBySchoolId(schoolId: UUID): List<User>
+
     fun existsUserByEmail(email: String): Boolean
 
     fun existsUserByAccountId(accountId: String): Boolean

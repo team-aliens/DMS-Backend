@@ -14,6 +14,9 @@ dependencies {
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
 
+    // transaction
+    implementation(Dependencies.SPRING_TRANSACTION)
+
     // thymeleaf
     implementation(Dependencies.SPRING_THYMELEAF)
 
@@ -22,6 +25,8 @@ dependencies {
 
     // jwt
     implementation(Dependencies.JWT)
+    runtimeOnly(Dependencies.JWT_IMPL)
+    runtimeOnly(Dependencies.JWT_JACKSON)
 
     // aws
     implementation(Dependencies.AWS_SES)
@@ -48,13 +53,9 @@ dependencies {
 
     // logging
     implementation(Dependencies.SENTRY)
-}
 
-kapt {
-    arguments {
-        arg("mapstruct.defaultComponentModel", "spring")
-        arg("mapstruct.unmappedTargetPolicy", "ignore")
-    }
+    // notification
+    implementation(Dependencies.FCM)
 }
 
 tasks.getByName<Jar>("jar") {

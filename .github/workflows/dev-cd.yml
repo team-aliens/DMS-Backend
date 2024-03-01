@@ -50,7 +50,7 @@ jobs:
           host: ${{ secrets.EC2_DEV_HOST }}
           port: ${{ secrets.EC2_DEV_PORT }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_DEV_KEY }}
           script: |
             cd dms-dev
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.DOCKER_DEV_IMAGE }}

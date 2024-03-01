@@ -18,6 +18,7 @@ import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
+import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
@@ -230,7 +231,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 .map {
                     autoSizeColumn(it)
                     val width = getColumnWidth(it)
-                    setColumnWidth(it, width + 500)
+                    setColumnWidth(it, width + 900)
                 }
         }
     }
@@ -257,6 +258,33 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             attributes = attributes,
             datasList = seatInfosList
         )
+    }
+
+    override fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>): ByteArray {
+        val attributes = mutableListOf("이름", "학번", "외출일", "외출 시간", "도착 시간")
+
+        val maxOutingCompanionCount = outingApplicationVos.maxOf { it.outingCompanionVOs.size }
+
+        for (i in 0 until maxOutingCompanionCount) {
+            val order = i + 1 // ex) 동행1 이름, 동행1 학번
+            attributes.addAll(listOf("동행$order 이름", "동행$order 학번"))
+        }
+
+        val outingApplicationInfosList = outingApplicationVos.map { outingApplication ->
+            mutableListOf(
+                outingApplication.studentName,
+                outingApplication.studentGcn,
+                outingApplication.outAt.toString(),
+                outingApplication.outingTime.toString(),
+                outingApplication.arrivalTime.toString()
+            ).apply {
+                outingApplication.outingCompanionVOs.forEach { outingCompanion ->
+                    addAll(listOf(outingCompanion.studentName, outingCompanion.studentGcn))
+                }
+            }
+        }
+
+        return createExcelSheet(attributes, outingApplicationInfosList)
     }
 
     private fun createExcelSheet(

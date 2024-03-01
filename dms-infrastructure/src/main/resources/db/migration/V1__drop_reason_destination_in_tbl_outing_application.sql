@@ -1,0 +1,1 @@
+alter table tbl_outing_application drop reason, drop destination;

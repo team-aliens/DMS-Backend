@@ -1,10 +1,10 @@
 package team.aliens.dms.global.error
 
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.ConstraintViolationException
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import team.aliens.dms.common.error.ErrorProperty
-import javax.validation.ConstraintViolation
-import javax.validation.ConstraintViolationException
 
 data class ErrorResponse(
     val status: Int,
