@@ -25,6 +25,7 @@ class OutingApplicationMapper(
                 outingTime = it.outingTime,
                 arrivalTime = it.arrivalTime,
                 status = it.status,
+                reason = it.reason,
                 outingTypeTitle = it.outingType!!.id.title,
                 schoolId = it.outingType!!.id.schoolId
             )
@@ -47,6 +48,7 @@ class OutingApplicationMapper(
             outingTime = domain.outingTime,
             arrivalTime = domain.arrivalTime,
             status = domain.status,
+            reason = domain.reason,
             outingType = outingType
         )
     }
