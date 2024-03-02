@@ -3,5 +3,5 @@ config:
   service_type: be
   port: 8080
   domain:
-    prod: dms.xquare.app
-    stag: dev-dms.xquare.app
+    prod: api.dms-dsm.com
+    stag: dev-api.dms-dsm.com
