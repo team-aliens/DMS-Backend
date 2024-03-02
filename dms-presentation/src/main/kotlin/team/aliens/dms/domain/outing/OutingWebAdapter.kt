@@ -56,6 +56,7 @@ class OutingWebAdapter(
                 outingTime = webRequest.outingTime,
                 arrivalTime = webRequest.arrivalTime,
                 outingTypeTitle = webRequest.outingTypeTitle,
+                reason = webRequest.reason,
                 companionIds = webRequest.companionIds
             )
         )
