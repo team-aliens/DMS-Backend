@@ -17,7 +17,10 @@ class WebMvcConfig : WebMvcConfigurer {
                 "http://localhost:3002",
                 "https://www.aliens-dms.com",
                 "https://admin.aliens-dms.com",
-                "https://admin-dev.aliens-dms.com"
+                "https://admin-dev.aliens-dms.com",
+                "https://admin.dms-dsm.com",
+                "https://admin-dev.dms-dsm.com",
+                "https://webview.dms-dsm.com"
             )
             .exposedHeaders(HttpHeaders.CONTENT_DISPOSITION)
     }
