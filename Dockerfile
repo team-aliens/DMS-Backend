@@ -32,5 +32,8 @@ ENV AWS_SECRET ${AWS_SECRET}
 ARG NEIS_KEY
 ENV NEIS_KEY ${NEIS_KEY}
 
+ARG SES_SENDER
+ENV SES_SENDER ${SES_SENDER}
+
 COPY ./dms-infrastructure/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
