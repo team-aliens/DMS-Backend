@@ -25,9 +25,11 @@ class ExceptionFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (e: DmsException) {
+            e.printStackTrace()
             errorToJson(e.errorProperty, response)
             Sentry.captureException(e)
         } catch (e: Exception) {
+            e.printStackTrace()
             when (e.cause) {
                 is DmsException -> {
                     errorToJson((e.cause as DmsException).errorProperty, response)

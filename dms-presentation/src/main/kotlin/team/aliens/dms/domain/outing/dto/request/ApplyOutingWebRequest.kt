@@ -22,6 +22,9 @@ data class ApplyOutingWebRequest(
     @field:NotBlank
     val outingTypeTitle: String,
 
+    @field:Size(max = 100)
+    val reason: String?,
+
     @field:NotNullElements
     val companionIds: List<UUID>?
 )
