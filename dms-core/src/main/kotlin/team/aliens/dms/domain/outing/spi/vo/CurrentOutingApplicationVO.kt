@@ -10,5 +10,6 @@ open class CurrentOutingApplicationVO(
     val status: OutingStatus,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
+    val reason: String?,
     val outingCompanions: List<String>
 )
