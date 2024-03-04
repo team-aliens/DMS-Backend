@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.outing.dto
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import java.time.LocalDate
@@ -14,12 +15,15 @@ data class ExportAllOutingApplicationsResponse(
     val fileName: String
 )
 
+
 data class GetCurrentOutingApplicationResponse(
     val outAt: LocalDate,
     val outingTypeTitle: String,
     val status: OutingStatus,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
+    @field:JsonInclude(JsonInclude.Include.ALWAYS)
+    val reason: String?,
     val outingCompanions: List<String>
 ) {
     companion object {
@@ -31,6 +35,7 @@ data class GetCurrentOutingApplicationResponse(
                     status = status,
                     outingTime = outingTime,
                     arrivalTime = arrivalTime,
+                    reason = reason,
                     outingCompanions = outingCompanions
                 )
             }

@@ -100,6 +100,7 @@ class OutingApplicationPersistenceAdapter(
                             outingApplicationJpaEntity.status,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
+                            outingApplicationJpaEntity.reason,
                             list(outingCompanionStudentJpaEntity.name)
                         )
                     )
