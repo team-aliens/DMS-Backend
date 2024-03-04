@@ -23,7 +23,6 @@ data class ApplyOutingWebRequest(
     val outingTypeTitle: String,
 
     @field:Size(max = 100)
-    @field:NotBlank
     val reason: String?,
 
     @field:NotNullElements
