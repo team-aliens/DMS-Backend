@@ -45,3 +45,4 @@ jobs:
             AWS_SECRET=${{ secrets.AWS_SECRET }}
             NEIS_KEY=${{ secrets.NEIS_KEY }}
             SES_SENDER=${{ secrets.SES_SENDER }}
+            S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}

@@ -35,5 +35,8 @@ ENV NEIS_KEY ${NEIS_KEY}
 ARG SES_SENDER
 ENV SES_SENDER ${SES_SENDER}
 
+ARG S3_BUCKET_NAME
+ENV S3_BUCKET_NAME ${S3_BUCKET_NAME}
+
 COPY ./dms-infrastructure/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
