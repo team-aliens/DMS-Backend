@@ -45,7 +45,7 @@ object Dependencies {
     const val JWT_JACKSON = "io.jsonwebtoken:jjwt-jackson:${DependencyVersions.JWT_VERSION}"
 
     // aws
-    const val SPRING_AWS = "io.awspring.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
+    const val SPRING_AWS = "org.springframework.cloud:spring-cloud-starter-aws:${DependencyVersions.AWS_VERSION}"
     const val AWS_SES = "com.amazonaws:aws-java-sdk-ses:${DependencyVersions.SES_VERSION}"
 
     // test
