@@ -40,5 +40,5 @@ class GetOutingServiceImpl(
         name: String?,
         date: LocalDate,
         outingStatus: OutingStatus
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.getOutingHistoryByNameAndDateAndStatus(name, date, outingStatus)
+    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoryByNameAndDateAndStatus(name, date, outingStatus)
 }
