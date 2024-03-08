@@ -17,19 +17,23 @@ class RedisConfig(
 
     @Value("\${spring.data.redis.port}")
     private val redisPort: Int,
-
+/*
     @Value("\${spring.data.redis.password}")
     private val redisPassword: String
+
+ */
 
 ) {
 
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory {
         val redisConfig = RedisStandaloneConfiguration(redisHost, redisPort)
-
+/*
         if (redisPassword.isNotBlank()) {
             redisConfig.setPassword(redisPassword)
         }
+
+ */
 
         val clientConfig = LettuceClientConfiguration.builder()
             .commandTimeout(Duration.ofSeconds(1))

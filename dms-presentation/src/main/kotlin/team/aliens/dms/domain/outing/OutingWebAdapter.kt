@@ -22,6 +22,7 @@ import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
 import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
+import team.aliens.dms.domain.outing.dto.OutingApplicationHistoryResponse
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.model.OutingStatus
@@ -30,6 +31,7 @@ import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.GetCurrentOutingApplicationUseCase
+import team.aliens.dms.domain.outing.usecase.GetOutingApplicationHistoryUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
@@ -47,7 +49,8 @@ class OutingWebAdapter(
     private val getAllOutingTypeTitlesUseCase: GetAllOutingTypeTitlesUseCase,
     private val updateOutingStatusUseCase: UpdateOutingStatusUseCase,
     private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase,
-    private val getCurrentOutingApplicationUseCase: GetCurrentOutingApplicationUseCase
+    private val getCurrentOutingApplicationUseCase: GetCurrentOutingApplicationUseCase,
+    private val getOutingApplicationHistoryUseCase: GetOutingApplicationHistoryUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -113,5 +116,18 @@ class OutingWebAdapter(
     @GetMapping("/my")
     fun getCurrentOutingApplication(): GetCurrentOutingApplicationResponse {
         return getCurrentOutingApplicationUseCase.execute()
+    }
+
+    @GetMapping
+    fun getOutingApplicationHistory(
+        @RequestParam(name = "name", required = false) name: String?,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestParam(name = "outing_status") @NotNull outingStatus: OutingStatus
+    ): OutingApplicationHistoryResponse {
+        return getOutingApplicationHistoryUseCase.execute(
+            name = name,
+            date = date,
+            outingStatus = outingStatus
+        )
     }
 }
