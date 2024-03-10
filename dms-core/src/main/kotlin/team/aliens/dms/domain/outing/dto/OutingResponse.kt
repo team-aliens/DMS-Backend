@@ -54,9 +54,9 @@ data class OutingApplicationHistoryResponse(
                 it.run {
                     OutingHistoryVO(
                         outingApplicationId = outingApplicationId,
-                        name = name,
+                        studentName = studentName,
                         outingType = outingType,
-                        companionCount = companionCount,
+                        outingCompanionCount = outingCompanionCount,
                         outingTime = outingTime,
                         arrivalTime = arrivalTime
                     )

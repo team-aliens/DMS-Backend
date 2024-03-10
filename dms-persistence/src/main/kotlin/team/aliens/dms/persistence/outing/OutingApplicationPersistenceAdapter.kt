@@ -109,7 +109,7 @@ class OutingApplicationPersistenceAdapter(
             ).firstOrNull()
     }
 
-    override fun queryOutingHistoryByNameAndDateAndStatus(name: String?, date: LocalDate, status: OutingStatus): List<OutingHistoryVO> {
+    override fun queryOutingHistoriesByStudentNameAndDateAndStatus(studentName: String?, date: LocalDate, status: OutingStatus): List<OutingHistoryVO> {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
 
@@ -129,14 +129,14 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .leftJoin(outingCompanionJpaEntity)
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
-            .join(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
+            .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
                 outingApplicationJpaEntity.status.eq(status),
-                name?.let { outingApplicationJpaEntity.student.name.eq(it) },
+                studentName?.let { studentJpaEntity.name.eq(it) },
                 outingApplicationJpaEntity.outAt.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)
-            .orderBy(outingApplicationJpaEntity.outAt.desc())
+            .orderBy(outingApplicationJpaEntity.outAt.asc())
             .fetch()
     }
 

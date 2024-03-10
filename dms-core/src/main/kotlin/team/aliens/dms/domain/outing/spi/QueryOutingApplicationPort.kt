@@ -18,5 +18,5 @@ interface QueryOutingApplicationPort {
 
     fun queryCurrentOutingApplicationVO(studentId: UUID): CurrentOutingApplicationVO?
 
-    fun queryOutingHistoryByNameAndDateAndStatus(name: String?, date: LocalDate, status: OutingStatus): List<OutingHistoryVO>
+    fun queryOutingHistoriesByStudentNameAndDateAndStatus(studentName: String?, date: LocalDate, status: OutingStatus): List<OutingHistoryVO>
 }

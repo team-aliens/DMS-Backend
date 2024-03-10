@@ -120,12 +120,12 @@ class OutingWebAdapter(
 
     @GetMapping
     fun getOutingApplicationHistory(
-        @RequestParam(name = "name", required = false) name: String?,
+        @RequestParam(name = "student_name", required = false) studentName: String?,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
         @RequestParam(name = "outing_status") @NotNull outingStatus: OutingStatus
     ): OutingApplicationHistoryResponse {
         return getOutingApplicationHistoryUseCase.execute(
-            name = name,
+            studentName = studentName,
             date = date,
             outingStatus = outingStatus
         )

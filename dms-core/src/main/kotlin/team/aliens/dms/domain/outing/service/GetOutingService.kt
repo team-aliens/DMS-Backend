@@ -21,5 +21,5 @@ interface GetOutingService {
 
     fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO
 
-    fun getOutingHistoryByNameAndDateAndStatus(name: String?, date: LocalDate, outingStatus: OutingStatus): List<OutingHistoryVO>
+    fun getOutingHistoriesByStudentNameAndDateAndStatus(studentName: String?, date: LocalDate, outingStatus: OutingStatus): List<OutingHistoryVO>
 }

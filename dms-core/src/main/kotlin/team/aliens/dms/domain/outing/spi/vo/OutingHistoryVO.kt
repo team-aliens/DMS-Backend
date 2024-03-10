@@ -5,9 +5,9 @@ import java.util.UUID
 
 open class OutingHistoryVO(
     val outingApplicationId: UUID,
-    val name: String?,
+    val studentName: String?,
     val outingType: String,
-    val companionCount: Int,
+    val outingCompanionCount: Int,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime
 )

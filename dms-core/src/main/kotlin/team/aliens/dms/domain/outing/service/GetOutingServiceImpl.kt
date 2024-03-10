@@ -36,9 +36,9 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
             ?: throw OutingApplicationNotFoundException
 
-    override fun getOutingHistoryByNameAndDateAndStatus(
-        name: String?,
+    override fun getOutingHistoriesByStudentNameAndDateAndStatus(
+        studentName: String?,
         date: LocalDate,
         outingStatus: OutingStatus
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoryByNameAndDateAndStatus(name, date, outingStatus)
+    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDateAndStatus(studentName, date, outingStatus)
 }

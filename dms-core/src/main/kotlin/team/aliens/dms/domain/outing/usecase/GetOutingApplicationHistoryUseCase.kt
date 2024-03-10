@@ -12,12 +12,12 @@ class GetOutingApplicationHistoryUseCase(
 ) {
 
     fun execute(
-        name: String?,
+        studentName: String?,
         date: LocalDate,
         outingStatus: OutingStatus
     ): OutingApplicationHistoryResponse {
-        val outings = outingService.getOutingHistoryByNameAndDateAndStatus(
-            name = name,
+        val outings = outingService.getOutingHistoriesByStudentNameAndDateAndStatus(
+            studentName = studentName,
             date = date,
             outingStatus = outingStatus
         )
