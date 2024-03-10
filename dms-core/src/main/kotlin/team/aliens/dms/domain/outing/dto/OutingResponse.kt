@@ -47,21 +47,4 @@ data class GetCurrentOutingApplicationResponse(
 
 data class OutingApplicationHistoryResponse(
     val outings: List<OutingHistoryVO>
-) {
-    companion object {
-        fun of(outingHistories: List<OutingHistoryVO>) = OutingApplicationHistoryResponse(
-            outings = outingHistories.map {
-                it.run {
-                    OutingHistoryVO(
-                        outingApplicationId = outingApplicationId,
-                        studentName = studentName,
-                        outingType = outingType,
-                        outingCompanionCount = outingCompanionCount,
-                        outingTime = outingTime,
-                        arrivalTime = arrivalTime
-                    )
-                }
-            }
-        )
-    }
-}
+)

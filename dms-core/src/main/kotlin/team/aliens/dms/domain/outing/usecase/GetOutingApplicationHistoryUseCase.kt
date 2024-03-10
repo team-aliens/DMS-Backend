@@ -22,6 +22,6 @@ class GetOutingApplicationHistoryUseCase(
             outingStatus = outingStatus
         )
 
-        return OutingApplicationHistoryResponse.of(outings)
+        return OutingApplicationHistoryResponse(outings)
     }
 }
