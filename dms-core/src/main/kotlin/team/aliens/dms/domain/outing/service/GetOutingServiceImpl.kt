@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationNotFoundException
 import team.aliens.dms.domain.outing.exception.OutingTypeNotFoundException
 import team.aliens.dms.domain.outing.model.OutingApplication
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
@@ -36,9 +35,8 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
             ?: throw OutingApplicationNotFoundException
 
-    override fun getOutingHistoriesByStudentNameAndDateAndStatus(
+    override fun getOutingHistoriesByStudentNameAndDate(
         studentName: String?,
-        date: LocalDate,
-        outingStatus: OutingStatus
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDateAndStatus(studentName, date, outingStatus)
+        date: LocalDate
+    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
 }

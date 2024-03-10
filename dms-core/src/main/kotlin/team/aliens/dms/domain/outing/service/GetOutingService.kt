@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.domain.outing.model.OutingApplication
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
@@ -21,5 +20,5 @@ interface GetOutingService {
 
     fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO
 
-    fun getOutingHistoriesByStudentNameAndDateAndStatus(studentName: String?, date: LocalDate, outingStatus: OutingStatus): List<OutingHistoryVO>
+    fun getOutingHistoriesByStudentNameAndDate(studentName: String?, date: LocalDate): List<OutingHistoryVO>
 }

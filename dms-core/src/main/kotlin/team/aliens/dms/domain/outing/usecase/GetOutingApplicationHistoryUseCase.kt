@@ -16,10 +16,9 @@ class GetOutingApplicationHistoryUseCase(
         date: LocalDate,
         outingStatus: OutingStatus
     ): OutingApplicationHistoryResponse {
-        val outings = outingService.getOutingHistoriesByStudentNameAndDateAndStatus(
+        val outings = outingService.getOutingHistoriesByStudentNameAndDate(
             studentName = studentName,
-            date = date,
-            outingStatus = outingStatus
+            date = date
         )
 
         return OutingApplicationHistoryResponse(outings)
