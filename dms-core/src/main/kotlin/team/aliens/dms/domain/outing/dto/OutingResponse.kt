@@ -3,6 +3,7 @@ package team.aliens.dms.domain.outing.dto
 import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
+import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -14,7 +15,6 @@ data class ExportAllOutingApplicationsResponse(
     val file: ByteArray,
     val fileName: String
 )
-
 
 data class GetCurrentOutingApplicationResponse(
     val outAt: LocalDate,
@@ -41,3 +41,7 @@ data class GetCurrentOutingApplicationResponse(
             }
     }
 }
+
+data class OutingApplicationHistoriesResponse(
+    val outings: List<OutingHistoryVO>
+)
