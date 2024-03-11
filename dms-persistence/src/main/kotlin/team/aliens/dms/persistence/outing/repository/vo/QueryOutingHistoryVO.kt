@@ -7,7 +7,7 @@ import java.util.UUID
 
 class QueryOutingHistoryVO @QueryProjection constructor(
     outingApplicationId: UUID,
-    studentName: String?,
+    studentName: String,
     outingType: String,
     outingCompanionCount: Int,
     outingTime: LocalTime,

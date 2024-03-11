@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
-import team.aliens.dms.domain.studyroom.dto.StudyRoomResponse
-import team.aliens.dms.domain.studyroom.spi.vo.StudyRoomVO
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.UUID
 
 data class GetAllOutingTypeTitlesResponse(
     val titles: List<String>
@@ -45,6 +42,6 @@ data class GetCurrentOutingApplicationResponse(
     }
 }
 
-data class OutingApplicationHistoryResponse(
+data class OutingApplicationHistoriesResponse(
     val outings: List<OutingHistoryVO>
 )
