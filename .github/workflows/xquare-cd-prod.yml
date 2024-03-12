@@ -2,8 +2,8 @@ name: DMS - xquare deployment prod
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - v*.*.*
       
 jobs:
   CD:
