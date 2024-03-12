@@ -25,6 +25,8 @@ data class OutingApplication(
 
     val status: OutingStatus,
 
+    val reason: String?,
+
     val outingTypeTitle: String,
 
     override val schoolId: UUID,

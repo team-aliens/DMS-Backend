@@ -7,6 +7,8 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
+import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
+import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.LocalDate
 import java.util.UUID
 
@@ -28,4 +30,13 @@ class GetOutingServiceImpl(
 
     override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate) =
         queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
+
+    override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO =
+        queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
+            ?: throw OutingApplicationNotFoundException
+
+    override fun getOutingHistoriesByStudentNameAndDate(
+        studentName: String?,
+        date: LocalDate
+    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
 }

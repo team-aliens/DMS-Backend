@@ -65,7 +65,7 @@ cloud:
     stack:
       auto: false
     s3:
-      bucket: ${BUCKET_NAME:dms}
+      bucket: ${S3_BUCKET_NAME:dms}
     ses:
       source: ${SES_SENDER:asdf}
 

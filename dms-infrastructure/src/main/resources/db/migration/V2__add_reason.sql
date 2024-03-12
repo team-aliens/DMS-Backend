@@ -1,0 +1,1 @@
+alter table tbl_outing_application add reason varchar(100) null;

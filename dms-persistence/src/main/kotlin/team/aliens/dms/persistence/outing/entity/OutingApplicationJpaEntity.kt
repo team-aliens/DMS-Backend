@@ -42,6 +42,9 @@ class OutingApplicationJpaEntity(
     @Column(columnDefinition = "VARCHAR(9)", nullable = false)
     val status: OutingStatus,
 
+    @Column(columnDefinition = "VARCHAR(100)", nullable = true)
+    val reason: String?,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns(
         JoinColumn(name = "outing_type_title", referencedColumnName = "title", nullable = false),
