@@ -48,8 +48,8 @@ fcm:
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
-  access-exp: ${ACCESS_EXP:1800}
-  refresh-exp: ${REFRESH_EXP:7200}
+  access-exp: ${ACCESS_EXP:3600}
+  refresh-exp: ${REFRESH_EXP:1205600}
 
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
