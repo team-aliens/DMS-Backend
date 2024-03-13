@@ -23,8 +23,8 @@ data class ResetPasswordManagerWebRequest(
     @field:NotBlank
     @field:Size(min = 8, max = 20)
     @field:Pattern(
-        regexp = Password.PATTERN,
-        message = Password.MESSAGE
+        regexp = PasswordRegex.PATTERN,
+        message = PasswordRegex.MESSAGE
     )
     val newPassword: String
 

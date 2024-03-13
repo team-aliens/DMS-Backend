@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import team.aliens.dms.domain.manager.dto.request.AccountId
-import team.aliens.dms.domain.manager.dto.request.Password
+import team.aliens.dms.domain.manager.dto.request.AccountIdRegex
+import team.aliens.dms.domain.manager.dto.request.PasswordRegex
 
 data class SignUpWebRequest(
 
@@ -44,16 +44,16 @@ data class SignUpWebRequest(
 
     @field:NotBlank
     @field:Pattern(
-        regexp = AccountId.PATTERN,
-        message = AccountId.MESSAGE
+        regexp = AccountIdRegex.PATTERN,
+        message = AccountIdRegex.MESSAGE
     )
     @field:Size(min = 4, max = 20)
     val accountId: String,
 
     @field:NotBlank
     @field:Pattern(
-        regexp = Password.PATTERN,
-        message = Password.MESSAGE
+        regexp = PasswordRegex.PATTERN,
+        message = PasswordRegex.MESSAGE
     )
     @field:Size(min = 8, max = 20)
     val password: String,

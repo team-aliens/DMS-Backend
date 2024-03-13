@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import team.aliens.dms.domain.manager.dto.request.Password
+import team.aliens.dms.domain.manager.dto.request.PasswordRegex
 
 data class ResetStudentPasswordWebRequest(
 
@@ -28,8 +28,8 @@ data class ResetStudentPasswordWebRequest(
     @field:NotBlank
     @field:Size(min = 8, max = 20)
     @field:Pattern(
-        regexp = Password.PATTERN,
-        message = Password.MESSAGE
+        regexp = PasswordRegex.PATTERN,
+        message = PasswordRegex.MESSAGE
     )
     val newPassword: String
 
