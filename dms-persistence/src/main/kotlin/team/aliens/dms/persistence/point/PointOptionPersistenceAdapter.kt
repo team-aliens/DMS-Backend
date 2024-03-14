@@ -39,6 +39,6 @@ class PointOptionPersistenceAdapter(
             .map {
                 pointOptionMapper.toDomain(it)!!
             }
-            .sortedByDescending { it.createdAt }
+            .sortedBy { it.createdAt }
     }
 }
