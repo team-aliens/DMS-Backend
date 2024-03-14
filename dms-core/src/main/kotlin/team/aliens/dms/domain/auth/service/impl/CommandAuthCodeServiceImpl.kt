@@ -28,6 +28,6 @@ class CommandAuthCodeServiceImpl(
         val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmailAndEmailType(email, type)
             ?: AuthCodeLimit(email, type)
 
-        commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit)
+        commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
     }
 }
