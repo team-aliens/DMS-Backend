@@ -9,8 +9,10 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
@@ -31,6 +33,8 @@ class PointOptionJpaEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(5)", nullable = false)
-    val type: PointType
+    val type: PointType,
 
-) : BaseUUIDEntity(id)
+    override val createdAt: LocalDateTime,
+
+    ) : BaseEntity(id)

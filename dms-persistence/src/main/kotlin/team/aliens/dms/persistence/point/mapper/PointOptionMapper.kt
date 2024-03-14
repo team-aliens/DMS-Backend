@@ -19,7 +19,8 @@ class PointOptionMapper(
                 schoolId = it.school!!.id!!,
                 name = it.name,
                 score = it.score,
-                type = it.type
+                type = it.type,
+                createdAt = it.createdAt
             )
         }
     }
@@ -32,7 +33,8 @@ class PointOptionMapper(
             school = school,
             name = domain.name,
             score = domain.score,
-            type = domain.type
+            type = domain.type,
+            createdAt = domain.createdAt!!
         )
     }
 }
