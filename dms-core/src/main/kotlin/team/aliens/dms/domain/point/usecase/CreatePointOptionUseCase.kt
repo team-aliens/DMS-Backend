@@ -7,6 +7,7 @@ import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.user.service.UserService
+import java.time.LocalDateTime
 
 @UseCase
 class CreatePointOptionUseCase(
@@ -18,14 +19,14 @@ class CreatePointOptionUseCase(
 
         val user = userService.getCurrentUser()
 
-        pointService.checkPointOptionExistsByNameAndSchoolId(request.name, user.schoolId)
-
         val pointOption = pointService.savePointOption(
             PointOption(
                 schoolId = user.schoolId,
                 name = request.name,
                 score = request.score,
-                type = PointType.valueOf(request.type)
+                type = PointType.valueOf(request.type),
+                createdAt = LocalDateTime.now()
+
             )
         )
 

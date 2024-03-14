@@ -38,13 +38,15 @@ internal fun createPointOptionStub(
     schoolId: UUID = UUID.randomUUID(),
     name: String = "기숙사 봉사 활동",
     score: Int = 5,
-    type: PointType = PointType.BONUS
+    type: PointType = PointType.BONUS,
+    createdAt: LocalDateTime
 ) = PointOption(
     id = id,
     schoolId = schoolId,
     name = name,
     score = score,
-    type = type
+    type = type,
+    createdAt = createdAt
 )
 
 internal fun createPhraseStub(
