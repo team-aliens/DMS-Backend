@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.outing.spi
 
 import team.aliens.dms.domain.outing.model.OutingApplication
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
