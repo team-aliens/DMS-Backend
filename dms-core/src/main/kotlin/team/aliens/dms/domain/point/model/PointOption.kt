@@ -20,4 +20,4 @@ data class PointOption(
 
     val createdAt: LocalDateTime?,
 
-    ) : SchoolIdDomain
+) : SchoolIdDomain

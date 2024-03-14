@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.persistence.BaseEntity
-import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
@@ -37,4 +36,4 @@ class PointOptionJpaEntity(
 
     override val createdAt: LocalDateTime,
 
-    ) : BaseEntity(id)
+) : BaseEntity(id)
