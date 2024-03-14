@@ -23,6 +23,8 @@ class AuthCodePersistenceAdapter(
         authCodeRepository.findByEmailAndType(email, type)
     )
 
+    override fun existsAuthCodeByCode(code: String) = authCodeRepository.existsById(code)
+
     override fun queryAuthCodeByEmail(email: String) = authCodeMapper.toDomain(
         authCodeRepository.findByEmail(email)
     )

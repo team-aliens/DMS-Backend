@@ -7,5 +7,7 @@ interface QueryAuthCodePort {
 
     fun queryAuthCodeByEmailAndEmailType(email: String, type: EmailType): AuthCode?
 
+    fun existsAuthCodeByCode(code: String): Boolean
+
     fun queryAuthCodeByEmail(email: String): AuthCode?
 }
