@@ -95,3 +95,9 @@ tasks.register<JacocoReport>("jacocoRootReport") {
 tasks.getByName<Jar>("jar") {
     enabled = false
 }
+
+tasks.register<Copy>("installGitHooks") {
+    from(file("$rootDir/.githooks"))
+    into(file("$rootDir/.git/hooks"))
+    fileMode = "0775".toInt()
+}
