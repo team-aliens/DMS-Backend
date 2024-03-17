@@ -104,6 +104,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.PUT, "/points/history/{point-history-id}").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/points/options").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.PATCH, "/points/options/{point-option-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/points/history/excel").hasAuthority(MANAGER.name)
 
                 // /templates
                 .requestMatchers(HttpMethod.GET, "/templates").permitAll()

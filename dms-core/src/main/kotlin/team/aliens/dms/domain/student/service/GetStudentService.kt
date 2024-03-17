@@ -25,11 +25,11 @@ interface GetStudentService {
     fun getStudentByUserId(userId: UUID): Student
 
     fun getStudentsByNameAndSortAndFilter(
-        name: String?,
-        sort: Sort,
+        name: String? = null,
+        sort: Sort = Sort.GCN,
         schoolId: UUID,
-        pointFilter: PointFilter,
-        tagIds: List<UUID>?
+        pointFilter: PointFilter = PointFilter(null, null, null),
+        tagIds: List<UUID>? = null
     ): List<StudentWithTag>
 
     fun getRoommates(studentId: UUID, roomNumber: String, schoolId: UUID): List<Student>

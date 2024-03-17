@@ -39,4 +39,8 @@ interface QueryPointHistoryPort {
         startAt: LocalDateTime?,
         endAt: LocalDateTime?
     ): List<PointHistory>
+
+    fun queryPointHistoryByGcnIn(
+        gcns: List<String>
+    ): List<PointHistory>
 }

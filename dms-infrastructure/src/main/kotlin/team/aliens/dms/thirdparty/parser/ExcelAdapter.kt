@@ -18,8 +18,10 @@ import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
+import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
+import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -148,6 +150,46 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         return createExcelSheet(
             attributes = attributes,
             datasList = historyDatasList
+        )
+    }
+
+    override fun writePointHistoriesExcelFile(
+        pointHistories: List<PointHistory>,
+        students: List<StudentWithTag>
+    ): ByteArray {
+
+        val attributes = listOf("학번", "이름", "상점", "벌점", "상점 내역", "벌점 내역", "교육 단계")
+        val pointHistoryMap = pointHistories.groupBy { it.studentGcn }
+
+        val studentPointHistoryInfoList = students.map { student ->
+
+            val recentPointHistory = pointHistoryMap[student.gcn]?.maxBy { it.createdAt }
+            val (bonusPointHistory, minusPointHistory) = pointHistoryMap[student.gcn]?.let { pointHistories ->
+                pointHistories.partition { it.pointType == PointType.BONUS }
+            } ?: Pair(emptyList(), emptyList())
+
+            val minusPointHistoryString = minusPointHistory.joinToString(separator = "") { pointStatus ->
+                "[${pointStatus.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).format()}] ${pointStatus.pointName} (${pointStatus.pointScore}점)\n"
+            }
+
+            val bonusPointHistoryString = bonusPointHistory.joinToString(separator = "") { pointStatus ->
+                "[${pointStatus.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}] ${pointStatus.pointName} (${pointStatus.pointScore}점)\n"
+            }
+
+            listOf(
+                student.gcn,
+                student.name,
+                (recentPointHistory?.bonusTotal ?: 0).toString(),
+                (recentPointHistory?.minusTotal ?: 0).toString(),
+                bonusPointHistoryString.replace(Regex("[\\[\\]]"), ""),
+                minusPointHistoryString.replace(Regex("[\\[\\]]"), ""),
+                student.tags.joinToString()
+            )
+        }
+
+        return createExcelSheet(
+            attributes = attributes,
+            datasList = studentPointHistoryInfoList
         )
     }
 

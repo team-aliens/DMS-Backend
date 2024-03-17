@@ -31,6 +31,7 @@ import team.aliens.dms.domain.point.dto.StudentPointHistoryResponse
 import team.aliens.dms.domain.point.dto.request.CreatePointOptionWebRequest
 import team.aliens.dms.domain.point.dto.request.GrantPointWebRequest
 import team.aliens.dms.domain.point.dto.request.UpdatePointOptionWebRequest
+import team.aliens.dms.domain.point.usecase.ExportPointHistoryUseCase
 import team.aliens.dms.domain.point.usecase.CancelGrantedPointUseCase
 import team.aliens.dms.domain.point.usecase.CreatePointOptionUseCase
 import team.aliens.dms.domain.point.usecase.ExportAllPointHistoryUseCase
@@ -56,6 +57,7 @@ class PointWebAdapter(
     private val queryAllPointHistoryUseCase: QueryAllPointHistoryUseCase,
     private val queryStudentRecentPointHistoryUseCase: QueryStudentRecentPointHistoryUseCase,
     private val exportAllPointHistoryUseCase: ExportAllPointHistoryUseCase,
+    private val exportPointHistoryUseCase: ExportPointHistoryUseCase,
     private val cancelGrantedPointUseCase: CancelGrantedPointUseCase,
     private val queryPointOptionsUseCase: QueryPointOptionsUseCase,
     private val queryStudentPointHistoryUseCase: QueryStudentPointHistoryUseCase,
@@ -130,6 +132,15 @@ class PointWebAdapter(
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) end: LocalDateTime
     ): ByteArray {
         val response = exportAllPointHistoryUseCase.execute(start, end)
+        httpResponse.setExcelContentDisposition(response.fileName)
+        return response.file
+    }
+
+    @GetMapping("/history/excel")
+    fun exportPointHistory(
+        httpResponse: HttpServletResponse
+    ): ByteArray {
+        val response = exportPointHistoryUseCase.execute()
         httpResponse.setExcelContentDisposition(response.fileName)
         return response.file
     }
