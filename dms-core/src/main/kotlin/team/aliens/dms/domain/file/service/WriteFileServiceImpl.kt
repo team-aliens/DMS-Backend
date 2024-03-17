@@ -2,6 +2,7 @@ package team.aliens.dms.domain.file.service
 
 import org.springframework.stereotype.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
+import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
@@ -20,6 +21,9 @@ class WriteFileServiceImpl(
 
     override fun writePointHistoryExcelFile(pointHistories: List<PointHistory>) =
         writeFilePort.writePointHistoryExcelFile(pointHistories)
+
+    override fun writePointHistoriesExcelFile(pointHistories: List<PointHistory>, students: List<StudentWithTag>) =
+        writeFilePort.writePointHistoriesExcelFile(pointHistories, students)
 
     override fun writeRemainStatusExcelFile(studentRemainInfos: List<StudentRemainInfo>) =
         writeFilePort.writeRemainStatusExcelFile(studentRemainInfos)

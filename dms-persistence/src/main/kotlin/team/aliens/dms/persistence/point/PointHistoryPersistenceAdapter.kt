@@ -150,4 +150,8 @@ class PointHistoryPersistenceAdapter(
             }
         )
     }
+
+    override fun queryPointHistoryByGcnIn(gcns: List<String>) =
+        pointHistoryRepository.findByStudentGcnIn(gcns)
+            .map { pointHistoryMapper.toDomain(it)!! }
 }

@@ -49,6 +49,10 @@ interface GetPointService {
         endAt: LocalDateTime?
     ): List<PointHistory>
 
+    fun getPointHistoryByGcnIn(
+        gcns: List<String>
+    ): List<PointHistory>
+
     fun getPointOptionById(pointOptionId: UUID, schoolId: UUID): PointOption
 
     fun queryPointOptionsBySchoolIdAndKeyword(schoolId: UUID, keyword: String?): List<PointOption>

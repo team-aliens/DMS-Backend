@@ -79,6 +79,12 @@ class GetPointServiceImpl(
         endAt = endAt
     )
 
+    override fun getPointHistoryByGcnIn(
+        gcns: List<String>
+    ): List<PointHistory> = queryPointHistoryPort.queryPointHistoryByGcnIn(
+        gcns = gcns
+    )
+
     override fun getPointOptionById(pointOptionId: UUID, schoolId: UUID) =
         queryPointOptionPort.queryPointOptionById(pointOptionId) ?: throw PointOptionNotFoundException
 
