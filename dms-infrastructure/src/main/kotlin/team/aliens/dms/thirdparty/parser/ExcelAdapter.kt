@@ -159,7 +159,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     ): ByteArray {
 
         val attributes = listOf("학번", "이름", "상점", "벌점", "상점 내역", "벌점 내역", "교육 단계")
-        val pointHistoryMap = pointHistories.groupBy { it.studentGcn }
+        val pointHistoryMap = pointHistories.filter { !it.isCancel }.groupBy { it.studentGcn }
 
         val studentPointHistoryInfoList = students.map { student ->
 
@@ -183,7 +183,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 (recentPointHistory?.minusTotal ?: 0).toString(),
                 bonusPointHistoryString.replace(Regex("[\\[\\]]"), ""),
                 minusPointHistoryString.replace(Regex("[\\[\\]]"), ""),
-                student.tags.joinToString()
+                student.tags.joinToString { it.name }
             )
         }
 
