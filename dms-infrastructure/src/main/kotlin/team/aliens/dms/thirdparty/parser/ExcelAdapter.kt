@@ -341,9 +341,18 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         datasList.forEachIndexed { idx, datas ->
             val row = sheet.createRow(idx + 1)
+            sheet.autoSizeColumn(idx + 1)
             insertDatasAtRow(row, datas, getDefaultCellStyle(workbook))
         }
         formatWorkSheet(sheet)
+
+        sheet.setColumnWidth(1, 7 * 256)
+        sheet.setColumnWidth(2, 5 * 256)
+        sheet.setColumnWidth(3, 5 * 256)
+        sheet.setColumnWidth(4, 45 * 256)
+        sheet.setColumnWidth(5, 45 * 256)
+        sheet.setColumnWidth(6, 10 * 256)
+        sheet.setColumnWidth(7, 15 * 256)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
