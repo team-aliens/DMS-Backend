@@ -353,8 +353,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
         datasList.forEachIndexed { idx, datas ->
             val row = sheet.createRow(idx + 1)
-
-
             insertDatasAtRow(row, datas, getDefaultCellStyle(workbook))
         }
         formatWorkSheet(sheet)
