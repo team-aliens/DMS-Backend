@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.outing.repository.vo
 
 import com.querydsl.core.annotations.QueryProjection
+import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.LocalTime
 import java.util.UUID
@@ -10,6 +11,7 @@ class QueryOutingHistoryVO @QueryProjection constructor(
     studentName: String,
     outingType: String,
     outingCompanionCount: Int,
+    outingStatus: OutingStatus,
     outingTime: LocalTime,
     arrivalTime: LocalTime
 ) : OutingHistoryVO(
@@ -17,6 +19,7 @@ class QueryOutingHistoryVO @QueryProjection constructor(
     studentName = studentName,
     outingType = outingType,
     outingCompanionCount = outingCompanionCount,
+    outingStatus = outingStatus,
     outingTime = outingTime,
     arrivalTime = arrivalTime
 )
