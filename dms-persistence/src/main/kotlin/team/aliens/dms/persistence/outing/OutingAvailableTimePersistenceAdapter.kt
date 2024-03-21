@@ -22,21 +22,21 @@ class OutingAvailableTimePersistenceAdapter(
             outingAvailableTimeRepository.findByDayOfWeek(dayOfWeek)
         )
 
-
-        override fun queryOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTimeVO> {
-            return queryFactory
-                .select(
-                    QQueryOutingAvailableTimeVO(
-                        outingAvailableTimeJpaEntity.id,
-                        outingAvailableTimeJpaEntity.outingTime,
-                        outingAvailableTimeJpaEntity.arrivalTime,
-                        outingAvailableTimeJpaEntity.enabled,
-                        outingAvailableTimeJpaEntity.dayOfWeek
-                    )
+    override fun queryOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTimeVO> {
+        return queryFactory
+            .select(
+                QQueryOutingAvailableTimeVO(
+                    outingAvailableTimeJpaEntity.id,
+                    outingAvailableTimeJpaEntity.outingTime,
+                    outingAvailableTimeJpaEntity.arrivalTime,
+                    outingAvailableTimeJpaEntity.enabled,
+                    outingAvailableTimeJpaEntity.dayOfWeek
                 )
-                .from(outingAvailableTimeJpaEntity)
-                .where(outingAvailableTimeJpaEntity.dayOfWeek.eq(dayOfWeek)
-                )
-                .fetch()
-        }
+            )
+            .from(outingAvailableTimeJpaEntity)
+            .where(
+                outingAvailableTimeJpaEntity.dayOfWeek.eq(dayOfWeek)
+            )
+            .fetch()
+    }
 }
