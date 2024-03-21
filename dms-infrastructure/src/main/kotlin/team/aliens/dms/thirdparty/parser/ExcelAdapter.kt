@@ -241,12 +241,11 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                         style = getDefaultCellStyle(workbook),
                         startIdx = classNumIdx
                     )
-
                 }
             }
             lastRowNum += 18
         }
-        formatWorkSheet(sheet, workbook)
+        formatWorkSheet(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
@@ -303,20 +302,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
     private fun formatWorkSheet(
         worksheet: Sheet,
-        workbook: Workbook? = null
     ) {
         val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
-        val lastRowNum = worksheet.lastRowNum
-
-        // 테두리 적용
-        val borderLine = CellRangeAddress(0, lastRowNum, 0, lastCellNum - 1)
-        workbook?.let {
-            RegionUtil.setBorderTop(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
-            RegionUtil.setBorderBottom(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
-            RegionUtil.setBorderLeft(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
-            RegionUtil.setBorderRight(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
-        }
-
         worksheet.apply {
             // 정렬 필터 적용
             setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
