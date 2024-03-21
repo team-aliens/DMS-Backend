@@ -1,6 +1,7 @@
 package team.aliens.dms.thirdparty.parser
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.HorizontalAlignment
@@ -11,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
+import org.apache.poi.ss.util.RegionUtil
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
@@ -207,23 +209,49 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     }
 
     override fun writeRemainStatusExcelFile(studentRemainInfos: List<StudentRemainInfo>): ByteArray {
-
-        val attributes = listOf("학생 이름", "학번", "성별", "호실", "신청 항목")
-
         val remainInfosList: List<List<String?>> = studentRemainInfos.map {
             listOf(
-                it.studentName,
                 it.studentGcn,
-                it.studentSex.korean,
-                it.roomNumber,
-                it.optionName
+                it.studentName,
+                it.optionName,
+                null // 서명은 의미상 null
             )
         }
 
-        return createExcelSheet(
-            attributes = attributes,
-            datasList = remainInfosList
-        )
+        val workbook = XSSFWorkbook()
+        val sheet = workbook.createSheet()
+
+        var lastRowNum = 0
+        for (grade in 1..3) {
+            val attributes = listOf("학번", "이름", "신청 항목", "서명")
+            val headerRow = sheet.createRow(lastRowNum)
+            for (classNum in 1..4) {
+                val classNumIdx = (classNum - 1) * 4 // 반 별로 출력
+                insertDatasAtRow(row = headerRow, datas = attributes, style = getHeaderCellStyle(workbook), startIdx = classNumIdx)
+
+                for (number in 1..18) {
+                    val row = sheet.getRow(lastRowNum + number) ?: sheet.createRow(lastRowNum + number)
+
+                    val studentGcn = "${grade}${classNum}${number.toString().padStart(2, '0')}"
+                    val studentInfos = remainInfosList.find { it[0] == studentGcn } ?: emptyList()
+
+                    insertDatasAtRow(
+                        row = row,
+                        datas = studentInfos,
+                        style = getDefaultCellStyle(workbook),
+                        startIdx = classNumIdx
+                    )
+
+                }
+            }
+            lastRowNum += 18
+        }
+        formatWorkSheet(sheet, workbook)
+
+        ByteArrayOutputStream().use { stream ->
+            workbook.write(stream)
+            return stream.toByteArray()
+        }
     }
 
     override fun addStudyRoomApplicationStatusExcelFile(
@@ -275,8 +303,20 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
     private fun formatWorkSheet(
         worksheet: Sheet,
+        workbook: Workbook? = null
     ) {
         val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
+        val lastRowNum = worksheet.lastRowNum
+
+        // 테두리 적용
+        val borderLine = CellRangeAddress(0, lastRowNum, 0, lastCellNum - 1)
+        workbook?.let {
+            RegionUtil.setBorderTop(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
+            RegionUtil.setBorderBottom(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
+            RegionUtil.setBorderLeft(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
+            RegionUtil.setBorderRight(BorderStyle.MEDIUM.ordinal, borderLine, worksheet, it)
+        }
+
         worksheet.apply {
             // 정렬 필터 적용
             setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
