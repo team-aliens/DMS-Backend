@@ -6,16 +6,19 @@ import team.aliens.dms.domain.outing.exception.OutingTypeNotFoundException
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
+import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
 
 @Service
 class GetOutingServiceImpl(
     private val queryOutingTypePort: QueryOutingTypePort,
-    private val queryOutingApplicationPort: QueryOutingApplicationPort
+    private val queryOutingApplicationPort: QueryOutingApplicationPort,
+    private val queryOutingAvailableTimePort: QueryOutingAvailableTimePort
 ) : GetOutingService {
 
     override fun getOutingType(outingType: OutingType) =
@@ -39,4 +42,10 @@ class GetOutingServiceImpl(
         studentName: String?,
         date: LocalDate
     ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
+
+    override fun getOutingAvailableTimesByDayOfWeek(
+        dayOfWeek: DayOfWeek
+    ) = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(
+        dayOfWeek = dayOfWeek
+    )
 }

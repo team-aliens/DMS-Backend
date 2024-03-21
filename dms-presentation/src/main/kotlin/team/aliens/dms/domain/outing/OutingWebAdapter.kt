@@ -23,6 +23,7 @@ import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.dto.OutingApplicationHistoriesResponse
+import team.aliens.dms.domain.outing.dto.OutingAvailableTimeResponse
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.model.OutingStatus
@@ -32,9 +33,11 @@ import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.GetCurrentOutingApplicationUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingApplicationHistoriesUseCase
+import team.aliens.dms.domain.outing.usecase.GetOutingAvailableTimesUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
 
@@ -50,7 +53,8 @@ class OutingWebAdapter(
     private val updateOutingStatusUseCase: UpdateOutingStatusUseCase,
     private val exportAllOutingApplicationsUseCase: ExportAllOutingApplicationsUseCase,
     private val getCurrentOutingApplicationUseCase: GetCurrentOutingApplicationUseCase,
-    private val getOutingApplicationHistoryUseCase: GetOutingApplicationHistoriesUseCase
+    private val getOutingApplicationHistoryUseCase: GetOutingApplicationHistoriesUseCase,
+    private val getOutingAvailableTimesUseCase: GetOutingAvailableTimesUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -127,5 +131,12 @@ class OutingWebAdapter(
             studentName = studentName,
             date = date
         )
+    }
+
+    @GetMapping("/available-time")
+    fun getOutingAvailableTime(
+        @RequestParam dayOfWeek: DayOfWeek
+    ): OutingAvailableTimeResponse {
+        return getOutingAvailableTimesUseCase.execute(dayOfWeek)
     }
 }
