@@ -56,7 +56,9 @@ class ExcelAdapterTests {
         val attributes = slot<List<String>>()
         val datasList = slot<List<List<String>>>()
 
-        every { excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) } returns byteArrayOf()
+        every {
+            excelAdapter["createExcelSheet"](capture(attributes), capture(datasList))
+        } returns byteArrayOf()
 
         // when
         excelAdapter.writePointHistoryExcelFile(histories)
@@ -87,7 +89,9 @@ class ExcelAdapterTests {
         val attributes = slot<List<String>>()
         val datasList = slot<List<List<String>>>()
 
-        every { excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) } returns byteArrayOf()
+        every {
+            excelAdapter["createExcelSheet"](capture(attributes), capture(datasList))
+        } returns byteArrayOf()
 
         // when
         excelAdapter.writeRemainStatusExcelFile(studentRemainInfos)
@@ -140,7 +144,9 @@ class ExcelAdapterTests {
         val attributes = slot<List<String>>()
         val datasList = slot<List<List<String>>>()
 
-        every { excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) } returns byteArrayOf()
+        every {
+            excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) // , Consumer<Sheet> {}
+        } returns byteArrayOf()
 
         // when
         excelAdapter.writeStudyRoomApplicationStatusExcelFile(

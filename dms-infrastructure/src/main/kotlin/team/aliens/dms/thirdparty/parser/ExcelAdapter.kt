@@ -33,7 +33,6 @@ import team.aliens.dms.thirdparty.parser.exception.ExcelInvalidFileException
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.time.format.DateTimeFormatter
-import java.util.function.Consumer
 import java.util.function.Function
 
 @Component
@@ -192,6 +191,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         return createExcelSheet(
             attributes = attributes,
             datasList = studentPointHistoryInfoList,
+            /*
             applyToSheet = Consumer { sheet ->
                 sheet.setColumnWidth(1, 7 * 256)
                 sheet.setColumnWidth(2, 5 * 256)
@@ -201,6 +201,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 sheet.setColumnWidth(6, 10 * 256)
                 sheet.setColumnWidth(7, 15 * 256)
             }
+
+             */
         )
     }
 
@@ -343,7 +345,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     private fun createExcelSheet(
         attributes: List<String>,
         datasList: List<List<String?>>,
-        applyToSheet: Consumer<Sheet> = Consumer {  }
+        // applyToSheet: Consumer<Sheet> = Consumer { }
     ): ByteArray {
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet()
@@ -357,7 +359,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         }
         formatWorkSheet(sheet)
 
-        applyToSheet.accept(sheet)
+        // applyToSheet.accept(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
@@ -406,6 +408,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             .apply {
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
                 verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
-                wrapText = true
+                // wrapText = true
             }
 }
