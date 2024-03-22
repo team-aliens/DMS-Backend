@@ -41,6 +41,7 @@ class GenerateJwtAdapter(
         val token = Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
+            .setId(userId.toString())
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
