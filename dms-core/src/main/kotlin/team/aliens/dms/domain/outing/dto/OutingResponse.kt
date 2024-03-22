@@ -47,6 +47,6 @@ data class OutingApplicationHistoriesResponse(
     val outings: List<OutingHistoryVO>
 )
 
-data class OutingAvailableTimeResponse(
-    val outingAvailableTime: List<OutingAvailableTimeVO>
+data class OutingAvailableTimesResponse(
+    val outingAvailableTimes: List<OutingAvailableTimeVO>
 )

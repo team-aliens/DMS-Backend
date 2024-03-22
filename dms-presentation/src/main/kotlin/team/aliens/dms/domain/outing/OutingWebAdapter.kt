@@ -23,7 +23,7 @@ import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.dto.OutingApplicationHistoriesResponse
-import team.aliens.dms.domain.outing.dto.OutingAvailableTimeResponse
+import team.aliens.dms.domain.outing.dto.OutingAvailableTimesResponse
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.model.OutingStatus
@@ -136,7 +136,7 @@ class OutingWebAdapter(
     @GetMapping("/available-time")
     fun getOutingAvailableTime(
         @RequestParam dayOfWeek: DayOfWeek
-    ): OutingAvailableTimeResponse {
+    ): OutingAvailableTimesResponse {
         return getOutingAvailableTimesUseCase.execute(dayOfWeek)
     }
 }
