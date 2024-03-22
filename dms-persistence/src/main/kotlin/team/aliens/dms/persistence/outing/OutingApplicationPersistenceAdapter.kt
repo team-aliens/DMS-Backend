@@ -120,6 +120,7 @@ class OutingApplicationPersistenceAdapter(
                     studentJpaEntity.name,
                     outingTypeJpaEntity.id.title,
                     outingCompanionJpaEntity.count().intValue(),
+                    outingApplicationJpaEntity.status,
                     outingApplicationJpaEntity.outingTime,
                     outingApplicationJpaEntity.arrivalTime
                 )
