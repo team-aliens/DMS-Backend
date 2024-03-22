@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.auth.entity
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
+import org.springframework.data.redis.core.index.Indexed
 import team.aliens.dms.domain.auth.model.Authority
 import java.util.UUID
 
@@ -10,9 +11,10 @@ import java.util.UUID
 data class RefreshTokenEntity(
 
     @Id
-    val token: String,
-
     val userId: UUID,
+
+    @Indexed
+    val token: String,
 
     val authority: Authority,
 
