@@ -9,7 +9,7 @@ open class OutingApplicationVO(
     val studentGrade: Int,
     val studentClassRoom: Int,
     val studentNumber: Int,
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val outingCompanionVOs: List<OutingCompanionVO>

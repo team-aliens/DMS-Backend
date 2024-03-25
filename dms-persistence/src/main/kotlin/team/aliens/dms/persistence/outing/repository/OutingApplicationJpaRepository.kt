@@ -8,5 +8,5 @@ import java.util.UUID
 
 @Repository
 interface OutingApplicationJpaRepository : CrudRepository<OutingApplicationJpaEntity, UUID> {
-    fun existsByOutAtAndStudentId(outAt: LocalDate, studentId: UUID): Boolean
+    fun existsByOutingDateAndStudentId(outingDate: LocalDate, studentId: UUID): Boolean
 }

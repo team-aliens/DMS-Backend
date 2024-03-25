@@ -9,7 +9,7 @@ interface CheckOutingService {
 
     fun checkOutingApplicationAvailable(
         studentId: UUID,
-        outAt: LocalDate,
+        outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     )

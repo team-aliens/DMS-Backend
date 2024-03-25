@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class QueryCurrentOutingApplicationVO @QueryProjection constructor(
-    outAt: LocalDate,
+    outingDate: LocalDate,
     outingTypeTitle: String,
     status: OutingStatus,
     outingTime: LocalTime,
@@ -15,7 +15,7 @@ class QueryCurrentOutingApplicationVO @QueryProjection constructor(
     reason: String?,
     outingCompanions: List<String>
 ) : CurrentOutingApplicationVO(
-    outAt = outAt,
+    outingDate = outingDate,
     outingTypeTitle = outingTypeTitle,
     status = status,
     outingTime = outingTime,

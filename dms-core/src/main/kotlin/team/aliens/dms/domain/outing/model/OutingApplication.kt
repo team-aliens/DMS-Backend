@@ -17,7 +17,7 @@ data class OutingApplication(
 
     val createdAt: LocalDateTime,
 
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
 
     val outingTime: LocalTime,
 

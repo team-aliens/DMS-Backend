@@ -62,7 +62,7 @@ class OutingWebAdapter(
     fun applyOuting(@RequestBody @Valid webRequest: ApplyOutingWebRequest): ApplyOutingResponse {
         return applyOutingUseCase.execute(
             ApplyOutingRequest(
-                outAt = webRequest.outAt,
+                outingDate = webRequest.outingDate,
                 outingTime = webRequest.outingTime,
                 arrivalTime = webRequest.arrivalTime,
                 outingTypeTitle = webRequest.outingTypeTitle,

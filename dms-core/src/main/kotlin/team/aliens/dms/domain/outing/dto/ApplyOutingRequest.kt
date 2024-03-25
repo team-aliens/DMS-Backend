@@ -5,7 +5,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class ApplyOutingRequest(
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val outingTypeTitle: String,
