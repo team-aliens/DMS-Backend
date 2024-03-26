@@ -14,5 +14,7 @@ data class QueryStudentsWithTagVO @QueryProjection constructor(
     val roomNumber: String,
     val profileImageUrl: String,
     val sex: Sex,
+    val bonusPoint: Int,
+    val minusPoint: Int,
     val tags: List<TagJpaEntity>
 )

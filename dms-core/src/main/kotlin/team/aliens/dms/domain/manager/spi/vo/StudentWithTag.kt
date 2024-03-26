@@ -14,6 +14,8 @@ data class StudentWithTag(
     val roomNumber: String,
     val profileImageUrl: String,
     val sex: Sex,
+    val bonusPoint: Int,
+    val minusPoint: Int,
     val tags: List<Tag>
 ) {
     val gcn: String = Student.processGcn(this.grade, this.classRoom, this.number)
