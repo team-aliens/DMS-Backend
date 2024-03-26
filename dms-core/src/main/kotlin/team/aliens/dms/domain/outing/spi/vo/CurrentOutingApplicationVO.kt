@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 open class CurrentOutingApplicationVO(
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
     val outingTypeTitle: String,
     val status: OutingStatus,
     val outingTime: LocalTime,

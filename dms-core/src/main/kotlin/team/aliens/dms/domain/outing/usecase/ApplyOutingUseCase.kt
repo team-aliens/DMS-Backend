@@ -22,7 +22,7 @@ class ApplyOutingUseCase(
 
         outingService.checkOutingApplicationAvailable(
             studentId = student.id,
-            outAt = request.outAt,
+            outingDate = request.outingDate,
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime
         )
@@ -31,7 +31,7 @@ class ApplyOutingUseCase(
             OutingApplication(
                 studentId = student.id,
                 createdAt = LocalDateTime.now(),
-                outAt = request.outAt,
+                outingDate = request.outingDate,
                 outingTime = request.outingTime,
                 arrivalTime = request.arrivalTime,
                 status = OutingStatus.REQUESTED,
