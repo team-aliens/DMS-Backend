@@ -6,7 +6,6 @@ import team.aliens.dms.domain.outing.model.OutingCompanion
 import team.aliens.dms.domain.outing.spi.OutingCompanionPort
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outingCompanionJpaEntity
-import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntityId.outingCompanionJpaEntityId
 import team.aliens.dms.persistence.outing.mapper.OutingCompanionMapper
 import team.aliens.dms.persistence.outing.repository.OutingCompanionJpaRepository
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionDetailsVO

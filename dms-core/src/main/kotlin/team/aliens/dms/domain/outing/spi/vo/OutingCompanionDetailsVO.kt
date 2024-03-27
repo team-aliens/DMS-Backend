@@ -15,4 +15,4 @@ open class OutingCompanionDetailsVO(
         get() =
             if (studentGrade != 0 && studentClassRoom != 0 && studentNumber != 0)
                 Student.processGcn(studentGrade, studentClassRoom, studentNumber)
-            else ""}
+            else "" }
