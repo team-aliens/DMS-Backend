@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import java.util.UUID
 
-class QueryStudentOutingHistoryVO @QueryProjection constructor(
+class QueryOutingCompanionDetailsVO @QueryProjection constructor(
     id: UUID,
     name: String,
     grade: Int,
