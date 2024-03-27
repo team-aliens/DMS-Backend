@@ -11,7 +11,6 @@ class GetOutingHistoryDetailsUseCase(
 ) {
 
     fun execute(outingApplicationId: UUID): OutingHistoryDetailsResponse {
-
         val outingHistory = outingService.getOutingApplicationById(outingApplicationId)
 
         val outingCompanion = outingService.getOutingCompanionsById(outingApplicationId)
