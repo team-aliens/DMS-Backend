@@ -11,6 +11,7 @@ import team.aliens.dms.domain.outing.spi.OutingApplicationPort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
+import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.outingApplicationJpaEntity
 import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outingCompanionJpaEntity
 import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingTypeJpaEntity
@@ -20,7 +21,9 @@ import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingAppli
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingHistoryVO
+import team.aliens.dms.persistence.outing.repository.vo.QQueryStudentOutingHistoryVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
 import java.util.UUID
 
@@ -137,6 +140,26 @@ class OutingApplicationPersistenceAdapter(
             )
             .groupBy(outingApplicationJpaEntity.id)
             .orderBy(outingApplicationJpaEntity.outAt.asc())
+            .fetch()
+    }
+
+    override fun queryOutingCompanionsById(applicationId: UUID): List<OutingCompanionDetailsVO> {
+        return queryFactory
+            .select(
+                QQueryStudentOutingHistoryVO(
+                    studentJpaEntity.id,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    studentJpaEntity.room.number
+                )
+            )
+            .from(studentJpaEntity)
+            .join(outingCompanionJpaEntity.student, studentJpaEntity)
+            .where(
+                outingCompanionJpaEntity.outingApplication.id.eq(applicationId)
+            )
             .fetch()
     }
 
