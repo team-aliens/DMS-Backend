@@ -178,6 +178,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/outings/my").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.GET, "/outings/histories").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/outings/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/outings/history/{outing-application-id}").permitAll()
 
                 .anyRequest().denyAll()
             }

@@ -1,10 +1,12 @@
 package team.aliens.dms.domain.outing.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingAvailableTimeVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
+import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -50,3 +52,28 @@ data class OutingApplicationHistoriesResponse(
 data class OutingAvailableTimesResponse(
     val outingAvailableTimes: List<OutingAvailableTimeVO>
 )
+
+data class OutingHistoryDetailsResponse(
+    val outingTime: LocalTime,
+    val arrivalTime: LocalTime,
+    val outingStatus: OutingStatus,
+    val reason: String?,
+    val outingType: String,
+    val students: List<OutingCompanionDetailsVO>?
+) {
+    companion object {
+        fun of(
+            outingHistory: OutingApplication,
+            outingCompanions: List<OutingCompanionDetailsVO>?
+        ): OutingHistoryDetailsResponse {
+            return OutingHistoryDetailsResponse(
+                outingTime = outingHistory.outingTime,
+                arrivalTime = outingHistory.arrivalTime,
+                outingStatus = outingHistory.status,
+                reason = outingHistory.reason,
+                outingType = outingHistory.outingTypeTitle,
+                students = outingCompanions
+            )
+        }
+    }
+}
