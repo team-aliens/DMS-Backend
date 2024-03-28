@@ -11,8 +11,5 @@ open class OutingCompanionDetailsVO(
     val studentNumber: Int,
     val roomNumber: String
 ) {
-    val studentGcn: String
-        get() =
-            if (studentGrade != 0 && studentClassRoom != 0 && studentNumber != 0)
-                Student.processGcn(studentGrade, studentClassRoom, studentNumber)
-            else "" }
+    val studentGcn: String = Student.processGcn(studentGrade, studentClassRoom, studentNumber)
+}

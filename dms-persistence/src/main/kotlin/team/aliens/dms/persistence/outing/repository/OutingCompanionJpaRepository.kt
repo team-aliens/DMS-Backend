@@ -6,6 +6,4 @@ import team.aliens.dms.persistence.outing.entity.OutingCompanionJpaEntity
 import team.aliens.dms.persistence.outing.entity.OutingCompanionJpaEntityId
 
 @Repository
-interface OutingCompanionJpaRepository : CrudRepository<OutingCompanionJpaEntity, OutingCompanionJpaEntityId> {
-    fun findOutingCompanionJpaEntitiesById(id: OutingCompanionJpaEntityId): List<OutingCompanionJpaEntity>
-}
+interface OutingCompanionJpaRepository : CrudRepository<OutingCompanionJpaEntity, OutingCompanionJpaEntityId>

@@ -13,8 +13,8 @@ class GetOutingHistoryDetailsUseCase(
     fun execute(outingApplicationId: UUID): OutingHistoryDetailsResponse {
         val outingHistory = outingService.getOutingApplicationById(outingApplicationId)
 
-        val outingCompanion = outingService.getOutingCompanionsById(outingApplicationId)
+        val outingCompanions = outingService.getOutingCompanionsByApplicationId(outingApplicationId)
 
-        return OutingHistoryDetailsResponse.of(outingHistory, outingCompanion)
+        return OutingHistoryDetailsResponse.of(outingHistory, outingCompanions)
     }
 }
