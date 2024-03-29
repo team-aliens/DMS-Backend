@@ -60,12 +60,12 @@ data class OutingHistoryDetailsResponse(
     val outingStatus: OutingStatus,
     val reason: String?,
     val outingType: String,
-    val students: List<OutingCompanionsResponse>?
+    val students: List<OutingCompanionsResponse>
 ) {
     companion object {
         fun of(
             outingHistory: OutingApplication,
-            outingCompanions: List<OutingCompanionDetailsVO>?
+            outingCompanions: List<OutingCompanionDetailsVO>
         ): OutingHistoryDetailsResponse {
             return OutingHistoryDetailsResponse(
                 outingTime = outingHistory.outingTime,
@@ -73,7 +73,7 @@ data class OutingHistoryDetailsResponse(
                 outingStatus = outingHistory.status,
                 reason = outingHistory.reason,
                 outingType = outingHistory.outingTypeTitle,
-                students = outingCompanions!!.map {
+                students = outingCompanions.map {
                     OutingCompanionsResponse.of(it)
                 }
             )

@@ -52,6 +52,6 @@ class GetOutingServiceImpl(
         dayOfWeek = dayOfWeek
     )
 
-    override fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO>? =
+    override fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO> =
         queryOutingCompanionPort.queryOutingCompanionsById(outingApplicationId)
 }

@@ -5,5 +5,5 @@ import java.util.UUID
 
 interface QueryOutingCompanionPort {
 
-    fun queryOutingCompanionsById(outingApplicationId: UUID): List<OutingCompanionDetailsVO>?
+    fun queryOutingCompanionsById(outingApplicationId: UUID): List<OutingCompanionDetailsVO>
 }

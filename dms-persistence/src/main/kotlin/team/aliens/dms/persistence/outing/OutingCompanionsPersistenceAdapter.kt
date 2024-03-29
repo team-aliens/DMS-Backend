@@ -19,7 +19,7 @@ class OutingCompanionsPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : OutingCompanionPort {
 
-    override fun queryOutingCompanionsById(outingApplicationId: UUID): List<OutingCompanionDetailsVO>? {
+    override fun queryOutingCompanionsById(outingApplicationId: UUID): List<OutingCompanionDetailsVO> {
         return queryFactory
             .select(
                 QQueryOutingCompanionDetailsVO(
