@@ -7,8 +7,10 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
+import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
+import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -18,7 +20,8 @@ import java.util.UUID
 class GetOutingServiceImpl(
     private val queryOutingTypePort: QueryOutingTypePort,
     private val queryOutingApplicationPort: QueryOutingApplicationPort,
-    private val queryOutingAvailableTimePort: QueryOutingAvailableTimePort
+    private val queryOutingAvailableTimePort: QueryOutingAvailableTimePort,
+    private val queryOutingCompanionPort: QueryOutingCompanionPort
 ) : GetOutingService {
 
     override fun getOutingType(outingType: OutingType) =
@@ -48,4 +51,7 @@ class GetOutingServiceImpl(
     ) = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(
         dayOfWeek = dayOfWeek
     )
+
+    override fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO> =
+        queryOutingCompanionPort.queryOutingCompanionsById(outingApplicationId)
 }

@@ -21,6 +21,7 @@ import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationV
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingHistoryVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
 import java.util.UUID
 
