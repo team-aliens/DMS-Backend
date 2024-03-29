@@ -21,7 +21,7 @@ data class ExportAllOutingApplicationsResponse(
 )
 
 data class GetCurrentOutingApplicationResponse(
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
     val outingTypeTitle: String,
     val status: OutingStatus,
     val outingTime: LocalTime,
@@ -34,7 +34,7 @@ data class GetCurrentOutingApplicationResponse(
         fun of(currentOutingApplicationVO: CurrentOutingApplicationVO) =
             currentOutingApplicationVO.run {
                 GetCurrentOutingApplicationResponse(
-                    outAt = outAt,
+                    outingDate = outingDate,
                     outingTypeTitle = outingTypeTitle,
                     status = status,
                     outingTime = outingTime,

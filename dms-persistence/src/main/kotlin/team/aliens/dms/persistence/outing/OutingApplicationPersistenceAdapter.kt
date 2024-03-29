@@ -32,8 +32,8 @@ class OutingApplicationPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : OutingApplicationPort {
 
-    override fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) =
-        outingApplicationRepository.existsByOutAtAndStudentId(outAt, studentId)
+    override fun existOutingApplicationByOutingDateAndStudentId(outingDate: LocalDate, studentId: UUID) =
+        outingApplicationRepository.existsByOutingDateAndStudentId(outingDate, studentId)
 
     override fun queryOutingApplicationById(outingApplicationId: UUID) =
         outingApplicationMapper.toDomain(
@@ -53,8 +53,8 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity)
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .where(outingApplicationJpaEntity.outAt.between(start, end))
-            .orderBy(outingApplicationJpaEntity.outAt.asc())
+            .where(outingApplicationJpaEntity.outingDate.between(start, end))
+            .orderBy(outingApplicationJpaEntity.outingDate.asc())
             .transform(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
@@ -63,7 +63,7 @@ class OutingApplicationPersistenceAdapter(
                             studentJpaEntity.grade,
                             studentJpaEntity.classRoom,
                             studentJpaEntity.number,
-                            outingApplicationJpaEntity.outAt,
+                            outingApplicationJpaEntity.outingDate,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             list(
@@ -98,7 +98,7 @@ class OutingApplicationPersistenceAdapter(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
                         QQueryCurrentOutingApplicationVO(
-                            outingApplicationJpaEntity.outAt,
+                            outingApplicationJpaEntity.outingDate,
                             outingTypeJpaEntity.id.title,
                             outingApplicationJpaEntity.status,
                             outingApplicationJpaEntity.outingTime,
@@ -134,10 +134,10 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
                 studentName?.let { studentJpaEntity.name.eq(it) },
-                outingApplicationJpaEntity.outAt.eq(date)
+                outingApplicationJpaEntity.outingDate.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)
-            .orderBy(outingApplicationJpaEntity.outAt.asc())
+            .orderBy(outingApplicationJpaEntity.outingDate.asc())
             .fetch()
     }
 

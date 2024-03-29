@@ -30,7 +30,7 @@ class OutingApplicationJpaEntity(
     override val createdAt: LocalDateTime,
 
     @Column(columnDefinition = "DATE", nullable = false)
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
 
     @Column(columnDefinition = "TIME", nullable = false)
     val outingTime: LocalTime,

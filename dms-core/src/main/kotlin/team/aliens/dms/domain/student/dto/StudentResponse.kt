@@ -112,6 +112,8 @@ data class StudentsResponse(
                     roomNumber = it.roomNumber,
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
+                    bonusPoint = it.bonusPoint,
+                    minusPoint = it.minusPoint,
                     tags = it.tags.map { tag ->
                         TagResponse.of(tag)
                     }

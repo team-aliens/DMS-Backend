@@ -354,7 +354,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             mutableListOf(
                 outingApplication.studentName,
                 outingApplication.studentGcn,
-                outingApplication.outAt.toString(),
+                outingApplication.outingDate.toString(),
                 outingApplication.outingTime.toString(),
                 outingApplication.arrivalTime.toString()
             ).apply {

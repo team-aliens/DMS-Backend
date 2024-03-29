@@ -11,7 +11,7 @@ class QueryOutingApplicationVO @QueryProjection constructor(
     studentGrade: Int,
     studentClassRoom: Int,
     studentNumber: Int,
-    outAt: LocalDate,
+    outingDate: LocalDate,
     outingTime: LocalTime,
     arrivalTime: LocalTime,
     outingCompanionVOs: List<OutingCompanionVO>
@@ -20,7 +20,7 @@ class QueryOutingApplicationVO @QueryProjection constructor(
     studentGrade = studentGrade,
     studentClassRoom = studentClassRoom,
     studentNumber = studentNumber,
-    outAt = outAt,
+    outingDate = outingDate,
     outingTime = outingTime,
     arrivalTime = arrivalTime,
     outingCompanionVOs = outingCompanionVOs
