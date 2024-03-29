@@ -58,6 +58,7 @@ data class OutingHistoryDetailsResponse(
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val outingStatus: OutingStatus,
+    @field:JsonInclude(JsonInclude.Include.ALWAYS)
     val reason: String?,
     val outingType: String,
     val students: List<OutingCompanionsResponse>
