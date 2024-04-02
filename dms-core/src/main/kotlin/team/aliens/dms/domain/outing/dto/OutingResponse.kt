@@ -57,6 +57,8 @@ data class OutingAvailableTimesResponse(
 
 data class OutingHistoryDetailsResponse(
     val studentName: String,
+    val studentGcn: String,
+    val studentRoomNumber: String,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val outingStatus: OutingStatus,
@@ -73,6 +75,8 @@ data class OutingHistoryDetailsResponse(
         ): OutingHistoryDetailsResponse {
             return OutingHistoryDetailsResponse(
                 studentName = student.name,
+                studentGcn = student.gcn,
+                studentRoomNumber = student.roomNumber,
                 outingTime = outingHistory.outingTime,
                 arrivalTime = outingHistory.arrivalTime,
                 outingStatus = outingHistory.status,
