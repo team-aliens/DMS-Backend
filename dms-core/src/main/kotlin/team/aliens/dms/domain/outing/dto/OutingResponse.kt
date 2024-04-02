@@ -7,6 +7,7 @@ import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingAvailableTimeVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
+import team.aliens.dms.domain.student.model.Student
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -55,6 +56,7 @@ data class OutingAvailableTimesResponse(
 )
 
 data class OutingHistoryDetailsResponse(
+    val studentName: String,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val outingStatus: OutingStatus,
@@ -66,9 +68,11 @@ data class OutingHistoryDetailsResponse(
     companion object {
         fun of(
             outingHistory: OutingApplication,
-            outingCompanions: List<OutingCompanionDetailsVO>
+            outingCompanions: List<OutingCompanionDetailsVO>,
+            student: Student
         ): OutingHistoryDetailsResponse {
             return OutingHistoryDetailsResponse(
+                studentName = student.name,
                 outingTime = outingHistory.outingTime,
                 arrivalTime = outingHistory.arrivalTime,
                 outingStatus = outingHistory.status,

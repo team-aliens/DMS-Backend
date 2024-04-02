@@ -137,7 +137,7 @@ class OutingApplicationPersistenceAdapter(
                 outingApplicationJpaEntity.outingDate.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)
-            .orderBy(outingApplicationJpaEntity.outingDate.asc())
+            .orderBy(outingApplicationJpaEntity.arrivalTime.asc())
             .fetch()
     }
 
