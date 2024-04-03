@@ -22,7 +22,6 @@ class ExportRemainStatusUseCase(
 ) {
 
     fun execute(): ExportRemainStatusResponse {
-
         val user = userService.getCurrentUser()
         val school = schoolService.getSchoolById(user.schoolId)
 
