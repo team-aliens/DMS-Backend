@@ -25,12 +25,13 @@ class StudyRoomTest : DescribeSpec({
 
         context("자습실 이용 가능한 학년이 0이면") {
             val studyRoom = createStudyRoomStub(availableGrade = 0, availableSex = Sex.MALE)
-            val grade = 3
             val sex = Sex.MALE
 
             it("모든 학년이 자습실을 이용할 수 있다") {
-                shouldNotThrowAny {
-                    studyRoom.checkIsAvailableGradeAndSex(grade, sex)
+                (1..3).forEach { grade ->
+                    shouldNotThrowAny {
+                        studyRoom.checkIsAvailableGradeAndSex(grade, sex)
+                    }
                 }
             }
         }
@@ -38,11 +39,12 @@ class StudyRoomTest : DescribeSpec({
         context("자습실 이용 가능한 성별이 ALL이면") {
             val studyRoom = createStudyRoomStub(availableGrade = 3, availableSex = Sex.ALL)
             val grade = 3
-            val sex = Sex.MALE
 
             it("같은 학년의 모든 학생이 자습실을 이용할 수 있다") {
-                shouldNotThrowAny {
-                    studyRoom.checkIsAvailableGradeAndSex(grade, sex)
+                Sex.entries.forEach { sex ->
+                    shouldNotThrowAny {
+                        studyRoom.checkIsAvailableGradeAndSex(grade, sex)
+                    }
                 }
             }
         }
