@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.outing.service
 
-import org.springframework.stereotype.Service
+import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationNotFoundException
 import team.aliens.dms.domain.outing.exception.OutingTypeNotFoundException
 import team.aliens.dms.domain.outing.model.OutingApplication

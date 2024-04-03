@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.file.service
 
-import org.springframework.stereotype.Service
+import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
