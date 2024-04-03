@@ -37,8 +37,11 @@ subprojects {
         implementation(Dependencies.JAVA_SERVLET)
 
         // test
-        implementation(Dependencies.SPRING_TEST)
-        implementation(Dependencies.MOCKK)
+        testImplementation(Dependencies.SPRING_TEST)
+        testImplementation(Dependencies.MOCKK)
+        testImplementation(Dependencies.SPRING_KOTEST)
+        testImplementation(Dependencies.KOTEST)
+        testImplementation(Dependencies.KOTEST_ASSERTIONS)
 
         detektPlugins(Dependencies.DETEKT)
     }
