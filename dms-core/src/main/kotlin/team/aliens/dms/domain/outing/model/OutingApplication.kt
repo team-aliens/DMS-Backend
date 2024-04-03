@@ -35,9 +35,7 @@ data class OutingApplication(
 
 ) : SchoolIdDomain {
 
-    fun checkCancelable(
-        status: OutingStatus
-    ) {
+    fun checkCancelable(status: OutingStatus) {
         if (status != OutingStatus.REQUESTED) {
             throw OutingTypeMismatchException
         }

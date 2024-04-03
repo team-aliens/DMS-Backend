@@ -6,6 +6,7 @@ import team.aliens.dms.domain.studyroom.exception.SeatCanNotAppliedException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomAlreadyExistsException
 import team.aliens.dms.domain.studyroom.exception.StudyRoomTimeSlotNotFoundException
 import team.aliens.dms.domain.studyroom.spi.QueryStudyRoomPort
+import java.time.LocalTime
 import java.util.UUID
 
 @Service
@@ -32,7 +33,7 @@ class CheckStudyRoomServiceImpl(
 
     override fun checkStudyRoomApplicationTimeAvailable(schoolId: UUID) {
         val availableTime = queryStudyRoomPort.queryAvailableTimeBySchoolId(schoolId) ?: throw AvailableTimeNotFoundException
-        if (!availableTime.isAvailable()) {
+        if (!availableTime.isAvailable(LocalTime.now())) {
             throw SeatCanNotAppliedException
         }
     }

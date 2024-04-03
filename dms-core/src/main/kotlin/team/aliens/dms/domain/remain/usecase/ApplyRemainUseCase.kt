@@ -19,7 +19,7 @@ class ApplyRemainUseCase(
 
         val remainOption = remainService.getRemainOptionById(remainOptionId)
         remainService.getRemainAvailableTimeBySchoolId(student.schoolId)
-            .apply { checkAvailable() }
+            .apply { checkAvailable(LocalDateTime.now()) }
 
         remainService.saveRemainStatus(
             RemainStatus(
