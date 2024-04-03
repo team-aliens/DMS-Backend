@@ -51,6 +51,9 @@ object Dependencies {
     // test
     const val SPRING_TEST = "org.springframework.boot:spring-boot-starter-test:${PluginVersions.SPRING_BOOT_VERSION}"
     const val MOCKK = "io.mockk:mockk:${DependencyVersions.MOCKK_VERSION}"
+    const val SPRING_KOTEST = "io.kotest.extensions:kotest-extensions-spring:${DependencyVersions.SPRING_KOTEST_VERSION}"
+    const val KOTEST = "io.kotest:kotest-runner-junit5:${DependencyVersions.KOTEST_VERSION}"
+    const val KOTEST_ASSERTIONS = "io.kotest:kotest-assertions-core:${DependencyVersions.KOTEST_VERSION}"
 
     // time based uuid
     const val UUID_TIME = "com.fasterxml.uuid:java-uuid-generator:${DependencyVersions.UUID_TIME_VERSION}"
