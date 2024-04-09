@@ -5,8 +5,10 @@ import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.UUID
 
 class QueryCurrentOutingApplicationVO @QueryProjection constructor(
+    id: UUID,
     outingDate: LocalDate,
     outingTypeTitle: String,
     status: OutingStatus,
@@ -15,6 +17,7 @@ class QueryCurrentOutingApplicationVO @QueryProjection constructor(
     reason: String?,
     outingCompanions: List<String>
 ) : CurrentOutingApplicationVO(
+    id = id,
     outingDate = outingDate,
     outingTypeTitle = outingTypeTitle,
     status = status,

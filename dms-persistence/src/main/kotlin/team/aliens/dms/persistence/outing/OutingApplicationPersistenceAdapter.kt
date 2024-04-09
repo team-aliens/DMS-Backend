@@ -98,6 +98,7 @@ class OutingApplicationPersistenceAdapter(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
                         QQueryCurrentOutingApplicationVO(
+                            outingApplicationJpaEntity.id,
                             outingApplicationJpaEntity.outingDate,
                             outingTypeJpaEntity.id.title,
                             outingApplicationJpaEntity.status,
