@@ -10,17 +10,17 @@ class OutingApplicationTest : DescribeSpec({
 
     describe("checkCancelable") {
         context("외출 신청 상태가 REQUESTED이면") {
-            val outingApplication = createOutingApplicationStub(outingStatus = OutingStatus.REQUESTED)
+            val outingApplication = createOutingApplicationStub(outingStatus = OutingStatus.APPROVED)
 
             it("외출 취소가 가능하다") {
                 shouldNotThrowAny {
-                    outingApplication.checkCancelable(OutingStatus.REQUESTED)
+                    outingApplication.checkCancelable(OutingStatus.APPROVED)
                 }
             }
         }
 
         context("외출 신청 상태가 REQUESTED가 아니면") {
-            val outingApplication = createOutingApplicationStub(outingStatus = OutingStatus.REQUESTED)
+            val outingApplication = createOutingApplicationStub(outingStatus = OutingStatus.APPROVED)
 
             it("외출 취소가 불가능하다") {
                 shouldThrow<OutingTypeMismatchException> {
