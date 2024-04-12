@@ -10,7 +10,7 @@ enum class WarningTag {
     THREE_OUT;
 
     companion object {
-        fun of(warningLevel: Int) = when (warningLevel) {
+        fun ofByPoint(warningLevel: Int) = when ((warningLevel - 10) / 5) {
             1 -> FIRST_WARNING
             2 -> SECOND_WARNING
             3 -> THIRD_WARNING
@@ -20,7 +20,7 @@ enum class WarningTag {
             else -> SAFE
         }
 
-        fun of(warningMessage: String) = when (warningMessage) {
+        fun ofByNameOrNull(warningMessage: String) = when (warningMessage) {
             "1차 경고" -> FIRST_WARNING
             "2차 경고" -> SECOND_WARNING
             "3차 경고" -> THIRD_WARNING
