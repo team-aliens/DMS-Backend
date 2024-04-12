@@ -7,4 +7,6 @@ import java.util.UUID
 
 interface StudentTagJpaRepository : CrudRepository<StudentTagJpaEntity, StudentTagId> {
     fun deleteByTagId(tagId: UUID)
+
+    fun findAllByStudentId(studentId: UUID): List<StudentTagJpaEntity>
 }

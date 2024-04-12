@@ -26,6 +26,9 @@ class CommandTagServiceImpl(
         return commandTagPort.saveTag(tag)
     }
 
+    override fun saveStudentTag(studentTag: StudentTag): StudentTag =
+        commandStudentTagPort.saveStudentTag(studentTag)
+
     override fun saveAllStudentTags(studentTags: List<StudentTag>) {
         commandStudentTagPort.saveAllStudentTags(studentTags)
     }

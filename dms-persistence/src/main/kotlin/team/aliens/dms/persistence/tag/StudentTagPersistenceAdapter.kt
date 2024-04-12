@@ -16,6 +16,11 @@ class StudentTagPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : StudentTagPort {
 
+    override fun queryStudentTagsByStudentId(studentId: UUID): List<StudentTag> {
+        return studentTagRepository.findAllByStudentId(studentId)
+            .map { studentTagMapper.toDomain(it)!! }
+    }
+
     override fun deleteStudentTagById(studentId: UUID, tagId: UUID) {
         val id = StudentTagId(
             studentId = studentId,
@@ -28,6 +33,12 @@ class StudentTagPersistenceAdapter(
     override fun deleteStudentTagByTagId(tagId: UUID) {
         studentTagRepository.deleteByTagId(tagId)
     }
+
+    override fun saveStudentTag(studentTag: StudentTag) = studentTagMapper.toDomain(
+        studentTagRepository.save(
+            studentTagMapper.toEntity(studentTag)
+        )
+    )!!
 
     override fun saveAllStudentTags(studentTags: List<StudentTag>) {
         studentTagRepository.saveAll(

@@ -9,5 +9,7 @@ interface CommandStudentTagPort {
 
     fun deleteStudentTagByTagId(tagId: UUID)
 
+    fun saveStudentTag(studentTag: StudentTag): StudentTag
+
     fun saveAllStudentTags(studentTags: List<StudentTag>)
 }
