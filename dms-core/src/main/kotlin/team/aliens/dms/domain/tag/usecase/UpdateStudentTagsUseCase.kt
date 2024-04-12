@@ -15,39 +15,33 @@ class UpdateStudentTagsUseCase(
     private val pointService: PointService,
 ) {
     fun execute() {
-        studentService.getAllStudentsByName("").forEach { student ->
-            val warningTag = WarningTag.of(
-                pointService.queryBonusAndMinusTotalPointByStudentGcnAndName(
-                    student.gcn,
-                    student.name
-                ).second
-            )
+
+        val saveList = ArrayList<StudentTag>()
+
+        studentService.getAllStudentWithMinusPoint().forEach { (studentId, minusPoint) ->
+            val warningTag = WarningTag.ofByPoint(minusPoint)
+
             if (warningTag != WarningTag.SAFE) {
-                var flag = true
-
-                tagService.getStudentTagsByStudentId(student.id).stream()
-                    .map { tag -> WarningTag.of(tagService.getTagById(tag.tagId).name) }
-                    .forEach { tag ->
-                        tag?.run {
-                            if (this.ordinal < warningTag.ordinal)
-                                tagService.deleteStudentTagById(
-                                    student.id,
-                                    tagService.getTagByName(this.getTagName()).id
-                                )
-                            else
-                                flag = false
-                        }
+                tagService.getStudentTagsByStudentId(studentId).stream().forEach { tag ->
+                    WarningTag.ofByNameOrNull(tagService.getTagById(tag.tagId).name)?.run {
+                        if (this.ordinal < warningTag.ordinal)
+                            tagService.deleteStudentTagById(
+                                studentId,
+                                tag.tagId
+                            )
                     }
+                }
 
-                if (flag)
-                    tagService.saveStudentTag(
-                        StudentTag(
-                            student.id,
-                            tagService.getTagByName(warningTag.getTagName()).id,
-                            LocalDateTime.now()
-                        )
+                saveList.add(
+                    StudentTag(
+                        studentId,
+                        tagService.getTagByName(warningTag.getTagName()).id,
+                        LocalDateTime.now()
                     )
+                )
             }
         }
+
+        tagService.saveAllStudentTags(saveList)
     }
 }
