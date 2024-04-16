@@ -73,7 +73,6 @@ class GetStudentServiceImpl(
                 gcn = student.gcn,
                 studentName = student.name
             ).second
-
             Pair(student.id, minusTotalPoint)
         }
 

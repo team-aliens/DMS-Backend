@@ -18,6 +18,16 @@ class TagPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : TagPort {
 
+    override fun queryAllWarningTags(names: List<String>): List<Tag> {
+        return queryFactory.selectFrom(tagJpaEntity)
+            .where(
+                tagJpaEntity.name.`in`(names)
+            ).fetch()
+            .map {
+                tagMapper.toDomain(it)!!
+            }
+    }
+
     override fun queryTagsBySchoolId(schoolId: UUID): List<Tag> {
         return tagRepository.findBySchoolId(schoolId)
             .map {

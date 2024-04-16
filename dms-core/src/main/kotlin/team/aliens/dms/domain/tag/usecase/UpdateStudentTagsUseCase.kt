@@ -7,39 +7,30 @@ import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.WarningTag
 import team.aliens.dms.domain.tag.service.TagService
 import java.time.LocalDateTime
+import java.util.UUID
 
 @SchedulerUseCase
 class UpdateStudentTagsUseCase(
     private val studentService: StudentService,
-    private val tagService: TagService,
     private val pointService: PointService,
+    private val tagService: TagService,
 ) {
     fun execute() {
+        val warningTagMap: Map<String, UUID> = tagService.getAllWarningTags(
+            WarningTag.getAllNames()
+        ).associate { it.name to it.id }
 
-        val saveList = ArrayList<StudentTag>()
+        tagService.deleteAllStudentTagsByTagIdIn(warningTagMap.values.toList())
 
-        studentService.getAllStudentWithMinusPoint().forEach { (studentId, minusPoint) ->
-            val warningTag = WarningTag.ofByPoint(minusPoint)
-
+        val saveList: List<StudentTag> = pointService.getPointTotalsGroupByStudent().mapNotNull {
+            val warningTag = WarningTag.byPoint(it.minusTotal)
             if (warningTag != WarningTag.SAFE) {
-                tagService.getStudentTagsByStudentId(studentId).stream().forEach { tag ->
-                    WarningTag.ofByNameOrNull(tagService.getTagById(tag.tagId).name)?.run {
-                        if (this.ordinal < warningTag.ordinal)
-                            tagService.deleteStudentTagById(
-                                studentId,
-                                tag.tagId
-                            )
-                    }
-                }
-
-                saveList.add(
-                    StudentTag(
-                        studentId,
-                        tagService.getTagByName(warningTag.getTagName()).id,
-                        LocalDateTime.now()
-                    )
+                StudentTag(
+                    it.studentId,
+                    warningTagMap[warningTag.name]!!,
+                    LocalDateTime.now()
                 )
-            }
+            } else null
         }
 
         tagService.saveAllStudentTags(saveList)

@@ -8,6 +8,8 @@ interface GetTagService {
 
     fun getStudentTagsByStudentId(studentId: UUID): List<StudentTag>
 
+    fun getAllWarningTags(names: List<String>): List<Tag>
+
     fun getTagByName(name: String): Tag
 
     fun getTagById(tagId: UUID): Tag
