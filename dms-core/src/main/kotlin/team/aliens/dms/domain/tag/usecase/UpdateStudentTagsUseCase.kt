@@ -2,7 +2,6 @@ package team.aliens.dms.domain.tag.usecase
 
 import team.aliens.dms.common.annotation.SchedulerUseCase
 import team.aliens.dms.domain.point.service.PointService
-import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.WarningTag
 import team.aliens.dms.domain.tag.service.TagService
@@ -11,7 +10,6 @@ import java.util.UUID
 
 @SchedulerUseCase
 class UpdateStudentTagsUseCase(
-    private val studentService: StudentService,
     private val pointService: PointService,
     private val tagService: TagService,
 ) {
