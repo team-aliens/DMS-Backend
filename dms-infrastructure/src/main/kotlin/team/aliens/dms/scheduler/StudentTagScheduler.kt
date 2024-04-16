@@ -10,7 +10,7 @@ class StudentTagScheduler(
 ) {
 
     /**
-     * 매일 밤 12시 마다 벌점 태그 자동 부여
+     * 매일 밤 12시 마다 학생이 가진 벌점 태그 초기화 후 벌점에 따른 태그 자동 부여
      */
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     fun updateStudentTags() = updateStudentTagsUseCase.execute()
