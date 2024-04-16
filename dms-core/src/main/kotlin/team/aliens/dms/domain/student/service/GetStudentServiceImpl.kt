@@ -5,6 +5,7 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
+import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -17,7 +18,8 @@ import java.util.function.Function
 @Service
 class GetStudentServiceImpl(
     private val securityPort: SecurityPort,
-    private val queryStudentPort: QueryStudentPort
+    private val queryStudentPort: QueryStudentPort,
+    private val queryPointHistoryPort: QueryPointHistoryPort
 ) : GetStudentService {
 
     override fun getCurrentStudent(): Student {
@@ -64,6 +66,15 @@ class GetStudentServiceImpl(
 
     override fun getStudentsBySchoolId(schoolId: UUID) =
         queryStudentPort.queryStudentsBySchoolId(schoolId)
+
+    override fun getAllStudentWithMinusPoint(): List<Pair<UUID, Int>> =
+        queryStudentPort.queryAllStudentsByName("").map { student ->
+            val minusTotalPoint = queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
+                gcn = student.gcn,
+                studentName = student.name
+            ).second
+            Pair(student.id, minusTotalPoint)
+        }
 
     override fun getAllStudentsByIdsIn(studentIds: List<UUID>) =
         queryStudentPort.queryAllStudentsByIdsIn(studentIds)

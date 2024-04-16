@@ -5,6 +5,7 @@ import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -43,4 +44,6 @@ interface QueryPointHistoryPort {
     fun queryPointHistoryByGcnIn(
         gcns: List<String>
     ): List<PointHistory>
+
+    fun queryPointTotalsGroupByStudent(): List<StudentTotalVO>
 }

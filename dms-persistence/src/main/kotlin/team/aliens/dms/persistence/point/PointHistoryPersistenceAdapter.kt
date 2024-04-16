@@ -1,5 +1,7 @@
 package team.aliens.dms.persistence.point
 
+import com.querydsl.core.BooleanBuilder
+import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -9,11 +11,14 @@ import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
+import team.aliens.dms.persistence.point.repository.vo.QQueryStudentTotalVO
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -154,4 +159,41 @@ class PointHistoryPersistenceAdapter(
     override fun queryPointHistoryByGcnIn(gcns: List<String>) =
         pointHistoryRepository.findByStudentGcnIn(gcns)
             .map { pointHistoryMapper.toDomain(it)!! }
+
+    override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
+        return queryFactory
+            .select(
+                QQueryStudentTotalVO(
+                    studentJpaEntity.id,
+                    pointHistoryJpaEntity.bonusTotal,
+                    pointHistoryJpaEntity.minusTotal
+                )
+            )
+            .from(studentJpaEntity)
+            .innerJoin(pointHistoryJpaEntity).on(
+                pointHistoryJpaEntity.id.eq(
+                    select(pointHistoryJpaEntity.id)
+                        .from(studentJpaEntity)
+                        .join(pointHistoryJpaEntity)
+                        .on(
+                            eqGcn(), pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
+
+                        )
+                        .orderBy(pointHistoryJpaEntity.createdAt.desc())
+                        .fetchFirst()
+                )
+            )
+            .groupBy(studentJpaEntity.id)
+            .fetch()
+    }
+
+    private fun eqGcn(): BooleanBuilder {
+        val condition = BooleanBuilder()
+        val gcn = pointHistoryJpaEntity.studentGcn
+        condition
+            .and(gcn.substring(0, 1).eq(studentJpaEntity.grade.stringValue()))
+            .and(gcn.substring(1, 2).endsWith(studentJpaEntity.classRoom.stringValue()))
+            .and(gcn.substring(2).endsWith(studentJpaEntity.number.stringValue()))
+        return condition
+    }
 }

@@ -11,6 +11,7 @@ import team.aliens.dms.domain.point.spi.QueryPhrasePort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.point.spi.QueryPointOptionPort
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import java.time.LocalDateTime
 import java.util.UUID
@@ -19,7 +20,7 @@ import java.util.UUID
 class GetPointServiceImpl(
     private val queryPhrasePort: QueryPhrasePort,
     private val queryPointHistoryPort: QueryPointHistoryPort,
-    private val queryPointOptionPort: QueryPointOptionPort
+    private val queryPointOptionPort: QueryPointOptionPort,
 ) : GetPointService {
 
     override fun queryAllPhraseByPointTypeAndStandardPoint(type: PointType, standardPoint: Int) =
@@ -114,5 +115,9 @@ class GetPointServiceImpl(
                 schoolId = schoolId
             )
         }
+    }
+
+    override fun getPointTotalsGroupByStudent(): List<StudentTotalVO> {
+        return queryPointHistoryPort.queryPointTotalsGroupByStudent()
     }
 }
