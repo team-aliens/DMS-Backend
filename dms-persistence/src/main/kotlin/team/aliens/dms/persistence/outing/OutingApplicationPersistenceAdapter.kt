@@ -105,7 +105,7 @@ class OutingApplicationPersistenceAdapter(
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             outingApplicationJpaEntity.reason,
-                            list(outingCompanionStudentJpaEntity.name)
+                            list(outingCompanionJpaEntity.student.name)
                         )
                     )
             ).firstOrNull()
