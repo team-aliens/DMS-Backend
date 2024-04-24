@@ -135,7 +135,7 @@ class OutingApplicationPersistenceAdapter(
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
-                studentName?.let { studentJpaEntity.name.eq(it) },
+                studentName?.let { studentJpaEntity.name.contains(it) },
                 outingApplicationJpaEntity.outingDate.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)
