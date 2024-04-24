@@ -30,7 +30,8 @@ data class AvailableFeaturesResponse(
     val noticeService: Boolean,
     val pointService: Boolean,
     val studyRoomService: Boolean,
-    val remainService: Boolean
+    val remainService: Boolean,
+    val outingService: Boolean
 )
 
 data class NeisSchoolResponse(

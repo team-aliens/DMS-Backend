@@ -16,6 +16,8 @@ data class AvailableFeature(
 
     val studyRoomService: Boolean,
 
-    val remainService: Boolean
+    val remainService: Boolean,
+
+    val outingService: Boolean
 
 )
