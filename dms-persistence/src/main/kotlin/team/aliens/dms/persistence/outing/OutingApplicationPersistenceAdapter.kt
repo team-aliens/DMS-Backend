@@ -15,7 +15,6 @@ import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.out
 import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outingCompanionJpaEntity
 import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingTypeJpaEntity
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
-import team.aliens.dms.persistence.outing.mapper.OutingCompanionMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
 import team.aliens.dms.persistence.outing.repository.OutingCompanionJpaRepository
 import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
@@ -153,7 +152,8 @@ class OutingApplicationPersistenceAdapter(
 
     override fun deleteOutingApplication(outingApplication: OutingApplication) {
         outingCompanionsRepository.deleteAllByOutingApplication(
-                outingApplicationMapper.toEntity(outingApplication))
+            outingApplicationMapper.toEntity(outingApplication)
+        )
 
         outingApplicationRepository.delete(
             outingApplicationMapper.toEntity(outingApplication)

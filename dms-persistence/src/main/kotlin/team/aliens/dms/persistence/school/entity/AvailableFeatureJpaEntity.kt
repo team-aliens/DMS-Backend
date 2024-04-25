@@ -35,6 +35,9 @@ class AvailableFeatureJpaEntity(
     val studyRoomService: Boolean,
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
-    val remainService: Boolean
+    val remainService: Boolean,
+
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    val outingService: Boolean,
 
 )

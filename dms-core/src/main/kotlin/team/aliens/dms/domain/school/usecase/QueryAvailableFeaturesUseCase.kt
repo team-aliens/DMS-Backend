@@ -20,7 +20,8 @@ class QueryAvailableFeaturesUseCase(
             noticeService = availableFeatures.noticeService,
             pointService = availableFeatures.pointService,
             studyRoomService = availableFeatures.studyRoomService,
-            remainService = availableFeatures.remainService
+            remainService = availableFeatures.remainService,
+            outingService = availableFeatures.outingService
         )
     }
 }
