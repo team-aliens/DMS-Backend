@@ -20,7 +20,6 @@ class BugReportMapper(
                 id = it.id!!,
                 studentId = it.student!!.id!!,
                 content = it.content,
-                type = it.bugType,
                 developmentArea = it.developmentArea,
                 createdAt = it.createdAt,
                 attachmentUrls = BugAttachment(it.attachments?.map { it.attachmentUrl })
@@ -37,7 +36,6 @@ class BugReportMapper(
             id = domain.id,
             student = student,
             content = domain.content,
-            bugType = domain.type,
             developmentArea = domain.developmentArea,
             createdAt = domain.createdAt!!,
             attachments = attachments

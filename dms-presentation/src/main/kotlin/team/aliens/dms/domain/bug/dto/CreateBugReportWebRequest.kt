@@ -11,9 +11,6 @@ data class CreateBugReportWebRequest(
     val content: String,
 
     @field:NotNull
-    val bugType: BugType,
-
-    @field:NotNull
     val developmentArea: DevelopmentArea,
 
     val attachmentUrls: List<String>?

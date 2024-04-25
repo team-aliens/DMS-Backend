@@ -13,8 +13,6 @@ data class BugReport(
 
     val content: String,
 
-    val type: BugType,
-
     val developmentArea: DevelopmentArea,
 
     val createdAt: LocalDateTime?,

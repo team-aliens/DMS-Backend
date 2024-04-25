@@ -25,7 +25,6 @@ class BugWebAdapter(
         createBugReportUseCase.execute(
             CreateBugReportRequest(
                 content = request.content,
-                type = request.bugType.name,
                 developmentArea = request.developmentArea.name,
                 attachmentUrls = request.attachmentUrls
             )

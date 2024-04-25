@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.bug.entity
 
 import jakarta.persistence.*
-import team.aliens.dms.domain.bug.model.BugType
 import team.aliens.dms.domain.bug.model.DevelopmentArea
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
@@ -23,10 +22,6 @@ class BugReportJpaEntity(
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(7)", nullable = false)
     val developmentArea: DevelopmentArea,
-
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(11)", nullable = false)
-    val bugType: BugType,
 
     override val createdAt: LocalDateTime,
 

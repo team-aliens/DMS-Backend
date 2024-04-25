@@ -4,7 +4,6 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.bug.dto.CreateBugReportRequest
 import team.aliens.dms.domain.bug.model.BugAttachment
 import team.aliens.dms.domain.bug.model.BugReport
-import team.aliens.dms.domain.bug.model.BugType
 import team.aliens.dms.domain.bug.model.DevelopmentArea
 import team.aliens.dms.domain.bug.service.BugService
 import team.aliens.dms.domain.student.service.StudentService
@@ -25,7 +24,6 @@ class CreateBugReportUseCase(
             BugReport(
                 studentId = student.id,
                 content = request.content,
-                type = BugType.valueOf(request.type),
                 developmentArea = DevelopmentArea.valueOf(request.developmentArea),
                 createdAt = LocalDateTime.now(),
                 attachmentUrls = BugAttachment(attachmentUrls)
