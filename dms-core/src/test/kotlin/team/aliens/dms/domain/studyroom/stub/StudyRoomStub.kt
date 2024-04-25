@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.studyroom.stub
 
 import team.aliens.dms.domain.student.model.Sex
+import team.aliens.dms.domain.studyroom.model.AvailableTime
 import team.aliens.dms.domain.studyroom.model.Seat
 import team.aliens.dms.domain.studyroom.model.SeatApplication
 import team.aliens.dms.domain.studyroom.model.SeatStatus
@@ -90,4 +91,14 @@ internal fun createSeatTypeStub(
     schoolId = schoolId,
     name = name,
     color = color
+)
+
+internal fun createAvailableTime(
+    schoolId: UUID = UUID.randomUUID(),
+    startAt: LocalTime = LocalTime.now(),
+    endAt: LocalTime = LocalTime.now()
+) = AvailableTime(
+    schoolId = schoolId,
+    startAt = startAt,
+    endAt = endAt
 )

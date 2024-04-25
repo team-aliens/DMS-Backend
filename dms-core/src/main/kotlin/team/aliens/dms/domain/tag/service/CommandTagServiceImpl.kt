@@ -13,6 +13,10 @@ class CommandTagServiceImpl(
     private val commandTagPort: CommandTagPort
 ) : CommandTagService {
 
+    override fun deleteAllStudentTagsByTagIdIn(tagIds: List<UUID>) {
+        commandStudentTagPort.deleteAllStudentTagsByTagIdIn(tagIds)
+    }
+
     override fun deleteStudentTagById(studentId: UUID, tagId: UUID) {
         commandStudentTagPort.deleteStudentTagById(studentId, tagId)
     }
@@ -25,6 +29,9 @@ class CommandTagServiceImpl(
     override fun saveTag(tag: Tag): Tag {
         return commandTagPort.saveTag(tag)
     }
+
+    override fun saveStudentTag(studentTag: StudentTag): StudentTag =
+        commandStudentTagPort.saveStudentTag(studentTag)
 
     override fun saveAllStudentTags(studentTags: List<StudentTag>) {
         commandStudentTagPort.saveAllStudentTags(studentTags)

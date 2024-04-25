@@ -7,6 +7,7 @@ import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
+import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import java.time.LocalDateTime
 import java.util.UUID
@@ -62,4 +63,6 @@ interface GetPointService {
         pointOption: PointOption,
         schoolId: UUID
     ): List<PointHistory>
+
+    fun getPointTotalsGroupByStudent(): List<StudentTotalVO>
 }

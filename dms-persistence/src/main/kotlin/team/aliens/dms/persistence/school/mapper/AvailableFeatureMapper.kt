@@ -20,7 +20,8 @@ class AvailableFeatureMapper(
                 noticeService = entity.noticeService,
                 pointService = entity.pointService,
                 studyRoomService = entity.studyRoomService,
-                remainService = entity.remainService
+                remainService = entity.remainService,
+                outingService = entity.outingService
             )
         }
     }
@@ -35,7 +36,8 @@ class AvailableFeatureMapper(
             noticeService = domain.noticeService,
             pointService = domain.pointService,
             studyRoomService = domain.studyRoomService,
-            remainService = domain.remainService
+            remainService = domain.remainService,
+            outingService = domain.outingService
         )
     }
 }

@@ -1,4 +1,4 @@
-package team.aliens.dms.common
+package team.aliens.dms.common.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders

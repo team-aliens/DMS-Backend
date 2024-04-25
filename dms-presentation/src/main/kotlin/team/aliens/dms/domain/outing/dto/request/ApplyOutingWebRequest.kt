@@ -10,7 +10,7 @@ import java.util.UUID
 
 data class ApplyOutingWebRequest(
     @field:NotNull
-    val outAt: LocalDate,
+    val outingDate: LocalDate,
 
     @field:NotNull
     val outingTime: LocalTime,

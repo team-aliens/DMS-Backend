@@ -38,6 +38,8 @@ interface GetStudentService {
 
     fun getStudentsBySchoolId(schoolId: UUID): List<Student>
 
+    fun getAllStudentWithMinusPoint(): List<Pair<UUID, Int>>
+
     fun getAllStudentsByIdsIn(studentIds: List<UUID>): List<Student>
 
     fun getGcnUpdatedStudent(

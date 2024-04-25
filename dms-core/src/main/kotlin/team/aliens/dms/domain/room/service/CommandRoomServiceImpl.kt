@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.room.service
 
-import org.springframework.stereotype.Service
+import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.room.spi.CommandRoomPort
 import team.aliens.dms.domain.room.spi.QueryRoomPort

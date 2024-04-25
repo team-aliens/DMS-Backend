@@ -22,8 +22,7 @@ data class RemainAvailableTime(
 
 ) {
 
-    fun checkAvailable() {
-        val currentDateTime = LocalDateTime.now()
+    fun checkAvailable(currentDateTime: LocalDateTime) {
         val dayOfWeek = currentDateTime.dayOfWeek.value
         val now = currentDateTime.toLocalTime()
 

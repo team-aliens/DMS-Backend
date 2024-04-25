@@ -16,6 +16,7 @@ import team.aliens.dms.persistence.outing.entity.QOutingCompanionJpaEntity.outin
 import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingTypeJpaEntity
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
+import team.aliens.dms.persistence.outing.repository.OutingCompanionJpaRepository
 import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
 import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
@@ -28,11 +29,12 @@ import java.util.UUID
 class OutingApplicationPersistenceAdapter(
     private val outingApplicationMapper: OutingApplicationMapper,
     private val outingApplicationRepository: OutingApplicationJpaRepository,
+    private val outingCompanionsRepository: OutingCompanionJpaRepository,
     private val queryFactory: JPAQueryFactory
 ) : OutingApplicationPort {
 
-    override fun existOutingApplicationByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) =
-        outingApplicationRepository.existsByOutAtAndStudentId(outAt, studentId)
+    override fun existOutingApplicationByOutingDateAndStudentId(outingDate: LocalDate, studentId: UUID) =
+        outingApplicationRepository.existsByOutingDateAndStudentId(outingDate, studentId)
 
     override fun queryOutingApplicationById(outingApplicationId: UUID) =
         outingApplicationMapper.toDomain(
@@ -52,8 +54,8 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity)
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .where(outingApplicationJpaEntity.outAt.between(start, end))
-            .orderBy(outingApplicationJpaEntity.outAt.asc())
+            .where(outingApplicationJpaEntity.outingDate.between(start, end))
+            .orderBy(outingApplicationJpaEntity.outingDate.asc())
             .transform(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
@@ -62,7 +64,7 @@ class OutingApplicationPersistenceAdapter(
                             studentJpaEntity.grade,
                             studentJpaEntity.classRoom,
                             studentJpaEntity.number,
-                            outingApplicationJpaEntity.outAt,
+                            outingApplicationJpaEntity.outingDate,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             list(
@@ -97,13 +99,14 @@ class OutingApplicationPersistenceAdapter(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
                         QQueryCurrentOutingApplicationVO(
-                            outingApplicationJpaEntity.outAt,
+                            outingApplicationJpaEntity.id,
+                            outingApplicationJpaEntity.outingDate,
                             outingTypeJpaEntity.id.title,
                             outingApplicationJpaEntity.status,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             outingApplicationJpaEntity.reason,
-                            list(outingCompanionStudentJpaEntity.name)
+                            list(outingCompanionJpaEntity.student.name)
                         )
                     )
             ).firstOrNull()
@@ -133,10 +136,10 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
                 studentName?.let { studentJpaEntity.name.eq(it) },
-                outingApplicationJpaEntity.outAt.eq(date)
+                outingApplicationJpaEntity.outingDate.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)
-            .orderBy(outingApplicationJpaEntity.outAt.asc())
+            .orderBy(outingApplicationJpaEntity.arrivalTime.asc())
             .fetch()
     }
 
@@ -148,6 +151,10 @@ class OutingApplicationPersistenceAdapter(
         )!!
 
     override fun deleteOutingApplication(outingApplication: OutingApplication) {
+        outingCompanionsRepository.deleteAllByOutingApplication(
+            outingApplicationMapper.toEntity(outingApplication)
+        )
+
         outingApplicationRepository.delete(
             outingApplicationMapper.toEntity(outingApplication)
         )

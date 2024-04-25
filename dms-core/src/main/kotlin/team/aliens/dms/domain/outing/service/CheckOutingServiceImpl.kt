@@ -21,26 +21,26 @@ class CheckOutingServiceImpl(
 
     override fun checkOutingApplicationAvailable(
         studentId: UUID,
-        outAt: LocalDate,
+        outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
-        checkOutingAvailableTime(outAt, outingTime, arrivalTime)
-        checkOutingApplicationExistsByOutAtAndStudentId(outAt, studentId)
+        checkOutingAvailableTime(outingDate, outingTime, arrivalTime)
+        checkOutingApplicationExistsByOutingDateAndStudentId(outingDate, studentId)
     }
 
     private fun checkOutingAvailableTime(
-        outAt: LocalDate,
+        outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
-        queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outAt.dayOfWeek)
-            ?.checkAvailable(outAt.dayOfWeek, outingTime, arrivalTime)
+        queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outingDate.dayOfWeek)
+            ?.checkAvailable(outingDate.dayOfWeek, outingTime, arrivalTime)
             ?: throw OutingAvailableTimeMismatchException
     }
 
-    private fun checkOutingApplicationExistsByOutAtAndStudentId(outAt: LocalDate, studentId: UUID) {
-        if (queryOutingApplicationPort.existOutingApplicationByOutAtAndStudentId(outAt, studentId)) {
+    private fun checkOutingApplicationExistsByOutingDateAndStudentId(outingDate: LocalDate, studentId: UUID) {
+        if (queryOutingApplicationPort.existOutingApplicationByOutingDateAndStudentId(outingDate, studentId)) {
             throw OutingApplicationAlreadyExistsException
         }
     }

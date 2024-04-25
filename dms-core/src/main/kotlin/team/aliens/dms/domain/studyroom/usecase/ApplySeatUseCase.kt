@@ -13,7 +13,6 @@ class ApplySeatUseCase(
 ) {
 
     fun execute(seatId: UUID, timeSlotId: UUID) {
-
         val student = studentService.getCurrentStudent()
 
         val seat = studyRoomService.getSeatById(seatId)

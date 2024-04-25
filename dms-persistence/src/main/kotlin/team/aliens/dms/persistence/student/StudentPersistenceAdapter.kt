@@ -185,6 +185,8 @@ class StudentPersistenceAdapter(
                             roomJpaEntity.number,
                             studentJpaEntity.profileImageUrl,
                             studentJpaEntity.sex,
+                            pointHistoryJpaEntity.bonusTotal,
+                            pointHistoryJpaEntity.minusTotal,
                             list(tagJpaEntity)
                         )
                     )
@@ -199,6 +201,8 @@ class StudentPersistenceAdapter(
                     roomNumber = it.roomNumber,
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
+                    bonusPoint = it.bonusPoint,
+                    minusPoint = it.minusPoint,
                     tags = it.tags
                         .map { tag ->
                             tagMapper.toDomain(tag)!!
