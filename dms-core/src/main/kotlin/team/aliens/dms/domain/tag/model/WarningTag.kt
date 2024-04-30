@@ -1,10 +1,10 @@
 package team.aliens.dms.domain.tag.model
 
-enum class WarningTag(warningMessage: String) {
-    SAFE(""),
-    FIRST_WARNING("1차 경고"),
-    SECOND_WARNING("2차 경고"),
-    THIRD_WARNING("3차 경고"),
+enum class WarningTag(val warningMessage: String) {
+    SAFE("SAFE"),
+    FIRST_WARNING("경고 1단계"),
+    SECOND_WARNING("경고 2단계"),
+    THIRD_WARNING("경고 3단계"),
     ONE_OUT("OUT 1"),
     TWO_OUT("OUT 2"),
     THREE_OUT("OUT 3");
@@ -20,13 +20,16 @@ enum class WarningTag(warningMessage: String) {
             else -> SAFE
         }
 
-        fun getAllNames(): List<String> = listOf(
-            FIRST_WARNING.name,
-            SECOND_WARNING.name,
-            THIRD_WARNING.name,
-            ONE_OUT.name,
-            TWO_OUT.name,
-            THREE_OUT.name
+        fun getAllMessages(): List<String> = listOf(
+            FIRST_WARNING.warningMessage,
+            SECOND_WARNING.warningMessage,
+            THIRD_WARNING.warningMessage,
+            ONE_OUT.warningMessage,
+            TWO_OUT.warningMessage,
+            THREE_OUT.warningMessage
         )
     }
+
+    fun getPoint(): Int =
+        if (this == SAFE) 0 else (this.ordinal + 2) * 5
 }

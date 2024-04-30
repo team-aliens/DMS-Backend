@@ -12,12 +12,14 @@ import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
+import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryStudentTotalVO
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
@@ -170,30 +172,26 @@ class PointHistoryPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .innerJoin(pointHistoryJpaEntity).on(
-                pointHistoryJpaEntity.id.eq(
-                    select(pointHistoryJpaEntity.id)
-                        .from(studentJpaEntity)
-                        .join(pointHistoryJpaEntity)
-                        .on(
-                            eqGcn(), pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
-
+            .join(pointHistoryJpaEntity).on(
+                pointHistoryJpaEntity.createdAt.eq(
+                    select(pointHistoryJpaEntity.createdAt.max())
+                        .from(pointHistoryJpaEntity)
+                        .where(
+                            eqGcn(pointHistoryJpaEntity, studentJpaEntity),
+                            pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
                         )
-                        .orderBy(pointHistoryJpaEntity.createdAt.desc())
-                        .fetchFirst()
                 )
             )
-            .groupBy(studentJpaEntity.id)
             .fetch()
     }
 
-    private fun eqGcn(): BooleanBuilder {
+    private fun eqGcn(phj: QPointHistoryJpaEntity, sje: QStudentJpaEntity): BooleanBuilder {
         val condition = BooleanBuilder()
-        val gcn = pointHistoryJpaEntity.studentGcn
+        val gcn = phj.studentGcn
         condition
-            .and(gcn.substring(0, 1).eq(studentJpaEntity.grade.stringValue()))
-            .and(gcn.substring(1, 2).endsWith(studentJpaEntity.classRoom.stringValue()))
-            .and(gcn.substring(2).endsWith(studentJpaEntity.number.stringValue()))
+            .and(gcn.substring(0, 1).eq(sje.grade.stringValue()))
+            .and(gcn.substring(1, 2).endsWith(sje.classRoom.stringValue()))
+            .and(gcn.substring(2).endsWith(sje.number.stringValue()))
         return condition
     }
 }

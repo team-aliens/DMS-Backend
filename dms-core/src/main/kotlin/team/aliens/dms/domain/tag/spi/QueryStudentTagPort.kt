@@ -5,5 +5,7 @@ import java.util.UUID
 
 interface QueryStudentTagPort {
 
+    fun queryStudentTagsByTagNameIn(names: List<String>): List<StudentTag>
+
     fun queryStudentTagsByStudentId(studentId: UUID): List<StudentTag>
 }

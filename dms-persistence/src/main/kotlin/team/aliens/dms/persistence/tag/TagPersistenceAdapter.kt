@@ -18,7 +18,7 @@ class TagPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : TagPort {
 
-    override fun queryAllWarningTags(names: List<String>): List<Tag> {
+    override fun queryTagsByTagNameIn(names: List<String>): List<Tag> {
         return queryFactory.selectFrom(tagJpaEntity)
             .where(
                 tagJpaEntity.name.`in`(names)

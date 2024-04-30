@@ -14,11 +14,14 @@ class GetTagServiceImpl(
     private val queryStudentTagPort: QueryStudentTagPort
 ) : GetTagService {
 
+    override fun getStudentTagsByTagNameIn(names: List<String>): List<StudentTag> =
+        queryStudentTagPort.queryStudentTagsByTagNameIn(names)
+
     override fun getStudentTagsByStudentId(studentId: UUID): List<StudentTag> =
         queryStudentTagPort.queryStudentTagsByStudentId(studentId)
 
-    override fun getAllWarningTags(names: List<String>): List<Tag> =
-        queryTagPort.queryAllWarningTags(names)
+    override fun getTagsByTagNameIn(names: List<String>): List<Tag> =
+        queryTagPort.queryTagsByTagNameIn(names)
 
     override fun getTagByName(name: String) =
         queryTagPort.queryTagByName(name) ?: throw TagNotFoundException

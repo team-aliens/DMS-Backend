@@ -1,10 +1,12 @@
 package team.aliens.dms.persistence.tag
 
+import com.querydsl.jpa.JPAExpressions.selectFrom
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.spi.StudentTagPort
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
+import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.entity.StudentTagId
 import team.aliens.dms.persistence.tag.mapper.StudentTagMapper
 import team.aliens.dms.persistence.tag.repository.StudentTagJpaRepository
@@ -22,10 +24,22 @@ class StudentTagPersistenceAdapter(
             .map { studentTagMapper.toDomain(it)!! }
     }
 
-    override fun deleteAllStudentTagsByTagIdIn(tagIds: List<UUID>) {
+    override fun queryStudentTagsByTagNameIn(names: List<String>): List<StudentTag> {
+        return queryFactory.selectFrom(studentTagJpaEntity)
+            .join(tagJpaEntity).on(tagJpaEntity.id.eq(studentTagJpaEntity.tag.id))
+            .where(tagJpaEntity.name.`in`(names))
+            .fetch()
+            .map {
+                studentTagMapper.toDomain(it)!!
+            }
+    }
+
+    override fun deleteAllStudentTagsByTagIdInOrStudentIdIn(tagIds: List<UUID>, studentIds: List<UUID>) {
         queryFactory.delete(studentTagJpaEntity)
             .where(
-                studentTagJpaEntity.tag.id.`in`(tagIds)
+                studentTagJpaEntity.tag.id.`in`(tagIds).or(
+                    studentTagJpaEntity.student.id.`in`(studentIds)
+                )
             ).execute()
     }
 
