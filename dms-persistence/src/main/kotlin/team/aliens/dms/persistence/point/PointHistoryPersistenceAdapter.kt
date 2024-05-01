@@ -185,13 +185,13 @@ class PointHistoryPersistenceAdapter(
             .fetch()
     }
 
-    private fun eqGcn(phj: QPointHistoryJpaEntity, sje: QStudentJpaEntity): BooleanBuilder {
+    private fun eqGcn(qPointHistoryJpaEntity: QPointHistoryJpaEntity, qStudentJpaEntity: QStudentJpaEntity): BooleanBuilder {
         val condition = BooleanBuilder()
-        val gcn = phj.studentGcn
+        val gcn = qPointHistoryJpaEntity.studentGcn
         condition
-            .and(gcn.substring(0, 1).eq(sje.grade.stringValue()))
-            .and(gcn.substring(1, 2).endsWith(sje.classRoom.stringValue()))
-            .and(gcn.substring(2).endsWith(sje.number.stringValue()))
+            .and(gcn.substring(0, 1).eq(qStudentJpaEntity.grade.stringValue()))
+            .and(gcn.substring(1, 2).endsWith(qStudentJpaEntity.classRoom.stringValue()))
+            .and(gcn.substring(2).endsWith(qStudentJpaEntity.number.stringValue()))
         return condition
     }
 }
