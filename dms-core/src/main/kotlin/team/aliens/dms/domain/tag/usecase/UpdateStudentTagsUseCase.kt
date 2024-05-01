@@ -25,17 +25,13 @@ class UpdateStudentTagsUseCase(
 
         val completeStudentTags: List<StudentTag> = tagService.getStudentTagsByTagNameIn(CompleteTag.getAllMessages())
 
-        println(warningTagMap)
-
-        println(completeStudentTags)
-
         val deleteStudentIdList = ArrayList<UUID>()
 
         val saveList: List<StudentTag> = pointService.getPointTotalsGroupByStudent().mapNotNull {
             val warningTag = WarningTag.byPoint(it.minusTotal)
             if (warningTag != WarningTag.SAFE) {
                 val tagId: UUID = if (completeStudentTags.all { studentTag ->
-                        it.studentId != studentTag.studentId || warningTag.getPoint() > completeTagMap[studentTag.tagId]!!.getPoint()
+                        it.studentId != studentTag.studentId || warningTag.point > completeTagMap[studentTag.tagId]!!.point
                     }
                 ) {
                     deleteStudentIdList.add(it.studentId)
