@@ -177,7 +177,7 @@ class PointHistoryPersistenceAdapter(
                     select(pointHistoryJpaEntity.createdAt.max())
                         .from(pointHistoryJpaEntity)
                         .where(
-                            eqGcn(pointHistoryJpaEntity, studentJpaEntity),
+                            eqGcn(),
                             pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
                         )
                 )
@@ -185,13 +185,13 @@ class PointHistoryPersistenceAdapter(
             .fetch()
     }
 
-    private fun eqGcn(qPointHistoryJpaEntity: QPointHistoryJpaEntity, qStudentJpaEntity: QStudentJpaEntity): BooleanBuilder {
+    private fun eqGcn(): BooleanBuilder {
         val condition = BooleanBuilder()
-        val gcn = qPointHistoryJpaEntity.studentGcn
+        val gcn = pointHistoryJpaEntity.studentGcn
         condition
-            .and(gcn.substring(0, 1).eq(qStudentJpaEntity.grade.stringValue()))
-            .and(gcn.substring(1, 2).endsWith(qStudentJpaEntity.classRoom.stringValue()))
-            .and(gcn.substring(2).endsWith(qStudentJpaEntity.number.stringValue()))
+            .and(gcn.substring(0, 1).eq(studentJpaEntity.grade.stringValue()))
+            .and(gcn.substring(1, 2).endsWith(studentJpaEntity.classRoom.stringValue()))
+            .and(gcn.substring(2).endsWith(studentJpaEntity.number.stringValue()))
         return condition
     }
 }

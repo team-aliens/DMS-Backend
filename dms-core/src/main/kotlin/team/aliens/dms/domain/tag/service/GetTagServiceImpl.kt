@@ -6,6 +6,7 @@ import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.spi.QueryStudentTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
+import team.aliens.dms.domain.tag.spi.vo.StudentTagDetailVO
 import java.util.UUID
 
 @Service
@@ -20,6 +21,9 @@ class GetTagServiceImpl(
     override fun getStudentTagsByStudentId(studentId: UUID): List<StudentTag> =
         queryStudentTagPort.queryStudentTagsByStudentId(studentId)
 
+    override fun getAllStudentTagDetails(): List<StudentTagDetailVO> =
+        queryStudentTagPort.queryAllStudentTagDetails()
+    
     override fun getTagsByTagNameIn(names: List<String>): List<Tag> =
         queryTagPort.queryTagsByTagNameIn(names)
 
