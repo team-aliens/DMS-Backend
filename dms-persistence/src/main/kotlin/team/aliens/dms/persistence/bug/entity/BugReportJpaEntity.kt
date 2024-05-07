@@ -1,11 +1,20 @@
 package team.aliens.dms.persistence.bug.entity
 
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.Table
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.FetchType
+import jakarta.persistence.Column
+import jakarta.persistence.Enumerated
+import jakarta.persistence.EnumType
+import jakarta.persistence.ElementCollection
+import jakarta.persistence.CollectionTable
 import team.aliens.dms.domain.bug.model.DevelopmentArea
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @Entity
 @Table(name = "tbl_bug_report")
