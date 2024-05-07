@@ -170,20 +170,16 @@ class PointHistoryPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .innerJoin(pointHistoryJpaEntity).on(
-                pointHistoryJpaEntity.id.eq(
-                    select(pointHistoryJpaEntity.id)
-                        .from(studentJpaEntity)
-                        .join(pointHistoryJpaEntity)
-                        .on(
-                            eqGcn(), pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
-
+            .join(pointHistoryJpaEntity).on(
+                pointHistoryJpaEntity.createdAt.eq(
+                    select(pointHistoryJpaEntity.createdAt.max())
+                        .from(pointHistoryJpaEntity)
+                        .where(
+                            eqGcn(),
+                            pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
                         )
-                        .orderBy(pointHistoryJpaEntity.createdAt.desc())
-                        .fetchFirst()
                 )
             )
-            .groupBy(studentJpaEntity.id)
             .fetch()
     }
 
