@@ -1,15 +1,15 @@
 package team.aliens.dms.persistence.bug.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.FetchType
-import jakarta.persistence.Column
-import jakarta.persistence.Enumerated
-import jakarta.persistence.EnumType
-import jakarta.persistence.ElementCollection
 import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import team.aliens.dms.domain.bug.model.DevelopmentArea
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
