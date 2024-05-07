@@ -45,8 +45,7 @@ class UpdateStudentTagsUseCase(
                 )
             } else null
         }
-
-        println(deleteStudentIdList) // TODO 지워지워지워지워지워지워지워지워지워지워지워지워
+        
         tagService.deleteAllStudentTagsByStudentIdIn(deleteStudentIdList)
 
         tagService.saveAllStudentTags(saveList)
