@@ -10,7 +10,7 @@ class QueryStudentTagDetailVO @QueryProjection constructor(
     tagId: UUID,
     tagColor: String,
     tagName: String
-) :StudentTagDetailVO(
+) : StudentTagDetailVO(
     studentId = studentId,
     studentName = studentName,
     tagId = tagId,

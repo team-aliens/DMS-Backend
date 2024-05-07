@@ -12,14 +12,12 @@ import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
-import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
 import team.aliens.dms.persistence.point.repository.vo.QQueryAllPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryPointHistoryVO
 import team.aliens.dms.persistence.point.repository.vo.QQueryStudentTotalVO
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID

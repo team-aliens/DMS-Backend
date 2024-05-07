@@ -35,7 +35,8 @@ class StudentTagPersistenceAdapter(
                 tagJpaEntity.id,
                 tagJpaEntity.color,
                 tagJpaEntity.name
-            )).from(studentTagJpaEntity)
+            )
+        ).from(studentTagJpaEntity)
             .join(tagJpaEntity).on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
             .join(studentJpaEntity).on(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
             .fetch()

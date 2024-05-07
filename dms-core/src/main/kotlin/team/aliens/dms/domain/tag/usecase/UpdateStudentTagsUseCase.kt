@@ -17,7 +17,7 @@ class UpdateStudentTagsUseCase(
     fun execute() {
         val warningTagMap: Map<String, UUID> = tagService.getTagsByTagNameIn(
             WarningTag.getAllMessages()
-            ).associate { it.name to it.id }
+        ).associate { it.name to it.id }
 
         val studentTagDetailMap: Map<UUID, List<StudentTagDetailVO>> = tagService.getAllStudentTagDetails()
             .groupBy { it.studentId }
@@ -29,12 +29,13 @@ class UpdateStudentTagsUseCase(
 
             val isWarningTag = warningTag != WarningTag.SAFE
             val hasNotWarningTag = !studentTagDetailMap.containsKey(it.studentId)
-            val isHighLevelWarning = if(!hasNotWarningTag) studentTagDetailMap[it.studentId]!!.any {
+            val isHighLevelWarning = if (!hasNotWarningTag) studentTagDetailMap[it.studentId]!!.any {
                 WarningTag.byContent(it.tagName).point < warningTag.point
             } else false
 
             if (isWarningTag &&
-                (hasNotWarningTag || isHighLevelWarning)) {
+                (hasNotWarningTag || isHighLevelWarning)
+            ) {
 
                 deleteStudentIdList.add(it.studentId)
                 StudentTag(

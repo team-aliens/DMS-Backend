@@ -23,7 +23,7 @@ class GetTagServiceImpl(
 
     override fun getAllStudentTagDetails(): List<StudentTagDetailVO> =
         queryStudentTagPort.queryAllStudentTagDetails()
-    
+
     override fun getTagsByTagNameIn(names: List<String>): List<Tag> =
         queryTagPort.queryTagsByTagNameIn(names)
 
