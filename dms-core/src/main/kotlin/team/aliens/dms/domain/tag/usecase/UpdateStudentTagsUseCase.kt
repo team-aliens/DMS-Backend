@@ -22,22 +22,22 @@ class UpdateStudentTagsUseCase(
         val studentTagDetailMap: Map<UUID, List<StudentTagDetailVO>> = tagService.getAllStudentTagDetails()
             .groupBy { it.studentId }
 
-        val deleteStudentIdList = ArrayList<UUID>()
+        val studentIdsToDeleteStudentTags = ArrayList<UUID>()
 
         val saveList: List<StudentTag> = pointService.getPointTotalsGroupByStudent().mapNotNull {
             val warningTag = WarningTag.byPoint(it.minusTotal)
 
             val isWarningTag = warningTag != WarningTag.SAFE
-            val hasNotWarningTag = !studentTagDetailMap.containsKey(it.studentId)
-            val isHighLevelWarning = if (!hasNotWarningTag) studentTagDetailMap[it.studentId]!!.any {
+            val hasWarningTag = studentTagDetailMap.containsKey(it.studentId)
+            val isHighLevelWarning = if (hasWarningTag) studentTagDetailMap[it.studentId]!!.any {
                 WarningTag.byContent(it.tagName).point < warningTag.point
             } else false
 
             if (isWarningTag &&
-                (hasNotWarningTag || isHighLevelWarning)
+                (!hasWarningTag || isHighLevelWarning)
             ) {
 
-                deleteStudentIdList.add(it.studentId)
+                studentIdsToDeleteStudentTags.add(it.studentId)
                 StudentTag(
                     it.studentId,
                     warningTagMap[warningTag.warningMessage]!!,
@@ -46,7 +46,7 @@ class UpdateStudentTagsUseCase(
             } else null
         }
         
-        tagService.deleteAllStudentTagsByStudentIdIn(deleteStudentIdList)
+        tagService.deleteAllStudentTagsByStudentIdIn(studentIdsToDeleteStudentTags)
 
         tagService.saveAllStudentTags(saveList)
     }
