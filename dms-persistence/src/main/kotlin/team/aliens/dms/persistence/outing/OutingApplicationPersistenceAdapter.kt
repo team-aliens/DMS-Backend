@@ -92,7 +92,8 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-                studentJpaEntity.id.eq(studentId),
+                studentJpaEntity.id.eq(studentId)
+                    .or(outingCompanionStudentJpaEntity.id.eq(studentId)),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
             .transform(
