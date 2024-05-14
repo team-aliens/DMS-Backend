@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface CommandTagService {
 
-    fun deleteAllStudentTagsByTagIdIn(tagIds: List<UUID>)
+    fun deleteAllStudentTagsByStudentIdIn(studentIds: List<UUID>)
 
     fun deleteStudentTagById(studentId: UUID, tagId: UUID)
 

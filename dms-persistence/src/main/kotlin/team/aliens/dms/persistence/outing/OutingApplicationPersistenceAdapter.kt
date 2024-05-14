@@ -92,7 +92,8 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-                studentJpaEntity.id.eq(studentId),
+                studentJpaEntity.id.eq(studentId)
+                    .or(outingCompanionStudentJpaEntity.id.eq(studentId)),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
             .transform(
@@ -135,7 +136,7 @@ class OutingApplicationPersistenceAdapter(
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
-                studentName?.let { studentJpaEntity.name.eq(it) },
+                studentName?.let { studentJpaEntity.name.contains(it) },
                 outingApplicationJpaEntity.outingDate.eq(date)
             )
             .groupBy(outingApplicationJpaEntity.id)

@@ -6,6 +6,7 @@ import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.Tag
 import team.aliens.dms.domain.tag.spi.QueryStudentTagPort
 import team.aliens.dms.domain.tag.spi.QueryTagPort
+import team.aliens.dms.domain.tag.spi.vo.StudentTagDetailVO
 import java.util.UUID
 
 @Service
@@ -14,11 +15,17 @@ class GetTagServiceImpl(
     private val queryStudentTagPort: QueryStudentTagPort
 ) : GetTagService {
 
+    override fun getStudentTagsByTagNameIn(names: List<String>): List<StudentTag> =
+        queryStudentTagPort.queryStudentTagsByTagNameIn(names)
+
     override fun getStudentTagsByStudentId(studentId: UUID): List<StudentTag> =
         queryStudentTagPort.queryStudentTagsByStudentId(studentId)
 
-    override fun getAllWarningTags(names: List<String>): List<Tag> =
-        queryTagPort.queryAllWarningTags(names)
+    override fun getAllStudentTagDetails(): List<StudentTagDetailVO> =
+        queryStudentTagPort.queryAllStudentTagDetails()
+
+    override fun getTagsByTagNameIn(names: List<String>): List<Tag> =
+        queryTagPort.queryTagsByTagNameIn(names)
 
     override fun getTagByName(name: String) =
         queryTagPort.queryTagByName(name) ?: throw TagNotFoundException

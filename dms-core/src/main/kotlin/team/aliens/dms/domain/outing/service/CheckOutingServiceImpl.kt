@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.outing.exception.OutingApplicationAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.exception.OutingTypeAlreadyExistsException
 import team.aliens.dms.domain.outing.model.OutingType
@@ -26,7 +25,6 @@ class CheckOutingServiceImpl(
         arrivalTime: LocalTime
     ) {
         checkOutingAvailableTime(outingDate, outingTime, arrivalTime)
-        checkOutingApplicationExistsByOutingDateAndStudentId(outingDate, studentId)
     }
 
     private fun checkOutingAvailableTime(
@@ -37,12 +35,6 @@ class CheckOutingServiceImpl(
         queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outingDate.dayOfWeek)
             ?.checkAvailable(outingDate.dayOfWeek, outingTime, arrivalTime)
             ?: throw OutingAvailableTimeMismatchException
-    }
-
-    private fun checkOutingApplicationExistsByOutingDateAndStudentId(outingDate: LocalDate, studentId: UUID) {
-        if (queryOutingApplicationPort.existOutingApplicationByOutingDateAndStudentId(outingDate, studentId)) {
-            throw OutingApplicationAlreadyExistsException
-        }
     }
 
     override fun checkOutingTypeExists(outingType: OutingType) {

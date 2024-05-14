@@ -5,6 +5,7 @@ import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.tag.model.StudentTag
 import team.aliens.dms.domain.tag.model.WarningTag
 import team.aliens.dms.domain.tag.service.TagService
+import team.aliens.dms.domain.tag.spi.vo.StudentTagDetailVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -14,22 +15,38 @@ class UpdateStudentTagsUseCase(
     private val tagService: TagService,
 ) {
     fun execute() {
-        val warningTagMap: Map<String, UUID> = tagService.getAllWarningTags(
-            WarningTag.getAllNames()
+        val warningTagMap: Map<String, UUID> = tagService.getTagsByTagNameIn(
+            WarningTag.getAllMessages()
         ).associate { it.name to it.id }
 
-        tagService.deleteAllStudentTagsByTagIdIn(warningTagMap.values.toList())
+        val studentTagDetailMap: Map<UUID, List<StudentTagDetailVO>> = tagService.getAllStudentTagDetails()
+            .groupBy { it.studentId }
+
+        val studentIdsToDeleteStudentTags = ArrayList<UUID>()
 
         val saveList: List<StudentTag> = pointService.getPointTotalsGroupByStudent().mapNotNull {
             val warningTag = WarningTag.byPoint(it.minusTotal)
-            if (warningTag != WarningTag.SAFE) {
+
+            val isWarningTag = warningTag != WarningTag.SAFE
+            val hasWarningTag = studentTagDetailMap.containsKey(it.studentId)
+            val isHighLevelWarning = if (hasWarningTag) studentTagDetailMap[it.studentId]!!.any {
+                WarningTag.byContent(it.tagName).point < warningTag.point
+            } else false
+
+            if (isWarningTag &&
+                (!hasWarningTag || isHighLevelWarning)
+            ) {
+
+                studentIdsToDeleteStudentTags.add(it.studentId)
                 StudentTag(
                     it.studentId,
-                    warningTagMap[warningTag.name]!!,
+                    warningTagMap[warningTag.warningMessage]!!,
                     LocalDateTime.now()
                 )
             } else null
         }
+        
+        tagService.deleteAllStudentTagsByStudentIdIn(studentIdsToDeleteStudentTags)
 
         tagService.saveAllStudentTags(saveList)
     }
