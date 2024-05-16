@@ -45,7 +45,7 @@ class UpdateStudentTagsUseCase(
                 )
             } else null
         }
-        
+
         tagService.deleteAllStudentTagsByStudentIdIn(studentIdsToDeleteStudentTags)
 
         tagService.saveAllStudentTags(saveList)
