@@ -22,7 +22,6 @@ class UpdateStudentTagsUseCase(
 
         val reverseWarningTagMap: Map<UUID, String> = tagList.associate { it.id to it.name }
 
-
         val studentTagDetailMap: Map<UUID, List<StudentTagDetailVO>> = tagService.getAllStudentTagDetails()
             .groupBy { it.studentId }
 
