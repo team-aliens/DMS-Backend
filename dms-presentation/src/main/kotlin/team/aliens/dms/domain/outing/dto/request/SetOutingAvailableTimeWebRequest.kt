@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull
 import java.time.DayOfWeek
 import java.time.LocalTime
 
-data class SetOutingTimeWebRequest(
+data class SetOutingAvailableTimeWebRequest(
     @field:NotNull
     val dayOfWeek: DayOfWeek,
 

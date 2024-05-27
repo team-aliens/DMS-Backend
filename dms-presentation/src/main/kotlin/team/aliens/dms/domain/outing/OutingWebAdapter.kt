@@ -21,15 +21,15 @@ import team.aliens.dms.domain.outing.dto.request.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
-import team.aliens.dms.domain.outing.dto.request.SetOutingTimeRequest
-import team.aliens.dms.domain.outing.dto.request.SetOutingTimeWebRequest
+import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeRequest
+import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeWebRequest
 import team.aliens.dms.domain.outing.dto.response.ApplyOutingResponse
 import team.aliens.dms.domain.outing.dto.response.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.response.GetCurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.dto.response.OutingApplicationHistoriesResponse
 import team.aliens.dms.domain.outing.dto.response.OutingAvailableTimesResponse
 import team.aliens.dms.domain.outing.dto.response.OutingHistoryDetailsResponse
-import team.aliens.dms.domain.outing.dto.response.SetOutingTimeResponse
+import team.aliens.dms.domain.outing.dto.response.SetOutingAvailableTimeResponse
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
@@ -40,12 +40,12 @@ import team.aliens.dms.domain.outing.usecase.GetOutingApplicationHistoriesUseCas
 import team.aliens.dms.domain.outing.usecase.GetOutingAvailableTimesUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingHistoryDetailsUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
-import team.aliens.dms.domain.outing.usecase.SetOutingTimeUseCase
+import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Validated
 @RequestMapping("/outings")
@@ -62,7 +62,7 @@ class OutingWebAdapter(
     private val getOutingApplicationHistoriesUseCase: GetOutingApplicationHistoriesUseCase,
     private val getOutingAvailableTimesUseCase: GetOutingAvailableTimesUseCase,
     private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
-    private val setOutingTimeUseCase: SetOutingTimeUseCase
+    private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -156,9 +156,9 @@ class OutingWebAdapter(
     }
 
     @PostMapping("/available-time")
-    fun setOutingTime(@RequestBody @Valid webRequest: SetOutingTimeWebRequest): SetOutingTimeResponse {
-        return setOutingTimeUseCase.execute(
-            SetOutingTimeRequest(
+    fun setOutingAvailableTime(@RequestBody @Valid webRequest: SetOutingAvailableTimeWebRequest): SetOutingAvailableTimeResponse {
+        return setOutingAvailableTimeUseCase.execute(
+            SetOutingAvailableTimeRequest(
                 dayOfWeek = webRequest.dayOfWeek,
                 startTime = webRequest.startTime,
                 endTime = webRequest.endTime
