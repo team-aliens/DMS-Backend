@@ -41,11 +41,10 @@ class OutingAvailableTimePersistenceAdapter(
             .fetch()
     }
 
-    override fun saveOutingTime(outingAvailableTime: OutingAvailableTime) {
+    override fun saveOutingTime(outingAvailableTime: OutingAvailableTime): OutingAvailableTime =
         outingAvailableTimeMapper.toDomain(
             outingAvailableTimeRepository.save(
                 outingAvailableTimeMapper.toEntity(outingAvailableTime)
             )
         )!!
-    }
 }
