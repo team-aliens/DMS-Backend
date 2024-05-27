@@ -29,6 +29,7 @@ import team.aliens.dms.domain.outing.dto.response.GetCurrentOutingApplicationRes
 import team.aliens.dms.domain.outing.dto.response.OutingApplicationHistoriesResponse
 import team.aliens.dms.domain.outing.dto.response.OutingAvailableTimesResponse
 import team.aliens.dms.domain.outing.dto.response.OutingHistoryDetailsResponse
+import team.aliens.dms.domain.outing.dto.response.SetOutingTimeResponse
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
