@@ -111,5 +111,5 @@ data class OutingCompanionsResponse(
 }
 
 data class SetOutingTimeResponse(
-    val setOutingTimeId: UUID
+    val outingTimeId: UUID
 )
