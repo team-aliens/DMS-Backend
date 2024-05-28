@@ -20,7 +20,7 @@ class SetOutingAvailableTimeUseCase(
             endTime = request.endTime
         )
 
-        val outingTime = outingService.saveOutingTime(
+        val outingTime = outingService.saveOutingAvailableTime(
             OutingAvailableTime(
                 schoolId = securityService.getCurrentSchoolId(),
                 dayOfWeek = request.dayOfWeek,

@@ -45,7 +45,7 @@ import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Validated
 @RequestMapping("/outings")

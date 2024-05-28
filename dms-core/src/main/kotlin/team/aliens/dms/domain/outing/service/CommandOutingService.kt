@@ -14,5 +14,5 @@ interface CommandOutingService {
 
     fun deleteOutingApplication(outingApplication: OutingApplication)
 
-    fun saveOutingTime(outingAvailableTime: OutingAvailableTime): OutingAvailableTime
+    fun saveOutingAvailableTime(outingAvailableTime: OutingAvailableTime): OutingAvailableTime
 }
