@@ -156,7 +156,9 @@ class OutingWebAdapter(
     }
 
     @PostMapping("/available-time")
-    fun setOutingAvailableTime(@RequestBody @Valid webRequest: SetOutingAvailableTimeWebRequest): SetOutingAvailableTimeResponse {
+    fun setOutingAvailableTime(
+        @RequestBody @Valid webRequest: SetOutingAvailableTimeWebRequest
+    ): SetOutingAvailableTimeResponse {
         return setOutingAvailableTimeUseCase.execute(
             SetOutingAvailableTimeRequest(
                 dayOfWeek = webRequest.dayOfWeek,

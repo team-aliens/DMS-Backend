@@ -25,3 +25,7 @@ object OutingTypeNotFoundException : DmsException(
 object OutingTypeMismatchException : DmsException(
     OutingErrorCode.OUTING_TYPE_MISMATCH
 )
+
+object OutingAvailableTimeAlreadyExistsException : DmsException(
+    OutingErrorCode.OUTING_AVAILABLE_TIME_ALREADY_EXISTS
+)

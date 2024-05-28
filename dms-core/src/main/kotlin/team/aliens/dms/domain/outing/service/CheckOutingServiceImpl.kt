@@ -1,12 +1,14 @@
 package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.exception.OutingTypeAlreadyExistsException
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -41,5 +43,28 @@ class CheckOutingServiceImpl(
         if (queryOutingTypePort.existsOutingType(outingType)) {
             throw OutingTypeAlreadyExistsException
         }
+    }
+
+    override fun checkOutingAvailableTime(
+        dayOfWeek: DayOfWeek,
+        startTime: LocalTime,
+        endTime: LocalTime
+    ) {
+        val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(dayOfWeek)
+
+        for (existingTime in existingTimes) {
+            if (timesOverlap(startTime, endTime, existingTime.outingTime, existingTime.arrivalTime)) {
+                throw OutingAvailableTimeAlreadyExistsException
+            }
+        }
+    }
+
+    private fun timesOverlap(
+        newStartTime: LocalTime,
+        newEndTime: LocalTime,
+        startTime: LocalTime,
+        endTime: LocalTime
+    ): Boolean {
+        return !(newEndTime <= startTime || newStartTime >= endTime)
     }
 }
