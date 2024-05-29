@@ -3,10 +3,9 @@ package team.aliens.dms.domain.outing.model
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
-import team.aliens.dms.domain.point.dto.PointRequestType
 import java.time.DayOfWeek
 import java.time.LocalTime
-import java.util.UUID
+import java.util.*
 
 @Aggregate
 class OutingAvailableTime(
