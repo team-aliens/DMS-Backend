@@ -3,6 +3,7 @@ package team.aliens.dms.domain.outing.model
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
+import team.aliens.dms.domain.point.dto.PointRequestType
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.UUID
@@ -34,6 +35,17 @@ class OutingAvailableTime(
             this.arrivalTime.isBefore(arrivalTime)
         ) {
             throw OutingAvailableTimeMismatchException
+        }
+    }
+
+    companion object {
+        fun timesOverlap(
+                newStartTime: LocalTime,
+                newEndTime: LocalTime,
+                startTime: LocalTime,
+                endTime: LocalTime
+        ): Boolean {
+            return !(newEndTime <= startTime || newStartTime >= endTime)
         }
     }
 }

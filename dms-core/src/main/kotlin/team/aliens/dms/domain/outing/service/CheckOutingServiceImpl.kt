@@ -4,6 +4,8 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.exception.OutingTypeAlreadyExistsException
+import team.aliens.dms.domain.outing.model.OutingAvailableTime
+import team.aliens.dms.domain.outing.model.OutingAvailableTime.Companion.timesOverlap
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
@@ -57,14 +59,5 @@ class CheckOutingServiceImpl(
                 throw OutingAvailableTimeAlreadyExistsException
             }
         }
-    }
-
-    private fun timesOverlap(
-        newStartTime: LocalTime,
-        newEndTime: LocalTime,
-        startTime: LocalTime,
-        endTime: LocalTime
-    ): Boolean {
-        return !(newEndTime <= startTime || newStartTime >= endTime)
     }
 }
