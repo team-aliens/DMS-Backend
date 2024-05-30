@@ -2,9 +2,9 @@ package team.aliens.dms.domain.outing.dto.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.outing.model.OutingApplication
+import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
-import team.aliens.dms.domain.outing.spi.vo.OutingAvailableTimeVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import team.aliens.dms.domain.student.model.Student
@@ -54,7 +54,7 @@ data class OutingApplicationHistoriesResponse(
 )
 
 data class OutingAvailableTimesResponse(
-    val outingAvailableTimes: List<OutingAvailableTimeVO>
+    val outingAvailableTimes: List<OutingAvailableTime>
 )
 
 data class OutingHistoryDetailsResponse(
