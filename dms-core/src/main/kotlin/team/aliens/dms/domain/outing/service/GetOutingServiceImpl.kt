@@ -2,8 +2,10 @@ package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationNotFoundException
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeNotFoundException
 import team.aliens.dms.domain.outing.exception.OutingTypeNotFoundException
 import team.aliens.dms.domain.outing.model.OutingApplication
+import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
@@ -54,4 +56,8 @@ class GetOutingServiceImpl(
 
     override fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO> =
         queryOutingCompanionPort.queryOutingCompanionsById(outingApplicationId)
+
+    override fun getOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime =
+        queryOutingAvailableTimePort.queryOutingAvailableTimeById(outingAvailableTimeId)
+            ?: throw OutingAvailableTimeNotFoundException
 }

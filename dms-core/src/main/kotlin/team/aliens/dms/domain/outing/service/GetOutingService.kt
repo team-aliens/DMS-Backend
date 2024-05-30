@@ -28,4 +28,6 @@ interface GetOutingService {
     fun getOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTime>
 
     fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO>
+
+    fun getOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime
 }

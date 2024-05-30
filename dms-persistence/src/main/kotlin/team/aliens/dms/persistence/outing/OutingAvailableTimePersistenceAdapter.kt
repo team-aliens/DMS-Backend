@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.outing
 
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.spi.OutingAvailableTimePort
@@ -8,6 +9,7 @@ import team.aliens.dms.persistence.outing.entity.QOutingAvailableTimeJpaEntity
 import team.aliens.dms.persistence.outing.mapper.OutingAvailableTimeMapper
 import team.aliens.dms.persistence.outing.repository.OutingAvailableTimeJpaRepository
 import java.time.DayOfWeek
+import java.util.UUID
 
 @Component
 class OutingAvailableTimePersistenceAdapter(
@@ -37,4 +39,14 @@ class OutingAvailableTimePersistenceAdapter(
                 outingAvailableTimeMapper.toEntity(outingAvailableTime)
             )
         )!!
+
+    override fun queryOutingAvailableTimeById(outingAvailableTimeId: UUID) = outingAvailableTimeMapper.toDomain(
+        outingAvailableTimeRepository.findByIdOrNull(outingAvailableTimeId)
+    )
+
+    override fun deleteOutingAvailableTime(outingAvailableTime: OutingAvailableTime) {
+        outingAvailableTimeRepository.delete(
+            outingAvailableTimeMapper.toEntity(outingAvailableTime)
+        )
+    }
 }
