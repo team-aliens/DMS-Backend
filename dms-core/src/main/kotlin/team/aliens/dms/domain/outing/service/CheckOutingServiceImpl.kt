@@ -11,7 +11,7 @@ import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.*
+import java.util.UUID
 
 @Service
 class CheckOutingServiceImpl(
