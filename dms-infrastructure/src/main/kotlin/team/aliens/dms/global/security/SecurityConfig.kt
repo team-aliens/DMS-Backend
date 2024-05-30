@@ -29,7 +29,7 @@ class SecurityConfig(
 
         http
             .authorizeHttpRequests { authorize -> authorize
-                // healthcheck
+                // /healthcheck
                 .requestMatchers(HttpMethod.GET, "/").permitAll()
 
                 // /auth
@@ -167,7 +167,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
 
-                //outings
+                // /outings
                 .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.POST, "/outings/types").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.DELETE, "/outings/types/{title}").hasAuthority(MANAGER.name)
@@ -179,8 +179,9 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/outings/histories").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/outings/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/outings/history/{outing-application-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.POST, "/outings/available-time").hasAuthority(MANAGER.name)
 
-                //bugs
+                // /bugs
                 .requestMatchers(HttpMethod.POST, "/bugs").hasAuthority(STUDENT.name)
 
                 .anyRequest().denyAll()

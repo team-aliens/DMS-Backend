@@ -17,16 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.extension.setExcelContentDisposition
-import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
-import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
-import team.aliens.dms.domain.outing.dto.CreateOutingTypeRequest
-import team.aliens.dms.domain.outing.dto.GetAllOutingTypeTitlesResponse
-import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
-import team.aliens.dms.domain.outing.dto.OutingApplicationHistoriesResponse
-import team.aliens.dms.domain.outing.dto.OutingAvailableTimesResponse
-import team.aliens.dms.domain.outing.dto.OutingHistoryDetailsResponse
+import team.aliens.dms.domain.outing.dto.request.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingWebRequest
+import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
+import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeRequest
+import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeWebRequest
+import team.aliens.dms.domain.outing.dto.response.ApplyOutingResponse
+import team.aliens.dms.domain.outing.dto.response.GetAllOutingTypeTitlesResponse
+import team.aliens.dms.domain.outing.dto.response.GetCurrentOutingApplicationResponse
+import team.aliens.dms.domain.outing.dto.response.OutingApplicationHistoriesResponse
+import team.aliens.dms.domain.outing.dto.response.OutingAvailableTimesResponse
+import team.aliens.dms.domain.outing.dto.response.OutingHistoryDetailsResponse
+import team.aliens.dms.domain.outing.dto.response.SetOutingAvailableTimeResponse
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
@@ -37,6 +40,7 @@ import team.aliens.dms.domain.outing.usecase.GetOutingApplicationHistoriesUseCas
 import team.aliens.dms.domain.outing.usecase.GetOutingAvailableTimesUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingHistoryDetailsUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
+import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
 import java.time.DayOfWeek
@@ -57,7 +61,8 @@ class OutingWebAdapter(
     private val getCurrentOutingApplicationUseCase: GetCurrentOutingApplicationUseCase,
     private val getOutingApplicationHistoriesUseCase: GetOutingApplicationHistoriesUseCase,
     private val getOutingAvailableTimesUseCase: GetOutingAvailableTimesUseCase,
-    private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase
+    private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
+    private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -148,5 +153,18 @@ class OutingWebAdapter(
         @PathVariable("outing-application-id") @NotNull outingApplicationId: UUID
     ): OutingHistoryDetailsResponse {
         return getOutingHistoryDetailsUseCase.execute(outingApplicationId)
+    }
+
+    @PostMapping("/available-time")
+    fun setOutingAvailableTime(
+        @RequestBody @Valid webRequest: SetOutingAvailableTimeWebRequest
+    ): SetOutingAvailableTimeResponse {
+        return setOutingAvailableTimeUseCase.execute(
+            SetOutingAvailableTimeRequest(
+                dayOfWeek = webRequest.dayOfWeek,
+                startTime = webRequest.startTime,
+                endTime = webRequest.endTime
+            )
+        )
     }
 }

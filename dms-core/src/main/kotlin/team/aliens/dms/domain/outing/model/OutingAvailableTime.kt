@@ -5,7 +5,7 @@ import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import java.time.DayOfWeek
 import java.time.LocalTime
-import java.util.UUID
+import java.util.*
 
 @Aggregate
 class OutingAvailableTime(
@@ -35,5 +35,12 @@ class OutingAvailableTime(
         ) {
             throw OutingAvailableTimeMismatchException
         }
+    }
+
+    fun timesOverlap(
+        newStartTime: LocalTime,
+        newEndTime: LocalTime
+    ): Boolean {
+        return !(newEndTime <= this.outingTime || newStartTime >= this.arrivalTime)
     }
 }

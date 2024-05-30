@@ -3,7 +3,7 @@ package team.aliens.dms.domain.outing.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.service.FileService
-import team.aliens.dms.domain.outing.dto.ExportAllOutingApplicationsResponse
+import team.aliens.dms.domain.outing.dto.response.ExportAllOutingApplicationsResponse
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService

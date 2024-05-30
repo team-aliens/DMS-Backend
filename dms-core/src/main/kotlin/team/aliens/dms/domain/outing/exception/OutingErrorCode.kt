@@ -17,6 +17,7 @@ enum class OutingErrorCode(
 
     OUTING_APPLICATION_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Application Already Exists", 1),
     OUTING_TYPE_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Type Already Exists", 2),
+    OUTING_AVAILABLE_TIME_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Outing Available Time Already Exists", 1),
     ;
 
     override fun status(): Int = status
