@@ -6,18 +6,22 @@ enum class WarningTag(val warningMessage: String, val point: Int) {
     SAFE("SAFE", 0),
 
     FIRST_WARNING("경고 1단계", 15),
-    SECOND_WARNING("경고 2단계", 20),
-    THIRD_WARNING("경고 3단계", 25),
-    ONE_OUT("OUT 1", 30),
-    TWO_OUT("OUT 2", 35),
-    THREE_OUT("OUT 3", 40),
-
     C_FIRST_WARNING("경고 1단계(완료)", 15),
+
+    SECOND_WARNING("경고 2단계", 20),
     C_SECOND_WARNING("경고 2단계(완료)", 20),
+
+    THIRD_WARNING("경고 3단계", 25),
     C_THIRD_WARNING("경고 3단계(완료)", 25),
-    C_ONE_OUT("OUT 1(완료)", 30),
-    C_TWO_OUT("OUT 2(완료)", 35),
-    C_THREE_OUT("OUT 3(완료)", 40);
+
+    ONE_OUT("OUT 1", 35),
+    C_ONE_OUT("OUT 1(완료)", 35),
+
+    TWO_OUT("OUT 2", 45),
+    C_TWO_OUT("OUT 2(완료)", 45),
+
+    THREE_OUT("OUT 3", 60),
+    C_THREE_OUT("OUT 3(완료)", 60);
 
     companion object {
         fun byContent(warningMessage: String): WarningTag =
@@ -39,9 +43,9 @@ enum class WarningTag(val warningMessage: String, val point: Int) {
             }
 
         fun byPoint(minusPoint: Int) = when {
-            40 <= minusPoint -> THREE_OUT
-            35 <= minusPoint -> TWO_OUT
-            30 <= minusPoint -> ONE_OUT
+            60 <= minusPoint -> THREE_OUT
+            45 <= minusPoint -> TWO_OUT
+            35 <= minusPoint -> ONE_OUT
             25 <= minusPoint -> THIRD_WARNING
             20 <= minusPoint -> SECOND_WARNING
             15 <= minusPoint -> FIRST_WARNING
@@ -64,4 +68,7 @@ enum class WarningTag(val warningMessage: String, val point: Int) {
             C_THREE_OUT.warningMessage
         )
     }
+
+    fun nextLevel() =
+        entries[this.ordinal + 1]
 }
