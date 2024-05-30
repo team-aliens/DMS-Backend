@@ -39,6 +39,7 @@ import team.aliens.dms.domain.outing.usecase.GetCurrentOutingApplicationUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingApplicationHistoriesUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingAvailableTimesUseCase
 import team.aliens.dms.domain.outing.usecase.GetOutingHistoryDetailsUseCase
+import team.aliens.dms.domain.outing.usecase.RemoveOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
@@ -62,7 +63,8 @@ class OutingWebAdapter(
     private val getOutingApplicationHistoriesUseCase: GetOutingApplicationHistoriesUseCase,
     private val getOutingAvailableTimesUseCase: GetOutingAvailableTimesUseCase,
     private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
-    private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase
+    private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase,
+    private val removeOutingAvailableTimeUseCase: RemoveOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -166,5 +168,11 @@ class OutingWebAdapter(
                 endTime = webRequest.endTime
             )
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/available-time/{outing-available-time-id}")
+    fun removeOutingAvailableTime(@PathVariable("outing-available-time-id") @NotNull outingAvailableTimeId: UUID) {
+        removeOutingAvailableTimeUseCase.execute(outingAvailableTimeId)
     }
 }
