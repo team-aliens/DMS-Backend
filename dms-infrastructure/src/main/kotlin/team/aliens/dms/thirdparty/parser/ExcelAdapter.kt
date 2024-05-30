@@ -311,7 +311,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 .map {
                     autoSizeColumn(it)
                     val width = getColumnWidth(it)
-                    setColumnWidth(it, width + 900)
+                    setColumnWidth(it, ((width * 1.3) - 50).toInt())
                 }
         }
     }
@@ -433,6 +433,5 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             .apply {
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
                 verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
-                // wrapText = true
             }
 }
