@@ -54,4 +54,8 @@ class CommandOutingServiceImpl(
 
     override fun saveOutingAvailableTime(outingAvailableTime: OutingAvailableTime): OutingAvailableTime =
         commandOutingTimePort.saveOutingAvailableTime(outingAvailableTime)
+
+    override fun deleteOutingAvailableTime(outingAvailableTime: OutingAvailableTime) {
+        commandOutingTimePort.deleteOutingAvailableTime(outingAvailableTime)
+    }
 }
