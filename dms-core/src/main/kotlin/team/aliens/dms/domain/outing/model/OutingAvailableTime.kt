@@ -37,14 +37,10 @@ class OutingAvailableTime(
         }
     }
 
-    companion object {
-        fun timesOverlap(
-                newStartTime: LocalTime,
-                newEndTime: LocalTime,
-                startTime: LocalTime,
-                endTime: LocalTime
-        ): Boolean {
-            return !(newEndTime <= startTime || newStartTime >= endTime)
-        }
+    fun timesOverlap(
+        newStartTime: LocalTime,
+        newEndTime: LocalTime
+    ): Boolean {
+        return !(newEndTime <= this.outingTime || newStartTime >= this.arrivalTime)
     }
 }
