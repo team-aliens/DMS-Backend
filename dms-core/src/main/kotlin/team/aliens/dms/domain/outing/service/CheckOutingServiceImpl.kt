@@ -45,15 +45,15 @@ class CheckOutingServiceImpl(
         }
     }
 
-    override fun checkOutingAvailableTime(
+    override fun checkOutingAvailableTimeOverlap(
         dayOfWeek: DayOfWeek,
-        startTime: LocalTime,
-        endTime: LocalTime
+        outingTime: LocalTime,
+        arrivalTime: LocalTime
     ) {
         val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(dayOfWeek)
 
         for (existingTime in existingTimes) {
-            if (existingTime.timesOverlap(startTime, endTime)) {
+            if (existingTime.timesOverlap(outingTime, arrivalTime)) {
                 throw OutingAvailableTimeAlreadyExistsException
             }
         }
