@@ -9,7 +9,6 @@ import java.util.UUID
 
 @UseCase
 class UpdateOutingAvailableTimeUseCase(
-    private val securityService: SecurityService,
     private val outingService: OutingService
 ) {
 
@@ -24,7 +23,7 @@ class UpdateOutingAvailableTimeUseCase(
 
         val updatedOutingAvailableTime = OutingAvailableTime(
             id = outingAvailableTimeId,
-            schoolId = securityService.getCurrentSchoolId(),
+            schoolId = currentOutingAvailableTime.schoolId,
             outingTime = outingTime,
             arrivalTime = arrivalTime,
             enabled = currentOutingAvailableTime.enabled,
