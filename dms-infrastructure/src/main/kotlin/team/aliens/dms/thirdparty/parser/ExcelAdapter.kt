@@ -343,28 +343,32 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     override fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>): ByteArray {
         val attributes = mutableListOf("이름", "학번", "외출일", "외출 시간", "도착 시간")
 
-        val maxOutingCompanionCount = outingApplicationVos.maxOf { it.outingCompanionVOs.size }
+        val outingApplicationInfoSet = outingApplicationVos.map { outingApplication ->
+            val outingApplicationInfoList = mutableListOf(
+                listOf(
+                    outingApplication.studentName,
+                    outingApplication.studentGcn,
+                    outingApplication.outingDate.toString(),
+                    outingApplication.outingTime.toString(),
+                    outingApplication.arrivalTime.toString()
+                )
+            )
 
-        for (i in 0 until maxOutingCompanionCount) {
-            val order = i + 1 // ex) 동행1 이름, 동행1 학번
-            attributes.addAll(listOf("동행$order 이름", "동행$order 학번"))
+            for (outingCompanions in outingApplication.outingCompanionVOs)
+                outingApplicationInfoList.add(
+                    listOf(
+                        outingCompanions.studentName,
+                        outingCompanions.studentGcn,
+                        outingApplication.outingDate.toString(),
+                        outingApplication.outingTime.toString(),
+                        outingApplication.arrivalTime.toString()
+                    )
+                )
+
+            outingApplicationInfoList
         }
 
-        val outingApplicationInfosList = outingApplicationVos.map { outingApplication ->
-            mutableListOf(
-                outingApplication.studentName,
-                outingApplication.studentGcn,
-                outingApplication.outingDate.toString(),
-                outingApplication.outingTime.toString(),
-                outingApplication.arrivalTime.toString()
-            ).apply {
-                outingApplication.outingCompanionVOs.forEach { outingCompanion ->
-                    addAll(listOf(outingCompanion.studentName, outingCompanion.studentGcn))
-                }
-            }
-        }
-
-        return createExcelSheet(attributes, outingApplicationInfosList)
+        return createExcelSheetForOuting(attributes, outingApplicationInfoSet)
     }
 
     private fun createExcelSheet(
@@ -385,6 +389,37 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         formatWorkSheet(sheet)
 
         // applyToSheet.accept(sheet)
+        ByteArrayOutputStream().use { stream ->
+            workbook.write(stream)
+            return stream.toByteArray()
+        }
+    }
+
+    private fun createExcelSheetForOuting(
+        attributes: List<String>,
+        datasListSet: List<List<List<String?>>>
+    ): ByteArray {
+        val workbook = XSSFWorkbook()
+        val sheet = workbook.createSheet()
+
+        val headerRow = sheet.createRow(0)
+        insertDatasAtRow(headerRow, attributes, getHeaderCellStyle(workbook))
+
+        val colors = listOf(
+            IndexedColors.LIGHT_BLUE.index,
+            IndexedColors.LIGHT_YELLOW.index,
+            IndexedColors.LIGHT_GREEN.index
+        )
+
+        datasListSet.forEachIndexed { setIdx, datasList ->
+            val color = colors[setIdx % 3]
+
+            datasList.forEachIndexed { idx, datas ->
+                val row = sheet.createRow(idx + 1)
+                insertDatasAtRowWithColor(row, datas, getDefaultCellStyle(workbook), color)
+            }
+        }
+        formatWorkSheet(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
@@ -398,6 +433,23 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         style: CellStyle,
         startIdx: Int = 0
     ) {
+        datas.forEachIndexed { i, data ->
+            val cell = row.createCell(i + startIdx)
+            data?.toDoubleOrNull()?.let {
+                cell.setCellValue(it)
+            } ?: cell.setCellValue(data)
+            cell.cellStyle = style
+        }
+    }
+
+    private fun insertDatasAtRowWithColor(
+        row: Row,
+        datas: List<String?>,
+        style: CellStyle,
+        colorIdx: Short,
+        startIdx: Int = 0
+    ) {
+        style.fillForegroundColor = colorIdx
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
             data?.toDoubleOrNull()?.let {
