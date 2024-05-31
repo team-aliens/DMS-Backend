@@ -181,6 +181,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/outings/history/{outing-application-id}").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.POST, "/outings/available-time").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.DELETE, "/outings/available-time/{outing-available-time-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.PATCH, "/outings/available-time/{outing-available-time-id}").hasAuthority(MANAGER.name)
 
                 // /bugs
                 .requestMatchers(HttpMethod.POST, "/bugs").hasAuthority(STUDENT.name)

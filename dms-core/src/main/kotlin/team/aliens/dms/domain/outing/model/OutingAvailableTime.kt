@@ -38,9 +38,9 @@ class OutingAvailableTime(
     }
 
     fun timesOverlap(
-        newStartTime: LocalTime,
-        newEndTime: LocalTime
+        newOutingTime: LocalTime,
+        newArrivalTime: LocalTime
     ): Boolean {
-        return !(newEndTime <= this.outingTime || newStartTime >= this.arrivalTime)
+        return !(newArrivalTime <= this.outingTime || newOutingTime >= this.arrivalTime)
     }
 }

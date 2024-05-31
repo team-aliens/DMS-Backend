@@ -5,6 +5,6 @@ import java.time.LocalTime
 
 data class SetOutingAvailableTimeRequest(
     val dayOfWeek: DayOfWeek,
-    val startTime: LocalTime,
-    val endTime: LocalTime
+    val outingTime: LocalTime,
+    val arrivalTime: LocalTime
 )

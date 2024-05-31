@@ -1,13 +1,9 @@
 package team.aliens.dms.domain.outing.dto.request
 
 import jakarta.validation.constraints.NotNull
-import java.time.DayOfWeek
 import java.time.LocalTime
 
-data class SetOutingAvailableTimeWebRequest(
-    @field:NotNull
-    val dayOfWeek: DayOfWeek,
-
+data class UpdateOutingAvailableTimeWebRequest(
     @field:NotNull
     val outingTime: LocalTime,
 

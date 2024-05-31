@@ -17,9 +17,9 @@ interface CheckOutingService {
 
     fun checkOutingTypeExists(outingType: OutingType)
 
-    fun checkOutingAvailableTime(
+    fun checkOutingAvailableTimeOverlap(
         dayOfWeek: DayOfWeek,
-        startTime: LocalTime,
-        endTime: LocalTime
+        outingTime: LocalTime,
+        arrivalTime: LocalTime
     )
 }
