@@ -23,6 +23,7 @@ import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeRequest
 import team.aliens.dms.domain.outing.dto.request.CreateOutingTypeWebRequest
 import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeRequest
 import team.aliens.dms.domain.outing.dto.request.SetOutingAvailableTimeWebRequest
+import team.aliens.dms.domain.outing.dto.request.UpdateOutingAvailableTimeWebRequest
 import team.aliens.dms.domain.outing.dto.response.ApplyOutingResponse
 import team.aliens.dms.domain.outing.dto.response.GetAllOutingTypeTitlesResponse
 import team.aliens.dms.domain.outing.dto.response.GetCurrentOutingApplicationResponse
@@ -43,6 +44,7 @@ import team.aliens.dms.domain.outing.usecase.RemoveOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
+import team.aliens.dms.domain.outing.usecase.UpdateOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -64,7 +66,8 @@ class OutingWebAdapter(
     private val getOutingAvailableTimesUseCase: GetOutingAvailableTimesUseCase,
     private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
     private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase,
-    private val removeOutingAvailableTimeUseCase: RemoveOutingAvailableTimeUseCase
+    private val removeOutingAvailableTimeUseCase: RemoveOutingAvailableTimeUseCase,
+    private val updateOutingAvailableTimeUseCase: UpdateOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -164,8 +167,8 @@ class OutingWebAdapter(
         return setOutingAvailableTimeUseCase.execute(
             SetOutingAvailableTimeRequest(
                 dayOfWeek = webRequest.dayOfWeek,
-                startTime = webRequest.startTime,
-                endTime = webRequest.endTime
+                outingTime = webRequest.outingTime,
+                arrivalTime = webRequest.arrivalTime
             )
         )
     }
@@ -174,5 +177,18 @@ class OutingWebAdapter(
     @DeleteMapping("/available-time/{outing-available-time-id}")
     fun removeOutingAvailableTime(@PathVariable("outing-available-time-id") @NotNull outingAvailableTimeId: UUID) {
         removeOutingAvailableTimeUseCase.execute(outingAvailableTimeId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/available-time/{outing-available-time-id}")
+    fun updateOutingAvailableTime(
+        @PathVariable("outing-available-time-id") @NotNull outingAvailableTimeId: UUID,
+        @RequestBody @Valid request: UpdateOutingAvailableTimeWebRequest
+    ) {
+        updateOutingAvailableTimeUseCase.execute(
+            outingAvailableTimeId = outingAvailableTimeId,
+            outingTime = request.outingTime,
+            arrivalTime = request.arrivalTime
+        )
     }
 }
