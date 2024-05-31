@@ -16,6 +16,12 @@ class UpdateOutingAvailableTimeUseCase(
     fun execute(outingAvailableTimeId: UUID, outingTime: LocalTime, arrivalTime: LocalTime) {
         val currentOutingAvailableTime = outingService.getOutingAvailableTimeById(outingAvailableTimeId)
 
+        outingService.checkOutingAvailableTimeOverlap(
+            dayOfWeek = currentOutingAvailableTime.dayOfWeek,
+            outingTime = outingTime,
+            arrivalTime = arrivalTime
+        )
+
         val updatedOutingAvailableTime = OutingAvailableTime(
             id = outingAvailableTimeId,
             schoolId = securityService.getCurrentSchoolId(),
