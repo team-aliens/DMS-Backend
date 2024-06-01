@@ -449,7 +449,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         colorIdx: Short,
         startIdx: Int = 0
     ) {
-        style.fillForegroundColor = colorIdx
+        style.fillBackgroundColor = colorIdx
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
             data?.toDoubleOrNull()?.let {
