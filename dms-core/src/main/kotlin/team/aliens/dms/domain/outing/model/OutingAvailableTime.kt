@@ -5,10 +5,10 @@ import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import java.time.DayOfWeek
 import java.time.LocalTime
-import java.util.*
+import java.util.UUID
 
 @Aggregate
-class OutingAvailableTime(
+data class OutingAvailableTime(
 
     val id: UUID = UUID(0, 0),
 

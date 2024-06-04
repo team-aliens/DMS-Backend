@@ -34,6 +34,7 @@ import team.aliens.dms.domain.outing.dto.response.SetOutingAvailableTimeResponse
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
+import team.aliens.dms.domain.outing.usecase.EnableOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.GetCurrentOutingApplicationUseCase
@@ -67,7 +68,8 @@ class OutingWebAdapter(
     private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
     private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase,
     private val removeOutingAvailableTimeUseCase: RemoveOutingAvailableTimeUseCase,
-    private val updateOutingAvailableTimeUseCase: UpdateOutingAvailableTimeUseCase
+    private val updateOutingAvailableTimeUseCase: UpdateOutingAvailableTimeUseCase,
+    private val enableOutingAvailableTimeUseCase: EnableOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -190,5 +192,11 @@ class OutingWebAdapter(
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/available-time/toggle/{outing-available-time-id}")
+    fun toggleOutingAvailableTime(@PathVariable("outing-available-time-id") @NotNull outingAvailableTimeId: UUID) {
+        enableOutingAvailableTimeUseCase.execute(outingAvailableTimeId)
     }
 }
