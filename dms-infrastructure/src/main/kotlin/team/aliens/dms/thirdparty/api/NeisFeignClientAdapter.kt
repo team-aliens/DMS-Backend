@@ -53,7 +53,7 @@ class NeisFeignClientAdapter(
         regionCode: String
     ): NeisMealServiceDietInfosResponse {
         runCatching {
-            val nextMonth = LocalDate.now().plusMonths(1)
+            val nextMonth = LocalDate.now()
 
             val neisMealServiceDietInfoString = neisFeignClient.getMealServiceDietInfo(
                 key = neisKey,
