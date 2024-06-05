@@ -5,7 +5,7 @@ import team.aliens.dms.domain.outing.service.OutingService
 import java.util.UUID
 
 @UseCase
-class EnableOutingAvailableTimeUseCase(
+class ToggleOutingAvailableTimeUseCase(
     private val outingService: OutingService
 ) {
 
