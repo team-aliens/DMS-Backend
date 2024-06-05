@@ -43,4 +43,7 @@ data class OutingAvailableTime(
     ): Boolean {
         return !(newArrivalTime <= this.outingTime || newOutingTime >= this.arrivalTime)
     }
+
+    fun toggleEnabled(): OutingAvailableTime =
+        this.copy(enabled = !this.enabled)
 }

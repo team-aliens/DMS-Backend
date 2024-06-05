@@ -12,10 +12,8 @@ class ToggleOutingAvailableTimeUseCase(
     fun execute(outingAvailableTimeId: UUID) {
         val currentOutingAvailableTime = outingService.getOutingAvailableTimeById(outingAvailableTimeId)
 
-        val enabledOutingAvailableTime = currentOutingAvailableTime.copy(
-            enabled = !currentOutingAvailableTime.enabled
-        )
+        val toggledOutingAvailableTime = currentOutingAvailableTime.toggleEnabled()
 
-        outingService.saveOutingAvailableTime(enabledOutingAvailableTime)
+        outingService.saveOutingAvailableTime(toggledOutingAvailableTime)
     }
 }

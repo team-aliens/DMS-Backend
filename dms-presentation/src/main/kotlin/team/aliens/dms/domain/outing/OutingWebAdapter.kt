@@ -34,7 +34,6 @@ import team.aliens.dms.domain.outing.dto.response.SetOutingAvailableTimeResponse
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
-import team.aliens.dms.domain.outing.usecase.ToggleOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
 import team.aliens.dms.domain.outing.usecase.GetAllOutingTypeTitlesUseCase
 import team.aliens.dms.domain.outing.usecase.GetCurrentOutingApplicationUseCase
@@ -44,6 +43,7 @@ import team.aliens.dms.domain.outing.usecase.GetOutingHistoryDetailsUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
+import team.aliens.dms.domain.outing.usecase.ToggleOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
