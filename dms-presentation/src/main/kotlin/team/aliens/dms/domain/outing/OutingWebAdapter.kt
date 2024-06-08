@@ -43,6 +43,7 @@ import team.aliens.dms.domain.outing.usecase.GetOutingHistoryDetailsUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.RemoveOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.SetOutingAvailableTimeUseCase
+import team.aliens.dms.domain.outing.usecase.ToggleOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UnApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingAvailableTimeUseCase
 import team.aliens.dms.domain.outing.usecase.UpdateOutingStatusUseCase
@@ -67,7 +68,8 @@ class OutingWebAdapter(
     private val getOutingHistoryDetailsUseCase: GetOutingHistoryDetailsUseCase,
     private val setOutingAvailableTimeUseCase: SetOutingAvailableTimeUseCase,
     private val removeOutingAvailableTimeUseCase: RemoveOutingAvailableTimeUseCase,
-    private val updateOutingAvailableTimeUseCase: UpdateOutingAvailableTimeUseCase
+    private val updateOutingAvailableTimeUseCase: UpdateOutingAvailableTimeUseCase,
+    private val toggleOutingAvailableTimeUseCase: ToggleOutingAvailableTimeUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -190,5 +192,11 @@ class OutingWebAdapter(
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/available-time/toggle/{outing-available-time-id}")
+    fun toggleOutingAvailableTime(@PathVariable("outing-available-time-id") @NotNull outingAvailableTimeId: UUID) {
+        toggleOutingAvailableTimeUseCase.execute(outingAvailableTimeId)
     }
 }
