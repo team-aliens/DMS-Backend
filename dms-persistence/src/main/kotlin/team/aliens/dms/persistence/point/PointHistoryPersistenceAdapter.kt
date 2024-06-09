@@ -170,7 +170,8 @@ class PointHistoryPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .join(pointHistoryJpaEntity).on(
+            .leftJoin(pointHistoryJpaEntity).on(
+                eqGcn(),
                 pointHistoryJpaEntity.createdAt.eq(
                     select(pointHistoryJpaEntity.createdAt.max())
                         .from(pointHistoryJpaEntity)
