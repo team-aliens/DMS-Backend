@@ -341,29 +341,32 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     }
 
     override fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>): ByteArray {
-        val attributes = mutableListOf("이름", "학번", "외출일", "외출 시간", "도착 시간")
+        val attributes = mutableListOf("학번", "이름", "외출 시간", "도착 시간", "외출 서명", "복귀 확인")
 
         val outingApplicationInfoSet = outingApplicationVos.map { outingApplication ->
             val outingApplicationInfoList = mutableListOf(
                 listOf(
-                    outingApplication.studentName,
                     outingApplication.studentGcn,
-                    outingApplication.outingDate.toString(),
+                    outingApplication.studentName,
                     outingApplication.outingTime.toString(),
-                    outingApplication.arrivalTime.toString()
+                    outingApplication.arrivalTime.toString(),
+                    null,
+                    null
                 )
             )
 
             for (outingCompanions in outingApplication.outingCompanionVOs)
-                outingApplicationInfoList.add(
-                    listOf(
-                        outingCompanions.studentName,
-                        outingCompanions.studentGcn,
-                        outingApplication.outingDate.toString(),
-                        outingApplication.outingTime.toString(),
-                        outingApplication.arrivalTime.toString()
+                if (outingCompanions.studentGcn.isNotBlank())
+                    outingApplicationInfoList.add(
+                        listOf(
+                            outingCompanions.studentGcn,
+                            outingCompanions.studentName,
+                            outingApplication.outingTime.toString(),
+                            outingApplication.arrivalTime.toString(),
+                            null,
+                            null
+                        )
                     )
-                )
 
             outingApplicationInfoList
         }
@@ -411,11 +414,12 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             IndexedColors.LIGHT_GREEN.index
         )
 
+        var idx = 1;
         datasListSet.forEachIndexed { setIdx, datasList ->
-            val color = colors[setIdx % 3]
+            val color = colors[setIdx % colors.size]
 
-            datasList.forEachIndexed { idx, datas ->
-                val row = sheet.createRow(idx + 1)
+            datasList.forEach { datas ->
+                val row = sheet.createRow(idx++)
                 insertDatasAtRowWithColor(row, datas, getDefaultCellStyle(workbook), color)
             }
         }
