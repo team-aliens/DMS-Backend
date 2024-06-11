@@ -409,9 +409,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         insertDatasAtRow(headerRow, attributes, getHeaderCellStyle(workbook))
 
         val colors = listOf(
-            IndexedColors.LIGHT_BLUE.index,
-            IndexedColors.LIGHT_YELLOW.index,
-            IndexedColors.LIGHT_GREEN.index
+            IndexedColors.AQUA.index,
+            IndexedColors.LIGHT_YELLOW.index
         )
 
         var idx = 1;
