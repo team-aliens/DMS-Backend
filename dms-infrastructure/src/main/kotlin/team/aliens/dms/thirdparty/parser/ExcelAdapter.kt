@@ -440,9 +440,10 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         if (color > -1) {
             style.fillPattern = CellStyle.SOLID_FOREGROUND
             style.fillForegroundColor = color
+            
+            style.setBorder()
         }
 
-        style.setBorder()
 
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
