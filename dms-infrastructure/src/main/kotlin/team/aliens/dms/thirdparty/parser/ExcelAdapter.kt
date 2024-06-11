@@ -419,7 +419,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
             datasList.forEach { datas ->
                 val row = sheet.createRow(idx++)
-                insertDatasAtRowWithColor(row, datas, getDefaultCellStyle(workbook), color)
+                insertDatasAtRow(row = row, datas = datas, style = getDefaultCellStyle(workbook), colorIdx = color)
             }
         }
         formatWorkSheet(sheet)
@@ -434,25 +434,16 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         row: Row,
         datas: List<String?>,
         style: CellStyle,
+        colorIdx: Short = 9,
         startIdx: Int = 0
     ) {
-        datas.forEachIndexed { i, data ->
-            val cell = row.createCell(i + startIdx)
-            data?.toDoubleOrNull()?.let {
-                cell.setCellValue(it)
-            } ?: cell.setCellValue(data)
-            cell.cellStyle = style
+        if (colorIdx.compareTo(9) != 0) {
+            style.fillPattern = CellStyle.SOLID_FOREGROUND
+            style.fillForegroundColor = colorIdx
         }
-    }
 
-    private fun insertDatasAtRowWithColor(
-        row: Row,
-        datas: List<String?>,
-        style: CellStyle,
-        colorIdx: Short,
-        startIdx: Int = 0
-    ) {
-        style.fillBackgroundColor = colorIdx
+        style.setBorder()
+
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
             data?.toDoubleOrNull()?.let {
@@ -489,4 +480,18 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 alignment = HorizontalAlignment.LEFT.ordinal.toShort()
                 verticalAlignment = VerticalAlignment.CENTER.ordinal.toShort()
             }
+}
+
+fun CellStyle.setBorder() {
+    val borderStyle = CellStyle.BORDER_THIN
+    val borderColor = IndexedColors.BLACK.index
+
+    borderLeft = borderStyle
+    borderTop = borderStyle
+    borderRight = borderStyle
+    borderBottom = borderStyle
+    leftBorderColor = borderColor
+    topBorderColor = borderColor
+    rightBorderColor = borderColor
+    bottomBorderColor = borderColor
 }
