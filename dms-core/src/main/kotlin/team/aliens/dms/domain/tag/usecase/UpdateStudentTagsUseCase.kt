@@ -13,7 +13,7 @@ import java.util.UUID
 @SchedulerUseCase
 class UpdateStudentTagsUseCase(
     private val pointService: PointService,
-    private val tagService: TagService,
+    private val tagService: TagService
 ) {
     fun execute() {
         val tagList: List<Tag> = tagService.getTagsByTagNameIn(WarningTag.getAllMessages())
