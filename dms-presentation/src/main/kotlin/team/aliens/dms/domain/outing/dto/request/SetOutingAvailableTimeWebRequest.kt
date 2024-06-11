@@ -9,8 +9,8 @@ data class SetOutingAvailableTimeWebRequest(
     val dayOfWeek: DayOfWeek,
 
     @field:NotNull
-    val outingTime: LocalTime,
+    val startTime: LocalTime,
 
     @field:NotNull
-    val arrivalTime: LocalTime
+    val endTime: LocalTime
 )

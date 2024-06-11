@@ -169,8 +169,8 @@ class OutingWebAdapter(
         return setOutingAvailableTimeUseCase.execute(
             SetOutingAvailableTimeRequest(
                 dayOfWeek = webRequest.dayOfWeek,
-                outingTime = webRequest.outingTime,
-                arrivalTime = webRequest.arrivalTime
+                startTime = webRequest.startTime,
+                endTime = webRequest.endTime
             )
         )
     }
