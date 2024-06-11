@@ -409,8 +409,8 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         insertDatasAtRow(headerRow, attributes, getHeaderCellStyle(workbook))
 
         val colors = listOf(
-            IndexedColors.WHITE.index,
-            IndexedColors.GREY_25_PERCENT.index
+            IndexedColors.WHITE,
+            IndexedColors.GREY_25_PERCENT,
         )
 
         var idx = 1;
@@ -434,16 +434,16 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         row: Row,
         datas: List<String?>,
         style: CellStyle,
-        color: Short = -1,
+        color: IndexedColors? = null,
         startIdx: Int = 0
     ) {
-        if (color > -1) {
+        color?.let {
+
             style.fillPattern = CellStyle.SOLID_FOREGROUND
-            style.fillForegroundColor = color
+            style.fillForegroundColor = it.index
 
             style.setBorder()
         }
-
 
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
