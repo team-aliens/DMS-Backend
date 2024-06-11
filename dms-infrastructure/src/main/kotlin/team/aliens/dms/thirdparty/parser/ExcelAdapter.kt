@@ -434,17 +434,14 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         row: Row,
         datas: List<String?>,
         style: CellStyle,
-        color: IndexedColors? = null,
+        color: IndexedColors = IndexedColors.WHITE,
         startIdx: Int = 0
     ) {
-        color?.let {
+        style.fillPattern = CellStyle.SOLID_FOREGROUND
+        style.fillForegroundColor = color.index
 
-            style.fillPattern = CellStyle.SOLID_FOREGROUND
-            style.fillForegroundColor = it.index
-
-            style.setBorder()
-        }
-
+        style.setBorder()
+        
         datas.forEachIndexed { i, data ->
             val cell = row.createCell(i + startIdx)
             data?.toDoubleOrNull()?.let {
