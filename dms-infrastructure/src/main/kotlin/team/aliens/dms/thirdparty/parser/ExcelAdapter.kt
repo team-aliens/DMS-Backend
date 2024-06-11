@@ -419,7 +419,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
 
             datasList.forEach { datas ->
                 val row = sheet.createRow(idx++)
-                insertDatasAtRow(row = row, datas = datas, style = getDefaultCellStyle(workbook), colorIdx = color)
+                insertDatasAtRow(row = row, datas = datas, style = getDefaultCellStyle(workbook), color = color)
             }
         }
         formatWorkSheet(sheet)
@@ -434,12 +434,12 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         row: Row,
         datas: List<String?>,
         style: CellStyle,
-        colorIdx: Short = 9,
+        color: Short = -1,
         startIdx: Int = 0
     ) {
-        if (colorIdx.compareTo(9) != 0) {
+        if (color > -1) {
             style.fillPattern = CellStyle.SOLID_FOREGROUND
-            style.fillForegroundColor = colorIdx
+            style.fillForegroundColor = color
         }
 
         style.setBorder()
