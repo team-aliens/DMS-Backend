@@ -7,6 +7,7 @@ import team.aliens.dms.domain.outing.exception.OutingTypeAlreadyExistsException
 import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
+import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -15,7 +16,7 @@ import java.util.UUID
 
 @Service
 class CheckOutingServiceImpl(
-    private val queryOutingApplicationPort: QueryOutingApplicationPort,
+    private val queryOutingCompanionPort: QueryOutingCompanionPort,
     private val queryOutingAvailableTimePort: QueryOutingAvailableTimePort,
     private val queryOutingTypePort: QueryOutingTypePort
 ) : CheckOutingService {
@@ -26,7 +27,14 @@ class CheckOutingServiceImpl(
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
+        checkOutingApplicationExists(studentId)
         checkOutingAvailableTime(outingDate, outingTime, arrivalTime)
+    }
+
+    private fun checkOutingApplicationExists(studentId: UUID) {
+        if (queryOutingCompanionPort.existsOutingCompanionById(studentId)) {
+            throw OutingApplicationAlreadyExistsException
+        }
     }
 
     private fun checkOutingAvailableTime(
