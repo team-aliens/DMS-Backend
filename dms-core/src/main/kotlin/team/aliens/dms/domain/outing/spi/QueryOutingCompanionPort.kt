@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.outing.spi
 
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
-import java.time.LocalDate
 import java.util.UUID
 
 interface QueryOutingCompanionPort {
