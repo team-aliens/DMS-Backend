@@ -8,7 +8,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 @Aggregate
-class OutingAvailableTime(
+data class OutingAvailableTime(
 
     val id: UUID = UUID(0, 0),
 
@@ -36,4 +36,14 @@ class OutingAvailableTime(
             throw OutingAvailableTimeMismatchException
         }
     }
+
+    fun timesOverlap(
+        newOutingTime: LocalTime,
+        newArrivalTime: LocalTime
+    ): Boolean {
+        return !(newArrivalTime <= this.outingTime || newOutingTime >= this.arrivalTime)
+    }
+
+    fun toggleEnabled(): OutingAvailableTime =
+        this.copy(enabled = !this.enabled)
 }

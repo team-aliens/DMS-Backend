@@ -38,5 +38,8 @@ ENV SES_SENDER ${SES_SENDER}
 ARG S3_BUCKET_NAME
 ENV S3_BUCKET_NAME ${S3_BUCKET_NAME}
 
+ARG FCM_FILE_URL
+ENV FCM_FILE_URL ${FCM_FILE_URL}
+
 COPY ./dms-infrastructure/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

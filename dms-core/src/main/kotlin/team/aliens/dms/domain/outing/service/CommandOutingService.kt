@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.domain.outing.model.OutingApplication
+import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.model.OutingType
 
 interface CommandOutingService {
@@ -12,4 +13,8 @@ interface CommandOutingService {
     fun deleteOutingType(outingType: OutingType)
 
     fun deleteOutingApplication(outingApplication: OutingApplication)
+
+    fun saveOutingAvailableTime(outingAvailableTime: OutingAvailableTime): OutingAvailableTime
+
+    fun deleteOutingAvailableTime(outingAvailableTime: OutingAvailableTime)
 }

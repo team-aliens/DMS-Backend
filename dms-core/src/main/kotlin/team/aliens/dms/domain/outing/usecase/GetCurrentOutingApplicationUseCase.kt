@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.outing.dto.GetCurrentOutingApplicationResponse
+import team.aliens.dms.domain.outing.dto.response.GetCurrentOutingApplicationResponse
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.student.service.StudentService
 

@@ -2,8 +2,8 @@ package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.outing.dto.ApplyOutingRequest
-import team.aliens.dms.domain.outing.dto.ApplyOutingResponse
+import team.aliens.dms.domain.outing.dto.request.ApplyOutingRequest
+import team.aliens.dms.domain.outing.dto.response.ApplyOutingResponse
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.service.OutingService
