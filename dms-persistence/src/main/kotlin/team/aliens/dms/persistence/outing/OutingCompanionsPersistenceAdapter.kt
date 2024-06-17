@@ -39,6 +39,10 @@ class OutingCompanionsPersistenceAdapter(
             .fetch()
     }
 
+    override fun existsOutingCompanionById(studentId: UUID): Boolean {
+        return outingCompanionRepository.existsByStudentId(studentId)
+    }
+
     override fun saveAllOutingCompanions(outingCompanions: List<OutingCompanion>) {
         outingCompanionRepository.saveAll(
             outingCompanions.map {
