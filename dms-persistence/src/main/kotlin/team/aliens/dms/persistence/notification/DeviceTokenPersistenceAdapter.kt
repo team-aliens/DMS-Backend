@@ -13,6 +13,10 @@ class DeviceTokenPersistenceAdapter(
     private val deviceTokenRepository: DeviceTokenJpaRepository
 ) : DeviceTokenPort {
 
+    override fun existsDeviceTokenByUserId(userId: UUID): Boolean {
+        return deviceTokenRepository.existsByUser(userId)
+    }
+
     override fun saveDeviceToken(deviceToken: DeviceToken) = notificationMapper.toDomain(
         deviceTokenRepository.save(
             notificationMapper.toEntity(deviceToken)
