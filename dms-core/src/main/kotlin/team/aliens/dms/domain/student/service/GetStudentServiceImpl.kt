@@ -5,7 +5,6 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.room.exception.RoomNotFoundException

@@ -203,7 +203,6 @@ class OutingApplicationPersistenceAdapter(
             ).firstOrNull()
     }
 
-
     override fun isApplicant(studentId: UUID): Boolean {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
 
