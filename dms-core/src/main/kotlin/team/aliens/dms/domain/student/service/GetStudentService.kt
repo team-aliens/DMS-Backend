@@ -54,4 +54,6 @@ interface GetStudentService {
     ): List<Student>
 
     fun getAllStudentsByName(name: String?): List<AllStudentsVO>
+
+    fun isOutingApplicant(studentId: UUID): Boolean
 }
