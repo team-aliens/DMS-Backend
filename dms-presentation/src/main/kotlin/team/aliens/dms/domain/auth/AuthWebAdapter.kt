@@ -47,7 +47,8 @@ class AuthWebAdapter(
         return signInUseCase.execute(
             SignInRequest(
                 accountId = request.accountId,
-                password = request.password
+                password = request.password,
+                deviceToken = request.deviceToken
             )
         )
     }
