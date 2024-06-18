@@ -30,4 +30,6 @@ interface GetOutingService {
     fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO>
 
     fun getOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime
+
+    fun getCurrentOutingApplicationAsCompanion(studentId: UUID): CurrentOutingApplicationVO
 }
