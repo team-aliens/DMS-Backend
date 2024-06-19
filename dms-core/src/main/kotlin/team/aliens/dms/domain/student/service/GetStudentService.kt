@@ -55,5 +55,5 @@ interface GetStudentService {
 
     fun getAllStudentsByName(name: String?): List<AllStudentsVO>
 
-    fun isOutingApplicant(studentId: UUID): Boolean
+    fun isApplicant(studentId: UUID): Boolean
 }

@@ -125,7 +125,7 @@ class GetStudentServiceImpl(
             )
         }
 
-    override fun isOutingApplicant(studentId: UUID): Boolean =
+    override fun isApplicant(studentId: UUID): Boolean =
         queryOutingApplicationPort.isApplicant(studentId)
 
     private fun getUpdatedStudent(
