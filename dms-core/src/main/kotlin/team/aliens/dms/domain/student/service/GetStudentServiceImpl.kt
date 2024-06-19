@@ -5,6 +5,7 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
+import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.point.spi.QueryPointHistoryPort
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
@@ -19,7 +20,8 @@ import java.util.function.Function
 class GetStudentServiceImpl(
     private val securityPort: SecurityPort,
     private val queryStudentPort: QueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort
+    private val queryPointHistoryPort: QueryPointHistoryPort,
+    private val queryOutingApplicationPort: QueryOutingApplicationPort,
 ) : GetStudentService {
 
     override fun getCurrentStudent(): Student {
@@ -122,6 +124,9 @@ class GetStudentServiceImpl(
                 number = studentVO.number
             )
         }
+
+    override fun isApplicant(studentId: UUID): Boolean =
+        queryOutingApplicationPort.isApplicant(studentId)
 
     private fun getUpdatedStudent(
         studentVOs: List<ExcelStudentVO>,
