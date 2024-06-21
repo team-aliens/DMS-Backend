@@ -8,6 +8,8 @@ interface CommandNotificationService {
 
     fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken
 
+    fun deleteDeviceTokenByUserId(userID: UUID)
+
     fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID)
 
     fun deleteNotificationOfUserByUserId(userId: UUID)
