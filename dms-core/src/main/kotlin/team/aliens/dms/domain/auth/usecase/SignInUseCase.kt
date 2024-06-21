@@ -29,15 +29,16 @@ class SignInUseCase(
         )
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        if (notificationService.checkDeviceTokenByUserId(user.id)) {
-            notificationService.saveDeviceToken(
-                DeviceToken(
-                    userId = user.id,
-                    schoolId = user.schoolId,
-                    token = request.deviceToken
-                )
+        if (notificationService.checkDeviceTokenByUserId(user.id))
+            notificationService.deleteDeviceTokenByUserId(user.id)
+
+        notificationService.saveDeviceToken(
+            DeviceToken(
+                userId = user.id,
+                schoolId = user.schoolId,
+                token = request.deviceToken
             )
-        }
+        )
 
         return TokenFeatureResponse.of(tokenResponse, availableFeatures)
     }
