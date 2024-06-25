@@ -17,9 +17,11 @@ class NotificationServiceImpl(
     private val commandTopicSubscriptionPort: CommandTopicSubscriptionPort,
     private val notificationOfUserPort: CommandNotificationOfUserPort,
     getNotificationService: GetNotificationService,
+    checkNotificationService: CheckNotificationService,
     commandNotificationService: CommandNotificationService
 ) : NotificationService,
     GetNotificationService by getNotificationService,
+    CheckNotificationService by checkNotificationService,
     CommandNotificationService by commandNotificationService {
 
     override fun subscribeTopic(token: String, topic: Topic) {
