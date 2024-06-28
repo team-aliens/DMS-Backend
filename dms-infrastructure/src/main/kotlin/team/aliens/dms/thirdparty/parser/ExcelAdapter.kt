@@ -191,18 +191,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         return createExcelSheet(
             attributes = attributes,
             datasList = studentPointHistoryInfoList,
-            /*
-            applyToSheet = Consumer { sheet ->
-                sheet.setColumnWidth(1, 7 * 256)
-                sheet.setColumnWidth(2, 5 * 256)
-                sheet.setColumnWidth(3, 5 * 256)
-                sheet.setColumnWidth(4, 45 * 256)
-                sheet.setColumnWidth(5, 45 * 256)
-                sheet.setColumnWidth(6, 10 * 256)
-                sheet.setColumnWidth(7, 15 * 256)
-            }
-
-             */
         )
     }
 
@@ -298,7 +286,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         }
     }
 
-    private fun formatWorkSheet(
+    private fun formatOutingWorkSheet(
         worksheet: Sheet,
     ) {
         val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
@@ -312,6 +300,24 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                     autoSizeColumn(it)
                     val width = getColumnWidth(it)
                     setColumnWidth(it, ((width * 1.3) - 50).toInt())
+                }
+        }
+    }
+
+    private fun formatWorkSheet(
+        worksheet: Sheet,
+    ) {
+        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
+        worksheet.apply {
+            // 정렬 필터 적용
+            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
+            createFreezePane(0, 1)
+            // 데이터에 맞춰 폭 조정
+            (0 until lastCellNum)
+                .map {
+                    autoSizeColumn(it)
+                    val width = getColumnWidth(it)
+                    setColumnWidth(it, width + 900)
                 }
         }
     }
@@ -377,7 +383,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     private fun createExcelSheet(
         attributes: List<String>,
         datasList: List<List<String?>>,
-        // applyToSheet: Consumer<Sheet> = Consumer { }
     ): ByteArray {
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet()
@@ -391,7 +396,6 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
         }
         formatWorkSheet(sheet)
 
-        // applyToSheet.accept(sheet)
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
             return stream.toByteArray()
@@ -422,7 +426,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
                 insertDatasAtRow(row = row, datas = datas, style = getDefaultCellStyle(workbook), color = color)
             }
         }
-        formatWorkSheet(sheet)
+        formatOutingWorkSheet(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
