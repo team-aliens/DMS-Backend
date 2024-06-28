@@ -305,7 +305,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
     }
 
     private fun formatWorkSheet(
-            worksheet: Sheet,
+        worksheet: Sheet,
     ) {
         val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
         worksheet.apply {
@@ -314,11 +314,11 @@ class ExcelAdapter : ParseFilePort, WriteFilePort {
             createFreezePane(0, 1)
             // 데이터에 맞춰 폭 조정
             (0 until lastCellNum)
-                    .map {
-                        autoSizeColumn(it)
-                        val width = getColumnWidth(it)
-                        setColumnWidth(it, width + 900)
-                    }
+                .map {
+                    autoSizeColumn(it)
+                    val width = getColumnWidth(it)
+                    setColumnWidth(it, width + 900)
+                }
         }
     }
 
