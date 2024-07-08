@@ -9,6 +9,7 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 import java.util.UUID
 
 @Service
@@ -16,7 +17,8 @@ class CommandNotificationServiceImpl(
     private val deviceTokenPort: DeviceTokenPort,
     private val notificationPort: NotificationPort,
     private val queryNotificationOfUserPort: QueryNotificationOfUserPort,
-    private val commandNotificationOfUserPort: CommandNotificationOfUserPort
+    private val commandNotificationOfUserPort: CommandNotificationOfUserPort,
+    private val topicSubscriptionPort: TopicSubscriptionPort
 ) : CommandNotificationService {
 
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
@@ -27,14 +29,15 @@ class CommandNotificationServiceImpl(
         }
     }
 
-    override fun deleteDeviceTokenByUserId(userID: UUID) {
-        deviceTokenPort.existsDeviceTokenByUserId(userID).also {
-            if (!it) {
-                throw DeviceTokenNotFoundException
-            }
-        }
+    override fun deleteDeviceTokenByUserId(userId: UUID) {
+        val deviceToken = deviceTokenPort.queryDeviceTokenByUserId(userId)
 
-        deviceTokenPort.deleteDeviceTokenByUserId(userID)
+        if (deviceToken != null) {
+            topicSubscriptionPort.deleteAllByDeviceTokenId(deviceToken.id)
+            deviceTokenPort.deleteDeviceTokenByUserId(userId)
+        } else {
+            throw DeviceTokenNotFoundException
+        }
     }
 
     override fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID) {
