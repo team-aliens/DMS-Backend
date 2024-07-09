@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.outing
 
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
+import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -162,6 +163,7 @@ class OutingApplicationPersistenceAdapter(
     }
 
     override fun queryCurrentOutingApplicationAsCompanionVO(studentId: UUID): CurrentOutingApplicationVO? {
+        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
 
         return queryFactory
@@ -180,10 +182,19 @@ class OutingApplicationPersistenceAdapter(
             .from(outingApplicationJpaEntity)
             .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .join(outingApplicationJpaEntity.student, QStudentJpaEntity("studentJpaEntity"))
+            .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-                outingCompanionStudentJpaEntity.id.eq(studentId),
+                studentJpaEntity.id.eq(
+                    select(outingApplicationJpaEntity.id)
+                        .from(outingApplicationJpaEntity)
+                        .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
+                        .where(
+                            outingCompanionJpaEntity.student.id.eq(studentId).and(
+                                outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
+                            )
+                        )
+                ),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
             .transform(
