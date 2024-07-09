@@ -14,15 +14,17 @@ import java.time.LocalDateTime
 class ApplyOutingUseCase(
     private val outingService: OutingService,
     private val studentService: StudentService,
-    private val securityService: SecurityService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: ApplyOutingRequest): ApplyOutingResponse {
         val student = studentService.getCurrentStudent()
 
+        val outingDate = outingService.checkOutingDateBasedOnCurrentTime()
+
         outingService.checkOutingApplicationAvailable(
             studentId = student.id,
-            outingDate = request.outingDate,
+            outingDate = outingDate,
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime
         )
@@ -31,7 +33,7 @@ class ApplyOutingUseCase(
             OutingApplication(
                 studentId = student.id,
                 createdAt = LocalDateTime.now(),
-                outingDate = request.outingDate,
+                outingDate = outingDate,
                 outingTime = request.outingTime,
                 arrivalTime = request.arrivalTime,
                 status = OutingStatus.APPROVED,
@@ -45,3 +47,4 @@ class ApplyOutingUseCase(
         return ApplyOutingResponse(outing.id)
     }
 }
+

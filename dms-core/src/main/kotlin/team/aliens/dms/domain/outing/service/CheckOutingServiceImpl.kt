@@ -66,4 +66,12 @@ class CheckOutingServiceImpl(
             }
         }
     }
+
+    override fun checkOutingDateBasedOnCurrentTime(): LocalDate {
+        return if (LocalTime.now().isAfter(LocalTime.of(20, 0))) {
+            LocalDate.now().plusDays(1)
+        } else {
+            LocalDate.now()
+        }
+    }
 }
