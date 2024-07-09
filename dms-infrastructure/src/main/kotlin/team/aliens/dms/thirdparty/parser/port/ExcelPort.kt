@@ -67,42 +67,6 @@ class ExcelPort {
         }
     }
 
-    fun formatOutingWorkSheet(
-        worksheet: Sheet,
-    ) {
-        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
-        worksheet.apply {
-            // 정렬 필터 적용
-            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
-            createFreezePane(0, 1)
-            // 데이터에 맞춰 폭 조정
-            (0 until lastCellNum)
-                .map {
-                    autoSizeColumn(it)
-                    val width = getColumnWidth(it)
-                    setColumnWidth(it, ((width * 1.3) - 50).toInt())
-                }
-        }
-    }
-
-    fun formatWorkSheet(
-        worksheet: Sheet,
-    ) {
-        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
-        worksheet.apply {
-            // 정렬 필터 적용
-            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
-            createFreezePane(0, 1)
-            // 데이터에 맞춰 폭 조정
-            (0 until lastCellNum)
-                .map {
-                    autoSizeColumn(it)
-                    val width = getColumnWidth(it)
-                    setColumnWidth(it, width + 900)
-                }
-        }
-    }
-
     fun createExcelSheet(
         attributes: List<String>,
         dataList: List<List<String?>>
@@ -155,6 +119,40 @@ class ExcelPort {
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
             return stream.toByteArray()
+        }
+    }
+
+    fun formatOutingWorkSheet(
+        worksheet: Sheet,
+    ) {
+        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
+        worksheet.apply {
+            // 정렬 필터 적용
+            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
+            createFreezePane(0, 1)
+            // 데이터에 맞춰 폭 조정
+            (0 until lastCellNum)
+                .map {
+                    autoSizeColumn(it)
+                    val width = getColumnWidth(it)
+        }
+    }
+
+    fun formatWorkSheet(
+        worksheet: Sheet,
+    ) {
+        val lastCellNum = worksheet.getRow(0).lastCellNum.toInt()
+        worksheet.apply {
+            // 정렬 필터 적용
+            setAutoFilter(CellRangeAddress(0, 0, 0, lastCellNum - 1))
+            createFreezePane(0, 1)
+            // 데이터에 맞춰 폭 조정
+            (0 until lastCellNum)
+                .map {
+                    autoSizeColumn(it)
+                    val width = getColumnWidth(it)
+                    setColumnWidth(it, width + 900)
+                }
         }
     }
 
