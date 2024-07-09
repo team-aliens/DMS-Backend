@@ -47,4 +47,3 @@ class ApplyOutingUseCase(
         return ApplyOutingResponse(outing.id)
     }
 }
-
