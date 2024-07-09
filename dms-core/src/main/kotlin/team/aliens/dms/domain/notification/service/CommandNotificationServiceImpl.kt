@@ -5,10 +5,10 @@ import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundExceptio
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.NotificationOfUser
+import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
-import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 import java.util.UUID
 
