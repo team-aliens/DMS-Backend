@@ -14,11 +14,7 @@ class GetCurrentOutingApplicationUseCase(
     fun execute(): GetCurrentOutingApplicationResponse {
         val student = studentService.getCurrentStudent()
 
-        val currentOutingApplicationVO = if (studentService.isApplicant(student.id)) {
-            outingService.getCurrentOutingApplication(student.id)
-        } else {
-            outingService.getCurrentOutingApplicationAsCompanion(student.id)
-        }
+        val currentOutingApplicationVO = outingService.getCurrentOutingApplication(student.id)
 
         return GetCurrentOutingApplicationResponse.of(currentOutingApplicationVO)
     }
