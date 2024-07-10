@@ -102,6 +102,7 @@ class OutingApplicationPersistenceAdapter(
                                 .or(outingCompanionJpaEntity.student.id.eq(studentId)),
                             outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
                         )
+                        .limit(1)
                 ),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
