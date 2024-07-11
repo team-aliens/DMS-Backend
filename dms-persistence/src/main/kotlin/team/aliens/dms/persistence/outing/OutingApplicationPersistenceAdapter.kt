@@ -122,6 +122,7 @@ class OutingApplicationPersistenceAdapter(
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             outingApplicationJpaEntity.reason,
+                            outingApplicationJpaEntity.student.name,
                             list(outingCompanionJpaEntity.student.name)
                         )
                     )

@@ -16,6 +16,6 @@ class GetCurrentOutingApplicationUseCase(
 
         val currentOutingApplicationVO = outingService.getCurrentOutingApplication(student.id)
 
-        return GetCurrentOutingApplicationResponse.of(currentOutingApplicationVO)
+        return GetCurrentOutingApplicationResponse.of(currentOutingApplicationVO, student.name)
     }
 }
