@@ -43,7 +43,7 @@ data class GetCurrentOutingApplicationResponse(
                     outingTime = outingTime,
                     arrivalTime = arrivalTime,
                     reason = reason,
-                    outingCompanions = listOf(*outingCompanions.toTypedArray(), outingApplication).filter { it != deleteUsername }
+                    outingCompanions = listOf(*outingCompanions.toTypedArray(), outingApplicant).filter { it != deleteUsername }
                 )
             }
     }

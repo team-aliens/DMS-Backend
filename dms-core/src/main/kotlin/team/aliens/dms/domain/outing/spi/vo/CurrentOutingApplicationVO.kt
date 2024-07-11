@@ -13,6 +13,6 @@ open class CurrentOutingApplicationVO(
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val reason: String?,
-    val outingApplication: String,
+    val outingApplicant: String,
     val outingCompanions: List<String>
 )
