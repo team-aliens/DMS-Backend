@@ -93,12 +93,11 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-
                 outingApplicationJpaEntity.student.id.eq(
                     studentId
                 ).or(
-                     outingApplicationJpaEntity.student.id.eq(
-                         select(outingApplicationJpaEntity.student.id)
+                    outingApplicationJpaEntity.student.id.eq(
+                        select(outingApplicationJpaEntity.student.id)
                             .from(outingApplicationJpaEntity)
                             .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
                             .where(
@@ -107,7 +106,7 @@ class OutingApplicationPersistenceAdapter(
                             )
                             .limit(1)
 
-                        )
+                    )
                 ),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
