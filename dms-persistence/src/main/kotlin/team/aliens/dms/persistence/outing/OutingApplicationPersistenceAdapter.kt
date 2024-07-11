@@ -176,58 +176,6 @@ class OutingApplicationPersistenceAdapter(
         )
     }
 
-    override fun queryCurrentOutingApplicationAsCompanionVO(studentId: UUID): CurrentOutingApplicationVO? {
-        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
-        val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
-
-        return queryFactory
-            .selectDistinct(
-                QQueryCurrentOutingApplicationVO(
-                    outingApplicationJpaEntity.id,
-                    outingApplicationJpaEntity.outingDate,
-                    outingTypeJpaEntity.id.title,
-                    outingApplicationJpaEntity.status,
-                    outingApplicationJpaEntity.outingTime,
-                    outingApplicationJpaEntity.arrivalTime,
-                    outingApplicationJpaEntity.reason,
-                    list(QStudentJpaEntity("studentJpaEntity").name)
-                )
-            )
-            .from(outingApplicationJpaEntity)
-            .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
-            .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .join(outingApplicationJpaEntity.student, studentJpaEntity)
-            .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
-            .where(
-                studentJpaEntity.id.eq(
-                    select(outingApplicationJpaEntity.id)
-                        .from(outingApplicationJpaEntity)
-                        .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
-                        .where(
-                            outingCompanionJpaEntity.student.id.eq(studentId).and(
-                                outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
-                            )
-                        )
-                ),
-                outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
-            )
-            .transform(
-                groupBy(outingApplicationJpaEntity.id)
-                    .list(
-                        QQueryCurrentOutingApplicationVO(
-                            outingApplicationJpaEntity.id,
-                            outingApplicationJpaEntity.outingDate,
-                            outingTypeJpaEntity.id.title,
-                            outingApplicationJpaEntity.status,
-                            outingApplicationJpaEntity.outingTime,
-                            outingApplicationJpaEntity.arrivalTime,
-                            outingApplicationJpaEntity.reason,
-                            list(QStudentJpaEntity("studentJpaEntity").name)
-                        )
-                    )
-            ).firstOrNull()
-    }
-
     override fun isApplicant(studentId: UUID): Boolean {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
 

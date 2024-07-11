@@ -60,8 +60,4 @@ class GetOutingServiceImpl(
     override fun getOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime =
         queryOutingAvailableTimePort.queryOutingAvailableTimeById(outingAvailableTimeId)
             ?: throw OutingAvailableTimeNotFoundException
-
-    override fun getCurrentOutingApplicationAsCompanion(studentId: UUID): CurrentOutingApplicationVO =
-        queryOutingApplicationPort.queryCurrentOutingApplicationAsCompanionVO(studentId)
-            ?: throw OutingApplicationNotFoundException
 }
