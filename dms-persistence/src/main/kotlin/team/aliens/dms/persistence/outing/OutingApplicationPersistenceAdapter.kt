@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.outing
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
 import com.querydsl.jpa.JPAExpressions.select
+import com.querydsl.jpa.JPAExpressions.selectOne
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -93,21 +94,18 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .join(outingApplicationJpaEntity.outingType, outingTypeJpaEntity)
             .where(
-                outingApplicationJpaEntity.student.id.eq(
-                    studentId
-                ).or(
-                    outingApplicationJpaEntity.student.id.eq(
-                        select(outingApplicationJpaEntity.student.id)
+                outingApplicationJpaEntity.student.id.eq(studentId)
+                    .or(
+                        selectOne()
                             .from(outingApplicationJpaEntity)
                             .leftJoin(outingCompanionJpaEntity).on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
                             .where(
                                 outingCompanionJpaEntity.student.id.eq(studentId),
+                                outingApplicationJpaEntity.student.id.eq(studentJpaEntity.id),
                                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
                             )
-                            .limit(1)
-
-                    )
-                ),
+                            .exists()
+                    ),
                 outingApplicationJpaEntity.status.ne(OutingStatus.DONE)
             )
             .transform(
