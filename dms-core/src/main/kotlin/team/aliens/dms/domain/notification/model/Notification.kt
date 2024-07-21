@@ -2,8 +2,6 @@ package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointOption
-import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDateTime
 import java.util.UUID
 
