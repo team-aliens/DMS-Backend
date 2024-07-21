@@ -5,7 +5,8 @@ enum class TopicGroup(
 ) {
     NOTICE("공지"),
     STUDY_ROOM("자습실"),
-    POINT("상벌점")
+    POINT("상벌점"),
+    OUTING("외출")
 }
 
 enum class Topic(
@@ -24,6 +25,7 @@ enum class Topic(
         title = "이용 시간 알림",
         content = "자습실 이용 시작 10분 전에 알림을 받을 수 있습니다."
     ),
+
     STUDY_ROOM_APPLY(
         topicGroup = TopicGroup.STUDY_ROOM,
         title = "신청 시간 알림",
@@ -34,5 +36,11 @@ enum class Topic(
         topicGroup = TopicGroup.POINT,
         title = "상벌점 알림",
         content = "상벌점을 부여 받았을 때 알림을 받을 수 있습니다."
+    ),
+
+    OUTING(
+        topicGroup = TopicGroup.OUTING,
+        title = "외출 알림",
+        content = "외출 신청 시 알림을 받을 수 있습니다"
     )
 }

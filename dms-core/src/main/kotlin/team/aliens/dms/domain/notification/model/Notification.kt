@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.domain.notice.model.Notice
+import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.point.model.PointHistory
 import java.time.LocalDateTime
 import java.util.UUID
@@ -48,6 +49,19 @@ sealed class Notification(
         title = notice.title,
         content = "기숙사 공지가 등록되었습니다.",
         threadId = notice.id.toString(),
+        isSaveRequired = true
+    )
+
+    class OutingNotification(
+        schoolId: UUID,
+        outing: OutingApplication
+    ) : Notification(
+        schoolId = schoolId,
+        topic = Topic.NOTICE,
+        linkIdentifier = outing.id.toString(),
+        title = "외출이 신청되었습니다",
+        content = "외출 시간은 " + outing.outingTime + " ~ " + outing.arrivalTime + "입니다",
+        threadId = outing.id.toString(),
         isSaveRequired = true
     )
 
