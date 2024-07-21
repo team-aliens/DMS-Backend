@@ -59,8 +59,8 @@ sealed class Notification(
         schoolId = schoolId,
         topic = Topic.NOTICE,
         linkIdentifier = outing.id.toString(),
-        title = "보류",
-        content = "보류",
+        title = "외출이 신청되었습니다",
+        content = "외출 시간은 " + outing.outingTime + " ~ " + outing.arrivalTime + "입니다",
         threadId = outing.id.toString(),
         isSaveRequired = true
     )
