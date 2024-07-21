@@ -51,4 +51,17 @@ sealed class Notification(
         threadId = notice.id.toString(),
         isSaveRequired = true
     )
+
+    class OutingNotification(
+        schoolId: UUID,
+        outing: OutingApplication
+    ) : Notification(
+        schoolId = schoolId,
+        topic = Topic.NOTICE,
+        linkIdentifier = outing.id.toString(),
+        title = "보류",
+        content = "보류",
+        threadId = outing.id.toString(),
+        isSaveRequired = true
+    )
 }
