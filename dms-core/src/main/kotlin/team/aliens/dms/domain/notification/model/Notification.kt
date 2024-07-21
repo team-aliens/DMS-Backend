@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.domain.notice.model.Notice
+import team.aliens.dms.domain.point.model.PointHistory
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -47,6 +48,18 @@ sealed class Notification(
         title = notice.title,
         content = "기숙사 공지가 등록되었습니다.",
         threadId = notice.id.toString(),
+        isSaveRequired = true
+    )
+
+    class PointNotification(
+        pointHistory: PointHistory
+    ) : Notification(
+        schoolId = pointHistory.schoolId,
+        topic = Topic.POINT,
+        linkIdentifier = pointHistory.id.toString(),
+        title = pointHistory.getTitle(),
+        content = pointHistory.pointName,
+        threadId = pointHistory.id.toString(),
         isSaveRequired = true
     )
 }
