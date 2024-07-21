@@ -2,7 +2,6 @@ package team.aliens.dms.domain.point.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
-import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
@@ -12,7 +11,7 @@ import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 class CommandPointServiceImpl(
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val commandPointOptionPort: CommandPointOptionPort,
-    private val notificationEventPort: NotificationEventPort,
+    private val notificationEventPort: NotificationEventPort
 ) : CommandPointService {
 
     override fun savePointHistory(pointHistory: PointHistory) =
@@ -26,14 +25,8 @@ class CommandPointServiceImpl(
         commandPointHistoryPort.saveAllPointHistories(pointHistories)
     }
 
-    override fun savePointOption(pointOption: PointOption): PointOption {
-        return commandPointOptionPort.savePointOption(pointOption)
-            .also {
-                notificationEventPort.publishNotificationToAllByTopic(
-                    Notification.PointNotification(it)
-                )
-            }
-    }
+    override fun savePointOption(pointOption: PointOption): PointOption =
+        commandPointOptionPort.savePointOption(pointOption)
 
     override fun deletePointOption(pointOption: PointOption) {
         commandPointOptionPort.deletePointOption(pointOption)

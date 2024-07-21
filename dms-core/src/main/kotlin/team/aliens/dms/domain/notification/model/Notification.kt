@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.domain.notice.model.Notice
+import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
 import java.time.LocalDateTime
@@ -53,14 +54,14 @@ sealed class Notification(
     )
 
     class PointNotification(
-        pointOption: PointOption
+        pointHistory: PointHistory
     ) : Notification(
-        schoolId = pointOption.schoolId,
+        schoolId = pointHistory.schoolId,
         topic = Topic.POINT,
-        linkIdentifier = pointOption.id.toString(),
-        title = pointOption.getTitle(),
-        content = pointOption.name,
-        threadId = pointOption.id.toString(),
+        linkIdentifier = pointHistory.id.toString(),
+        title = pointHistory.getTitle(),
+        content = pointHistory.pointName,
+        threadId = pointHistory.id.toString(),
         isSaveRequired = true
     )
 }
