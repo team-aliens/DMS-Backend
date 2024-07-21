@@ -59,7 +59,7 @@ sealed class Notification(
         topic = Topic.POINT,
         linkIdentifier = pointOption.id.toString(),
         title = pointOption.name,
-        content = if (pointOption.type == PointType.BONUS) "상점이 부과되었습니다." else "벌점이 부과되었습니다.",
+        content = pointOption.getContent(),
         threadId = pointOption.id.toString(),
         isSaveRequired = true
     )
