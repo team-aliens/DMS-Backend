@@ -22,7 +22,7 @@ data class PointOption(
 
 ) : SchoolIdDomain {
 
-    fun getContent(): String =
+    fun getTitle(): String =
         when (type) {
             PointType.BONUS -> "상점이 부과되었습니다."
             PointType.MINUS -> "벌점이 부과되었습니다."

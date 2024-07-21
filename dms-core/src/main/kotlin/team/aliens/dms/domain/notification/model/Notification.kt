@@ -58,8 +58,8 @@ sealed class Notification(
         schoolId = pointOption.schoolId,
         topic = Topic.POINT,
         linkIdentifier = pointOption.id.toString(),
-        title = pointOption.name,
-        content = pointOption.getContent(),
+        title = pointOption.getTitle(),
+        content = pointOption.name,
         threadId = pointOption.id.toString(),
         isSaveRequired = true
     )
