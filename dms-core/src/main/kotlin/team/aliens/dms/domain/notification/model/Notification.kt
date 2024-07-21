@@ -66,15 +66,14 @@ sealed class Notification(
     )
 
     class PointNotification(
-            pointHistory: PointHistory
+        pointHistory: PointHistory
     ) : Notification(
-            schoolId = pointHistory.schoolId,
-            topic = Topic.POINT,
-            linkIdentifier = pointHistory.id.toString(),
-            title = pointHistory.getTitle(),
-            content = pointHistory.pointName,
-            threadId = pointHistory.id.toString(),
-            isSaveRequired = true
+        schoolId = pointHistory.schoolId,
+        topic = Topic.POINT,
+        linkIdentifier = pointHistory.id.toString(),
+        title = pointHistory.getTitle(),
+        content = pointHistory.pointName,
+        threadId = pointHistory.id.toString(),
+        isSaveRequired = true
     )
-
 }

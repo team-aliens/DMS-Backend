@@ -13,7 +13,6 @@ import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.*
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.*
 
 @Service
@@ -34,7 +33,7 @@ class CommandOutingServiceImpl(
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
             .copy(companionIds = outingApplication.companionIds)
 
-        val users : List<OutingCompanionDetailsVO> = queryOutingApplicationPort.queryOutingCompanionsById(outingApplication.id)
+        val users: List<OutingCompanionDetailsVO> = queryOutingApplicationPort.queryOutingCompanionsById(outingApplication.id)
 
         val deviceTokens: List<DeviceToken> = users.mapNotNull { user ->
             val student = queryStudentPort.queryStudentById(user.id)
@@ -46,7 +45,7 @@ class CommandOutingServiceImpl(
         return savedOutingApplication
             .also {
                 notificationEventPort.publishNotificationToApplicant(
-                        deviceTokens, Notification.OutingNotification(schoolId, outingApplication)
+                    deviceTokens, Notification.OutingNotification(schoolId, outingApplication)
                 )
                 saveAllOutingCompanions(savedOutingApplication)
             }
