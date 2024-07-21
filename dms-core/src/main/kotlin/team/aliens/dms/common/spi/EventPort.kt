@@ -9,7 +9,7 @@ interface NotificationEventPort {
 
     fun publishNotificationToAllByTopic(notification: Notification)
 
-    fun publishNotificationToApplicant(notification: Notification, deviceTokens: List<DeviceToken>)
+    fun publishNotificationToApplicant(deviceTokens: List<DeviceToken>, notification: Notification)
 }
 
 interface EventPort : NotificationEventPort

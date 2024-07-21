@@ -46,7 +46,7 @@ class CommandOutingServiceImpl(
         return savedOutingApplication
             .also {
                 notificationEventPort.publishNotificationToApplicant(
-                    Notification.OutingNotification(schoolId, outingApplication), deviceTokens
+                        deviceTokens, Notification.OutingNotification(schoolId, outingApplication)
                 )
                 saveAllOutingCompanions(savedOutingApplication)
             }
