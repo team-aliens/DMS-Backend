@@ -2,7 +2,6 @@ package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.outing.model.OutingApplication
-import team.aliens.dms.domain.outing.model.OutingApplication
 import java.time.LocalDateTime
 import java.util.UUID
 
