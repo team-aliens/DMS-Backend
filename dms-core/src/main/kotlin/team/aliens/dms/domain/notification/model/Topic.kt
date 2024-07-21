@@ -4,7 +4,8 @@ enum class TopicGroup(
     val groupName: String
 ) {
     NOTICE("공지"),
-    STUDY_ROOM("자습실")
+    STUDY_ROOM("자습실"),
+    POINT("상벌점")
 }
 
 enum class Topic(
@@ -27,5 +28,11 @@ enum class Topic(
         topicGroup = TopicGroup.STUDY_ROOM,
         title = "신청 시간 알림",
         content = "자습실 신청 시간을 알리는 알림입니다."
+    ),
+
+    POINT(
+        topicGroup = TopicGroup.POINT,
+        title = "상벌점 알림",
+        content = "상벌점 부여 시 알림을 받을 수 있습니다."
     )
 }
