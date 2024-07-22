@@ -9,6 +9,7 @@ import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.persistence.notification.entity.QNotificationOfUserJpaEntity.notificationOfUserJpaEntity
 import team.aliens.dms.persistence.notification.mapper.NotificationOfUserMapper
 import team.aliens.dms.persistence.notification.repository.NotificationOfUserJpaRepository
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
@@ -51,5 +52,13 @@ class NotificationOfPersistenceAdapterOfUser(
 
     override fun deleteNotificationOfUserByUserId(userId: UUID) {
         notificationOfUserRepository.deleteByUserId(userId)
+    }
+
+    override fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime): Int {
+        val deletedCount = queryFactory
+            .delete(notificationOfUserJpaEntity)
+            .where(notificationOfUserJpaEntity.createdAt.before(cutoffDate))
+            .execute()
+        return deletedCount.toInt()
     }
 }

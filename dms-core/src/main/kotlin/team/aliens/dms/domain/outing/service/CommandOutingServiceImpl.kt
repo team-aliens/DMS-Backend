@@ -20,15 +20,15 @@ import team.aliens.dms.domain.student.spi.QueryStudentPort
 
 @Service
 class CommandOutingServiceImpl(
-        private val commandOutingApplicationPort: CommandOutingApplicationPort,
-        private val commandOutingCompanionPort: CommandOutingCompanionPort,
-        private val commandOutingTypePort: CommandOutingTypePort,
-        private val commandOutingTimePort: CommandOutingTimePort,
-        private val queryStudentPort: QueryStudentPort,
-        private val queryDeviceTokenPort: QueryDeviceTokenPort,
-        private val queryOutingApplicationPort: QueryOutingCompanionPort,
-        private val notificationEventPort: NotificationEventPort,
-        private val securityPort: SecurityPort
+    private val commandOutingApplicationPort: CommandOutingApplicationPort,
+    private val commandOutingCompanionPort: CommandOutingCompanionPort,
+    private val commandOutingTypePort: CommandOutingTypePort,
+    private val commandOutingTimePort: CommandOutingTimePort,
+    private val queryStudentPort: QueryStudentPort,
+    private val queryDeviceTokenPort: QueryDeviceTokenPort,
+    private val queryOutingApplicationPort: QueryOutingCompanionPort,
+    private val notificationEventPort: NotificationEventPort,
+    private val securityPort: SecurityPort
 ) : CommandOutingService {
 
     override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication {

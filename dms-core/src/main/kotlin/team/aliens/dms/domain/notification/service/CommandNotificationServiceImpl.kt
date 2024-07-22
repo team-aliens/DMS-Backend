@@ -10,6 +10,7 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -59,5 +60,10 @@ class CommandNotificationServiceImpl(
 
     override fun saveNotificationsOfUser(notificationOfUsers: List<NotificationOfUser>) {
         commandNotificationOfUserPort.saveNotificationsOfUser(notificationOfUsers)
+    }
+
+    override fun deleteOldNotifications() {
+        val cutoffDate = LocalDateTime.now().minusDays(60)
+        commandNotificationOfUserPort.deleteOldNotificationOfUsers(cutoffDate)
     }
 }
