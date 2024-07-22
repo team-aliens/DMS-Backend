@@ -17,4 +17,6 @@ interface CommandNotificationService {
     fun saveNotificationOfUser(notificationOfUser: NotificationOfUser): NotificationOfUser
 
     fun saveNotificationsOfUser(notificationOfUsers: List<NotificationOfUser>)
+
+    fun deleteOldNotifications()
 }
