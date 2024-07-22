@@ -54,11 +54,10 @@ class NotificationOfPersistenceAdapterOfUser(
         notificationOfUserRepository.deleteByUserId(userId)
     }
 
-    override fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime): Int {
-        val deletedCount = queryFactory
+    override fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime) {
+        queryFactory
             .delete(notificationOfUserJpaEntity)
             .where(notificationOfUserJpaEntity.createdAt.before(cutoffDate))
             .execute()
-        return deletedCount.toInt()
     }
 }

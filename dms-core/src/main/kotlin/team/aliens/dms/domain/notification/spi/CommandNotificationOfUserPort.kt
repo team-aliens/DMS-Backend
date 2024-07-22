@@ -14,5 +14,5 @@ interface CommandNotificationOfUserPort {
 
     fun deleteNotificationOfUserByUserId(userId: UUID)
 
-    fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime): Int
+    fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime)
 }
