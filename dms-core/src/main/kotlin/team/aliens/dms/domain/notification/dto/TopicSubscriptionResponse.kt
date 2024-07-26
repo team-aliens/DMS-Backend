@@ -52,7 +52,5 @@ data class TopicGroupSubscriptionResponse(
 
 data class TopicSubscriptionResponse(
     val topic: Topic,
-    val title: String = topic.title,
-    val description: String = topic.content,
     val isSubscribed: Boolean
 )
