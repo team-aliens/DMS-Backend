@@ -57,7 +57,7 @@ sealed class Notification(
         outing: OutingApplication
     ) : Notification(
         schoolId = schoolId,
-        topic = Topic.NOTICE,
+        topic = Topic.OUTING,
         linkIdentifier = outing.id.toString(),
         title = "외출이 신청되었습니다",
         content = "외출 시간은 " + outing.outingTime + " ~ " + outing.arrivalTime + "입니다",
