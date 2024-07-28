@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.HorizontalAlignment
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.ss.usermodel.Row.RETURN_BLANK_AS_NULL
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
@@ -46,7 +47,11 @@ class ExcelPort {
         return results
     }
 
-    private fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK
+    fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK
+
+    fun Row.getStringValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).stringCellValue
+
+    fun Row.getIntValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).numericCellValue.toInt()
 
     fun transferToExcel(file: File): Workbook {
         val inputStream = file.inputStream()
@@ -100,7 +105,8 @@ class ExcelPort {
         val headerRow = sheet.createRow(0)
         insertDataAtRow(headerRow, attributes, getHeaderCellStyle(workbook))
 
-        var idx = 1;
+        var idx = 1
+
         dataListSet.forEachIndexed { setIdx, dataList -> // 각 그룹마다 지정된 색을 받음.
             val color = colors[setIdx % colors.size]
 
@@ -135,6 +141,8 @@ class ExcelPort {
                 .map {
                     autoSizeColumn(it)
                     val width = getColumnWidth(it)
+                    setColumnWidth(it, ((width * 1.3) - 50).toInt())
+                }
         }
     }
 

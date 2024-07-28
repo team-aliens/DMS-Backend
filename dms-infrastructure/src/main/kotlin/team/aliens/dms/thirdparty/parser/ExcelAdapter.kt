@@ -1,9 +1,6 @@
 package team.aliens.dms.thirdparty.parser
 
-import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.IndexedColors
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.ss.usermodel.Row.RETURN_BLANK_AS_NULL
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.spi.ParseFilePort
@@ -24,16 +21,14 @@ import java.io.File
 import java.time.format.DateTimeFormatter
 
 @Component
-class ExcelAdapter(
-    private val excelPort: ExcelPort
-) : ParseFilePort, WriteFilePort {
+class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
 
     override fun getExcelStudentVO(file: File): List<ExcelStudentVO> {
-        val workbook = excelPort.transferToExcel(file)
+        val workbook = transferToExcel(file)
 
         val worksheet = workbook.getSheetAt(0)
 
-        val excelStudentVOs = excelPort.getExcelInfo(worksheet) { row ->
+        val excelStudentVOs = getExcelInfo(worksheet) { row ->
             row.run {
                 ExcelStudentVO(
                     grade = getIntValue(0),
@@ -52,13 +47,6 @@ class ExcelAdapter(
         return excelStudentVOs.filterNotNull()
     }
 
-    private fun Row.isFirstCellBlank() = cellIterator().next().cellType == Cell.CELL_TYPE_BLANK
-
-    private fun Row.getStringValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).stringCellValue
-
-    private fun Row.getIntValue(idx: Int) = getCell(idx, RETURN_BLANK_AS_NULL).numericCellValue.toInt()
-
-
     override fun writeStudentExcelFile(students: List<Student>): ByteArray {
 
         val attributes = listOf("학년", "반", "번호", "성별 (ex. 남, 여)", "이름", "호실번호 (ex. 301,  501)", "호실자리위치 (ex. A, B, C)")
@@ -75,7 +63,7 @@ class ExcelAdapter(
             )
         }
 
-        return excelPort.createExcelSheet(
+        return createExcelSheet(
             attributes = attributes,
             dataList = studentsList
         )
@@ -96,7 +84,7 @@ class ExcelAdapter(
             )
         }
 
-        return excelPort.createExcelSheet(
+        return createExcelSheet(
             attributes = attributes,
             dataList = historyDataList
         )
@@ -137,7 +125,7 @@ class ExcelAdapter(
             )
         }
 
-        return excelPort.createExcelSheet(
+        return createExcelSheet(
             attributes = attributes,
             dataList = studentPointHistoryInfoList,
         )
@@ -162,7 +150,7 @@ class ExcelAdapter(
             val headerRow = sheet.createRow(lastRowNum)
             for (classNum in 1..4) {
                 val classNumIdx = (classNum - 1) * 4 // 반 별로 출력
-                excelPort.insertDataAtRow(row = headerRow, data = attributes, style = excelPort.getHeaderCellStyle(workbook), startIdx = classNumIdx)
+                insertDataAtRow(row = headerRow, data = attributes, style = getHeaderCellStyle(workbook), startIdx = classNumIdx)
 
                 for (number in 1..18) {
                     val row = sheet.getRow(lastRowNum + number) ?: sheet.createRow(lastRowNum + number)
@@ -170,17 +158,17 @@ class ExcelAdapter(
                     val studentGcn = "${grade}${classNum}${number.toString().padStart(2, '0')}"
                     val studentInfos = remainInfosList.find { it[0] == studentGcn } ?: emptyList()
 
-                    excelPort.insertDataAtRow(
+                    insertDataAtRow(
                         row = row,
                         data = studentInfos,
-                        style = excelPort.getDefaultCellStyle(workbook),
+                        style = getDefaultCellStyle(workbook),
                         startIdx = classNumIdx
                     )
                 }
             }
             lastRowNum += 18
         }
-        excelPort.formatWorkSheet(sheet)
+        formatWorkSheet(sheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
@@ -193,18 +181,18 @@ class ExcelAdapter(
         timeSlots: List<TimeSlot>,
         studentSeatsMap: Map<Pair<String, String>, StudentSeatInfo>,
     ): ByteArray {
-        val workbook = excelPort.transferToExcel(baseFile)
+        val workbook = transferToExcel(baseFile)
         val worksheet = workbook.getSheetAt(0)
 
         val columnCount = worksheet.getRow(0).lastCellNum.toInt()
-        excelPort.insertDataAtRow(
+        insertDataAtRow(
             row = worksheet.getRow(0),
             startIdx = columnCount,
             data = timeSlots.map { it.name },
-            style = excelPort.getHeaderCellStyle(workbook)
+            style = getHeaderCellStyle(workbook)
         )
 
-        val gcns = excelPort.getExcelInfo(worksheet) { row ->
+        val gcns = getExcelInfo(worksheet) { row ->
             row.run {
                 Pair(
                     Student.processGcn(getIntValue(0), getIntValue(1), getIntValue(2)),
@@ -218,24 +206,22 @@ class ExcelAdapter(
             if (row.isFirstCellBlank()) continue
 
             val studentSeats = studentSeatsMap[gcns[i - 1]]?.seats
-            excelPort.insertDataAtRow(
+            insertDataAtRow(
                 row = row,
                 startIdx = columnCount,
                 data = timeSlots.map { timeSlot ->
                     studentSeats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
                 },
-                style = excelPort.getDefaultCellStyle(workbook)
+                style = getDefaultCellStyle(workbook)
             )
         }
-        excelPort.formatWorkSheet(worksheet)
+        formatWorkSheet(worksheet)
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
             return stream.toByteArray()
         }
     }
-
-
 
     override fun writeStudyRoomApplicationStatusExcelFile(
         timeSlots: List<TimeSlot>,
@@ -255,7 +241,7 @@ class ExcelAdapter(
             )
         }
 
-        return excelPort.createExcelSheet(
+        return createExcelSheet(
             attributes = attributes,
             dataList = seatInfosList
         )
@@ -292,7 +278,7 @@ class ExcelAdapter(
             outingApplicationInfoList
         }
 
-        return excelPort.createGroupExcelSheet(
+        return createGroupExcelSheet(
             attributes = attributes,
             dataListSet = outingApplicationInfoSet,
             colors = listOf(
