@@ -22,8 +22,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.function.Function
 
-@Component
-class ExcelPort {
+abstract class ExcelPort {
     fun <T> getExcelInfo(worksheet: Sheet, function: Function<Row, T>): List<T?> {
 
         val invalidRowIdxes = mutableListOf<Int>()
