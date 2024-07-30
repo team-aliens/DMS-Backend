@@ -166,8 +166,9 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
+                .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
 
-                // /outings
+                    // /outings
                 .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.POST, "/outings/types").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.DELETE, "/outings/types/{title}").hasAuthority(MANAGER.name)
