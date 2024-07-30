@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.notification.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.dto.NotificationsResponse
 import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.user.service.UserService

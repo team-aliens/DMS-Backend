@@ -3,7 +3,6 @@ package team.aliens.dms.persistence.notification
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.persistence.notification.entity.QNotificationOfUserJpaEntity.notificationOfUserJpaEntity
