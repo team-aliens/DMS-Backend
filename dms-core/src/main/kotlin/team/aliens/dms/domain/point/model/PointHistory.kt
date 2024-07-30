@@ -67,6 +67,12 @@ data class PointHistory(
         )
     }
 
+    fun getTitle(): String =
+        when (pointType) {
+            PointType.BONUS -> "상점이 부과되었습니다."
+            PointType.MINUS -> "벌점이 부과되었습니다."
+        }
+
     private fun calculateCanceledPointTotal(pointTotal: Pair<Int, Int>): Pair<Int, Int> {
         return if (this.pointType == PointType.BONUS) {
             Pair(pointTotal.first - this.pointScore, pointTotal.second)

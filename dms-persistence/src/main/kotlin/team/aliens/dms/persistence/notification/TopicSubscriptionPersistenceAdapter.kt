@@ -27,6 +27,10 @@ class TopicSubscriptionPersistenceAdapter(
         )
     }
 
+    override fun deleteAllByDeviceTokenId(deviceTokenId: UUID) {
+        topicSubscriptionRepository.deleteAllByDeviceTokenId(deviceTokenId)
+    }
+
     override fun queryTopicSubscriptionsByDeviceTokenId(deviceTokenId: UUID) =
         topicSubscriptionRepository.findByDeviceTokenId(deviceTokenId)
             .map { topicSubscriptionMapper.toDomain(it)!! }

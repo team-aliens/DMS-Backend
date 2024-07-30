@@ -14,7 +14,7 @@ class DeviceTokenPersistenceAdapter(
 ) : DeviceTokenPort {
 
     override fun existsDeviceTokenByUserId(userId: UUID): Boolean {
-        return deviceTokenRepository.findByUserId(userId) != null
+        return deviceTokenRepository.existsByUserId(userId)
     }
 
     override fun saveDeviceToken(deviceToken: DeviceToken) = notificationMapper.toDomain(
