@@ -16,8 +16,8 @@ class GetNotificationServiceImpl(
     private val topicSubscriptionPort: QueryTopicSubscriptionPort
 ) : GetNotificationService {
 
-    override fun getNotificationOfUsersByUserId(userId: UUID, pageData: PageData) =
-        notificationOfUserPort.queryNotificationOfUserByUserId(userId, pageData)
+    override fun getNotificationOfUsersByUserId(userId: UUID) =
+        notificationOfUserPort.queryNotificationOfUserByUserId(userId)
 
     override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
         val savedToken = getDeviceTokenByToken(token)

@@ -34,12 +34,10 @@ class NotificationOfPersistenceAdapterOfUser(
         )
     }
 
-    override fun queryNotificationOfUserByUserId(userId: UUID, pageData: PageData) =
+    override fun queryNotificationOfUserByUserId(userId: UUID) =
         queryFactory
             .selectFrom(notificationOfUserJpaEntity)
             .where(notificationOfUserJpaEntity.user.id.eq(userId))
-            .offset(pageData.offset)
-            .limit(pageData.size)
             .fetch().map { notificationOfUserMapper.toDomain(it)!! }
 
     override fun queryNotificationOfUserById(notificationOfUserId: UUID) = notificationOfUserMapper.toDomain(

@@ -53,8 +53,8 @@ class NotificationWebAdapter(
     }
 
     @GetMapping
-    fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
-        return queryAndReadMyNotificationsUseCase.execute(pageData)
+    fun queryMyNotifications(): NotificationsResponse {
+        return queryAndReadMyNotificationsUseCase.execute()
     }
 
     @PostMapping("/topic")

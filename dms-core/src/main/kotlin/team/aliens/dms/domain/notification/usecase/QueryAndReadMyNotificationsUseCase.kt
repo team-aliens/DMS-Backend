@@ -12,9 +12,9 @@ class QueryAndReadMyNotificationsUseCase(
     private val notificationService: NotificationService
 ) {
 
-    fun execute(pageData: PageData): NotificationsResponse {
+    fun execute(): NotificationsResponse {
         val user = userService.getCurrentUser()
-        val notificationsOfUser = notificationService.getNotificationOfUsersByUserId(user.id, pageData)
+        val notificationsOfUser = notificationService.getNotificationOfUsersByUserId(user.id)
         notificationService.saveNotificationsOfUser(notificationsOfUser.map { it.read() })
         return NotificationsResponse.of(notificationsOfUser)
     }

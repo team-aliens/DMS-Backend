@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface QueryNotificationOfUserPort {
 
-    fun queryNotificationOfUserByUserId(userId: UUID, pageData: PageData): List<NotificationOfUser>
+    fun queryNotificationOfUserByUserId(userId: UUID): List<NotificationOfUser>
 
     fun queryNotificationOfUserById(notificationOfUserId: UUID): NotificationOfUser?
 }

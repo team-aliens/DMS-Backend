@@ -8,7 +8,7 @@ import java.util.UUID
 
 interface GetNotificationService {
 
-    fun getNotificationOfUsersByUserId(userId: UUID, pageData: PageData): List<NotificationOfUser>
+    fun getNotificationOfUsersByUserId(userId: UUID): List<NotificationOfUser>
 
     fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription>
 
