@@ -15,6 +15,7 @@ class QueryCurrentOutingApplicationVO @QueryProjection constructor(
     outingTime: LocalTime,
     arrivalTime: LocalTime,
     reason: String?,
+    outingApplicant: String,
     outingCompanions: List<String>
 ) : CurrentOutingApplicationVO(
     id = id,
@@ -24,5 +25,6 @@ class QueryCurrentOutingApplicationVO @QueryProjection constructor(
     outingTime = outingTime,
     arrivalTime = arrivalTime,
     reason = reason,
+    outingApplicant = outingApplicant,
     outingCompanions = outingCompanions
 )
