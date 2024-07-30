@@ -36,7 +36,7 @@ data class TopicSubscriptionGroupsResponse(
                 topicGroupsMap[it.topicGroup]?.add(
                     TopicSubscriptionResponse(
                         topic = it,
-                        isSubscribed = topicSubscriptionsMap[it]?.isSubscribed ?: false
+                        isSubscribed = topicSubscriptionsMap[it]?.isSubscribed ?: true
                     )
                 )
             }
