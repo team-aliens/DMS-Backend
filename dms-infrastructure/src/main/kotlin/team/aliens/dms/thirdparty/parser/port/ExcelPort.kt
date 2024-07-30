@@ -12,7 +12,6 @@ import org.apache.poi.ss.usermodel.VerticalAlignment
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.springframework.stereotype.Component
 import team.aliens.dms.domain.file.FileExtension.XLS
 import team.aliens.dms.domain.file.FileExtension.XLSX
 import team.aliens.dms.thirdparty.parser.exception.BadExcelFormatException
@@ -22,7 +21,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.function.Function
 
-abstract class ExcelPort {
+open class ExcelPort {
     fun <T> getExcelInfo(worksheet: Sheet, function: Function<Row, T>): List<T?> {
 
         val invalidRowIdxes = mutableListOf<Int>()
