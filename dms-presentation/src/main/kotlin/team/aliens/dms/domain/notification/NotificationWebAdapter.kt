@@ -60,7 +60,7 @@ class NotificationWebAdapter(
     @PostMapping("/topic")
     fun subscribeTopic(@RequestBody @Valid request: TopicRequest) {
         subscribeTopicUseCase.execute(
-            token = request.token,
+            deviceToken = request.deviceToken,
             topic = request.topic
         )
     }
@@ -68,7 +68,7 @@ class NotificationWebAdapter(
     @DeleteMapping("/topic")
     fun unsubscribeTopic(@RequestBody @Valid request: TopicRequest) {
         unsubscribeTopicUseCase.execute(
-            token = request.token,
+            deviceToken = request.deviceToken,
             topic = request.topic
         )
     }
