@@ -3,7 +3,6 @@ package team.aliens.dms.persistence.notification
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.spi.NotificationOfUserPort
 import team.aliens.dms.persistence.notification.entity.QNotificationOfUserJpaEntity.notificationOfUserJpaEntity
@@ -34,12 +33,10 @@ class NotificationOfPersistenceAdapterOfUser(
         )
     }
 
-    override fun queryNotificationOfUserByUserId(userId: UUID, pageData: PageData) =
+    override fun queryNotificationOfUserByUserId(userId: UUID) =
         queryFactory
             .selectFrom(notificationOfUserJpaEntity)
             .where(notificationOfUserJpaEntity.user.id.eq(userId))
-            .offset(pageData.offset)
-            .limit(pageData.size)
             .fetch().map { notificationOfUserMapper.toDomain(it)!! }
 
     override fun queryNotificationOfUserById(notificationOfUserId: UUID) = notificationOfUserMapper.toDomain(

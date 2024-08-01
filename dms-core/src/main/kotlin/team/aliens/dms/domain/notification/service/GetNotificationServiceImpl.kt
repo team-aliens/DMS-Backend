@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
@@ -16,8 +15,8 @@ class GetNotificationServiceImpl(
     private val topicSubscriptionPort: QueryTopicSubscriptionPort
 ) : GetNotificationService {
 
-    override fun getNotificationOfUsersByUserId(userId: UUID, pageData: PageData) =
-        notificationOfUserPort.queryNotificationOfUserByUserId(userId, pageData)
+    override fun getNotificationOfUsersByUserId(userId: UUID) =
+        notificationOfUserPort.queryNotificationOfUserByUserId(userId)
 
     override fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription> {
         val savedToken = getDeviceTokenByToken(token)
