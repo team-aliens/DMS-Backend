@@ -33,7 +33,7 @@ data class GetCurrentOutingApplicationResponse(
     val outingCompanions: List<String>
 ) {
     companion object {
-        fun of(currentOutingApplicationVO: CurrentOutingApplicationVO) =
+        fun of(currentOutingApplicationVO: CurrentOutingApplicationVO, deleteUsername: String = "") =
             currentOutingApplicationVO.run {
                 GetCurrentOutingApplicationResponse(
                     id = id,
@@ -43,7 +43,7 @@ data class GetCurrentOutingApplicationResponse(
                     outingTime = outingTime,
                     arrivalTime = arrivalTime,
                     reason = reason,
-                    outingCompanions = outingCompanions
+                    outingCompanions = listOf(*outingCompanions.toTypedArray(), outingApplicant).filter { it != deleteUsername }
                 )
             }
     }
