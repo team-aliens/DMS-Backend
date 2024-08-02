@@ -16,7 +16,7 @@ class QueryTopicSubscriptionUseCase(
         notificationService.updateSubscribes(
             token = token,
             topicsToSubscribe = Topic.values().filter { topic ->
-                !topicSubscriptions.any { it.topic.name == topic.name}
+                !topicSubscriptions.any { it.topic.name == topic.name }
             }.map { topic ->
                 Pair(
                     topic,
