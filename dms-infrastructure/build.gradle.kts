@@ -32,6 +32,9 @@ dependencies {
     implementation(Dependencies.AWS_SES)
     implementation(Dependencies.SPRING_AWS)
 
+    // slack
+    implementation(Dependencies.SLACK_API)
+
     // configuration
     kapt(Dependencies.CONFIGURATION_PROCESSOR)
 
