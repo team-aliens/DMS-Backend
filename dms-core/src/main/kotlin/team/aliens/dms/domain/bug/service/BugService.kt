@@ -4,5 +4,7 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class BugService(
-    commandBugService: CommandBugService
-) : CommandBugService by commandBugService
+    commandBugService: CommandBugService,
+    sendBugService: SendBugService
+) : CommandBugService by commandBugService,
+    SendBugService by sendBugService
