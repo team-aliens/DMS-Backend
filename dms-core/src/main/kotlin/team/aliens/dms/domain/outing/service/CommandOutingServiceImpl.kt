@@ -36,14 +36,12 @@ class CommandOutingServiceImpl(
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
             .copy(companionIds = outingApplication.companionIds)
 
-        val users: List<OutingCompanionDetailsVO> = queryOutingApplicationPort.queryOutingCompanionsById(outingApplication.id)
-
-        val deviceTokens: List<DeviceToken> = users.mapNotNull { user ->
-            val student = queryStudentPort.queryStudentById(user.id)
+        val deviceTokens: List<DeviceToken> = outingApplication.companionIds?.mapNotNull { studentId ->
+            val student = queryStudentPort.queryStudentById(studentId)
             student?.let {
-                queryDeviceTokenPort.queryDeviceTokenByUserId(it.userId!!)
+                queryDeviceTokenPort.queryDeviceTokenByUserId(it.userId!!)!!
             }
-        }
+        } ?: emptyList()
 
         return savedOutingApplication
             .also {
