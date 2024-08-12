@@ -10,4 +10,6 @@ interface QueryDeviceTokenPort {
     fun queryDeviceTokenByUserId(userId: UUID): DeviceToken?
 
     fun queryDeviceTokenByToken(token: String): DeviceToken?
+
+    fun queryDeviceTokensByUserIds(studentIds: List<UUID>): List<DeviceToken>
 }
