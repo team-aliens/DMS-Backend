@@ -14,8 +14,6 @@ import team.aliens.dms.domain.outing.spi.CommandOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.CommandOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.CommandOutingTimePort
 import team.aliens.dms.domain.outing.spi.CommandOutingTypePort
-import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
-import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 
 @Service
@@ -26,7 +24,6 @@ class CommandOutingServiceImpl(
     private val commandOutingTimePort: CommandOutingTimePort,
     private val queryStudentPort: QueryStudentPort,
     private val queryDeviceTokenPort: QueryDeviceTokenPort,
-    private val queryOutingApplicationPort: QueryOutingCompanionPort,
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort
 ) : CommandOutingService {
@@ -36,11 +33,8 @@ class CommandOutingServiceImpl(
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
             .copy(companionIds = outingApplication.companionIds)
 
-        val deviceTokens: List<DeviceToken> = outingApplication.companionIds?.mapNotNull { studentId ->
-            val student = queryStudentPort.queryStudentById(studentId)
-            student?.let {
-                queryDeviceTokenPort.queryDeviceTokenByUserId(it.userId!!)!!
-            }
+        val deviceTokens: List<DeviceToken> = outingApplication.companionIds?.let {
+            queryDeviceTokenPort.queryDeviceTokensByUserIds(it)
         } ?: emptyList()
 
         return savedOutingApplication
