@@ -36,7 +36,7 @@ class DeviceTokenPersistenceAdapter(
         deviceTokenRepository.findByToken(token)
     )
 
-    override fun queryDeviceTokensByUserIds(studentIds: List<UUID>): List<DeviceToken> {
+    override fun queryDeviceTokensByStudentIds(studentIds: List<UUID>): List<DeviceToken> {
         return queryFactory
             .selectFrom(deviceTokenJpaEntity)
             .join(userJpaEntity).on(userJpaEntity.id.eq(deviceTokenJpaEntity.user.id))
