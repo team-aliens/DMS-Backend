@@ -34,7 +34,7 @@ class CommandOutingServiceImpl(
             .copy(companionIds = outingApplication.companionIds)
 
         val deviceTokens: List<DeviceToken>? = outingApplication.companionIds?.let {
-            queryDeviceTokenPort.queryDeviceTokensByUserIds(it)
+            queryDeviceTokenPort.queryDeviceTokensByStudentIds(it)
         }
 
         return savedOutingApplication
