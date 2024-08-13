@@ -79,3 +79,6 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+slack:
+  url: ${SLACK_WEBHOOK_URL}
