@@ -33,7 +33,7 @@ dependencies {
     implementation(Dependencies.SPRING_AWS)
 
     // slack
-    implementation(Dependencies.SLACK_API)
+    implementation(Dependencies.SLACK)
 
     // configuration
     kapt(Dependencies.CONFIGURATION_PROCESSOR)
