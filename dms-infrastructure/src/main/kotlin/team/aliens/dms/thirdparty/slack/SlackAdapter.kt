@@ -31,34 +31,34 @@ class SlackAdapter(
     private val slack = Slack.getInstance()
 
     override fun sendBugReport(bugReport: BugReport) {
-        val blocks = mutableListOf(
-            *asBlocks(
-                header { it.text(plainText("버그 제보가 들어왔습니다.")) },
-                section { it.text(plainText("제보자 : ${bugReport.studentId}")) },
-                section { it.text(plainText("OS : ${bugReport.developmentArea.name}")) },
-                section { it.text(plainText("message : ${bugReport.content}")) }
-            ).toTypedArray()
+        val blocks = toMutableBlocks(
+            header { it.text(plainText("버그 제보가 들어왔습니다.")) },
+            section { it.text(plainText("제보자 : ${bugReport.studentId}")) },
+            section { it.text(plainText("OS : ${bugReport.developmentArea.name}")) },
+            section { it.text(plainText("message : ${bugReport.content}")) }
         )
 
         blocks
-            .addImages(bugReport.attachmentUrls)
+            .addImages(bugReport.attachmentUrls?.attachmentUrls ?: emptyList())
             .addSelectProgress()
             .sendBug()
     }
 
     fun sendServerBug(request: HttpServletRequest, response: HttpServletResponse, exception: Exception) {
-        val blocks = mutableListOf(
-            *asBlocks(
-                header { it.text(plainText("서버에 예외가 발생했습니다.")) },
-                section { it.text(plainText("requested info : <${request.method}> ${request.requestURL}")) },
-                section { it.text(plainText("exception class : ${exception.javaClass.name}")) },
-                section { it.text(plainText("exception message : ${exception.message}")) },
-            ).toTypedArray()
+        val blocks = toMutableBlocks(
+            header { it.text(plainText("서버에 예외가 발생했습니다.")) },
+            section { it.text(plainText("requested info : <${request.method}> ${request.requestURL}")) },
+            section { it.text(plainText("exception class : ${exception.javaClass.name}")) },
+            section { it.text(plainText("exception message : ${exception.message}")) },
         )
 
         blocks
             .addSelectProgress()
             .sendBug()
+    }
+
+    private fun toMutableBlocks(vararg blocks: LayoutBlock): MutableList<LayoutBlock> {
+        return blocks.toMutableList()
     }
 
     private fun MutableList<LayoutBlock>.addSelectProgress(): MutableList<LayoutBlock> {
@@ -91,15 +91,15 @@ class SlackAdapter(
         return this
     }
 
-    private fun MutableList<LayoutBlock>.addImages(bugAttachment: BugAttachment?): MutableList<LayoutBlock> {
+    private fun MutableList<LayoutBlock>.addImages(attachmentUrls: List<String>): MutableList<LayoutBlock> {
         this.addAll(
-            bugAttachment?.attachmentUrls?.map { url ->
+            attachmentUrls.map { url ->
                 asBlocks(
                     image {
                         it.imageUrl(url).altText("bug image")
                     }
                 )[0]
-            } ?: emptyList()
+            }
         )
 
         return this
@@ -108,10 +108,8 @@ class SlackAdapter(
     private fun MutableList<LayoutBlock>.sendBug() {
         slack.send(
             url,
-            Payload
-                .builder()
+            Payload.builder()
                 .blocks(this)
-                .
                 .build()
         )
     }
