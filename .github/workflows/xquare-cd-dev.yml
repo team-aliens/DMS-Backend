@@ -48,3 +48,5 @@ jobs:
             SES_SENDER=${{ secrets.SES_SENDER }}
             S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
             FCM_FILE_URL=${{ secrets.FCM_FILE_URL }}
+            FLYWAY_ENABLED=${{ secrets.FLYWAY_ENABLED }}
+            BASELINE_ON_MIGRATE=${{ secrets.BASELINE_ON_MIGRATE }}

@@ -5,15 +5,14 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.notification.dto.NotificationsResponse
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
@@ -52,14 +51,14 @@ class NotificationWebAdapter(
     }
 
     @GetMapping
-    fun queryMyNotifications(@ModelAttribute pageData: PageData): NotificationsResponse {
-        return queryAndReadMyNotificationsUseCase.execute(pageData)
+    fun queryMyNotifications(): NotificationsResponse {
+        return queryAndReadMyNotificationsUseCase.execute()
     }
 
     @PostMapping("/topic")
     fun subscribeTopic(@RequestBody @Valid request: TopicRequest) {
         subscribeTopicUseCase.execute(
-            token = request.token,
+            deviceToken = request.deviceToken,
             topic = request.topic
         )
     }
@@ -67,7 +66,7 @@ class NotificationWebAdapter(
     @DeleteMapping("/topic")
     fun unsubscribeTopic(@RequestBody @Valid request: TopicRequest) {
         unsubscribeTopicUseCase.execute(
-            token = request.token,
+            deviceToken = request.deviceToken,
             topic = request.topic
         )
     }
@@ -81,8 +80,8 @@ class NotificationWebAdapter(
     }
 
     @GetMapping("/topic")
-    fun queryTopicSubscriptions(@RequestBody @Valid request: DeviceTokenWebRequest): TopicSubscriptionGroupsResponse {
-        return queryTopicSubscriptionUseCase.execute(request.deviceToken)
+    fun queryTopicSubscriptions(@RequestParam("device_token") deviceToken: String): TopicSubscriptionGroupsResponse {
+        return queryTopicSubscriptionUseCase.execute(deviceToken)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

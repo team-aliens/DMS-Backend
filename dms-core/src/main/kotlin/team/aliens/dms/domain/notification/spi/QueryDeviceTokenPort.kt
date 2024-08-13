@@ -5,7 +5,11 @@ import java.util.UUID
 
 interface QueryDeviceTokenPort {
 
+    fun existsDeviceTokenByUserId(userId: UUID): Boolean
+
     fun queryDeviceTokenByUserId(userId: UUID): DeviceToken?
 
     fun queryDeviceTokenByToken(token: String): DeviceToken?
+
+    fun queryDeviceTokensByStudentIds(studentIds: List<UUID>): List<DeviceToken>
 }

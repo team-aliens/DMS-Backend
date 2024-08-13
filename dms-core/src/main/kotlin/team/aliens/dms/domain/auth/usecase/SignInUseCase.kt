@@ -5,6 +5,8 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.spi.JwtPort
+import team.aliens.dms.domain.notification.model.DeviceToken
+import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
 
@@ -13,7 +15,8 @@ class SignInUseCase(
     private val securityService: SecurityService,
     private val userService: UserService,
     private val schoolService: SchoolService,
-    private val jwtPort: JwtPort
+    private val notificationService: NotificationService,
+    private val jwtPort: JwtPort,
 ) {
 
     fun execute(request: SignInRequest): TokenFeatureResponse {
@@ -25,6 +28,17 @@ class SignInUseCase(
             userId = user.id, authority = user.authority
         )
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
+
+        if (notificationService.checkDeviceTokenByUserId(user.id))
+            notificationService.deleteDeviceTokenByUserId(user.id)
+
+        notificationService.saveDeviceToken(
+            DeviceToken(
+                userId = user.id,
+                schoolId = user.schoolId,
+                token = request.deviceToken
+            )
+        )
 
         return TokenFeatureResponse.of(tokenResponse, availableFeatures)
     }

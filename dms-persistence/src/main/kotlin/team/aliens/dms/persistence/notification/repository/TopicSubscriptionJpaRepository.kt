@@ -9,4 +9,6 @@ import java.util.UUID
 @Repository
 interface TopicSubscriptionJpaRepository : CrudRepository<TopicSubscriptionJpaEntity, TopicSubscriptionJpaEntityId> {
     fun findByDeviceTokenId(deviceTokenId: UUID): List<TopicSubscriptionJpaEntity>
+
+    fun deleteAllByDeviceTokenId(deviceTokenId: UUID)
 }

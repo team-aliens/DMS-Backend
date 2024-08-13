@@ -6,6 +6,7 @@ import team.aliens.dms.domain.notification.model.Topic
 
 interface NotificationService :
     GetNotificationService,
+    CheckNotificationService,
     CommandNotificationService {
 
     fun unsubscribeTopic(token: String, topic: Topic)
