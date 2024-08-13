@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.bug.model.BugAttachment
 import team.aliens.dms.domain.bug.model.BugReport
 import team.aliens.dms.domain.bug.spi.SendBugPort
 import java.lang.Exception
