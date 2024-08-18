@@ -7,6 +7,7 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity
 import team.aliens.dms.persistence.notification.mapper.DeviceTokenMapper
 import team.aliens.dms.persistence.notification.repository.DeviceTokenJpaRepository
+import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
@@ -15,7 +16,7 @@ import java.util.UUID
 class DeviceTokenPersistenceAdapter(
     private val notificationMapper: DeviceTokenMapper,
     private val deviceTokenRepository: DeviceTokenJpaRepository,
-    private val queryFactory: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory,
 ) : DeviceTokenPort {
 
     override fun existsDeviceTokenByUserId(userId: UUID): Boolean {
@@ -42,6 +43,16 @@ class DeviceTokenPersistenceAdapter(
             .join(userJpaEntity).on(userJpaEntity.id.eq(deviceTokenJpaEntity.user.id))
             .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.user.id))
             .where(studentJpaEntity.id.`in`(studentIds))
+            .fetch()
+            .map {
+                notificationMapper.toDomain(it)!!
+            }
+    }
+
+    override fun queryDeviceTokensBySchoolId(schoolId: UUID): List<DeviceToken> {
+        return queryFactory
+            .selectFrom(deviceTokenJpaEntity)
+            .join(userJpaEntity).on(userJpaEntity.school.id.eq(schoolId))
             .fetch()
             .map {
                 notificationMapper.toDomain(it)!!
