@@ -20,18 +20,6 @@ class EventAdapter(
         )
     }
 
-    override fun publishNotificationToAllByTopic(
-            deviceTokens: List<DeviceToken>,
-            notification: Notification
-    ) {
-        eventPublisher.publishEvent(
-            GroupNotificationEvent(
-                deviceTokens = deviceTokens,
-                notification = notification
-            )
-        )
-    }
-
     override fun publishNotificationToApplicant(
         deviceTokens: List<DeviceToken>,
         notification: Notification

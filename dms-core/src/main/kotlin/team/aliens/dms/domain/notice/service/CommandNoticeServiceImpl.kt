@@ -23,7 +23,7 @@ class CommandNoticeServiceImpl(
 
         return commandNoticePort.saveNotice(notice)
             .also {
-                notificationEventPort.publishNotificationToAllByTopic(
+                notificationEventPort.publishNotificationToApplicant(
                     deviceTokens, Notification.NoticeNotification(schoolId, it)
                 )
             }
