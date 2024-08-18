@@ -11,11 +11,11 @@ import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 
 @Service
 class CommandNoticeServiceImpl(
-        private val commandNoticePort: CommandNoticePort,
-        private val notificationEventPort: NotificationEventPort,
-        private val securityPort: SecurityPort,
-        private val deviceTokenPort: QueryDeviceTokenPort,
-        ) : CommandNoticeService {
+    private val commandNoticePort: CommandNoticePort,
+    private val notificationEventPort: NotificationEventPort,
+    private val securityPort: SecurityPort,
+    private val deviceTokenPort: QueryDeviceTokenPort,
+) : CommandNoticeService {
 
     override fun saveNotice(notice: Notice): Notice {
         val schoolId = securityPort.getCurrentUserSchoolId()

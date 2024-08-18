@@ -7,7 +7,6 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity
 import team.aliens.dms.persistence.notification.mapper.DeviceTokenMapper
 import team.aliens.dms.persistence.notification.repository.DeviceTokenJpaRepository
-import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
