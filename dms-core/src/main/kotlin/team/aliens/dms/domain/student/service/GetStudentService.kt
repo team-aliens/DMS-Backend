@@ -51,7 +51,7 @@ interface GetStudentService {
         studentVOs: List<ExcelStudentVO>,
     ): List<Student>
 
-    fun getAllStudentsByName(name: String?): List<AllStudentsVO>
+    fun getAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
     fun isApplicant(studentId: UUID): Boolean
 }

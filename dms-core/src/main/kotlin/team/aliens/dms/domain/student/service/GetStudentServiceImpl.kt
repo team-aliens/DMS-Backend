@@ -95,8 +95,8 @@ class GetStudentServiceImpl(
             )
         }
 
-    override fun getAllStudentsByName(name: String?) =
-        queryStudentPort.queryAllStudentsByName(name)
+    override fun getAllStudentsByName(name: String?, schoolId: UUID) =
+        queryStudentPort.queryAllStudentsByName(name, schoolId)
 
     override fun getGcnUpdatedStudent(
         studentMap: Map<Pair<String, String>, Student>,
