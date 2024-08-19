@@ -20,7 +20,6 @@ import java.util.function.Function
 class GetStudentServiceImpl(
     private val securityPort: SecurityPort,
     private val queryStudentPort: QueryStudentPort,
-    private val queryPointHistoryPort: QueryPointHistoryPort,
     private val queryOutingApplicationPort: QueryOutingApplicationPort,
 ) : GetStudentService {
 
@@ -69,15 +68,6 @@ class GetStudentServiceImpl(
     override fun getStudentsBySchoolId(schoolId: UUID) =
         queryStudentPort.queryStudentsBySchoolId(schoolId)
 
-    override fun getAllStudentWithMinusPoint(): List<Pair<UUID, Int>> =
-        queryStudentPort.queryAllStudentsByName("").map { student ->
-            val minusTotalPoint = queryPointHistoryPort.queryBonusAndMinusTotalPointByStudentGcnAndName(
-                gcn = student.gcn,
-                studentName = student.name
-            ).second
-            Pair(student.id, minusTotalPoint)
-        }
-
     override fun getAllStudentsByIdsIn(studentIds: List<UUID>) =
         queryStudentPort.queryAllStudentsByIdsIn(studentIds)
             .also { students ->
@@ -105,8 +95,8 @@ class GetStudentServiceImpl(
             )
         }
 
-    override fun getAllStudentsByName(name: String?) =
-        queryStudentPort.queryAllStudentsByName(name)
+    override fun getAllStudentsByName(name: String?, schoolId: UUID) =
+        queryStudentPort.queryAllStudentsByName(name, schoolId)
 
     override fun getGcnUpdatedStudent(
         studentMap: Map<Pair<String, String>, Student>,

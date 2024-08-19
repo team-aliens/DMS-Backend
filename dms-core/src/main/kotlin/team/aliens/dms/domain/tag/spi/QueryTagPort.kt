@@ -11,8 +11,6 @@ interface QueryTagPort {
 
     fun queryTagById(tagId: UUID): Tag?
 
-    fun queryTagByName(name: String): Tag?
-
     fun existsByNameAndSchoolId(name: String, schoolId: UUID): Boolean
 
     fun queryTagsByStudentId(studentId: UUID): List<Tag>

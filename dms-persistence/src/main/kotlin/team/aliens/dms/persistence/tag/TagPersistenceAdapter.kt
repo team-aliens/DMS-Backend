@@ -41,12 +41,6 @@ class TagPersistenceAdapter(
         )
     }
 
-    override fun queryTagByName(name: String): Tag? {
-        return tagMapper.toDomain(
-            tagRepository.findByName(name)
-        )
-    }
-
     override fun deleteTagById(tagId: UUID) {
         tagRepository.deleteById(tagId)
     }

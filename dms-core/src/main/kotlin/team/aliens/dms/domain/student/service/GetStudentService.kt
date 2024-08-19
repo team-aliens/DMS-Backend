@@ -38,8 +38,6 @@ interface GetStudentService {
 
     fun getStudentsBySchoolId(schoolId: UUID): List<Student>
 
-    fun getAllStudentWithMinusPoint(): List<Pair<UUID, Int>>
-
     fun getAllStudentsByIdsIn(studentIds: List<UUID>): List<Student>
 
     fun getGcnUpdatedStudent(
@@ -53,7 +51,7 @@ interface GetStudentService {
         studentVOs: List<ExcelStudentVO>,
     ): List<Student>
 
-    fun getAllStudentsByName(name: String?): List<AllStudentsVO>
+    fun getAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
     fun isApplicant(studentId: UUID): Boolean
 }
