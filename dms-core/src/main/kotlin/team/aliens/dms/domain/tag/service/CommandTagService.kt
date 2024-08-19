@@ -14,7 +14,5 @@ interface CommandTagService {
 
     fun saveTag(tag: Tag): Tag
 
-    fun saveStudentTag(studentTag: StudentTag): StudentTag
-
     fun saveAllStudentTags(studentTags: List<StudentTag>)
 }
