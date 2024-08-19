@@ -15,7 +15,7 @@ import java.util.UUID
 class DeviceTokenPersistenceAdapter(
     private val notificationMapper: DeviceTokenMapper,
     private val deviceTokenRepository: DeviceTokenJpaRepository,
-    private val queryFactory: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory,
 ) : DeviceTokenPort {
 
     override fun existsDeviceTokenByUserId(userId: UUID): Boolean {
@@ -42,6 +42,17 @@ class DeviceTokenPersistenceAdapter(
             .join(userJpaEntity).on(userJpaEntity.id.eq(deviceTokenJpaEntity.user.id))
             .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.user.id))
             .where(studentJpaEntity.id.`in`(studentIds))
+            .fetch()
+            .map {
+                notificationMapper.toDomain(it)!!
+            }
+    }
+
+    override fun queryDeviceTokensBySchoolId(schoolId: UUID): List<DeviceToken> {
+        return queryFactory
+            .selectFrom(deviceTokenJpaEntity)
+            .join(deviceTokenJpaEntity.user, userJpaEntity)
+            .where(userJpaEntity.school.id.eq(schoolId))
             .fetch()
             .map {
                 notificationMapper.toDomain(it)!!

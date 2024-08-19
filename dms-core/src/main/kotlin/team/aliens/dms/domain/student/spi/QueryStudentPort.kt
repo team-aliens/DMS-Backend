@@ -40,5 +40,5 @@ interface QueryStudentPort {
 
     fun queryAllStudentsByIdsIn(studentIds: List<UUID>): List<Student>
 
-    fun queryAllStudentsByName(name: String?): List<AllStudentsVO>
+    fun queryAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 }

@@ -1,6 +1,5 @@
 package team.aliens.dms.persistence.tag
 
-import com.querydsl.jpa.JPAExpressions.selectFrom
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.tag.model.StudentTag
@@ -22,11 +21,6 @@ class StudentTagPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : StudentTagPort {
 
-    override fun queryStudentTagsByStudentId(studentId: UUID): List<StudentTag> {
-        return studentTagRepository.findAllByStudentId(studentId)
-            .map { studentTagMapper.toDomain(it)!! }
-    }
-
     override fun queryAllStudentTagDetails(): List<StudentTagDetailVO> {
         return queryFactory.select(
             QQueryStudentTagDetailVO(
@@ -40,16 +34,6 @@ class StudentTagPersistenceAdapter(
             .join(tagJpaEntity).on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
             .join(studentJpaEntity).on(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
             .fetch()
-    }
-
-    override fun queryStudentTagsByTagNameIn(names: List<String>): List<StudentTag> {
-        return queryFactory.selectFrom(studentTagJpaEntity)
-            .join(tagJpaEntity).on(tagJpaEntity.id.eq(studentTagJpaEntity.tag.id))
-            .where(tagJpaEntity.name.`in`(names))
-            .fetch()
-            .map {
-                studentTagMapper.toDomain(it)!!
-            }
     }
 
     override fun deleteAllStudentTagsByStudentIdIn(studentIds: List<UUID>) {
@@ -70,12 +54,6 @@ class StudentTagPersistenceAdapter(
     override fun deleteStudentTagByTagId(tagId: UUID) {
         studentTagRepository.deleteByTagId(tagId)
     }
-
-    override fun saveStudentTag(studentTag: StudentTag) = studentTagMapper.toDomain(
-        studentTagRepository.save(
-            studentTagMapper.toEntity(studentTag)
-        )
-    )!!
 
     override fun saveAllStudentTags(studentTags: List<StudentTag>) {
         studentTagRepository.saveAll(

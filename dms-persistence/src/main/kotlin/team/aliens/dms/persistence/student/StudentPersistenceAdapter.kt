@@ -361,7 +361,7 @@ class StudentPersistenceAdapter(
                 studentMapper.toDomain(it)!!
             }
 
-    override fun queryAllStudentsByName(name: String?): List<AllStudentsVO> {
+    override fun queryAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO> {
         return queryFactory
             .select(
                 QQueryAllStudentsVO(
@@ -374,7 +374,10 @@ class StudentPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .where(name?.let { studentJpaEntity.name.contains(it) })
+            .where(
+                studentJpaEntity.user.school.id.eq(schoolId)
+                    .and(name?.let { studentJpaEntity.name.contains(it) })
+            )
             .fetch()
     }
 }
