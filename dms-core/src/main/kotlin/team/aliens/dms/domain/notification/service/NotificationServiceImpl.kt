@@ -123,17 +123,20 @@ class NotificationServiceImpl(
 
     override fun toggleSubscription(token: String, topic: Topic) {
         val deviceToken = this.getDeviceTokenByToken(token)
-        queryTopicSubscriptionPort.queryDeviceTokenIdAndTopic(deviceToken.id, topic)?.let { currentSubscription ->
-            if (currentSubscription.isSubscribed) {
+        val currentSubscribe = queryTopicSubscriptionPort.queryDeviceTokenIdAndTopic(deviceToken.id, topic)
+
+        currentSubscribe?.let {
+            if (it.isSubscribed) {
                 notificationPort.unsubscribeTopic(token, topic)
             } else {
                 notificationPort.subscribeTopic(token, topic)
             }
+
             commandTopicSubscriptionPort.saveTopicSubscription(
                 TopicSubscription(
                     deviceTokenId = deviceToken.id,
                     topic = topic,
-                    isSubscribed = !currentSubscription.isSubscribed
+                    isSubscribed = !it.isSubscribed
                 )
             )
         }
