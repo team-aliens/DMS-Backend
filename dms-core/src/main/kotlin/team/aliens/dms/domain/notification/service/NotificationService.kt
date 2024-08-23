@@ -25,4 +25,6 @@ interface NotificationService :
     fun sendMessagesByTopic(
         notification: Notification
     )
+
+    fun toggleSubscription(token: String, topic: Topic)
 }
