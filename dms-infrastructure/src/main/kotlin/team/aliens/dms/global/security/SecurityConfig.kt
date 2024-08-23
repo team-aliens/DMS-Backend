@@ -167,6 +167,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
                 .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/notifications/topic/toggle").authenticated()
 
                 // /outings
                 .requestMatchers(HttpMethod.POST, "/outings").hasAuthority(STUDENT.name)

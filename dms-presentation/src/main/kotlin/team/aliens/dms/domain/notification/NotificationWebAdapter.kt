@@ -25,6 +25,7 @@ import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCas
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
 import team.aliens.dms.domain.notification.usecase.SubscribeTopicUseCase
+import team.aliens.dms.domain.notification.usecase.ToggleSubscriptionUseCase
 import team.aliens.dms.domain.notification.usecase.UnsubscribeTopicUseCase
 import team.aliens.dms.domain.notification.usecase.UpdateTopicSubscriptionsUseCase
 import java.util.UUID
@@ -41,6 +42,7 @@ class NotificationWebAdapter(
     private val queryTopicSubscriptionUseCase: QueryTopicSubscriptionUseCase,
     private val removeNotificationUseCase: RemoveNotificationUseCase,
     private val removeMyAllNotificationUseCase: RemoveMyAllNotificationUseCase,
+    private val toggleSubscriptionUseCase: ToggleSubscriptionUseCase,
 ) {
 
     @PostMapping("/token")
@@ -66,6 +68,15 @@ class NotificationWebAdapter(
     @DeleteMapping("/topic")
     fun unsubscribeTopic(@RequestBody @Valid request: TopicRequest) {
         unsubscribeTopicUseCase.execute(
+            deviceToken = request.deviceToken,
+            topic = request.topic
+        )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/topic/toggle")
+    fun toggleSubscription(@RequestBody @Valid request: TopicRequest) {
+        toggleSubscriptionUseCase.execute(
             deviceToken = request.deviceToken,
             topic = request.topic
         )
