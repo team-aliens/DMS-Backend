@@ -1,7 +1,6 @@
 package team.aliens.dms.thirdparty.slack
 
 import com.slack.api.Slack
-import com.slack.api.model.block.Blocks.asBlocks
 import com.slack.api.model.block.Blocks.divider
 import com.slack.api.model.block.Blocks.header
 import com.slack.api.model.block.Blocks.image
@@ -68,7 +67,7 @@ class SlackAdapter(
                     section.text(markdownText("현재 버그 상황을 선택 해주세요."))
                     section.accessory(
                         staticSelect {
-                            it.placeholder(plainText("Select an progress status"))
+                            it.placeholder(plainText("Select a progress status"))
                             it.options(
                                 listOf(
                                     OptionObject.builder().text(plainText("미해결")).value("not-in-progress").build(),
@@ -93,11 +92,7 @@ class SlackAdapter(
     private fun MutableList<LayoutBlock>.addImages(attachmentUrls: List<String>): MutableList<LayoutBlock> {
         this.addAll(
             attachmentUrls.map { url ->
-                asBlocks(
-                    image {
-                        it.imageUrl(url).altText("bug image")
-                    }
-                )[0]
+                image { it.imageUrl(url).altText("bug image") }
             }
         )
 
