@@ -1,9 +1,13 @@
-${AnsiColor.BRIGHT_CYAN}  ,-.,-. ,--------.,------.  ,---.  ,--.   ,--.     ,------.  ,--.   ,--. ,---.   ,-.,-.
-${AnsiColor.BRIGHT_CYAN} /  /  / '--.  .--'|  .---' /  O  \ |   `.'   |     |  .-.  \ |   `.'   |'   .-'  \  \  \
-${AnsiColor.BRIGHT_CYAN}/  /  /     |  |   |  `--, |  .-.  ||  |'.'|  |     |  |  \  :|  |'.'|  |`.  `-.   \  \  \
-${AnsiColor.BRIGHT_CYAN}\  \  \     |  |   |  `---.|  | |  ||  |   |  |     |  '--'  /|  |   |  |.-'    |  /  /  /
-${AnsiColor.BRIGHT_CYAN} \  \  \    `--'   `------'`--' `--'`--'   `--'     `-------' `--'   `--'`-----'  /  /  /
-${AnsiColor.BRIGHT_CYAN}  `-'`-'                                                                          `-'`-'
+${AnsiColor.BRIGHT_CYAN}▄▄██████▓▓█████ ▄▄▄       ███▄ ▄███▓   ▓█████▄  ███▄ ▄███▓  ██████
+${AnsiColor.BRIGHT_CYAN}▓  ██▒ ▓▒▓█   ▀▒████▄    ▓██▒▀█▀ ██▒   ▒██▀ ██▌▓██▒▀█▀ ██▒▒██    ▒
+${AnsiColor.BRIGHT_CYAN}▒ ▓██░ ▒░▒███  ▒██  ▀█▄  ▓██    ▓██░   ░██   █▌▓██    ▓██░░ ▓██▄
+${AnsiColor.BRIGHT_CYAN}░ ▓██▓ ░ ▒▓█  ▄░██▄▄▄▄██ ▒██    ▒██    ░▓█▄   ▌▒██    ▒██   ▒   ██▒
+${AnsiColor.BRIGHT_CYAN}  ▒██▒ ░ ░▒████▒▓█   ▓██▒▒██▒   ░██▒   ░▒████▓ ▒██▒   ░██▒▒██████▒▒
+${AnsiColor.BRIGHT_CYAN}  ▒ ░░   ░░ ▒░ ░▒▒   ▓▒█░░ ▒░   ░  ░    ▒▒▓  ▒ ░ ▒░   ░  ░▒ ▒▓▒ ▒ ░
+${AnsiColor.BRIGHT_CYAN}    ░     ░ ░  ░ ▒   ▒▒ ░░  ░      ░    ░ ▒  ▒ ░  ░      ░░ ░▒  ░ ░
+${AnsiColor.BRIGHT_CYAN}  ░         ░    ░   ▒   ░      ░       ░ ░  ░ ░      ░   ░  ░  ░
+${AnsiColor.BRIGHT_CYAN}            ░  ░     ░  ░       ░         ░           ░         ░
+${AnsiColor.BRIGHT_CYAN}                                        ░
 ${AnsiColor.BRIGHT_WHITE}Domitory Management System
 ${AnsiColor.BLUE}최고의 기숙사 관리 서비스
 ${AnsiColor.BRIGHT_GREEN}Powered by Spring Boot ${spring-boot.version}
