@@ -81,4 +81,4 @@ logging:
           EC2MetadataUtils: error
 
 slack:
-  url: ${SLACK_WEBHOOK_URL}
+  url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
