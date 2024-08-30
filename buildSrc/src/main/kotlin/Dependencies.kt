@@ -83,4 +83,7 @@ object Dependencies {
     // flyway
     const val FLYWAY = "org.flywaydb:flyway-mysql:${DependencyVersions.FLYWAY_VERSION}"
 
+    // slack
+    const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
+
 }
