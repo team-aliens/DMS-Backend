@@ -14,7 +14,10 @@ class SetOutingAvailableTimeUseCase(
 ) {
 
     fun execute(request: SetOutingAvailableTimeRequest): SetOutingAvailableTimeResponse {
+        val schoolId = securityService.getCurrentSchoolId()
+
         outingService.checkOutingAvailableTimeOverlap(
+            schoolId = schoolId,
             dayOfWeek = request.dayOfWeek,
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime
@@ -22,7 +25,7 @@ class SetOutingAvailableTimeUseCase(
 
         val outingTime = outingService.saveOutingAvailableTime(
             OutingAvailableTime(
-                schoolId = securityService.getCurrentSchoolId(),
+                schoolId = schoolId,
                 dayOfWeek = request.dayOfWeek,
                 outingTime = request.outingTime,
                 arrivalTime = request.arrivalTime,

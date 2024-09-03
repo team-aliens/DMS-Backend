@@ -23,12 +23,13 @@ class CheckOutingServiceImpl(
 
     override fun checkOutingApplicationAvailable(
         studentId: UUID,
+        schoolId: UUID,
         outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
         checkOutingApplicationExists(studentId)
-        checkOutingAvailableTime(outingDate, outingTime, arrivalTime)
+        checkOutingAvailableTime(schoolId, outingDate, outingTime, arrivalTime)
     }
 
     private fun checkOutingApplicationExists(studentId: UUID) {
@@ -38,11 +39,12 @@ class CheckOutingServiceImpl(
     }
 
     private fun checkOutingAvailableTime(
+        schoolId: UUID,
         outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
-        queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outingDate.dayOfWeek)
+        queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeekAndSchoolId(outingDate.dayOfWeek, schoolId)
             ?.checkAvailable(outingDate.dayOfWeek, outingTime, arrivalTime)
             ?: throw OutingAvailableTimeMismatchException
     }
@@ -54,11 +56,12 @@ class CheckOutingServiceImpl(
     }
 
     override fun checkOutingAvailableTimeOverlap(
+        schoolId: UUID,
         dayOfWeek: DayOfWeek,
         outingTime: LocalTime,
         arrivalTime: LocalTime
     ) {
-        val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(dayOfWeek)
+        val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeekAndSchoolId(dayOfWeek, schoolId)
 
         for (existingTime in existingTimes) {
             if (existingTime.timesOverlap(outingTime, arrivalTime)) {

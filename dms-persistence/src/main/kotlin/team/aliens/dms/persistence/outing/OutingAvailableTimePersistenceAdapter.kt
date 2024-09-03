@@ -18,16 +18,19 @@ class OutingAvailableTimePersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : OutingAvailableTimePort {
 
-    override fun queryOutingAvailableTimeByDayOfWeek(dayOfWeek: DayOfWeek) =
+    override fun queryOutingAvailableTimeByDayOfWeekAndSchoolId(dayOfWeek: DayOfWeek, schoolId: UUID) =
         outingAvailableTimeMapper.toDomain(
-            outingAvailableTimeRepository.findByDayOfWeek(dayOfWeek)
+            outingAvailableTimeRepository.findByDayOfWeekAndSchoolId(dayOfWeek, schoolId)
         )
 
-    override fun queryOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTime> {
+    override fun queryOutingAvailableTimesByDayOfWeekAndSchoolId(dayOfWeek: DayOfWeek, schoolId: UUID): List<OutingAvailableTime> {
         val qOutingAvailableTimeJpaEntity = QOutingAvailableTimeJpaEntity.outingAvailableTimeJpaEntity
         val entities = queryFactory
             .selectFrom(qOutingAvailableTimeJpaEntity)
-            .where(qOutingAvailableTimeJpaEntity.dayOfWeek.eq(dayOfWeek))
+            .where(
+                qOutingAvailableTimeJpaEntity.dayOfWeek.eq(dayOfWeek)
+                    .and(qOutingAvailableTimeJpaEntity.school.id.eq(schoolId))
+            )
             .fetch()
 
         return entities.mapNotNull { outingAvailableTimeMapper.toDomain(it) }

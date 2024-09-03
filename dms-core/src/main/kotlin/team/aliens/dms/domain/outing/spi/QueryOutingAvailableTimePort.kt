@@ -6,9 +6,9 @@ import java.util.UUID
 
 interface QueryOutingAvailableTimePort {
 
-    fun queryOutingAvailableTimeByDayOfWeek(dayOfWeek: DayOfWeek): OutingAvailableTime?
+    fun queryOutingAvailableTimeByDayOfWeekAndSchoolId(dayOfWeek: DayOfWeek, schoolId: UUID): OutingAvailableTime?
 
-    fun queryOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTime>
+    fun queryOutingAvailableTimesByDayOfWeekAndSchoolId(dayOfWeek: DayOfWeek, schoolId: UUID): List<OutingAvailableTime>
 
     fun queryOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime?
 }

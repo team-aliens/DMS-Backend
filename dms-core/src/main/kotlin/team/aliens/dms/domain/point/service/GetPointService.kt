@@ -64,5 +64,5 @@ interface GetPointService {
         schoolId: UUID
     ): List<PointHistory>
 
-    fun getPointTotalsGroupByStudent(): List<StudentTotalVO>
+    fun getPointTotalsGroupByStudent(schoolId: UUID): List<StudentTotalVO>
 }

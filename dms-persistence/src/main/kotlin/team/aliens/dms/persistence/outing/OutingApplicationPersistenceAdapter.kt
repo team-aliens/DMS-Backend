@@ -45,7 +45,8 @@ class OutingApplicationPersistenceAdapter(
 
     override fun queryAllOutingApplicationVOsBetweenStartAndEnd(
         start: LocalDate,
-        end: LocalDate
+        end: LocalDate,
+        schoolId: UUID
     ): List<OutingApplicationVO> {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
@@ -56,7 +57,10 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity)
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .where(outingApplicationJpaEntity.outingDate.between(start, end))
+            .where(
+                outingApplicationJpaEntity.outingDate.between(start, end),
+                outingApplicationJpaEntity.outingType.school.id.eq(schoolId)
+            )
             .orderBy(outingApplicationJpaEntity.outingDate.asc())
             .transform(
                 groupBy(outingApplicationJpaEntity.id)
@@ -126,7 +130,7 @@ class OutingApplicationPersistenceAdapter(
             ).firstOrNull()
     }
 
-    override fun queryOutingHistoriesByStudentNameAndDate(studentName: String?, date: LocalDate): List<OutingHistoryVO> {
+    override fun queryOutingHistoriesByStudentNameAndDate(studentName: String?, schoolId: UUID, date: LocalDate): List<OutingHistoryVO> {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
 
@@ -150,7 +154,8 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
             .where(
                 studentName?.let { studentJpaEntity.name.contains(it) },
-                outingApplicationJpaEntity.outingDate.eq(date)
+                outingApplicationJpaEntity.outingDate.eq(date),
+                outingTypeJpaEntity.school.id.eq(schoolId)
             )
             .groupBy(outingApplicationJpaEntity.id)
             .orderBy(outingApplicationJpaEntity.arrivalTime.asc())

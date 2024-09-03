@@ -117,7 +117,7 @@ class GetPointServiceImpl(
         }
     }
 
-    override fun getPointTotalsGroupByStudent(): List<StudentTotalVO> {
-        return queryPointHistoryPort.queryPointTotalsGroupByStudent()
+    override fun getPointTotalsGroupByStudent(schoolId: UUID): List<StudentTotalVO> {
+        return queryPointHistoryPort.queryPointTotalsGroupByStudent(schoolId)
     }
 }

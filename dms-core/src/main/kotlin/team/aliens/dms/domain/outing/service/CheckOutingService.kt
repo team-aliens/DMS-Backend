@@ -10,6 +10,7 @@ interface CheckOutingService {
 
     fun checkOutingApplicationAvailable(
         studentId: UUID,
+        schoolId: UUID,
         outingDate: LocalDate,
         outingTime: LocalTime,
         arrivalTime: LocalTime
@@ -18,6 +19,7 @@ interface CheckOutingService {
     fun checkOutingTypeExists(outingType: OutingType)
 
     fun checkOutingAvailableTimeOverlap(
+        schoolId: UUID,
         dayOfWeek: DayOfWeek,
         outingTime: LocalTime,
         arrivalTime: LocalTime

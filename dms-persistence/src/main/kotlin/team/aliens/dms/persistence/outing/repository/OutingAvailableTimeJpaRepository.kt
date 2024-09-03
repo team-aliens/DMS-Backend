@@ -9,5 +9,5 @@ import java.util.UUID
 @Repository
 interface OutingAvailableTimeJpaRepository : CrudRepository<OutingAvailableTimeJpaEntity, UUID> {
 
-    fun findByDayOfWeek(dayOfWeek: DayOfWeek): OutingAvailableTimeJpaEntity?
+    fun findByDayOfWeekAndSchoolId(dayOfWeek: DayOfWeek, school: UUID): OutingAvailableTimeJpaEntity?
 }

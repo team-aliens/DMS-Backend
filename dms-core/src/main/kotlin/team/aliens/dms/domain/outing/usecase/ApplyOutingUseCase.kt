@@ -22,6 +22,7 @@ class ApplyOutingUseCase(
 
         outingService.checkOutingApplicationAvailable(
             studentId = student.id,
+            schoolId = student.schoolId,
             outingDate = request.outingDate,
             outingTime = request.outingTime,
             arrivalTime = request.arrivalTime

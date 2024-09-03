@@ -13,11 +13,11 @@ interface QueryOutingApplicationPort {
 
     fun queryOutingApplicationById(outingApplicationId: UUID): OutingApplication?
 
-    fun queryAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationVO>
+    fun queryAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate, schoolId: UUID): List<OutingApplicationVO>
 
     fun queryCurrentOutingApplicationVO(studentId: UUID): CurrentOutingApplicationVO?
 
-    fun queryOutingHistoriesByStudentNameAndDate(studentName: String?, date: LocalDate): List<OutingHistoryVO>
+    fun queryOutingHistoriesByStudentNameAndDate(studentName: String?, schoolId: UUID, date: LocalDate): List<OutingHistoryVO>
 
     fun isApplicant(studentId: UUID): Boolean
 }

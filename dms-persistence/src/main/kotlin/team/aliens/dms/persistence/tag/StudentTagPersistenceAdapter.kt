@@ -21,7 +21,7 @@ class StudentTagPersistenceAdapter(
     private val queryFactory: JPAQueryFactory
 ) : StudentTagPort {
 
-    override fun queryAllStudentTagDetails(): List<StudentTagDetailVO> {
+    override fun queryAllStudentTagDetails(schoolId: UUID): List<StudentTagDetailVO> {
         return queryFactory.select(
             QQueryStudentTagDetailVO(
                 studentJpaEntity.id,
@@ -33,6 +33,7 @@ class StudentTagPersistenceAdapter(
         ).from(studentTagJpaEntity)
             .join(tagJpaEntity).on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
             .join(studentJpaEntity).on(studentTagJpaEntity.student.id.eq(studentJpaEntity.id))
+            .where(tagJpaEntity.school.id.eq(schoolId))
             .fetch()
     }
 

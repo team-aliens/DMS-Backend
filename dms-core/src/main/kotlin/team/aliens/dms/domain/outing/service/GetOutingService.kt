@@ -19,13 +19,13 @@ interface GetOutingService {
 
     fun getOutingApplicationById(outingApplicationId: UUID): OutingApplication
 
-    fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationVO>
+    fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate, schoolId: UUID): List<OutingApplicationVO>
 
     fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO
 
-    fun getOutingHistoriesByStudentNameAndDate(studentName: String?, date: LocalDate): List<OutingHistoryVO>
+    fun getOutingHistoriesByStudentNameAndDate(studentName: String?, schoolId: UUID, date: LocalDate): List<OutingHistoryVO>
 
-    fun getOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTime>
+    fun getOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek, schoolId: UUID): List<OutingAvailableTime>
 
     fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO>
 

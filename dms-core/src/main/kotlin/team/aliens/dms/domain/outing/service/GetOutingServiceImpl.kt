@@ -36,8 +36,8 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId)
             ?: throw OutingApplicationNotFoundException
 
-    override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate) =
-        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
+    override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate, schoolId: UUID) =
+        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end, schoolId)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO =
         queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
@@ -45,13 +45,16 @@ class GetOutingServiceImpl(
 
     override fun getOutingHistoriesByStudentNameAndDate(
         studentName: String?,
+        schoolId: UUID,
         date: LocalDate
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
+    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, schoolId, date)
 
     override fun getOutingAvailableTimesByDayOfWeek(
-        dayOfWeek: DayOfWeek
-    ) = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(
-        dayOfWeek = dayOfWeek
+        dayOfWeek: DayOfWeek,
+        schoolId: UUID
+    ) = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeekAndSchoolId(
+        dayOfWeek = dayOfWeek,
+        schoolId = schoolId
     )
 
     override fun getOutingCompanionsByApplicationId(outingApplicationId: UUID): List<OutingCompanionDetailsVO> =

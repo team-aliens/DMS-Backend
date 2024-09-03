@@ -38,6 +38,7 @@ class OutingApplicationMapper(
             schoolId = domain.schoolId
         )
         val outingType = outingTypeRepository.findByIdOrNull(id)
+        println(outingType)
         val student = studentRepository.findByIdOrNull(domain.studentId)
 
         return OutingApplicationJpaEntity(

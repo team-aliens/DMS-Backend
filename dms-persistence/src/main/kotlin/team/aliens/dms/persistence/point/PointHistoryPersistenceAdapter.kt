@@ -160,7 +160,7 @@ class PointHistoryPersistenceAdapter(
         pointHistoryRepository.findByStudentGcnIn(gcns)
             .map { pointHistoryMapper.toDomain(it)!! }
 
-    override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
+    override fun queryPointTotalsGroupByStudent(schoolId: UUID): List<StudentTotalVO> {
         return queryFactory
             .select(
                 QQueryStudentTotalVO(
@@ -181,6 +181,7 @@ class PointHistoryPersistenceAdapter(
                         )
                 )
             )
+            .where(pointHistoryJpaEntity.school.id.eq(schoolId))
             .fetch()
     }
 
