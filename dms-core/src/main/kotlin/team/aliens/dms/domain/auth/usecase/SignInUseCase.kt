@@ -29,7 +29,7 @@ class SignInUseCase(
         )
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
-        request.deviceToken?.let {
+        if (!request.deviceToken.isNullOrBlank()) {
             if (notificationService.checkDeviceTokenByUserId(user.id))
                 notificationService.deleteDeviceTokenByUserId(user.id)
 
