@@ -20,7 +20,7 @@
 
 ## ERD
 
-![image](https://github.com/team-aliens/DMS-Backend/assets/81006587/8ba0806b-69b3-43c2-ae3f-706263312298)
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/308d831c-84ff-4b98-89ec-87565e525ea3/5f6580b9-fe2c-4f01-a789-8f33cad288de/image.png)
 
 ## archtecture
 
