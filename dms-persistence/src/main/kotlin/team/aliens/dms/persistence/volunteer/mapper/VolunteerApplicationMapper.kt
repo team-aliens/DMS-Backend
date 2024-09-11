@@ -19,7 +19,8 @@ class VolunteerApplicationMapper(
             VolunteerApplication(
                 id = it.id!!,
                 studentId = it.student!!.id!!,
-                volunteerId = it.volunteer!!.id!!
+                volunteerId = it.volunteer!!.id!!,
+                approved = it.approved
             )
         }
     }
@@ -31,7 +32,8 @@ class VolunteerApplicationMapper(
         return VolunteerApplicationJpaEntity(
             id = domain.id,
             student = student,
-            volunteer = volunteer
+            volunteer = volunteer,
+            approved = domain.approved
         )
     }
 }

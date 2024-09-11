@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.volunteer.entity
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -21,6 +22,9 @@ class VolunteerApplicationJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "volunteer_id", columnDefinition = "BINARY(16)", nullable = false)
-    val volunteer: VolunteerJpaEntity?
+    val volunteer: VolunteerJpaEntity?,
+
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    val approved: Boolean,
 
 ) : BaseEntity(id)
