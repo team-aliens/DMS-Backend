@@ -10,6 +10,8 @@ data class VolunteerApplication(
 
     val studentId: UUID,
 
-    val volunteerId: UUID
+    val volunteerId: UUID,
+
+    val approved: Boolean
 
 )
