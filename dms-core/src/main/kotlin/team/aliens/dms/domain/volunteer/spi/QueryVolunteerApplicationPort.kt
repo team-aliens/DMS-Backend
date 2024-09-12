@@ -6,4 +6,6 @@ import java.util.UUID
 interface QueryVolunteerApplicationPort {
 
     fun queryVolunteerApplicationById(volunteerApplicationId: UUID): VolunteerApplication?
+
+    fun queryVolunteerApplicationsByStudentId(studentId: UUID): List<VolunteerApplication>
 }

@@ -31,4 +31,8 @@ class VolunteerApplicationPersistenceAdapter(
             volunteerApplicationMapper.toEntity(volunteerApplication)
         )
     }
+
+    override fun queryVolunteerApplicationsByStudentId(studentId: UUID) =
+        volunteerApplicationRepository.findByStudentId(studentId)
+            .mapNotNull { volunteerApplicationMapper.toDomain(it) }
 }
