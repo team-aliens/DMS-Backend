@@ -201,7 +201,7 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.POST, "/volunteers/apply/{volunteer-id}").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.DELETE, "/volunteers/cancel/{volunteer-application-id}").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
-                .requestMatchers(HttpMethod.GET, "/volunteers/my").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/my/application").hasAuthority(STUDENT.name)
 
                 .anyRequest().denyAll()
             }

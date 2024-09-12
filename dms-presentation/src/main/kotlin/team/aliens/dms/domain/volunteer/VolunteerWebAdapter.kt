@@ -64,7 +64,7 @@ class VolunteerWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/my")
+    @GetMapping("/my/application")
     fun getMyVolunteerApplications(): QueryMyVolunteerApplicationResponse {
         return queryMyVolunteerApplicationUseCase.execute()
     }
