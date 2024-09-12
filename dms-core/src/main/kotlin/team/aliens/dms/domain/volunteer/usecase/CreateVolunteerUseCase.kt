@@ -14,7 +14,7 @@ class CreateVolunteerUseCase(
     private val volunteerService: VolunteerService
 ) {
 
-    fun execute(createVolunteerRequest: CreateVolunteerRequest): Volunteer {
+    fun execute(createVolunteerRequest: CreateVolunteerRequest) {
         val schoolId = securityService.getCurrentSchoolId()
 
         val volunteer = Volunteer(
@@ -28,6 +28,6 @@ class CreateVolunteerUseCase(
             schoolId = schoolId
         )
 
-        return volunteerService.saveVolunteer(volunteer)
+        volunteerService.saveVolunteer(volunteer)
     }
 }
