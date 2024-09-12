@@ -12,7 +12,7 @@ import java.util.UUID
 @Service
 class GetVolunteerServiceImpl(
     private val queryVolunteerApplicationPort: QueryVolunteerApplicationPort,
-    private val queryVolunteerPort: QueryVolunteerPort
+    private val queryVolunteerPort: QueryVolunteerPort,
 ) : GetVolunteerService {
 
     override fun getVolunteerApplicationById(volunteerApplicationId: UUID): VolunteerApplication =
@@ -23,4 +23,9 @@ class GetVolunteerServiceImpl(
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
 
+    override fun getVolunteerByCondition(studentId: UUID): List<Volunteer> =
+        queryVolunteerPort.queryVolunteerByCondition(studentId)
+
+    override fun getVolunteerApplicationsByStudentId(studentId: UUID): List<VolunteerApplication> =
+        queryVolunteerApplicationPort.queryVolunteerApplicationsByStudentId(studentId)
 }

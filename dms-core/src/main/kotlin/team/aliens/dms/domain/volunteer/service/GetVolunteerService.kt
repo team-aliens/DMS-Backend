@@ -9,4 +9,8 @@ interface GetVolunteerService {
     fun getVolunteerApplicationById(volunteerApplicationId: UUID): VolunteerApplication
 
     fun getVolunteerById(volunteerId: UUID): Volunteer
+
+    fun getVolunteerByCondition(studentId: UUID): List<Volunteer>
+
+    fun getVolunteerApplicationsByStudentId(studentId: UUID): List<VolunteerApplication>
 }
