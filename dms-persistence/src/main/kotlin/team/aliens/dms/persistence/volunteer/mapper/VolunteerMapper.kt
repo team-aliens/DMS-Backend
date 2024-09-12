@@ -1,12 +1,16 @@
 package team.aliens.dms.persistence.volunteer.mapper
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.persistence.GenericMapper
+import team.aliens.dms.persistence.school.repository.SchoolJpaRepository
 import team.aliens.dms.persistence.volunteer.entity.VolunteerJpaEntity
 
 @Component
-class VolunteerMapper() : GenericMapper<Volunteer, VolunteerJpaEntity> {
+class VolunteerMapper(
+    private val schoolRepository: SchoolJpaRepository
+) : GenericMapper<Volunteer, VolunteerJpaEntity> {
 
     override fun toDomain(entity: VolunteerJpaEntity?): Volunteer? {
         return entity?.let {
@@ -18,12 +22,14 @@ class VolunteerMapper() : GenericMapper<Volunteer, VolunteerJpaEntity> {
                 optionalScore = it.optionalScore,
                 maxApplicants = it.maxApplicants,
                 sexCondition = it.sexCondition,
-                gradeCondition = it.gradeCondition
+                gradeCondition = it.gradeCondition,
+                schoolId = it.school!!.id!!
             )
         }
     }
 
     override fun toEntity(domain: Volunteer): VolunteerJpaEntity {
+        val school = schoolRepository.findByIdOrNull(domain.schoolId)
         return VolunteerJpaEntity(
             id = domain.id,
             name = domain.name,
@@ -32,7 +38,8 @@ class VolunteerMapper() : GenericMapper<Volunteer, VolunteerJpaEntity> {
             optionalScore = domain.optionalScore,
             maxApplicants = domain.maxApplicants,
             sexCondition = domain.sexCondition,
-            gradeCondition = domain.gradeCondition
+            gradeCondition = domain.gradeCondition,
+            school = school
         )
     }
 }
