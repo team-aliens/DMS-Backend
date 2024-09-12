@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.volunteer.model
 
 import team.aliens.dms.common.annotation.Aggregate
+import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.student.model.Sex
 import java.util.UUID
 
@@ -22,4 +23,6 @@ data class Volunteer(
     val sexCondition: Sex,
 
     val gradeCondition: GradeCondition,
-)
+
+    override val schoolId: UUID
+) : SchoolIdDomain
