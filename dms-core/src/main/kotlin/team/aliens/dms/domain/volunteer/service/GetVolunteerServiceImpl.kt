@@ -7,6 +7,7 @@ import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
+import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import java.util.UUID
 
@@ -35,4 +36,7 @@ class GetVolunteerServiceImpl(
 
     override fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsByVolunteerId(volunteerId)
+
+    override fun getAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> =
+        queryVolunteerApplicationPort.queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId)
 }

@@ -14,7 +14,7 @@ class QueryAppliedStudentUseCase(
     fun execute(volunteerId: UUID): VolunteerApplicantsResponse {
 
         val applicants = volunteerService.getAllApplicantsByVolunteerId(volunteerId)
-            .map { VolunteerApplicantResponse.from(it) }
+            .map { VolunteerApplicantResponse.of(it) }
 
         return VolunteerApplicantsResponse(applicants)
     }

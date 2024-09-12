@@ -1,15 +1,20 @@
 package team.aliens.dms.persistence.volunteer
 
+import com.querydsl.core.group.GroupBy.groupBy
+import com.querydsl.core.group.GroupBy.list
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.VolunteerApplicationPort
+import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerApplicationJpaEntity.volunteerApplicationJpaEntity
+import team.aliens.dms.persistence.volunteer.entity.QVolunteerJpaEntity.volunteerJpaEntity
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerApplicationMapper
 import team.aliens.dms.persistence.volunteer.repository.VolunteerApplicationJpaRepository
+import team.aliens.dms.persistence.volunteer.repository.vo.QQueryCurrentVolunteerApplicantVO
 import team.aliens.dms.persistence.volunteer.repository.vo.QQueryVolunteerApplicantVO
 import java.util.UUID
 
@@ -61,4 +66,31 @@ class VolunteerApplicationPersistenceAdapter(
     override fun queryVolunteerApplicationsByStudentId(studentId: UUID) =
         volunteerApplicationRepository.findByStudentId(studentId)
             .mapNotNull { volunteerApplicationMapper.toDomain(it) }
+
+    override fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> {
+        return queryFactory
+            .selectFrom(volunteerApplicationJpaEntity)
+            .leftJoin(volunteerJpaEntity)
+            .where(
+                volunteerJpaEntity.school.id.eq(schoolId),
+                volunteerApplicationJpaEntity.approved.eq(true)
+            )
+            .transform(
+                groupBy(volunteerJpaEntity.name)
+                    .list(
+                        QQueryCurrentVolunteerApplicantVO(
+                            volunteerJpaEntity.name,
+                            list(
+                                QQueryVolunteerApplicantVO(
+                                    volunteerApplicationJpaEntity.id,
+                                    studentJpaEntity.grade,
+                                    studentJpaEntity.classRoom,
+                                    studentJpaEntity.number,
+                                    studentJpaEntity.name,
+                                )
+                            )
+                        )
+                    )
+            )
+    }
 }

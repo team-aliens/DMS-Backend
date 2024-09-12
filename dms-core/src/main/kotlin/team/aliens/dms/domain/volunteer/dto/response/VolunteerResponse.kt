@@ -4,6 +4,7 @@ import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.GradeCondition
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import java.util.UUID
 
@@ -71,7 +72,7 @@ data class VolunteerApplicantResponse(
     val name: String,
 ) {
     companion object {
-        fun from(applicants: VolunteerApplicantVO) = VolunteerApplicantResponse(
+        fun of(applicants: VolunteerApplicantVO) = VolunteerApplicantResponse(
             id = applicants.id,
             gcd = applicants.gcn,
             name = applicants.name
@@ -81,4 +82,21 @@ data class VolunteerApplicantResponse(
 
 data class VolunteerApplicantsResponse(
     val applicants: List<VolunteerApplicantResponse>
+)
+
+data class CurrentVolunteerApplicantResponse(
+    val volunteerName: String,
+    val applicants: List<VolunteerApplicantResponse>
+) {
+    companion object {
+        fun of(currentVolunteerApplicant: CurrentVolunteerApplicantVO) = CurrentVolunteerApplicantResponse(
+            volunteerName = currentVolunteerApplicant.volunteerName,
+            applicants = currentVolunteerApplicant.applicants
+                .map { VolunteerApplicantResponse.of(it) }
+        )
+    }
+}
+
+data class CurrentVolunteerApplicantsResponse(
+    val volunteers: List<CurrentVolunteerApplicantResponse>
 )
