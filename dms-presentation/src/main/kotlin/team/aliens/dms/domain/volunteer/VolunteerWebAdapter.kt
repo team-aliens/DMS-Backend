@@ -18,6 +18,7 @@ import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteerResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
@@ -30,6 +31,7 @@ import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryAppliedStudentUseCase
 import java.util.UUID
 
 @Validated
@@ -45,7 +47,8 @@ class VolunteerWebAdapter(
     private val rejectVolunteerApplicationUseCase: RejectVolunteerApplicationUseCase,
     private val queryAvailableVolunteersUseCase: QueryAvailableVolunteersUseCase,
     private val queryMyVolunteerApplicationUseCase: QueryMyVolunteerApplicationUseCase,
-    private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase
+    private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase,
+    private val queryAppliedStudentUseCase: QueryAppliedStudentUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -130,3 +133,9 @@ class VolunteerWebAdapter(
     fun managerGetAllVolunteers(): VolunteersResponse {
         return managerGetAllVolunteersUseCase.execute()
     }
+
+    @GetMapping("/{volunteer-id}")
+    fun queryAppliedStudent(@PathVariable("volunteer-id") @NotNull volunteerId: UUID): VolunteerApplicantsResponse {
+        return queryAppliedStudentUseCase.execute(volunteerId)
+    }
+}

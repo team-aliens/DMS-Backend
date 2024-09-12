@@ -63,3 +63,21 @@ data class VolunteerResponse(
 data class VolunteersResponse(
     val volunteers: List<VolunteerResponse>
 )
+
+data class VolunteerApplicantResponse(
+    val id: UUID,
+    val gcd: String,
+    val name: String,
+) {
+    companion object {
+        fun from(applicants: VolunteerApplicantVO) = VolunteerApplicantResponse(
+            id = applicants.id,
+            gcd = applicants.gcn,
+            name = applicants.name
+        )
+    }
+}
+
+data class VolunteerApplicantsResponse(
+    val applicants: List<VolunteerApplicantResponse>
+)

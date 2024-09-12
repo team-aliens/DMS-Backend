@@ -8,4 +8,6 @@ interface QueryVolunteerPort {
     fun queryVolunteerById(volunteerId: UUID): Volunteer?
 
     fun queryVolunteerByCondition(studentId: UUID): List<Volunteer>
+
+    fun queryAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer>
 }
