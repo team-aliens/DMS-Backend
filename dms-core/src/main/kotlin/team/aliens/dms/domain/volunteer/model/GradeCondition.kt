@@ -7,7 +7,7 @@ enum class GradeCondition(
     FIRST(setOf(1)),
     SECOND(setOf(2)),
     THIRD(setOf(3)),
-    FIRSTANDSECOND(setOf(1, 2)),
-    SECONDANDTHIRD(setOf(2, 3)),
-    FIRSTANDTHIRD(setOf(1, 3))
+    FIRST_SECOND(setOf(1, 2)),
+    SECOND_THIRD(setOf(2, 3)),
+    FIRST_THIRD(setOf(1, 3))
 }
