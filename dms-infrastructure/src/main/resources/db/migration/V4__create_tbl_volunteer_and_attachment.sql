@@ -16,7 +16,7 @@ create table tbl_volunteer
 create table tbl_volunteer_application
 (
     id binary(16)  not null primary key,
-    created_at   datetime(6) not null,
+    created_at   timestamp   not null,
     approved     bit         not null,
     student_id   binary(16)  not null,
     volunteer_id binary(16)  not null,
