@@ -21,4 +21,8 @@ class CommandVolunteerServiceImpl(
 
     override fun saveVolunteer(volunteer: Volunteer): Volunteer =
         commandVolunteerPort.saveVolunteer(volunteer)
+
+    override fun deleteVolunteer(volunteer: Volunteer) {
+        commandVolunteerPort.deleteVolunteer(volunteer)
+    }
 }

@@ -20,6 +20,10 @@ class VolunteerPersistenceAdapter(
         )
     )!!
 
+    override fun deleteVolunteerById(volunteerId: UUID) {
+        volunteerJpaRepository.deleteById(volunteerId)
+    }
+
     override fun queryVolunteerById(volunteerId: UUID): Volunteer? = volunteerMapper.toDomain(
         volunteerJpaRepository.findById(volunteerId).getOrNull()
     )

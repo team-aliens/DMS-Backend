@@ -16,10 +16,7 @@ import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
-import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.*
 import java.util.UUID
 
 @Validated
@@ -30,6 +27,7 @@ class VolunteerWebAdapter(
     private val unapplyVolunteerUseCase: UnapplyVolunteerUseCase,
     private val createVolunteerUseCase: CreateVolunteerUseCase,
     private val updateVolunteerUseCase: UpdateVolunteerUseCase,
+    private val deleteVolunteerUseCase: DeleteVolunteerUseCase,
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,8 +60,8 @@ class VolunteerWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{volunteer-id}")
-    fun update(@Valid @RequestBody updateVolunteerWebRequest: UpdateVolunteerWebRequest,
-               @PathVariable("volunteer-id") @NotNull volunteerApplicationId: UUID) {
+    fun updateVolunteer(@Valid @RequestBody updateVolunteerWebRequest: UpdateVolunteerWebRequest,
+               @PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
         updateVolunteerUseCase.execute(
             UpdateVolunteerRequest(
                 name = updateVolunteerWebRequest.name,
@@ -73,8 +71,14 @@ class VolunteerWebAdapter(
                 score = updateVolunteerWebRequest.score,
                 optionalScore = updateVolunteerWebRequest.optionalScore,
                 maxApplicants = updateVolunteerWebRequest.maxApplicants,
-                volunteerId = volunteerApplicationId
+                volunteerId = volunteerId
             )
         )
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{volunteer-id}")
+    fun deleteVolunteer(@PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
+        deleteVolunteerUseCase.execute(volunteerId)
     }
 }
