@@ -39,8 +39,9 @@ class VolunteerWebAdapter(
         unapplyVolunteerUseCase.execute(volunteerApplicationId)
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun create(@Valid @RequestBody createVolunteerWebRequest: CreateVolunteerWebRequest) {
+    fun createVolunteer(@Valid @RequestBody createVolunteerWebRequest: CreateVolunteerWebRequest) {
         createVolunteerUseCase.execute(
             CreateVolunteerRequest(
                 name = createVolunteerWebRequest.name,
