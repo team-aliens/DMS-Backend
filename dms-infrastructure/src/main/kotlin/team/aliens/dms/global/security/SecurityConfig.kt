@@ -190,6 +190,14 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.POST, "/bugs").hasAuthority(STUDENT.name)
 
                 // /volunteers
+                .requestMatchers(HttpMethod.POST, "/volunteers/volunteers").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.PATCH, "/volunteers/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/manage").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/{volunteer-id}/{student-id}/apply").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/volunteers/{volunteer-id}/{student-id}/reject").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/current").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.POST, "/volunteers/{volunteer-id}").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.DELETE, "/volunteers/{volunteer-application-id}").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
