@@ -17,7 +17,7 @@ class VolunteerApplicationJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BIINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val student: StudentJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
