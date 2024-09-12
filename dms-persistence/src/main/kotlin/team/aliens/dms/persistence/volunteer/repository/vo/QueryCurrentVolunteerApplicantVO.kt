@@ -6,7 +6,7 @@ import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 class QueryCurrentVolunteerApplicantVO @QueryProjection constructor(
     volunteerName: String,
     applicants: List<QueryVolunteerApplicantVO>
-) :  CurrentVolunteerApplicantVO(
+) : CurrentVolunteerApplicantVO(
     volunteerName = volunteerName,
     applicants = applicants
 )

@@ -25,8 +25,8 @@ import team.aliens.dms.domain.volunteer.usecase.DeleteVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.ManagerGetAllVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAppliedStudentUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
-import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryCurrentVolunteerApplicantsUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
