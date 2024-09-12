@@ -8,4 +8,5 @@ import java.util.UUID
 @Repository
 interface VolunteerJpaRepository : CrudRepository<VolunteerJpaEntity, UUID> {
 
+    fun findAllBySchoolId(schoolId: UUID): List<VolunteerJpaEntity>
 }

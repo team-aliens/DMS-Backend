@@ -44,4 +44,9 @@ class VolunteerPersistenceAdapter(
             }
             .mapNotNull { volunteerMapper.toDomain(it) }
     }
+
+    override fun queryAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> {
+        return volunteerJpaRepository.findAllBySchoolId(schoolId)
+            .map { volunteerMapper.toDomain(it)!! }
+    }
 }

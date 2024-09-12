@@ -28,4 +28,7 @@ class GetVolunteerServiceImpl(
 
     override fun getVolunteerApplicationsByStudentId(studentId: UUID): List<VolunteerApplication> =
         queryVolunteerApplicationPort.queryVolunteerApplicationsByStudentId(studentId)
+
+    override fun getAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> =
+        queryVolunteerPort.queryAllVolunteersBySchoolId(schoolId)
 }

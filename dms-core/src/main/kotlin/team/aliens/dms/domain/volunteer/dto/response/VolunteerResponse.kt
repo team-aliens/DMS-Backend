@@ -43,4 +43,23 @@ data class VolunteerResponse(
     val maxApplicants: Int,
     val sexCondition: Sex,
     val gradeCondition: GradeCondition
+) {
+    companion object {
+        fun of(volunteer: Volunteer): VolunteerResponse {
+            return VolunteerResponse(
+                id = volunteer.id,
+                name = volunteer.name,
+                content = volunteer.content,
+                score = volunteer.score,
+                optionalScore = volunteer.optionalScore,
+                maxApplicants = volunteer.maxApplicants,
+                sexCondition = volunteer.sexCondition,
+                gradeCondition = volunteer.gradeCondition
+            )
+        }
+    }
+}
+
+data class VolunteersResponse(
+    val volunteers: List<VolunteerResponse>
 )

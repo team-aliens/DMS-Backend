@@ -19,7 +19,17 @@ import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteerResponse
-import team.aliens.dms.domain.volunteer.usecase.*
+import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
+import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.DeleteVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.ManagerGetAllVolunteersUseCase
+import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
 import java.util.UUID
 
 @Validated
@@ -34,7 +44,8 @@ class VolunteerWebAdapter(
     private val approveVolunteerApplicationUseCase: ApproveVolunteerApplicationUseCase,
     private val rejectVolunteerApplicationUseCase: RejectVolunteerApplicationUseCase,
     private val queryAvailableVolunteersUseCase: QueryAvailableVolunteersUseCase,
-    private val queryMyVolunteerApplicationUseCase: QueryMyVolunteerApplicationUseCase
+    private val queryMyVolunteerApplicationUseCase: QueryMyVolunteerApplicationUseCase,
+    private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -114,4 +125,8 @@ class VolunteerWebAdapter(
     fun rejectVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
-}
+
+    @GetMapping("/manager")
+    fun managerGetAllVolunteers(): VolunteersResponse {
+        return managerGetAllVolunteersUseCase.execute()
+    }
