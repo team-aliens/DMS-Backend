@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RequestBody
-import team.aliens.dms.domain.volunteer.dto.CreateVolunteerRequest
-import team.aliens.dms.domain.volunteer.dto.CreateVolunteerWebRequest
+import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
+import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase

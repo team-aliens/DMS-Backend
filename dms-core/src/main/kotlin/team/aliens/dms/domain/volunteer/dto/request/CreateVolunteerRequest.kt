@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.volunteer.dto
+package team.aliens.dms.domain.volunteer.dto.request
 
 data class CreateVolunteerRequest(
     val name: String,

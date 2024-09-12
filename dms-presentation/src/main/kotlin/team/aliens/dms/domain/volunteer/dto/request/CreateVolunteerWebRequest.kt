@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.volunteer.dto
+package team.aliens.dms.domain.volunteer.dto.request
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
