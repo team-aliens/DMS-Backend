@@ -4,18 +4,21 @@ import jakarta.validation.Valid
 import org.jetbrains.annotations.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.RequestBody
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
+import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteerResponse
 import team.aliens.dms.domain.volunteer.usecase.*
 import java.util.UUID
 
@@ -29,7 +32,9 @@ class VolunteerWebAdapter(
     private val updateVolunteerUseCase: UpdateVolunteerUseCase,
     private val deleteVolunteerUseCase: DeleteVolunteerUseCase,
     private val approveVolunteerApplicationUseCase: ApproveVolunteerApplicationUseCase,
-    private val rejectVolunteerApplicationUseCase: RejectVolunteerApplicationUseCase
+    private val rejectVolunteerApplicationUseCase: RejectVolunteerApplicationUseCase,
+    private val queryAvailableVolunteersUseCase: QueryAvailableVolunteersUseCase,
+    private val queryMyVolunteerApplicationUseCase: QueryMyVolunteerApplicationUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,6 +47,18 @@ class VolunteerWebAdapter(
     @DeleteMapping("/cancel/{volunteer-application-id}")
     fun unapplyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
         unapplyVolunteerUseCase.execute(volunteerApplicationId)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/my")
+    fun getMyVolunteerApplications(): QueryMyVolunteerApplicationResponse {
+        return queryMyVolunteerApplicationUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    fun getAvailableVolunteers(): List<VolunteerResponse> {
+        return queryAvailableVolunteersUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,8 +79,10 @@ class VolunteerWebAdapter(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/{volunteer-id}")
-    fun updateVolunteer(@Valid @RequestBody updateVolunteerWebRequest: UpdateVolunteerWebRequest,
-               @PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
+    fun updateVolunteer(
+        @Valid @RequestBody updateVolunteerWebRequest: UpdateVolunteerWebRequest,
+        @PathVariable("volunteer-id") @NotNull volunteerId: UUID
+    ) {
         updateVolunteerUseCase.execute(
             UpdateVolunteerRequest(
                 name = updateVolunteerWebRequest.name,
