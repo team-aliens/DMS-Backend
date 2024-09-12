@@ -1,12 +1,12 @@
 package team.aliens.dms.persistence.volunteer
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.spi.VolunteerPort
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
 import team.aliens.dms.persistence.volunteer.repository.VolunteerJpaRepository
 import java.util.UUID
-import kotlin.jvm.optionals.getOrNull
 
 @Component
 class VolunteerPersistenceAdapter(
@@ -20,11 +20,13 @@ class VolunteerPersistenceAdapter(
         )
     )!!
 
-    override fun deleteVolunteerById(volunteerId: UUID) {
-        volunteerJpaRepository.deleteById(volunteerId)
+    override fun deleteVolunteer(volunteer: Volunteer) {
+        volunteerJpaRepository.delete(
+            volunteerMapper.toEntity(volunteer)
+        )
     }
 
     override fun queryVolunteerById(volunteerId: UUID): Volunteer? = volunteerMapper.toDomain(
-        volunteerJpaRepository.findById(volunteerId).getOrNull()
+        volunteerJpaRepository.findByIdOrNull(volunteerId)
     )
 }
