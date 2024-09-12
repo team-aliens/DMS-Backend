@@ -13,4 +13,3 @@ object VolunteerApplicationAlreadyAssigned : DmsException(
 object VolunteerNotFoundException : DmsException(
     VolunteerErrorCode.VOLUNTEER_NOT_FOUND
 )
-

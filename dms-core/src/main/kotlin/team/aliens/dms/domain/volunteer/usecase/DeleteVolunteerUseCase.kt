@@ -5,7 +5,7 @@ import team.aliens.dms.domain.volunteer.service.VolunteerService
 import java.util.UUID
 
 @UseCase
-class DeleteVolunteerUseCase (
+class DeleteVolunteerUseCase(
     private val volunteerService: VolunteerService
 ) {
 
