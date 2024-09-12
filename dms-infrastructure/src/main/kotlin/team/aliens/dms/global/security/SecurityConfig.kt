@@ -189,6 +189,12 @@ class SecurityConfig(
                 // /bugs
                 .requestMatchers(HttpMethod.POST, "/bugs").hasAuthority(STUDENT.name)
 
+                // /volunteers
+                .requestMatchers(HttpMethod.POST, "/volunteers/{volunteer-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/{volunteer-application-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/my").hasAuthority(STUDENT.name)
+
                 .anyRequest().denyAll()
             }
         http
