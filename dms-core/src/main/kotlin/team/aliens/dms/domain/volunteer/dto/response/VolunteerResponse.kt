@@ -2,7 +2,9 @@ package team.aliens.dms.domain.volunteer.dto.response
 
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.GradeCondition
+import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import java.util.UUID
 
 data class QueryMyVolunteerApplicationResponse(
