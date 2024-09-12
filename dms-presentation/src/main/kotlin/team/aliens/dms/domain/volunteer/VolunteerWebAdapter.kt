@@ -33,13 +33,13 @@ class VolunteerWebAdapter(
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{volunteer-application-id}")
+    @PostMapping("/apply/{volunteer-application-id}")
     fun applyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
         applyVolunteerUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{volunteer-application-id}")
+    @DeleteMapping("/cancel/{volunteer-application-id}")
     fun unapplyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
         unapplyVolunteerUseCase.execute(volunteerApplicationId)
     }

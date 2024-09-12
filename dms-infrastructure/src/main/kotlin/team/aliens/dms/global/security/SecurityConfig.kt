@@ -198,8 +198,8 @@ class SecurityConfig(
                 .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/{volunteer-id}/{student-id}/apply").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.DELETE, "/volunteers/volunteers/{volunteer-id}/{student-id}/reject").hasAuthority(MANAGER.name)
                 .requestMatchers(HttpMethod.GET, "/volunteers/volunteers/current").hasAuthority(MANAGER.name)
-                .requestMatchers(HttpMethod.POST, "/volunteers/{volunteer-id}").hasAuthority(STUDENT.name)
-                .requestMatchers(HttpMethod.DELETE, "/volunteers/{volunteer-application-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.POST, "/volunteers/apply/{volunteer-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/cancel/{volunteer-application-id}").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
                 .requestMatchers(HttpMethod.GET, "/volunteers/my").hasAuthority(STUDENT.name)
 
