@@ -28,6 +28,8 @@ class VolunteerWebAdapter(
     private val createVolunteerUseCase: CreateVolunteerUseCase,
     private val updateVolunteerUseCase: UpdateVolunteerUseCase,
     private val deleteVolunteerUseCase: DeleteVolunteerUseCase,
+    private val approveVolunteerApplicationUseCase: ApproveVolunteerApplicationUseCase,
+    private val rejectVolunteerApplicationUseCase: RejectVolunteerApplicationUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -80,5 +82,17 @@ class VolunteerWebAdapter(
     @DeleteMapping("/{volunteer-id}")
     fun deleteVolunteer(@PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
         deleteVolunteerUseCase.execute(volunteerId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/approve/{volunteer-application-id}")
+    fun approveVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
+        approveVolunteerApplicationUseCase.execute(volunteerApplicationId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/reject/{volunteer-application-id}")
+    fun rejectVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
+        rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 }
