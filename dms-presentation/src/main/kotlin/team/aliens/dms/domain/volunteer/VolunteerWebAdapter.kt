@@ -128,16 +128,19 @@ class VolunteerWebAdapter(
         rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/manager")
     fun managerGetAllVolunteers(): VolunteersResponse {
         return managerGetAllVolunteersUseCase.execute()
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{volunteer-id}")
     fun queryAppliedStudent(@PathVariable("volunteer-id") @NotNull volunteerId: UUID): VolunteerApplicantsResponse {
         return queryAppliedStudentUseCase.execute(volunteerId)
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/current")
     fun queryAppliedStudent(): CurrentVolunteerApplicantsResponse {
         return queryCurrentVolunteerApplicantsUseCase.execute()
