@@ -10,6 +10,7 @@ enum class VolunteerErrorCode(
 ) : ErrorProperty {
 
     VOLUNTEER_APPLICATION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Volunteer Application Not Found", 1),
+    VOLUNTEER_NOT_FOUND(ErrorStatus.NOT_FOUND, "Volunteer Not Found", 1),
 
     VOLUNTEER_APPLICATION_ALREADY_ASSIGNED(ErrorStatus.CONFLICT, "Volunteer Application Already Assigned", 1)
     ;
