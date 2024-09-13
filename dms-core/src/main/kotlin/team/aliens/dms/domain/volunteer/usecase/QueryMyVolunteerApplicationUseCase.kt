@@ -16,6 +16,8 @@ class QueryMyVolunteerApplicationUseCase(
 
         val volunteerApplications = volunteerService.getVolunteerApplicationsByStudentId(student.id)
 
-        return QueryMyVolunteerApplicationResponse.of(volunteerApplications)
+        val volunteers = volunteerService.getAllVolunteers()
+
+        return QueryMyVolunteerApplicationResponse.of(volunteerApplications, volunteers)
     }
 }

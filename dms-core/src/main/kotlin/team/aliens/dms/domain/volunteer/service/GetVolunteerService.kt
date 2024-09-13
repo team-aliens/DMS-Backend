@@ -21,4 +21,6 @@ interface GetVolunteerService {
     fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO>
 
     fun getAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO>
+
+    fun getAllVolunteers(): List<Volunteer>
 }

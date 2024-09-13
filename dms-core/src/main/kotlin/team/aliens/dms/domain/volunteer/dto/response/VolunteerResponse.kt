@@ -12,9 +12,13 @@ data class QueryMyVolunteerApplicationResponse(
     val volunteerApplications: List<VolunteerApplicationResponse>
 ) {
     companion object {
-        fun of(volunteerApplications: List<VolunteerApplication>): QueryMyVolunteerApplicationResponse {
+        fun of(volunteerApplications: List<VolunteerApplication>, volunteers: List<Volunteer>): QueryMyVolunteerApplicationResponse {
             return QueryMyVolunteerApplicationResponse(
-                volunteerApplications = volunteerApplications.map { VolunteerApplicationResponse.of(it) }
+                volunteerApplications = volunteerApplications.mapNotNull { application ->
+                    volunteers.find { it.id == application.volunteerId }?.let { volunteer ->
+                        VolunteerApplicationResponse.of(application, volunteer)
+                    }
+                }
             )
         }
     }
@@ -23,14 +27,16 @@ data class QueryMyVolunteerApplicationResponse(
 data class VolunteerApplicationResponse(
     val id: UUID,
     val volunteerId: UUID,
-    val approved: Boolean
+    val approved: Boolean,
+    val name: String,
 ) {
     companion object {
-        fun of(volunteerApplication: VolunteerApplication): VolunteerApplicationResponse {
+        fun of(volunteerApplication: VolunteerApplication, volunteer: Volunteer): VolunteerApplicationResponse {
             return VolunteerApplicationResponse(
                 id = volunteerApplication.id,
                 volunteerId = volunteerApplication.volunteerId,
-                approved = volunteerApplication.approved
+                approved = volunteerApplication.approved,
+                name = volunteer.name
             )
         }
     }
