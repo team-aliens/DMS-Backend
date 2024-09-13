@@ -3,11 +3,7 @@ package team.aliens.dms.domain.volunteer.usecase
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteerResponse
-<<<<<<< Updated upstream
-=======
 import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteersResponse
-import team.aliens.dms.domain.volunteer.dto.response.VolunteerResponse
->>>>>>> Stashed changes
 import team.aliens.dms.domain.volunteer.service.VolunteerService
 
 @ReadOnlyUseCase
