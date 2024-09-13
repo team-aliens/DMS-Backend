@@ -6,6 +6,4 @@ import team.aliens.dms.persistence.volunteer.entity.VolunteerApplicationJpaEntit
 import java.util.UUID
 
 @Repository
-interface VolunteerApplicationJpaRepository : CrudRepository<VolunteerApplicationJpaEntity, UUID> {
-
-}
+interface VolunteerApplicationJpaRepository : CrudRepository<VolunteerApplicationJpaEntity, UUID>
