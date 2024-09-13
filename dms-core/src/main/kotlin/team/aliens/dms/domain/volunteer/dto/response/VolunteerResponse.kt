@@ -100,3 +100,25 @@ data class CurrentVolunteerApplicantResponse(
 data class CurrentVolunteerApplicantsResponse(
     val volunteers: List<CurrentVolunteerApplicantResponse>
 )
+
+data class AvailableVolunteerResponse(
+    val id: UUID,
+    val name: String,
+    val content: String,
+    val score: Int,
+    val optionalScore: Int,
+    val maxApplicants: Int
+) {
+    companion object {
+        fun of(volunteer: Volunteer): AvailableVolunteerResponse {
+            return AvailableVolunteerResponse(
+                id = volunteer.id,
+                name = volunteer.name,
+                content = volunteer.content,
+                score = volunteer.score,
+                optionalScore = volunteer.optionalScore,
+                maxApplicants = volunteer.maxApplicants
+            )
+        }
+    }
+}
