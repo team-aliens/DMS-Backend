@@ -12,7 +12,10 @@ data class QueryMyVolunteerApplicationResponse(
     val volunteerApplications: List<VolunteerApplicationResponse>
 ) {
     companion object {
-        fun of(volunteerApplications: List<VolunteerApplication>, volunteers: List<Volunteer>): QueryMyVolunteerApplicationResponse {
+        fun of(
+            volunteerApplications: List<VolunteerApplication>,
+            volunteers: List<Volunteer>
+        ): QueryMyVolunteerApplicationResponse {
             return QueryMyVolunteerApplicationResponse(
                 volunteerApplications = volunteerApplications.mapNotNull { application ->
                     volunteers.find { it.id == application.volunteerId }?.let { volunteer ->
