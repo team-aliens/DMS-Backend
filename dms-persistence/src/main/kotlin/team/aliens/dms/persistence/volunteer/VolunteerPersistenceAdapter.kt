@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.volunteer
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.spi.VolunteerPort
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
@@ -40,11 +41,12 @@ class VolunteerPersistenceAdapter(
         val volunteers = volunteerJpaRepository.findAll()
         return volunteers
             .filter { volunteer ->
-                volunteer.gradeCondition.grades.contains(student.grade) && volunteer.sexCondition == student.sex
+                (volunteer.gradeCondition.grades.contains(student.grade) &&
+                    (volunteer.sexCondition == student.sex || volunteer.sexCondition == Sex.ALL))
             }
             .mapNotNull { volunteerMapper.toDomain(it) }
     }
-
+    
     override fun queryAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> {
         return volunteerJpaRepository.findAllBySchoolId(schoolId)
             .map { volunteerMapper.toDomain(it)!! }
