@@ -9,7 +9,7 @@ import java.lang.reflect.Method
 @Configuration
 class CustomKeyGenerator : KeyGenerator {
 
-    //메서드 명을 사용해 key를 만들어준다.
+    // 메서드 명을 사용해 key를 만들어준다.
     override fun generate(target: Any, method: Method, vararg params: Any): Any {
         return method.name + SimpleKeyGenerator.generateKey(*params)
     }
