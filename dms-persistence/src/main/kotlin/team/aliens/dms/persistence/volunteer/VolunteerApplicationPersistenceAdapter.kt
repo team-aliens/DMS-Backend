@@ -70,7 +70,8 @@ class VolunteerApplicationPersistenceAdapter(
     override fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> {
         return queryFactory
             .selectFrom(volunteerApplicationJpaEntity)
-            .leftJoin(volunteerJpaEntity)
+            .join(volunteerApplicationJpaEntity.volunteer, volunteerJpaEntity)
+            .join(volunteerApplicationJpaEntity.student, studentJpaEntity)
             .where(
                 volunteerJpaEntity.school.id.eq(schoolId),
                 volunteerApplicationJpaEntity.approved.eq(true)
