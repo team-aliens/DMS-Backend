@@ -131,3 +131,7 @@ data class AvailableVolunteerResponse(
         }
     }
 }
+
+data class AvailableVolunteersResponse(
+    val volunteers: List<AvailableVolunteerResponse>
+)

@@ -70,7 +70,7 @@ class VolunteerWebAdapter(
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    fun getAvailableVolunteers(): List<AvailableVolunteerResponse> {
+    fun getAvailableVolunteers(): AvailableVolunteersResponse {
         return queryAvailableVolunteersUseCase.execute()
     }
 
