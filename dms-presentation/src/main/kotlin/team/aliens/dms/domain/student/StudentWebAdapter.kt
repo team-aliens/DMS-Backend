@@ -5,6 +5,9 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -56,6 +59,7 @@ import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentRoomByFileUseCase
 import java.util.UUID
 
+@CacheConfig(cacheNames = ["student"])
 @Validated
 @RequestMapping("/students")
 @RestController
@@ -157,6 +161,7 @@ class StudentWebAdapter(
         return checkStudentGcnUseCase.execute(request)
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping("/profile")
     fun updateProfile(@RequestBody @Valid webRequest: UpdateStudentProfileWebRequest) {
@@ -168,6 +173,7 @@ class StudentWebAdapter(
         return studentMyPageUseCase.execute()
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     fun withdrawal() {
@@ -181,6 +187,7 @@ class StudentWebAdapter(
         return response.file
     }
 
+    @Cacheable
     @GetMapping("/manager")
     fun managerGetAllStudents(
         @RequestParam(required = false) name: String?,
@@ -202,29 +209,34 @@ class StudentWebAdapter(
         )
     }
 
+    @Cacheable
     @GetMapping("/{student-id}")
     fun getStudentDetails(@PathVariable("student-id") @NotNull studentId: UUID): StudentDetailsResponse {
         return queryStudentDetailsUseCase.execute(studentId)
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{student-id}")
     fun deleteStudent(@PathVariable("student-id") @NotNull studentId: UUID) {
         removeStudentUseCase.execute(studentId)
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/file/room")
     fun updateStudentRoomByFile(@RequestPart @NotNull file: MultipartFile?) {
         updateStudentRoomByFileUseCase.execute(file!!.toFile())
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping("/file/gcn")
     fun updateStudentGcnByFile(@RequestPart @NotNull file: MultipartFile?) {
         updateStudentGcnByFileUseCase.execute(file!!.toFile())
     }
 
+    @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/verified-student")
     fun importVerifiedStudentFromExcel(@RequestPart @NotNull file: MultipartFile?) {
@@ -233,6 +245,7 @@ class StudentWebAdapter(
         )
     }
 
+    @Cacheable
     @GetMapping
     fun studentGetAllStudents(@RequestParam(required = false) name: String?): StudentsResponse {
         return studentGetAllStudentsUseCase.execute(name)

@@ -86,4 +86,5 @@ object Dependencies {
     // slack
     const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
 
+    const val CACHE = "org.springframework.boot:spring-boot-starter-cache"
 }
