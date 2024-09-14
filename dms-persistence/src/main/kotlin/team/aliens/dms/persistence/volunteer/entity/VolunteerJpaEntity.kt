@@ -37,11 +37,11 @@ class VolunteerJpaEntity(
 
     @Column(columnDefinition = "VARCHAR(6)", nullable = false)
     @Enumerated(EnumType.STRING)
-    val sexCondition: Sex,
+    val availableSex: Sex,
 
     @Column(columnDefinition = "VARCHAR(14)", nullable = false)
     @Enumerated(EnumType.STRING)
-    val gradeCondition: GradeCondition,
+    val availableGrade: GradeCondition,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)

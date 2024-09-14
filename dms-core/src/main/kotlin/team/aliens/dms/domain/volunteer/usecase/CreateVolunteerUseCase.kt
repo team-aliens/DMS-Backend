@@ -20,8 +20,8 @@ class CreateVolunteerUseCase(
         val volunteer = Volunteer(
             name = createVolunteerRequest.name,
             content = createVolunteerRequest.content,
-            sexCondition = Sex.valueOf(createVolunteerRequest.sexCondition),
-            gradeCondition = GradeCondition.valueOf(createVolunteerRequest.gradeCondition),
+            availableSex = Sex.valueOf(createVolunteerRequest.availableSex),
+            availableGrade = GradeCondition.valueOf(createVolunteerRequest.availableGrade),
             score = createVolunteerRequest.score,
             optionalScore = createVolunteerRequest.optionalScore,
             maxApplicants = createVolunteerRequest.maxApplicants,

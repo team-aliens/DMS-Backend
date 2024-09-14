@@ -5,8 +5,8 @@ import java.util.UUID
 data class UpdateVolunteerRequest(
     val name: String,
     val content: String,
-    val sexCondition: String,
-    val gradeCondition: String,
+    val availableSex: String,
+    val availableGrade: String,
     val score: Int,
     val optionalScore: Int,
     val maxApplicants: Int,

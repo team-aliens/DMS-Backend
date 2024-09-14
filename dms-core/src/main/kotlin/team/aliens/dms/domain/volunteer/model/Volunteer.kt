@@ -20,9 +20,9 @@ data class Volunteer(
 
     val maxApplicants: Int,
 
-    val sexCondition: Sex,
+    val availableSex: Sex,
 
-    val gradeCondition: GradeCondition,
+    val availableGrade: GradeCondition,
 
     override val schoolId: UUID
 ) : SchoolIdDomain

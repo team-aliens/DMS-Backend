@@ -14,11 +14,11 @@ data class UpdateVolunteerWebRequest(
 
     @field:Size(min = 1, max = 6)
     @field:NotBlank
-    val sexCondition: String,
+    val availableSex: String,
 
     @field:Size(min = 1, max = 14)
     @field:NotBlank
-    val gradeCondition: String,
+    val availableGrade: String,
 
     @field:NotNull
     val score: Int,

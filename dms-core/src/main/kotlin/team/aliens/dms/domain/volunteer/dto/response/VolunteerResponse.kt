@@ -52,8 +52,8 @@ data class VolunteerResponse(
     val score: Int,
     val optionalScore: Int,
     val maxApplicants: Int,
-    val sexCondition: Sex,
-    val gradeCondition: GradeCondition
+    val availableSex: Sex,
+    val availableGrade: GradeCondition
 ) {
     companion object {
         fun of(volunteer: Volunteer): VolunteerResponse {
@@ -64,8 +64,8 @@ data class VolunteerResponse(
                 score = volunteer.score,
                 optionalScore = volunteer.optionalScore,
                 maxApplicants = volunteer.maxApplicants,
-                sexCondition = volunteer.sexCondition,
-                gradeCondition = volunteer.gradeCondition
+                availableSex = volunteer.availableSex,
+                availableGrade = volunteer.availableGrade
             )
         }
     }

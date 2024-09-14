@@ -18,8 +18,8 @@ class UpdateVolunteerUseCase(
             currentVolunteer.copy(
                 name = updateVolunteerRequest.name,
                 content = updateVolunteerRequest.content,
-                sexCondition = Sex.valueOf(updateVolunteerRequest.sexCondition),
-                gradeCondition = GradeCondition.valueOf(updateVolunteerRequest.gradeCondition),
+                availableSex = Sex.valueOf(updateVolunteerRequest.availableSex),
+                availableGrade = GradeCondition.valueOf(updateVolunteerRequest.availableGrade),
                 score = updateVolunteerRequest.score,
                 optionalScore = updateVolunteerRequest.optionalScore,
                 maxApplicants = updateVolunteerRequest.maxApplicants,

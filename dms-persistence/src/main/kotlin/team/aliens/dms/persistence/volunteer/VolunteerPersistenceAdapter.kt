@@ -42,8 +42,8 @@ class VolunteerPersistenceAdapter(
         return volunteers
             .filter { volunteer ->
                 (
-                    volunteer.gradeCondition.grades.contains(student.grade) &&
-                        (volunteer.sexCondition == student.sex || volunteer.sexCondition == Sex.ALL)
+                    volunteer.availableGrade.grades.contains(student.grade) &&
+                        (volunteer.availableSex == student.sex || volunteer.availableSex == Sex.ALL)
                     )
             }
             .mapNotNull { volunteerMapper.toDomain(it) }
