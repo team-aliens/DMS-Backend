@@ -42,7 +42,7 @@ class VolunteerApplicationPersistenceAdapter(
                 )
             )
             .from(volunteerApplicationJpaEntity)
-            .leftJoin(studentJpaEntity)
+            .join(studentJpaEntity, volunteerApplicationJpaEntity.student)
             .where(
                 volunteerApplicationJpaEntity.volunteer.id.eq(volunteerId),
                 volunteerApplicationJpaEntity.approved.eq(false)
