@@ -5,6 +5,7 @@ import com.querydsl.core.group.GroupBy.list
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.VolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
@@ -13,6 +14,7 @@ import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEn
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerApplicationJpaEntity.volunteerApplicationJpaEntity
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerJpaEntity.volunteerJpaEntity
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerApplicationMapper
+import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
 import team.aliens.dms.persistence.volunteer.repository.VolunteerApplicationJpaRepository
 import team.aliens.dms.persistence.volunteer.repository.vo.QQueryCurrentVolunteerApplicantVO
 import team.aliens.dms.persistence.volunteer.repository.vo.QQueryVolunteerApplicantVO
@@ -22,7 +24,8 @@ import java.util.UUID
 class VolunteerApplicationPersistenceAdapter(
     private val volunteerApplicationMapper: VolunteerApplicationMapper,
     private val volunteerApplicationRepository: VolunteerApplicationJpaRepository,
-    private val queryFactory: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory,
+    private val volunteerMapper: VolunteerMapper
 ) : VolunteerApplicationPort {
 
     override fun queryVolunteerApplicationById(volunteerApplicationId: UUID) =
@@ -93,5 +96,21 @@ class VolunteerApplicationPersistenceAdapter(
                         )
                     )
             )
+    }
+
+    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>> {
+        val result = queryFactory
+            .select(volunteerApplicationJpaEntity, volunteerJpaEntity)
+            .from(volunteerApplicationJpaEntity)
+            .join(volunteerApplicationJpaEntity.volunteer, volunteerJpaEntity)
+            .where(volunteerApplicationJpaEntity.student.id.eq(studentId))
+            .fetch()
+
+        return result.map { tuple ->
+            val volunteerApplication = volunteerApplicationMapper.toDomain(tuple[volunteerApplicationJpaEntity])!!
+            val volunteer = volunteerMapper.toDomain(tuple[volunteerJpaEntity])!!
+
+            volunteerApplication to volunteer
+        }
     }
 }

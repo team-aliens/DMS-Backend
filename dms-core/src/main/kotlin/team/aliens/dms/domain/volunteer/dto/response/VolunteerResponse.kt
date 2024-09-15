@@ -13,14 +13,11 @@ data class QueryMyVolunteerApplicationResponse(
 ) {
     companion object {
         fun of(
-            volunteerApplications: List<VolunteerApplication>,
-            volunteers: List<Volunteer>
+            applicationsWithVolunteers: List<Pair<VolunteerApplication, Volunteer>>
         ): QueryMyVolunteerApplicationResponse {
             return QueryMyVolunteerApplicationResponse(
-                volunteerApplications = volunteerApplications.mapNotNull { application ->
-                    volunteers.find { it.id == application.volunteerId }?.let { volunteer ->
-                        VolunteerApplicationResponse.of(application, volunteer)
-                    }
+                volunteerApplications = applicationsWithVolunteers.map { (application, volunteer) ->
+                    VolunteerApplicationResponse.of(application, volunteer)
                 }
             )
         }
