@@ -15,7 +15,7 @@ class QueryAvailableVolunteersUseCase(
     fun execute(): AvailableVolunteersResponse {
         val student = studentService.getCurrentStudent()
 
-        val availableVolunteers = volunteerService.getVolunteerByCondition(student.id)
+        val availableVolunteers = volunteerService.getVolunteerByStudentId(student.id)
 
         return AvailableVolunteersResponse(
             availableVolunteers

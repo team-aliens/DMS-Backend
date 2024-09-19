@@ -25,8 +25,8 @@ class GetVolunteerServiceImpl(
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
 
-    override fun getVolunteerByCondition(studentId: UUID): List<Volunteer> =
-        queryVolunteerPort.queryVolunteerByCondition(studentId)
+    override fun getVolunteerByStudentId(studentId: UUID): List<Volunteer> =
+        queryVolunteerPort.queryVolunteerByStudentId(studentId)
 
     override fun getVolunteerApplicationsByStudentId(studentId: UUID): List<VolunteerApplication> =
         queryVolunteerApplicationPort.queryVolunteerApplicationsByStudentId(studentId)

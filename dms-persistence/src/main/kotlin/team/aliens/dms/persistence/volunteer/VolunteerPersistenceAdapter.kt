@@ -34,7 +34,7 @@ class VolunteerPersistenceAdapter(
         volunteerJpaRepository.findByIdOrNull(volunteerId)
     )
 
-    override fun queryVolunteerByCondition(studentId: UUID): List<Volunteer> {
+    override fun queryVolunteerByStudentId(studentId: UUID): List<Volunteer> {
         val student = studentRepository.findById(studentId)
             .orElseThrow { throw StudentNotFoundException }
 
