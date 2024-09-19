@@ -66,10 +66,6 @@ class VolunteerApplicationPersistenceAdapter(
         )
     }
 
-    override fun queryVolunteerApplicationsByStudentId(studentId: UUID) =
-        volunteerApplicationRepository.findByStudentId(studentId)
-            .mapNotNull { volunteerApplicationMapper.toDomain(it) }
-
     override fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> {
         return queryFactory
             .selectFrom(volunteerApplicationJpaEntity)
