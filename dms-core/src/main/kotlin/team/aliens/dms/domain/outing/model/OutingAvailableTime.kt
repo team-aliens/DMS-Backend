@@ -25,7 +25,6 @@ data class OutingAvailableTime(
 ) : SchoolIdDomain {
 
     fun checkAvailable(
-        dayOfWeek: DayOfWeek,
         outingTime: LocalTime,
         arrivalTime: LocalTime,
     ) {
