@@ -12,9 +12,7 @@ class RejectVolunteerApplicationUseCase(
     fun execute(volunteerApplicationId: UUID) {
         val currentVolunteerApplication = volunteerService.getVolunteerApplicationById(volunteerApplicationId)
 
-        currentVolunteerApplication.apply {
-            checkCancelable(currentVolunteerApplication.approved)
-        }
+        currentVolunteerApplication.checkIsNotApproved()
 
         volunteerService.deleteVolunteerApplication(currentVolunteerApplication)
     }

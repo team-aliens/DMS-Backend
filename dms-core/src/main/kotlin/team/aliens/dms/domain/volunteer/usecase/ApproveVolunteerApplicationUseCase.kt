@@ -13,6 +13,8 @@ class ApproveVolunteerApplicationUseCase(
 
         val currentVolunteerApplication = volunteerService.getVolunteerApplicationById(volunteerApplicationId)
 
+        currentVolunteerApplication.checkIsNotApproved()
+
         volunteerService.saveVolunteerApplication(
             currentVolunteerApplication.copy(
                 approved = true

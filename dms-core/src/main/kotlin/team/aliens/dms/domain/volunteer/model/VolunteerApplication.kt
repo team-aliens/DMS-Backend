@@ -16,13 +16,13 @@ data class VolunteerApplication(
 
     val approved: Boolean,
 ) {
-    fun checkCancelable(approved: Boolean) {
+    fun checkIsNotApproved() {
         if (approved) {
             throw VolunteerApplicationAlreadyAssigned
         }
     }
 
-    fun checkExcludable(approved: Boolean) {
+    fun checkIsApproved() {
         if (!approved) {
             throw VolunteerApplicationNotAssigned
         }

@@ -12,9 +12,7 @@ class ExcludeVolunteerApplicationUseCase(
     fun execute(volunteerApplicationId: UUID) {
         val currentVolunteerApplication = volunteerService.getVolunteerApplicationById(volunteerApplicationId)
 
-        currentVolunteerApplication.apply {
-            checkExcludable(currentVolunteerApplication.approved)
-        }
+        currentVolunteerApplication.checkIsApproved()
 
         volunteerService.deleteVolunteerApplication(currentVolunteerApplication)
     }
