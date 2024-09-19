@@ -17,7 +17,11 @@ import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
-import team.aliens.dms.domain.volunteer.dto.response.*
+import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteersResponse
+import team.aliens.dms.domain.volunteer.dto.response.CurrentVolunteerApplicantsResponse
+import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteerApplicantsResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase
