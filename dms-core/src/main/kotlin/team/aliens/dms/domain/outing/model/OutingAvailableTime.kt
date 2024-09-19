@@ -25,11 +25,10 @@ data class OutingAvailableTime(
 ) : SchoolIdDomain {
 
     fun checkAvailable(
-        dayOfWeek: DayOfWeek,
         outingTime: LocalTime,
         arrivalTime: LocalTime,
     ) {
-        if (this.dayOfWeek != dayOfWeek ||
+        if (
             this.outingTime.isAfter(outingTime) ||
             this.arrivalTime.isBefore(arrivalTime)
         ) {
