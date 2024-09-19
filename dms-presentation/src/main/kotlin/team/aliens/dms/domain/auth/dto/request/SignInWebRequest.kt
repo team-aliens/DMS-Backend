@@ -13,6 +13,6 @@ data class SignInWebRequest(
     @field:Size(min = 8, max = 20)
     val password: String,
 
-    val deviceToken: String = "default"
+    val deviceToken: String?
 
 )

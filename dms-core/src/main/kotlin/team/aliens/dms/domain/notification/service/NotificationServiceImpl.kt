@@ -8,6 +8,7 @@ import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.CommandTopicSubscriptionPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
+import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @Service
@@ -16,6 +17,7 @@ class NotificationServiceImpl(
     private val queryUserPort: QueryUserPort,
     private val commandTopicSubscriptionPort: CommandTopicSubscriptionPort,
     private val notificationOfUserPort: CommandNotificationOfUserPort,
+    private val queryTopicSubscriptionPort: QueryTopicSubscriptionPort,
     getNotificationService: GetNotificationService,
     checkNotificationService: CheckNotificationService,
     commandNotificationService: CommandNotificationService
@@ -117,5 +119,26 @@ class NotificationServiceImpl(
         notificationPort.sendByTopic(
             notification = notification
         )
+    }
+
+    override fun toggleSubscription(token: String, topic: Topic) {
+        val deviceToken = this.getDeviceTokenByToken(token)
+        val currentSubscribe = queryTopicSubscriptionPort.queryDeviceTokenIdAndTopic(deviceToken.id, topic)
+
+        currentSubscribe?.let {
+            if (it.isSubscribed) {
+                notificationPort.unsubscribeTopic(token, topic)
+            } else {
+                notificationPort.subscribeTopic(token, topic)
+            }
+
+            commandTopicSubscriptionPort.saveTopicSubscription(
+                TopicSubscription(
+                    deviceTokenId = deviceToken.id,
+                    topic = topic,
+                    isSubscribed = !it.isSubscribed
+                )
+            )
+        }
     }
 }

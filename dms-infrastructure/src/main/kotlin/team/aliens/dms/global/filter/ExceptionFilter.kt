@@ -11,10 +11,12 @@ import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.global.error.ErrorResponse
 import team.aliens.dms.global.error.GlobalErrorCode
+import team.aliens.dms.thirdparty.slack.SlackAdapter
 import java.nio.charset.StandardCharsets
 
 class ExceptionFilter(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val slackAdapter: SlackAdapter
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -37,6 +39,7 @@ class ExceptionFilter(
                 }
                 else -> {
                     errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
+                    slackAdapter.sendServerBug(request, response, e)
                     Sentry.captureException(e)
                 }
             }

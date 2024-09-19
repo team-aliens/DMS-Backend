@@ -1,6 +1,7 @@
 package team.aliens.dms.persistence.notification
 
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 import team.aliens.dms.persistence.notification.mapper.TopicSubscriptionMapper
@@ -31,7 +32,13 @@ class TopicSubscriptionPersistenceAdapter(
         topicSubscriptionRepository.deleteAllByDeviceTokenId(deviceTokenId)
     }
 
-    override fun queryTopicSubscriptionsByDeviceTokenId(deviceTokenId: UUID) =
-        topicSubscriptionRepository.findByDeviceTokenId(deviceTokenId)
+    override fun queryTopicSubscriptionsByDeviceTokenId(deviceTokenId: UUID): List<TopicSubscription> {
+        return topicSubscriptionRepository.findByDeviceTokenId(deviceTokenId)
             .map { topicSubscriptionMapper.toDomain(it)!! }
+    }
+
+    override fun queryDeviceTokenIdAndTopic(deviceTokenId: UUID, topic: Topic): TopicSubscription? {
+        return topicSubscriptionRepository.findById_DeviceTokenIdAndId_Topic(deviceTokenId, topic)
+            ?.let { topicSubscriptionMapper.toDomain(it) }
+    }
 }

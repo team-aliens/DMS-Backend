@@ -48,7 +48,7 @@ fcm:
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
-  access-exp: ${ACCESS_EXP:3600}
+  access-exp: 120
   refresh-exp: ${REFRESH_EXP:1205600}
 
 open-feign:
@@ -79,3 +79,6 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+slack:
+  url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}

@@ -43,8 +43,8 @@ class CheckOutingServiceImpl(
         arrivalTime: LocalTime
     ) {
         queryOutingAvailableTimePort.queryOutingAvailableTimeByDayOfWeek(outingDate.dayOfWeek)
-            ?.checkAvailable(outingDate.dayOfWeek, outingTime, arrivalTime)
-            ?: throw OutingAvailableTimeMismatchException
+            ?.checkAvailable(outingTime, arrivalTime)
+            ?:throw OutingAvailableTimeMismatchException
     }
 
     override fun checkOutingTypeExists(outingType: OutingType) {

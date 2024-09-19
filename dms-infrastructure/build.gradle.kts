@@ -32,6 +32,9 @@ dependencies {
     implementation(Dependencies.AWS_SES)
     implementation(Dependencies.SPRING_AWS)
 
+    // slack
+    implementation(Dependencies.SLACK)
+
     // configuration
     kapt(Dependencies.CONFIGURATION_PROCESSOR)
 
@@ -56,6 +59,9 @@ dependencies {
 
     // notification
     implementation(Dependencies.FCM)
+
+    //cache
+    implementation(Dependencies.CACHE)
 }
 
 tasks.getByName<Jar>("jar") {

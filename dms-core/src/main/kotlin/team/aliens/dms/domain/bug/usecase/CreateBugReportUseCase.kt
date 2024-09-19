@@ -20,13 +20,15 @@ class CreateBugReportUseCase(
 
         val attachmentUrls = request.attachmentUrls ?: emptyList()
 
-        bugService.saveBugReport(
-            BugReport(
-                studentId = student.id,
-                content = request.content,
-                developmentArea = DevelopmentArea.valueOf(request.developmentArea),
-                createdAt = LocalDateTime.now(),
-                attachmentUrls = BugAttachment(attachmentUrls)
+        bugService.sendBugReport(
+            bugService.saveBugReport(
+                BugReport(
+                    studentId = student.id,
+                    content = request.content,
+                    developmentArea = DevelopmentArea.valueOf(request.developmentArea),
+                    createdAt = LocalDateTime.now(),
+                    attachmentUrls = BugAttachment(attachmentUrls)
+                )
             )
         )
     }

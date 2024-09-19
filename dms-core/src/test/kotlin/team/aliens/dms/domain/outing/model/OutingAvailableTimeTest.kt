@@ -21,21 +21,8 @@ class OutingAvailableTimeTest : DescribeSpec({
             it("외출 신청이 가능하다") {
                 shouldNotThrowAny {
                     outingAvailableTime.checkAvailable(
-                        dayOfWeek = DayOfWeek.SUNDAY,
                         outingTime = LocalTime.of(12, 0, 0),
                         arrivalTime = LocalTime.of(20, 30, 0)
-                    )
-                }
-            }
-        }
-
-        context("외출하는 날이 아닐 때 외출 신청을 하면") {
-            it("예외가 발생한다") {
-                shouldThrow<OutingAvailableTimeMismatchException> {
-                    outingAvailableTime.checkAvailable(
-                        dayOfWeek = DayOfWeek.SATURDAY,
-                        outingTime = LocalTime.of(14, 0, 0),
-                        arrivalTime = LocalTime.of(20, 0, 0)
                     )
                 }
             }
@@ -45,7 +32,6 @@ class OutingAvailableTimeTest : DescribeSpec({
             it("예외가 발생한다") {
                 shouldThrow<OutingAvailableTimeMismatchException> {
                     outingAvailableTime.checkAvailable(
-                        dayOfWeek = DayOfWeek.SATURDAY,
                         outingTime = LocalTime.of(11, 59, 59),
                         arrivalTime = LocalTime.of(20, 0, 0)
                     )
@@ -57,7 +43,6 @@ class OutingAvailableTimeTest : DescribeSpec({
             it("예외가 발생한다") {
                 shouldThrow<OutingAvailableTimeMismatchException> {
                     outingAvailableTime.checkAvailable(
-                        dayOfWeek = DayOfWeek.SATURDAY,
                         outingTime = LocalTime.of(14, 0, 0),
                         arrivalTime = LocalTime.of(20, 30, 1)
                     )
