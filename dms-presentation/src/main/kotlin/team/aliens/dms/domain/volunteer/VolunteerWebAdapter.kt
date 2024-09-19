@@ -129,13 +129,13 @@ class VolunteerWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/reject/{volunteer-application-id}")
+    @DeleteMapping("/reject/{volunteer-application-id}")
     fun rejectVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/exclude/{volunteer-application-id}")
+    @DeleteMapping("/exclude/{volunteer-application-id}")
     fun excludeVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         excludeVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }

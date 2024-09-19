@@ -45,7 +45,7 @@ class VolunteerApplicationPersistenceAdapter(
                 )
             )
             .from(volunteerApplicationJpaEntity)
-            .join(studentJpaEntity, volunteerApplicationJpaEntity.student)
+            .join(volunteerApplicationJpaEntity.student, studentJpaEntity)
             .where(
                 volunteerApplicationJpaEntity.volunteer.id.eq(volunteerId),
                 volunteerApplicationJpaEntity.approved.eq(false)
