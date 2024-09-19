@@ -28,7 +28,10 @@ data class OutingAvailableTime(
         outingTime: LocalTime,
         arrivalTime: LocalTime,
     ) {
-        if (this.outingTime.isAfter(outingTime) || this.arrivalTime.isBefore(arrivalTime)) {
+        if (
+            this.outingTime.isAfter(outingTime) ||
+            this.arrivalTime.isBefore(arrivalTime)
+        ) {
             throw OutingAvailableTimeMismatchException
         }
     }
