@@ -21,8 +21,8 @@ class VolunteerMapper(
                 score = it.score,
                 optionalScore = it.optionalScore,
                 maxApplicants = it.maxApplicants,
-                sexCondition = it.sexCondition,
-                gradeCondition = it.gradeCondition,
+                availableSex = it.availableSex,
+                availableGrade = it.availableGrade,
                 schoolId = it.school!!.id!!
             )
         }
@@ -37,8 +37,8 @@ class VolunteerMapper(
             score = domain.score,
             optionalScore = domain.optionalScore,
             maxApplicants = domain.maxApplicants,
-            sexCondition = domain.sexCondition,
-            gradeCondition = domain.gradeCondition,
+            availableSex = domain.availableSex,
+            availableGrade = domain.availableGrade,
             school = school
         )
     }

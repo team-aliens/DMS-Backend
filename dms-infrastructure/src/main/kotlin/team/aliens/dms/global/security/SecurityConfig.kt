@@ -189,6 +189,21 @@ class SecurityConfig(
                 // /bugs
                 .requestMatchers(HttpMethod.POST, "/bugs").hasAuthority(STUDENT.name)
 
+                // /volunteers
+                .requestMatchers(HttpMethod.POST, "/volunteers").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.PATCH, "/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/manage").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/{volunteer-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/apply/{volunteer-application-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/reject/{volunteer-application-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/exclude/{volunteer-application-id}").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/current").hasAuthority(MANAGER.name)
+                .requestMatchers(HttpMethod.POST, "/volunteers/apply/{volunteer-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.DELETE, "/volunteers/cancel/{volunteer-application-id}").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
+                .requestMatchers(HttpMethod.GET, "/volunteers/my/application").hasAuthority(STUDENT.name)
+
                 .anyRequest().denyAll()
             }
         http
