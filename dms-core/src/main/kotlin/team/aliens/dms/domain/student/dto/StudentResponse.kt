@@ -99,7 +99,7 @@ data class StudentDetailsResponse(
 }
 
 data class StudentsResponse(
-    val students: List<StudentDetailsResponse>,
+    val students: List<StudentDetailsResponse> = emptyList(),
 ) {
     companion object {
         @JvmName("ofStudentWithTag")
