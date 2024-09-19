@@ -2,6 +2,7 @@ package team.aliens.dms.domain.volunteer.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationAlreadyAssigned
+import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotAssigned
 import java.util.UUID
 
 @Aggregate
@@ -18,6 +19,12 @@ data class VolunteerApplication(
     fun checkCancelable(approved: Boolean) {
         if (approved) {
             throw VolunteerApplicationAlreadyAssigned
+        }
+    }
+
+    fun checkExcludable(approved: Boolean) {
+        if (!approved) {
+            throw VolunteerApplicationNotAssigned
         }
     }
 }

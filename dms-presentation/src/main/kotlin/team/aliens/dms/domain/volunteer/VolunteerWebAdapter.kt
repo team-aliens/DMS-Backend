@@ -26,6 +26,7 @@ import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.DeleteVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.ExcludeVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.ManagerGetAllVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAppliedStudentUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
@@ -51,7 +52,8 @@ class VolunteerWebAdapter(
     private val queryMyVolunteerApplicationUseCase: QueryMyVolunteerApplicationUseCase,
     private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase,
     private val queryAppliedStudentUseCase: QueryAppliedStudentUseCase,
-    private val queryCurrentVolunteerApplicantsUseCase: QueryCurrentVolunteerApplicantsUseCase
+    private val queryCurrentVolunteerApplicantsUseCase: QueryCurrentVolunteerApplicantsUseCase,
+    private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -130,6 +132,12 @@ class VolunteerWebAdapter(
     @PostMapping("/reject/{volunteer-application-id}")
     fun rejectVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping("/exclude/{volunteer-application-id}")
+    fun excludeVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
+        excludeVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -10,6 +10,10 @@ object VolunteerApplicationAlreadyAssigned : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_ALREADY_ASSIGNED
 )
 
+object VolunteerApplicationNotAssigned : DmsException(
+    VolunteerErrorCode.VOLUNTEER_APPLICATION_NOT_ASSIGNED
+)
+
 object VolunteerNotFoundException : DmsException(
     VolunteerErrorCode.VOLUNTEER_NOT_FOUND
 )

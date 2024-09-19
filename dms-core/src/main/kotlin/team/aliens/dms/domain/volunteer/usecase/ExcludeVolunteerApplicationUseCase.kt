@@ -5,7 +5,7 @@ import team.aliens.dms.domain.volunteer.service.VolunteerService
 import java.util.UUID
 
 @UseCase
-class RejectVolunteerApplicationUseCase(
+class ExcludeVolunteerApplicationUseCase(
     private val volunteerService: VolunteerService
 ) {
 
@@ -13,7 +13,7 @@ class RejectVolunteerApplicationUseCase(
         val currentVolunteerApplication = volunteerService.getVolunteerApplicationById(volunteerApplicationId)
 
         currentVolunteerApplication.apply {
-            checkCancelable(currentVolunteerApplication.approved)
+            checkExcludable(currentVolunteerApplication.approved)
         }
 
         volunteerService.deleteVolunteerApplication(currentVolunteerApplication)

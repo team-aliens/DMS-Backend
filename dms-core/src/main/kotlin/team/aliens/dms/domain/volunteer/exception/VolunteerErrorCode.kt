@@ -12,7 +12,8 @@ enum class VolunteerErrorCode(
     VOLUNTEER_APPLICATION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Volunteer Application Not Found", 1),
     VOLUNTEER_NOT_FOUND(ErrorStatus.NOT_FOUND, "Volunteer Not Found", 2),
 
-    VOLUNTEER_APPLICATION_ALREADY_ASSIGNED(ErrorStatus.CONFLICT, "Volunteer Application Already Assigned", 1)
+    VOLUNTEER_APPLICATION_ALREADY_ASSIGNED(ErrorStatus.CONFLICT, "Volunteer Application Already Assigned", 1),
+    VOLUNTEER_APPLICATION_NOT_ASSIGNED(ErrorStatus.CONFLICT, "Volunteer Application Not Assigned", 2)
     ;
 
     override fun status(): Int = status
