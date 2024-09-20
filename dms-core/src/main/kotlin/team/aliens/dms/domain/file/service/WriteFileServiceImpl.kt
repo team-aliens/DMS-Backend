@@ -3,7 +3,7 @@ package team.aliens.dms.domain.file.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
-import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
+import team.aliens.dms.domain.outing.spi.vo.OutingApplicationExcelVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Student
@@ -39,6 +39,6 @@ class WriteFileServiceImpl(
         studentSeats: List<StudentSeatInfo>
     ) = writeFilePort.writeStudyRoomApplicationStatusExcelFile(timeSlots, studentSeats)
 
-    override fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>) =
-        writeFilePort.writeOutingApplicationExcelFile(outingApplicationVos)
+    override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationExcelVO>) =
+        writeFilePort.writeOutingApplicationExcelFile(outingApplicationExcelVos)
 }

@@ -11,6 +11,7 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
+import team.aliens.dms.domain.outing.spi.vo.OutingApplicationExcelVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.outingApplicationJpaEntity
@@ -19,10 +20,7 @@ import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingType
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
 import team.aliens.dms.persistence.outing.repository.OutingCompanionJpaRepository
-import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
-import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
-import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
-import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingHistoryVO
+import team.aliens.dms.persistence.outing.repository.vo.*
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import java.time.LocalDate
 import java.util.UUID
@@ -66,6 +64,48 @@ class OutingApplicationPersistenceAdapter(
                             studentJpaEntity.grade,
                             studentJpaEntity.classRoom,
                             studentJpaEntity.number,
+                            outingApplicationJpaEntity.outingDate,
+                            outingApplicationJpaEntity.outingTime,
+                            outingApplicationJpaEntity.arrivalTime,
+                            list(
+                                QQueryOutingCompanionVO(
+                                    outingCompanionStudentJpaEntity.name,
+                                    outingCompanionStudentJpaEntity.grade,
+                                    outingCompanionStudentJpaEntity.classRoom,
+                                    outingCompanionStudentJpaEntity.number
+                                )
+                            )
+                        )
+                    )
+            )
+    }
+
+    override fun queryAllOutingApplicationVOsBetweenStartAndEnd2(
+        start: LocalDate,
+        end: LocalDate
+    ): List<OutingApplicationExcelVO> {
+
+        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
+        val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
+
+        return queryFactory
+            .selectFrom(outingApplicationJpaEntity)
+            .join(outingApplicationJpaEntity.student, studentJpaEntity)
+            .leftJoin(outingCompanionJpaEntity)
+            .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
+            .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
+            .where(outingApplicationJpaEntity.outingDate.between(start, end))
+            .orderBy(outingApplicationJpaEntity.outingDate.asc())
+            .transform(
+                groupBy(outingApplicationJpaEntity.id)
+                    .list(
+                        QQueryOutingApplicationExcelVO(
+                            studentJpaEntity.name,
+                            studentJpaEntity.grade,
+                            studentJpaEntity.classRoom,
+                            studentJpaEntity.number,
+                            outingApplicationJpaEntity.reason,
+                            outingApplicationJpaEntity.reason,
                             outingApplicationJpaEntity.outingDate,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,

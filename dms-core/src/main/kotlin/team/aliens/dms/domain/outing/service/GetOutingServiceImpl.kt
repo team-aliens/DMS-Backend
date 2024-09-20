@@ -11,9 +11,7 @@ import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.QueryOutingAvailableTimePort
 import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
-import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
-import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
-import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
+import team.aliens.dms.domain.outing.spi.vo.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
@@ -38,6 +36,9 @@ class GetOutingServiceImpl(
 
     override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate) =
         queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
+
+    override fun getAllOutingApplicationVOsBetweenStartAndEnd2(start: LocalDate, end: LocalDate) =
+        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd2(start, end)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO =
         queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
