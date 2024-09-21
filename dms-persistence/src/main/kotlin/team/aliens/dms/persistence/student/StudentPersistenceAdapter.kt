@@ -375,8 +375,13 @@ class StudentPersistenceAdapter(
             )
             .from(studentJpaEntity)
             .where(
-                studentJpaEntity.user.school.id.eq(schoolId)
-                    .and(name?.let { studentJpaEntity.name.contains(it) })
+                studentJpaEntity.user.school.id.eq(schoolId),
+                name?.let { studentJpaEntity.name.contains(it) }
+            )
+            .orderBy(
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
             )
             .fetch()
     }
