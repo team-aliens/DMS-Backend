@@ -18,7 +18,7 @@ interface GetOutingService {
 
     fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationVO>
 
-    fun getAllOutingApplicationVOsBetweenStartAndEnd2(start: LocalDate, end: LocalDate): List<OutingApplicationExcelVO>
+    fun getAllOutingApplicationExcelVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationExcelVO>
 
     fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO
 

@@ -18,7 +18,7 @@ class ExportAllOutingApplicationsUseCase(
 
     fun execute(start: LocalDate, end: LocalDate): ExportAllOutingApplicationsResponse {
 
-        val outingApplicationExcelVOs = outingService.getAllOutingApplicationVOsBetweenStartAndEnd2(start, end)
+        val outingApplicationExcelVOs = outingService.getAllOutingApplicationExcelVOsBetweenStartAndEnd(start, end)
 
         val file = fileService.writeOutingApplicationExcelFile(outingApplicationExcelVOs)
 

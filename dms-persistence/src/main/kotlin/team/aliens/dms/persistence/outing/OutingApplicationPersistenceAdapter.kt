@@ -2,7 +2,6 @@ package team.aliens.dms.persistence.outing
 
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
-import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.JPAExpressions.selectOne
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -80,7 +79,7 @@ class OutingApplicationPersistenceAdapter(
             )
     }
 
-    override fun queryAllOutingApplicationVOsBetweenStartAndEnd2(
+    override fun queryAllOutingApplicationExcelVOsBetweenStartAndEnd(
         start: LocalDate,
         end: LocalDate
     ): List<OutingApplicationExcelVO> {
