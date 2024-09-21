@@ -2,7 +2,6 @@ package team.aliens.dms.persistence.outing
 
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
-import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.JPAExpressions.selectOne
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -66,6 +65,8 @@ class OutingApplicationPersistenceAdapter(
                             studentJpaEntity.grade,
                             studentJpaEntity.classRoom,
                             studentJpaEntity.number,
+                            outingApplicationJpaEntity.reason,
+                            outingApplicationJpaEntity.reason,
                             outingApplicationJpaEntity.outingDate,
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
