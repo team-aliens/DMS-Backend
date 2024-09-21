@@ -1,12 +1,12 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.file.model.File
 import team.aliens.dms.domain.file.service.FileService
 import team.aliens.dms.domain.outing.dto.response.ExportAllOutingApplicationsResponse
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
-import team.aliens.dms.domain.file.model.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -20,7 +20,7 @@ class ExportAllOutingApplicationsUseCase(
 
     fun execute(start: LocalDate, end: LocalDate): ExportAllOutingApplicationsResponse {
 
-        val outingApplicationExcelVOs = outingService.getAllOutingApplicationExcelVOsBetweenStartAndEnd(start, end)
+        val outingApplicationExcelVOs = outingService.getAllOutingApplicationVOsBetweenStartAndEnd(start, end)
 
         val file = fileService.writeOutingApplicationExcelFile(outingApplicationExcelVOs)
 

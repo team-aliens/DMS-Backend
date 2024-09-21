@@ -10,7 +10,6 @@ import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.OutingApplicationPort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
-import team.aliens.dms.domain.outing.spi.vo.OutingApplicationExcelVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import team.aliens.dms.persistence.outing.entity.QOutingApplicationJpaEntity.outingApplicationJpaEntity
@@ -59,46 +58,6 @@ class OutingApplicationPersistenceAdapter(
                 groupBy(outingApplicationJpaEntity.id)
                     .list(
                         QQueryOutingApplicationVO(
-                            studentJpaEntity.name,
-                            studentJpaEntity.grade,
-                            studentJpaEntity.classRoom,
-                            studentJpaEntity.number,
-                            outingApplicationJpaEntity.outingDate,
-                            outingApplicationJpaEntity.outingTime,
-                            outingApplicationJpaEntity.arrivalTime,
-                            list(
-                                QQueryOutingCompanionVO(
-                                    outingCompanionStudentJpaEntity.name,
-                                    outingCompanionStudentJpaEntity.grade,
-                                    outingCompanionStudentJpaEntity.classRoom,
-                                    outingCompanionStudentJpaEntity.number
-                                )
-                            )
-                        )
-                    )
-            )
-    }
-
-    override fun queryAllOutingApplicationExcelVOsBetweenStartAndEnd(
-        start: LocalDate,
-        end: LocalDate
-    ): List<OutingApplicationExcelVO> {
-
-        val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
-        val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
-
-        return queryFactory
-            .selectFrom(outingApplicationJpaEntity)
-            .join(outingApplicationJpaEntity.student, studentJpaEntity)
-            .leftJoin(outingCompanionJpaEntity)
-            .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
-            .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .where(outingApplicationJpaEntity.outingDate.between(start, end))
-            .orderBy(outingApplicationJpaEntity.outingDate.asc())
-            .transform(
-                groupBy(outingApplicationJpaEntity.id)
-                    .list(
-                        QQueryOutingApplicationExcelVO(
                             studentJpaEntity.name,
                             studentJpaEntity.grade,
                             studentJpaEntity.classRoom,

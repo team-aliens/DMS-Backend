@@ -7,7 +7,7 @@ import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
-import team.aliens.dms.domain.outing.spi.vo.OutingApplicationExcelVO
+import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
@@ -247,7 +247,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
         )
     }
 
-    override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationExcelVO>): ByteArray {
+    override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>): ByteArray {
         val attributes = mutableListOf("ㅤ학번ㅤ", "ㅤ이름ㅤ", "외출 사유", "외출 시간", "도착 시간", "외출 확인", "복귀 확인")
 
         val outingApplicationInfoSet = outingApplicationExcelVos.map { outingApplication ->

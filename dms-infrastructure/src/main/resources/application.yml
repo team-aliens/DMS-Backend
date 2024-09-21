@@ -14,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
       order_inserts: true
       order_updates: true
       jdbc:
@@ -44,7 +44,7 @@ spring:
       max-request-size: 20MB
 
 fcm:
-  file-url: ${FCM_FILE_URL:https://image-dms.s3.ap-northeast-2.amazonaws.com/team-dms-firebase-adminsdk-vrfz3-d92cd1ba9b.json}
+  file-url: ${FCM_FILE_URL}
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
