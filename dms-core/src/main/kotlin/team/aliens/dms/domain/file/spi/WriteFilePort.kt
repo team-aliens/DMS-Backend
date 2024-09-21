@@ -30,5 +30,5 @@ interface WriteFilePort {
         studentSeats: List<StudentSeatInfo>
     ): ByteArray
 
-    fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>): ByteArray
+    fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>): ByteArray
 }

@@ -39,6 +39,6 @@ class WriteFileServiceImpl(
         studentSeats: List<StudentSeatInfo>
     ) = writeFilePort.writeStudyRoomApplicationStatusExcelFile(timeSlots, studentSeats)
 
-    override fun writeOutingApplicationExcelFile(outingApplicationVos: List<OutingApplicationVO>) =
-        writeFilePort.writeOutingApplicationExcelFile(outingApplicationVos)
+    override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>) =
+        writeFilePort.writeOutingApplicationExcelFile(outingApplicationExcelVos)
 }
