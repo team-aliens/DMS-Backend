@@ -6,7 +6,9 @@ import team.aliens.dms.domain.outing.dto.response.ExportAllOutingApplicationsRes
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
+import team.aliens.dms.domain.file.model.File
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @ReadOnlyUseCase
 class ExportAllOutingApplicationsUseCase(
@@ -32,5 +34,5 @@ class ExportAllOutingApplicationsUseCase(
     }
 
     private fun getFileName(schoolName: String) =
-        "ss"
+        "${schoolName.replace(" ", "")}_외출_신청상태_${LocalDateTime.now().format(File.FILE_DATE_FORMAT)}"
 }
