@@ -245,7 +245,6 @@ class StudentWebAdapter(
         )
     }
 
-    @Cacheable
     @GetMapping
     fun studentGetAllStudents(@RequestParam(required = false) name: String?): StudentsResponse {
         return studentGetAllStudentsUseCase.execute(name)
