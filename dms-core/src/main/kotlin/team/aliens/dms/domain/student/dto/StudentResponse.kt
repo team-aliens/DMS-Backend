@@ -49,7 +49,6 @@ data class StudentNameResponse(
     val name: String
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class StudentDetailsResponse @JsonCreator constructor(
     @JsonProperty("id") val id: UUID,
     @JsonProperty("name") val name: String,
