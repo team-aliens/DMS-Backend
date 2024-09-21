@@ -255,7 +255,7 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
                 listOf(
                     outingApplication.studentGcn,
                     outingApplication.studentName,
-                    outingApplication.reason,
+                    outingApplication.reason ?: "",
                     outingApplication.outingTime.toString(),
                     outingApplication.arrivalTime.toString(),
                     null,
