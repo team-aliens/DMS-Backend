@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.student.dto
 
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.student.model.Sex
