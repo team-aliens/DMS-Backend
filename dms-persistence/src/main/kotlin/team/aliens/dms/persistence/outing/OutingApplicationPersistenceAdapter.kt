@@ -18,7 +18,10 @@ import team.aliens.dms.persistence.outing.entity.QOutingTypeJpaEntity.outingType
 import team.aliens.dms.persistence.outing.mapper.OutingApplicationMapper
 import team.aliens.dms.persistence.outing.repository.OutingApplicationJpaRepository
 import team.aliens.dms.persistence.outing.repository.OutingCompanionJpaRepository
-import team.aliens.dms.persistence.outing.repository.vo.*
+import team.aliens.dms.persistence.outing.repository.vo.QQueryCurrentOutingApplicationVO
+import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingApplicationVO
+import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingCompanionVO
+import team.aliens.dms.persistence.outing.repository.vo.QQueryOutingHistoryVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import java.time.LocalDate
 import java.util.UUID
