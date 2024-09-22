@@ -139,7 +139,7 @@ open class ExcelPort {
                 .map {
                     autoSizeColumn(it)
                     val width = getColumnWidth(it)
-                    setColumnWidth(it, ((width * 1.3) - 50).toInt())
+                    setColumnWidth(it, ((width * 1.3) + 120).toInt())
                 }
         }
     }
