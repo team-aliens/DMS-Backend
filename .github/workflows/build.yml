@@ -30,6 +30,7 @@ jobs:
             build
             --build-cache
             --no-daemon
+            --stacktrace
 
       - name: Run Detekt Domain
-        run: ./gradlew :dms-core:detekt --stacktrace
+        run: ./gradlew :dms-core:detekt
