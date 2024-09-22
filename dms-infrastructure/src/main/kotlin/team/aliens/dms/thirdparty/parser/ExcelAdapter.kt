@@ -248,14 +248,14 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
     }
 
     override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>): ByteArray {
-        val attributes = mutableListOf("ㅤ학번ㅤ", "ㅤ이름ㅤ", "외출 사유", "외출 시간", "도착 시간", "외출 확인", "복귀 확인")
+        val attributes = mutableListOf("ㅤ학번ㅤ", "ㅤ이름ㅤ", "외출 유형", "외출 시간", "도착 시간", "외출 확인", "복귀 확인")
 
         val outingApplicationInfoSet = outingApplicationExcelVos.map { outingApplication ->
             val outingApplicationInfoList = mutableListOf(
                 listOf(
                     outingApplication.studentGcn,
                     outingApplication.studentName,
-                    outingApplication.reason ?: "",
+                    outingApplication.outingType,
                     outingApplication.outingTime.toString(),
                     outingApplication.arrivalTime.toString(),
                     null,
