@@ -60,8 +60,6 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
-    //cache
-    implementation(Dependencies.CACHE)
 }
 
 tasks.getByName<Jar>("jar") {
