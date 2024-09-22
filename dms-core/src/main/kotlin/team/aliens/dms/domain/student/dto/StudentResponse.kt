@@ -1,8 +1,5 @@
 package team.aliens.dms.domain.student.dto
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
@@ -49,17 +46,17 @@ data class StudentNameResponse(
     val name: String
 )
 
-data class StudentDetailsResponse @JsonCreator constructor(
-    @JsonProperty("id") val id: UUID,
-    @JsonProperty("name") val name: String,
-    @JsonProperty("gcn") val gcn: String,
-    @JsonProperty("profileImageUrl") val profileImageUrl: String,
-    @JsonProperty("sex") val sex: Sex? = null,
-    @JsonProperty("bonusPoint") val bonusPoint: Int? = null,
-    @JsonProperty("minusPoint") val minusPoint: Int? = null,
-    @JsonProperty("roomNumber") val roomNumber: String? = null,
-    @JsonProperty("roomMates") val roomMates: List<RoomMate>? = null,
-    @JsonProperty("tags") val tags: List<TagResponse>? = null
+data class StudentDetailsResponse(
+    val id: UUID,
+    val name: String,
+    val gcn: String,
+    val profileImageUrl: String,
+    val sex: Sex? = null,
+    val bonusPoint: Int? = null,
+    val minusPoint: Int? = null,
+    val roomNumber: String? = null,
+    val roomMates: List<RoomMate>? = null,
+    val tags: List<TagResponse>? = null
 ) {
     data class RoomMate(
         val id: UUID,
