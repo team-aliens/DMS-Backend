@@ -10,7 +10,7 @@ open class OutingApplicationVO(
     val studentClassRoom: Int,
     val studentNumber: Int,
     val reason: String?,
-    val outingType: String,
+    val outingType: String?,
     val outingDate: LocalDate,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
