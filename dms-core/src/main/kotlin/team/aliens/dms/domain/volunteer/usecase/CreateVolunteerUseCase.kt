@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
-import team.aliens.dms.domain.volunteer.model.GradeCondition
+import team.aliens.dms.domain.volunteer.model.AvailableGrade
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.service.VolunteerService
 
@@ -21,7 +21,7 @@ class CreateVolunteerUseCase(
             name = createVolunteerRequest.name,
             content = createVolunteerRequest.content,
             availableSex = Sex.valueOf(createVolunteerRequest.availableSex),
-            availableGrade = GradeCondition.valueOf(createVolunteerRequest.availableGrade),
+            availableGrade = AvailableGrade.valueOf(createVolunteerRequest.availableGrade),
             score = createVolunteerRequest.score,
             optionalScore = createVolunteerRequest.optionalScore,
             maxApplicants = createVolunteerRequest.maxApplicants,

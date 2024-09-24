@@ -22,7 +22,7 @@ data class Volunteer(
 
     val availableSex: Sex,
 
-    val availableGrade: GradeCondition,
+    val availableGrade: AvailableGrade,
 
     override val schoolId: UUID
 ) : SchoolIdDomain

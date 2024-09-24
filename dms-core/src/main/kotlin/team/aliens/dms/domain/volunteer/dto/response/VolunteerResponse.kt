@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.volunteer.dto.response
 
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.volunteer.model.GradeCondition
+import team.aliens.dms.domain.volunteer.model.AvailableGrade
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
@@ -50,7 +50,7 @@ data class VolunteerResponse(
     val optionalScore: Int,
     val maxApplicants: Int,
     val availableSex: Sex,
-    val availableGrade: GradeCondition
+    val availableGrade: AvailableGrade
 ) {
     companion object {
         fun of(volunteer: Volunteer): VolunteerResponse {

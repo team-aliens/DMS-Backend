@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.volunteer.model
 
-enum class GradeCondition(
+enum class AvailableGrade(
     val grades: Set<Int>
 ) {
     ALL(setOf(1, 2, 3)),
