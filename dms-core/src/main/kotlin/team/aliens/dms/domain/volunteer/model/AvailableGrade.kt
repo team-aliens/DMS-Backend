@@ -7,7 +7,7 @@ enum class AvailableGrade(
     FIRST(setOf(1)),
     SECOND(setOf(2)),
     THIRD(setOf(3)),
-    FIRST_SECOND(setOf(1, 2)),
-    SECOND_THIRD(setOf(2, 3)),
-    FIRST_THIRD(setOf(1, 3))
+    FIRST_AND_SECOND(setOf(1, 2)),
+    SECOND_AND_THIRD(setOf(2, 3)),
+    FIRST_AND_THIRD(setOf(1, 3))
 }
