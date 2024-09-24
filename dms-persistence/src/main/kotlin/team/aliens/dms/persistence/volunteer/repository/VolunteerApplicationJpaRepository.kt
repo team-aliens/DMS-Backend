@@ -9,4 +9,6 @@ import java.util.UUID
 interface VolunteerApplicationJpaRepository : CrudRepository<VolunteerApplicationJpaEntity, UUID> {
 
     fun findByStudentId(studentId: UUID): List<VolunteerApplicationJpaEntity>
+
+    fun deleteAllByVolunteerId(volunteerId: UUID)
 }

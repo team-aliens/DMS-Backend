@@ -66,6 +66,10 @@ class VolunteerApplicationPersistenceAdapter(
         )
     }
 
+    override fun deleteAllVolunteerApplicationsByVolunteerId(volunteerId: UUID) {
+        volunteerApplicationRepository.deleteAllByVolunteerId(volunteerId)
+    }
+
     override fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> {
         return queryFactory
             .selectFrom(volunteerApplicationJpaEntity)
