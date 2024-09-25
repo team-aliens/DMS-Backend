@@ -39,7 +39,7 @@ class VolunteerJpaEntity(
     @Enumerated(EnumType.STRING)
     val availableSex: Sex,
 
-    @Column(columnDefinition = "VARCHAR(14)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(16)", nullable = false)
     @Enumerated(EnumType.STRING)
     val availableGrade: AvailableGrade,
 
