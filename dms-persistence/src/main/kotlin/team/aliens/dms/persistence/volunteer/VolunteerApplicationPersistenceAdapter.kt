@@ -72,18 +72,22 @@ class VolunteerApplicationPersistenceAdapter(
 
     override fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> {
         return queryFactory
-            .selectFrom(volunteerApplicationJpaEntity)
-            .join(volunteerApplicationJpaEntity.volunteer, volunteerJpaEntity)
-            .join(volunteerApplicationJpaEntity.student, studentJpaEntity)
+            .selectFrom(volunteerJpaEntity)
+            .leftJoin(volunteerApplicationJpaEntity)
+            .on(volunteerApplicationJpaEntity.volunteer.id.eq(volunteerJpaEntity.id)
+                .and(volunteerApplicationJpaEntity.approved.isFalse.not()))
+            .leftJoin(studentJpaEntity)
+            .on(studentJpaEntity.id.eq(volunteerApplicationJpaEntity.student.id))
             .where(
-                volunteerJpaEntity.school.id.eq(schoolId),
-                volunteerApplicationJpaEntity.approved.eq(true)
+                volunteerJpaEntity.school.id.eq(schoolId)
             )
             .transform(
-                groupBy(volunteerJpaEntity.name)
+                groupBy(volunteerJpaEntity.id)
                     .list(
                         QQueryCurrentVolunteerApplicantVO(
                             volunteerJpaEntity.name,
+                            volunteerJpaEntity.availableSex,
+                            volunteerJpaEntity.availableGrade,
                             list(
                                 QQueryVolunteerApplicantVO(
                                     volunteerApplicationJpaEntity.id,
@@ -91,11 +95,12 @@ class VolunteerApplicationPersistenceAdapter(
                                     studentJpaEntity.classRoom,
                                     studentJpaEntity.number,
                                     studentJpaEntity.name,
-                                )
+                                ).skipNulls()
                             )
                         )
                     )
             )
+    }
 
     override fun queryVolunteerApplicationByStudentIdAndVolunteerId(
         studentId: UUID,

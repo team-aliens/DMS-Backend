@@ -92,11 +92,15 @@ data class VolunteerApplicantsResponse(
 
 data class CurrentVolunteerApplicantResponse(
     val volunteerName: String,
+    val availableSex: Sex,
+    val availableGrade: AvailableGrade,
     val applicants: List<VolunteerApplicantResponse>
 ) {
     companion object {
         fun of(currentVolunteerApplicant: CurrentVolunteerApplicantVO) = CurrentVolunteerApplicantResponse(
             volunteerName = currentVolunteerApplicant.volunteerName,
+            availableSex = currentVolunteerApplicant.availableSex,
+            availableGrade = currentVolunteerApplicant.availableGrade,
             applicants = currentVolunteerApplicant.applicants
                 .map { VolunteerApplicantResponse.of(it) }
         )
