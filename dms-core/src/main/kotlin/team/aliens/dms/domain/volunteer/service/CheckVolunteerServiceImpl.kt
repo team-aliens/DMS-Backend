@@ -8,7 +8,7 @@ import java.util.UUID
 @Service
 class CheckVolunteerServiceImpl(
     private val queryVolunteerApplicationPort: QueryVolunteerApplicationPort
-): CheckVolunteerService {
+) : CheckVolunteerService {
 
     override fun checkVolunteerApplicationExists(studentId: UUID, volunteerId: UUID) {
         queryVolunteerApplicationPort

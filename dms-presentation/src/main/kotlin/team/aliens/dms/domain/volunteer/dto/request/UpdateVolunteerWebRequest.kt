@@ -2,7 +2,6 @@ package team.aliens.dms.domain.volunteer.dto.request
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Size
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.AvailableGrade
 

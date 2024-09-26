@@ -74,8 +74,10 @@ class VolunteerApplicationPersistenceAdapter(
         return queryFactory
             .selectFrom(volunteerJpaEntity)
             .leftJoin(volunteerApplicationJpaEntity)
-            .on(volunteerApplicationJpaEntity.volunteer.id.eq(volunteerJpaEntity.id)
-                .and(volunteerApplicationJpaEntity.approved.isFalse.not()))
+            .on(
+                volunteerApplicationJpaEntity.volunteer.id.eq(volunteerJpaEntity.id)
+                    .and(volunteerApplicationJpaEntity.approved.isFalse.not())
+            )
             .leftJoin(studentJpaEntity)
             .on(studentJpaEntity.id.eq(volunteerApplicationJpaEntity.student.id))
             .where(

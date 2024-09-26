@@ -2,7 +2,6 @@ package team.aliens.dms.domain.volunteer.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotFoundException
 import team.aliens.dms.domain.volunteer.exception.VolunteerNotFoundException
 import team.aliens.dms.domain.volunteer.model.Volunteer
@@ -16,8 +15,7 @@ import java.util.UUID
 @Service
 class GetVolunteerServiceImpl(
     private val queryVolunteerApplicationPort: QueryVolunteerApplicationPort,
-    private val queryVolunteerPort: QueryVolunteerPort,
-    private val queryStudentPort: QueryStudentPort
+    private val queryVolunteerPort: QueryVolunteerPort
 ) : GetVolunteerService {
 
     override fun getVolunteerApplicationById(volunteerApplicationId: UUID): VolunteerApplication =

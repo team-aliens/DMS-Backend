@@ -31,7 +31,7 @@ data class Volunteer(
 
     fun isAvailable(student: Student): Boolean {
         return this.availableGrade.grades.contains(student.grade) &&
-                (this.availableSex == student.sex || this.availableSex == Sex.ALL)
+            (this.availableSex == student.sex || this.availableSex == Sex.ALL)
     }
 
     fun checkAvailable(student: Student) {

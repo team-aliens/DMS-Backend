@@ -47,4 +47,4 @@ class VolunteerJpaEntity(
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
     val school: SchoolJpaEntity?,
 
-    ) : BaseEntity(id)
+) : BaseEntity(id)

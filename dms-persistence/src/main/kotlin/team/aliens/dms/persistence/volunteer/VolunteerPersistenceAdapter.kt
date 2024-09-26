@@ -2,11 +2,8 @@ package team.aliens.dms.persistence.volunteer
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.spi.VolunteerPort
-import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
 import team.aliens.dms.persistence.volunteer.repository.VolunteerJpaRepository
 import java.util.UUID
