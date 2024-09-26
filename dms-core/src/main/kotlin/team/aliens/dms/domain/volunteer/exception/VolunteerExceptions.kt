@@ -2,6 +2,10 @@ package team.aliens.dms.domain.volunteer.exception
 
 import team.aliens.dms.common.error.DmsException
 
+object VolunteerNotAvailableException : DmsException(
+    VolunteerErrorCode.VOLUNTEER_NOT_AVAILABLE
+)
+
 object VolunteerApplicationNotFoundException : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_NOT_FOUND
 )
