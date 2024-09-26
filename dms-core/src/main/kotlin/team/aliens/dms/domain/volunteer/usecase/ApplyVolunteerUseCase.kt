@@ -17,6 +17,11 @@ class ApplyVolunteerUseCase(
         val student = studentService.getCurrentStudent()
         val currentVolunteer = volunteerService.getVolunteerById(volunteerId)
 
+        volunteerService.checkVolunteerApplicationExists(
+            studentId = student.id,
+            volunteerId = currentVolunteer.id
+        )
+
         val volunteer = volunteerService.saveVolunteerApplication(
             VolunteerApplication(
                 studentId = student.id,

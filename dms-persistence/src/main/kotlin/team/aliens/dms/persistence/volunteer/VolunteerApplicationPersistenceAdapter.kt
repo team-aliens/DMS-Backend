@@ -96,6 +96,16 @@ class VolunteerApplicationPersistenceAdapter(
                         )
                     )
             )
+
+    override fun queryVolunteerApplicationByStudentIdAndVolunteerId(
+        studentId: UUID,
+        volunteerId: UUID
+    ): VolunteerApplication? {
+        return volunteerApplicationMapper.toDomain(
+            volunteerApplicationRepository.findByStudentIdAndVolunteerId(
+                studentId, volunteerId
+            )
+        )
     }
 
     override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>> {

@@ -11,4 +11,6 @@ interface VolunteerApplicationJpaRepository : CrudRepository<VolunteerApplicatio
     fun findByStudentId(studentId: UUID): List<VolunteerApplicationJpaEntity>
 
     fun deleteAllByVolunteerId(volunteerId: UUID)
+
+    fun findByStudentIdAndVolunteerId(studentId: UUID, volunteerId: UUID): VolunteerApplicationJpaEntity?
 }

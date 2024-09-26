@@ -4,7 +4,9 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class VolunteerService(
+    checkVolunteerService: CheckVolunteerService,
     commandVolunteerService: CommandVolunteerService,
     getVolunteerService: GetVolunteerService
-) : CommandVolunteerService by commandVolunteerService,
+) : CheckVolunteerService by checkVolunteerService,
+    CommandVolunteerService by commandVolunteerService,
     GetVolunteerService by getVolunteerService
