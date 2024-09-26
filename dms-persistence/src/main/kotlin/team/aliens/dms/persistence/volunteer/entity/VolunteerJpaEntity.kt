@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.volunteer.model.GradeCondition
+import team.aliens.dms.domain.volunteer.model.AvailableGrade
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
 import java.util.UUID
@@ -39,9 +39,9 @@ class VolunteerJpaEntity(
     @Enumerated(EnumType.STRING)
     val availableSex: Sex,
 
-    @Column(columnDefinition = "VARCHAR(14)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(16)", nullable = false)
     @Enumerated(EnumType.STRING)
-    val availableGrade: GradeCondition,
+    val availableGrade: AvailableGrade,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
