@@ -15,11 +15,12 @@ class ApplyVolunteerUseCase(
 
     fun execute(volunteerId: UUID): ApplyVolunteerResponse {
         val student = studentService.getCurrentStudent()
+        val currentVolunteer = volunteerService.getVolunteerById(volunteerId)
 
         val volunteer = volunteerService.saveVolunteerApplication(
             VolunteerApplication(
                 studentId = student.id,
-                volunteerId = volunteerId,
+                volunteerId = currentVolunteer.also { it.checkAvailable(student) }.id,
                 approved = false
             )
         )
