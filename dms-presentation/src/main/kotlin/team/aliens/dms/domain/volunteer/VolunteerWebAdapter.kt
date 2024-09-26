@@ -57,13 +57,13 @@ class VolunteerWebAdapter(
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/apply/{volunteer-application-id}")
+    @PostMapping("/application/{volunteer-application-id}")
     fun applyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
         applyVolunteerUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/cancel/{volunteer-application-id}")
+    @DeleteMapping("/cancellation/{volunteer-application-id}")
     fun unapplyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
         unapplyVolunteerUseCase.execute(volunteerApplicationId)
     }
@@ -123,19 +123,19 @@ class VolunteerWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping("/approve/{volunteer-application-id}")
+    @PostMapping("/approval/{volunteer-application-id}")
     fun approveVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         approveVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/reject/{volunteer-application-id}")
+    @DeleteMapping("/rejection/{volunteer-application-id}")
     fun rejectVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         rejectVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/exclude/{volunteer-application-id}")
+    @DeleteMapping("/exception/{volunteer-application-id}")
     fun excludeVolunteerApplication(@PathVariable("volunteer-application-id") volunteerApplicationId: UUID) {
         excludeVolunteerApplicationUseCase.execute(volunteerApplicationId)
     }
