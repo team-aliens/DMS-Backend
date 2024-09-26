@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.volunteer.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationAlreadyApplied
+import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationAlreadyExists
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import java.util.UUID
 
@@ -14,7 +14,7 @@ class CheckVolunteerServiceImpl(
         queryVolunteerApplicationPort
             .queryVolunteerApplicationByStudentIdAndVolunteerId(studentId, volunteerId)
             ?.let {
-                throw VolunteerApplicationAlreadyApplied
+                throw VolunteerApplicationAlreadyExists
             }
     }
 }

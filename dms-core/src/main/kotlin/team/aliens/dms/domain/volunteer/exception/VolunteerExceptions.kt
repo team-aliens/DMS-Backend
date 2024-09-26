@@ -22,6 +22,6 @@ object VolunteerApplicationNotAssigned : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_NOT_ASSIGNED
 )
 
-object VolunteerApplicationAlreadyApplied : DmsException(
-    VolunteerErrorCode.VOLUNTEER_APPLICATION_ALREADY_APPLIED
+object VolunteerApplicationAlreadyExists : DmsException(
+    VolunteerErrorCode.VOLUNTEER_APPLICATION_ALREADY_EXISTS
 )
