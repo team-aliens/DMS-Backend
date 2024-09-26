@@ -14,7 +14,8 @@ import java.util.UUID
 @Component
 class VolunteerPersistenceAdapter(
     private val volunteerMapper: VolunteerMapper,
-    private val volunteerJpaRepository: VolunteerJpaRepository
+    private val volunteerJpaRepository: VolunteerJpaRepository,
+    private val studentRepository: StudentJpaRepository
 ) : VolunteerPort {
 
     override fun saveVolunteer(volunteer: Volunteer): Volunteer = volunteerMapper.toDomain(
@@ -33,8 +34,28 @@ class VolunteerPersistenceAdapter(
         volunteerJpaRepository.findByIdOrNull(volunteerId)
     )
 
+    override fun queryVolunteerByStudentId(studentId: UUID): List<Volunteer> {
+        val student = studentRepository.findById(studentId)
+            .orElseThrow { throw StudentNotFoundException }
+
+        val volunteers = volunteerJpaRepository.findAll()
+        return volunteers
+            .filter { volunteer ->
+                (
+                    volunteer.availableGrade.grades.contains(student.grade) &&
+                        (volunteer.availableSex == student.sex || volunteer.availableSex == Sex.ALL)
+                    )
+            }
+            .mapNotNull { volunteerMapper.toDomain(it) }
+    }
+
     override fun queryAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> {
         return volunteerJpaRepository.findAllBySchoolId(schoolId)
+            .map { volunteerMapper.toDomain(it)!! }
+    }
+
+    override fun queryAllVolunteers(): List<Volunteer> {
+        return volunteerJpaRepository.findAll()
             .map { volunteerMapper.toDomain(it)!! }
     }
 }
