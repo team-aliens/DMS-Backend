@@ -41,7 +41,6 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO {
-        checkQueryAble()
         return queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
                 ?: throw OutingApplicationNotFoundException
     }
@@ -64,9 +63,4 @@ class GetOutingServiceImpl(
         queryOutingAvailableTimePort.queryOutingAvailableTimeById(outingAvailableTimeId)
             ?: throw OutingAvailableTimeNotFoundException
 
-    private fun checkQueryAble(): Boolean {
-        val currentTime = LocalTime.now()
-
-        return currentTime.isBefore(LocalTime.of(20, 0))
-    }
 }
