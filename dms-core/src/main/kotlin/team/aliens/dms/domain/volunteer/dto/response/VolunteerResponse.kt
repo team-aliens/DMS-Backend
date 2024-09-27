@@ -6,6 +6,7 @@ import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
 data class QueryMyVolunteerApplicationResponse(
@@ -48,21 +49,23 @@ data class VolunteerResponse(
     val content: String,
     val score: Int,
     val optionalScore: Int,
+    val currentApplicants: Int,
     val maxApplicants: Int,
     val availableSex: Sex,
     val availableGrade: AvailableGrade
 ) {
     companion object {
-        fun of(volunteer: Volunteer): VolunteerResponse {
+        fun of(volunteerWithCurrentApplicantVO: VolunteerWithCurrentApplicantVO): VolunteerResponse {
             return VolunteerResponse(
-                id = volunteer.id,
-                name = volunteer.name,
-                content = volunteer.content,
-                score = volunteer.score,
-                optionalScore = volunteer.optionalScore,
-                maxApplicants = volunteer.maxApplicants,
-                availableSex = volunteer.availableSex,
-                availableGrade = volunteer.availableGrade
+                id = volunteerWithCurrentApplicantVO.id,
+                name = volunteerWithCurrentApplicantVO.name,
+                content = volunteerWithCurrentApplicantVO.content,
+                score = volunteerWithCurrentApplicantVO.score,
+                optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
+                currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
+                maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants,
+                availableSex = volunteerWithCurrentApplicantVO.availableSex,
+                availableGrade = volunteerWithCurrentApplicantVO.availableGrade
             )
         }
     }
@@ -94,6 +97,8 @@ data class CurrentVolunteerApplicantResponse(
     val volunteerName: String,
     val availableSex: Sex,
     val availableGrade: AvailableGrade,
+    val currentApplicants: Int,
+    val maxApplicants: Int,
     val applicants: List<VolunteerApplicantResponse>
 ) {
     companion object {
@@ -101,6 +106,8 @@ data class CurrentVolunteerApplicantResponse(
             volunteerName = currentVolunteerApplicant.volunteerName,
             availableSex = currentVolunteerApplicant.availableSex,
             availableGrade = currentVolunteerApplicant.availableGrade,
+            currentApplicants = currentVolunteerApplicant.currentApplicants,
+            maxApplicants = currentVolunteerApplicant.maxApplicants,
             applicants = currentVolunteerApplicant.applicants
                 .map { VolunteerApplicantResponse.of(it) }
         )
@@ -117,17 +124,19 @@ data class AvailableVolunteerResponse(
     val content: String,
     val score: Int,
     val optionalScore: Int,
+    val currentApplicants: Int,
     val maxApplicants: Int
 ) {
     companion object {
-        fun of(volunteer: Volunteer): AvailableVolunteerResponse {
+        fun of(volunteerWithCurrentApplicantVO: VolunteerWithCurrentApplicantVO): AvailableVolunteerResponse {
             return AvailableVolunteerResponse(
-                id = volunteer.id,
-                name = volunteer.name,
-                content = volunteer.content,
-                score = volunteer.score,
-                optionalScore = volunteer.optionalScore,
-                maxApplicants = volunteer.maxApplicants
+                id = volunteerWithCurrentApplicantVO.id,
+                name = volunteerWithCurrentApplicantVO.name,
+                content = volunteerWithCurrentApplicantVO.content,
+                score = volunteerWithCurrentApplicantVO.score,
+                optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
+                currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
+                maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants
             )
         }
     }

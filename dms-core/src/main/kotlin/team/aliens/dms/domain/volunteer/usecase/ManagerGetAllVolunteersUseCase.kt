@@ -15,7 +15,7 @@ class ManagerGetAllVolunteersUseCase(
     fun execute(): VolunteersResponse {
         val schoolId = securityService.getCurrentSchoolId()
 
-        val volunteers = volunteerService.getAllVolunteersBySchoolId(schoolId)
+        val volunteers = volunteerService.getAllVolunteersWithCurrentApplicantsBySchoolId(schoolId)
             .map { VolunteerResponse.of(it) }
 
         return VolunteersResponse(volunteers)

@@ -76,7 +76,7 @@ class VolunteerApplicationPersistenceAdapter(
             .leftJoin(volunteerApplicationJpaEntity)
             .on(
                 volunteerApplicationJpaEntity.volunteer.id.eq(volunteerJpaEntity.id)
-                    .and(volunteerApplicationJpaEntity.approved.isFalse.not())
+                    .and(volunteerApplicationJpaEntity.approved.isTrue)
             )
             .leftJoin(studentJpaEntity)
             .on(studentJpaEntity.id.eq(volunteerApplicationJpaEntity.student.id))
@@ -90,6 +90,8 @@ class VolunteerApplicationPersistenceAdapter(
                             volunteerJpaEntity.name,
                             volunteerJpaEntity.availableSex,
                             volunteerJpaEntity.availableGrade,
+                            list(volunteerApplicationJpaEntity.id),
+                            volunteerJpaEntity.maxApplicants,
                             list(
                                 QQueryVolunteerApplicantVO(
                                     volunteerApplicationJpaEntity.id,

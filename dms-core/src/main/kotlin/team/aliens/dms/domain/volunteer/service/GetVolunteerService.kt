@@ -5,6 +5,7 @@ import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
 interface GetVolunteerService {
@@ -13,9 +14,9 @@ interface GetVolunteerService {
 
     fun getVolunteerById(volunteerId: UUID): Volunteer
 
-    fun getVolunteerByStudent(student: Student): List<Volunteer>
+    fun getAllVolunteersWithCurrentApplicantsByStudent(student: Student): List<VolunteerWithCurrentApplicantVO>
 
-    fun getAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer>
+    fun getAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO>
 
     fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO>
 

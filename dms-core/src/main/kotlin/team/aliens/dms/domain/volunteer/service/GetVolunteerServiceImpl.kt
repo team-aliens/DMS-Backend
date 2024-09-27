@@ -10,6 +10,7 @@ import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
 @Service
@@ -26,16 +27,16 @@ class GetVolunteerServiceImpl(
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
 
-    override fun getVolunteerByStudent(student: Student): List<Volunteer> {
-        val volunteers = queryVolunteerPort.queryAllVolunteersBySchoolId(student.schoolId)
+    override fun getAllVolunteersWithCurrentApplicantsByStudent(student: Student): List<VolunteerWithCurrentApplicantVO> {
+        val volunteers = queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(student.schoolId)
 
         return volunteers.filter { volunteer ->
-            volunteer.isAvailable(student)
+            volunteer.toVolunteer().isAvailable(student)
         }
     }
 
-    override fun getAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> =
-        queryVolunteerPort.queryAllVolunteersBySchoolId(schoolId)
+    override fun getAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO> =
+        queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(schoolId)
 
     override fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsByVolunteerId(volunteerId)
