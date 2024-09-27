@@ -66,4 +66,10 @@ class CheckOutingServiceImpl(
             }
         }
     }
+
+    override fun checkOutingApplicationQueryAble(): Boolean {
+        val currentTime = LocalTime.now()
+
+        return currentTime.isBefore(LocalTime.of(20, 0))
+    }
 }
