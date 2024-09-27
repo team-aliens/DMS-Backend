@@ -13,6 +13,8 @@ class DeleteVolunteerUseCase(
 
         val currentVolunteer = volunteerService.getVolunteerById(volunteerId)
 
+        volunteerService.deleteAllVolunteerApplicationsByVolunteerId(currentVolunteer.id)
+
         volunteerService.deleteVolunteer(currentVolunteer)
     }
 }

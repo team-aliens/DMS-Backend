@@ -14,5 +14,7 @@ interface QueryVolunteerApplicationPort {
 
     fun queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO>
 
+    fun queryVolunteerApplicationByStudentIdAndVolunteerId(studentId: UUID, volunteerId: UUID): VolunteerApplication?
+
     fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>>
 }
