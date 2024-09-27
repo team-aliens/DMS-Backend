@@ -89,9 +89,9 @@ class VolunteerWebAdapter(
                 content = createVolunteerWebRequest.content,
                 availableGrade = createVolunteerWebRequest.availableGrade,
                 availableSex = createVolunteerWebRequest.availableSex,
-                score = createVolunteerWebRequest.score,
-                optionalScore = createVolunteerWebRequest.optionalScore,
-                maxApplicants = createVolunteerWebRequest.maxApplicants,
+                score = createVolunteerWebRequest.score!!,
+                optionalScore = createVolunteerWebRequest.optionalScore!!,
+                maxApplicants = createVolunteerWebRequest.maxApplicants!!,
             )
         )
     }
@@ -108,9 +108,9 @@ class VolunteerWebAdapter(
                 content = updateVolunteerWebRequest.content,
                 availableGrade = updateVolunteerWebRequest.availableGrade,
                 availableSex = updateVolunteerWebRequest.availableSex,
-                score = updateVolunteerWebRequest.score,
-                optionalScore = updateVolunteerWebRequest.optionalScore,
-                maxApplicants = updateVolunteerWebRequest.maxApplicants,
+                score = updateVolunteerWebRequest.score!!,
+                optionalScore = updateVolunteerWebRequest.optionalScore!!,
+                maxApplicants = updateVolunteerWebRequest.maxApplicants!!,
                 volunteerId = volunteerId
             )
         )
