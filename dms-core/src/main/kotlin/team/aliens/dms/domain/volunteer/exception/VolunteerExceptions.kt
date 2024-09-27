@@ -2,8 +2,16 @@ package team.aliens.dms.domain.volunteer.exception
 
 import team.aliens.dms.common.error.DmsException
 
+object VolunteerNotAvailableException : DmsException(
+    VolunteerErrorCode.VOLUNTEER_NOT_AVAILABLE
+)
+
 object VolunteerApplicationNotFoundException : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_NOT_FOUND
+)
+
+object VolunteerNotFoundException : DmsException(
+    VolunteerErrorCode.VOLUNTEER_NOT_FOUND
 )
 
 object VolunteerApplicationAlreadyAssigned : DmsException(
@@ -14,6 +22,6 @@ object VolunteerApplicationNotAssigned : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_NOT_ASSIGNED
 )
 
-object VolunteerNotFoundException : DmsException(
-    VolunteerErrorCode.VOLUNTEER_NOT_FOUND
+object VolunteerApplicationAlreadyExists : DmsException(
+    VolunteerErrorCode.VOLUNTEER_APPLICATION_ALREADY_EXISTS
 )

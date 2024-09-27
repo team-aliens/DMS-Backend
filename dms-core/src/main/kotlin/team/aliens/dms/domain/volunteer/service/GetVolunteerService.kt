@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.volunteer.service
 
+import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
@@ -12,15 +13,13 @@ interface GetVolunteerService {
 
     fun getVolunteerById(volunteerId: UUID): Volunteer
 
-    fun getVolunteerByStudentId(studentId: UUID): List<Volunteer>
+    fun getVolunteerByStudent(student: Student): List<Volunteer>
 
     fun getAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer>
 
     fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO>
 
     fun getAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO>
-
-    fun getAllVolunteers(): List<Volunteer>
 
     fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>>
 }

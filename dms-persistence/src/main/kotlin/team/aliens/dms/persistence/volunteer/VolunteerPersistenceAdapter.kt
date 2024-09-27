@@ -2,11 +2,8 @@ package team.aliens.dms.persistence.volunteer
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.student.exception.StudentNotFoundException
-import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.spi.VolunteerPort
-import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
 import team.aliens.dms.persistence.volunteer.repository.VolunteerJpaRepository
 import java.util.UUID
@@ -14,8 +11,7 @@ import java.util.UUID
 @Component
 class VolunteerPersistenceAdapter(
     private val volunteerMapper: VolunteerMapper,
-    private val volunteerJpaRepository: VolunteerJpaRepository,
-    private val studentRepository: StudentJpaRepository
+    private val volunteerJpaRepository: VolunteerJpaRepository
 ) : VolunteerPort {
 
     override fun saveVolunteer(volunteer: Volunteer): Volunteer = volunteerMapper.toDomain(
@@ -34,28 +30,8 @@ class VolunteerPersistenceAdapter(
         volunteerJpaRepository.findByIdOrNull(volunteerId)
     )
 
-    override fun queryVolunteerByStudentId(studentId: UUID): List<Volunteer> {
-        val student = studentRepository.findById(studentId)
-            .orElseThrow { throw StudentNotFoundException }
-
-        val volunteers = volunteerJpaRepository.findAll()
-        return volunteers
-            .filter { volunteer ->
-                (
-                    volunteer.availableGrade.grades.contains(student.grade) &&
-                        (volunteer.availableSex == student.sex || volunteer.availableSex == Sex.ALL)
-                    )
-            }
-            .mapNotNull { volunteerMapper.toDomain(it) }
-    }
-
     override fun queryAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> {
         return volunteerJpaRepository.findAllBySchoolId(schoolId)
-            .map { volunteerMapper.toDomain(it)!! }
-    }
-
-    override fun queryAllVolunteers(): List<Volunteer> {
-        return volunteerJpaRepository.findAll()
             .map { volunteerMapper.toDomain(it)!! }
     }
 }

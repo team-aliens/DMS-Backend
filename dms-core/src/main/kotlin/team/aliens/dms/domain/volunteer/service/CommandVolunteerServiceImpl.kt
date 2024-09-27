@@ -5,6 +5,7 @@ import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.spi.CommandVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.CommandVolunteerPort
+import java.util.UUID
 
 @Service
 class CommandVolunteerServiceImpl(
@@ -17,6 +18,10 @@ class CommandVolunteerServiceImpl(
 
     override fun deleteVolunteerApplication(volunteerApplication: VolunteerApplication) {
         commandVolunteerApplicationPort.deleteVolunteerApplication(volunteerApplication)
+    }
+
+    override fun deleteAllVolunteerApplicationsByVolunteerId(volunteerId: UUID) {
+        commandVolunteerApplicationPort.deleteAllVolunteerApplicationsByVolunteerId(volunteerId)
     }
 
     override fun saveVolunteer(volunteer: Volunteer): Volunteer =
