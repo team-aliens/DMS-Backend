@@ -2,6 +2,7 @@ package team.aliens.dms.domain.school.stub
 
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
+import team.aliens.dms.domain.volunteer.exception.VolunteerErrorCode
 import java.time.LocalDate
 import java.util.UUID
 
@@ -32,7 +33,8 @@ internal fun createAvailableFeatureStub(
     remainService: Boolean = true,
     pointService: Boolean = true,
     noticeService: Boolean = true,
-    outingService: Boolean = true
+    outingService: Boolean = true,
+    volunteerService: Boolean = true
 ) = AvailableFeature(
     schoolId = schoolId,
     mealService = mealService,
@@ -40,5 +42,6 @@ internal fun createAvailableFeatureStub(
     remainService = remainService,
     pointService = pointService,
     noticeService = noticeService,
-    outingService = outingService
+    outingService = outingService,
+    volunteerService = volunteerService
 )
