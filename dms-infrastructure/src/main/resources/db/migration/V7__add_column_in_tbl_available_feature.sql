@@ -1,0 +1,1 @@
+alter table tbl_available_feature add column volunteer_service tinyint(1) not null;
