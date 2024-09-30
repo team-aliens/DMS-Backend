@@ -23,6 +23,15 @@ class GetVolunteerServiceImpl(
         queryVolunteerApplicationPort.queryVolunteerApplicationById(volunteerApplicationId)
             ?: throw VolunteerApplicationNotFoundException
 
+    override fun getVolunteerApplicationByVolunteerIdAndStudentId(
+        volunteerId: UUID,
+        studentId: UUID
+    ): VolunteerApplication =
+        queryVolunteerApplicationPort.queryVolunteerApplicationByStudentIdAndVolunteerId(
+            volunteerId = volunteerId,
+            studentId = studentId
+        ) ?: throw VolunteerApplicationNotFoundException
+
     override fun getVolunteerById(volunteerId: UUID): Volunteer =
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
