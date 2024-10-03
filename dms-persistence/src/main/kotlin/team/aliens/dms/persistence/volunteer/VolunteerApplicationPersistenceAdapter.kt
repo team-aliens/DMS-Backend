@@ -7,6 +7,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.VolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
@@ -117,9 +118,9 @@ class VolunteerApplicationPersistenceAdapter(
         )
     }
 
-    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>> {
+    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>> {
         val result = queryFactory
-            .select(volunteerApplicationJpaEntity, volunteerJpaEntity)
+            .select(volunteerApplicationJpaEntity, volunteerJpaEntity, volunteerApplicationJpaEntity.approved)
             .from(volunteerApplicationJpaEntity)
             .join(volunteerApplicationJpaEntity.volunteer, volunteerJpaEntity)
             .where(volunteerApplicationJpaEntity.student.id.eq(studentId))
@@ -128,8 +129,13 @@ class VolunteerApplicationPersistenceAdapter(
         return result.map { tuple ->
             val volunteerApplication = volunteerApplicationMapper.toDomain(tuple[volunteerApplicationJpaEntity])!!
             val volunteer = volunteerMapper.toDomain(tuple[volunteerJpaEntity])!!
+            val status = VolunteerApplicationStatus.of(tuple[volunteerApplicationJpaEntity.approved])
 
-            volunteerApplication to volunteer
+            Triple(
+                volunteerApplication,
+                volunteer,
+                status
+            )
         }
     }
 }

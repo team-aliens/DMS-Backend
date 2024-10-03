@@ -6,6 +6,7 @@ import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotFoundEx
 import team.aliens.dms.domain.volunteer.exception.VolunteerNotFoundException
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
@@ -53,7 +54,7 @@ class GetVolunteerServiceImpl(
     override fun getAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId)
 
-    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>> {
+    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>> {
         return queryVolunteerApplicationPort.getVolunteerApplicationsWithVolunteersByStudentId(studentId)
     }
 }

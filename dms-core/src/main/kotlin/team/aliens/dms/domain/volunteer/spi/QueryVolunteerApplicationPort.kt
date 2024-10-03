@@ -2,6 +2,7 @@ package team.aliens.dms.domain.volunteer.spi
 
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import java.util.UUID
@@ -16,5 +17,5 @@ interface QueryVolunteerApplicationPort {
 
     fun queryVolunteerApplicationByStudentIdAndVolunteerId(studentId: UUID, volunteerId: UUID): VolunteerApplication?
 
-    fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>>
+    fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>>
 }

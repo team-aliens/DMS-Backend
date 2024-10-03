@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.spi.VolunteerPort
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
+import team.aliens.dms.persistence.volunteer.entity.QVolunteerApplicationJpaEntity
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerApplicationJpaEntity.volunteerApplicationJpaEntity
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerJpaEntity.volunteerJpaEntity
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
@@ -44,12 +45,16 @@ class VolunteerPersistenceAdapter(
     }
 
     override fun queryAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO> {
+        val myApplication = QVolunteerApplicationJpaEntity("myApplication")
+
         return queryFactory.selectFrom(volunteerJpaEntity)
             .leftJoin(volunteerApplicationJpaEntity)
             .on(
                 volunteerApplicationJpaEntity.volunteer.id.eq(volunteerJpaEntity.id),
                 volunteerApplicationJpaEntity.approved.isTrue
             )
+            .leftJoin(myApplication)
+            .on(myApplication.volunteer.id.eq(volunteerJpaEntity.id))
             .transform(
                 groupBy(volunteerJpaEntity.id)
                     .list(
@@ -63,7 +68,8 @@ class VolunteerPersistenceAdapter(
                             volunteerJpaEntity.maxApplicants,
                             volunteerJpaEntity.availableSex,
                             volunteerJpaEntity.availableGrade,
-                            volunteerJpaEntity.school.id
+                            volunteerJpaEntity.school.id,
+                            myApplication.approved
                         )
                     )
             )

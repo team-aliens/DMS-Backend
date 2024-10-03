@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.volunteer.repository.vo
 import com.querydsl.core.annotations.QueryProjection
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.AvailableGrade
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
@@ -16,7 +17,8 @@ class QueryVolunteerWithCurrentApplicantVO @QueryProjection constructor(
     maxApplicants: Int,
     availableSex: Sex,
     availableGrade: AvailableGrade,
-    schoolId: UUID
+    schoolId: UUID,
+    status: Boolean?
 ) : VolunteerWithCurrentApplicantVO(
     id = id,
     name = name,
@@ -27,5 +29,6 @@ class QueryVolunteerWithCurrentApplicantVO @QueryProjection constructor(
     maxApplicants = maxApplicants,
     availableSex = availableSex,
     availableGrade = availableGrade,
-    schoolId = schoolId
+    schoolId = schoolId,
+    status = VolunteerApplicationStatus.of(status)
 )
