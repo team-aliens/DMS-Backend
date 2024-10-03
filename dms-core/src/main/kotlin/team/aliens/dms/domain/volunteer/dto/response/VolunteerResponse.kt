@@ -4,6 +4,7 @@ import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.AvailableGrade
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
@@ -14,11 +15,11 @@ data class QueryMyVolunteerApplicationResponse(
 ) {
     companion object {
         fun of(
-            applicationsWithVolunteers: List<Pair<VolunteerApplication, Volunteer>>
+            applicationsWithVolunteers: List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>>
         ): QueryMyVolunteerApplicationResponse {
             return QueryMyVolunteerApplicationResponse(
-                volunteerApplications = applicationsWithVolunteers.map { (application, volunteer) ->
-                    VolunteerApplicationResponse.of(application, volunteer)
+                volunteerApplications = applicationsWithVolunteers.map { (application, volunteer, status) ->
+                    VolunteerApplicationResponse.of(application, volunteer, status)
                 }
             )
         }
@@ -28,15 +29,19 @@ data class QueryMyVolunteerApplicationResponse(
 data class VolunteerApplicationResponse(
     val id: UUID,
     val volunteerId: UUID,
-    val approved: Boolean,
-    val name: String,
+    val status: VolunteerApplicationStatus,
+    val name: String
 ) {
     companion object {
-        fun of(volunteerApplication: VolunteerApplication, volunteer: Volunteer): VolunteerApplicationResponse {
+        fun of(
+            volunteerApplication: VolunteerApplication,
+            volunteer: Volunteer,
+            status: VolunteerApplicationStatus
+        ): VolunteerApplicationResponse {
             return VolunteerApplicationResponse(
                 id = volunteerApplication.id,
                 volunteerId = volunteerApplication.volunteerId,
-                approved = volunteerApplication.approved,
+                status = status,
                 name = volunteer.name
             )
         }
@@ -125,7 +130,8 @@ data class AvailableVolunteerResponse(
     val score: Int,
     val optionalScore: Int,
     val currentApplicants: Int,
-    val maxApplicants: Int
+    val maxApplicants: Int,
+    val status: VolunteerApplicationStatus
 ) {
     companion object {
         fun of(volunteerWithCurrentApplicantVO: VolunteerWithCurrentApplicantVO): AvailableVolunteerResponse {
@@ -136,7 +142,8 @@ data class AvailableVolunteerResponse(
                 score = volunteerWithCurrentApplicantVO.score,
                 optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
                 currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
-                maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants
+                maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants,
+                status = volunteerWithCurrentApplicantVO.status
             )
         }
     }
