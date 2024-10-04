@@ -18,6 +18,8 @@ data class AvailableFeature(
 
     val remainService: Boolean,
 
-    val outingService: Boolean
+    val outingService: Boolean,
+
+    val volunteerService: Boolean
 
 )
