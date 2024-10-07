@@ -63,9 +63,9 @@ class VolunteerWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/cancellation/{volunteer-application-id}")
-    fun unapplyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
-        unapplyVolunteerUseCase.execute(volunteerApplicationId)
+    @DeleteMapping("/cancellation/{volunteer-id}")
+    fun unapplyVolunteer(@PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
+        unapplyVolunteerUseCase.execute(volunteerId)
     }
 
     @ResponseStatus(HttpStatus.OK)

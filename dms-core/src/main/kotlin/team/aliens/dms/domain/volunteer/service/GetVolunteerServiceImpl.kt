@@ -6,10 +6,12 @@ import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotFoundEx
 import team.aliens.dms.domain.volunteer.exception.VolunteerNotFoundException
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
+import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
 @Service
@@ -22,20 +24,29 @@ class GetVolunteerServiceImpl(
         queryVolunteerApplicationPort.queryVolunteerApplicationById(volunteerApplicationId)
             ?: throw VolunteerApplicationNotFoundException
 
+    override fun getVolunteerApplicationByVolunteerIdAndStudentId(
+        volunteerId: UUID,
+        studentId: UUID
+    ): VolunteerApplication =
+        queryVolunteerApplicationPort.queryVolunteerApplicationByStudentIdAndVolunteerId(
+            volunteerId = volunteerId,
+            studentId = studentId
+        ) ?: throw VolunteerApplicationNotFoundException
+
     override fun getVolunteerById(volunteerId: UUID): Volunteer =
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
 
-    override fun getVolunteerByStudent(student: Student): List<Volunteer> {
-        val volunteers = queryVolunteerPort.queryAllVolunteersBySchoolId(student.schoolId)
+    override fun getAllVolunteersWithCurrentApplicantsByStudent(student: Student): List<VolunteerWithCurrentApplicantVO> {
+        val volunteers = queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(student.schoolId)
 
         return volunteers.filter { volunteer ->
-            volunteer.isAvailable(student)
+            volunteer.toVolunteer().isAvailable(student)
         }
     }
 
-    override fun getAllVolunteersBySchoolId(schoolId: UUID): List<Volunteer> =
-        queryVolunteerPort.queryAllVolunteersBySchoolId(schoolId)
+    override fun getAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO> =
+        queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(schoolId)
 
     override fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsByVolunteerId(volunteerId)
@@ -43,7 +54,7 @@ class GetVolunteerServiceImpl(
     override fun getAllApplicantsBySchoolIdGroupByVolunteer(schoolId: UUID): List<CurrentVolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsBySchoolIdGroupByVolunteer(schoolId)
 
-    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Pair<VolunteerApplication, Volunteer>> {
+    override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>> {
         return queryVolunteerApplicationPort.getVolunteerApplicationsWithVolunteersByStudentId(studentId)
     }
 }
