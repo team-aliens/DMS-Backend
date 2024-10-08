@@ -23,5 +23,5 @@ interface CheckOutingService {
         arrivalTime: LocalTime
     )
 
-    fun checkOutingApplicationQueryAble() : Boolean
+    fun checkOutingApplicationQueryAble(): Boolean
 }

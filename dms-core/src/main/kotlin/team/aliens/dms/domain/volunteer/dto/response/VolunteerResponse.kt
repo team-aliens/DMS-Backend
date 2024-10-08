@@ -51,7 +51,6 @@ data class VolunteerApplicationResponse(
 data class VolunteerResponse(
     val id: UUID,
     val name: String,
-    val content: String,
     val score: Int,
     val optionalScore: Int,
     val currentApplicants: Int,
@@ -64,7 +63,6 @@ data class VolunteerResponse(
             return VolunteerResponse(
                 id = volunteerWithCurrentApplicantVO.id,
                 name = volunteerWithCurrentApplicantVO.name,
-                content = volunteerWithCurrentApplicantVO.content,
                 score = volunteerWithCurrentApplicantVO.score,
                 optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
                 currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
@@ -128,7 +126,6 @@ data class CurrentVolunteerApplicantsResponse(
 data class AvailableVolunteerResponse(
     val id: UUID,
     val name: String,
-    val content: String,
     val score: Int,
     val optionalScore: Int,
     val currentApplicants: Int,
@@ -140,7 +137,6 @@ data class AvailableVolunteerResponse(
             return AvailableVolunteerResponse(
                 id = volunteerWithCurrentApplicantVO.id,
                 name = volunteerWithCurrentApplicantVO.name,
-                content = volunteerWithCurrentApplicantVO.content,
                 score = volunteerWithCurrentApplicantVO.score,
                 optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
                 currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,

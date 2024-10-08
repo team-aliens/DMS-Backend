@@ -2,7 +2,6 @@ package team.aliens.dms.domain.school.stub
 
 import team.aliens.dms.domain.school.model.AvailableFeature
 import team.aliens.dms.domain.school.model.School
-import team.aliens.dms.domain.volunteer.exception.VolunteerErrorCode
 import java.time.LocalDate
 import java.util.UUID
 

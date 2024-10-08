@@ -23,9 +23,6 @@ class VolunteerJpaEntity(
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
-    val content: String,
-
     @Column(columnDefinition = "INT", nullable = false)
     val score: Int,
 

@@ -14,8 +14,6 @@ data class Volunteer(
 
     val name: String,
 
-    val content: String,
-
     val score: Int,
 
     val optionalScore: Int = 0,

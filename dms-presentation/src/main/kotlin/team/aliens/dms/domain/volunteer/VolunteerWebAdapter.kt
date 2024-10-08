@@ -86,7 +86,6 @@ class VolunteerWebAdapter(
         createVolunteerUseCase.execute(
             CreateVolunteerRequest(
                 name = createVolunteerWebRequest.name,
-                content = createVolunteerWebRequest.content,
                 availableGrade = createVolunteerWebRequest.availableGrade,
                 availableSex = createVolunteerWebRequest.availableSex,
                 score = createVolunteerWebRequest.score!!,
@@ -105,7 +104,6 @@ class VolunteerWebAdapter(
         updateVolunteerUseCase.execute(
             UpdateVolunteerRequest(
                 name = updateVolunteerWebRequest.name,
-                content = updateVolunteerWebRequest.content,
                 availableGrade = updateVolunteerWebRequest.availableGrade,
                 availableSex = updateVolunteerWebRequest.availableSex,
                 score = updateVolunteerWebRequest.score!!,
