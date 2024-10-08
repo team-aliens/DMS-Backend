@@ -99,7 +99,8 @@ data class VolunteerApplicantsResponse(
 )
 
 data class CurrentVolunteerApplicantResponse(
-    val volunteerName: String,
+    val id: UUID,
+    val name: String,
     val availableSex: Sex,
     val availableGrade: AvailableGrade,
     val currentApplicants: Int,
@@ -108,7 +109,8 @@ data class CurrentVolunteerApplicantResponse(
 ) {
     companion object {
         fun of(currentVolunteerApplicant: CurrentVolunteerApplicantVO) = CurrentVolunteerApplicantResponse(
-            volunteerName = currentVolunteerApplicant.volunteerName,
+            id = currentVolunteerApplicant.id,
+            name = currentVolunteerApplicant.name,
             availableSex = currentVolunteerApplicant.availableSex,
             availableGrade = currentVolunteerApplicant.availableGrade,
             currentApplicants = currentVolunteerApplicant.currentApplicants,
