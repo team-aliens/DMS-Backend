@@ -63,6 +63,8 @@ allprojects {
 
         compileJava {
             sourceCompatibility = JavaVersion.VERSION_17.majorVersion
+
+            options.isFork = true
         }
 
         test {
