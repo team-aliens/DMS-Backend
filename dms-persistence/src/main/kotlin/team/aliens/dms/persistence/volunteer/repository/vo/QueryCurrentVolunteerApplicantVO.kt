@@ -7,14 +7,16 @@ import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import java.util.UUID
 
 class QueryCurrentVolunteerApplicantVO @QueryProjection constructor(
-    volunteerName: String,
+    id: UUID,
+    name: String,
     availableSex: Sex,
     availableGrade: AvailableGrade,
     currentApplicants: List<UUID>,
     maxApplicants: Int,
     applicants: List<QueryVolunteerApplicantVO>
 ) : CurrentVolunteerApplicantVO(
-    volunteerName = volunteerName,
+    id = id,
+    name = name,
     availableSex = availableSex,
     availableGrade = availableGrade,
     currentApplicants = currentApplicants.size,

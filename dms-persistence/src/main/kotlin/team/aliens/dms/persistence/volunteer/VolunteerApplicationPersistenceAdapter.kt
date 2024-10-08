@@ -88,6 +88,7 @@ class VolunteerApplicationPersistenceAdapter(
                 groupBy(volunteerJpaEntity.id)
                     .list(
                         QQueryCurrentVolunteerApplicantVO(
+                            volunteerJpaEntity.id,
                             volunteerJpaEntity.name,
                             volunteerJpaEntity.availableSex,
                             volunteerJpaEntity.availableGrade,
