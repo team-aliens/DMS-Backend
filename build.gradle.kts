@@ -63,6 +63,12 @@ allprojects {
 
         compileJava {
             sourceCompatibility = JavaVersion.VERSION_17.majorVersion
+
+            options.isFork = true
+            options.forkOptions.apply {
+                memoryMaximumSize = "4g"
+                jvmArgs = listOf("-Xmx4g", "-Xss1g")
+            }
         }
 
         test {
