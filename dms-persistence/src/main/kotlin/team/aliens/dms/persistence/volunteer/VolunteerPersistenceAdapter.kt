@@ -61,7 +61,6 @@ class VolunteerPersistenceAdapter(
                         QQueryVolunteerWithCurrentApplicantVO(
                             volunteerJpaEntity.id,
                             volunteerJpaEntity.name,
-                            volunteerJpaEntity.content,
                             volunteerJpaEntity.score,
                             volunteerJpaEntity.optionalScore,
                             list(volunteerApplicationJpaEntity.id),

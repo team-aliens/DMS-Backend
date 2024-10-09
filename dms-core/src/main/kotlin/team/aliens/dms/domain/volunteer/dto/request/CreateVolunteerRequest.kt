@@ -5,7 +5,6 @@ import team.aliens.dms.domain.volunteer.model.AvailableGrade
 
 data class CreateVolunteerRequest(
     val name: String,
-    val content: String,
     val availableSex: Sex,
     val availableGrade: AvailableGrade,
     val score: Int,

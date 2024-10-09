@@ -15,7 +15,6 @@ class UpdateVolunteerUseCase(
         volunteerService.saveVolunteer(
             currentVolunteer.copy(
                 name = updateVolunteerRequest.name,
-                content = updateVolunteerRequest.content,
                 availableSex = updateVolunteerRequest.availableSex,
                 availableGrade = updateVolunteerRequest.availableGrade,
                 score = updateVolunteerRequest.score,

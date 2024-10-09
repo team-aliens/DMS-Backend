@@ -17,7 +17,6 @@ class VolunteerMapper(
             Volunteer(
                 id = it.id!!,
                 name = it.name,
-                content = it.content,
                 score = it.score,
                 optionalScore = it.optionalScore,
                 maxApplicants = it.maxApplicants,
@@ -33,7 +32,6 @@ class VolunteerMapper(
         return VolunteerJpaEntity(
             id = domain.id,
             name = domain.name,
-            content = domain.content,
             score = domain.score,
             optionalScore = domain.optionalScore,
             maxApplicants = domain.maxApplicants,
