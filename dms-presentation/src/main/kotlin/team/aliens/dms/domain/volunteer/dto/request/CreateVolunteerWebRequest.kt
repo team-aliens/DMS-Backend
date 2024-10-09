@@ -10,9 +10,6 @@ data class CreateVolunteerWebRequest(
     @field:NotBlank
     val name: String,
 
-    @field:NotBlank
-    val content: String,
-
     @field:NotNull
     val availableSex: Sex,
 
