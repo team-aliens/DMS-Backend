@@ -1,7 +1,8 @@
 package team.aliens.dms.persistence.volunteer
 
 import com.querydsl.core.group.GroupBy.groupBy
-import com.querydsl.core.group.GroupBy.list
+import com.querydsl.core.group.GroupBy.set
+import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -44,7 +45,7 @@ class VolunteerPersistenceAdapter(
             .map { volunteerMapper.toDomain(it)!! }
     }
 
-    override fun queryAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO> {
+    override fun queryAllVolunteersWithCurrentApplicantsBySchoolIdWithStatus(schoolId: UUID, studentId: UUID?): List<VolunteerWithCurrentApplicantVO> {
         val myApplication = QVolunteerApplicationJpaEntity("myApplication")
 
         return queryFactory.selectFrom(volunteerJpaEntity)
@@ -54,7 +55,12 @@ class VolunteerPersistenceAdapter(
                 volunteerApplicationJpaEntity.approved.isTrue
             )
             .leftJoin(myApplication)
-            .on(myApplication.volunteer.id.eq(volunteerJpaEntity.id))
+            .on(
+                myApplication.volunteer.id.eq(volunteerJpaEntity.id),
+                studentId?.let { myApplication.student.id.eq(it) }
+                    ?: Expressions.asBoolean(true).isTrue
+            )
+            .where(volunteerJpaEntity.school.id.eq(schoolId))
             .transform(
                 groupBy(volunteerJpaEntity.id)
                     .list(
@@ -63,7 +69,7 @@ class VolunteerPersistenceAdapter(
                             volunteerJpaEntity.name,
                             volunteerJpaEntity.score,
                             volunteerJpaEntity.optionalScore,
-                            list(volunteerApplicationJpaEntity.id),
+                            set(volunteerApplicationJpaEntity.id),
                             volunteerJpaEntity.maxApplicants,
                             volunteerJpaEntity.availableSex,
                             volunteerJpaEntity.availableGrade,

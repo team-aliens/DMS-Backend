@@ -37,8 +37,11 @@ class GetVolunteerServiceImpl(
         queryVolunteerPort.queryVolunteerById(volunteerId)
             ?: throw VolunteerNotFoundException
 
-    override fun getAllVolunteersWithCurrentApplicantsByStudent(student: Student): List<VolunteerWithCurrentApplicantVO> {
-        val volunteers = queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(student.schoolId)
+    override fun getAllVolunteersWithCurrentApplicantsAndStatusByStudent(student: Student): List<VolunteerWithCurrentApplicantVO> {
+        val volunteers = queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolIdWithStatus(
+            schoolId = student.schoolId,
+            studentId = student.id
+        )
 
         return volunteers.filter { volunteer ->
             volunteer.toVolunteer().isAvailable(student)
@@ -46,7 +49,10 @@ class GetVolunteerServiceImpl(
     }
 
     override fun getAllVolunteersWithCurrentApplicantsBySchoolId(schoolId: UUID): List<VolunteerWithCurrentApplicantVO> =
-        queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolId(schoolId)
+        queryVolunteerPort.queryAllVolunteersWithCurrentApplicantsBySchoolIdWithStatus(
+            schoolId = schoolId,
+            studentId = null
+        )
 
     override fun getAllApplicantsByVolunteerId(volunteerId: UUID): List<VolunteerApplicantVO> =
         queryVolunteerApplicationPort.queryAllApplicantsByVolunteerId(volunteerId)
