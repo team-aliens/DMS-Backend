@@ -23,7 +23,9 @@ data class OutingApplication(
 
     val arrivalTime: LocalTime,
 
-    val status: OutingStatus,
+    val isApproved: Boolean,
+
+    val isComeback: Boolean,
 
     val reason: String?,
 
@@ -35,8 +37,8 @@ data class OutingApplication(
 
 ) : SchoolIdDomain {
 
-    fun checkCancelable(status: OutingStatus) {
-        if (status != OutingStatus.APPROVED) {
+    fun checkCancelable(isApproved: Boolean) {
+        if (isApproved) {
             throw OutingTypeMismatchException
         }
     }

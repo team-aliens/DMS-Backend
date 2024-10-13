@@ -3,7 +3,6 @@ package team.aliens.dms.domain.outing.dto.response
 import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingAvailableTime
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
 import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
@@ -25,7 +24,6 @@ data class GetCurrentOutingApplicationResponse(
     val id: UUID,
     val outingDate: LocalDate,
     val outingTypeTitle: String,
-    val status: OutingStatus,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     @field:JsonInclude(JsonInclude.Include.ALWAYS)
@@ -39,7 +37,6 @@ data class GetCurrentOutingApplicationResponse(
                     id = id,
                     outingDate = outingDate,
                     outingTypeTitle = outingTypeTitle,
-                    status = status,
                     outingTime = outingTime,
                     arrivalTime = arrivalTime,
                     reason = reason,
@@ -63,7 +60,6 @@ data class OutingHistoryDetailsResponse(
     val studentRoomNumber: String,
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
-    val outingStatus: OutingStatus,
     @field:JsonInclude(JsonInclude.Include.ALWAYS)
     val reason: String?,
     val outingType: String,
@@ -81,7 +77,6 @@ data class OutingHistoryDetailsResponse(
                 studentRoomNumber = student.roomNumber,
                 outingTime = outingHistory.outingTime,
                 arrivalTime = outingHistory.arrivalTime,
-                outingStatus = outingHistory.status,
                 reason = outingHistory.reason,
                 outingType = outingHistory.outingTypeTitle,
                 students = outingCompanions.map {
