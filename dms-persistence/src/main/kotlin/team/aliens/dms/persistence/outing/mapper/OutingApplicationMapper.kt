@@ -24,7 +24,8 @@ class OutingApplicationMapper(
                 outingDate = it.outingDate,
                 outingTime = it.outingTime,
                 arrivalTime = it.arrivalTime,
-                status = it.status,
+                isApproved = it.isApproved,
+                isComeback = it.isComeback,
                 reason = it.reason,
                 outingTypeTitle = it.outingType!!.id.title,
                 schoolId = it.outingType!!.id.schoolId
@@ -47,7 +48,8 @@ class OutingApplicationMapper(
             outingDate = domain.outingDate,
             outingTime = domain.outingTime,
             arrivalTime = domain.arrivalTime,
-            status = domain.status,
+            isApproved = domain.isApproved,
+            isComeback = domain.isComeback,
             reason = domain.reason,
             outingType = outingType
         )
