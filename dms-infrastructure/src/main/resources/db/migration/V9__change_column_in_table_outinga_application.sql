@@ -1,3 +1,4 @@
 alter table tbl_outing_application
-    add column is_approved bit(1) default false not null,
-    add column is_comeback bit(1) default false not null;
+drop column status,
+add column is_approved bit(1) not null default b'0',
+add column is_comeback bit(1) not null default b'0';
