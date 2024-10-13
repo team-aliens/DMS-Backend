@@ -6,7 +6,6 @@ import team.aliens.dms.domain.outing.model.OutingType
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
-import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
@@ -22,8 +21,6 @@ interface GetOutingService {
     fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate): List<OutingApplicationVO>
 
     fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO
-
-    fun getOutingHistoriesByStudentNameAndDate(studentName: String?, date: LocalDate): List<OutingHistoryVO>
 
     fun getOutingAvailableTimesByDayOfWeek(dayOfWeek: DayOfWeek): List<OutingAvailableTime>
 

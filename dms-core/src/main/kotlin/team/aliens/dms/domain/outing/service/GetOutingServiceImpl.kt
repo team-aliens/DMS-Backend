@@ -13,7 +13,6 @@ import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
-import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
@@ -43,11 +42,6 @@ class GetOutingServiceImpl(
         return queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
             ?: throw OutingApplicationNotFoundException
     }
-
-    override fun getOutingHistoriesByStudentNameAndDate(
-        studentName: String?,
-        date: LocalDate
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
 
     override fun getOutingAvailableTimesByDayOfWeek(
         dayOfWeek: DayOfWeek

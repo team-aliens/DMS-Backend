@@ -5,7 +5,6 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.outing.dto.request.ApplyOutingRequest
 import team.aliens.dms.domain.outing.dto.response.ApplyOutingResponse
 import team.aliens.dms.domain.outing.model.OutingApplication
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.service.OutingService
 import team.aliens.dms.domain.student.service.StudentService
 import java.time.LocalDateTime
@@ -34,7 +33,8 @@ class ApplyOutingUseCase(
                 outingDate = request.outingDate,
                 outingTime = request.outingTime,
                 arrivalTime = request.arrivalTime,
-                status = OutingStatus.APPROVED,
+                isApproved = false,
+                isComeback = false,
                 reason = request.reason,
                 outingTypeTitle = request.outingTypeTitle,
                 schoolId = securityService.getCurrentSchoolId(),
