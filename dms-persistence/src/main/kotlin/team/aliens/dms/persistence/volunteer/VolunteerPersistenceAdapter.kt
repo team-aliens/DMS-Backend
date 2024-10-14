@@ -45,7 +45,7 @@ class VolunteerPersistenceAdapter(
             .map { volunteerMapper.toDomain(it)!! }
     }
 
-    override fun queryAllVolunteersWithCurrentApplicantsBySchoolIdWithStatus(schoolId: UUID, studentId: UUID?): List<VolunteerWithCurrentApplicantVO> {
+    override fun queryAllVolunteersWithCurrentApplicantsBySchoolIdAndStudentId(schoolId: UUID, studentId: UUID?): List<VolunteerWithCurrentApplicantVO> {
         val myApplication = QVolunteerApplicationJpaEntity("myApplication")
 
         return queryFactory.selectFrom(volunteerJpaEntity)
