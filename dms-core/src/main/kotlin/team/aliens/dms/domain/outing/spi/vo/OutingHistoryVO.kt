@@ -11,5 +11,5 @@ open class OutingHistoryVO(
     val outingTime: LocalTime,
     val arrivalTime: LocalTime,
     val isApproved: Boolean,
-    val isComeback: Boolean
+    val isReturned: Boolean
 )

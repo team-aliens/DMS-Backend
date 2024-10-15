@@ -9,11 +9,11 @@ class UpdateOutingStatusUseCase(
     private val outingService: OutingService
 ) {
 
-    fun execute(outingApplicationId: UUID, isApproved: Boolean, isComeback: Boolean) {
+    fun execute(outingApplicationId: UUID, isApproved: Boolean, isReturned: Boolean) {
         val outingApplication = outingService.getOutingApplicationById(outingApplicationId)
 
         outingService.saveOutingApplication(
-            outingApplication.copy(isApproved = isApproved, isComeback = isComeback)
+            outingApplication.copy(isApproved = isApproved, isComeback = isReturned)
         )
     }
 }

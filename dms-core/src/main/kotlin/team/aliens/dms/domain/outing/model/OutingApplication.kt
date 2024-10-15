@@ -25,7 +25,7 @@ data class OutingApplication(
 
     val isApproved: Boolean,
 
-    val isComeback: Boolean,
+    val isReturned: Boolean,
 
     val reason: String?,
 

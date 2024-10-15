@@ -13,7 +13,7 @@ class QueryOutingHistoryVO @QueryProjection constructor(
     outingTime: LocalTime,
     arrivalTime: LocalTime,
     isApproved: Boolean,
-    isComeback: Boolean
+    isReturned: Boolean
 ) : OutingHistoryVO(
     id = id,
     studentGcn = studentGcn,
@@ -22,5 +22,5 @@ class QueryOutingHistoryVO @QueryProjection constructor(
     outingTime = outingTime,
     arrivalTime = arrivalTime,
     isApproved = isApproved,
-    isComeback = isComeback
+    isReturned = isReturned
 )

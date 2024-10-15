@@ -42,7 +42,7 @@ class OutingApplicationJpaEntity(
 
     @Column(columnDefinition = "BIT(1)", nullable = false)
     @ColumnDefault("false")
-    val isComeback: Boolean,
+    val isReturned: Boolean,
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = true)
     val reason: String?,
