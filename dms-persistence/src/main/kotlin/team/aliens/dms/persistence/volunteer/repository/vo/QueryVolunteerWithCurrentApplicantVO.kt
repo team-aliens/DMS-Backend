@@ -12,7 +12,7 @@ class QueryVolunteerWithCurrentApplicantVO @QueryProjection constructor(
     name: String,
     score: Int,
     optionalScore: Int,
-    currentApplicants: List<UUID>,
+    currentApplicants: Set<UUID>,
     maxApplicants: Int,
     availableSex: Sex,
     availableGrade: AvailableGrade,
