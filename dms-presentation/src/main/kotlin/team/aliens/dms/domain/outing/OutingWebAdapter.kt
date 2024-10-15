@@ -115,8 +115,8 @@ class OutingWebAdapter(
     @PatchMapping("/{outing-application-id}")
     fun updateOutingStatus(
         @PathVariable("outing-application-id") @NotNull outingApplicationId: UUID,
-        @RequestParam("is_approved") @NotNull isApproved: Boolean,
-        @RequestParam("is_comeback") @NotNull isComeback: Boolean,
+        @RequestParam("is_approved", required = false) isApproved: Boolean,
+        @RequestParam("is_comeback", required = false) isComeback: Boolean,
     ) {
         updateOutingStatusUseCase.execute(outingApplicationId, isApproved, isComeback)
     }
