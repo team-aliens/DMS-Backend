@@ -13,7 +13,7 @@ class GetOutingApplicationHistoriesUseCase(
 
     fun execute(studentName: String?, date: LocalDate): OutingApplicationHistoriesResponse {
 
-        val outingApplications = outingService.getAllOutingApplicationVOsBetweenStartAndEnd(date, date)
+        val outingApplications = outingService.getAllOutingApplicationVOsBetweenStartAndEnd(studentName, date, date)
 
         val outingApplicationInfoSet = outingApplications.flatMap { outingApplication ->
             val outingApplicationInfoList = mutableListOf(

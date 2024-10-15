@@ -116,9 +116,9 @@ class OutingWebAdapter(
     fun updateOutingStatus(
         @PathVariable("outing-application-id") @NotNull outingApplicationId: UUID,
         @RequestParam("is_approved", required = false) isApproved: Boolean,
-        @RequestParam("is_comeback", required = false) isComeback: Boolean,
+        @RequestParam("is_returned", required = false) isReturned: Boolean,
     ) {
-        updateOutingStatusUseCase.execute(outingApplicationId, isApproved, isComeback)
+        updateOutingStatusUseCase.execute(outingApplicationId, isApproved, isReturned)
     }
 
     @GetMapping("/files")

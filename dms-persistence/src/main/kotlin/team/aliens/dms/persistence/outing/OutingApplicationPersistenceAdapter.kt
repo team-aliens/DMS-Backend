@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.outing
 
 import com.querydsl.core.group.GroupBy.groupBy
 import com.querydsl.core.group.GroupBy.list
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPAExpressions.selectOne
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -40,6 +41,7 @@ class OutingApplicationPersistenceAdapter(
         )
 
     override fun queryAllOutingApplicationVOsBetweenStartAndEnd(
+        name: String?,
         start: LocalDate,
         end: LocalDate
     ): List<OutingApplicationVO> {
@@ -52,7 +54,10 @@ class OutingApplicationPersistenceAdapter(
             .leftJoin(outingCompanionJpaEntity)
             .on(outingApplicationJpaEntity.id.eq(outingCompanionJpaEntity.outingApplication.id))
             .leftJoin(outingCompanionJpaEntity.student, outingCompanionStudentJpaEntity)
-            .where(outingApplicationJpaEntity.outingDate.between(start, end))
+            .where(
+                containsName(name),
+                outingApplicationJpaEntity.outingDate.between(start, end)
+            )
             .orderBy(outingApplicationJpaEntity.outingDate.asc())
             .transform(
                 groupBy(outingApplicationJpaEntity.id)
@@ -156,5 +161,9 @@ class OutingApplicationPersistenceAdapter(
             .fetchOne()
 
         return result != null
+    }
+
+    private fun containsName(name: String?): BooleanExpression? {
+        return name?.let { outingApplicationJpaEntity.student.name.contains(it) }
     }
 }
