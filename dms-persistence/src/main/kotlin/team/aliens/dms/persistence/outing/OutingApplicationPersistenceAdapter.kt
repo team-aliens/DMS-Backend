@@ -73,7 +73,7 @@ class OutingApplicationPersistenceAdapter(
                             outingApplicationJpaEntity.outingTime,
                             outingApplicationJpaEntity.arrivalTime,
                             outingApplicationJpaEntity.isApproved,
-                            outingApplicationJpaEntity.isComeback,
+                            outingApplicationJpaEntity.isReturned,
                             list(
                                 QQueryOutingCompanionVO(
                                     outingCompanionStudentJpaEntity.name,
@@ -107,11 +107,11 @@ class OutingApplicationPersistenceAdapter(
                             .where(
                                 outingCompanionJpaEntity.student.id.eq(studentId),
                                 outingApplicationJpaEntity.student.id.eq(studentJpaEntity.id),
-                                outingApplicationJpaEntity.isComeback.eq(false)
+                                outingApplicationJpaEntity.isReturned.eq(false)
                             )
                             .exists()
                     ),
-                outingApplicationJpaEntity.isComeback.eq(false)
+                outingApplicationJpaEntity.isReturned.eq(false)
             )
             .transform(
                 groupBy(outingApplicationJpaEntity.id)
@@ -156,7 +156,7 @@ class OutingApplicationPersistenceAdapter(
             .join(outingApplicationJpaEntity.student, studentJpaEntity)
             .where(
                 studentJpaEntity.id.eq(studentId),
-                outingApplicationJpaEntity.isComeback.eq(false)
+                outingApplicationJpaEntity.isReturned.eq(false)
             )
             .fetchOne()
 

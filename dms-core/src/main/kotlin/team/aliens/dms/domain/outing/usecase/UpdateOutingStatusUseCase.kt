@@ -13,7 +13,7 @@ class UpdateOutingStatusUseCase(
         val outingApplication = outingService.getOutingApplicationById(outingApplicationId)
 
         outingService.saveOutingApplication(
-            outingApplication.copy(isApproved = isApproved, isComeback = isReturned)
+            outingApplication.copy(isApproved = isApproved, isReturned = isReturned)
         )
     }
 }

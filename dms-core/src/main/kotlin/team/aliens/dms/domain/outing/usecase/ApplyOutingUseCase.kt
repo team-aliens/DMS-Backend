@@ -34,7 +34,7 @@ class ApplyOutingUseCase(
                 outingTime = request.outingTime,
                 arrivalTime = request.arrivalTime,
                 isApproved = false,
-                isComeback = false,
+                isReturned = false,
                 reason = request.reason,
                 outingTypeTitle = request.outingTypeTitle,
                 schoolId = securityService.getCurrentSchoolId(),

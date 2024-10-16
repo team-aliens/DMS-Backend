@@ -36,7 +36,7 @@ class GetOutingServiceImpl(
             ?: throw OutingApplicationNotFoundException
 
     override fun getAllOutingApplicationVOsBetweenStartAndEnd(name: String?, start: LocalDate, end: LocalDate) =
-        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
+        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(name, start, end)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO {
         return queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
