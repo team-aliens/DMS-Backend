@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.outing.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.service.OutingService
 import java.util.UUID
 
@@ -10,11 +9,11 @@ class UpdateOutingStatusUseCase(
     private val outingService: OutingService
 ) {
 
-    fun execute(outingApplicationId: UUID, outingStatus: OutingStatus) {
+    fun execute(outingApplicationId: UUID, isApproved: Boolean, isReturned: Boolean) {
         val outingApplication = outingService.getOutingApplicationById(outingApplicationId)
 
         outingService.saveOutingApplication(
-            outingApplication.copy(status = outingStatus)
+            outingApplication.copy(isApproved = isApproved, isReturned = isReturned)
         )
     }
 }

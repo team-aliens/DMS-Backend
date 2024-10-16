@@ -2,14 +2,12 @@ package team.aliens.dms.persistence.outing.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinColumns
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import team.aliens.dms.domain.outing.model.OutingStatus
+import org.hibernate.annotations.ColumnDefault
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDate
@@ -38,9 +36,13 @@ class OutingApplicationJpaEntity(
     @Column(columnDefinition = "TIME", nullable = false)
     val arrivalTime: LocalTime,
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(9)", nullable = false)
-    val status: OutingStatus,
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @ColumnDefault("false")
+    val isApproved: Boolean,
+
+    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @ColumnDefault("false")
+    val isReturned: Boolean,
 
     @Column(columnDefinition = "VARCHAR(100)", nullable = true)
     val reason: String?,

@@ -31,7 +31,6 @@ import team.aliens.dms.domain.outing.dto.response.OutingApplicationHistoriesResp
 import team.aliens.dms.domain.outing.dto.response.OutingAvailableTimesResponse
 import team.aliens.dms.domain.outing.dto.response.OutingHistoryDetailsResponse
 import team.aliens.dms.domain.outing.dto.response.SetOutingAvailableTimeResponse
-import team.aliens.dms.domain.outing.model.OutingStatus
 import team.aliens.dms.domain.outing.usecase.ApplyOutingUseCase
 import team.aliens.dms.domain.outing.usecase.CreateOutingTypeUseCase
 import team.aliens.dms.domain.outing.usecase.ExportAllOutingApplicationsUseCase
@@ -116,9 +115,10 @@ class OutingWebAdapter(
     @PatchMapping("/{outing-application-id}")
     fun updateOutingStatus(
         @PathVariable("outing-application-id") @NotNull outingApplicationId: UUID,
-        @RequestParam("outing_status") @NotNull outingStatus: OutingStatus
+        @RequestParam("is_approved", required = false) isApproved: Boolean,
+        @RequestParam("is_returned", required = false) isReturned: Boolean,
     ) {
-        updateOutingStatusUseCase.execute(outingApplicationId, outingStatus)
+        updateOutingStatusUseCase.execute(outingApplicationId, isApproved, isReturned)
     }
 
     @GetMapping("/files")
