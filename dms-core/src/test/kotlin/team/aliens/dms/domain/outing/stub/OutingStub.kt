@@ -16,7 +16,7 @@ internal fun createOutingApplicationStub(
     outingTime: LocalTime = LocalTime.now(),
     arrivalTime: LocalTime = LocalTime.now(),
     isApproved: Boolean = false,
-    isComeback: Boolean = false,
+    isReturned: Boolean = false,
     reason: String? = null,
     outingTypeTitle: String = "식사 외출",
     schoolId: UUID = UUID.randomUUID(),
@@ -29,7 +29,7 @@ internal fun createOutingApplicationStub(
     outingTime = outingTime,
     arrivalTime = arrivalTime,
     isApproved = isApproved,
-    isComeback = isComeback,
+    isReturned = isReturned,
     reason = reason,
     outingTypeTitle = outingTypeTitle,
     schoolId = schoolId
