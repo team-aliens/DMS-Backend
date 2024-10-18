@@ -87,7 +87,7 @@ class OutingApplicationPersistenceAdapter(
             )
     }
 
-    override fun queryCurrentOutingApplicationVO(studentId: UUID): CurrentOutingApplicationVO? {
+    override fun queryCurrentOutingApplicationVO(studentId: UUID, date: LocalDate): CurrentOutingApplicationVO? {
         val studentJpaEntity = QStudentJpaEntity("studentJpaEntity")
         val outingCompanionStudentJpaEntity = QStudentJpaEntity("outingCompanionStudentJpaEntity")
 
@@ -107,11 +107,13 @@ class OutingApplicationPersistenceAdapter(
                             .where(
                                 outingCompanionJpaEntity.student.id.eq(studentId),
                                 outingApplicationJpaEntity.student.id.eq(studentJpaEntity.id),
-                                outingApplicationJpaEntity.isReturned.eq(false)
+                                outingApplicationJpaEntity.isReturned.eq(false),
+                                outingApplicationJpaEntity.outingDate.eq(date)
                             )
                             .exists()
                     ),
-                outingApplicationJpaEntity.isReturned.eq(false)
+                outingApplicationJpaEntity.isReturned.eq(false),
+                outingApplicationJpaEntity.outingDate.eq(date)
             )
             .transform(
                 groupBy(outingApplicationJpaEntity.id)

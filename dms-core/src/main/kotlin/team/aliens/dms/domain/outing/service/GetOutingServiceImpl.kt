@@ -39,8 +39,10 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(name, start, end)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO {
-        return queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
-            ?: throw OutingApplicationNotFoundException
+        return queryOutingApplicationPort.queryCurrentOutingApplicationVO(
+            studentId = studentId,
+            date = LocalDate.now()
+        ) ?: throw OutingApplicationNotFoundException
     }
 
     override fun getOutingAvailableTimesByDayOfWeek(
