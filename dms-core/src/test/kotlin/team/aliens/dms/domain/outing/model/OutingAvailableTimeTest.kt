@@ -68,15 +68,15 @@ class OutingAvailableTimeTest : DescribeSpec({
                     )
                 }
             }
+        }
 
-            context("외출 가능 시간이 겹친다면") {
-                it("예외가 발생한다") {
-                    shouldThrow<OutingAvailableTimeAlreadyExistsException> {
-                        outingAvailableTime.timesOverlap(
-                            newOutingTime = LocalTime.of(12, 0, 0),
-                            newArrivalTime = LocalTime.of(23, 30, 0)
-                        )
-                    }
+        context("외출 가능 시간이 겹친다면") {
+            it("예외가 발생한다") {
+                shouldThrow<OutingAvailableTimeAlreadyExistsException> {
+                    outingAvailableTime.timesOverlap(
+                        newOutingTime = LocalTime.of(12, 0, 0),
+                        newArrivalTime = LocalTime.of(23, 30, 0)
+                    )
                 }
             }
         }
