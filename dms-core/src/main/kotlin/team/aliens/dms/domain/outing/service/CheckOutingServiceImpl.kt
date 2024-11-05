@@ -64,10 +64,4 @@ class CheckOutingServiceImpl(
             existingTime.timesOverlap(outingTime, arrivalTime)
         }
     }
-
-    override fun checkOutingApplicationQueryAble(): Boolean {
-        val currentTime = LocalTime.now()
-
-        return currentTime.isBefore(LocalTime.of(20, 0))
-    }
 }
