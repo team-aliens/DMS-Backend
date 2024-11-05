@@ -3,6 +3,7 @@ package team.aliens.dms.domain.outing.model
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.stub.createOutingAvailableTimeStub
 import java.time.DayOfWeek
@@ -45,6 +46,36 @@ class OutingAvailableTimeTest : DescribeSpec({
                     outingAvailableTime.checkAvailable(
                         outingTime = LocalTime.of(14, 0, 0),
                         arrivalTime = LocalTime.of(20, 30, 1)
+                    )
+                }
+            }
+        }
+    }
+
+    describe("setAvailableTime") {
+        val outingAvailableTime = createOutingAvailableTimeStub(
+            dayOfWeek = DayOfWeek.SUNDAY,
+            outingTime = LocalTime.of(12, 0, 0),
+            arrivalTime = LocalTime.of(18, 30, 0)
+        )
+
+        context("외출 가능 시간이 겹치지 않는다면") {
+            it("외출 가능 시간이 생성된다") {
+                shouldNotThrowAny {
+                    outingAvailableTime.timesOverlap(
+                        newOutingTime = LocalTime.of(19, 0, 0),
+                        newArrivalTime = LocalTime.of(23, 30, 0)
+                    )
+                }
+            }
+        }
+
+        context("외출 가능 시간이 겹친다면") {
+            it("예외가 발생한다") {
+                shouldThrow<OutingAvailableTimeAlreadyExistsException> {
+                    outingAvailableTime.timesOverlap(
+                        newOutingTime = LocalTime.of(12, 0, 0),
+                        newArrivalTime = LocalTime.of(23, 30, 0)
                     )
                 }
             }

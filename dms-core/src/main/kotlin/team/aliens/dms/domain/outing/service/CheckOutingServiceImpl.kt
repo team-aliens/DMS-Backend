@@ -61,9 +61,7 @@ class CheckOutingServiceImpl(
         val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(dayOfWeek)
 
         for (existingTime in existingTimes) {
-            if (existingTime.timesOverlap(outingTime, arrivalTime)) {
-                throw OutingAvailableTimeAlreadyExistsException
-            }
+            existingTime.timesOverlap(outingTime, arrivalTime)
         }
     }
 
