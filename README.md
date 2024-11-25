@@ -118,3 +118,4 @@ service 종류 (깔끔한 분류를 위해 나눔)
 
 - persistenceAdapter **:** JPA, QueryDSL을 통한 쿼리 구현
 - 또는 기타 기술이나 라이브러리에 의존하는 세부 구현 내용
+
