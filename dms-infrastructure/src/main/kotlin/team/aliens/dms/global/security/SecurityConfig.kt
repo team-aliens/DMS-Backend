@@ -223,6 +223,11 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/volunteers/my/application").hasAuthority(STUDENT.name)
 
+                authorize
+                        // /vote
+                        .requestMatchers(HttpMethod.POST,"/vote/voting-topic").hasAnyAuthority(MANAGER.name)
+                        .requestMatchers(HttpMethod.GET,"/vote").permitAll()
+
                 .anyRequest().denyAll()
             }
         http
