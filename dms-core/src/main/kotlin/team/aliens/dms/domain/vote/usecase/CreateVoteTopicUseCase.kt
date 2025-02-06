@@ -10,9 +10,9 @@ import team.aliens.dms.domain.vote.service.ScheduleCreateVoteResultNoticeService
 
 @UseCase
 class CreateVoteTopicUseCase(
-    val commendVotingTopicService: CommendVotingTopicService,
-    val scheduleCreateVoteResultNoticeService: ScheduleCreateVoteResultNoticeService,
-    val securityPort: SecurityPort
+    private val commendVotingTopicService: CommendVotingTopicService,
+    private val scheduleCreateVoteResultNoticeService: ScheduleCreateVoteResultNoticeService,
+    private val securityPort: SecurityPort
 ) {
 
     fun execute(request: CreateVoteTopicRequest){
