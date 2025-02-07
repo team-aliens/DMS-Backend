@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import team.aliens.dms.domain.vote.model.VoteType
 import java.time.LocalDateTime
 
-data class CreateVoteTopicWebRequest(
+data class CreateVotingTopicWebRequest(
 
 
     @field:NotBlank(message = "Please provide a topic")
@@ -15,9 +15,9 @@ data class CreateVoteTopicWebRequest(
     val topicName: String?,
 
     @field:NotBlank(message = "Please provide a topic")
-    val voteDescription: String?,
+    val description: String?,
 
-    @field:NotBlank(message = "Please provide a topic")
+    @NotNull(message = "Please provide a topic")
     @JsonProperty("vote_type")
     val voteType: VoteType?,
 

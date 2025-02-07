@@ -5,10 +5,10 @@ import team.aliens.dms.domain.vote.service.CommendVotingTopicService
 import java.util.UUID
 
 @UseCase
-class DeleteVoteTopicUseCase(
+class DeleteVotingTopicUseCase(
     private val commandVotingTopicService: CommendVotingTopicService
 ) {
-    fun excute(id: UUID){
+    fun execute(id: UUID){
         commandVotingTopicService.deleteVoteTopicById(id)
     }
 }

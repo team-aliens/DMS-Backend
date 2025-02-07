@@ -1,15 +1,16 @@
 package team.aliens.dms.domain.vote.usecase
 
 
+import org.springframework.beans.factory.annotation.Qualifier
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.vote.dto.CreateVoteTopicRequest
+import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
 import team.aliens.dms.domain.vote.service.ScheduleCreateVoteResultNoticeService
 
 @UseCase
-class CreateVoteTopicUseCase(
+class CreateVotingTopicUseCase(
     private val commendVotingTopicService: CommendVotingTopicService,
     private val scheduleCreateVoteResultNoticeService: ScheduleCreateVoteResultNoticeService,
     private val securityPort: SecurityPort
@@ -23,14 +24,14 @@ class CreateVoteTopicUseCase(
             VotingTopic(
                 managerId = userId,
                 topicName = request.topicName,
-                voteDescription = request.voteDescription,
+                description = request.description,
                 startTime = request.startTime,
                 endTime = request.endTime,
                 voteType = request.voteType,
             )
         )
 
-        scheduleCreateVoteResultNoticeService.exctue(
+        scheduleCreateVoteResultNoticeService.exectue(
             request.endTime,
             userId,
             schoolId ,
