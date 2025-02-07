@@ -10,7 +10,7 @@ data class VotingTopic(
 
     val topicName: String,
 
-    val voteDescription: String,
+    val description: String,
 
     val startTime: LocalDateTime,
 

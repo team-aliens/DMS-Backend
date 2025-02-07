@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.vote
 
+import org.springframework.data.repository.findByIdOrNull
 import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -32,6 +33,16 @@ class VotingTopicPersistenceAdapter(
 
     override fun deleteVotingTopicById(id: UUID) {
        votingTopicJpaRepository.deleteById(id)
+    }
+
+    override fun findById(id: UUID) = votingTopicMapper.toDomain(
+        votingTopicJpaRepository.findByIdOrNull(id)
+    )
+
+    override fun findAll(): List<VotingTopic?> {
+        return votingTopicJpaRepository.findAll().map {
+            votingTopicMapper.toDomain(it)
+        }
     }
 
 }

@@ -18,8 +18,8 @@ class VotingTopicJpaEntity(
     @Column(name = "topic_name", columnDefinition = "VARCHAR(255)", nullable = false)
     val topicName: String,
 
-    @Column(name = "topic_discription", columnDefinition = "VARCHAR(255)", nullable = false)
-    val voteDiscription: String,
+    @Column(name = "discription", columnDefinition = "VARCHAR(255)", nullable = false)
+    val discription: String,
 
     @Column(name = "start_time", columnDefinition = "DATETIME(6)", nullable = false)
     val startTime: LocalDateTime,

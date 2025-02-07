@@ -18,7 +18,7 @@ class VotingTopicMapper(
             VotingTopic(
                 id = it.id!!,
                 topicName = it.topicName,
-                voteDescription = it.voteDiscription,
+                description = it.discription,
                 startTime = it.startTime,
                 endTime = it.startTime,
                 voteType = it.voteType,
@@ -28,12 +28,12 @@ class VotingTopicMapper(
     }
 
     override fun toEntity(domain: VotingTopic): VotingTopicJpaEntity {
-        val manager = managerJpaRepository.findByIdOrNull(domain.id)
+        val manager = managerJpaRepository.findByIdOrNull(domain.managerId)
         return domain.let {
             VotingTopicJpaEntity(
                 id = it.id,
                 topicName = it.topicName,
-                voteDiscription = it.voteDescription,
+                discription = it.description,
                 startTime = it.startTime,
                 endTime = it.startTime,
                 voteType = it.voteType,
