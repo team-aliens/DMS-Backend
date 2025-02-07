@@ -2,8 +2,7 @@ package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
-import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.common.spi.TaskSchdulerPort
+import team.aliens.dms.common.spi.TaskSchedulerPort
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notification.model.DeviceToken
@@ -14,15 +13,14 @@ import java.util.*
 
 @Service
 class ScheduleCreateVoteResultNoticeServiceImpl(
-    private val taskSchdulerPort: TaskSchdulerPort,
+    private val taskSchedulerPort: TaskSchedulerPort,
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
-    private val securityPort: SecurityPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
 ): ScheduleCreateVoteResultNoticeService {
-    override fun exctue(endTime: LocalDateTime, managerId: UUID,schoolId: UUID, title: String, content: String) {
+    override fun exectue(endTime: LocalDateTime, managerId: UUID,schoolId: UUID, title: String, content: String) {
 
-         taskSchdulerPort.schduleTask({
+         taskSchedulerPort.schduleTask({
 
                     val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
                      commandNoticePort.saveNotice(Notice(
