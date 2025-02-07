@@ -76,8 +76,6 @@ class NoticePersistenceAdapter(
                     updatedAt = LocalDateTime.now()
                 ))
 
-
-
             },endTimeInstant
         )
     }
