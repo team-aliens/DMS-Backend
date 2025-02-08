@@ -3,12 +3,13 @@ package team.aliens.dms.domain.vote
 import jakarta.validation.Valid
 import org.jetbrains.annotations.NotNull
 import org.springframework.web.bind.annotation.*
+import team.aliens.dms.domain.vote.dto.reponse.GetAllVotingTopicResponse
+import team.aliens.dms.domain.vote.dto.reponse.GetVotingTopicResponse
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
-import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
-import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
-import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
-import team.aliens.dms.domain.vote.usecase.QueryVotingTopicUseCase
+import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
+import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
+import team.aliens.dms.domain.vote.usecase.*
 import java.util.UUID
 
 @RestController
@@ -18,8 +19,9 @@ class VoteWebAdapter(
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryVotingTopicUseCase: QueryVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
+    private val updateVotingTopicUseCase: UpdateVotingTopicUseCase
 ) {
-    @PostMapping("/voting-topic")
+    @PostMapping("")
     fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest){
         createVotingTopicUseCase.execute(
             CreateVoteTopicRequest(
@@ -32,22 +34,33 @@ class VoteWebAdapter(
         )
     }
 
-    @DeleteMapping("/{votingTopicId}")
-    fun deleteVotingTopic(@PathVariable("votingTopicId") @NotNull votingTopicId: UUID){
+    @PatchMapping("")
+    fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest){
+        updateVotingTopicUseCase.execute(
+            UpdateVotingTopicRequest(
+                id = request.id!!,
+                topicName = request.topicName!!,
+                description = request.description!!,
+                startTime = request.startTime!!,
+                endTime = request.endTime!!,
+                voteType = request.voteType!!
+            )
+        )
+    }
+
+    @DeleteMapping("/{voting-topic-id}")
+    fun deleteVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID){
         deleteVotingTopicUseCase.execute(votingTopicId)
     }
 
-    @GetMapping("/{votingTopicId}")
-    fun getVotingTopic(@PathVariable("votingTopicId") @NotNull votingTopicId: UUID){
-        queryVotingTopicUseCase.execute(votingTopicId)
+    @GetMapping("/{voting-topic-id}")
+    fun getVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID): GetVotingTopicResponse{
+        return queryVotingTopicUseCase.execute(votingTopicId)
     }
-
 
     @GetMapping("")
-    fun getAllVotingTopic(){
-        queryAllVotingTopicUseCase.execute()
+    fun getAllVotingTopic(): GetAllVotingTopicResponse{
+        return queryAllVotingTopicUseCase.execute()
     }
 
-    @GetMapping("/test")
-    fun healthCheck() = "OK1"
 }

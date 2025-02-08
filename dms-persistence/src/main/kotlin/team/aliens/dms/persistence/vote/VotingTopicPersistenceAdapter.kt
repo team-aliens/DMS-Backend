@@ -23,12 +23,12 @@ class VotingTopicPersistenceAdapter(
         return votingTopicJpaRepository.findEndTimeById(id)
     }
 
-    override fun saveVotingTopic(votingTopic: VotingTopic) {
-        votingTopicJpaRepository.save(
+    override fun saveVotingTopic(votingTopic: VotingTopic):UUID {
+        return votingTopicJpaRepository.save(
             votingTopicMapper.toEntity(
                 votingTopic
             )
-        )
+        ).id!!
     }
 
     override fun deleteVotingTopicById(id: UUID) {

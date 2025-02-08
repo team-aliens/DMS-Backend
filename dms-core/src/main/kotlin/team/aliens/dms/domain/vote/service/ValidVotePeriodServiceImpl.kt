@@ -1,6 +1,9 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.vote.exception.NotValidPeriodException
+import team.aliens.dms.domain.vote.exception.NotVotingPeriodException
+import team.aliens.dms.domain.vote.exception.VotingAlreadyEndedException
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import java.time.LocalDateTime
 import java.util.UUID
@@ -10,11 +13,11 @@ class ValidVotePeriodServiceImpl(
     val queryPort: QueryVotingTopicPort
 ): ValidVotePeriodService {
 
-    override fun excute(voteTopicId : UUID):Boolean{
+    override fun excute(voteTopicId : UUID){
         val startTime = queryPort.findStartTimeById(voteTopicId)
         val endTime = queryPort.findEndTimeById(voteTopicId)
         val currentTime = LocalDateTime.now()
 
-        return currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+        if(!(currentTime.isAfter(startTime) && currentTime.isBefore(endTime))) throw NotVotingPeriodException
     }
 }

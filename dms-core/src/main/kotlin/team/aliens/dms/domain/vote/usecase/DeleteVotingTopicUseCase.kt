@@ -9,6 +9,6 @@ class DeleteVotingTopicUseCase(
     private val commandVotingTopicService: CommendVotingTopicService
 ) {
     fun execute(id: UUID){
-        commandVotingTopicService.deleteVoteTopicById(id)
+        commandVotingTopicService.deleteVotingTopicById(id)
     }
 }

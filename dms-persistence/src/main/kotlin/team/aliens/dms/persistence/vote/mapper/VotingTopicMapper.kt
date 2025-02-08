@@ -20,7 +20,7 @@ class VotingTopicMapper(
                 topicName = it.topicName,
                 description = it.discription,
                 startTime = it.startTime,
-                endTime = it.startTime,
+                endTime = it.endTime,
                 voteType = it.voteType,
                 managerId = it.manager.id
             )
@@ -35,7 +35,7 @@ class VotingTopicMapper(
                 topicName = it.topicName,
                 discription = it.description,
                 startTime = it.startTime,
-                endTime = it.startTime,
+                endTime = it.endTime,
                 voteType = it.voteType,
                 manager = manager!!
             )

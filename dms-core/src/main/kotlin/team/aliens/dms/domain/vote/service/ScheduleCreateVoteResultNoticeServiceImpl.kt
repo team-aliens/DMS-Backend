@@ -8,6 +8,8 @@ import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
+import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
+import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import java.time.LocalDateTime
 import java.util.*
 
@@ -18,15 +20,15 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
     private val notificationEventPort: NotificationEventPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
 ): ScheduleCreateVoteResultNoticeService {
-    override fun exectue(endTime: LocalDateTime, managerId: UUID,schoolId: UUID, title: String, content: String) {
+    override fun execute(id:UUID, reservedTime:LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId:UUID) {
 
-         taskSchedulerPort.schduleTask({
+         taskSchedulerPort.schduleTask(id,{
 
                     val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
                      commandNoticePort.saveNotice(Notice(
-                        title = title,
-                        content = content,
-                        managerId = managerId,
+                        title = voteResultNoticeRequest.title,
+                        content = voteResultNoticeRequest.content,
+                        managerId = voteResultNoticeRequest.managerId,
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now()
                     )).also {
@@ -35,7 +37,7 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
                             )}
 
                 }
-          ,endTime
+          ,reservedTime
         )
     }
 }

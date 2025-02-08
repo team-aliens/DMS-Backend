@@ -5,6 +5,6 @@ import java.util.UUID
 
 
 interface CommendVotingTopicService {
-    fun saveVoteTopic(voteTopic: VotingTopic)
-    fun deleteVoteTopicById(id: UUID)
+    fun saveVotingTopic(voteTopic: VotingTopic):UUID
+    fun deleteVotingTopicById(id: UUID)
 }
