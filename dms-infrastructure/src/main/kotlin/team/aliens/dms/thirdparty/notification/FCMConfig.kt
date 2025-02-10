@@ -15,7 +15,7 @@ import java.nio.file.Paths
 @Configuration
 class FCMConfig(
     @Value("\${fcm.file-url}")
-    private val url: String = "file:///C:/Users/user/Desktop/team-dms-firebase-adminsdk-vrfz3-d92cd1ba9b.json"
+    private val url: String 
 ) {
     @PostConstruct
     fun initialize() {
