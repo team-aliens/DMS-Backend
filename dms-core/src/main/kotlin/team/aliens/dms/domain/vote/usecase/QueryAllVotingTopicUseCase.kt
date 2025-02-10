@@ -9,5 +9,4 @@ class QueryAllVotingTopicUseCase(
     val getVotingTopicService: GetVotingTopicService
 ) {
     fun execute() = GetAllVotingTopicResponse.from(getVotingTopicService.getAllVotingTopics())
-
 }

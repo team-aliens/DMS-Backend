@@ -5,6 +5,6 @@ import java.util.UUID
 
 interface GetVotingTopicService {
 
-    fun getVotingTopicById(id: UUID):VotingTopic
+    fun getVotingTopicById(id: UUID): VotingTopic
     fun getAllVotingTopics(): List<VotingTopic?>
 }

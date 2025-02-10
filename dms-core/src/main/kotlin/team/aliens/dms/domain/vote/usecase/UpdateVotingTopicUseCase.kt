@@ -21,26 +21,28 @@ class UpdateVotingTopicUseCase(
     private val securityPort: SecurityPort
 ) {
 
-    fun execute(request: UpdateVotingTopicRequest){
-        if(request.startTime.isAfter(request.endTime)||request.endTime.isBefore(LocalDateTime.now())){
+    fun execute(request: UpdateVotingTopicRequest) {
+        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw NotValidPeriodException
         }
 
         val votingTopic = getVotingTopicService.getVotingTopicById(request.id)
-        if(votingTopic.endTime.isBefore(LocalDateTime.now())){
+        if (votingTopic.endTime.isBefore(LocalDateTime.now())) {
             throw VotingAlreadyEndedException
         }
 
         val userId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
 
-        val savedVotingTopicId = commandVotingTopicService.saveVotingTopic(votingTopic!!.copy(
-            topicName = request.topicName,
-            voteType = request.voteType,
-            description = request.description,
-            startTime = request.startTime,
-            endTime = request.endTime
-        ))
+        val savedVotingTopicId = commandVotingTopicService.saveVotingTopic(
+            votingTopic.copy(
+                topicName = request.topicName,
+                voteType = request.voteType,
+                description = request.description,
+                startTime = request.startTime,
+                endTime = request.endTime
+            )
+        )
 
         taskSchedulerPort.cancelTask(request.id)
 
@@ -51,7 +53,8 @@ class UpdateVotingTopicUseCase(
                 userId,
                 "ex)모범학생 투표 결과",
                 "쿼리 메서드로 이렇게 들어감 ex)1 학년 : 홍길동,임꺽정,유씨, 2학년 ...."
-            ),schoolId
+            ),
+            schoolId
         )
     }
 }

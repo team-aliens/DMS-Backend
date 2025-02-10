@@ -8,7 +8,7 @@ import java.util.UUID
 class DeleteVotingTopicUseCase(
     private val commandVotingTopicService: CommendVotingTopicService
 ) {
-    fun execute(id: UUID){
+    fun execute(id: UUID) {
         commandVotingTopicService.deleteVotingTopicById(id)
     }
 }

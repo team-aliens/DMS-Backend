@@ -2,11 +2,9 @@ package team.aliens.dms.persistence.vote.entity
 
 import jakarta.persistence.*
 import team.aliens.dms.domain.vote.model.VoteType
-import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.BaseUUIDEntity
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import java.time.LocalDateTime
-import java.util.Date
 import java.util.UUID
 
 @Entity
@@ -32,8 +30,7 @@ class VotingTopicJpaEntity(
     val voteType: VoteType,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",columnDefinition = "BINARY(16)",nullable = false)
+    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
     val manager: ManagerJpaEntity,
 
-
-): BaseUUIDEntity(id)
+) : BaseUUIDEntity(id)

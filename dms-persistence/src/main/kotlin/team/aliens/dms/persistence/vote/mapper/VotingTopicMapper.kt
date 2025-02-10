@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.vote.mapper
 
 import org.springframework.data.repository.findByIdOrNull
-
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.persistence.GenericMapper
@@ -11,7 +10,7 @@ import team.aliens.dms.persistence.vote.entity.VotingTopicJpaEntity
 @Component
 class VotingTopicMapper(
     private val managerJpaRepository: ManagerJpaRepository
-): GenericMapper<VotingTopic,VotingTopicJpaEntity> {
+) : GenericMapper<VotingTopic, VotingTopicJpaEntity> {
 
     override fun toDomain(entity: VotingTopicJpaEntity?): VotingTopic? {
         return entity?.let {

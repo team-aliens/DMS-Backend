@@ -18,7 +18,7 @@ class SignInUseCase(
     private val schoolService: SchoolService,
     private val notificationService: NotificationService,
     private val jwtPort: JwtPort,
-    private val port : SchoolPort
+    private val port: SchoolPort
 ) {
 
     fun execute(request: SignInRequest): TokenFeatureResponse {
@@ -29,7 +29,6 @@ class SignInUseCase(
         val tokenResponse = jwtPort.receiveToken(
             userId = user.id, authority = user.authority
         )
-        port.test(user.schoolId)
 
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 

@@ -13,6 +13,4 @@ interface QuerySchoolPort {
     fun querySchoolByCode(code: String): School?
 
     fun queryAvailableFeaturesBySchoolId(schoolId: UUID): AvailableFeature?
-
-    fun test(schoolId: UUID)
 }

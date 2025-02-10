@@ -1,10 +1,10 @@
 package team.aliens.dms.persistence.vote
 
 import org.springframework.data.repository.findByIdOrNull
-import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.VotingTopicPort
+import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
 import java.time.LocalDateTime
 import java.util.*
@@ -14,16 +14,16 @@ class VotingTopicPersistenceAdapter(
     private val votingTopicJpaRepository: VotingTopicJpaRepository,
     private val votingTopicMapper: VotingTopicMapper,
 
-    ) : VotingTopicPort {
-    override fun findStartTimeById(id:UUID): LocalDateTime? {
+) : VotingTopicPort {
+    override fun findStartTimeById(id: UUID): LocalDateTime? {
         return votingTopicJpaRepository.findStartTimeById(id)
     }
 
-    override fun findEndTimeById(id:UUID): LocalDateTime? {
+    override fun findEndTimeById(id: UUID): LocalDateTime? {
         return votingTopicJpaRepository.findEndTimeById(id)
     }
 
-    override fun saveVotingTopic(votingTopic: VotingTopic):UUID {
+    override fun saveVotingTopic(votingTopic: VotingTopic): UUID {
         return votingTopicJpaRepository.save(
             votingTopicMapper.toEntity(
                 votingTopic
@@ -32,7 +32,7 @@ class VotingTopicPersistenceAdapter(
     }
 
     override fun deleteVotingTopicById(id: UUID) {
-       votingTopicJpaRepository.deleteById(id)
+        votingTopicJpaRepository.deleteById(id)
     }
 
     override fun findById(id: UUID) = votingTopicMapper.toDomain(
@@ -44,5 +44,4 @@ class VotingTopicPersistenceAdapter(
             votingTopicMapper.toDomain(it)
         }
     }
-
 }

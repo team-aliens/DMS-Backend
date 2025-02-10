@@ -5,5 +5,5 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 interface ScheduleCreateVoteResultNoticeService {
-    fun execute(id:UUID, reservedTime:LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId:UUID)
+    fun execute(id: UUID, reservedTime: LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId: UUID)
 }

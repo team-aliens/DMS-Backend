@@ -9,7 +9,6 @@ import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
-import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import java.time.LocalDateTime
 import java.util.*
 
@@ -19,25 +18,32 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
-): ScheduleCreateVoteResultNoticeService {
-    override fun execute(id:UUID, reservedTime:LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId:UUID) {
+) : ScheduleCreateVoteResultNoticeService {
+    override fun execute(
+        id: UUID,
+        reservedTime: LocalDateTime,
+        voteResultNoticeRequest: VoteResultNoticeRequest,
+        schoolId: UUID
+    ) {
 
-         taskSchedulerPort.schduleTask(id,{
+        taskSchedulerPort.schduleTask(
+            id, {
 
-                    val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
-                     commandNoticePort.saveNotice(Notice(
+                val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
+                commandNoticePort.saveNotice(
+                    Notice(
                         title = voteResultNoticeRequest.title,
                         content = voteResultNoticeRequest.content,
                         managerId = voteResultNoticeRequest.managerId,
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now()
-                    )).also {
-                            notificationEventPort.publishNotificationToApplicant(
-                                deviceTokens, Notification.NoticeNotification(schoolId, it)
-                            )}
-
+                    )
+                ).also {
+                    notificationEventPort.publishNotificationToApplicant(
+                        deviceTokens, Notification.NoticeNotification(schoolId, it)
+                    )
                 }
-          ,reservedTime
+            }, reservedTime
         )
     }
 }

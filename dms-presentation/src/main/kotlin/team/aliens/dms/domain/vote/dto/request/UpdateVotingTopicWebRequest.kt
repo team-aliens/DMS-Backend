@@ -11,7 +11,7 @@ import java.util.UUID
 data class UpdateVotingTopicWebRequest(
 
     @field:NotNull
-    val id:UUID,
+    val id: UUID,
 
     @field:NotBlank(message = "Please provide a topic")
     @JsonProperty("topic_name") // JSON 필드명을 강제 지정
@@ -34,5 +34,4 @@ data class UpdateVotingTopicWebRequest(
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val endTime: LocalDateTime?,
 
-    ) {
-}
+)

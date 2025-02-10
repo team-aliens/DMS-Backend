@@ -6,5 +6,4 @@ import java.util.*
 interface TaskSchedulerPort {
     fun schduleTask(id: UUID, task: Runnable, time: LocalDateTime)
     fun cancelTask(id: UUID)
-
 }

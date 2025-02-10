@@ -11,6 +11,4 @@ interface GetNoticeService {
     fun getNoticeById(noticeId: UUID): Notice
 
     fun getNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID): Notice
-
-
 }

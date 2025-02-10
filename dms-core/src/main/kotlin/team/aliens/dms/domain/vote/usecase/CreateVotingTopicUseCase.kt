@@ -1,7 +1,5 @@
 package team.aliens.dms.domain.vote.usecase
 
-
-import org.springframework.beans.factory.annotation.Qualifier
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
@@ -19,12 +17,12 @@ class CreateVotingTopicUseCase(
     private val securityPort: SecurityPort
 ) {
 
-    fun execute(request: CreateVoteTopicRequest){
+    fun execute(request: CreateVoteTopicRequest) {
 
         val userId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
 
-        if(request.startTime.isBefore(LocalDateTime.now())||request.endTime.isBefore(request.startTime)) {
+        if (request.startTime.isBefore(LocalDateTime.now()) || request.endTime.isBefore(request.startTime)) {
             throw NotValidPeriodException
         }
 
@@ -46,8 +44,8 @@ class CreateVotingTopicUseCase(
                 userId,
                 "ex)모범학생 투표 결과",
                 "쿼리 메서드로 이렇게 들어감 ex)1 학년 : 홍길동,임꺽정,유씨, 2학년 ...."
-            ),schoolId
+            ),
+            schoolId
         )
-
     }
 }

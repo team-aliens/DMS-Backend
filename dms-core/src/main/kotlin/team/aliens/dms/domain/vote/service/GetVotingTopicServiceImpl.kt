@@ -9,13 +9,12 @@ import java.util.UUID
 @Service
 class GetVotingTopicServiceImpl(
     private val queryVotingTopicPort: QueryVotingTopicPort
-): GetVotingTopicService {
+) : GetVotingTopicService {
     override fun getVotingTopicById(id: UUID): VotingTopic {
-        return queryVotingTopicPort.findById(id)?: throw NotFoundVotingTopicException
+        return queryVotingTopicPort.findById(id) ?: throw NotFoundVotingTopicException
     }
 
     override fun getAllVotingTopics(): List<VotingTopic?> {
         return queryVotingTopicPort.findAll()
     }
-
 }

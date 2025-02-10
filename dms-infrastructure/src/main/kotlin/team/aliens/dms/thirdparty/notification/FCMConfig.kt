@@ -15,7 +15,7 @@ import java.nio.file.Paths
 @Configuration
 class FCMConfig(
     @Value("\${fcm.file-url}")
-    private val url: String 
+    private val url: String
 ) {
     @PostConstruct
     fun initialize() {

@@ -60,23 +60,24 @@ class NoticePersistenceAdapter(
         )
     )!!
 
-    override fun scheduleVoteResultNoticeDelivery(endTime: LocalDateTime, managerId : UUID, title: String, content: String) {
+    override fun scheduleVoteResultNoticeDelivery(endTime: LocalDateTime, managerId: UUID, title: String, content: String) {
 
         val manager = managerJpaRepository.findByIdOrNull(managerId)
         val endTimeInstant = endTime.atZone(ZoneId.systemDefault()).toInstant()
 
         taskSchduler.schedule(
             {
-                noticeRepository.save(NoticeJpaEntity(
-                    id = null,
-                    manager = manager,
-                    title = title,
-                    content = content,
-                    createdAt = LocalDateTime.now(),
-                    updatedAt = LocalDateTime.now()
-                ))
-
-            },endTimeInstant
+                noticeRepository.save(
+                    NoticeJpaEntity(
+                        id = null,
+                        manager = manager,
+                        title = title,
+                        content = content,
+                        createdAt = LocalDateTime.now(),
+                        updatedAt = LocalDateTime.now()
+                    )
+                )
+            }, endTimeInstant
         )
     }
 }

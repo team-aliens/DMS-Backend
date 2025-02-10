@@ -10,7 +10,7 @@ import javax.annotation.PreDestroy
 @EnableScheduling
 class TaskSchedulerConfig {
 
-        private val scheduler = ThreadPoolTaskScheduler()
+    private val scheduler = ThreadPoolTaskScheduler()
     @Bean
     fun taskScheduler(): ThreadPoolTaskScheduler {
         scheduler.poolSize = 5
@@ -20,7 +20,7 @@ class TaskSchedulerConfig {
     }
 
     @PreDestroy
-    fun shutdown(){
+    fun shutdown() {
         scheduler.shutdown()
     }
 }

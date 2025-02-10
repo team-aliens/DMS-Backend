@@ -7,16 +7,14 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 
 @Component
 class TaskSchedulerAdepter(
     private val taskScheduler: ThreadPoolTaskScheduler,
 
-): TaskSchedulerPort {
-    var scheduledTasks = ConcurrentHashMap<UUID,ScheduledFuture<*>>()
-
+) : TaskSchedulerPort {
+    var scheduledTasks = ConcurrentHashMap<UUID, ScheduledFuture<*>>()
 
     override fun schduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
 
@@ -30,5 +28,4 @@ class TaskSchedulerAdepter(
         scheduledTasks[id]?.cancel(false)
         scheduledTasks.remove(id)
     }
-
 }

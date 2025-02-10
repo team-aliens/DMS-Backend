@@ -22,7 +22,7 @@ class VoteWebAdapter(
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase
 ) {
     @PostMapping("")
-    fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest){
+    fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest) {
         createVotingTopicUseCase.execute(
             CreateVoteTopicRequest(
                 topicName = request.topicName!!,
@@ -35,7 +35,7 @@ class VoteWebAdapter(
     }
 
     @PatchMapping("")
-    fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest){
+    fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest) {
         updateVotingTopicUseCase.execute(
             UpdateVotingTopicRequest(
                 id = request.id!!,
@@ -49,18 +49,17 @@ class VoteWebAdapter(
     }
 
     @DeleteMapping("/{voting-topic-id}")
-    fun deleteVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID){
+    fun deleteVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID) {
         deleteVotingTopicUseCase.execute(votingTopicId)
     }
 
     @GetMapping("/{voting-topic-id}")
-    fun getVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID): GetVotingTopicResponse{
+    fun getVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID): GetVotingTopicResponse {
         return queryVotingTopicUseCase.execute(votingTopicId)
     }
 
     @GetMapping("")
-    fun getAllVotingTopic(): GetAllVotingTopicResponse{
+    fun getAllVotingTopic(): GetAllVotingTopicResponse {
         return queryAllVotingTopicUseCase.execute()
     }
-
 }

@@ -12,7 +12,7 @@ data class GetVotingTopicResponse(
     val voteType: VoteType,
     val startTime: LocalDateTime,
     val endTime: LocalDateTime
-){
+) {
     companion object {
         fun from(votingTopic: VotingTopic): GetVotingTopicResponse {
             return GetVotingTopicResponse(

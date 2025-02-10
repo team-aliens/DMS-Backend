@@ -9,7 +9,6 @@ import java.time.LocalDateTime
 
 data class CreateVotingTopicWebRequest(
 
-
     @field:NotBlank(message = "Please provide a topic")
     @JsonProperty("topic_name") // JSON 필드명을 강제 지정
     val topicName: String?,

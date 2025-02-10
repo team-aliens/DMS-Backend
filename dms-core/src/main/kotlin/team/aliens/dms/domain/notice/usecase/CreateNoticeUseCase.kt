@@ -25,7 +25,6 @@ class CreateNoticeUseCase(
         )
         val savedNotice = noticeService.saveNotice(notice)
 
-
         return NoticeIdResponse(savedNotice.id)
     }
 }
