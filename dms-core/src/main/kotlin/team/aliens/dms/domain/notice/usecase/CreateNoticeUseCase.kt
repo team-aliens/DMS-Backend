@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @UseCase
 class CreateNoticeUseCase(
     private val userService: UserService,
-    private val noticeService: NoticeService
+    private val noticeService: NoticeService,
 ) {
 
     fun execute(title: String, content: String): NoticeIdResponse {
@@ -24,6 +24,7 @@ class CreateNoticeUseCase(
             updatedAt = LocalDateTime.now()
         )
         val savedNotice = noticeService.saveNotice(notice)
+
 
         return NoticeIdResponse(savedNotice.id)
     }

@@ -36,6 +36,12 @@ class SchoolPersistenceAdapter(
         schoolRepository.findByIdOrNull(schoolId)
     )
 
+    override fun test(schoolId: UUID){
+        println("학생의 스쿨 아이디 : $schoolId")
+        val id:UUID? = schoolRepository.findIdByName("이름")?:UUID.randomUUID()
+        print("스쿨 기본키 : $id")
+    }
+
     override fun querySchoolByCode(code: String) = schoolMapper.toDomain(
         schoolRepository.findByCode(code)
     )

@@ -1,6 +1,7 @@
 package team.aliens.dms.scheduler
 
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.usecase.DeleteOldNotificationsUseCase
 
