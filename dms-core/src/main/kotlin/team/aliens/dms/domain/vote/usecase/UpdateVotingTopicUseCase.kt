@@ -31,7 +31,6 @@ class UpdateVotingTopicUseCase(
             throw VotingAlreadyEndedException
         }
 
-
         val userId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
 
