@@ -17,7 +17,7 @@ class VotingTopicMapper(
             VotingTopic(
                 id = it.id!!,
                 topicName = it.topicName,
-                description = it.discription,
+                description = it.description,
                 startTime = it.startTime,
                 endTime = it.endTime,
                 voteType = it.voteType,
@@ -32,7 +32,7 @@ class VotingTopicMapper(
             VotingTopicJpaEntity(
                 id = it.id,
                 topicName = it.topicName,
-                discription = it.description,
+                description = it.description,
                 startTime = it.startTime,
                 endTime = it.endTime,
                 voteType = it.voteType,

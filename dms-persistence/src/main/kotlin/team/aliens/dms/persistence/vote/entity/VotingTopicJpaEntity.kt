@@ -16,8 +16,8 @@ class VotingTopicJpaEntity(
     @Column(name = "topic_name", columnDefinition = "VARCHAR(255)", nullable = false)
     val topicName: String,
 
-    @Column(name = "discription", columnDefinition = "VARCHAR(255)", nullable = false)
-    val discription: String,
+    @Column(name = "description", columnDefinition = "VARCHAR(255)", nullable = false)
+    val description: String,
 
     @Column(name = "start_time", columnDefinition = "DATETIME(6)", nullable = false)
     val startTime: LocalDateTime,
@@ -30,7 +30,7 @@ class VotingTopicJpaEntity(
     val voteType: VoteType,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)
     val manager: ManagerJpaEntity,
 
 ) : BaseUUIDEntity(id)
