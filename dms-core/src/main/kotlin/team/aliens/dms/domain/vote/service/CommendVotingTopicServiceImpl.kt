@@ -9,6 +9,7 @@ import java.util.*
 class CommendVotingTopicServiceImpl(
     val commendVotingTopicPort: CommendVotingTopicPort
 ) : CommendVotingTopicService {
+
     override fun saveVotingTopic(voteTopic: VotingTopic): UUID {
         return commendVotingTopicPort.saveVotingTopic(voteTopic)
     }
@@ -16,4 +17,5 @@ class CommendVotingTopicServiceImpl(
     override fun deleteVotingTopicById(id: UUID) {
         commendVotingTopicPort.deleteVotingTopicById(id)
     }
+
 }

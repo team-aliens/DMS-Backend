@@ -6,14 +6,9 @@ import java.util.*
 
 data class UpdateVotingTopicRequest(
     val id: UUID,
-
     val topicName: String,
-
     val description: String,
-
     val startTime: LocalDateTime,
-
     val endTime: LocalDateTime,
-
     val voteType: VoteType
 )

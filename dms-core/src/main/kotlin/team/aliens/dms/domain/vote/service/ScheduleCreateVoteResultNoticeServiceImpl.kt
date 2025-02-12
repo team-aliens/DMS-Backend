@@ -19,6 +19,7 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
     private val notificationEventPort: NotificationEventPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
 ) : ScheduleCreateVoteResultNoticeService {
+
     override fun execute(
         id: UUID,
         reservedTime: LocalDateTime,

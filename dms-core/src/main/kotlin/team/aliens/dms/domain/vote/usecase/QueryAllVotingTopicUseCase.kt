@@ -8,5 +8,6 @@ import team.aliens.dms.domain.vote.service.GetVotingTopicService
 class QueryAllVotingTopicUseCase(
     val getVotingTopicService: GetVotingTopicService
 ) {
+
     fun execute() = GetAllVotingTopicResponse.from(getVotingTopicService.getAllVotingTopics())
 }

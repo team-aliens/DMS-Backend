@@ -9,5 +9,6 @@ import java.util.UUID
 class QueryVotingTopicUseCase(
     private val getVotingTopicService: GetVotingTopicService
 ) {
+
     fun execute(id: UUID) = GetVotingTopicResponse.from(getVotingTopicService.getVotingTopicById(id))
 }

@@ -15,6 +15,7 @@ class VotingTopicPersistenceAdapter(
     private val votingTopicMapper: VotingTopicMapper,
 
 ) : VotingTopicPort {
+
     override fun findStartTimeById(id: UUID): LocalDateTime? {
         return votingTopicJpaRepository.findStartTimeById(id)
     }

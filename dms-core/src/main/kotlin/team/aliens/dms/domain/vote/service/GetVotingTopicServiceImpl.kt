@@ -10,6 +10,7 @@ import java.util.UUID
 class GetVotingTopicServiceImpl(
     private val queryVotingTopicPort: QueryVotingTopicPort
 ) : GetVotingTopicService {
+
     override fun getVotingTopicById(id: UUID): VotingTopic {
         return queryVotingTopicPort.findById(id) ?: throw NotFoundVotingTopicException
     }
