@@ -35,7 +35,7 @@ class VoteWebAdapter(
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase
 ) {
-    @PostMapping("")
+    @PostMapping
     fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest) {
         createVotingTopicUseCase.execute(
             CreateVoteTopicRequest(
@@ -48,7 +48,7 @@ class VoteWebAdapter(
         )
     }
 
-    @PatchMapping("")
+    @PatchMapping
     fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest) {
         updateVotingTopicUseCase.execute(
             UpdateVotingTopicRequest(
@@ -72,7 +72,7 @@ class VoteWebAdapter(
         return queryVotingTopicUseCase.execute(votingTopicId)
     }
 
-    @GetMapping("")
+    @GetMapping
     fun getAllVotingTopic(): GetAllVotingTopicResponse {
         return queryAllVotingTopicUseCase.execute()
     }
