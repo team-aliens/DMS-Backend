@@ -22,10 +22,6 @@ class CreateVotingTopicUseCase(
         val userId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
 
-        if (request.startTime.isBefore(LocalDateTime.now()) || request.endTime.isBefore(request.startTime)) {
-            throw NotValidPeriodException
-        }
-
         val savedVotingTopicId = commendVotingTopicService.saveVotingTopic(
             VotingTopic(
                 managerId = userId,

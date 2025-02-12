@@ -16,12 +16,13 @@ import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
+import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.UpdateVotingTopicUseCase
-
+import java.time.LocalDateTime
 
 
 import java.util.UUID
@@ -37,6 +38,9 @@ class VoteWebAdapter(
 ) {
     @PostMapping
     fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest) {
+        if (request.startTime!!.isBefore(LocalDateTime.now()) || request.endTime!!.isBefore(request.startTime)) {
+            throw NotValidPeriodException
+        }
         createVotingTopicUseCase.execute(
             CreateVoteTopicRequest(
                 topicName = request.topicName!!,
@@ -50,6 +54,9 @@ class VoteWebAdapter(
 
     @PatchMapping
     fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest) {
+        if (request.startTime!!.isAfter(request.endTime) || request.endTime!!.isBefore(LocalDateTime.now())) {
+            throw NotValidPeriodException
+        }
         updateVotingTopicUseCase.execute(
             UpdateVotingTopicRequest(
                 id = request.id!!,

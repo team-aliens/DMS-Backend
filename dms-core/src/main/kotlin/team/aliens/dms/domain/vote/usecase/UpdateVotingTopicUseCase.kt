@@ -22,9 +22,6 @@ class UpdateVotingTopicUseCase(
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
-        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
-            throw NotValidPeriodException
-        }
 
         val votingTopic = getVotingTopicService.getVotingTopicById(request.id)
         if (votingTopic.endTime.isBefore(LocalDateTime.now())) {
