@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionRequest
+import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionWebRequest
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
 import team.aliens.dms.domain.vote.usecase.CreateVoteUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
@@ -33,8 +34,11 @@ class VoteWebAdapter(
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/option")
-    fun createVotingOption(@RequestBody request: CreateVotingOptionRequest) {
-        createVotingOptionUseCase.execute(request)
+    fun createVotingOption(@RequestBody request: CreateVotingOptionWebRequest) {
+        createVotingOptionUseCase.execute(CreateVotingOptionRequest.of(
+                request.votingTopicId,
+                request.optionName
+        ))
     }
 
     @ResponseStatus(HttpStatus.OK)
