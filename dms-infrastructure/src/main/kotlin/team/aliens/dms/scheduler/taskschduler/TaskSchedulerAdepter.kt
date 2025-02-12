@@ -1,8 +1,9 @@
-package team.aliens.dms.global.taskschduler
+package team.aliens.dms.scheduler.taskschduler
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.TaskSchedulerPort
+import team.aliens.dms.scheduler.error.exception.TaskSchedulingErrorException
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.UUID
@@ -19,9 +20,12 @@ class TaskSchedulerAdepter(
     override fun schduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
 
         val InstantTime = time.atZone(ZoneId.systemDefault()).toInstant()
-        val scheduledFuture = taskScheduler.schedule(task, InstantTime)
-
-        scheduledTasks[id] = scheduledFuture
+        try {
+            val scheduledFuture = taskScheduler.schedule(task, InstantTime)
+            scheduledTasks[id] = scheduledFuture
+        }catch (e : Exception) {
+            throw TaskSchedulingErrorException
+        }
     }
 
     override fun cancelTask(id: UUID) {
