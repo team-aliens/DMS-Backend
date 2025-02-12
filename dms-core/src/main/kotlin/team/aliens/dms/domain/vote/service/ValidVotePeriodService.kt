@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.service
 
-import java.util.*
+import java.util.UUID
 
 interface ValidVotePeriodService {
 

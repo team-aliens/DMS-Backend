@@ -2,7 +2,7 @@ package team.aliens.dms.domain.vote.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @Aggregate
 data class VotingTopic(

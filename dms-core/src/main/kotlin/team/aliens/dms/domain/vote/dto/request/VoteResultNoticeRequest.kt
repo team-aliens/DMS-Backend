@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.vote.dto.request
 
-import java.util.*
+import java.util.UUID
+
 
 data class VoteResultNoticeRequest(
     val managerId: UUID,

@@ -10,7 +10,7 @@ import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @Service
 class ScheduleCreateVoteResultNoticeServiceImpl(

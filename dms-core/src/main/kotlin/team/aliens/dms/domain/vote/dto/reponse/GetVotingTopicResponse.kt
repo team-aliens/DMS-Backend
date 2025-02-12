@@ -3,7 +3,8 @@ package team.aliens.dms.domain.vote.dto.reponse
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
+
 
 data class GetVotingTopicResponse(
     val id: UUID,
