@@ -6,5 +6,4 @@ import team.aliens.dms.persistence.vote.entity.VotingOptionJpaEntity
 import java.util.UUID
 
 @Repository
-interface VotingOptionJpaRepository:CrudRepository<VotingOptionJpaEntity,UUID> {
-}
+interface VotingOptionJpaRepository : CrudRepository<VotingOptionJpaEntity, UUID>

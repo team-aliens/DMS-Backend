@@ -11,24 +11,25 @@ import java.util.UUID
 
 @Service
 class CommandVoteServiceImpl(
-        private val commandVotePort: CommandVotePort,
-        private val queryVotePort: QueryVotePort
-):CommandVoteService{
+    private val commandVotePort: CommandVotePort,
+    private val queryVotePort: QueryVotePort
+) : CommandVoteService {
     override fun createVotingTopic(votingTopic: VotingTopic): VotingTopic {
-        if(checkVotingTopic(votingTopic.topicName)){
+        if (checkVotingTopic(votingTopic.topicName)) {
             throw VotingTopicAlreadyExistException
         }
-        return commandVotePort.saveVotingTopic(votingTopic);
+        return commandVotePort.saveVotingTopic(votingTopic)
     }
 
-    override fun createVote(vote: Vote): Vote = commandVotePort.saveVote(vote);
+    override fun createVote(vote: Vote): Vote = commandVotePort.saveVote(vote)
     override fun createVotingOption(votingOption: VotingOption): VotingOption {
         return commandVotePort.saveVotingOption(votingOption)
     }
 
     override fun deleteVotingTopic(votingTopicId: UUID) = commandVotePort.deleteVotingTopicByVotingTopicId(votingTopicId)
-    override fun deleteVotingOption(votingOptionId: UUID) = commandVotePort.deleteVotingOptionByVotingOptionId(votingOptionId)
+    override fun deleteVotingOption(
+        votingOptionId: UUID
+    ) = commandVotePort.deleteVotingOptionByVotingOptionId(votingOptionId)
     override fun deleteVote(voteId: UUID) = commandVotePort.deleteVoteById(voteId)
     override fun checkVotingTopic(name: String): Boolean = queryVotePort.existVotingTopicByName(name)
-
 }

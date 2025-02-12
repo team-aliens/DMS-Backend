@@ -9,15 +9,15 @@ import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
 
 @Component
 class VotingOptionMapper(
-        private val votingTopicJpaRepository: VotingTopicJpaRepository
+    private val votingTopicJpaRepository: VotingTopicJpaRepository
 ) : GenericMapper<VotingOption, VotingOptionJpaEntity> {
 
     override fun toDomain(entity: VotingOptionJpaEntity?): VotingOption? {
         return entity?.let {
             VotingOption(
-                    id = it.id!!,
-                    votingTopicId = it.votingTopic!!.id!!,
-                    optionName = it.optionName
+                id = it.id!!,
+                votingTopicId = it.votingTopic!!.id!!,
+                optionName = it.optionName
             )
         }
     }
@@ -26,9 +26,9 @@ class VotingOptionMapper(
         val votingTopic = votingTopicJpaRepository.findByIdOrNull(domain.votingTopicId)
 
         return VotingOptionJpaEntity(
-                id = domain.id,
-                votingTopic = votingTopic,
-                optionName = domain.optionName
+            id = domain.id,
+            votingTopic = votingTopic,
+            optionName = domain.optionName
         )
     }
 }

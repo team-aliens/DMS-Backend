@@ -6,10 +6,10 @@ import team.aliens.dms.domain.vote.model.VotingTopic
 import java.util.UUID
 
 interface CommandVotePort {
-    fun saveVotingTopic(votingTopic: VotingTopic):VotingTopic
-    fun saveVote(vote: Vote):Vote
-    fun saveVotingOption(votingOption: VotingOption):VotingOption
+    fun saveVotingTopic(votingTopic: VotingTopic): VotingTopic
+    fun saveVote(vote: Vote): Vote
+    fun saveVotingOption(votingOption: VotingOption): VotingOption
     fun deleteVotingTopicByVotingTopicId(votingTopicId: UUID)
-    fun deleteVotingOptionByVotingOptionId(votingOptionId:UUID)
+    fun deleteVotingOptionByVotingOptionId(votingOptionId: UUID)
     fun deleteVoteById(voteId: UUID)
 }

@@ -13,15 +13,15 @@ import java.util.UUID
 
 @UseCase
 class QueryVotesUseCase(
-        private val voteService: VoteService,
-        private val studentService: StudentService
+    private val voteService: VoteService,
+    private val studentService: StudentService
 ) {
     fun execute(votingTopicId: UUID): Any {
         val votingTopic = voteService.getVotingTopic(votingTopicId)
 
         return when (votingTopic?.voteType) {
-            VoteType.STUDENT_VOTE,VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId)
-            VoteType.OPTION_VOTE,VoteType.APPROVAL_VOTE -> queryOptionVotingVotes(votingTopicId)
+            VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId)
+            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> queryOptionVotingVotes(votingTopicId)
 
             else -> throw WrongVoteTypeException
         }
@@ -29,11 +29,11 @@ class QueryVotesUseCase(
 
     private fun queryOptionVotingVotes(votingTopicId: UUID): List<OptionVotingResponse> {
         val result: List<OptionVotingResultVO> = voteService.getVotesInOptionVoting(votingTopicId)
-        println("Option voting result: $result")  // 디버그 로그 추가
+        println("Option voting result: $result") // 디버그 로그 추가
         return result.map { votingResult ->
             OptionVotingResponse(
-                    name = votingResult.name,
-                    votes = votingResult.votes
+                name = votingResult.name,
+                votes = votingResult.votes
             )
         }
     }
@@ -41,16 +41,16 @@ class QueryVotesUseCase(
     private fun queryStudentVotingVotes(votingTopicId: UUID): List<List<StudentVotingResponse>> {
         return listOf(1, 2, 3).map { grade ->
             val result: List<StudentVotingResultVO> = voteService.getVotesInStudentVoting(votingTopicId, grade)
-            println("Student voting result for grade $grade: $result")  // 디버그 로그 추가
+            println("Student voting result for grade $grade: $result") // 디버그 로그 추가
             result.map { votingResult ->
                 val student = studentService.getStudentById(votingResult.id)
                 val studentNumber = String.format("%02d", student.number)
-                val classNumber = "${student.grade}${student.classRoom}${studentNumber}"
+                val classNumber = "${student.grade}${student.classRoom}$studentNumber"
                 StudentVotingResponse.of(
-                        id = votingResult.id,
-                        name = votingResult.name,
-                        votes = votingResult.votes,
-                        classNumber = classNumber
+                    id = votingResult.id,
+                    name = votingResult.name,
+                    votes = votingResult.votes,
+                    classNumber = classNumber
                 )
             }
         }

@@ -6,9 +6,9 @@ import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
 @UseCase
 class RemoveVoteUseCase(
-        private val voteService: VoteService
+    private val voteService: VoteService
 ) {
-    fun execute(voteId:UUID){
+    fun execute(voteId: UUID) {
         val vote: Vote = voteService.getVote(voteId)
         voteService.deleteVote(vote.id)
     }

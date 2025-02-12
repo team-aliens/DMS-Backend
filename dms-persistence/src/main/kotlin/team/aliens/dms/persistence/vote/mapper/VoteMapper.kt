@@ -13,20 +13,20 @@ import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
 
 @Component
 class VoteMapper(
-        private val votingTopicJpaRepository: VotingTopicJpaRepository,
-        private val studentRepository: StudentJpaRepository,
-        private val votingOptionJpaRepository: VotingOptionJpaRepository,
+    private val votingTopicJpaRepository: VotingTopicJpaRepository,
+    private val studentRepository: StudentJpaRepository,
+    private val votingOptionJpaRepository: VotingOptionJpaRepository,
 ) : GenericMapper<Vote, VoteJpaEntity> {
 
     override fun toDomain(entity: VoteJpaEntity?): Vote? {
         return entity?.let {
             Vote(
-                    id = it.id!!,
-                    votingTopicId = it.votingTopic!!.id!!,
-                    studentId = it.student!!.id!!,
-                    votedAt = it.votedAt,
-                    selectedOptionId = it.selectedOption?.id,
-                    selectedStudentId = it.selectedStudent?.id
+                id = it.id!!,
+                votingTopicId = it.votingTopic!!.id!!,
+                studentId = it.student!!.id!!,
+                votedAt = it.votedAt,
+                selectedOptionId = it.selectedOption?.id,
+                selectedStudentId = it.selectedStudent?.id
             )
         }
     }
@@ -45,12 +45,12 @@ class VoteMapper(
             null
         }
         return VoteJpaEntity(
-                id = domain.id,
-                votingTopic = votingTopic,
-                student = student,
-                votedAt = domain.votedAt,
-                selectedOption = selectedOption,
-                selectedStudent = selectedStudent
+            id = domain.id,
+            votingTopic = votingTopic,
+            student = student,
+            votedAt = domain.votedAt,
+            selectedOption = selectedOption,
+            selectedStudent = selectedStudent
         )
     }
 }

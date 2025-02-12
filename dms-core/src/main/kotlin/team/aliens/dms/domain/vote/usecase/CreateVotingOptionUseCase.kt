@@ -10,7 +10,7 @@ import java.util.UUID
 
 @UseCase
 class CreateVotingOptionUseCase(
-        private val voteService: VoteService
+    private val voteService: VoteService
 ) {
     fun execute(request: CreateVotingOptionRequest): UUID {
         val votingTopic = voteService.getVotingTopic(request.votingTopicId)
@@ -18,10 +18,10 @@ class CreateVotingOptionUseCase(
             throw VoteTypeMismatchException
         }
         return voteService.createVotingOption(
-                VotingOption(
-                        votingTopicId = votingTopic.id,
-                        optionName = request.name
-                )
+            VotingOption(
+                votingTopicId = votingTopic.id,
+                optionName = request.name
+            )
         ).id
     }
 }

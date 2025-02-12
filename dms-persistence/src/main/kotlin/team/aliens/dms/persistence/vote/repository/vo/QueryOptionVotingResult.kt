@@ -5,11 +5,11 @@ import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import java.util.UUID
 
 class QueryOptionVotingResult @QueryProjection constructor(
-        id:UUID,
-        name:String,
-        votes:Int
-):OptionVotingResultVO(
-        id=id,
-        name = name,
-        votes = votes
+    id: UUID,
+    name: String,
+    votes: Int
+) : OptionVotingResultVO(
+    id = id,
+    name = name,
+    votes = votes
 )

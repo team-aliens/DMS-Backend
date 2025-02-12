@@ -14,9 +14,11 @@ import java.util.*
 
 @Service
 class GetVoteServiceImpl(
-        private val queryVotePort: QueryVotePort
-) :GetVoteService{
-    override fun getVotingTopic(votingTopicId: UUID): VotingTopic = queryVotePort.queryVotingTopicById(votingTopicId)?: throw VotingTopicNotFoundException
+    private val queryVotePort: QueryVotePort
+) : GetVoteService {
+    override fun getVotingTopic(
+        votingTopicId: UUID
+    ): VotingTopic = queryVotePort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
     override fun getAllVotingTopics(): List<VotingTopic>? = queryVotePort.queryAllVotingTopics()
 
     override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>? = queryVotePort.queryVotingOptionsByVotingTopicId(votingTopicId)
@@ -30,11 +32,10 @@ class GetVoteServiceImpl(
     }
 
     override fun getVotingOption(votingOptionId: UUID): VotingOption {
-        return queryVotePort.queryVotingOptionById(votingOptionId)?:throw VotingOptionNotFoundException
+        return queryVotePort.queryVotingOptionById(votingOptionId) ?: throw VotingOptionNotFoundException
     }
 
     override fun getVote(voteId: UUID): Vote {
-        return queryVotePort.queryVoteById(voteId)?:throw VoteNotFoundException
+        return queryVotePort.queryVoteById(voteId) ?: throw VoteNotFoundException
     }
-
 }

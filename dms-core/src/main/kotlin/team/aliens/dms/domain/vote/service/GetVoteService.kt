@@ -7,12 +7,12 @@ import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.util.UUID
 
-interface GetVoteService{
+interface GetVoteService {
     fun getVotingTopic(votingTopicId: UUID): VotingTopic?
-    fun getAllVotingTopics():List<VotingTopic>?
-    fun getVotingOptionsByVotingTopicId(votingTopicId: UUID):List<VotingOption>?
-    fun getVotesInStudentVoting(votingTopicId: UUID, grade:Int):List<StudentVotingResultVO>
-    fun getVotesInOptionVoting(votingTopicId: UUID):List<OptionVotingResultVO>
-    fun getVotingOption(votingOptionId:UUID):VotingOption
-    fun getVote(voteId:UUID):Vote
+    fun getAllVotingTopics(): List<VotingTopic>?
+    fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>?
+    fun getVotesInStudentVoting(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO>
+    fun getVotesInOptionVoting(votingTopicId: UUID): List<OptionVotingResultVO>
+    fun getVotingOption(votingOptionId: UUID): VotingOption
+    fun getVote(voteId: UUID): Vote
 }
