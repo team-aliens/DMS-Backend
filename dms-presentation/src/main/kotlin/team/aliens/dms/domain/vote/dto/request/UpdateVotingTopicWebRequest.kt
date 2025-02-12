@@ -13,24 +13,20 @@ data class UpdateVotingTopicWebRequest(
     @field:NotNull
     val id: UUID,
 
-    @field:NotBlank(message = "Please provide a topic")
-    @JsonProperty("topic_name") // JSON 필드명을 강제 지정
+    @field:NotBlank
     val topicName: String?,
 
-    @field:NotBlank(message = "Please provide a topic")
+    @field:NotBlank
     val description: String?,
 
-    @NotNull(message = "Please provide a topic")
-    @JsonProperty("vote_type")
+    @NotNull
     val voteType: VoteType?,
 
-    @field:NotNull(message = "Please provide a topic")
-    @JsonProperty("start_time")
+    @field:NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val startTime: LocalDateTime?,
 
-    @field:NotNull(message = "Please provide a topic")
-    @JsonProperty("end_time")
+    @field:NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val endTime: LocalDateTime?,
 
