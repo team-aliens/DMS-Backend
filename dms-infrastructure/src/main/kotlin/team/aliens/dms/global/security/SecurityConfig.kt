@@ -225,11 +225,11 @@ class SecurityConfig(
 
                 authorize
                         // /vote
-                    .requestMatchers(HttpMethod.POST,"/vote").hasAnyAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.GET,"/vote/{voting-topic-id}").hasAnyAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.DELETE,"/vote/{voting-topic-id}").hasAnyAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.PATCH,"/vote").hasAnyAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.GET,"/vote").hasAnyAuthority(MANAGER.name,STUDENT.name)
+                    .requestMatchers(HttpMethod.POST,"/votes").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET,"/votes/{voting-topic-id}").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.DELETE,"/votes/{voting-topic-id}").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.PATCH,"/votes").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name,STUDENT.name)
 
                 .anyRequest().denyAll()
             }
