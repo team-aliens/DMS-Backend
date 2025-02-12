@@ -27,7 +27,7 @@ import team.aliens.dms.domain.vote.usecase.UpdateVotingTopicUseCase
 import java.util.UUID
 
 @RestController
-@RequestMapping("/vote")
+@RequestMapping("/votes")
 class VoteWebAdapter(
     private val createVotingTopicUseCase: CreateVotingTopicUseCase,
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
