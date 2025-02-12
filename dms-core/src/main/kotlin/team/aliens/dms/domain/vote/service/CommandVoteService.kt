@@ -3,7 +3,7 @@ package team.aliens.dms.domain.vote.service
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
-import java.util.*
+import java.util.UUID
 
 interface CommandVoteService{
     fun createVotingTopic(votingTopic: VotingTopic): VotingTopic

@@ -11,8 +11,6 @@ import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.util.UUID
 
-
-
 @UseCase
 class QueryVotesUseCase(
         private val voteService: VoteService,
@@ -39,7 +37,6 @@ class QueryVotesUseCase(
             )
         }
     }
-
 
     private fun queryStudentVotingVotes(votingTopicId: UUID): List<List<StudentVotingResponse>> {
         return listOf(1, 2, 3).map { grade ->

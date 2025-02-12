@@ -5,7 +5,7 @@ import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
-import java.util.*
+import java.util.UUID
 
 interface GetVoteService{
     fun getVotingTopic(votingTopicId: UUID): VotingTopic?

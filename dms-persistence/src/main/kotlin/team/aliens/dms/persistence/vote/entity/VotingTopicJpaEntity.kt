@@ -1,6 +1,12 @@
 package team.aliens.dms.persistence.vote.entity
 
-import jakarta.persistence.*
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.Entity
+import jakarta.persistence.Enumerated
+import jakarta.persistence.EnumType
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
+import jakarta.persistence.Column
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity

@@ -3,7 +3,6 @@ package team.aliens.dms.domain.vote.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.exception.AlreadyVotedException
-import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
 import team.aliens.dms.domain.vote.exception.WrongVoteTypeException
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption

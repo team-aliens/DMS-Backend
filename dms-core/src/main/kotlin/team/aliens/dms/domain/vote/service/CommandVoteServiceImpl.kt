@@ -7,7 +7,7 @@ import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.CommandVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotePort
-import java.util.*
+import java.util.UUID
 
 @Service
 class CommandVoteServiceImpl(

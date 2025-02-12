@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.dto.response
 
-import java.util.*
+import java.util.UUID
 
 class VotingOptionsResponse (
         val id: UUID,
