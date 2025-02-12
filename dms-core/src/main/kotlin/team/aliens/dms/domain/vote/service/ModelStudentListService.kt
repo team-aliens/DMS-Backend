@@ -4,5 +4,5 @@ import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
 import java.time.LocalDate
 
 interface ModelStudentListService {
-    fun getModelStudentList(requestDate: LocalDate): List<ModelStudentListResponse>
+    fun getModelStudentList(date: LocalDate): List<ModelStudentListResponse>
 }
