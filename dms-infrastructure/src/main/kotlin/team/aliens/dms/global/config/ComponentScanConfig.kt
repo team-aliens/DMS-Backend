@@ -24,7 +24,6 @@ import team.aliens.dms.common.annotation.UseCase
                 SchedulerUseCase::class,
                 DomainService::class,
                 Service::class
-
             ]
         )
     ]
