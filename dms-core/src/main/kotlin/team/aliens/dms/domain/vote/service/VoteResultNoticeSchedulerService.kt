@@ -4,7 +4,7 @@ import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
 import java.time.LocalDateTime
 import java.util.UUID
 
-interface ScheduleCreateVoteResultNoticeService {
+interface VoteResultNoticeSchedulerService {
 
     fun execute(id: UUID, reservedTime: LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId: UUID)
 }

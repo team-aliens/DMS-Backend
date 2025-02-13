@@ -9,7 +9,7 @@ import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.exception.VotingAlreadyEndedException
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
 import team.aliens.dms.domain.vote.service.GetVotingTopicService
-import team.aliens.dms.domain.vote.service.ScheduleCreateVoteResultNoticeService
+import team.aliens.dms.domain.vote.service.VoteResultNoticeSchedulerService
 import java.time.LocalDateTime
 
 @UseCase
@@ -17,7 +17,7 @@ class UpdateVotingTopicUseCase(
     private val taskSchedulerPort: TaskSchedulerPort,
     private val commandVotingTopicService: CommendVotingTopicService,
     private val getVotingTopicService: GetVotingTopicService,
-    private val scheduleCreateVoteResultNoticeService: ScheduleCreateVoteResultNoticeService,
+    private val voteResultNoticeSchedulerService: VoteResultNoticeSchedulerService,
     private val securityPort: SecurityPort
 ) {
 
@@ -46,7 +46,7 @@ class UpdateVotingTopicUseCase(
 
         taskSchedulerPort.cancelTask(request.id)
 
-        scheduleCreateVoteResultNoticeService.execute(
+        voteResultNoticeSchedulerService.execute(
             savedVotingTopicId,
             request.endTime,
             VoteResultNoticeRequest(

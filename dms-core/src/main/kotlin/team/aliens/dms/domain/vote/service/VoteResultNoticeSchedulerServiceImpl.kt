@@ -13,13 +13,13 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
-class ScheduleCreateVoteResultNoticeServiceImpl(
+class VoteResultNoticeSchedulerServiceImpl(
     private val taskSchedulerPort: TaskSchedulerPort,
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
     private val noticePort: CommandNoticePort
-) : ScheduleCreateVoteResultNoticeService {
+) : VoteResultNoticeSchedulerService {
 
     override fun execute(
         id: UUID,
@@ -27,8 +27,6 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
         voteResultNoticeRequest: VoteResultNoticeRequest,
         schoolId: UUID
     ) {
-
-        // noticePort.scheduleVoteResultNoticeDelivery()
 
         taskSchedulerPort.schduleTask(
             id, {

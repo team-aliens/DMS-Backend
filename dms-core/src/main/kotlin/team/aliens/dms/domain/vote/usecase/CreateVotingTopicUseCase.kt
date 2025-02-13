@@ -7,13 +7,13 @@ import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
 import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
-import team.aliens.dms.domain.vote.service.ScheduleCreateVoteResultNoticeService
+import team.aliens.dms.domain.vote.service.VoteResultNoticeSchedulerService
 import java.time.LocalDateTime
 
 @UseCase
 class CreateVotingTopicUseCase(
     private val commendVotingTopicService: CommendVotingTopicService,
-    private val scheduleCreateVoteResultNoticeService: ScheduleCreateVoteResultNoticeService,
+    private val voteResultNoticeSchedulerService: VoteResultNoticeSchedulerService,
     private val securityPort: SecurityPort
 ) {
 
@@ -37,7 +37,7 @@ class CreateVotingTopicUseCase(
             )
         )
 
-        scheduleCreateVoteResultNoticeService.execute(
+        voteResultNoticeSchedulerService.execute(
             savedVotingTopicId,
             request.endTime,
             VoteResultNoticeRequest(
