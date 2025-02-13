@@ -5,6 +5,7 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.common.spi.TaskSchedulerPort
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
+import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.exception.VotingAlreadyEndedException
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
 import team.aliens.dms.domain.vote.service.GetVotingTopicService
@@ -21,6 +22,9 @@ class UpdateVotingTopicUseCase(
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
+        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
+            throw NotValidPeriodException
+        }
 
         val votingTopic = getVotingTopicService.getVotingTopicById(request.id)
         if (votingTopic.endTime.isBefore(LocalDateTime.now())) {

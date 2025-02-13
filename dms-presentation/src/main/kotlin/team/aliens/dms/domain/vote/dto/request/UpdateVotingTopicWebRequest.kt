@@ -13,20 +13,20 @@ data class UpdateVotingTopicWebRequest(
     val id: UUID,
 
     @field:NotBlank
-    val topicName: String?,
+    val topicName: String,
 
     @field:NotBlank
-    val description: String?,
+    val description: String,
 
     @NotNull
-    val voteType: VoteType?,
+    val voteType: VoteType,
 
     @field:NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    val startTime: LocalDateTime?,
+    val startTime: LocalDateTime,
 
     @field:NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    val endTime: LocalDateTime?,
+    val endTime: LocalDateTime,
 
 )
