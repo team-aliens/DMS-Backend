@@ -28,7 +28,7 @@ class VoteResultNoticeSchedulerServiceImpl(
         schoolId: UUID
     ) {
 
-        taskSchedulerPort.schduleTask(
+        taskSchedulerPort.scheduleTask(
             id, {
 
                 val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)

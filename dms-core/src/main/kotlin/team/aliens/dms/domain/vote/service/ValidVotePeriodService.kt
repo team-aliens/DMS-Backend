@@ -4,5 +4,5 @@ import java.util.UUID
 
 interface ValidVotePeriodService {
 
-    fun excute(voteTopicId: UUID)
+    fun execute(voteTopicId: UUID)
 }

@@ -17,7 +17,7 @@ class TaskSchedulerAdepter(
 ) : TaskSchedulerPort {
     var scheduledTasks = ConcurrentHashMap<UUID, ScheduledFuture<*>>()
 
-    override fun schduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
+    override fun scheduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
 
         val InstantTime = time.atZone(ZoneId.systemDefault()).toInstant()
         try {
