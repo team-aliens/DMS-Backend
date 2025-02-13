@@ -9,9 +9,6 @@ dependencies {
 
     // aop
     implementation(Dependencies.AOP)
-
-
-
 }
 
 allOpen {
