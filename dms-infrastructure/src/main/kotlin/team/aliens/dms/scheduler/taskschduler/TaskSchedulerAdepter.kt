@@ -19,9 +19,9 @@ class TaskSchedulerAdepter(
 
     override fun scheduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
 
-        val InstantTime = time.atZone(ZoneId.systemDefault()).toInstant()
+        val scheduledTime = time.atZone(ZoneId.systemDefault()).toInstant()
         try {
-            val scheduledFuture = taskScheduler.schedule(task, InstantTime)
+            val scheduledFuture = taskScheduler.schedule(task, scheduledTime)
             scheduledTasks[id] = scheduledFuture
         } catch (e: Exception) {
             throw TaskSchedulingErrorException
