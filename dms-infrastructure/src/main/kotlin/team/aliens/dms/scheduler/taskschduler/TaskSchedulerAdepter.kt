@@ -23,7 +23,7 @@ class TaskSchedulerAdepter(
         try {
             val scheduledFuture = taskScheduler.schedule(task, InstantTime)
             scheduledTasks[id] = scheduledFuture
-        }catch (e : Exception) {
+        } catch (e: Exception) {
             throw TaskSchedulingErrorException
         }
     }

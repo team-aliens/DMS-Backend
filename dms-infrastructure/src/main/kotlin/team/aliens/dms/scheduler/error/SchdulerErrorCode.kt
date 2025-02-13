@@ -1,6 +1,5 @@
 package team.aliens.dms.scheduler.error
 
-
 import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.common.error.ErrorStatus
 
@@ -15,5 +14,4 @@ enum class SchdulerErrorCode(
     override fun status() = status
     override fun message() = message
     override fun code() = "SCHEDULER-$status-$squence"
-
 }

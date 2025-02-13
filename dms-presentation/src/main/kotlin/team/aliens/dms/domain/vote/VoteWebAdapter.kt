@@ -23,8 +23,6 @@ import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.UpdateVotingTopicUseCase
 import java.time.LocalDateTime
-
-
 import java.util.UUID
 
 @RestController

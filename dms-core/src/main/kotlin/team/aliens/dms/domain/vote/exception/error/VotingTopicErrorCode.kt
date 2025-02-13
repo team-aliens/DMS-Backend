@@ -13,7 +13,6 @@ enum class VotingTopicErrorCode(
     NOT_VOTING_PERIOD(ErrorStatus.BAD_REQUEST, "Not Voting Period", 3),
     VOTING_AREADY_ENDED(ErrorStatus.BAD_REQUEST, "Voting Aready Ended", 4);
 
-
     override fun status(): Int = status
     override fun message(): String = message
     override fun code(): String = "VOTE-$status-$sequence"

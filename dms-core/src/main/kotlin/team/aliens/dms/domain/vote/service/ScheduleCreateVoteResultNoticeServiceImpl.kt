@@ -18,6 +18,7 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
+    private val noticePort: CommandNoticePort
 ) : ScheduleCreateVoteResultNoticeService {
 
     override fun execute(
@@ -26,6 +27,8 @@ class ScheduleCreateVoteResultNoticeServiceImpl(
         voteResultNoticeRequest: VoteResultNoticeRequest,
         schoolId: UUID
     ) {
+
+        // noticePort.scheduleVoteResultNoticeDelivery()
 
         taskSchedulerPort.schduleTask(
             id, {

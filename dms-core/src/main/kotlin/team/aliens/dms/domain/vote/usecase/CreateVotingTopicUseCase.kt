@@ -4,11 +4,9 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
-import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
 import team.aliens.dms.domain.vote.service.ScheduleCreateVoteResultNoticeService
-import java.time.LocalDateTime
 
 @UseCase
 class CreateVotingTopicUseCase(

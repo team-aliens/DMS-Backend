@@ -4,7 +4,6 @@ import team.aliens.dms.domain.vote.model.VoteType
 import java.time.LocalDateTime
 import java.util.UUID
 
-
 data class UpdateVotingTopicRequest(
     val id: UUID,
     val topicName: String,

@@ -5,7 +5,6 @@ import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.CommendVotingTopicPort
 import java.util.UUID
 
-
 @Service
 class CommendVotingTopicServiceImpl(
     val commendVotingTopicPort: CommendVotingTopicPort
@@ -18,5 +17,4 @@ class CommendVotingTopicServiceImpl(
     override fun deleteVotingTopicById(id: UUID) {
         commendVotingTopicPort.deleteVotingTopicById(id)
     }
-
 }
