@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.vote.usecase
 
-import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.vote.dto.reponse.GetVotingTopicResponse
 import team.aliens.dms.domain.vote.service.GetVotingTopicService
 import java.util.UUID
 
-@UseCase
+@ReadOnlyUseCase
 class QueryVotingTopicUseCase(
     private val getVotingTopicService: GetVotingTopicService
 ) {
