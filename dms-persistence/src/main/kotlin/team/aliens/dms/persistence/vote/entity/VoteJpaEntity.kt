@@ -23,7 +23,7 @@ class VoteJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val student: StudentJpaEntity?,
-    @Column(columnDefinition = "DATETIME")
+    @Column(columnDefinition = "DATETIME(6)")
     val votedAt: LocalDateTime,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_option_id", columnDefinition = "BINARY(16)", nullable = true)

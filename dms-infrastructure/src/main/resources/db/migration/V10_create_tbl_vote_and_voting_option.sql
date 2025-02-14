@@ -1,7 +1,7 @@
 create table tbl_vote
 (
     created_at          datetime(6) not null,
-    voted_at            datetime    null,
+    voted_at            datetime(6)    null,
     id                  binary(16)  not null
         primary key,
     selected_option_id  binary(16)  null,
