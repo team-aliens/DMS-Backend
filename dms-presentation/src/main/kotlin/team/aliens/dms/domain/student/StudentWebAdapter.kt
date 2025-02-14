@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -37,23 +38,9 @@ import team.aliens.dms.domain.student.dto.StudentsResponse
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
-import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
-import team.aliens.dms.domain.student.usecase.ExportStudentUseCase
-import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
-import team.aliens.dms.domain.student.usecase.ImportStudentUseCase
-import team.aliens.dms.domain.student.usecase.ManagerGetAllStudentsUseCase
-import team.aliens.dms.domain.student.usecase.QueryStudentDetailsUseCase
-import team.aliens.dms.domain.student.usecase.RemoveStudentUseCase
-import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
-import team.aliens.dms.domain.student.usecase.SignUpUseCase
-import team.aliens.dms.domain.student.usecase.StudentGetAllStudentsUseCase
-import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
-import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
-import team.aliens.dms.domain.student.usecase.UpdateStudentGcnByFileUseCase
-import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
-import team.aliens.dms.domain.student.usecase.UpdateStudentRoomByFileUseCase
+import team.aliens.dms.domain.student.usecase.*
+import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
+import java.time.LocalDate
 import java.util.UUID
 
 @Validated
@@ -76,7 +63,8 @@ class StudentWebAdapter(
     private val updateStudentGcnByFileUseCase: UpdateStudentGcnByFileUseCase,
     private val updateStudentRoomByFileUseCase: UpdateStudentRoomByFileUseCase,
     private val importStudentUseCase: ImportStudentUseCase,
-    private val studentGetAllStudentsUseCase: StudentGetAllStudentsUseCase
+    private val studentGetAllStudentsUseCase: StudentGetAllStudentsUseCase,
+    private val getModelStudentsUseCase: GetModelStudentsUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -236,5 +224,14 @@ class StudentWebAdapter(
     @GetMapping
     fun studentGetAllStudents(@RequestParam(required = false) name: String?): StudentsResponse {
         return studentGetAllStudentsUseCase.execute(name)
+    }
+
+    @GetMapping("/candidate-list/{date}")
+    fun getModelStudents(
+        @PathVariable
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        date: LocalDate
+    ): List<ModelStudentListResponse> {
+        return getModelStudentsUseCase.execute(date)
     }
 }

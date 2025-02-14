@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.vote.usecase
+package team.aliens.dms.domain.student.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
