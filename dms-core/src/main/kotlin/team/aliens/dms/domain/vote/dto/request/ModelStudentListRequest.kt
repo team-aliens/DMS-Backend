@@ -4,4 +4,5 @@ import java.time.LocalDate
 
 data class ModelStudentListRequest(
     val date: LocalDate
+
 )

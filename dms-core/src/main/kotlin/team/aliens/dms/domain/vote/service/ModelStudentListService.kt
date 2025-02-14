@@ -5,4 +5,5 @@ import java.time.LocalDate
 
 interface ModelStudentListService {
     fun getModelStudentList(date: LocalDate): List<ModelStudentListResponse>
+
 }

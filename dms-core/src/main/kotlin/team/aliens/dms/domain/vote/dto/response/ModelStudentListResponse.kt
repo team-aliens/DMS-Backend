@@ -7,4 +7,5 @@ data class ModelStudentListResponse(
     val gcn: String,
     val name: String,
     val profileImageUrl: String?
+
 )

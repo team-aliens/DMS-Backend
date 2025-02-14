@@ -52,4 +52,5 @@ class ModelStudentListAdapter(
         val formattedNumber = String.format("%02d", number)
         return "$grade$classRoom$formattedNumber"
     }
+
 }

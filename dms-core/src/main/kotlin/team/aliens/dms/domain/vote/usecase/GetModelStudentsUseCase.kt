@@ -12,4 +12,5 @@ class GetModelStudentsUseCase(
     fun execute(date: LocalDate): List<ModelStudentListResponse> {
         return modelStudentListService.getModelStudentList(date)
     }
+
 }

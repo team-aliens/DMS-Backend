@@ -7,4 +7,5 @@ import java.util.UUID
 
 @Repository
 interface ModelStudentListJpaRepository : JpaRepository<StudentJpaEntity, UUID>{
+
 }

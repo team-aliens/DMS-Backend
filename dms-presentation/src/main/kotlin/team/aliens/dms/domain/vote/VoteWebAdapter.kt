@@ -22,4 +22,5 @@ class VoteWebAdapter(
     ): List<ModelStudentListResponse> {
         return getModelStudentsUseCase.execute(date)
     }
+
 }
