@@ -9,19 +9,19 @@ import team.aliens.dms.persistence.vote.entity.VotingTopicJpaEntity
 
 @Component
 class VotingTopicMapper(
-        private val managerJpaRepository: ManagerJpaRepository
+    private val managerJpaRepository: ManagerJpaRepository
 ) : GenericMapper<VotingTopic, VotingTopicJpaEntity> {
 
     override fun toDomain(entity: VotingTopicJpaEntity?): VotingTopic? {
         return entity?.let {
             VotingTopic(
-                    id = it.id!!,
-                    topicName = it.topicName,
-                    description = it.description,
-                    startTime = it.startTime,
-                    endTime = it.endTime,
-                    voteType = it.voteType,
-                    managerId = it.manager.id
+                id = it.id!!,
+                topicName = it.topicName,
+                description = it.description,
+                startTime = it.startTime,
+                endTime = it.endTime,
+                voteType = it.voteType,
+                managerId = it.manager.id
             )
         }
     }
@@ -30,13 +30,13 @@ class VotingTopicMapper(
         val manager = managerJpaRepository.findByIdOrNull(domain.managerId)
         return domain.let {
             VotingTopicJpaEntity(
-                    id = it.id,
-                    topicName = it.topicName,
-                    description = it.description,
-                    startTime = it.startTime,
-                    endTime = it.endTime,
-                    voteType = it.voteType,
-                    manager = manager!!
+                id = it.id,
+                topicName = it.topicName,
+                description = it.description,
+                startTime = it.startTime,
+                endTime = it.endTime,
+                voteType = it.voteType,
+                manager = manager!!
             )
         }
     }

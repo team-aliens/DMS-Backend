@@ -6,17 +6,17 @@ import java.util.UUID
 
 @Aggregate
 data class VotingTopic(
-        val id: UUID = UUID(0, 0),
+    val id: UUID = UUID(0, 0),
 
-        val topicName: String,
+    val topicName: String,
 
-        val description: String,
+    val description: String,
 
-        val startTime: LocalDateTime,
+    val startTime: LocalDateTime,
 
-        val endTime: LocalDateTime,
+    val endTime: LocalDateTime,
 
-        val voteType: VoteType,
+    val voteType: VoteType,
 
-        val managerId: UUID,
+    val managerId: UUID,
 )
