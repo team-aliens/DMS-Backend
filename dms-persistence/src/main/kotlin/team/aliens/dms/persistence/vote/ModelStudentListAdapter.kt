@@ -3,6 +3,7 @@ package team.aliens.dms.persistence.vote
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.point.model.PointType
+import team.aliens.dms.domain.vote.exception.StudentIdNotFoundException
 import team.aliens.dms.domain.vote.model.ModelStudent
 import team.aliens.dms.domain.vote.spi.ModelStudentListPort
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
@@ -25,7 +26,7 @@ class ModelStudentListAdapter(
             .map { student ->
                 val gcn = createGcn(student.grade, student.classRoom, student.number)
                 ModelStudent(
-                    id = student.id ?: throw IllegalStateException("학생 ID가 존재하지 않습니다."),
+                    id = student.id ?: throw StudentIdNotFoundException,
                     studentGcn = gcn,
                     studentName = student.name,
                     studentProfile = student.profileImageUrl

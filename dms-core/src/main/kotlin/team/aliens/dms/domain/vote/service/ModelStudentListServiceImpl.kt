@@ -2,6 +2,7 @@ package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
+import team.aliens.dms.domain.vote.exception.validateStudentList
 import team.aliens.dms.domain.vote.spi.ModelStudentListPort
 import java.time.LocalDate
 
@@ -19,9 +20,7 @@ class ModelStudentListServiceImpl(
 
         val modelStudentList = modelStudentListPort.findModelStudents(startOfDay, endOfDay)
 
-        if (modelStudentList.isEmpty()) {
-            throw NoSuchElementException("학생을 찾을 수 없습니다")
-        }
+        validateStudentList(modelStudentList)
 
         return modelStudentList.map { student ->
             ModelStudentListResponse(
