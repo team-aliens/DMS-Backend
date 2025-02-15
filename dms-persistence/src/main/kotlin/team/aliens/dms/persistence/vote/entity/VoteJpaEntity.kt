@@ -31,4 +31,5 @@ class VoteJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_student_id", columnDefinition = "BINARY(16)", nullable = true)
     val selectedStudent: StudentJpaEntity?
+
 ) : BaseEntity(id)
