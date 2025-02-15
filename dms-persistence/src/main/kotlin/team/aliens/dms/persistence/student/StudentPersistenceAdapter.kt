@@ -17,10 +17,14 @@ import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
+import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
+import team.aliens.dms.domain.vote.exception.StudentIdNotFoundException
+import team.aliens.dms.domain.vote.model.ModelStudent
+import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
@@ -32,6 +36,7 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
@@ -40,6 +45,7 @@ class StudentPersistenceAdapter(
     private val tagMapper: TagMapper,
     private val studentRepository: StudentJpaRepository,
     private val queryFactory: JPAQueryFactory,
+    private val studentJpaRepository: StudentJpaRepository,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
@@ -384,5 +390,43 @@ class StudentPersistenceAdapter(
                 studentJpaEntity.number.asc()
             )
             .fetch()
+    }
+
+    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudent> {
+
+        val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay)
+
+        val students = studentJpaRepository.findAll()
+
+        return students
+            .map { student ->
+                val gcn = createGcn(student.grade, student.classRoom, student.number)
+                ModelStudent(
+                    id = student.id ?: throw StudentIdNotFoundException,
+                    studentGcn = gcn,
+                    studentName = student.name,
+                    studentProfile = student.profileImageUrl
+                )
+            }
+            .filter { it.studentGcn !in penalizedStudentGcn }
+    }
+
+    private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
+        return queryFactory
+            .select(
+                QPointHistoryJpaEntity.pointHistoryJpaEntity.studentGcn
+            )
+            .from(QPointHistoryJpaEntity.pointHistoryJpaEntity)
+            .where(
+                QPointHistoryJpaEntity.pointHistoryJpaEntity.isCancel.isFalse,
+                QPointHistoryJpaEntity.pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
+                QPointHistoryJpaEntity.pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay)
+            )
+            .fetch()
+    }
+
+    private fun createGcn(grade: Int, classRoom: Int, number: Int): String {
+        val formattedNumber = String.format("%02d", number)
+        return "$grade$classRoom$formattedNumber"
     }
 }

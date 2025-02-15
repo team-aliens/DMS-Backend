@@ -1,16 +1,17 @@
 package team.aliens.dms.domain.student.usecase
 
+import org.springframework.beans.factory.annotation.Qualifier
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.domain.student.service.GetStudentService
 import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
-import team.aliens.dms.domain.vote.service.ModelStudentListService
 import java.time.LocalDate
 
 @ReadOnlyUseCase
 class GetModelStudentsUseCase(
-    private val modelStudentListService: ModelStudentListService
+    @Qualifier("getStudentServiceImpl") private val getStudentService: GetStudentService
 ) {
     fun execute(date: LocalDate): List<ModelStudentListResponse> {
-        return modelStudentListService.getModelStudentList(date)
+        return getStudentService.getModelStudentList(date)
     }
 
 }
