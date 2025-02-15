@@ -19,7 +19,7 @@ class CreateVotingTopicUseCase(
 
     fun execute(request: CreateVoteTopicRequest) {
 
-        if (request.startTime.isBefore(LocalDateTime.now()) || request.endTime.isBefore(request.startTime)) {
+        if (request.endTime.isBefore(request.startTime)) {
             throw NotValidPeriodException
         }
 

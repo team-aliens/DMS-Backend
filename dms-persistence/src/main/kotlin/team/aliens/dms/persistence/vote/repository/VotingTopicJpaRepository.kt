@@ -8,8 +8,4 @@ import java.util.UUID
 
 @Repository
 interface VotingTopicJpaRepository : CrudRepository<VotingTopicJpaEntity, UUID> {
-
-    fun findStartTimeById(id: UUID): LocalDateTime?
-
-    fun findEndTimeById(id: UUID): LocalDateTime?
 }

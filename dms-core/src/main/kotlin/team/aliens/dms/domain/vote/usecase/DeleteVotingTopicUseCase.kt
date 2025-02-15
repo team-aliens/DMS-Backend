@@ -11,8 +11,8 @@ class DeleteVotingTopicUseCase(
     private val schedulerPort: TaskSchedulerPort
 ) {
 
-    fun execute(id: UUID) {
-        commandVotingTopicService.deleteVotingTopicById(id)
-        schedulerPort.cancelTask(id)
+    fun execute(votingTopicId: UUID) {
+        commandVotingTopicService.deleteVotingTopicById(votingTopicId)
+        schedulerPort.cancelTask(votingTopicId)
     }
 }

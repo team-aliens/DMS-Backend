@@ -16,33 +16,21 @@ class VotingTopicPersistenceAdapter(
     private val votingTopicMapper: VotingTopicMapper,
 ) : VotingTopicPort {
 
-    override fun queryStartTimeById(id: UUID): LocalDateTime? {
-        return votingTopicJpaRepository.findStartTimeById(id)
+    override fun saveVotingTopic(votingTopic: VotingTopic) = votingTopicJpaRepository.save(
+        votingTopicMapper.toEntity(
+            votingTopic
+        )
+    ).id!!
+
+    override fun deleteVotingTopicById(votingTopicId: UUID) {
+        votingTopicJpaRepository.deleteById(votingTopicId)
     }
 
-    override fun queryEndTimeById(id: UUID): LocalDateTime? {
-        return votingTopicJpaRepository.findEndTimeById(id)
-    }
-
-    override fun saveVotingTopic(votingTopic: VotingTopic): UUID {
-        return votingTopicJpaRepository.save(
-            votingTopicMapper.toEntity(
-                votingTopic
-            )
-        ).id!!
-    }
-
-    override fun deleteVotingTopicById(id: UUID) {
-        votingTopicJpaRepository.deleteById(id)
-    }
-
-    override fun queryVotingTopicById(id: UUID) = votingTopicMapper.toDomain(
-        votingTopicJpaRepository.findByIdOrNull(id)
+    override fun queryVotingTopicById(votingTopicId: UUID) = votingTopicMapper.toDomain(
+        votingTopicJpaRepository.findByIdOrNull(votingTopicId)
     )
 
-    override fun queryAllVotingTopic(): List<VotingTopic?> {
-        return votingTopicJpaRepository.findAll().map {
-            votingTopicMapper.toDomain(it)
-        }
+    override fun queryAllVotingTopic() = votingTopicJpaRepository.findAll().map {
+        votingTopicMapper.toDomain(it)
     }
 }

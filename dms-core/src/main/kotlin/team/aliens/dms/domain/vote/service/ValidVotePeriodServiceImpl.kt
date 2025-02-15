@@ -8,12 +8,13 @@ import java.util.UUID
 
 @Service
 class ValidVotePeriodServiceImpl(
-    val queryPort: QueryVotingTopicPort
+    val getVotingTopicService: GetVotingTopicService
 ) : ValidVotePeriodService {
 
     override fun execute(voteTopicId: UUID) {
-        val startTime = queryPort.queryStartTimeById(voteTopicId)
-        val endTime = queryPort.queryEndTimeById(voteTopicId)
+        val votingTopic = getVotingTopicService.getVotingTopicById(voteTopicId)
+        val startTime = votingTopic.startTime
+        val endTime = votingTopic.endTime
         val currentTime = LocalDateTime.now()
 
         if (!(currentTime.isAfter(startTime) && currentTime.isBefore(endTime)))
