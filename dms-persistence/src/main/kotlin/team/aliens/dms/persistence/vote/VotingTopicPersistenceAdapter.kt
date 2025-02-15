@@ -7,20 +7,20 @@ import team.aliens.dms.domain.vote.spi.VotingTopicPort
 import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
+
 
 @Component
 class VotingTopicPersistenceAdapter(
     private val votingTopicJpaRepository: VotingTopicJpaRepository,
     private val votingTopicMapper: VotingTopicMapper,
-
 ) : VotingTopicPort {
 
-    override fun findStartTimeById(id: UUID): LocalDateTime? {
+    override fun queryStartTimeById(id: UUID): LocalDateTime? {
         return votingTopicJpaRepository.findStartTimeById(id)
     }
 
-    override fun findEndTimeById(id: UUID): LocalDateTime? {
+    override fun queryEndTimeById(id: UUID): LocalDateTime? {
         return votingTopicJpaRepository.findEndTimeById(id)
     }
 
@@ -36,11 +36,11 @@ class VotingTopicPersistenceAdapter(
         votingTopicJpaRepository.deleteById(id)
     }
 
-    override fun findById(id: UUID) = votingTopicMapper.toDomain(
+    override fun queryVotingTopicById(id: UUID) = votingTopicMapper.toDomain(
         votingTopicJpaRepository.findByIdOrNull(id)
     )
 
-    override fun findAll(): List<VotingTopic?> {
+    override fun queryAllVotingTopic(): List<VotingTopic?> {
         return votingTopicJpaRepository.findAll().map {
             votingTopicMapper.toDomain(it)
         }

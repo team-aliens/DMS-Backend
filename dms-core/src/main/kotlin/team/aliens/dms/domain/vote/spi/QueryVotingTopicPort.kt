@@ -6,11 +6,11 @@ import java.util.UUID
 
 interface QueryVotingTopicPort {
 
-    fun findStartTimeById(id: UUID): LocalDateTime?
+    fun queryStartTimeById(id: UUID): LocalDateTime?
 
-    fun findEndTimeById(id: UUID): LocalDateTime?
+    fun queryEndTimeById(id: UUID): LocalDateTime?
 
-    fun findById(id: UUID): VotingTopic?
+    fun queryVotingTopicById(id: UUID): VotingTopic?
 
-    fun findAll(): List<VotingTopic?>
+    fun queryAllVotingTopic(): List<VotingTopic?>
 }
