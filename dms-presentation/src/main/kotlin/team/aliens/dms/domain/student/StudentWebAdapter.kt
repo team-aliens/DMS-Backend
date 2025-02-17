@@ -38,8 +38,25 @@ import team.aliens.dms.domain.student.dto.StudentsResponse
 import team.aliens.dms.domain.student.dto.request.ResetStudentPasswordWebRequest
 import team.aliens.dms.domain.student.dto.request.SignUpWebRequest
 import team.aliens.dms.domain.student.dto.request.UpdateStudentProfileWebRequest
-import team.aliens.dms.domain.student.usecase.*
-import team.aliens.dms.domain.vote.dto.response.ModelStudentListResponse
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.CheckDuplicatedEmailUseCase
+import team.aliens.dms.domain.student.usecase.CheckStudentGcnUseCase
+import team.aliens.dms.domain.student.usecase.SignUpUseCase
+import team.aliens.dms.domain.student.usecase.FindStudentAccountIdUseCase
+import team.aliens.dms.domain.student.usecase.ResetStudentPasswordUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
+import team.aliens.dms.domain.student.usecase.StudentMyPageUseCase
+import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
+import team.aliens.dms.domain.student.usecase.ExportStudentUseCase
+import team.aliens.dms.domain.student.usecase.ManagerGetAllStudentsUseCase
+import team.aliens.dms.domain.student.usecase.QueryStudentDetailsUseCase
+import team.aliens.dms.domain.student.usecase.RemoveStudentUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentGcnByFileUseCase
+import team.aliens.dms.domain.student.usecase.UpdateStudentRoomByFileUseCase
+import team.aliens.dms.domain.student.usecase.ImportStudentUseCase
+import team.aliens.dms.domain.student.usecase.StudentGetAllStudentsUseCase
+import team.aliens.dms.domain.student.usecase.GetModelStudentsUseCase
+import team.aliens.dms.domain.vote.dto.response.ModelStudentsResponse
 import java.time.LocalDate
 import java.util.UUID
 
@@ -226,12 +243,14 @@ class StudentWebAdapter(
         return studentGetAllStudentsUseCase.execute(name)
     }
 
-    @GetMapping("/candidate-list/{date}")
+    @GetMapping("/candidate-list")
     fun getModelStudents(
-        @PathVariable
+        @RequestParam
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         date: LocalDate
-    ): List<ModelStudentListResponse> {
-        return getModelStudentsUseCase.execute(date)
+    ): ModelStudentsResponse {
+        val students = getModelStudentsUseCase.execute(date)
+        return ModelStudentsResponse(students = students)
     }
+
 }
