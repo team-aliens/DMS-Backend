@@ -6,7 +6,7 @@ import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
-import team.aliens.dms.domain.vote.model.ModelStudent
+import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -44,5 +44,5 @@ interface QueryStudentPort {
 
     fun queryAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
-    fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudent>
+    fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO>
 }
