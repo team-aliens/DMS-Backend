@@ -22,8 +22,7 @@ import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
-import team.aliens.dms.domain.vote.exception.StudentIdNotFoundException
-import team.aliens.dms.domain.vote.model.ModelStudent
+import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
@@ -392,21 +391,23 @@ class StudentPersistenceAdapter(
             .fetch()
     }
 
-    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudent> {
+    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
 
         val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay)
 
         val students = studentJpaRepository.findAll()
 
         return students
-            .map { student ->
-                val gcn = createGcn(student.grade, student.classRoom, student.number)
-                ModelStudent(
-                    id = student.id ?: throw StudentIdNotFoundException,
-                    studentGcn = gcn,
-                    studentName = student.name,
-                    studentProfile = student.profileImageUrl
-                )
+            .mapNotNull { student ->
+                student.id?.let {
+                    val gcn = createGcn(student.grade, student.classRoom, student.number)
+                    ModelStudentVO(
+                        id = it,
+                        studentGcn = gcn,
+                        studentName = student.name,
+                        studentProfile = student.profileImageUrl
+                    )
+                }
             }
             .filter { it.studentGcn !in penalizedStudentGcn }
     }
@@ -429,4 +430,5 @@ class StudentPersistenceAdapter(
         val formattedNumber = String.format("%02d", number)
         return "$grade$classRoom$formattedNumber"
     }
+
 }
