@@ -2,7 +2,6 @@ package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.exception.NotVotingPeriodException
-import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import java.time.LocalDateTime
 import java.util.UUID
 

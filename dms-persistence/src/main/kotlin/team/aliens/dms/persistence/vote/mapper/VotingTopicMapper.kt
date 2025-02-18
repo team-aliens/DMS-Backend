@@ -26,7 +26,6 @@ class VotingTopicMapper(
         }
     }
 
-
     override fun toEntity(domain: VotingTopic): VotingTopicJpaEntity {
         val manager = managerJpaRepository.findByIdOrNull(domain.managerId)
 
@@ -41,5 +40,3 @@ class VotingTopicMapper(
         )
     }
 }
-
-

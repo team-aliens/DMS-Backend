@@ -6,9 +6,7 @@ import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.VotingTopicPort
 import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
-import java.time.LocalDateTime
 import java.util.UUID
-
 
 @Component
 class VotingTopicPersistenceAdapter(

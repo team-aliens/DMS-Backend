@@ -8,9 +8,8 @@ import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
-import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
+import team.aliens.dms.domain.vote.dto.VoteResultNoticeInfo
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Service
 class VoteResultNoticeSchedulerServiceImpl(
@@ -20,30 +19,25 @@ class VoteResultNoticeSchedulerServiceImpl(
     private val deviceTokenPort: QueryDeviceTokenPort,
 ) : VoteResultNoticeSchedulerService {
 
-    override fun execute(
-        id: UUID,
-        reservedTime: LocalDateTime,
-        voteResultNoticeRequest: VoteResultNoticeRequest,
-        schoolId: UUID
-    ) {
+    override fun scheduleVoteResultNotice(voteResultNoticeInfo: VoteResultNoticeInfo) {
 
         taskSchedulerPort.scheduleTask(
-            id, {
-                val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
+            voteResultNoticeInfo.savedVotingTopicId, {
+                val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(voteResultNoticeInfo.schoolId)
                 commandNoticePort.saveNotice(
                     Notice(
-                        title = voteResultNoticeRequest.title,
-                        content = voteResultNoticeRequest.content,
-                        managerId = voteResultNoticeRequest.managerId,
+                        title = voteResultNoticeInfo.title,
+                        content = voteResultNoticeInfo.content,
+                        managerId = voteResultNoticeInfo.managerId,
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now()
                     )
                 ).also {
                     notificationEventPort.publishNotificationToApplicant(
-                        deviceTokens, Notification.NoticeNotification(schoolId, it)
+                        deviceTokens, Notification.NoticeNotification(voteResultNoticeInfo.schoolId, it)
                     )
                 }
-            }, reservedTime
+            }, voteResultNoticeInfo.reservedTime
         )
     }
 }

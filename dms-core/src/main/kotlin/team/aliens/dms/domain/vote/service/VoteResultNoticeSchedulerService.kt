@@ -1,10 +1,8 @@
 package team.aliens.dms.domain.vote.service
 
-import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
-import java.time.LocalDateTime
-import java.util.UUID
+import team.aliens.dms.domain.vote.dto.VoteResultNoticeInfo
 
 interface VoteResultNoticeSchedulerService {
 
-    fun execute(id: UUID, reservedTime: LocalDateTime, voteResultNoticeRequest: VoteResultNoticeRequest, schoolId: UUID)
+    fun scheduleVoteResultNotice(voteResultNoticeInfo: VoteResultNoticeInfo)
 }

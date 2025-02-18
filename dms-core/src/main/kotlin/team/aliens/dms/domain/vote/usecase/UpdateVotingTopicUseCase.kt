@@ -3,8 +3,8 @@ package team.aliens.dms.domain.vote.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.common.spi.TaskSchedulerPort
+import team.aliens.dms.domain.vote.dto.VoteResultNoticeInfo
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
-import team.aliens.dms.domain.vote.dto.request.VoteResultNoticeRequest
 import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.exception.VotingAlreadyEndedException
 import team.aliens.dms.domain.vote.service.CommendVotingTopicService
@@ -31,7 +31,7 @@ class UpdateVotingTopicUseCase(
             throw VotingAlreadyEndedException
         }
 
-        val userId = securityPort.getCurrentUserId()
+        val managerId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
 
         val savedVotingTopicId = commandVotingTopicService.saveVotingTopic(
@@ -46,15 +46,15 @@ class UpdateVotingTopicUseCase(
 
         taskSchedulerPort.cancelTask(request.id)
 
-        voteResultNoticeSchedulerService.execute(
+        val voteResultNoticeInfo = VoteResultNoticeInfo(
             savedVotingTopicId,
             request.endTime,
-            VoteResultNoticeRequest(
-                userId,
-                "ex)모범학생 투표 결과",
-                "쿼리 메서드로 이렇게 들어감 ex)1 학년 : 홍길동,임꺽정,유씨, 2학년 ...."
-            ),
+            managerId,
+            "임시",
+            "임시",
             schoolId
         )
+
+        voteResultNoticeSchedulerService.scheduleVoteResultNotice(voteResultNoticeInfo)
     }
 }
