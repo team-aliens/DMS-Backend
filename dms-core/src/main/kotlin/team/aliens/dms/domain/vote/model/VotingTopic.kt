@@ -25,7 +25,8 @@ data class VotingTopic(
     fun checkVotingPeriod(voteTopicId: UUID) {
         val currentTime = LocalDateTime.now()
 
-        if (!(currentTime.isAfter(startTime) && currentTime.isBefore(endTime)))
+        if (!(currentTime.isAfter(startTime) && currentTime.isBefore(endTime))) {
             throw NotVotingPeriodException
+        }
     }
 }
