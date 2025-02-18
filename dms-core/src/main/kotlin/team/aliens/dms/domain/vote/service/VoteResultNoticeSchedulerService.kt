@@ -1,8 +1,9 @@
 package team.aliens.dms.domain.vote.service
 
-import team.aliens.dms.domain.vote.dto.VoteResultNoticeInfo
+import java.time.LocalDateTime
+import java.util.*
 
 interface VoteResultNoticeSchedulerService {
 
-    fun scheduleVoteResultNotice(voteResultNoticeInfo: VoteResultNoticeInfo)
+    fun scheduleVoteResultNotice(savedVotingTopicId: UUID, reservedTime: LocalDateTime)
 }

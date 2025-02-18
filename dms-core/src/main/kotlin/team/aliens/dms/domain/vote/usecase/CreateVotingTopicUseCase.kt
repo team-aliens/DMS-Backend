@@ -2,7 +2,6 @@ package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.vote.dto.VoteResultNoticeInfo
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -23,7 +22,6 @@ class CreateVotingTopicUseCase(
         }
 
         val managerId = securityPort.getCurrentUserId()
-        val schoolId = securityPort.getCurrentUserSchoolId()
 
         val savedVotingTopicId = commendVotingTopicService.saveVotingTopic(
             VotingTopic(
@@ -36,15 +34,6 @@ class CreateVotingTopicUseCase(
             )
         )
 
-        val voteResultNoticeInfo = VoteResultNoticeInfo(
-            savedVotingTopicId,
-            request.endTime,
-            managerId,
-            "임시",
-            "임시",
-            schoolId
-        )
-
-        voteResultNoticeSchedulerService.scheduleVoteResultNotice(voteResultNoticeInfo)
+        voteResultNoticeSchedulerService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime)
     }
 }
