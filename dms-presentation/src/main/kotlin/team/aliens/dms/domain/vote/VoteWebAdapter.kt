@@ -42,11 +42,14 @@ class VoteWebAdapter(
         )
     }
 
-    @PatchMapping
-    fun updateVotingTopic(@RequestBody @Valid request: UpdateVotingTopicWebRequest) {
+    @PatchMapping("/{voting-topic-id}")
+    fun updateVotingTopic(
+        @PathVariable("voting-topic-id") @NotNull votingTopicId: UUID,
+        @RequestBody @Valid request: UpdateVotingTopicWebRequest
+    ) {
         updateVotingTopicUseCase.execute(
             UpdateVotingTopicRequest(
-                id = request.id,
+                id = votingTopicId,
                 topicName = request.topicName,
                 description = request.description,
                 startTime = request.startTime,

@@ -5,7 +5,6 @@ import team.aliens.dms.common.spi.TaskSchedulerPort
 import team.aliens.dms.domain.notice.service.CommandNoticeService
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.exception.NotValidPeriodException
-import team.aliens.dms.domain.vote.exception.VotingAlreadyEndedException
 import team.aliens.dms.domain.vote.service.VoteService
 import java.time.LocalDateTime
 
@@ -22,9 +21,7 @@ class UpdateVotingTopicUseCase(
         }
 
         val votingTopic = voteService.getVotingTopicById(request.id)
-        if (votingTopic.endTime.isBefore(LocalDateTime.now())) {
-            throw VotingAlreadyEndedException
-        }
+        var isReNotice = if (votingTopic.endTime.isBefore(LocalDateTime.now())) true else false
 
         val savedVotingTopicId = voteService.saveVotingTopic(
             votingTopic.copy(
@@ -37,6 +34,6 @@ class UpdateVotingTopicUseCase(
         )
 
         taskSchedulerPort.cancelTask(request.id)
-        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime)
+        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime, isReNotice)
     }
 }

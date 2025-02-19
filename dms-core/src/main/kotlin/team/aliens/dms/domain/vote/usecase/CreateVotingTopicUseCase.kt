@@ -7,6 +7,7 @@ import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.exception.NotValidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
+import java.time.LocalDateTime
 
 @UseCase
 class CreateVotingTopicUseCase(
@@ -17,7 +18,7 @@ class CreateVotingTopicUseCase(
 
     fun execute(request: CreateVoteTopicRequest) {
 
-        if (request.endTime.isBefore(request.startTime)) {
+        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw NotValidPeriodException
         }
 
@@ -34,6 +35,6 @@ class CreateVotingTopicUseCase(
             )
         )
 
-        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime)
+        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime, false)
     }
 }

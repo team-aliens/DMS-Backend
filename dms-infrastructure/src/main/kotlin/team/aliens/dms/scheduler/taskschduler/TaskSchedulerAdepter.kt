@@ -23,6 +23,8 @@ class TaskSchedulerAdepter(
         try {
             val scheduledFuture = taskScheduler.schedule(task, scheduledTime)
             scheduledTasks[id] = scheduledFuture
+
+            taskScheduler.schedule({ scheduledTasks.remove(id) }, scheduledTime)
         } catch (e: Exception) {
             throw TaskSchedulingErrorException
         }
