@@ -20,7 +20,7 @@ data class VotingTopic(
     val voteType: VoteType,
 
     val managerId: UUID,
-){
+) {
 
     fun checkVotingPeriod(voteTopicId: UUID) {
         val currentTime = LocalDateTime.now()
