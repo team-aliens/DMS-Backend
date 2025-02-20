@@ -18,5 +18,5 @@ data class VotingTopic(
 
     val voteType: VoteType,
 
-    val managerId: UUID,
+    val managerId: UUID?
 )
