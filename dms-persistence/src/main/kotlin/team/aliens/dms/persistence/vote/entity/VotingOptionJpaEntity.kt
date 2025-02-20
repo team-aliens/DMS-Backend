@@ -18,6 +18,7 @@ class VotingOptionJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voting_topic_id", columnDefinition = "BINARY(16)", nullable = false)
     val votingTopic: VotingTopicJpaEntity?,
+
     @Column(columnDefinition = "VARCHAR(255)")
     val optionName: String
 

@@ -37,7 +37,7 @@ class VotingTopicJpaEntity(
     val voteType: VoteType,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = true)
     val manager: ManagerJpaEntity,
 
 ) : BaseUUIDEntity(id)

@@ -34,15 +34,11 @@ class VoteMapper(
     override fun toEntity(domain: Vote): VoteJpaEntity {
         val votingTopic = votingTopicJpaRepository.findByIdOrNull(domain.votingTopicId)
         val student = studentRepository.findByIdOrNull(domain.studentId)
-        val selectedOption: VotingOptionJpaEntity? = if (domain.selectedOptionId != null) {
-            votingOptionJpaRepository.findByIdOrNull(domain.selectedOptionId!!)
-        } else {
-            null
+        val selectedOption: VotingOptionJpaEntity? = domain.selectedOptionId?.let {
+            votingOptionJpaRepository.findByIdOrNull(it)
         }
-        val selectedStudent: StudentJpaEntity? = if (domain.selectedStudentId != null) {
-            studentRepository.findByIdOrNull(domain.selectedStudentId!!)
-        } else {
-            null
+        val selectedStudent: StudentJpaEntity? = domain.selectedStudentId?.let {
+            studentRepository.findByIdOrNull(it)
         }
         return VoteJpaEntity(
             id = domain.id,

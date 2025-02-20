@@ -32,6 +32,6 @@ create table tbl_voting_topic
     end_time    datetime(6)  not null,
     topic_name  varchar(255) not null,
     vote_type   varchar(20)  not null,
-    description varchar(255) not null,
+    description varchar(255) null,
     foreign key (manager_id) references tbl_manager (user_id)
 );
