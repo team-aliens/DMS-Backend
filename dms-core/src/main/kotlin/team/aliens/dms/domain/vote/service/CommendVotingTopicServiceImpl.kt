@@ -14,7 +14,7 @@ class CommendVotingTopicServiceImpl(
         return commendVotingTopicPort.saveVotingTopic(voteTopic)
     }
 
-    override fun deleteVotingTopicById(id: UUID) {
-        commendVotingTopicPort.deleteVotingTopicById(id)
+    override fun deleteVotingTopicById(votingTopicId: UUID) {
+        commendVotingTopicPort.deleteVotingTopicById(votingTopicId)
     }
 }

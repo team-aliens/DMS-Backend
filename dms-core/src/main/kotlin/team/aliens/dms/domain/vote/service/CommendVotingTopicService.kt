@@ -7,5 +7,5 @@ interface CommendVotingTopicService {
 
     fun saveVotingTopic(voteTopic: VotingTopic): UUID
 
-    fun deleteVotingTopicById(id: UUID)
+    fun deleteVotingTopicById(votingTopicId: UUID)
 }

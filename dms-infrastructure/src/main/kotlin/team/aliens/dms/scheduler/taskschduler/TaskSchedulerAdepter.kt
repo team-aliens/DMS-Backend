@@ -17,21 +17,21 @@ class TaskSchedulerAdepter(
 ) : TaskSchedulerPort {
     var scheduledTasks = ConcurrentHashMap<UUID, ScheduledFuture<*>>()
 
-    override fun scheduleTask(id: UUID, task: Runnable, time: LocalDateTime) {
+    override fun scheduleTask(taskId: UUID, task: Runnable, time: LocalDateTime) {
 
         val scheduledTime = time.atZone(ZoneId.systemDefault()).toInstant()
         try {
             val scheduledFuture = taskScheduler.schedule(task, scheduledTime)
-            scheduledTasks[id] = scheduledFuture
+            scheduledTasks[taskId] = scheduledFuture
 
-            taskScheduler.schedule({ scheduledTasks.remove(id) }, scheduledTime)
+            taskScheduler.schedule({ scheduledTasks.remove(taskId) }, scheduledTime)
         } catch (e: Exception) {
             throw TaskSchedulingErrorException
         }
     }
 
-    override fun cancelTask(id: UUID) {
-        scheduledTasks[id]?.cancel(false)
-        scheduledTasks.remove(id)
+    override fun cancelTask(taskId: UUID) {
+        scheduledTasks[taskId]?.cancel(false)
+        scheduledTasks.remove(taskId)
     }
 }

@@ -7,5 +7,5 @@ interface QueryVotingTopicPort {
 
     fun queryVotingTopicById(votingTopicId: UUID): VotingTopic?
 
-    fun queryAllVotingTopic(): List<VotingTopic?>
+    fun queryAllVotingTopic(): List<VotingTopic>
 }

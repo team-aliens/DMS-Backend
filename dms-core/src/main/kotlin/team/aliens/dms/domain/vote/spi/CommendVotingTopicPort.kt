@@ -7,5 +7,5 @@ interface CommendVotingTopicPort {
 
     fun saveVotingTopic(votingTopic: VotingTopic): UUID
 
-    fun deleteVotingTopicById(id: UUID)
+    fun deleteVotingTopicById(votingTopicId: UUID)
 }

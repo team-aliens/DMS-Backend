@@ -29,6 +29,6 @@ class VotingTopicPersistenceAdapter(
     )
 
     override fun queryAllVotingTopic() = votingTopicJpaRepository.findAll().map {
-        votingTopicMapper.toDomain(it)
+        votingTopicMapper.toDomain(it)!!
     }
 }

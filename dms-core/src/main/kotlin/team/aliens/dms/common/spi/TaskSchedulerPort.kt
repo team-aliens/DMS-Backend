@@ -5,7 +5,7 @@ import java.util.UUID
 
 interface TaskSchedulerPort {
 
-    fun scheduleTask(id: UUID, task: Runnable, time: LocalDateTime)
+    fun scheduleTask(taskId: UUID, task: Runnable, time: LocalDateTime)
 
-    fun cancelTask(id: UUID)
+    fun cancelTask(taskId: UUID)
 }

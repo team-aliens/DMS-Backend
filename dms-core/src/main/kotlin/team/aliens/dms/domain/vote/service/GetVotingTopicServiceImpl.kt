@@ -11,11 +11,11 @@ class GetVotingTopicServiceImpl(
     private val queryVotingTopicPort: QueryVotingTopicPort
 ) : GetVotingTopicService {
 
-    override fun getVotingTopicById(id: UUID): VotingTopic {
-        return queryVotingTopicPort.queryVotingTopicById(id) ?: throw NotFoundVotingTopicException
+    override fun getVotingTopicById(votingTopicId: UUID): VotingTopic {
+        return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw NotFoundVotingTopicException
     }
 
-    override fun getAllVotingTopics(): List<VotingTopic?> {
+    override fun getAllVotingTopics(): List<VotingTopic> {
         return queryVotingTopicPort.queryAllVotingTopic()
     }
 }
