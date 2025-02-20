@@ -4,7 +4,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.persistence.GenericMapper
-import team.aliens.dms.persistence.manager.entity.ManagerJpaEntity
 import team.aliens.dms.persistence.manager.repository.ManagerJpaRepository
 import team.aliens.dms.persistence.vote.entity.VotingTopicJpaEntity
 
@@ -16,33 +15,32 @@ class VotingTopicMapper(
     override fun toDomain(entity: VotingTopicJpaEntity?): VotingTopic? {
         return entity?.let {
             VotingTopic(
-                    id = it.id!!,
-                    topicName = it.topicName,
-                    description = it.description,
-                    startTime = it.startTime,
-                    endTime = it.endTime,
-                    voteType = it.voteType,
-                    managerId = it.manager?.id
+                id = it.id!!,
+                topicName = it.topicName,
+                description = it.description,
+                startTime = it.startTime,
+                endTime = it.endTime,
+                voteType = it.voteType,
+                managerId = it.manager?.id
             )
         }
     }
 
     override fun toEntity(domain: VotingTopic): VotingTopicJpaEntity {
-        val manager = if(domain.managerId != null){
+        val manager = if (domain.managerId != null) {
             managerJpaRepository.findByIdOrNull(domain.managerId!!)
         } else {
             null
         }
 
         return VotingTopicJpaEntity(
-                id = domain.id,
-                topicName = domain.topicName,
-                description = domain.description,
-                startTime = domain.startTime,
-                endTime = domain.endTime,
-                voteType = domain.voteType,
-                manager = manager
+            id = domain.id,
+            topicName = domain.topicName,
+            description = domain.description,
+            startTime = domain.startTime,
+            endTime = domain.endTime,
+            voteType = domain.voteType,
+            manager = manager
         )
     }
-
 }
