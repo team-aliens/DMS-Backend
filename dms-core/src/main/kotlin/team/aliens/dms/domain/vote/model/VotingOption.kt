@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.Aggregate
 import java.util.UUID
 
 @Aggregate
-class VotingOption(
+data class VotingOption(
     val id: UUID = UUID(0, 0),
 
     val votingTopicId: UUID = UUID(0, 0),
