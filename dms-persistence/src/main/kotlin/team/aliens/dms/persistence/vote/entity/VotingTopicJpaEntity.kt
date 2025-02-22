@@ -20,20 +20,20 @@ class VotingTopicJpaEntity(
 
     id: UUID?,
 
-    @Column(name = "topic_name", columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     val topicName: String,
 
-    @Column(name = "description", columnDefinition = "VARCHAR(255)", nullable = true)
+    @Column(columnDefinition = "VARCHAR(255)", nullable = true)
     val description: String?,
 
-    @Column(name = "start_time", columnDefinition = "DATETIME(6)", nullable = false)
+    @Column(columnDefinition = "DATETIME(6)", nullable = false)
     val startTime: LocalDateTime,
 
-    @Column(name = "end_time", columnDefinition = "DATETIME(6)", nullable = false)
+    @Column(columnDefinition = "DATETIME(6)", nullable = false)
     val endTime: LocalDateTime,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "vote_type", columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val voteType: VoteType,
 
     @ManyToOne(fetch = FetchType.LAZY)
