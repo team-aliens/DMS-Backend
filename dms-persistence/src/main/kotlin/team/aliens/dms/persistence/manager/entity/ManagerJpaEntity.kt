@@ -29,5 +29,4 @@ class ManagerJpaEntity(
 
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     val profileImageUrl: String
-
 )

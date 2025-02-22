@@ -10,5 +10,5 @@ interface CommandNoticeService {
 
     fun deleteNotice(notice: Notice)
 
-    fun scheduleVoteResultNotice(savedVotingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean)
+    fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean)
 }

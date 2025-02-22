@@ -14,8 +14,7 @@ class TaskSchedulerConfig {
     @Bean
     fun taskScheduler(): ThreadPoolTaskScheduler {
         scheduler.poolSize = 5
-        scheduler.setThreadNamePrefix("TeskScheduler-")
-        scheduler.initialize()
+        scheduler.setThreadNamePrefix("TaskScheduler-")
         return scheduler
     }
 

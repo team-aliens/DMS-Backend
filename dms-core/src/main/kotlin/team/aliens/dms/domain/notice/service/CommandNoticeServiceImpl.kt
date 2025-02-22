@@ -37,7 +37,7 @@ class CommandNoticeServiceImpl(
         commandNoticePort.deleteNotice(notice)
     }
 
-    override fun scheduleVoteResultNotice(savedVotingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
+    override fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
 
         val managerId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
@@ -45,7 +45,7 @@ class CommandNoticeServiceImpl(
         val reNoticePrefix = if (isReNotice) "[재공지]" else ""
 
         taskSchedulerPort.scheduleTask(
-            savedVotingTopicId, {
+            votingTopicId, {
                 commandNoticePort.saveNotice(
                     Notice(
                         title = reNoticePrefix + "임시",

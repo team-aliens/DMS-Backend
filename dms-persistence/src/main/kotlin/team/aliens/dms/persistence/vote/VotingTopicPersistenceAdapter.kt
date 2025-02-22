@@ -14,11 +14,11 @@ class VotingTopicPersistenceAdapter(
     private val votingTopicMapper: VotingTopicMapper,
 ) : VotingTopicPort {
 
-    override fun saveVotingTopic(votingTopic: VotingTopic) = votingTopicJpaRepository.save(
-        votingTopicMapper.toEntity(
-            votingTopic
+    override fun saveVotingTopic(votingTopic: VotingTopic) = votingTopicMapper.toDomain(
+        votingTopicJpaRepository.save(
+            votingTopicMapper.toEntity(votingTopic)
         )
-    ).id!!
+    )!!
 
     override fun deleteVotingTopicById(votingTopicId: UUID) {
         votingTopicJpaRepository.deleteById(votingTopicId)

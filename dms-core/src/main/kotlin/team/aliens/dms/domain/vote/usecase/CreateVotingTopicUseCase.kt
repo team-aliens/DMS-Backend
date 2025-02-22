@@ -17,14 +17,13 @@ class CreateVotingTopicUseCase(
 ) {
 
     fun execute(request: CreateVoteTopicRequest) {
-
         if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw NotValidPeriodException
         }
 
         val managerId = securityPort.getCurrentUserId()
 
-        val savedVotingTopicId = voteService.saveVotingTopic(
+        val votingTopicId = voteService.saveVotingTopic(
             VotingTopic(
                 managerId = managerId,
                 topicName = request.topicName,
@@ -33,8 +32,8 @@ class CreateVotingTopicUseCase(
                 endTime = request.endTime,
                 voteType = request.voteType,
             )
-        )
+        ).id
 
-        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime, false)
+        noticeService.scheduleVoteResultNotice(votingTopicId, request.endTime, false)
     }
 }

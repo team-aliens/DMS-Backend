@@ -16,14 +16,14 @@ class UpdateVotingTopicUseCase(
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
-        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
+        if (request.startTime.isAfter(request.endTime)) {
             throw NotValidPeriodException
         }
 
         val votingTopic = voteService.getVotingTopicById(request.id)
-        var isReNotice = if (votingTopic.endTime.isBefore(LocalDateTime.now())) true else false
+        var isReNotice = votingTopic.endTime.isBefore(LocalDateTime.now())
 
-        val savedVotingTopicId = voteService.saveVotingTopic(
+        voteService.saveVotingTopic(
             votingTopic.copy(
                 topicName = request.topicName,
                 voteType = request.voteType,
@@ -34,6 +34,6 @@ class UpdateVotingTopicUseCase(
         )
 
         taskSchedulerPort.cancelTask(request.id)
-        noticeService.scheduleVoteResultNotice(savedVotingTopicId, request.endTime, isReNotice)
+        noticeService.scheduleVoteResultNotice(request.id, request.endTime, isReNotice)
     }
 }

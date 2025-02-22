@@ -4,9 +4,9 @@ import team.aliens.dms.common.error.ErrorProperty
 import team.aliens.dms.common.error.ErrorStatus
 
 enum class VotingTopicErrorCode(
-    val status: Int,
-    val message: String,
-    val sequence: Int
+    private val status: Int,
+    private val message: String,
+    private val sequence: Int
 ) : ErrorProperty {
 
     NOT_VALID_PERIOD(ErrorStatus.BAD_REQUEST, "Not Valid Period", 1),

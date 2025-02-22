@@ -6,7 +6,6 @@ import team.aliens.dms.domain.vote.model.VoteType
 import java.time.LocalDateTime
 
 data class CreateVotingTopicWebRequest(
-
     @field:NotBlank
     val topicName: String,
 
@@ -20,5 +19,4 @@ data class CreateVotingTopicWebRequest(
 
     @field:NotNull
     val endTime: LocalDateTime,
-
 )
