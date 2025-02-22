@@ -3,7 +3,7 @@ package team.aliens.dms.domain.vote.service
 import team.aliens.dms.domain.vote.model.VotingTopic
 import java.util.UUID
 
-interface GetVotingTopicService {
+interface GetVoteService {
 
     fun getVotingTopicById(votingTopicId: UUID): VotingTopic
 

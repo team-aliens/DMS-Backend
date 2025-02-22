@@ -3,16 +3,16 @@ package team.aliens.dms.persistence.vote
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingTopic
-import team.aliens.dms.domain.vote.spi.VotingTopicPort
+import team.aliens.dms.domain.vote.spi.VotePort
 import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import team.aliens.dms.persistence.vote.repository.VotingTopicJpaRepository
 import java.util.UUID
 
 @Component
-class VotingTopicPersistenceAdapter(
+class VotePersistenceAdapter(
     private val votingTopicJpaRepository: VotingTopicJpaRepository,
     private val votingTopicMapper: VotingTopicMapper,
-) : VotingTopicPort {
+) : VotePort {
 
     override fun saveVotingTopic(votingTopic: VotingTopic) = votingTopicMapper.toDomain(
         votingTopicJpaRepository.save(
