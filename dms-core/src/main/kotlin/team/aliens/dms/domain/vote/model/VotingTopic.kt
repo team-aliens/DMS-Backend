@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.vote.model
 
 import team.aliens.dms.common.annotation.Aggregate
-import team.aliens.dms.domain.vote.exception.NotVotingPeriodException
+import team.aliens.dms.domain.vote.exception.InvalidVotingPeriodException
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -26,7 +26,7 @@ data class VotingTopic(
         val currentTime = LocalDateTime.now()
 
         if (!(currentTime.isAfter(startTime) && currentTime.isBefore(endTime))) {
-            throw NotVotingPeriodException
+            throw InvalidVotingPeriodException
         }
     }
 }

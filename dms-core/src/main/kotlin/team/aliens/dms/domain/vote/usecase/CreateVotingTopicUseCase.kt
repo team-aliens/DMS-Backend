@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.notice.service.CommandNoticeService
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
-import team.aliens.dms.domain.vote.exception.NotValidPeriodException
+import team.aliens.dms.domain.vote.exception.InvalidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import java.time.LocalDateTime
@@ -18,7 +18,7 @@ class CreateVotingTopicUseCase(
 
     fun execute(request: CreateVoteTopicRequest) {
         if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
-            throw NotValidPeriodException
+            throw InvalidPeriodException
         }
 
         val managerId = securityPort.getCurrentUserId()
