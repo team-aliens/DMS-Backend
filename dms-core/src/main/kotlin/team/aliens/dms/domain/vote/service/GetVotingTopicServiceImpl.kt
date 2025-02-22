@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.vote.exception.NotFoundVotingTopicException
+import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import java.util.UUID
@@ -12,7 +12,7 @@ class GetVotingTopicServiceImpl(
 ) : GetVotingTopicService {
 
     override fun getVotingTopicById(votingTopicId: UUID): VotingTopic {
-        return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw NotFoundVotingTopicException
+        return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
     }
 
     override fun getAllVotingTopics(): List<VotingTopic> {
