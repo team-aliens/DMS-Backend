@@ -21,7 +21,7 @@ class UpdateVotingTopicUseCase(
         }
 
         val votingTopic = voteService.getVotingTopicById(request.id)
-        var isReNotice = votingTopic.endTime.isBefore(LocalDateTime.now())
+        val isReNotice = votingTopic.endTime.isBefore(LocalDateTime.now())
 
         voteService.saveVotingTopic(
             votingTopic.copy(
