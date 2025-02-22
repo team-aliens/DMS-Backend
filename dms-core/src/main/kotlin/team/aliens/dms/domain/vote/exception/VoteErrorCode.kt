@@ -10,8 +10,9 @@ enum class VoteErrorCode(
 ) : ErrorProperty {
 
     INVALID_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Period", 1),
-    VOTING_TOPIC_NOT_FOUND(ErrorStatus.BAD_REQUEST, "VotingTopic Not Found", 2),
     INVALID_VOTING_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Voting Period", 3),
+
+    VOTING_TOPIC_NOT_FOUND(ErrorStatus.NOT_FOUND, "VotingTopic Not Found", 1)
     ;
 
     override fun status(): Int = status
