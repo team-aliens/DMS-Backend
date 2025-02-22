@@ -11,7 +11,7 @@ data class CreateVotingTopicWebRequest(
 
     val description: String,
 
-    @NotNull
+    @field:NotNull
     val voteType: VoteType,
 
     @field:NotNull
