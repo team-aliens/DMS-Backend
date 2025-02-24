@@ -5,6 +5,5 @@ import team.aliens.dms.domain.notice.model.Notice
 interface CommandNoticePort {
 
     fun deleteNotice(notice: Notice)
-
     fun saveNotice(notice: Notice): Notice
 }
