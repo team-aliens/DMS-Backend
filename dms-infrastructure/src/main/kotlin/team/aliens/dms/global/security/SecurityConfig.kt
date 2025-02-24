@@ -67,6 +67,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.POST, "/students/file/room").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.POST, "/students/file/gcn").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.POST, "/students/verified-student").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET, "/students/candidate-list").hasAnyAuthority(MANAGER.name)
 
                 authorize
                     // /managers
@@ -226,7 +227,11 @@ class SecurityConfig(
 
                 authorize
                     // /vote
-                    .requestMatchers(HttpMethod.GET, "/vote/candidate-list/{requestDate}").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.POST,"/votes").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.DELETE,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.PATCH,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name,STUDENT.name)
 
                 .anyRequest().denyAll()
             }
