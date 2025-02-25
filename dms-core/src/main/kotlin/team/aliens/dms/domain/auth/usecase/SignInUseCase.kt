@@ -27,6 +27,7 @@ class SignInUseCase(
         val tokenResponse = jwtPort.receiveToken(
             userId = user.id, authority = user.authority
         )
+
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
         if (!request.deviceToken.isNullOrBlank()) {
