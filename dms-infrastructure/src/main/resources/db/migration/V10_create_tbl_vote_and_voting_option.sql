@@ -27,7 +27,7 @@ create table tbl_voting_option
 create table tbl_voting_topic
 (
     id          binary(16) not null primary key,
-    manager_id  binary(16)   not null,
+    manager_id  binary(16)   null,
     start_time  datetime(6)  not null,
     end_time    datetime(6)  not null,
     topic_name  varchar(255) not null,
