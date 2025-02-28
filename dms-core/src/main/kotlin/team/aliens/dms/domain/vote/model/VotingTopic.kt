@@ -11,7 +11,7 @@ data class VotingTopic(
 
     val topicName: String,
 
-    val description: String,
+    val description: String?,
 
     val startTime: LocalDateTime,
 
@@ -19,7 +19,8 @@ data class VotingTopic(
 
     val voteType: VoteType,
 
-    val managerId: UUID,
+    val managerId: UUID
+
 ) {
 
     fun checkVotingPeriod(voteTopicId: UUID) {
