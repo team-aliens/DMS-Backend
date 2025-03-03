@@ -6,4 +6,7 @@ import team.aliens.dms.persistence.vote.entity.VotingTopicJpaEntity
 import java.util.UUID
 
 @Repository
-interface VotingTopicJpaRepository : CrudRepository<VotingTopicJpaEntity, UUID>
+interface VotingTopicJpaRepository : CrudRepository<VotingTopicJpaEntity, UUID> {
+    fun existsByTopicName(topicName: String): Boolean
+}
+
