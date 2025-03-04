@@ -9,7 +9,7 @@ import java.net.URLEncoder
 import java.util.UUID
 
 fun MultipartFile.toFile() =
-    File("${UUID.randomUUID()}||$originalFilename").let {
+    File("${UUID.randomUUID()}_$originalFilename").let {
         FileOutputStream(it).run {
             this.write(bytes)
             this.close()
