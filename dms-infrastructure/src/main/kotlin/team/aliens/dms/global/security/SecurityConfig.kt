@@ -1,6 +1,5 @@
 package team.aliens.dms.global.security
 
-import org.apache.http.protocol.HTTP
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
