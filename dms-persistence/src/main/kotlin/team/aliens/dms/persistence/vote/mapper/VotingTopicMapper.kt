@@ -21,7 +21,7 @@ class VotingTopicMapper(
                 startTime = it.startTime,
                 endTime = it.endTime,
                 voteType = it.voteType,
-                managerId = it.manager.id
+                managerId = it.manager!!.id
             )
         }
     }
@@ -36,7 +36,7 @@ class VotingTopicMapper(
             startTime = domain.startTime,
             endTime = domain.endTime,
             voteType = domain.voteType,
-            manager = manager!!
+            manager = manager
         )
     }
 }
