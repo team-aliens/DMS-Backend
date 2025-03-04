@@ -18,6 +18,6 @@ enum class VoteErrorCode(
 
     override fun status(): Int = status
     override fun message(): String = message
-  
+
     override fun code(): String = "Vote-$status-$sequence"
 }

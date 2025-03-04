@@ -58,5 +58,4 @@ interface GetStudentService {
     fun isApplicant(studentId: UUID): Boolean
 
     fun getModelStudentList(date: LocalDate): List<ModelStudentResponse>
-
 }
