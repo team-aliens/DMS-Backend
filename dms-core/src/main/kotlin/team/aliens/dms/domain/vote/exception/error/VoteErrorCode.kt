@@ -17,8 +17,10 @@ enum class VoteErrorCode(
     VOTE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Couldn't found vote", 1),
     ALREADY_VOTED(ErrorStatus.CONFLICT, "Already voted", 1),
     WRONG_SCHOOL_VOTED(ErrorStatus.UNAUTHORIZED, "Wrong school voted", 1),
-    INVALID_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Period", 1),
-    INVALID_VOTING_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Voting Period", 3)
+    STUDENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Student Not Found", 1),
+    STUDENT_ID_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Student ID Not Found", 2),
+    INVALID_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Period", 3),
+    INVALID_VOTING_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Voting Period", 4),
     ;
 
     override fun status(): Int = status
