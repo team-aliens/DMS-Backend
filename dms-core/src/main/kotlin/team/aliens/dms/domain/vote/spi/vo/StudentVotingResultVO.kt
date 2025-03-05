@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.spi.vo
 
-import java.util.*
+import java.util.UUID
 
 open class StudentVotingResultVO(
     val id: UUID,

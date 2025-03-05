@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.dto.request
 
-import java.util.*
+import java.util.UUID
 
 class CreateVotingOptionRequest(
     val votingTopicId: UUID,

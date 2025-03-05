@@ -10,9 +10,9 @@ class CheckVoteServiceImpl(
 ) : CheckVoteService {
     override fun checkVotingTopicExistByName(name: String): Boolean = queryVotePort.existVotingTopicByName(name)
 
-    override fun checkVotingTopicExist(id: UUID): Boolean = queryVotePort.existVotingTopicById(id)
+    override fun checkVotingTopicExistById(id: UUID): Boolean = queryVotePort.existVotingTopicById(id)
 
-    override fun checkVotingOptionExist(id: UUID): Boolean = queryVotePort.existVotingOptionById(id)
+    override fun checkVotingOptionExistById(id: UUID): Boolean = queryVotePort.existVotingOptionById(id)
 
     override fun checkVoteExistByStudentIdAndVotingTopicId(studentId: UUID, votingTopicId: UUID): Boolean {
         queryVotePort.queryVoteByStudentId(studentId).forEach { vote ->

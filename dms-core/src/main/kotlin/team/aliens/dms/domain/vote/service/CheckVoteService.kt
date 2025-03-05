@@ -6,9 +6,9 @@ interface CheckVoteService {
 
     fun checkVotingTopicExistByName(name: String): Boolean
 
-    fun checkVotingTopicExist(id: UUID): Boolean
+    fun checkVotingTopicExistById(id: UUID): Boolean
 
-    fun checkVotingOptionExist(id: UUID): Boolean
+    fun checkVotingOptionExistById(id: UUID): Boolean
 
     fun checkVoteExistByStudentIdAndVotingTopicId(studentId: UUID, votingTopicId: UUID): Boolean
 }

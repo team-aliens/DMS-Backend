@@ -11,16 +11,16 @@ enum class VoteErrorCode(
 
     VOTE_TYPE_MISMATCH(ErrorStatus.BAD_REQUEST, "Vote Type mismatch", 1),
     VOTING_TOPIC_NAME_ALREADY_EXIST(ErrorStatus.CONFLICT, "Voting Topic Already Exist", 1),
-    VOTING_TOPIC_NOT_FOUND(ErrorStatus.NOT_FOUND, "Couldn't found voting topic", 1),
+    VOTING_TOPIC_NOT_FOUND(ErrorStatus.NOT_FOUND, "Voting topic not found", 1),
     WRONG_VOTE_TYPE(ErrorStatus.BAD_REQUEST, "Wrong vote type", 1),
-    VOTING_OPTION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Couldn't found voting option", 1),
-    VOTE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Couldn't found vote", 1),
+    VOTING_OPTION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Voting option not found", 1),
+    VOTE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Vote not found", 1),
     ALREADY_VOTED(ErrorStatus.CONFLICT, "Already voted", 1),
     WRONG_SCHOOL_VOTED(ErrorStatus.UNAUTHORIZED, "Wrong school voted", 1),
     STUDENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Student Not Found", 1),
-    STUDENT_ID_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Student ID Not Found", 2),
-    INVALID_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Period", 3),
-    INVALID_VOTING_PERIOD(ErrorStatus.BAD_REQUEST, "Invalid Voting Period", 4),
+    STUDENT_ID_NOT_FOUND(ErrorStatus.NOT_FOUND, "Student ID Not Found", 2),
+    INVALID_PERIOD(ErrorStatus.FORBIDDEN, "Invalid Period", 3),
+    INVALID_VOTING_PERIOD(ErrorStatus.FORBIDDEN, "Invalid Voting Period", 4),
     ;
 
     override fun status(): Int = status

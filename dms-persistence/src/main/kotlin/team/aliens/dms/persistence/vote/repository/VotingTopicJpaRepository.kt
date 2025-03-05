@@ -9,4 +9,3 @@ import java.util.UUID
 interface VotingTopicJpaRepository : CrudRepository<VotingTopicJpaEntity, UUID> {
     fun existsByTopicName(topicName: String): Boolean
 }
-

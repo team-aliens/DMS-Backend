@@ -115,7 +115,7 @@ class VotePersistenceAdapter(
                 QQueryOptionVotingResultVO(
                     QVotingOptionJpaEntity.votingOptionJpaEntity.id,
                     QVotingOptionJpaEntity.votingOptionJpaEntity.optionName,
-                    QVoteJpaEntity.voteJpaEntity.id.count().intValue().coalesce(0) // Handle potential nulls
+                    QVoteJpaEntity.voteJpaEntity.id.count().intValue().coalesce(0)
                 )
             )
             .from(QVotingOptionJpaEntity.votingOptionJpaEntity)
