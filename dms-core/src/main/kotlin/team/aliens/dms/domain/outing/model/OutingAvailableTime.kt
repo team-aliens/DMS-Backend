@@ -2,6 +2,7 @@ package team.aliens.dms.domain.outing.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
+import team.aliens.dms.domain.outing.exception.OutingAvailableTimeAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -39,8 +40,12 @@ data class OutingAvailableTime(
     fun timesOverlap(
         newOutingTime: LocalTime,
         newArrivalTime: LocalTime
-    ): Boolean {
-        return !(newArrivalTime <= this.outingTime || newOutingTime >= this.arrivalTime)
+    ) {
+        if (
+            !(newArrivalTime <= this.outingTime || newOutingTime >= this.arrivalTime)
+        ) {
+            throw OutingAvailableTimeAlreadyExistsException
+        }
     }
 
     fun toggleEnabled(): OutingAvailableTime =

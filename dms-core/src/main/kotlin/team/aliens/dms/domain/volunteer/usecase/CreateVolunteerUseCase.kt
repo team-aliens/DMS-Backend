@@ -17,7 +17,6 @@ class CreateVolunteerUseCase(
 
         val volunteer = Volunteer(
             name = createVolunteerRequest.name,
-            content = createVolunteerRequest.content,
             availableSex = createVolunteerRequest.availableSex,
             availableGrade = createVolunteerRequest.availableGrade,
             score = createVolunteerRequest.score,

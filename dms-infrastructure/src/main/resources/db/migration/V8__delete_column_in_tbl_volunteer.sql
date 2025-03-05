@@ -1,0 +1,1 @@
+alter table tbl_volunteer drop column content;

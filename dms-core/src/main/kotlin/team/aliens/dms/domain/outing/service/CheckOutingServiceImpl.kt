@@ -2,7 +2,6 @@ package team.aliens.dms.domain.outing.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.outing.exception.OutingApplicationAlreadyExistsException
-import team.aliens.dms.domain.outing.exception.OutingAvailableTimeAlreadyExistsException
 import team.aliens.dms.domain.outing.exception.OutingAvailableTimeMismatchException
 import team.aliens.dms.domain.outing.exception.OutingTypeAlreadyExistsException
 import team.aliens.dms.domain.outing.model.OutingType
@@ -61,15 +60,7 @@ class CheckOutingServiceImpl(
         val existingTimes = queryOutingAvailableTimePort.queryOutingAvailableTimesByDayOfWeek(dayOfWeek)
 
         for (existingTime in existingTimes) {
-            if (existingTime.timesOverlap(outingTime, arrivalTime)) {
-                throw OutingAvailableTimeAlreadyExistsException
-            }
+            existingTime.timesOverlap(outingTime, arrivalTime)
         }
-    }
-
-    override fun checkOutingApplicationQueryAble(): Boolean {
-        val currentTime = LocalTime.now()
-
-        return currentTime.isBefore(LocalTime.of(20, 0))
     }
 }

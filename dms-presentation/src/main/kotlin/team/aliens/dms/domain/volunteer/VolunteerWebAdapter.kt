@@ -63,9 +63,9 @@ class VolunteerWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/cancellation/{volunteer-application-id}")
-    fun unapplyVolunteer(@PathVariable("volunteer-application-id") @NotNull volunteerApplicationId: UUID) {
-        unapplyVolunteerUseCase.execute(volunteerApplicationId)
+    @DeleteMapping("/cancellation/{volunteer-id}")
+    fun unapplyVolunteer(@PathVariable("volunteer-id") @NotNull volunteerId: UUID) {
+        unapplyVolunteerUseCase.execute(volunteerId)
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -86,12 +86,11 @@ class VolunteerWebAdapter(
         createVolunteerUseCase.execute(
             CreateVolunteerRequest(
                 name = createVolunteerWebRequest.name,
-                content = createVolunteerWebRequest.content,
                 availableGrade = createVolunteerWebRequest.availableGrade,
                 availableSex = createVolunteerWebRequest.availableSex,
-                score = createVolunteerWebRequest.score,
-                optionalScore = createVolunteerWebRequest.optionalScore,
-                maxApplicants = createVolunteerWebRequest.maxApplicants,
+                score = createVolunteerWebRequest.score!!,
+                optionalScore = createVolunteerWebRequest.optionalScore!!,
+                maxApplicants = createVolunteerWebRequest.maxApplicants!!,
             )
         )
     }
@@ -105,12 +104,11 @@ class VolunteerWebAdapter(
         updateVolunteerUseCase.execute(
             UpdateVolunteerRequest(
                 name = updateVolunteerWebRequest.name,
-                content = updateVolunteerWebRequest.content,
                 availableGrade = updateVolunteerWebRequest.availableGrade,
                 availableSex = updateVolunteerWebRequest.availableSex,
-                score = updateVolunteerWebRequest.score,
-                optionalScore = updateVolunteerWebRequest.optionalScore,
-                maxApplicants = updateVolunteerWebRequest.maxApplicants,
+                score = updateVolunteerWebRequest.score!!,
+                optionalScore = updateVolunteerWebRequest.optionalScore!!,
+                maxApplicants = updateVolunteerWebRequest.maxApplicants!!,
                 volunteerId = volunteerId
             )
         )

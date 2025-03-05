@@ -13,10 +13,8 @@ import team.aliens.dms.domain.outing.spi.QueryOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.QueryOutingTypePort
 import team.aliens.dms.domain.outing.spi.vo.CurrentOutingApplicationVO
 import team.aliens.dms.domain.outing.spi.vo.OutingCompanionDetailsVO
-import team.aliens.dms.domain.outing.spi.vo.OutingHistoryVO
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
 @Service
@@ -37,18 +35,15 @@ class GetOutingServiceImpl(
         queryOutingApplicationPort.queryOutingApplicationById(outingApplicationId)
             ?: throw OutingApplicationNotFoundException
 
-    override fun getAllOutingApplicationVOsBetweenStartAndEnd(start: LocalDate, end: LocalDate) =
-        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(start, end)
+    override fun getAllOutingApplicationVOsBetweenStartAndEnd(name: String?, start: LocalDate, end: LocalDate) =
+        queryOutingApplicationPort.queryAllOutingApplicationVOsBetweenStartAndEnd(name, start, end)
 
     override fun getCurrentOutingApplication(studentId: UUID): CurrentOutingApplicationVO {
-        return queryOutingApplicationPort.queryCurrentOutingApplicationVO(studentId)
-                ?: throw OutingApplicationNotFoundException
+        return queryOutingApplicationPort.queryCurrentOutingApplicationVO(
+            studentId = studentId,
+            date = LocalDate.now()
+        ) ?: throw OutingApplicationNotFoundException
     }
-
-    override fun getOutingHistoriesByStudentNameAndDate(
-        studentName: String?,
-        date: LocalDate
-    ): List<OutingHistoryVO> = queryOutingApplicationPort.queryOutingHistoriesByStudentNameAndDate(studentName, date)
 
     override fun getOutingAvailableTimesByDayOfWeek(
         dayOfWeek: DayOfWeek
@@ -62,5 +57,4 @@ class GetOutingServiceImpl(
     override fun getOutingAvailableTimeById(outingAvailableTimeId: UUID): OutingAvailableTime =
         queryOutingAvailableTimePort.queryOutingAvailableTimeById(outingAvailableTimeId)
             ?: throw OutingAvailableTimeNotFoundException
-
 }

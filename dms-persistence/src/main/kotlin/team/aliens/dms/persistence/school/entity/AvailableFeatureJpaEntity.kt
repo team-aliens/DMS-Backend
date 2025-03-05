@@ -40,4 +40,7 @@ class AvailableFeatureJpaEntity(
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     val outingService: Boolean,
 
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    val volunteerService: Boolean
+
 )

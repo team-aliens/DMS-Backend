@@ -2,7 +2,6 @@ package team.aliens.dms.domain.outing.stub
 
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingAvailableTime
-import team.aliens.dms.domain.outing.model.OutingStatus
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,7 +15,8 @@ internal fun createOutingApplicationStub(
     outingDate: LocalDate = LocalDate.now(),
     outingTime: LocalTime = LocalTime.now(),
     arrivalTime: LocalTime = LocalTime.now(),
-    outingStatus: OutingStatus = OutingStatus.REQUESTED,
+    isApproved: Boolean = false,
+    isReturned: Boolean = false,
     reason: String? = null,
     outingTypeTitle: String = "식사 외출",
     schoolId: UUID = UUID.randomUUID(),
@@ -28,7 +28,8 @@ internal fun createOutingApplicationStub(
     outingDate = outingDate,
     outingTime = outingTime,
     arrivalTime = arrivalTime,
-    status = outingStatus,
+    isApproved = isApproved,
+    isReturned = isReturned,
     reason = reason,
     outingTypeTitle = outingTypeTitle,
     schoolId = schoolId

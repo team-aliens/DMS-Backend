@@ -31,7 +31,8 @@ data class AvailableFeaturesResponse(
     val pointService: Boolean,
     val studyRoomService: Boolean,
     val remainService: Boolean,
-    val outingService: Boolean
+    val outingService: Boolean,
+    val volunteerService: Boolean
 )
 
 data class NeisSchoolResponse(
