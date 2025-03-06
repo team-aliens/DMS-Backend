@@ -9,13 +9,9 @@ import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.VotePort
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
-import team.aliens.dms.persistence.vote.entity.QVoteJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVoteJpaEntity.voteJpaEntity
-import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity.votingOptionJpaEntity
-import team.aliens.dms.persistence.vote.entity.QVotingTopicJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingTopicJpaEntity.votingTopicJpaEntity
 import team.aliens.dms.persistence.vote.mapper.VoteMapper
 import team.aliens.dms.persistence.vote.mapper.VotingOptionMapper
