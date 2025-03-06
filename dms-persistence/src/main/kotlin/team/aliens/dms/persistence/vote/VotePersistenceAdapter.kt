@@ -10,9 +10,13 @@ import team.aliens.dms.domain.vote.spi.VotePort
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVoteJpaEntity
+import team.aliens.dms.persistence.vote.entity.QVoteJpaEntity.voteJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity
+import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity.votingOptionJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingTopicJpaEntity
+import team.aliens.dms.persistence.vote.entity.QVotingTopicJpaEntity.votingTopicJpaEntity
 import team.aliens.dms.persistence.vote.mapper.VoteMapper
 import team.aliens.dms.persistence.vote.mapper.VotingOptionMapper
 import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
@@ -76,8 +80,8 @@ class VotePersistenceAdapter(
 
     override fun queryVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption> {
         return queryFactory
-            .selectFrom(QVotingOptionJpaEntity.votingOptionJpaEntity)
-            .where(QVotingOptionJpaEntity.votingOptionJpaEntity.votingTopic.id.eq(votingTopicId))
+            .selectFrom(votingOptionJpaEntity)
+            .where(votingOptionJpaEntity.votingTopic.id.eq(votingTopicId))
             .fetch()
             .map { entity ->
                 VotingOption(
@@ -92,20 +96,20 @@ class VotePersistenceAdapter(
         return queryFactory
             .select(
                 QQueryStudentVotingResultVO(
-                    QStudentJpaEntity.studentJpaEntity.id,
-                    QStudentJpaEntity.studentJpaEntity.name,
-                    QVoteJpaEntity.voteJpaEntity.id.count().intValue()
+                    studentJpaEntity.id,
+                    studentJpaEntity.name,
+                    voteJpaEntity.id.count().intValue()
                 )
             )
-            .from(QVoteJpaEntity.voteJpaEntity)
-            .join(QVoteJpaEntity.voteJpaEntity.selectedStudent, QStudentJpaEntity.studentJpaEntity)
-            .join(QVoteJpaEntity.voteJpaEntity.votingTopic, QVotingTopicJpaEntity.votingTopicJpaEntity)
+            .from(voteJpaEntity)
+            .join(voteJpaEntity.selectedStudent, studentJpaEntity)
+            .join(voteJpaEntity.votingTopic, votingTopicJpaEntity)
             .where(
-                QVotingTopicJpaEntity.votingTopicJpaEntity.id.eq(votingTopicId),
-                QStudentJpaEntity.studentJpaEntity.grade.eq(grade)
+                votingTopicJpaEntity.id.eq(votingTopicId),
+                studentJpaEntity.grade.eq(grade)
             )
-            .groupBy(QStudentJpaEntity.studentJpaEntity.id, QStudentJpaEntity.studentJpaEntity.name)
-            .orderBy(QVoteJpaEntity.voteJpaEntity.id.count().intValue().desc())
+            .groupBy(studentJpaEntity.id, studentJpaEntity.name)
+            .orderBy(voteJpaEntity.id.count().intValue().desc())
             .fetch()
     }
 
@@ -113,16 +117,16 @@ class VotePersistenceAdapter(
         return queryFactory
             .select(
                 QQueryOptionVotingResultVO(
-                    QVotingOptionJpaEntity.votingOptionJpaEntity.id,
-                    QVotingOptionJpaEntity.votingOptionJpaEntity.optionName,
-                    QVoteJpaEntity.voteJpaEntity.id.count().intValue().coalesce(0)
+                    votingOptionJpaEntity.id,
+                    votingOptionJpaEntity.optionName,
+                    voteJpaEntity.id.count().intValue().coalesce(0)
                 )
             )
-            .from(QVotingOptionJpaEntity.votingOptionJpaEntity)
-            .leftJoin(QVoteJpaEntity.voteJpaEntity).on(QVoteJpaEntity.voteJpaEntity.selectedOption.eq(QVotingOptionJpaEntity.votingOptionJpaEntity))
-            .where(QVotingOptionJpaEntity.votingOptionJpaEntity.votingTopic.id.eq(votingTopicId))
-            .groupBy(QVotingOptionJpaEntity.votingOptionJpaEntity.id, QVotingOptionJpaEntity.votingOptionJpaEntity.optionName)
-            .orderBy(QVoteJpaEntity.voteJpaEntity.id.count().intValue().desc())
+            .from(votingOptionJpaEntity)
+            .leftJoin(voteJpaEntity).on(voteJpaEntity.selectedOption.eq(votingOptionJpaEntity))
+            .where(votingOptionJpaEntity.votingTopic.id.eq(votingTopicId))
+            .groupBy(votingOptionJpaEntity.id, votingOptionJpaEntity.optionName)
+            .orderBy(voteJpaEntity.id.count().intValue().desc())
             .fetch()
     }
 
