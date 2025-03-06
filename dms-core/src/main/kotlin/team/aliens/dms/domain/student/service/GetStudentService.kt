@@ -8,6 +8,8 @@ import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
+import team.aliens.dms.domain.vote.dto.response.ModelStudentResponse
+import java.time.LocalDate
 import java.util.UUID
 
 interface GetStudentService {
@@ -54,4 +56,6 @@ interface GetStudentService {
     fun getAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
     fun isApplicant(studentId: UUID): Boolean
+
+    fun getModelStudentList(date: LocalDate): List<ModelStudentResponse>
 }

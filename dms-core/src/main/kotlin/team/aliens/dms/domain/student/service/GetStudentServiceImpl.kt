@@ -12,6 +12,9 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.exception.StudentUpdateInfoNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.vote.dto.response.ModelStudentResponse
+import team.aliens.dms.domain.vote.exception.validateStudentList
+import java.time.LocalDate
 import java.util.UUID
 import java.util.function.Function
 
@@ -134,6 +137,31 @@ class GetStudentServiceImpl(
             if (invalidStudentNames.isNotEmpty()) {
                 throw StudentUpdateInfoNotFoundException(invalidStudentNames)
             }
+        }
+    }
+
+    override fun getModelStudentList(date: LocalDate): List<ModelStudentResponse> {
+        val firstDayOfMonth = date.withDayOfMonth(1)
+        val lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth())
+
+        val startOfDay = firstDayOfMonth.atStartOfDay()
+        val endOfDay = lastDayOfMonth.atTime(23, 59, 59)
+
+        val modelStudentList = queryStudentPort.queryModelStudents(startOfDay, endOfDay)
+
+        if (modelStudentList.isEmpty()) {
+            throw StudentNotFoundException
+        }
+
+        validateStudentList(modelStudentList)
+
+        return modelStudentList.map { student ->
+            ModelStudentResponse(
+                id = student.id,
+                gcn = student.studentGcn,
+                name = student.studentName,
+                profileImageUrl = student.studentProfile
+            )
         }
     }
 }
