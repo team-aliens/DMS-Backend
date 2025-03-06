@@ -6,7 +6,8 @@ import java.util.UUID
 @Aggregate
 data class ExcludedStudent(
 
-    val studentId: UUID,
+    val studentId: UUID
+
 ) {
     
 }
