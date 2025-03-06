@@ -8,24 +8,28 @@ import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.QueryVotePort
+import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
+import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.util.UUID
 
 @Service
 class GetVoteServiceImpl(
-    private val queryVotePort: QueryVotePort
+    private val queryVotePort: QueryVotePort,
+    private val queryVotingTopicPort: QueryVotingTopicPort,
+    private val queryVotingOptionPort: QueryVotingOptionPort
 ) : GetVoteService {
 
     override fun getVotingTopicById(votingTopicId: UUID): VotingTopic {
-        return queryVotePort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
+        return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
     }
 
     override fun getAllVotingTopics(): List<VotingTopic> {
-        return queryVotePort.queryAllVotingTopic()
+        return queryVotingTopicPort.queryAllVotingTopic()
     }
 
-    override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>? = queryVotePort.queryVotingOptionsByVotingTopicId(votingTopicId)
+    override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>? = queryVotingOptionPort.queryVotingOptionsByVotingTopicId(votingTopicId)
 
     override fun getVotesInStudentVotingByVotingTopicId(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO> {
         return queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade)
@@ -36,7 +40,7 @@ class GetVoteServiceImpl(
     }
 
     override fun getVotingOptionById(votingOptionId: UUID): VotingOption {
-        return queryVotePort.queryVotingOptionById(votingOptionId) ?: throw VotingOptionNotFoundException
+        return queryVotingOptionPort.queryVotingOptionById(votingOptionId) ?: throw VotingOptionNotFoundException
     }
 
     override fun getVoteById(voteId: UUID): Vote {
