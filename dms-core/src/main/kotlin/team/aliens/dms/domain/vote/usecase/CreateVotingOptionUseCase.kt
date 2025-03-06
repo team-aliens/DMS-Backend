@@ -22,6 +22,6 @@ class CreateVotingOptionUseCase(
                 votingTopicId = votingTopic.id,
                 optionName = request.name
             )
-        ).id
+        )
     }
 }
