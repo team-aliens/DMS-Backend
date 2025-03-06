@@ -13,7 +13,6 @@ import team.aliens.dms.domain.student.exception.StudentUpdateInfoNotFoundExcepti
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
 import team.aliens.dms.domain.vote.dto.response.ModelStudentResponse
-import team.aliens.dms.domain.vote.exception.validateStudentList
 import java.time.LocalDate
 import java.util.UUID
 import java.util.function.Function
@@ -152,8 +151,6 @@ class GetStudentServiceImpl(
         if (modelStudentList.isEmpty()) {
             throw StudentNotFoundException
         }
-
-        validateStudentList(modelStudentList)
 
         return modelStudentList.map { student ->
             ModelStudentResponse(
