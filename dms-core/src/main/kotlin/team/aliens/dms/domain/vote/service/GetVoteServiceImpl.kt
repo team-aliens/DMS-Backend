@@ -24,25 +24,22 @@ class GetVoteServiceImpl(
     override fun getAllVotingTopics(): List<VotingTopic> {
         return queryVotePort.queryAllVotingTopic()
     }
-    override fun getVotingTopic(
-        votingTopicId: UUID
-    ): VotingTopic = queryVotePort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
 
     override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>? = queryVotePort.queryVotingOptionsByVotingTopicId(votingTopicId)
 
-    override fun getVotesInStudentVoting(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO> {
+    override fun getVotesInStudentVotingByVotingTopicId(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO> {
         return queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade)
     }
 
-    override fun getVotesInOptionVoting(votingTopicId: UUID): List<OptionVotingResultVO> {
+    override fun getVotesInOptionVotingByVotingTopicId(votingTopicId: UUID): List<OptionVotingResultVO> {
         return queryVotePort.queryOptionVotingByVotingTopicId(votingTopicId)
     }
 
-    override fun getVotingOption(votingOptionId: UUID): VotingOption {
+    override fun getVotingOptionById(votingOptionId: UUID): VotingOption {
         return queryVotePort.queryVotingOptionById(votingOptionId) ?: throw VotingOptionNotFoundException
     }
 
-    override fun getVote(voteId: UUID): Vote {
+    override fun getVoteById(voteId: UUID): Vote {
         return queryVotePort.queryVoteById(voteId) ?: throw VoteNotFoundException
     }
 }
