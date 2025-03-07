@@ -1,6 +1,9 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.vote.exception.VoteTypeMismatchException
+import team.aliens.dms.domain.vote.model.VoteType
+import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
@@ -12,6 +15,7 @@ class CheckVoteServiceImpl(
     private val queryVotingTopicPort: QueryVotingTopicPort,
     private val queryVotingOptionPort: QueryVotingOptionPort
 ) : CheckVoteService {
+
     override fun checkVotingTopicExistByName(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)
 
     override fun checkVotingTopicExistById(id: UUID): Boolean = queryVotingTopicPort.existVotingTopicById(id)
@@ -25,5 +29,11 @@ class CheckVoteServiceImpl(
             }
         }
         return false
+    }
+
+    override fun checkTypeIsOptionVote(votingTopic: VotingTopic) {
+        if (votingTopic.voteType != VoteType.OPTION_VOTE) {
+            throw VoteTypeMismatchException
+        }
     }
 }
