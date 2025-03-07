@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.vote.spi
 
-import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.model.Vote
 import java.util.UUID
 
 interface CommandVotePort {
 
-    fun saveVotingTopic(votingTopic: VotingTopic): VotingTopic
+    fun saveVote(vote: Vote): Vote
 
-    fun deleteVotingTopicById(votingTopicId: UUID)
+    fun deleteVoteById(voteId: UUID)
 }
