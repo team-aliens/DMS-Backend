@@ -19,36 +19,37 @@ class CreateVoteUseCase(
 
     fun execute(selectedId: UUID, votingTopicId: UUID) {
         val student = studentService.getCurrentStudent()
+
         if (voteService.checkVoteExistByStudentIdAndVotingTopicId(student.id, votingTopicId)) {
             throw AlreadyVotedException
         }
-        val votingTopic: VotingTopic = voteService.getVotingTopicById(votingTopicId)
 
-        when (votingTopic.voteType) {
-            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> {
-                val selectedOption: VotingOption = voteService.getVotingOptionById(selectedId)
-                voteService.createVote(
+        val votingTopic: VotingTopic = voteService.getVotingTopicById(votingTopicId)
+        val voteType: VoteType = votingTopic.voteType
+
+        if((voteType == VoteType.OPTION_VOTE) || (voteType == VoteType.APPROVAL_VOTE)){
+            val selectedOption: VotingOption = voteService.getVotingOptionById(selectedId)
+            voteService.createVote(
                     Vote(
-                        studentId = student.id,
-                        votingTopicId = votingTopic.id,
-                        votedAt = LocalDateTime.now(),
-                        selectedOptionId = selectedOption.id,
-                        selectedStudentId = null
+                            studentId = student.id,
+                            votingTopicId = votingTopic.id,
+                            votedAt = LocalDateTime.now(),
+                            selectedOptionId = selectedOption.id,
+                            selectedStudentId = null
                     )
-                )
-            }
-            VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> {
-                val selectedStudent = studentService.getStudentById(selectedId)
-                voteService.createVote(
+            )
+        }
+        if((voteType == VoteType.STUDENT_VOTE) || (voteType == VoteType.MODEL_STUDENT_VOTE)){
+            val selectedStudent = studentService.getStudentById(selectedId)
+            voteService.createVote(
                     Vote(
-                        studentId = student.id,
-                        votingTopicId = votingTopic.id,
-                        votedAt = LocalDateTime.now(),
-                        selectedOptionId = null,
-                        selectedStudentId = selectedStudent.id
+                            studentId = student.id,
+                            votingTopicId = votingTopic.id,
+                            votedAt = LocalDateTime.now(),
+                            selectedOptionId = null,
+                            selectedStudentId = selectedStudent.id
                     )
-                )
-            }
+            )
         }
     }
 }
