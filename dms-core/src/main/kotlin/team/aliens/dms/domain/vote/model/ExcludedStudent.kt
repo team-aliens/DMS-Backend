@@ -10,6 +10,4 @@ data class ExcludedStudent(
 
     val schoolId: UUID
 
-) {
-    
-}
+)
