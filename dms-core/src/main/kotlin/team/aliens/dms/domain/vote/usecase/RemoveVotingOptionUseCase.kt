@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
+
 @UseCase
 class RemoveVotingOptionUseCase(
     private val voteService: VoteService
