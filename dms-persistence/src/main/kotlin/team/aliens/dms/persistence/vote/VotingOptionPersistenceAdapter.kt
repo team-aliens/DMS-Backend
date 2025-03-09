@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.vote
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.spi.VotingOptionPort
 import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity
@@ -9,6 +10,7 @@ import team.aliens.dms.persistence.vote.mapper.VotingOptionMapper
 import team.aliens.dms.persistence.vote.repository.VotingOptionJpaRepository
 import java.util.UUID
 
+@Component
 class VotingOptionPersistenceAdapter(
     private val votingOptionMapper: VotingOptionMapper,
     private val votingOptionJpaRepository: VotingOptionJpaRepository,
