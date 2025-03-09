@@ -41,7 +41,7 @@ class CheckVoteServiceImpl(
     }
 
     override fun checkVoteDeletionAuthorization(vote: Vote, student: Student) {
-        if(student.id != vote.studentId){
+        if (student.id != vote.studentId) {
             throw UnauthorizedVoteDeletion
         }
     }
