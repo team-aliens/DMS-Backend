@@ -12,6 +12,6 @@ class RemoveVotingOptionUseCase(
 
     fun execute(votingOptionId: UUID) {
         val votingOption: VotingOption = voteService.getVotingOptionById(votingOptionId)
-        voteService.deleteVotingOption(votingOption.id)
+        voteService.deleteVotingOptionById(votingOption.id)
     }
 }
