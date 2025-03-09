@@ -1,10 +1,7 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.vote.exception.UnauthorizedVoteDeletion
 import team.aliens.dms.domain.vote.exception.VoteTypeMismatchException
-import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.QueryVotePort
@@ -37,12 +34,6 @@ class CheckVoteServiceImpl(
     override fun checkTypeIsOptionVote(votingTopic: VotingTopic) {
         if (votingTopic.voteType != VoteType.OPTION_VOTE) {
             throw VoteTypeMismatchException
-        }
-    }
-
-    override fun checkVoteDeletionAuthorization(vote: Vote, student: Student) {
-        if (student.id != vote.studentId) {
-            throw UnauthorizedVoteDeletion
         }
     }
 }
