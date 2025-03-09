@@ -12,6 +12,7 @@ enum class VoteErrorCode(
     VOTE_TYPE_MISMATCH(ErrorStatus.BAD_REQUEST, "Vote Type mismatch", 1),
     WRONG_VOTE_TYPE(ErrorStatus.BAD_REQUEST, "Wrong vote type", 2),
     WRONG_SCHOOL_VOTED(ErrorStatus.UNAUTHORIZED, "Wrong school voted", 1),
+    UNAUTHORIZED_VOTE_DELETION(ErrorStatus.UNAUTHORIZED, "Unauthorized to delete this vote", 2),
     INVALID_PERIOD(ErrorStatus.FORBIDDEN, "Invalid Period", 1),
     INVALID_VOTING_PERIOD(ErrorStatus.FORBIDDEN, "Invalid Voting Period", 2),
     STUDENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Student Not Found", 1),
