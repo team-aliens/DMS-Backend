@@ -19,12 +19,12 @@ class CreateVoteUseCase(
 
     fun execute(selectedId: UUID, votingTopicId: UUID) {
         val student = studentService.getCurrentStudent()
+        val votingTopic: VotingTopic = voteService.getVotingTopicById(votingTopicId)
 
         if (voteService.checkVoteExistByStudentIdAndVotingTopicId(student.id, votingTopicId)) {
             throw AlreadyVotedException
         }
 
-        val votingTopic: VotingTopic = voteService.getVotingTopicById(votingTopicId)
         val voteType: VoteType = votingTopic.voteType
 
         if((voteType == VoteType.OPTION_VOTE) || (voteType == VoteType.APPROVAL_VOTE)){
