@@ -16,7 +16,6 @@ class ExcludedStudentMapper(
     override fun toDomain(entity: ExcludedStudentJpaEntity?): ExcludedStudent? {
         return entity?.let {
             ExcludedStudent(
-                id = it.id,
                 studentId = it.student!!.id!!,
                 schoolId = it.school!!.id!!
             )
@@ -28,7 +27,7 @@ class ExcludedStudentMapper(
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return ExcludedStudentJpaEntity(
-            id = domain.id,
+            studentId = student!!.id!!,
             student = student,
             school = school
         )

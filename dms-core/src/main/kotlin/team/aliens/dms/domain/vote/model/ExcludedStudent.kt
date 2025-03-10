@@ -7,8 +7,6 @@ import java.util.UUID
 @Aggregate
 data class ExcludedStudent(
 
-    val id: UUID,
-
     val studentId: UUID,
 
     override val schoolId: UUID
