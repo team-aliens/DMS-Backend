@@ -16,11 +16,12 @@ class QueryVotingOptionsUseCase(
         val votingTopic: VotingTopic = votingService.getVotingTopicById(votingTopicId)
 
         return VotingOptionsResponse(
-                votingService.getVotingOptionsByVotingTopicId(votingTopic.id).map { option ->
-                    VotingOption(
-                            id = option.id,
-                            votingOptionName = option.optionName
-                    )
-                })
+            votingService.getVotingOptionsByVotingTopicId(votingTopic.id).map { option ->
+                VotingOption(
+                    id = option.id,
+                    votingOptionName = option.optionName
+                )
+            }
+        )
     }
 }
