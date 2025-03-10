@@ -48,7 +48,7 @@ class CommandVoteServiceImpl(
         votingOptionId: UUID
     ) = commandVotingOptionPort.deleteVotingOptionByVotingOptionId(votingOptionId)
 
-    override fun deleteVote(voteId: UUID) = commandVotePort.deleteVoteById(voteId)
+    override fun deleteVoteById(voteId: UUID) = commandVotePort.deleteVoteById(voteId)
 
     override fun checkVotingTopic(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)
 }
