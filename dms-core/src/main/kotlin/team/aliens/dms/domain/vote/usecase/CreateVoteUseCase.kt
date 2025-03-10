@@ -27,29 +27,19 @@ class CreateVoteUseCase(
 
         val voteType: VoteType = votingTopic.voteType
 
-        if((voteType == VoteType.OPTION_VOTE) || (voteType == VoteType.APPROVAL_VOTE)){
-            val selectedOption: VotingOption = voteService.getVotingOptionById(selectedId)
-            voteService.createVote(
-                    Vote(
-                            studentId = student.id,
-                            votingTopicId = votingTopic.id,
-                            votedAt = LocalDateTime.now(),
-                            selectedOptionId = selectedOption.id,
-                            selectedStudentId = null
-                    )
-            )
+        val (selectedOptionId, selectedStudentId) = when (voteType) {
+            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> voteService.getVotingOptionById(selectedId).id to null
+            VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> null to studentService.getStudentById(selectedId).id
         }
-        if((voteType == VoteType.STUDENT_VOTE) || (voteType == VoteType.MODEL_STUDENT_VOTE)){
-            val selectedStudent = studentService.getStudentById(selectedId)
-            voteService.createVote(
-                    Vote(
-                            studentId = student.id,
-                            votingTopicId = votingTopic.id,
-                            votedAt = LocalDateTime.now(),
-                            selectedOptionId = null,
-                            selectedStudentId = selectedStudent.id
-                    )
-            )
-        }
+
+        voteService.createVote(
+                Vote(
+                        studentId = student.id,
+                        votingTopicId = votingTopic.id,
+                        votedAt = LocalDateTime.now(),
+                        selectedOptionId = selectedOptionId,
+                        selectedStudentId = selectedStudentId
+                )
+        )
     }
 }
