@@ -7,6 +7,7 @@ import team.aliens.dms.domain.vote.exception.UnauthorizedVoteDeletion
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
+
 @UseCase
 class RemoveVoteUseCase(
     private val voteService: VoteService,
