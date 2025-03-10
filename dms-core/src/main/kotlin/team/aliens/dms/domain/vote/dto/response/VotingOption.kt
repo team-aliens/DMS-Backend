@@ -2,7 +2,7 @@ package team.aliens.dms.domain.vote.dto.response
 
 import java.util.UUID
 
-class VotingOptionsResponse(
+class VotingOption(
     val id: UUID,
     val votingOptionName: String,
 ) {
@@ -10,7 +10,7 @@ class VotingOptionsResponse(
         fun of(
             id: UUID,
             votingOptionName: String
-        ) = VotingOptionsResponse(
+        ) = VotingOption(
             id = id,
             votingOptionName = votingOptionName
         )
