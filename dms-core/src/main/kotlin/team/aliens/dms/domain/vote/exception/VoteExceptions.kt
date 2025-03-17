@@ -39,6 +39,6 @@ object AlreadyVotedException : DmsException(
     VoteErrorCode.ALREADY_VOTED
 )
 
-object UnauthorizedVoteDeletion : DmsException(
+object IsNotAuthorizedVoteDeletionException : DmsException(
     VoteErrorCode.UNAUTHORIZED_VOTE_DELETION
 )
