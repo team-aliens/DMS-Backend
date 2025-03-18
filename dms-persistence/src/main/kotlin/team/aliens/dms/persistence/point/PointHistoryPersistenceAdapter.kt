@@ -160,11 +160,10 @@ class PointHistoryPersistenceAdapter(
         pointHistoryRepository.findByStudentGcnIn(gcns)
             .map { pointHistoryMapper.toDomain(it)!! }
 
-
     override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
         val latestPointHistory = QPointHistoryJpaEntity("latestPointHistory")
 
-        val subQuery = JPAExpressions
+        val history = JPAExpressions
             .select(latestPointHistory.id)
             .from(latestPointHistory)
             .where(
@@ -188,7 +187,7 @@ class PointHistoryPersistenceAdapter(
             )
             .from(studentJpaEntity)
             .leftJoin(pointHistoryJpaEntity).on(
-                pointHistoryJpaEntity.id.`in`(subQuery)
+                pointHistoryJpaEntity.id.`in`(history)
             )
             .fetch()
     }
