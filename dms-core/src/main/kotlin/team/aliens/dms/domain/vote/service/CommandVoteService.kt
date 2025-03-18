@@ -19,7 +19,7 @@ interface CommandVoteService {
 
     fun deleteVotingTopic(votingTopicId: UUID)
 
-    fun deleteVotingOption(votingOptionId: UUID)
+    fun deleteVotingOptionById(votingOptionId: UUID)
 
     fun deleteVoteById(voteId: UUID)
 
