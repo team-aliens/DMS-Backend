@@ -186,7 +186,7 @@ class PointHistoryPersistenceAdapter(
                 )
             )
             .from(studentJpaEntity)
-            .leftJoin(pointHistoryJpaEntity).on(
+            .join(pointHistoryJpaEntity).on(
                 pointHistoryJpaEntity.id.`in`(history)
             )
             .fetch()
