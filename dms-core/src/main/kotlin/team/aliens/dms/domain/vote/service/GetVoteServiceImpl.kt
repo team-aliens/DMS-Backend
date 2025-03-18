@@ -29,7 +29,7 @@ class GetVoteServiceImpl(
         return queryVotingTopicPort.queryAllVotingTopic()
     }
 
-    override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>? = queryVotingOptionPort.queryVotingOptionsByVotingTopicId(votingTopicId)
+    override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption> = queryVotingOptionPort.queryVotingOptionsByVotingTopicId(votingTopicId)
 
     override fun getVotesInStudentVotingByVotingTopicId(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO> {
         return queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade)
