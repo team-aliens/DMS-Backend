@@ -171,7 +171,7 @@ class PointHistoryPersistenceAdapter(
                 latestPointHistory.studentGcn.startsWith(
                     studentJpaEntity.grade.stringValue().toString() +
                         studentJpaEntity.classRoom.stringValue() +
-                        studentJpaEntity.number.stringValue()
+                        studentJpaEntity.number.stringValue().toString().padStart(2, '0')
                 ),
                 latestPointHistory.studentName.eq(studentJpaEntity.name)
             )
