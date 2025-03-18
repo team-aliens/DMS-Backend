@@ -29,14 +29,10 @@ class CreateVoteUseCase(
         
         val selectedOptionId = if (voteType == VoteType.OPTION_VOTE || voteType == VoteType.APPROVAL_VOTE) {
             voteService.getVotingOptionById(selectedId).id
-        } else {
-            null
-        }
+        } else null
         val selectedStudentId = if (voteType == VoteType.STUDENT_VOTE || voteType == VoteType.MODEL_STUDENT_VOTE) {
             studentService.getStudentById(selectedId).id
-        } else {
-            null
-        }
+        } else null
 
         voteService.createVote(
                 Vote(
