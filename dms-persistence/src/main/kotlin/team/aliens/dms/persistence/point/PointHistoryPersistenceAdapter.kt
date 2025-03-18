@@ -167,7 +167,7 @@ class PointHistoryPersistenceAdapter(
             .select(latestPointHistory.id)
             .from(latestPointHistory)
             .where(
-                latestPointHistory.studentGcn.startsWith(
+                latestPointHistory.studentGcn.eq(
                     studentJpaEntity.grade.stringValue().toString() +
                         studentJpaEntity.classRoom.stringValue() +
                         studentJpaEntity.number.stringValue().toString().padStart(2, '0')
