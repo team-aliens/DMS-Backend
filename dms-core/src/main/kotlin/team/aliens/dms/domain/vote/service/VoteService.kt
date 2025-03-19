@@ -6,7 +6,7 @@ import team.aliens.dms.common.annotation.Service
 class VoteService(
     checkVoteService: CheckVoteService,
     getVoteService: GetVoteService,
-    commandVoteService: CommandVoteService
+    commandVoteService: CommandVoteService,
 ) : CheckVoteService by checkVoteService,
     GetVoteService by getVoteService,
     CommandVoteService by commandVoteService

@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.vote.mapper
 
+import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.ExcludedStudent
@@ -25,9 +26,10 @@ class ExcludedStudentMapper(
     override fun toEntity(domain: ExcludedStudent): ExcludedStudentJpaEntity {
         val student = studentJpaRepository.findByIdOrNull(domain.studentId)
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
-
+        
+        Hibernate.initialize(school)
         return ExcludedStudentJpaEntity(
-            studentId = student!!.id!!,
+            studentId = domain.studentId,
             student = student,
             school = school
         )

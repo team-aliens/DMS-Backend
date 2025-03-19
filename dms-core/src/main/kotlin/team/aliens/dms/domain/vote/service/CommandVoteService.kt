@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.vote.service
 
+import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -24,4 +25,6 @@ interface CommandVoteService {
     fun deleteVote(voteId: UUID)
 
     fun checkVotingTopic(name: String): Boolean
+
+    fun saveExcludedStudent(excludedStudent: ExcludedStudent): ExcludedStudent
 }
