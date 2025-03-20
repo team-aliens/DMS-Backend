@@ -9,7 +9,7 @@ import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
 
 @UseCase
-class RemoveVoteUseCase(
+class DeleteVoteUseCase(
     private val voteService: VoteService,
     private val studentService: StudentService
 ) {

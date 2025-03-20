@@ -6,7 +6,7 @@ import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
 
 @UseCase
-class RemoveVotingOptionUseCase(
+class DeleteVotingOptionUseCase(
     private val voteService: VoteService
 ) {
 

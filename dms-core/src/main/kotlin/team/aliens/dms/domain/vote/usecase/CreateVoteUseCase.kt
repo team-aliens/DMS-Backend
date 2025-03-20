@@ -5,7 +5,6 @@ import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.exception.AlreadyVotedException
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VoteType
-import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import java.time.LocalDateTime
@@ -26,7 +25,7 @@ class CreateVoteUseCase(
         }
 
         val voteType: VoteType = votingTopic.voteType
-        
+
         val selectedOptionId = if (voteType == VoteType.OPTION_VOTE || voteType == VoteType.APPROVAL_VOTE) {
             voteService.getVotingOptionById(selectedId).id
         } else null
@@ -35,13 +34,13 @@ class CreateVoteUseCase(
         } else null
 
         voteService.createVote(
-                Vote(
-                        studentId = student.id,
-                        votingTopicId = votingTopic.id,
-                        votedAt = LocalDateTime.now(),
-                        selectedOptionId = selectedOptionId,
-                        selectedStudentId = selectedStudentId
-                )
+            Vote(
+                studentId = student.id,
+                votingTopicId = votingTopic.id,
+                votedAt = LocalDateTime.now(),
+                selectedOptionId = selectedOptionId,
+                selectedStudentId = selectedStudentId
+            )
         )
     }
 }
