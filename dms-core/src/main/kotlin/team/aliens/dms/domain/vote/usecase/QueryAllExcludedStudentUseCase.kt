@@ -8,7 +8,7 @@ import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.service.VoteService
 
 @UseCase
-class QueryAllExcludedStuentUseCase(
+class QueryAllExcludedStudentUseCase(
     val voteService: VoteService,
     val studentService: StudentService
 ) {

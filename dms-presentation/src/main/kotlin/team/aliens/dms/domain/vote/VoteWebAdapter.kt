@@ -28,7 +28,7 @@ import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVoteUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
-import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStuentUseCase
+import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotesUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotingOptionsUseCase
@@ -42,7 +42,7 @@ class VoteWebAdapter(
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase,
-    private val queryAllExcludedStuentUseCase: QueryAllExcludedStuentUseCase,
+    private val queryAllExcludedStudentUseCase: QueryAllExcludedStudentUseCase,
     private val createVoteUseCase: CreateVoteUseCase,
     private val createVotingOptionUseCase: CreateVotingOptionUseCase,
     private val queryVotesUseCase: QueryVotesUseCase,
@@ -93,9 +93,9 @@ class VoteWebAdapter(
 
     @GetMapping("/excluded-student")
     fun getAllExcludedStudent(): ExcludedStudentsResponses {
-        return queryAllExcludedStuentUseCase.execute()
+        return queryAllExcludedStudentUseCase.execute()
     }
-    
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/option")
     fun createVotingOption(@RequestBody request: CreateVotingOptionWebRequest) {
