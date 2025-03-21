@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.dto.reponse.VotingTopicsResponse
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
@@ -17,6 +18,7 @@ import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
+import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStuentUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.UpdateVotingTopicUseCase
 import java.util.UUID
@@ -27,8 +29,10 @@ class VoteWebAdapter(
     private val createVotingTopicUseCase: CreateVotingTopicUseCase,
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
-    private val updateVotingTopicUseCase: UpdateVotingTopicUseCase
+    private val updateVotingTopicUseCase: UpdateVotingTopicUseCase,
+    private val queryAllExcludedStuentUseCase: QueryAllExcludedStuentUseCase
 ) {
+
     @PostMapping
     fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest) {
         createVotingTopicUseCase.execute(
@@ -67,5 +71,10 @@ class VoteWebAdapter(
     @GetMapping
     fun getAllVotingTopic(): VotingTopicsResponse {
         return queryAllVotingTopicUseCase.execute()
+    }
+
+    @GetMapping("/excluded-student")
+    fun getAllExcludedStudent(): ExcludedStudentsResponses {
+        return queryAllExcludedStuentUseCase.execute()
     }
 }

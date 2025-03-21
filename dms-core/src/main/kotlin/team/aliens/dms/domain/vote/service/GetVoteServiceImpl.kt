@@ -4,9 +4,11 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.exception.VoteNotFoundException
 import team.aliens.dms.domain.vote.exception.VotingOptionNotFoundException
 import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
+import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.QueryExcludedStudentPort
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
@@ -18,7 +20,8 @@ import java.util.UUID
 class GetVoteServiceImpl(
     private val queryVotePort: QueryVotePort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
-    private val queryVotingOptionPort: QueryVotingOptionPort
+    private val queryVotingOptionPort: QueryVotingOptionPort,
+    private val queryExcludedStudentPort: QueryExcludedStudentPort
 ) : GetVoteService {
 
     override fun getVotingTopicById(votingTopicId: UUID): VotingTopic {
@@ -45,5 +48,9 @@ class GetVoteServiceImpl(
 
     override fun getVoteById(voteId: UUID): Vote {
         return queryVotePort.queryVoteById(voteId) ?: throw VoteNotFoundException
+    }
+
+    override fun getAllExcludedStudents(): List<ExcludedStudent> {
+        return queryExcludedStudentPort.queryAllExcludedStudents()
     }
 }
