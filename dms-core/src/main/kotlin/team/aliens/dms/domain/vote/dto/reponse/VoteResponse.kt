@@ -50,3 +50,14 @@ data class ExcludedStudentResponse(
 data class ExcludedStudentsResponses(
     val excludedStudents: List<ExcludedStudentResponse>
 )
+
+data class ModelStudentResponse(
+    val id: UUID,
+    val gcn: String,
+    val name: String,
+    val profileImageUrl: String?
+)
+
+data class ModelStudentsResponse(
+    val students: List<ModelStudentResponse>
+)

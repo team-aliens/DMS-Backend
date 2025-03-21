@@ -12,7 +12,7 @@ import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.exception.StudentUpdateInfoNotFoundException
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.QueryStudentPort
-import team.aliens.dms.domain.vote.dto.response.ModelStudentResponse
+import team.aliens.dms.domain.vote.dto.reponse.ModelStudentResponse
 import java.time.LocalDate
 import java.util.UUID
 import java.util.function.Function

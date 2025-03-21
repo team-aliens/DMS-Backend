@@ -56,7 +56,7 @@ import team.aliens.dms.domain.student.usecase.StudentWithdrawalUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentGcnByFileUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentProfileUseCase
 import team.aliens.dms.domain.student.usecase.UpdateStudentRoomByFileUseCase
-import team.aliens.dms.domain.vote.dto.response.ModelStudentsResponse
+import team.aliens.dms.domain.vote.dto.reponse.ModelStudentsResponse
 import java.time.LocalDate
 import java.util.UUID
 
