@@ -9,5 +9,5 @@ interface QueryVotingOptionPort {
 
     fun existVotingOptionById(votingOptionId: UUID): Boolean
 
-    fun queryVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>?
+    fun queryVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>
 }
