@@ -38,3 +38,7 @@ object VoteNotFoundException : DmsException(
 object AlreadyVotedException : DmsException(
     VoteErrorCode.ALREADY_VOTED
 )
+
+object IsNotAuthorizedVoteDeletionException : DmsException(
+    VoteErrorCode.UNAUTHORIZED_VOTE_DELETION
+)
