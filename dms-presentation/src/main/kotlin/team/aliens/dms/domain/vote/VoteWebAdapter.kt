@@ -42,7 +42,7 @@ class VoteWebAdapter(
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase,
-    private val queryAllExcludedStuentUseCase: QueryAllExcludedStuentUseCase
+    private val queryAllExcludedStuentUseCase: QueryAllExcludedStuentUseCase,
     private val createVoteUseCase: CreateVoteUseCase,
     private val createVotingOptionUseCase: CreateVotingOptionUseCase,
     private val queryVotesUseCase: QueryVotesUseCase,
