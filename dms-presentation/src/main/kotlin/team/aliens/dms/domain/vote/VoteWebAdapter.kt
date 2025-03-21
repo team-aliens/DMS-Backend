@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.dto.reponse.VotingTopicsResponse
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionRequest
@@ -27,6 +28,7 @@ import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVoteUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
+import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotesUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotingOptionsUseCase
@@ -40,6 +42,7 @@ class VoteWebAdapter(
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase,
+    private val queryAllExcludedStudentUseCase: QueryAllExcludedStudentUseCase,
     private val createVoteUseCase: CreateVoteUseCase,
     private val createVotingOptionUseCase: CreateVotingOptionUseCase,
     private val queryVotesUseCase: QueryVotesUseCase,
@@ -86,6 +89,11 @@ class VoteWebAdapter(
     @GetMapping
     fun getAllVotingTopic(): VotingTopicsResponse {
         return queryAllVotingTopicUseCase.execute()
+    }
+
+    @GetMapping("/excluded-student")
+    fun getAllExcludedStudent(): ExcludedStudentsResponses {
+        return queryAllExcludedStudentUseCase.execute()
     }
 
     @ResponseStatus(HttpStatus.CREATED)

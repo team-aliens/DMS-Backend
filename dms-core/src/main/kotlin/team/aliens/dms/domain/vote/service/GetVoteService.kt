@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.vote.service
 
+import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -22,4 +23,6 @@ interface GetVoteService {
     fun getVotingOptionById(votingOptionId: UUID): VotingOption
 
     fun getVoteById(voteId: UUID): Vote
+
+    fun getAllExcludedStudents(): List<ExcludedStudent>
 }
