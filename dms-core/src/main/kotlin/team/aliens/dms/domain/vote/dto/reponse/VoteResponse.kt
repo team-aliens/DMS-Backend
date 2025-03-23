@@ -30,3 +30,23 @@ data class VotingTopicResponse(
 data class VotingTopicsResponse(
     val votingTopics: List<VotingTopicResponse>
 )
+
+data class ExcludedStudentResponse(
+    val studentId: UUID,
+    val gcn: String,
+    val name: String
+) {
+    companion object {
+        fun of(studentId: UUID, gcn: String, name: String): ExcludedStudentResponse {
+            return ExcludedStudentResponse(
+                studentId = studentId,
+                gcn = gcn,
+                name = name
+            )
+        }
+    }
+}
+
+data class ExcludedStudentsResponses(
+    val excludedStudents: List<ExcludedStudentResponse>
+)

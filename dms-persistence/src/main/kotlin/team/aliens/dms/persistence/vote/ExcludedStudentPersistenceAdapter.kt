@@ -23,4 +23,8 @@ class ExcludedStudentPersistenceAdapter(
 
     override fun existExcludedStudentById(excludedStudentId: UUID): Boolean =
         excludedStudentJpaRepository.existsById(excludedStudentId)
+
+    override fun queryAllExcludedStudents() = excludedStudentJpaRepository.findAll().map {
+        excludedStudentMapper.toDomain(it)!!
+    }
 }
