@@ -98,9 +98,7 @@ class VoteWebAdapter(
     @PostMapping("/excluded-student")
     fun saveExcludedStudent(@RequestBody @Valid request: CreateExcludedStudentWebRequest) {
         createExcludedStudentUseCase.execute(
-            CreateExcludedStudentRequest(
-                request.gcn
-            )
+            CreateExcludedStudentRequest(request.gcn)
         )
     }
 
