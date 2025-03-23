@@ -23,9 +23,9 @@ import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionWebRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
-import team.aliens.dms.domain.vote.usecase.CreateExcludedStudentUseCase
 import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
+import team.aliens.dms.domain.vote.usecase.CreateExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVoteUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
@@ -45,7 +45,7 @@ class VoteWebAdapter(
     private val deleteVotingTopicUseCase: DeleteVotingTopicUseCase,
     private val queryAllVotingTopicUseCase: QueryAllVotingTopicUseCase,
     private val updateVotingTopicUseCase: UpdateVotingTopicUseCase,
-    private val createExcludedStudentUseCase: CreateExcludedStudentUseCase
+    private val createExcludedStudentUseCase: CreateExcludedStudentUseCase,
     private val queryAllExcludedStudentUseCase: QueryAllExcludedStudentUseCase,
     private val createVoteUseCase: CreateVoteUseCase,
     private val createVotingOptionUseCase: CreateVotingOptionUseCase,
