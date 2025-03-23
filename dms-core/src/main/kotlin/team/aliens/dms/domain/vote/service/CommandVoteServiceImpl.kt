@@ -5,20 +5,20 @@ import team.aliens.dms.domain.vote.exception.VotingTopicAlreadyExistException
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.CommandExcludedStudentPort
 import team.aliens.dms.domain.vote.spi.CommandVotePort
 import team.aliens.dms.domain.vote.spi.CommandVotingOptionPort
 import team.aliens.dms.domain.vote.spi.CommandVotingTopicPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
-import team.aliens.dms.domain.vote.spi.CommandExcludedStudentPort
 import java.util.UUID
 
 @Service
 class CommandVoteServiceImpl(
-        val commandVotePort: CommandVotePort,
-        val commandVotingTopicPort: CommandVotingTopicPort,
-        val queryVotingTopicPort: QueryVotingTopicPort,
-        val commandVotingOptionPort: CommandVotingOptionPort,
-        val commandExcludedStudentPort: CommandExcludedStudentPort
+    val commandVotePort: CommandVotePort,
+    val commandVotingTopicPort: CommandVotingTopicPort,
+    val queryVotingTopicPort: QueryVotingTopicPort,
+    val commandVotingOptionPort: CommandVotingOptionPort,
+    val commandExcludedStudentPort: CommandExcludedStudentPort
 ) : CommandVoteService {
 
     override fun saveVotingTopic(voteTopic: VotingTopic): VotingTopic {

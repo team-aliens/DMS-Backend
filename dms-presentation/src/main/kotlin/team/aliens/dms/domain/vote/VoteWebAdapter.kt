@@ -143,7 +143,7 @@ class VoteWebAdapter(
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/votes/excluded-student/{excluded-student_id}")
+    @DeleteMapping("/excluded-student/{excluded-student_id}")
     fun deleteExcludedStudent(@PathVariable("excluded-student_id") excludedStudentId: UUID) {
         deleteExcludedStudentUseCase.execute(excludedStudentId)
     }
