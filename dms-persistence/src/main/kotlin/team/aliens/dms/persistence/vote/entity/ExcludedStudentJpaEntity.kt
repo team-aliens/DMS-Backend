@@ -19,7 +19,7 @@ class ExcludedStudentJpaEntity(
 
     @Id
     @Column(name = "student_id")
-    val studentId: UUID,
+    val studentId: UUID? = null,
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
