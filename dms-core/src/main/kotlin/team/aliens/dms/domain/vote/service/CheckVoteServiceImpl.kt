@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.exception.VoteTypeMismatchException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.CommandExcludedStudentPort
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
@@ -13,7 +14,8 @@ import java.util.UUID
 class CheckVoteServiceImpl(
     private val queryVotePort: QueryVotePort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
-    private val queryVotingOptionPort: QueryVotingOptionPort
+    private val queryVotingOptionPort: QueryVotingOptionPort,
+    private val excludedStudentPort: CommandExcludedStudentPort
 ) : CheckVoteService {
 
     override fun checkVotingTopicExistByName(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)

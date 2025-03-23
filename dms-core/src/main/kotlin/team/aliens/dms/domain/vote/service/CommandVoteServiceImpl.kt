@@ -8,17 +8,17 @@ import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.CommandVotePort
 import team.aliens.dms.domain.vote.spi.CommandVotingOptionPort
 import team.aliens.dms.domain.vote.spi.CommandVotingTopicPort
-import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
+import team.aliens.dms.domain.vote.spi.CommandExcludedStudentPort
 import java.util.UUID
 
 @Service
 class CommandVoteServiceImpl(
-    val queryVotePort: QueryVotePort,
-    val commandVotePort: CommandVotePort,
-    val commandVotingTopicPort: CommandVotingTopicPort,
-    val queryVotingTopicPort: QueryVotingTopicPort,
-    val commandVotingOptionPort: CommandVotingOptionPort
+        val commandVotePort: CommandVotePort,
+        val commandVotingTopicPort: CommandVotingTopicPort,
+        val queryVotingTopicPort: QueryVotingTopicPort,
+        val commandVotingOptionPort: CommandVotingOptionPort,
+        val commandExcludedStudentPort: CommandExcludedStudentPort
 ) : CommandVoteService {
 
     override fun saveVotingTopic(voteTopic: VotingTopic): VotingTopic {
@@ -51,4 +51,6 @@ class CommandVoteServiceImpl(
     override fun deleteVoteById(voteId: UUID) = commandVotePort.deleteVoteById(voteId)
 
     override fun checkVotingTopic(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)
+
+    override fun deleteExcludedStudentById(excludedStudentId: UUID) = commandExcludedStudentPort.deleteExcludedStudentById(excludedStudentId)
 }

@@ -232,7 +232,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.PATCH,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name, STUDENT.name)
                     .requestMatchers(HttpMethod.GET,"/votes/excluded-student").hasAuthority(MANAGER.name)
-
+                    .requestMatchers(HttpMethod.DELETE, "/votes/excluded-student/{excluded-student_id}").hasAnyAuthority(MANAGER.name)
                 .anyRequest().denyAll()
             }
         http

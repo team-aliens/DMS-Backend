@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.vote.exception.ExcludedStudentNotFoundException
 import team.aliens.dms.domain.vote.exception.VoteNotFoundException
 import team.aliens.dms.domain.vote.exception.VotingOptionNotFoundException
 import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
@@ -52,5 +53,9 @@ class GetVoteServiceImpl(
 
     override fun getAllExcludedStudents(): List<ExcludedStudent> {
         return queryExcludedStudentPort.queryAllExcludedStudents()
+    }
+
+    override fun getExcludedStudentById(excludedStudentId: UUID): ExcludedStudent {
+        return queryExcludedStudentPort.queryExcludedStudentById(excludedStudentId) ?: throw ExcludedStudentNotFoundException
     }
 }

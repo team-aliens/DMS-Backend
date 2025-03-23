@@ -24,4 +24,6 @@ interface CommandVoteService {
     fun deleteVoteById(voteId: UUID)
 
     fun checkVotingTopic(name: String): Boolean
+
+    fun deleteExcludedStudentById(excludedStudentId: UUID)
 }
