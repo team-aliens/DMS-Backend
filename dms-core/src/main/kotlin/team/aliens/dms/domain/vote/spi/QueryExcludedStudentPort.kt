@@ -4,5 +4,5 @@ import java.util.UUID
 
 interface QueryExcludedStudentPort {
 
-    fun queryExcludedStudentById(excludedStudentId: UUID) : Boolean
+    fun existExcludedStudentById(excludedStudentId: UUID) : Boolean
 }

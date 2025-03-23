@@ -41,7 +41,7 @@ class CheckVoteServiceImpl(
     }
 
     override fun checkExcludedStudentExistByStudentId(studentId: UUID) {
-        if (queryExcludedStudentPort.queryExcludedStudentById(studentId)) {
+        if (queryExcludedStudentPort.existExcludedStudentById(studentId)) {
             throw ExcludedStudentAlreadyExistsException
         }
     }

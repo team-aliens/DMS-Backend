@@ -21,6 +21,6 @@ class ExcludedStudentPersistenceAdapter(
         )
     )!!
 
-    override fun queryExcludedStudentById(excludedStudentId: UUID): Boolean =
+    override fun existExcludedStudentById(excludedStudentId: UUID): Boolean =
         excludedStudentJpaRepository.existsById(excludedStudentId)
 }
