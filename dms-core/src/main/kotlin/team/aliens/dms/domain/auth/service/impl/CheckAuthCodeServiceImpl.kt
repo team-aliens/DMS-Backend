@@ -29,7 +29,7 @@ class CheckAuthCodeServiceImpl(
     }
 
     override fun checkAuthCodeLimitIsVerifiedByEmail(email: String) {
-          val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email)
+        val authCodeLimit = queryAuthCodeLimitPort.queryAuthCodeLimitByEmail(email)
             ?: throw AuthCodeNotFoundException
 
         if (!authCodeLimit.isVerified) {
