@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.vote.usecase
 
-import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.student.model.Student
@@ -16,7 +15,6 @@ class CreateExcludedStudentUseCase(
     val securityService: SecurityService
 ) {
 
-    @Transactional
     fun execute(createExcludedStudentRequest: CreateExcludedStudentRequest) {
         val gcn = Student.parseGcn(createExcludedStudentRequest.gcn)
         val schoolId = securityService.getCurrentSchoolId()
@@ -28,9 +26,11 @@ class CreateExcludedStudentUseCase(
             gcn.third
         ).userId
 
+        voteService.checkExcludedStudentExistByStudentId(studentId!!)
+
         voteService.saveExcludedStudent(
             ExcludedStudent(
-                studentId!!,
+                studentId,
                 schoolId
             )
         )

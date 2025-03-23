@@ -6,6 +6,7 @@ import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.spi.ExcludedStudentPort
 import team.aliens.dms.persistence.vote.mapper.ExcludedStudentMapper
 import team.aliens.dms.persistence.vote.repository.ExcludedStudentJpaRepository
+import java.util.UUID
 
 @Component
 class ExcludedStudentPersistenceAdapter(
@@ -19,4 +20,7 @@ class ExcludedStudentPersistenceAdapter(
             excludedStudentMapper.toEntity(excludedStudent)
         )
     )!!
+
+    override fun queryExcludedStudentById(excludedStudentId: UUID): Boolean =
+        excludedStudentJpaRepository.existsById(excludedStudentId)
 }

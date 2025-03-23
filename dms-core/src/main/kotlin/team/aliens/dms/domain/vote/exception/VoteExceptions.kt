@@ -38,3 +38,7 @@ object VoteNotFoundException : DmsException(
 object AlreadyVotedException : DmsException(
     VoteErrorCode.ALREADY_VOTED
 )
+
+object ExcludedStudentAlreadyExistsException : DmsException(
+    VoteErrorCode.EXCLUDED_STUDENT_ALREADY_EXISTS
+)

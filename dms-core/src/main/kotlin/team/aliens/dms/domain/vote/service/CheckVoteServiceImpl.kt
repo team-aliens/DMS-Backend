@@ -1,9 +1,11 @@
 package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.vote.exception.ExcludedStudentAlreadyExistsException
 import team.aliens.dms.domain.vote.exception.VoteTypeMismatchException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.QueryExcludedStudentPort
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
@@ -13,7 +15,8 @@ import java.util.UUID
 class CheckVoteServiceImpl(
     private val queryVotePort: QueryVotePort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
-    private val queryVotingOptionPort: QueryVotingOptionPort
+    private val queryVotingOptionPort: QueryVotingOptionPort,
+    private val queryExcludedStudentPort: QueryExcludedStudentPort
 ) : CheckVoteService {
 
     override fun checkVotingTopicExistByName(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)
@@ -34,6 +37,12 @@ class CheckVoteServiceImpl(
     override fun checkTypeIsOptionVote(votingTopic: VotingTopic) {
         if (votingTopic.voteType != VoteType.OPTION_VOTE) {
             throw VoteTypeMismatchException
+        }
+    }
+
+    override fun checkExcludedStudentExistByStudentId(studentId: UUID) {
+        if (queryExcludedStudentPort.queryExcludedStudentById(studentId)) {
+            throw ExcludedStudentAlreadyExistsException
         }
     }
 }
