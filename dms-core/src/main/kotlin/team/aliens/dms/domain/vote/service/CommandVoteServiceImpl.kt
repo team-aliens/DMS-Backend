@@ -6,7 +6,12 @@ import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
-import team.aliens.dms.domain.vote.spi.*
+import team.aliens.dms.domain.vote.spi.CommandExcludedStudentPort
+import team.aliens.dms.domain.vote.spi.CommandVotePort
+import team.aliens.dms.domain.vote.spi.CommandVotingOptionPort
+import team.aliens.dms.domain.vote.spi.CommandVotingTopicPort
+import team.aliens.dms.domain.vote.spi.QueryVotePort
+import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import java.util.UUID
 
 @Service
