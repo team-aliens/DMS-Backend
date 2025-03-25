@@ -14,4 +14,6 @@ interface CheckVoteService {
     fun checkVoteExistByStudentIdAndVotingTopicId(studentId: UUID, votingTopicId: UUID): Boolean
 
     fun checkTypeIsOptionVote(votingTopic: VotingTopic)
+
+    fun checkExcludedStudentExistByStudentId(studentId: UUID)
 }

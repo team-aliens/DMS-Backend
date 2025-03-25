@@ -2,6 +2,7 @@ package team.aliens.dms.domain.vote.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.exception.VotingTopicAlreadyExistException
+import team.aliens.dms.domain.vote.model.ExcludedStudent
 import team.aliens.dms.domain.vote.model.Vote
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -18,7 +19,7 @@ class CommandVoteServiceImpl(
     val commandVotingTopicPort: CommandVotingTopicPort,
     val queryVotingTopicPort: QueryVotingTopicPort,
     val commandVotingOptionPort: CommandVotingOptionPort,
-    val commandExcludedStudentPort: CommandExcludedStudentPort
+    val commandExcludedStudentPort: CommandExcludedStudentPort,
 ) : CommandVoteService {
 
     override fun saveVotingTopic(voteTopic: VotingTopic): VotingTopic {
@@ -52,5 +53,7 @@ class CommandVoteServiceImpl(
 
     override fun checkVotingTopic(name: String): Boolean = queryVotingTopicPort.existVotingTopicByName(name)
 
-    override fun deleteExcludedStudentById(excludedStudentId: UUID) = commandExcludedStudentPort.deleteExcludedStudentById(excludedStudentId)
+    override fun saveExcludedStudent(excludedStudent: ExcludedStudent): ExcludedStudent {
+        return commandExcludedStudentPort.saveExcludedStudent(excludedStudent)
+    }
 }
