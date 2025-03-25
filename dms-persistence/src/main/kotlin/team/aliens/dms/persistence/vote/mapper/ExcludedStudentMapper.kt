@@ -27,7 +27,6 @@ class ExcludedStudentMapper(
         val school = schoolJpaRepository.findByIdOrNull(domain.schoolId)
 
         return ExcludedStudentJpaEntity(
-            studentId = student!!.id!!,
             student = student,
             school = school
         )

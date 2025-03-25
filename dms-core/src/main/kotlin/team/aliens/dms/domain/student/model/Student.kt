@@ -48,6 +48,8 @@ data class Student(
 
         fun processGcn(grade: Int, classRoom: Int, number: Int) = "${grade}${classRoom}${processNumber(number)}"
 
+        fun parseGcn(gcn: String) = Triple(gcn.substring(0, 1).toInt(), gcn.substring(1, 2).toInt(), gcn.substring(2, 4).toInt())
+
         private fun processNumber(number: Int) = if (number < DECIMAL_NUMBER) "0$number" else number.toString()
     }
 }
