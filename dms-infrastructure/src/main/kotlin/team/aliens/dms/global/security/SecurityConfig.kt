@@ -234,7 +234,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.POST,"/votes/excluded-student").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name, STUDENT.name)
                     .requestMatchers(HttpMethod.GET,"/votes/excluded-student").hasAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.DELETE, "/votes/excluded-student/{excluded-student_id}").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.DELETE, "/votes/excluded-student/{excluded-student-id}").hasAuthority(MANAGER.name)
                 .anyRequest().denyAll()
             }
         http
