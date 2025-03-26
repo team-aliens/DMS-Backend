@@ -66,7 +66,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.POST, "/students/file/room").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.POST, "/students/file/gcn").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.POST, "/students/verified-student").hasAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.GET, "/students/candidate-list").hasAnyAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET, "/students/candidate-list").hasAnyAuthority(MANAGER.name, STUDENT.name)
 
                 authorize
                     // /managers

@@ -3,8 +3,8 @@ package team.aliens.dms.domain.vote.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
-import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentResponse
-import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentsResponses
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentResponse
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.service.VoteService
 
 @UseCase

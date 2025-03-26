@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
-import team.aliens.dms.domain.vote.dto.reponse.VotingTopicResponse
-import team.aliens.dms.domain.vote.dto.reponse.VotingTopicsResponse
+import team.aliens.dms.domain.vote.dto.response.VotingTopicResponse
+import team.aliens.dms.domain.vote.dto.response.VotingTopicsResponse
 import team.aliens.dms.domain.vote.service.VoteService
 
 @ReadOnlyUseCase
