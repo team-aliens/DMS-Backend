@@ -20,6 +20,7 @@ enum class VoteErrorCode(
     VOTING_TOPIC_NOT_FOUND(ErrorStatus.NOT_FOUND, "Voting topic not found", 3),
     VOTING_OPTION_NOT_FOUND(ErrorStatus.NOT_FOUND, "Voting option not found", 4),
     VOTE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Vote not found", 5),
+    EXCLUDED_STUDENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Execluded student not found", 6),
     ALREADY_VOTED(ErrorStatus.CONFLICT, "Already voted", 1),
     VOTING_TOPIC_NAME_ALREADY_EXIST(ErrorStatus.CONFLICT, "Voting Topic Already Exist", 2),
     EXCLUDED_STUDENT_ALREADY_EXISTS(ErrorStatus.CONFLICT, "Excluded Student Already Exist", 3)

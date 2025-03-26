@@ -46,3 +46,7 @@ object ExcludedStudentAlreadyExistsException : DmsException(
 object IsNotAuthorizedVoteDeletionException : DmsException(
     VoteErrorCode.UNAUTHORIZED_VOTE_DELETION
 )
+
+object ExcludedStudentNotFoundException : DmsException(
+    VoteErrorCode.EXCLUDED_STUDENT_NOT_FOUND
+)

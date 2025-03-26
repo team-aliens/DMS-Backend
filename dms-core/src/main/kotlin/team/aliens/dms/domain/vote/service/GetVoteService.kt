@@ -25,4 +25,6 @@ interface GetVoteService {
     fun getVoteById(voteId: UUID): Vote
 
     fun getAllExcludedStudents(): List<ExcludedStudent>
+
+    fun getExcludedStudentById(excludedStudentId: UUID): ExcludedStudent
 }
