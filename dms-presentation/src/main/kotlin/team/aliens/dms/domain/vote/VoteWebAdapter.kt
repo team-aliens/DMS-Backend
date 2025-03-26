@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.vote.dto.reponse.ExcludedStudentsResponses
-import team.aliens.dms.domain.vote.dto.reponse.VotingTopicsResponse
 import team.aliens.dms.domain.vote.dto.request.CreateExcludedStudentRequest
 import team.aliens.dms.domain.vote.dto.request.CreateExcludedStudentWebRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
@@ -23,8 +21,10 @@ import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionWebRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
+import team.aliens.dms.domain.vote.dto.response.VotingTopicsResponse
 import team.aliens.dms.domain.vote.usecase.CreateExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVoteUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
