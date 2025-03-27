@@ -9,6 +9,13 @@ import team.aliens.dms.domain.notice.spi.CommandNoticePort
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
+import team.aliens.dms.domain.student.exception.StudentNotFoundException
+import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
+import team.aliens.dms.domain.vote.model.VoteType
+import team.aliens.dms.domain.vote.spi.QueryVotePort
+import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
+import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -18,7 +25,10 @@ class CommandNoticeServiceImpl(
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort,
     private val deviceTokenPort: QueryDeviceTokenPort,
-    private val taskSchedulerPort: TaskSchedulerPort
+    private val taskSchedulerPort: TaskSchedulerPort,
+    private val queryVotingTopicPort: QueryVotingTopicPort,
+    private val queryVotePort: QueryVotePort,
+    private val queryStudentPort: QueryStudentPort
 ) : CommandNoticeService {
 
     override fun saveNotice(notice: Notice): Notice {
@@ -38,18 +48,53 @@ class CommandNoticeServiceImpl(
     }
 
     override fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
-
         val managerId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
         val deviceTokens = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
         val reNoticePrefix = if (isReNotice) "[재공지]" else ""
 
+        val votingTopic = queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
+        var content = ""
+
+        when (votingTopic.voteType) {
+            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> {
+                val result =
+                    queryVotePort.queryOptionVotingByVotingTopicId(votingTopicId)
+                val stringBuilder = StringBuilder()
+
+                result.map {
+                    val place = 1;
+                    stringBuilder.append("${place}등 : ${it.name}(${it.votes})\n")
+                }
+                content = stringBuilder.toString()
+            }
+
+            VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> {
+                val stringBuilder = StringBuilder()
+
+                listOf(1, 2, 3).map { grade ->
+                    val result: List<StudentVotingResultVO> =
+                        queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade).take(3)
+
+                    stringBuilder.append("${grade}학년 : ")
+                    result.map { votingResult ->
+                        val student =
+                            queryStudentPort.queryStudentById(votingResult.id) ?: throw StudentNotFoundException
+
+                        stringBuilder.append("${student.gcn} ${student.name} (${votingResult.votes}), ")
+                    }
+                    stringBuilder.append("\n")
+                }
+                content = stringBuilder.toString()
+            }
+        }
+
         taskSchedulerPort.scheduleTask(
             votingTopicId, {
                 commandNoticePort.saveNotice(
                     Notice(
-                        title = reNoticePrefix + "임시",
-                        content = "임시",
+                        title = reNoticePrefix + votingTopic.topicName,
+                        content = content,
                         managerId = managerId,
                         createdAt = LocalDateTime.now(),
                         updatedAt = LocalDateTime.now()
