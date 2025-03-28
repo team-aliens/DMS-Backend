@@ -225,12 +225,18 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/volunteers/my/application").hasAuthority(STUDENT.name)
 
                 authorize
-                    // /vote
+                    // /votes
                     .requestMatchers(HttpMethod.POST,"/votes").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.DELETE,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.PATCH,"/votes/{voting-topic-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name,STUDENT.name)
+                    .requestMatchers(HttpMethod.DELETE, "/votes/option/{voting-option-id}").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET, "/votes/option/{voting-topic-id}").hasAnyAuthority(MANAGER.name,STUDENT.name)
+                    .requestMatchers(HttpMethod.POST, "/votes/option").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.POST, "/votes/student/{voting-topic-id}").hasAuthority(STUDENT.name)
+                    .requestMatchers(HttpMethod.DELETE, "/votes/student/{voting-topic-id}").hasAuthority(STUDENT.name)
+                    .requestMatchers(HttpMethod.GET, "/votes/result/{voting-topic-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.POST,"/votes/excluded-student").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name, STUDENT.name)
                     .requestMatchers(HttpMethod.GET,"/votes/excluded-student").hasAuthority(MANAGER.name)
