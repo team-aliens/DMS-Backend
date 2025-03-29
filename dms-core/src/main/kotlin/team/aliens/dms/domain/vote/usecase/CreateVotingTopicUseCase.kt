@@ -8,6 +8,7 @@ import team.aliens.dms.domain.vote.exception.InvalidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import java.time.LocalDateTime
+import java.util.UUID
 
 @UseCase
 class CreateVotingTopicUseCase(
@@ -16,7 +17,7 @@ class CreateVotingTopicUseCase(
     private val noticeService: CommandNoticeService
 ) {
 
-    fun execute(request: CreateVoteTopicRequest) {
+    fun execute(request: CreateVoteTopicRequest): UUID {
         if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw InvalidPeriodException
         }
@@ -35,5 +36,7 @@ class CreateVotingTopicUseCase(
         ).id
 
         noticeService.scheduleVoteResultNotice(votingTopicId, request.endTime, false)
+
+        return votingTopicId;
     }
 }
