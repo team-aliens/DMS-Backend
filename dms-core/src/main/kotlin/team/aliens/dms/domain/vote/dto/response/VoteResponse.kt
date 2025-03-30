@@ -123,7 +123,3 @@ class VotingOptionsResponse(
         )
     }
 }
-
-data class CreateVotingTopicResponse(
-        val votingTopicId: UUID
-)
