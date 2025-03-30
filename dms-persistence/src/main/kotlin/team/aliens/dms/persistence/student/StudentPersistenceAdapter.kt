@@ -26,7 +26,9 @@ import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
+import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryAllStudentsVO
@@ -396,30 +398,25 @@ class StudentPersistenceAdapter(
     override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
 
         val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay)
-        val excludedStudentIds = findExcludedStudents().filterNotNull()
+        val excludedStudentIds = findExcludedStudentIds().filterNotNull()
 
-        val students = studentJpaRepository.findAll()
+        val students = studentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
+            penalizedStudentGcn,
+            excludedStudentIds
+        )
 
         return students
-            .mapNotNull { student ->
-                student.id?.let {
-                    val gcn = createModelStudentGcn(student.grade, student.classRoom, student.number)
-
-                    if (gcn !in penalizedStudentGcn && student.id !in excludedStudentIds) {
-                        ModelStudentVO(
-                            id = it,
-                            studentGcn = gcn,
-                            studentName = student.name,
-                            studentProfile = student.profileImageUrl
-                        )
-                    } else {
-                        null
-                    }
-                }
+            .map { student ->
+                ModelStudentVO(
+                    id = student.id!!,
+                    studentGcn = createModelStudentGcn(student.grade, student.classRoom, student.number),
+                    studentName = student.name,
+                    studentProfile = student.profileImageUrl
+                )
             }
     }
 
-    private fun findExcludedStudents(): List<UUID?> {
+    private fun findExcludedStudentIds(): List<UUID?> {
         return excludedStudentJpaRepository.findAll()
             .map { it.studentId }
     }
@@ -443,4 +440,21 @@ class StudentPersistenceAdapter(
         return "$grade$classRoom$formattedNumber"
     }
 
+    fun StudentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
+        penalizedStudentGcns: List<String>,
+        excludedStudentIds: List<UUID?>,
+    ): List<StudentJpaEntity> {
+        val qStudent = QStudentJpaEntity.studentJpaEntity
+
+        return queryFactory
+            .selectFrom(qStudent)
+            .where(
+                qStudent.id.notIn(excludedStudentIds)
+            )
+            .fetch()
+            .filter { student ->
+                val studentGcn = createModelStudentGcn(student.grade, student.classRoom, student.number)
+                studentGcn !in penalizedStudentGcns
+            }
+    }
 }
