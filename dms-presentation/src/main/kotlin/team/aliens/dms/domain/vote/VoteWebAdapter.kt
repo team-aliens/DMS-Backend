@@ -21,8 +21,9 @@ import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionWebRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
-import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.dto.response.VotesResponse
+import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
 import team.aliens.dms.domain.vote.dto.response.VotingTopicsResponse
 import team.aliens.dms.domain.vote.usecase.CreateExcludedStudentUseCase
@@ -58,8 +59,8 @@ class VoteWebAdapter(
 ) {
 
     @PostMapping
-    fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest) {
-        createVotingTopicUseCase.execute(
+    fun saveVotingTopic(@RequestBody @Valid request: CreateVotingTopicWebRequest): CreateVotingTopicResponse {
+        return createVotingTopicUseCase.execute(
             CreateVoteTopicRequest(
                 topicName = request.topicName,
                 description = request.description,
