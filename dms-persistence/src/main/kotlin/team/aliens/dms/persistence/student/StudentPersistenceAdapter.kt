@@ -13,6 +13,7 @@ import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
@@ -23,10 +24,10 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
-import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
+import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
 import team.aliens.dms.persistence.student.repository.StudentJpaRepository
 import team.aliens.dms.persistence.student.repository.vo.QQueryAllStudentsVO
@@ -35,6 +36,10 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
+import team.aliens.dms.persistence.user.entity.QUserJpaEntity
+import team.aliens.dms.persistence.user.repository.UserJpaRepository
+import team.aliens.dms.persistence.vote.entity.QExcludedStudentJpaEntity
+import team.aliens.dms.persistence.vote.repository.ExcludedStudentJpaRepository
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -45,6 +50,7 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository,
     private val queryFactory: JPAQueryFactory,
     private val studentJpaRepository: StudentJpaRepository,
+    private val securityService: SecurityService,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
@@ -393,41 +399,73 @@ class StudentPersistenceAdapter(
 
     override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
 
-        val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay)
+        val schoolId = securityService.getCurrentSchoolId()
 
-        val students = studentJpaRepository.findAll()
+        val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay, schoolId)
+        val excludedStudentIds = findExcludedStudentIds(schoolId).filterNotNull()
+
+        val students = studentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
+            penalizedStudentGcn,
+            excludedStudentIds,
+            schoolId
+        )
 
         return students
-            .mapNotNull { student ->
-                student.id?.let {
-                    val gcn = createGcn(student.grade, student.classRoom, student.number)
-                    ModelStudentVO(
-                        id = it,
-                        studentGcn = gcn,
-                        studentName = student.name,
-                        studentProfile = student.profileImageUrl
-                    )
-                }
+            .map { student ->
+                ModelStudentVO(
+                    id = student.id!!,
+                    studentGcn = createModelStudentGcn(student.grade, student.classRoom, student.number),
+                    studentName = student.name,
+                    studentProfile = student.profileImageUrl
+                )
             }
-            .filter { it.studentGcn !in penalizedStudentGcn }
     }
 
-    private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
+    private fun findExcludedStudentIds(schoolId: UUID): List<UUID?> {
         return queryFactory
-            .select(
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.studentGcn
-            )
-            .from(QPointHistoryJpaEntity.pointHistoryJpaEntity)
+            .select(QExcludedStudentJpaEntity.excludedStudentJpaEntity.studentId)
+            .from(QExcludedStudentJpaEntity.excludedStudentJpaEntity)
             .where(
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.isCancel.isFalse,
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay)
+                QExcludedStudentJpaEntity.excludedStudentJpaEntity.school.id.eq(schoolId)
             )
             .fetch()
     }
 
-    private fun createGcn(grade: Int, classRoom: Int, number: Int): String {
+    private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime, schoolId: UUID): List<String> {
+        return queryFactory
+            .select(pointHistoryJpaEntity.studentGcn)
+            .from(pointHistoryJpaEntity)
+            .where(
+                pointHistoryJpaEntity.isCancel.isFalse,
+                pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
+                pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay),
+                pointHistoryJpaEntity.school.id.eq(schoolId)
+            )
+            .fetch()
+    }
+
+    private fun createModelStudentGcn(grade: Int, classRoom: Int, number: Int): String {
         val formattedNumber = String.format("%02d", number)
         return "$grade$classRoom$formattedNumber"
+    }
+
+    fun StudentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
+        penalizedStudentGcns: List<String>,
+        excludedStudentIds: List<UUID?>,
+        schoolId: UUID
+    ): List<StudentJpaEntity> {
+
+        return queryFactory
+            .selectFrom(studentJpaEntity)
+            .join(QUserJpaEntity.userJpaEntity).on(studentJpaEntity.user.id.eq(QUserJpaEntity.userJpaEntity.id))
+            .where(
+                QUserJpaEntity.userJpaEntity.school.id.eq(schoolId),
+                studentJpaEntity.id.notIn(excludedStudentIds)
+            )
+            .fetch()
+            .filter { student ->
+                val studentGcn = createModelStudentGcn(student.grade, student.classRoom, student.number)
+                studentGcn !in penalizedStudentGcns
+            }
     }
 }
