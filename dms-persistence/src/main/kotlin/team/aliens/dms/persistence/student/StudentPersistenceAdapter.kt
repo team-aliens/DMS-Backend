@@ -449,12 +449,11 @@ class StudentPersistenceAdapter(
         penalizedStudentGcns: List<String>,
         excludedStudentIds: List<UUID?>,
     ): List<StudentJpaEntity> {
-        val qStudent = QStudentJpaEntity.studentJpaEntity
 
         return queryFactory
-            .selectFrom(qStudent)
+            .selectFrom(QStudentJpaEntity.studentJpaEntity)
             .where(
-                qStudent.id.notIn(excludedStudentIds)
+                QStudentJpaEntity.studentJpaEntity.id.notIn(excludedStudentIds)
             )
             .fetch()
             .filter { student ->
