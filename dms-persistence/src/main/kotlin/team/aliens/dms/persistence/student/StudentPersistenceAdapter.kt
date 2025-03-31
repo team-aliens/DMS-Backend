@@ -13,6 +13,7 @@ import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
@@ -23,10 +24,8 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.spi.StudentPort
 import team.aliens.dms.domain.student.spi.vo.AllStudentsVO
 import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
-import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.room.entity.QRoomJpaEntity.roomJpaEntity
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import team.aliens.dms.persistence.student.mapper.StudentMapper
@@ -37,6 +36,8 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
+import team.aliens.dms.persistence.user.entity.QUserJpaEntity
+import team.aliens.dms.persistence.user.repository.UserJpaRepository
 import team.aliens.dms.persistence.vote.entity.QExcludedStudentJpaEntity
 import team.aliens.dms.persistence.vote.repository.ExcludedStudentJpaRepository
 import java.time.LocalDateTime
@@ -49,7 +50,7 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository,
     private val queryFactory: JPAQueryFactory,
     private val studentJpaRepository: StudentJpaRepository,
-    private val excludedStudentJpaRepository: ExcludedStudentJpaRepository,
+    private val securityService: SecurityService,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
@@ -398,12 +399,15 @@ class StudentPersistenceAdapter(
 
     override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
 
-        val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay)
-        val excludedStudentIds = findExcludedStudentIds().filterNotNull()
+        val schoolId = securityService.getCurrentSchoolId()
+
+        val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay, schoolId)
+        val excludedStudentIds = findExcludedStudentIds(schoolId).filterNotNull()
 
         val students = studentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
             penalizedStudentGcn,
-            excludedStudentIds
+            excludedStudentIds,
+            schoolId
         )
 
         return students
@@ -417,21 +421,25 @@ class StudentPersistenceAdapter(
             }
     }
 
-    private fun findExcludedStudentIds(): List<UUID?> {
+    private fun findExcludedStudentIds(schoolId: UUID): List<UUID?> {
         return queryFactory
             .select(QExcludedStudentJpaEntity.excludedStudentJpaEntity.studentId)
             .from(QExcludedStudentJpaEntity.excludedStudentJpaEntity)
+            .where(
+                QExcludedStudentJpaEntity.excludedStudentJpaEntity.school.id.eq(schoolId)
+            )
             .fetch()
     }
 
-    private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
+    private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime, schoolId: UUID): List<String> {
         return queryFactory
             .select(pointHistoryJpaEntity.studentGcn)
             .from(pointHistoryJpaEntity)
             .where(
                 pointHistoryJpaEntity.isCancel.isFalse,
                 pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
-                pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay)
+                pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay),
+                pointHistoryJpaEntity.school.id.eq(schoolId)
             )
             .fetch()
     }
@@ -444,11 +452,14 @@ class StudentPersistenceAdapter(
     fun StudentJpaRepository.findStudentsExcludingPenalizedAndExcluded(
         penalizedStudentGcns: List<String>,
         excludedStudentIds: List<UUID?>,
+        schoolId: UUID
     ): List<StudentJpaEntity> {
 
         return queryFactory
             .selectFrom(studentJpaEntity)
+            .join(QUserJpaEntity.userJpaEntity).on(studentJpaEntity.user.id.eq(QUserJpaEntity.userJpaEntity.id))
             .where(
+                QUserJpaEntity.userJpaEntity.school.id.eq(schoolId),
                 studentJpaEntity.id.notIn(excludedStudentIds)
             )
             .fetch()
