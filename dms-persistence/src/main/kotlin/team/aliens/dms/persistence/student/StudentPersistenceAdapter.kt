@@ -426,8 +426,6 @@ class StudentPersistenceAdapter(
             .fetch()
     }
 
-
-
     private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
         return queryFactory
             .select(
