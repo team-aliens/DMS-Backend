@@ -418,24 +418,20 @@ class StudentPersistenceAdapter(
     }
 
     private fun findExcludedStudentIds(): List<UUID?> {
-        val qExcludedStudent = QExcludedStudentJpaEntity.excludedStudentJpaEntity
-
         return queryFactory
-            .select(qExcludedStudent.studentId)
-            .from(qExcludedStudent)
+            .select(QExcludedStudentJpaEntity.excludedStudentJpaEntity.studentId)
+            .from(QExcludedStudentJpaEntity.excludedStudentJpaEntity)
             .fetch()
     }
 
     private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
         return queryFactory
-            .select(
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.studentGcn
-            )
-            .from(QPointHistoryJpaEntity.pointHistoryJpaEntity)
+            .select(pointHistoryJpaEntity.studentGcn)
+            .from(pointHistoryJpaEntity)
             .where(
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.isCancel.isFalse,
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
-                QPointHistoryJpaEntity.pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay)
+                pointHistoryJpaEntity.isCancel.isFalse,
+                pointHistoryJpaEntity.pointType.eq(PointType.MINUS),
+                pointHistoryJpaEntity.createdAt.between(startOfDay, endOfDay)
             )
             .fetch()
     }
@@ -451,9 +447,9 @@ class StudentPersistenceAdapter(
     ): List<StudentJpaEntity> {
 
         return queryFactory
-            .selectFrom(QStudentJpaEntity.studentJpaEntity)
+            .selectFrom(studentJpaEntity)
             .where(
-                QStudentJpaEntity.studentJpaEntity.id.notIn(excludedStudentIds)
+                studentJpaEntity.id.notIn(excludedStudentIds)
             )
             .fetch()
             .filter { student ->
