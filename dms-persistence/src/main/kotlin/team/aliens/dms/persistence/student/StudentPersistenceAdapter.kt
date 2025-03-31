@@ -37,6 +37,7 @@ import team.aliens.dms.persistence.student.repository.vo.QQueryStudentsWithTagVO
 import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpaEntity
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
+import team.aliens.dms.persistence.vote.entity.QExcludedStudentJpaEntity
 import team.aliens.dms.persistence.vote.repository.ExcludedStudentJpaRepository
 import java.time.LocalDateTime
 import java.util.UUID
@@ -417,9 +418,15 @@ class StudentPersistenceAdapter(
     }
 
     private fun findExcludedStudentIds(): List<UUID?> {
-        return excludedStudentJpaRepository.findAll()
-            .map { it.studentId }
+        val qExcludedStudent = QExcludedStudentJpaEntity.excludedStudentJpaEntity
+
+        return queryFactory
+            .select(qExcludedStudent.studentId)
+            .from(qExcludedStudent)
+            .fetch()
     }
+
+
 
     private fun findPenalizedStudentGcn(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<String> {
         return queryFactory
