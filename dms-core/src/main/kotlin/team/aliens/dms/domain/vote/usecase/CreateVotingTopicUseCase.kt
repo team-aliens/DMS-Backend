@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.notice.service.CommandNoticeService
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
+import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
 import team.aliens.dms.domain.vote.exception.InvalidPeriodException
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
@@ -16,7 +17,7 @@ class CreateVotingTopicUseCase(
     private val noticeService: CommandNoticeService
 ) {
 
-    fun execute(request: CreateVoteTopicRequest) {
+    fun execute(request: CreateVoteTopicRequest): CreateVotingTopicResponse {
         if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw InvalidPeriodException
         }
@@ -35,5 +36,7 @@ class CreateVotingTopicUseCase(
         ).id
 
         noticeService.scheduleVoteResultNotice(votingTopicId, request.endTime, false)
+
+        return CreateVotingTopicResponse(votingTopicId)
     }
 }
