@@ -33,6 +33,7 @@ import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVoteUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
+import team.aliens.dms.domain.vote.usecase.DeleteVotingOptionUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotesUseCase
@@ -54,7 +55,7 @@ class VoteWebAdapter(
     private val queryVotesUseCase: QueryVotesUseCase,
     private val queryVotingOptionsUseCase: QueryVotingOptionsUseCase,
     private val deleteVoteUseCase: DeleteVoteUseCase,
-    private val removeVotingOptionsUseCase: QueryVotingOptionsUseCase,
+    private val deleteVotingOptionUseCase: DeleteVotingOptionUseCase,
     private val deleteExcludedStudentUseCase: DeleteExcludedStudentUseCase
 ) {
 
@@ -130,7 +131,7 @@ class VoteWebAdapter(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/option/{voting-option-id}")
     fun removeVotingOption(@PathVariable("voting-option-id") votingOptionId: UUID) {
-        removeVotingOptionsUseCase.execute(votingOptionId)
+        deleteVotingOptionUseCase.execute(votingOptionId)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
