@@ -6,6 +6,8 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDateTime
@@ -21,6 +23,7 @@ class VoteJpaEntity(
     @JoinColumn(name = "voting_topic_id", columnDefinition = "BINARY(16)", nullable = false)
     val votingTopic: VotingTopicJpaEntity?,
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
     val student: StudentJpaEntity?,
@@ -28,10 +31,12 @@ class VoteJpaEntity(
     @Column(columnDefinition = "DATETIME(6)")
     val votedAt: LocalDateTime,
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_option_id", columnDefinition = "BINARY(16)", nullable = true)
     val selectedOption: VotingOptionJpaEntity?,
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_student_id", columnDefinition = "BINARY(16)", nullable = true)
     val selectedStudent: StudentJpaEntity?

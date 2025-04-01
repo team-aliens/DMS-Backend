@@ -6,6 +6,8 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import team.aliens.dms.persistence.BaseEntity
 import java.util.UUID
 
@@ -15,6 +17,7 @@ class VotingOptionJpaEntity(
 
     id: UUID?,
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voting_topic_id", columnDefinition = "BINARY(16)", nullable = false)
     val votingTopic: VotingTopicJpaEntity?,
