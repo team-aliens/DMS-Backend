@@ -50,7 +50,6 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository,
     private val queryFactory: JPAQueryFactory,
     private val studentJpaRepository: StudentJpaRepository,
-    private val securityService: SecurityService,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
