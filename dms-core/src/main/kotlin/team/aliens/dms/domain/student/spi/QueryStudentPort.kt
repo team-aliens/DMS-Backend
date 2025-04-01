@@ -44,5 +44,5 @@ interface QueryStudentPort {
 
     fun queryAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
-    fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO>
+    fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime, schoolId: UUID): List<ModelStudentVO>
 }

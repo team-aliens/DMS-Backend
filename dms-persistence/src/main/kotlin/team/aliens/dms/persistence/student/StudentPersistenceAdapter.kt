@@ -397,9 +397,7 @@ class StudentPersistenceAdapter(
             .fetch()
     }
 
-    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
-
-        val schoolId = securityService.getCurrentSchoolId()
+    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime, schoolId: UUID): List<ModelStudentVO> {
 
         val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay, schoolId)
         val excludedStudentIds = findExcludedStudentIds(schoolId).filterNotNull()
