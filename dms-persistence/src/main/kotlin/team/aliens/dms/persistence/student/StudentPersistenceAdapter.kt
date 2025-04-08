@@ -37,9 +37,7 @@ import team.aliens.dms.persistence.tag.entity.QStudentTagJpaEntity.studentTagJpa
 import team.aliens.dms.persistence.tag.entity.QTagJpaEntity.tagJpaEntity
 import team.aliens.dms.persistence.tag.mapper.TagMapper
 import team.aliens.dms.persistence.user.entity.QUserJpaEntity
-import team.aliens.dms.persistence.user.repository.UserJpaRepository
 import team.aliens.dms.persistence.vote.entity.QExcludedStudentJpaEntity
-import team.aliens.dms.persistence.vote.repository.ExcludedStudentJpaRepository
 import java.time.LocalDateTime
 import java.util.UUID
 

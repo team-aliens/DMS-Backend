@@ -17,7 +17,6 @@ class VotingOptionJpaEntity(
 
     id: UUID?,
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voting_topic_id", columnDefinition = "BINARY(16)", nullable = false)
     val votingTopic: VotingTopicJpaEntity?,

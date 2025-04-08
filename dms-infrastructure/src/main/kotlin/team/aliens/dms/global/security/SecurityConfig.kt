@@ -238,7 +238,6 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.DELETE, "/votes/student/{voting-topic-id}").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/votes/result/{voting-topic-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.POST,"/votes/excluded-student").hasAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.GET,"/votes").hasAnyAuthority(MANAGER.name, STUDENT.name)
                     .requestMatchers(HttpMethod.GET,"/votes/excluded-student").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.DELETE, "/votes/excluded-student/{excluded-student-id}").hasAuthority(MANAGER.name)
                 .anyRequest().denyAll()
