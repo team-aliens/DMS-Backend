@@ -9,5 +9,5 @@ interface CommandExcludedStudentPort {
 
     fun deleteExcludedStudentById(excludedStudentId: UUID)
 
-    fun clearExcludedStudents()
+    fun deleteAllExcludedStudents()
 }

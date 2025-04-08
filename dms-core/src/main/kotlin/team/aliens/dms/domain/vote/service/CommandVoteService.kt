@@ -30,5 +30,5 @@ interface CommandVoteService {
 
     fun deleteExcludedStudentById(excludedStudentId: UUID)
 
-    fun clearExcludedStudent()
+    fun deleteAllExcludedStudent()
 }

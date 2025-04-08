@@ -61,7 +61,7 @@ class CommandVoteServiceImpl(
         commandExcludedStudentPort.deleteExcludedStudentById(excludedStudentId)
     }
 
-    override fun clearExcludedStudent() {
-        commandExcludedStudentPort.clearExcludedStudents()
+    override fun deleteAllExcludedStudent() {
+        commandExcludedStudentPort.deleteAllExcludedStudents()
     }
 }

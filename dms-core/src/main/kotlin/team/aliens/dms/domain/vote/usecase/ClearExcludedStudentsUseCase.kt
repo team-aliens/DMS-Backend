@@ -8,6 +8,6 @@ class ClearExcludedStudentsUseCase (
     private val excludedStudentPort: ExcludedStudentPort
 ){
     fun execute() {
-        excludedStudentPort.clearExcludedStudents()
+        excludedStudentPort.deleteAllExcludedStudents()
     }
 }
