@@ -15,7 +15,6 @@ import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
-import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -61,29 +60,38 @@ class CommandNoticeServiceImpl(
                 val result =
                     queryVotePort.queryOptionVotingByVotingTopicId(votingTopicId)
                 val stringBuilder = StringBuilder()
+                var currentRank = 0
+                var displayRank = 0
+                var previousVotes: Int? = null
 
-                result.map {
-                    val place = 1;
-                    stringBuilder.append("${place}등 : ${it.name}(${it.votes})\n")
+                result.forEach {
+                    if (previousVotes == null || previousVotes != it.votes) {
+                        currentRank = displayRank + 1
+                    }
+                    displayRank++
+
+                    stringBuilder.append("${currentRank}등 : ${it.name} (${it.votes}표)\n")
+                    previousVotes = it.votes
                 }
                 content = stringBuilder.toString()
             }
 
             VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> {
                 val stringBuilder = StringBuilder()
-
-                listOf(1, 2, 3).map { grade ->
-                    val result: List<StudentVotingResultVO> =
-                        queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade).take(3)
+                listOf(1, 2, 3).forEach { grade ->
+                    val result =
+                        if (votingTopic.voteType == VoteType.MODEL_STUDENT_VOTE)
+                            queryVotePort.queryModelStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade).take(3)
+                        else
+                            queryVotePort.queryStudentVotingByVotingTopicIdAndGrade(votingTopicId, grade).take(1)
 
                     stringBuilder.append("${grade}학년 : ")
-                    result.map { votingResult ->
+                    var line = result.joinToString(", ") { votingResult ->
                         val student =
                             queryStudentPort.queryStudentById(votingResult.id) ?: throw StudentNotFoundException
-
-                        stringBuilder.append("${student.gcn} ${student.name} (${votingResult.votes}), ")
+                        "${student.gcn} ${student.name} (${votingResult.votes}표)"
                     }
-                    stringBuilder.append("\n")
+                    stringBuilder.append("$line \n")
                 }
                 content = stringBuilder.toString()
             }
