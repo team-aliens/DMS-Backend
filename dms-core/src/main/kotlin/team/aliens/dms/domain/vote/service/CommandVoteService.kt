@@ -29,4 +29,6 @@ interface CommandVoteService {
     fun saveExcludedStudent(excludedStudent: ExcludedStudent): ExcludedStudent
 
     fun deleteExcludedStudentById(excludedStudentId: UUID)
+
+    fun deleteAllExcludedStudent()
 }
