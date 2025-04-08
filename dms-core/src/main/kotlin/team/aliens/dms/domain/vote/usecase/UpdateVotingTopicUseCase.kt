@@ -16,7 +16,7 @@ class UpdateVotingTopicUseCase(
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
-        if (request.startTime.isAfter(request.endTime)) {
+        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
             throw InvalidPeriodException
         }
 
