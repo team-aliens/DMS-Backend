@@ -6,8 +6,6 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import org.hibernate.annotations.OnDelete
-import org.hibernate.annotations.OnDeleteAction
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
 import java.time.LocalDateTime

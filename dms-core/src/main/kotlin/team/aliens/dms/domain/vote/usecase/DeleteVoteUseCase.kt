@@ -21,6 +21,7 @@ class DeleteVoteUseCase(
         if (student.id != vote.studentId) {
             throw IsNotAuthorizedVoteDeletionException
         }
+
         voteService.deleteVoteById(vote.id)
     }
 }
