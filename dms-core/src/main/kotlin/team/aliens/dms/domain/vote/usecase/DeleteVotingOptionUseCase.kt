@@ -16,9 +16,9 @@ class DeleteVotingOptionUseCase(
 
         val voteType: VoteType = voteService.getVotingTopicById(votingOption.votingTopicId).voteType
 
-        if (voteType == VoteType.APPROVAL_VOTE || voteType == VoteType.OPTION_VOTE) {
-            voteService.deleteVoteByVotingOption(votingOption)
-        }
+        voteType
+            .takeIf { it == VoteType.APPROVAL_VOTE || it == VoteType.OPTION_VOTE }
+            .let { voteService.deleteVoteByVotingOption(votingOption) }
 
         voteService.deleteVotingOptionById(votingOption.id)
     }

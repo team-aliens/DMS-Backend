@@ -90,6 +90,7 @@ class VoteWebAdapter(
     }
 
     @DeleteMapping("/{voting-topic-id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID) {
         deleteVotingTopicUseCase.execute(votingTopicId)
     }
