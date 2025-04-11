@@ -39,7 +39,7 @@ class CreateVotingTopicUseCase(
         )
 
         if(votingTopic.voteType == VoteType.APPROVAL_VOTE) {
-            addApprovalOptions(votingTopic.id)
+            addApprovalOptions(votingTopic)
         }
 
         noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, false)
@@ -47,8 +47,7 @@ class CreateVotingTopicUseCase(
         return CreateVotingTopicResponse(votingTopic.id)
     }
 
-    private fun addApprovalOptions(votingTopicId: UUID) {
-        val votingTopic = voteService.getVotingTopicById(votingTopicId)
+    private fun addApprovalOptions(votingTopic: VotingTopic) {
         voteService.createVotingOption(
                 VotingOption(
                         votingTopicId = votingTopic.id,
