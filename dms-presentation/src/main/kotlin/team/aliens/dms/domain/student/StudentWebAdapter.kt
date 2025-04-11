@@ -243,7 +243,7 @@ class StudentWebAdapter(
         return studentGetAllStudentsUseCase.execute(name)
     }
 
-    @GetMapping("/candidate-list")
+    @GetMapping("/step/candidate-list")
     fun getModelStudents(
         @RequestParam
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

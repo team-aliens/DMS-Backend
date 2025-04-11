@@ -48,7 +48,6 @@ class StudentPersistenceAdapter(
     private val studentRepository: StudentJpaRepository,
     private val queryFactory: JPAQueryFactory,
     private val studentJpaRepository: StudentJpaRepository,
-    private val securityService: SecurityService,
 ) : StudentPort {
 
     override fun queryStudentBySchoolIdAndGcn(
@@ -395,9 +394,7 @@ class StudentPersistenceAdapter(
             .fetch()
     }
 
-    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime): List<ModelStudentVO> {
-
-        val schoolId = securityService.getCurrentSchoolId()
+    override fun queryModelStudents(startOfDay: LocalDateTime, endOfDay: LocalDateTime, schoolId: UUID): List<ModelStudentVO> {
 
         val penalizedStudentGcn = findPenalizedStudentGcn(startOfDay, endOfDay, schoolId)
         val excludedStudentIds = findExcludedStudentIds(schoolId).filterNotNull()

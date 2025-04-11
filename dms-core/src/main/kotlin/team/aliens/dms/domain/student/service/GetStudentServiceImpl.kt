@@ -143,10 +143,12 @@ class GetStudentServiceImpl(
         val firstDayOfMonth = date.withDayOfMonth(1)
         val lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth())
 
+        val schoolId = securityPort.getCurrentUserSchoolId()
+
         val startOfDay = firstDayOfMonth.atStartOfDay()
         val endOfDay = lastDayOfMonth.atTime(23, 59, 59)
 
-        val modelStudentList = queryStudentPort.queryModelStudents(startOfDay, endOfDay)
+        val modelStudentList = queryStudentPort.queryModelStudents(startOfDay, endOfDay, schoolId)
 
         if (modelStudentList.isEmpty()) {
             throw StudentNotFoundException
