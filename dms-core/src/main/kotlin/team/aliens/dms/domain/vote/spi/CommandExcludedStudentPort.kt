@@ -8,4 +8,6 @@ interface CommandExcludedStudentPort {
     fun saveExcludedStudent(excludedStudent: ExcludedStudent): ExcludedStudent
 
     fun deleteExcludedStudentById(excludedStudentId: UUID)
+
+    fun deleteAllExcludedStudents()
 }
