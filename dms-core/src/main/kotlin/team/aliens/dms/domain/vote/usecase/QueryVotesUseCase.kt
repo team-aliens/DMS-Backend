@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.usecase
 
-import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.dto.response.VoteResponse
@@ -11,7 +11,7 @@ import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.util.UUID
 
-@UseCase
+@ReadOnlyUseCase
 class QueryVotesUseCase(
     private val voteService: VoteService,
     private val studentService: StudentService
