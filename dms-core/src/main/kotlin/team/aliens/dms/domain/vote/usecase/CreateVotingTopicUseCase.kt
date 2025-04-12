@@ -11,7 +11,6 @@ import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import java.time.LocalDateTime
-import java.util.UUID
 
 @UseCase
 class CreateVotingTopicUseCase(
@@ -19,6 +18,11 @@ class CreateVotingTopicUseCase(
     private val securityPort: SecurityPort,
     private val noticeService: CommandNoticeService
 ) {
+
+    companion object{
+        val APPROVAL = "찬성"
+        val OPPOSITE = "반대"
+    }
 
     fun execute(request: CreateVoteTopicRequest): CreateVotingTopicResponse {
         if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
@@ -51,14 +55,14 @@ class CreateVotingTopicUseCase(
         voteService.createVotingOption(
                 VotingOption(
                         votingTopicId = votingTopic.id,
-                        optionName = "찬성"
+                        optionName = APPROVAL
                 )
         )
 
         voteService.createVotingOption(
                 VotingOption(
                         votingTopicId = votingTopic.id,
-                        optionName = "반대"
+                        optionName = OPPOSITE
                 )
         )
     }
