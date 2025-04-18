@@ -32,14 +32,14 @@ data class VotingTopicsResponse(
 )
 
 data class ExcludedStudentResponse(
-    val studentId: UUID,
+    val id: UUID,
     val gcn: String,
     val name: String
 ) {
     companion object {
-        fun of(studentId: UUID, gcn: String, name: String): ExcludedStudentResponse {
+        fun of(id: UUID, gcn: String, name: String): ExcludedStudentResponse {
             return ExcludedStudentResponse(
-                studentId = studentId,
+                id = id,
                 gcn = gcn,
                 name = name
             )
