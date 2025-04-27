@@ -24,9 +24,9 @@ class CreateExcludedStudentUseCase(
             gcn.first,
             gcn.second,
             gcn.third
-        ).userId
-
-        voteService.checkExcludedStudentExistByStudentId(studentId!!)
+        ).id
+        
+        voteService.checkExcludedStudentExistByStudentId(studentId)
 
         voteService.saveExcludedStudent(
             ExcludedStudent(
