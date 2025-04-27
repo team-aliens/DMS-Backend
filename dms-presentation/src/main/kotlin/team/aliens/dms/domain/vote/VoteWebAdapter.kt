@@ -21,9 +21,9 @@ import team.aliens.dms.domain.vote.dto.request.CreateVotingOptionWebRequest
 import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
-import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
 import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
+import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
 import team.aliens.dms.domain.vote.dto.response.VotingTopicsResponse
 import team.aliens.dms.domain.vote.usecase.CreateExcludedStudentUseCase
@@ -32,8 +32,8 @@ import team.aliens.dms.domain.vote.usecase.CreateVotingOptionUseCase
 import team.aliens.dms.domain.vote.usecase.CreateVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVoteUseCase
-import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.DeleteVotingOptionUseCase
+import team.aliens.dms.domain.vote.usecase.DeleteVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllExcludedStudentUseCase
 import team.aliens.dms.domain.vote.usecase.QueryAllVotingTopicUseCase
 import team.aliens.dms.domain.vote.usecase.QueryVotesUseCase
@@ -90,6 +90,7 @@ class VoteWebAdapter(
     }
 
     @DeleteMapping("/{voting-topic-id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteVotingTopic(@PathVariable("voting-topic-id") @NotNull votingTopicId: UUID) {
         deleteVotingTopicUseCase.execute(votingTopicId)
     }

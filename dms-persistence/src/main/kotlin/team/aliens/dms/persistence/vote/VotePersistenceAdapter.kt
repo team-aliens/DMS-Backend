@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.model.Vote
+import team.aliens.dms.domain.vote.model.VotingOption
+import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.VotePort
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
@@ -12,7 +14,10 @@ import team.aliens.dms.persistence.vote.entity.QVoteJpaEntity.voteJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingOptionJpaEntity.votingOptionJpaEntity
 import team.aliens.dms.persistence.vote.entity.QVotingTopicJpaEntity.votingTopicJpaEntity
 import team.aliens.dms.persistence.vote.mapper.VoteMapper
+import team.aliens.dms.persistence.vote.mapper.VotingOptionMapper
+import team.aliens.dms.persistence.vote.mapper.VotingTopicMapper
 import team.aliens.dms.persistence.vote.repository.VoteJpaRepository
+import team.aliens.dms.persistence.vote.repository.VotingOptionJpaRepository
 import team.aliens.dms.persistence.vote.repository.vo.QQueryOptionVotingResultVO
 import team.aliens.dms.persistence.vote.repository.vo.QQueryStudentVotingResultVO
 import java.util.UUID
@@ -21,7 +26,10 @@ import java.util.UUID
 class VotePersistenceAdapter(
     private val voteMapper: VoteMapper,
     private val voteJpaRepository: VoteJpaRepository,
-    private val queryFactory: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory,
+    private val votingOptionMapper: VotingOptionMapper,
+    private val votingOptionJpaRepository: VotingOptionJpaRepository,
+    private val votingTopicMapper: VotingTopicMapper
 ) : VotePort {
 
     override fun saveVote(vote: Vote): Vote = voteMapper.toDomain(
@@ -29,6 +37,14 @@ class VotePersistenceAdapter(
     )!!
 
     override fun deleteVoteById(voteId: UUID) = voteJpaRepository.deleteById(voteId)
+    
+    override fun deleteVotingOptionByVotingTopic(
+        votingTopic: VotingTopic
+    ) = votingOptionJpaRepository.deleteByVotingTopic(votingTopicMapper.toEntity(votingTopic))
+
+    override fun deleteVoteByVotingOption(votingOption: VotingOption) {
+        voteJpaRepository.deleteAllBySelectedOption(votingOptionMapper.toEntity(votingOption))
+    }
 
     override fun queryVoteById(voteId: UUID): Vote? = voteMapper.toDomain(
         voteJpaRepository.findByIdOrNull(voteId)
