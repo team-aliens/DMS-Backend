@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.vote.usecase
 
-import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.annotation.ReadOnlyUseCase
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.dto.response.VoteResponse
@@ -11,7 +11,7 @@ import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
 import java.util.UUID
 
-@UseCase
+@ReadOnlyUseCase
 class QueryVotesUseCase(
     private val voteService: VoteService,
     private val studentService: StudentService
@@ -21,7 +21,8 @@ class QueryVotesUseCase(
         val votingTopic = voteService.getVotingTopicById(votingTopicId)
 
         return when (votingTopic.voteType) {
-            VoteType.STUDENT_VOTE, VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId)
+            VoteType.STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId, false)
+            VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId, true)
             VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> queryOptionVotingVotes(votingTopicId)
         }
     }
@@ -40,10 +41,14 @@ class QueryVotesUseCase(
         )
     }
 
-    private fun queryStudentVotingVotes(votingTopicId: UUID): VotesResponse {
+    private fun queryStudentVotingVotes(votingTopicId: UUID, isModelStudent: Boolean): VotesResponse {
         return VotesResponse.of(
             listOf(1, 2, 3).flatMap { grade ->
-                val result: List<StudentVotingResultVO> = voteService.getVotesInStudentVotingByVotingTopicId(votingTopicId, grade)
+
+                val result: List<StudentVotingResultVO> =
+                    if (isModelStudent) voteService.getVotesInModelStudentVotingByVotingTopicId(votingTopicId, grade)
+                    else voteService.getVotesInStudentVotingByVotingTopicId(votingTopicId, grade)
+
                 result.map { votingResult ->
                     val student = studentService.getStudentById(votingResult.id)
                     val classNumber = Student.processGcn(
