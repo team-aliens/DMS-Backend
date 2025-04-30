@@ -14,4 +14,6 @@ interface QueryVotePort {
     fun queryOptionVotingByVotingTopicId(votingTopicId: UUID): List<OptionVotingResultVO>
 
     fun queryVoteByStudentId(studentId: UUID): List<Vote>
+
+    fun queryModelStudentVotingByVotingTopicIdAndGrade(votingTopicId: UUID, grade: Int): List<StudentVotingResultVO>
 }
