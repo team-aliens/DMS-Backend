@@ -24,7 +24,7 @@ class QueryAllExcludedStudentUseCase(
         return ExcludedStudentsResponses(
             students.map {
                 ExcludedStudentResponse.of(
-                    studentId = it.id,
+                    id = it.id,
                     gcn = Student.processGcn(it.grade, it.classRoom, it.number),
                     name = it.name
                 )
