@@ -49,4 +49,5 @@ jobs:
             FCM_FILE_URL=${{ secrets.FCM_FILE_URL }}
             FLYWAY_ENABLED=${{ secrets.FLYWAY_ENABLED }}
             BASELINE_ON_MIGRATE=${{ secrets.BASELINE_ON_MIGRATE }}
+            TOKEN_ACCESS_EXP=${{ secrets.TOKEN_ACCESS_EXP }}
 #            SLACK_WEBHOOK_URL=${{ secrets.SLACK_STAG_WEBHOOK_URL }}
