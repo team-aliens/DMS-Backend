@@ -16,10 +16,7 @@ class DeleteVotingTopicUseCase(
     fun execute(votingTopicId: UUID) {
         val votingTopic: VotingTopic = voteService.getVotingTopicById(votingTopicId)
 
-        voteService.getVotingOptionsByVotingTopicId(votingTopicId).forEach {
-                votingOption ->
-            voteService.deleteVoteByVotingOption(votingOption)
-        }
+        voteService.deleteVoteByVotingTopic(votingTopic)
 
         votingTopic.voteType
             .takeIf { it == VoteType.APPROVAL_VOTE || it == VoteType.OPTION_VOTE }

@@ -8,5 +8,5 @@ import java.util.UUID
 
 @Repository
 interface VotingOptionJpaRepository : CrudRepository<VotingOptionJpaEntity, UUID> {
-    fun deleteByVotingTopic(votingTopic: VotingTopicJpaEntity)
+    fun deleteAllByVotingTopic(votingTopic: VotingTopicJpaEntity)
 }

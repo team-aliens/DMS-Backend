@@ -3,6 +3,7 @@ package team.aliens.dms.domain.vote.usecase
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingOption
+import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import java.util.UUID
 
@@ -13,12 +14,10 @@ class DeleteVotingOptionUseCase(
 
     fun execute(votingOptionId: UUID) {
         val votingOption: VotingOption = voteService.getVotingOptionById(votingOptionId)
+        
+        val votingTopic: VotingTopic = voteService.getVotingTopicById(votingOption.votingTopicId)
 
-        val voteType: VoteType = voteService.getVotingTopicById(votingOption.votingTopicId).voteType
-
-        voteType
-            .takeIf { it == VoteType.APPROVAL_VOTE || it == VoteType.OPTION_VOTE }
-            .let { voteService.deleteVoteByVotingOption(votingOption) }
+        voteService.deleteVoteByVotingTopic(votingTopic)
 
         voteService.deleteVotingOptionById(votingOption.id)
     }

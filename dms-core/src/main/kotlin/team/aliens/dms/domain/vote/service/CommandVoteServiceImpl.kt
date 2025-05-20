@@ -51,7 +51,7 @@ class CommandVoteServiceImpl(
 
     override fun deleteVoteById(voteId: UUID) = commandVotePort.deleteVoteById(voteId)
 
-    override fun deleteVoteByVotingOption(votingOption: VotingOption) = commandVotePort.deleteVoteByVotingOption(votingOption)
+    override fun deleteVoteByVotingTopic(votingTopic: VotingTopic) = commandVotePort.deleteVoteByVotingTopic(votingTopic)
 
     override fun deleteVotingOptionByVotingTopic(votingTopic: VotingTopic) = commandVotePort.deleteVotingOptionByVotingTopic(votingTopic)
 
