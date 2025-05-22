@@ -43,13 +43,13 @@ class VotePersistenceAdapter(
     )!!
 
     override fun deleteVoteById(voteId: UUID) = voteJpaRepository.deleteById(voteId)
-    
+
     override fun deleteVotingOptionByVotingTopic(
         votingTopic: VotingTopic
-    ) = votingOptionJpaRepository.deleteByVotingTopic(votingTopicMapper.toEntity(votingTopic))
+    ) = votingOptionJpaRepository.deleteAllByVotingTopic(votingTopicMapper.toEntity(votingTopic))
 
-    override fun deleteVoteByVotingOption(votingOption: VotingOption) {
-        voteJpaRepository.deleteAllBySelectedOption(votingOptionMapper.toEntity(votingOption))
+    override fun deleteVoteByVotingTopic(votingTopic: VotingTopic) {
+        voteJpaRepository.deleteAllByVotingTopic(votingTopicMapper.toEntity(votingTopic))
     }
 
     override fun queryVoteById(voteId: UUID): Vote? = voteMapper.toDomain(

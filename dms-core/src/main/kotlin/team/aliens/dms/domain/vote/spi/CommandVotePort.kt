@@ -13,5 +13,5 @@ interface CommandVotePort {
 
     fun deleteVotingOptionByVotingTopic(votingTopic: VotingTopic)
 
-    fun deleteVoteByVotingOption(votingOption: VotingOption)
+    fun deleteVoteByVotingTopic(votingTopic: VotingTopic)
 }
