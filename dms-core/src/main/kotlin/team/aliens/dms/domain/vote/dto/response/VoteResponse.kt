@@ -86,13 +86,16 @@ data class VoteResponse(
 }
 
 data class VotesResponse(
+    val votingTopicName: String,
     val votes: List<VoteResponse>
 ) {
     companion object {
         fun of(
-            votes: List<VoteResponse>
+            votes: List<VoteResponse>,
+            votingTopicName: String
         ) = VotesResponse(
-            votes = votes
+            votes = votes,
+            votingTopicName = votingTopicName
         )
     }
 }
