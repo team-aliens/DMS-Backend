@@ -6,6 +6,7 @@ import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.dto.response.VoteResponse
 import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.model.VoteType
+import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
@@ -21,15 +22,16 @@ class QueryVotesUseCase(
         val votingTopic = voteService.getVotingTopicById(votingTopicId)
 
         return when (votingTopic.voteType) {
-            VoteType.STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId, false)
-            VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopicId, true)
-            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> queryOptionVotingVotes(votingTopicId)
+            VoteType.STUDENT_VOTE -> queryStudentVotingVotes(votingTopic, false)
+            VoteType.MODEL_STUDENT_VOTE -> queryStudentVotingVotes(votingTopic, true)
+            VoteType.OPTION_VOTE, VoteType.APPROVAL_VOTE -> queryOptionVotingVotes(votingTopic)
         }
     }
 
-    private fun queryOptionVotingVotes(votingTopicId: UUID): VotesResponse {
-        val result: List<OptionVotingResultVO> = voteService.getVotesInOptionVotingByVotingTopicId(votingTopicId)
+    private fun queryOptionVotingVotes(votingTopic: VotingTopic): VotesResponse {
+        val result: List<OptionVotingResultVO> = voteService.getVotesInOptionVotingByVotingTopicId(votingTopic.id)
         return VotesResponse.of(
+            votingTopicName = votingTopic.topicName,
             votes = result.map { votingResult ->
                 VoteResponse(
                     id = votingResult.id,
@@ -41,13 +43,14 @@ class QueryVotesUseCase(
         )
     }
 
-    private fun queryStudentVotingVotes(votingTopicId: UUID, isModelStudent: Boolean): VotesResponse {
+    private fun queryStudentVotingVotes(votingTopic: VotingTopic, isModelStudent: Boolean): VotesResponse {
         return VotesResponse.of(
-            listOf(1, 2, 3).flatMap { grade ->
+                votingTopicName = votingTopic.topicName,
+            votes = listOf(1, 2, 3).flatMap { grade ->
 
                 val result: List<StudentVotingResultVO> =
-                    if (isModelStudent) voteService.getVotesInModelStudentVotingByVotingTopicId(votingTopicId, grade)
-                    else voteService.getVotesInStudentVotingByVotingTopicId(votingTopicId, grade)
+                    if (isModelStudent) voteService.getVotesInModelStudentVotingByVotingTopicId(votingTopic.id, grade)
+                    else voteService.getVotesInStudentVotingByVotingTopicId(votingTopic.id, grade)
 
                 result.map { votingResult ->
                     val student = studentService.getStudentById(votingResult.id)
