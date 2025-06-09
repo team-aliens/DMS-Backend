@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.vote.dto.response
 
 import team.aliens.dms.domain.vote.model.VoteType
-import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.vo.VotingTopicResultVO
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,9 +12,10 @@ data class VotingTopicResponse(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val voteType: VoteType,
+    val isVoted: Boolean
 ) {
     companion object {
-        fun from(votingTopic: VotingTopic): VotingTopicResponse {
+        fun from(votingTopic: VotingTopicResultVO): VotingTopicResponse {
             return VotingTopicResponse(
                 id = votingTopic.id,
                 topicName = votingTopic.topicName,
@@ -22,6 +23,7 @@ data class VotingTopicResponse(
                 startTime = votingTopic.startTime,
                 endTime = votingTopic.endTime,
                 voteType = votingTopic.voteType,
+                isVoted = votingTopic.isVoted
             )
         }
     }
