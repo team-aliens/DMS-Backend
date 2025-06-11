@@ -15,6 +15,7 @@ import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
 import team.aliens.dms.domain.vote.spi.vo.OptionVotingResultVO
 import team.aliens.dms.domain.vote.spi.vo.StudentVotingResultVO
+import team.aliens.dms.domain.vote.spi.vo.VotingTopicResultVO
 import java.util.UUID
 
 @Service
@@ -29,8 +30,8 @@ class GetVoteServiceImpl(
         return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
     }
 
-    override fun getAllVotingTopics(): List<VotingTopic> {
-        return queryVotingTopicPort.queryAllVotingTopic()
+    override fun getAllVotingTopics(userId: UUID): List<VotingTopicResultVO> {
+        return queryVotingTopicPort.queryAllVotingTopic(userId)
     }
 
     override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption> = queryVotingOptionPort.queryVotingOptionsByVotingTopicId(votingTopicId)

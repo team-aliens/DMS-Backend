@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.vote.spi
 
 import team.aliens.dms.domain.vote.model.VotingTopic
+import team.aliens.dms.domain.vote.spi.vo.VotingTopicResultVO
 import java.util.UUID
 
 interface QueryVotingTopicPort {
@@ -11,5 +12,5 @@ interface QueryVotingTopicPort {
 
     fun queryVotingTopicById(votingTopicId: UUID): VotingTopic?
 
-    fun queryAllVotingTopic(): List<VotingTopic>
+    fun queryAllVotingTopic(userId: UUID): List<VotingTopicResultVO>
 }
