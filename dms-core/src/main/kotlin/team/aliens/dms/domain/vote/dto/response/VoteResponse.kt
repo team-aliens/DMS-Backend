@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.vote.dto.response
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.spi.vo.VotingTopicResultVO
 import java.time.LocalDateTime
@@ -12,6 +13,7 @@ data class VotingTopicResponse(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val voteType: VoteType,
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     val isVoted: Boolean
 ) {
     companion object {
