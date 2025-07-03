@@ -45,7 +45,7 @@ class QueryVotesUseCase(
 
     private fun queryStudentVotingVotes(votingTopic: VotingTopic, isModelStudent: Boolean): VotesResponse {
         return VotesResponse.of(
-                votingTopicName = votingTopic.topicName,
+            votingTopicName = votingTopic.topicName,
             votes = listOf(1, 2, 3).flatMap { grade ->
 
                 val result: List<StudentVotingResultVO> =
