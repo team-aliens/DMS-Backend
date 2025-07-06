@@ -11,14 +11,15 @@ enum class AuthErrorCode(
 
     AUTH_CODE_MISMATCH(ErrorStatus.UNAUTHORIZED, "Auth Code Mismatch", 1),
     EMAIL_MISMATCH(ErrorStatus.UNAUTHORIZED, "Email Mismatch", 2),
-    PASSWORD_MISMATCH(ErrorStatus.UNAUTHORIZED, "Password Mismatch", 3),
-    UNVERIFIED_AUTH_CODE(ErrorStatus.UNAUTHORIZED, "Unverified Auth Code", 4),
+    UNVERIFIED_AUTH_CODE(ErrorStatus.UNAUTHORIZED, "Unverified Auth Code", 3),
 
     REFRESH_TOKEN_NOT_FOUND(ErrorStatus.NOT_FOUND, "Refresh Token Not Found", 1),
     AUTH_CODE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Auth Code Not Found", 2),
     AUTH_CODE_LIMIT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Auth Code Limit Not Found", 3),
 
     EMAIL_ALREADY_CERTIFIED(ErrorStatus.CONFLICT, "Email Already Certified", 1),
+
+    PASSWORD_MISMATCH(ErrorStatus.UNPROCESSABLE_ENTITY, "Password Mismatch", 1),
 
     AUTH_CODE_OVER_LIMITED(ErrorStatus.TOO_MANY_REQUEST, "Auth Code Over Limited", 1)
     ;

@@ -19,7 +19,7 @@ class CreateVotingTopicUseCase(
     private val noticeService: CommandNoticeService
 ) {
 
-    companion object{
+    companion object {
         val APPROVAL = "찬성"
         val OPPOSITE = "반대"
     }
@@ -42,7 +42,7 @@ class CreateVotingTopicUseCase(
             )
         )
 
-        if(votingTopic.voteType == VoteType.APPROVAL_VOTE) {
+        if (votingTopic.voteType == VoteType.APPROVAL_VOTE) {
             addApprovalOptions(votingTopic)
         }
 
@@ -53,17 +53,17 @@ class CreateVotingTopicUseCase(
 
     private fun addApprovalOptions(votingTopic: VotingTopic) {
         voteService.createVotingOption(
-                VotingOption(
-                        votingTopicId = votingTopic.id,
-                        optionName = APPROVAL
-                )
+            VotingOption(
+                votingTopicId = votingTopic.id,
+                optionName = APPROVAL
+            )
         )
 
         voteService.createVotingOption(
-                VotingOption(
-                        votingTopicId = votingTopic.id,
-                        optionName = OPPOSITE
-                )
+            VotingOption(
+                votingTopicId = votingTopic.id,
+                optionName = OPPOSITE
+            )
         )
     }
 }

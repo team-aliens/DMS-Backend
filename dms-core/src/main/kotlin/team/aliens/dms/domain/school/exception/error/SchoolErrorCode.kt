@@ -16,6 +16,8 @@ enum class SchoolErrorCode(
     SCHOOL_NOT_FOUND(ErrorStatus.NOT_FOUND, "School Not Found", 1),
     FEATURE_NOT_FOUND(ErrorStatus.NOT_FOUND, "Feature Not Found", 2),
 
+    PASSWORD_MISMATCH(ErrorStatus.UNPROCESSABLE_ENTITY, "Password Mismatch", 1),
+
     FEATURE_NOT_AVAILABLE(ErrorStatus.FORBIDDEN, "Feature Not Available", 1)
     ;
 
