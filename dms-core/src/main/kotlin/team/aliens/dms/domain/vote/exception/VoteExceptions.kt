@@ -50,3 +50,7 @@ object IsNotAuthorizedVoteDeletionException : DmsException(
 object ExcludedStudentNotFoundException : DmsException(
     VoteErrorCode.EXCLUDED_STUDENT_NOT_FOUND
 )
+
+object VotingTopicExpiredException : DmsException(
+    VoteErrorCode.VOTING_TOPIC_EXPIRED
+)

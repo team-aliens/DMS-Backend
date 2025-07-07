@@ -3,12 +3,14 @@ package team.aliens.dms.domain.vote.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.vote.exception.ExcludedStudentAlreadyExistsException
 import team.aliens.dms.domain.vote.exception.VoteTypeMismatchException
+import team.aliens.dms.domain.vote.exception.VotingTopicExpiredException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.spi.QueryExcludedStudentPort
 import team.aliens.dms.domain.vote.spi.QueryVotePort
 import team.aliens.dms.domain.vote.spi.QueryVotingOptionPort
 import team.aliens.dms.domain.vote.spi.QueryVotingTopicPort
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -43,6 +45,14 @@ class CheckVoteServiceImpl(
     override fun checkExcludedStudentExistByStudentId(studentId: UUID) {
         if (queryExcludedStudentPort.existExcludedStudentById(studentId)) {
             throw ExcludedStudentAlreadyExistsException
+        }
+    }
+
+    override fun checkVotingTopicExpired(votingTopicId: UUID) {
+        val votingTopic: VotingTopic = queryVotingTopicPort.queryVotingTopicById(votingTopicId)!!
+
+        if (votingTopic.endTime < LocalDateTime.now()) {
+            throw VotingTopicExpiredException
         }
     }
 }
