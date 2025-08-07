@@ -30,8 +30,8 @@ class GetVoteServiceImpl(
         return queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
     }
 
-    override fun getAllVotingTopics(userId: UUID): List<VotingTopicResultVO> {
-        return queryVotingTopicPort.queryAllVotingTopic(userId)
+    override fun getAllVotingTopics(studentId: UUID): List<VotingTopicResultVO> {
+        return queryVotingTopicPort.queryAllVotingTopic(studentId)
     }
 
     override fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption> = queryVotingOptionPort.queryVotingOptionsByVotingTopicId(votingTopicId)

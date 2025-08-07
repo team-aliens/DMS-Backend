@@ -13,7 +13,7 @@ interface GetVoteService {
 
     fun getVotingTopicById(votingTopicId: UUID): VotingTopic
 
-    fun getAllVotingTopics(userId: UUID): List<VotingTopicResultVO>
+    fun getAllVotingTopics(studentId: UUID): List<VotingTopicResultVO>
 
     fun getVotingOptionsByVotingTopicId(votingTopicId: UUID): List<VotingOption>
 

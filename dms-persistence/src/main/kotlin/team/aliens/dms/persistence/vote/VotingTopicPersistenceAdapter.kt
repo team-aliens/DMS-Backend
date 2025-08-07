@@ -41,7 +41,7 @@ class VotingTopicPersistenceAdapter(
         votingTopicJpaRepository.deleteById(votingTopicId)
     }
 
-    override fun queryAllVotingTopic(userId: UUID): List<QueryVotingTopicResultVO> {
+    override fun queryAllVotingTopic(studentId: UUID): List<QueryVotingTopicResultVO> {
         return queryFactory
             .select(
                 QQueryVotingTopicResultVO(
@@ -55,7 +55,7 @@ class VotingTopicPersistenceAdapter(
                         .from(voteJpaEntity)
                         .where(
                             voteJpaEntity.votingTopic.id.eq(votingTopicJpaEntity.id)
-                                .and(voteJpaEntity.student.id.eq(userId))
+                                .and(voteJpaEntity.student.id.eq(studentId))
                         )
                         .exists()
                 )
