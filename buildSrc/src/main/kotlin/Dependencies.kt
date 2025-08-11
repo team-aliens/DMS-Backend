@@ -88,4 +88,7 @@ object Dependencies {
 
     //spring cloud gateway
     const val SPRING_CLOUD_GATEWAY = "org.springframework.cloud:spring-cloud-starter-gateway:${DependencyVersions.SPRING_CLOUD_GATEWAY_VERSION}"
+
+    //webflux
+    const val WEB_FLUX = "org.springframework.boot:spring-boot-starter-webflux"
 }
