@@ -59,9 +59,6 @@ dependencies {
 
     // notification
     implementation(Dependencies.FCM)
-
-    // spring cloud gateway
-    implementation(Dependencies.SPRING_CLOUD_GATEWAY)
 }
 
 tasks.getByName<Jar>("jar") {
