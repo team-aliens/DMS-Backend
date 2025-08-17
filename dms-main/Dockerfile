@@ -50,5 +50,5 @@ ENV BASELINE_ON_MIGRATE ${BASELINE_ON_MIGRATE}
 ARG SLACK_WEBHOOK_URL
 ENV SLACK_WEBHOOK_URL ${SLACK_WEBHOOK_URL}
 
-COPY ./dms-infrastructure/build/libs/*.jar app.jar
+COPY ./dms-main/main-infrastructure/build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
