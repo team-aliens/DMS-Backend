@@ -7,9 +7,9 @@ plugins {
 
 dependencies {
     // impl project
-    implementation(project(":dms-persistence"))
-    implementation(project(":dms-core"))
-    implementation(project(":dms-presentation"))
+    implementation(project(":dms-main:main-persistence"))
+    implementation(project(":dms-main:main-core"))
+    implementation(project(":dms-main:main-presentation"))
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)

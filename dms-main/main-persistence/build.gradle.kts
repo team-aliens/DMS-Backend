@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     // impl project
-    implementation(project(":dms-core"))
+    implementation(project(":dms-main:main-core"))
 
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
