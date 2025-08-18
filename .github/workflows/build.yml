@@ -33,4 +33,4 @@ jobs:
             --stacktrace
 
       - name: Run Detekt Domain
-        run: ./gradlew :dms-core:detekt
+        run: ./gradlew :dms-main:main-core:detekt

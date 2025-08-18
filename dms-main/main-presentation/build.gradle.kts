@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     // impl project
-    implementation(project(":dms-core"))
+    implementation(project(":dms-main:main-core"))
 
     // web
     implementation(Dependencies.SPRING_WEB)

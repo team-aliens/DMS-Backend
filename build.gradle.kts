@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 plugins {
     kotlin("jvm") version PluginVersions.JVM_VERSION
     id("io.gitlab.arturbosch.detekt").version(PluginVersions.DETEKT_VERSION)
@@ -17,6 +20,11 @@ subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
         version = PluginVersions.DETEKT_VERSION
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     detekt {
@@ -61,15 +69,20 @@ allprojects {
             }
         }
 
-        compileJava {
-            sourceCompatibility = JavaVersion.VERSION_17.majorVersion
-
-            options.isFork = true
+        compileTestKotlin {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
         }
+    }
 
-        test {
-            useJUnitPlatform()
-        }
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        javaLauncher.set(
+            javaToolchains.launcherFor {
+                languageVersion.set(JavaLanguageVersion.of(17))
+            }
+        )
     }
 
     repositories {
