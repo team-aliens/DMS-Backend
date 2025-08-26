@@ -1,0 +1,18 @@
+### Git ###
+.git
+.gitignore
+
+### IDE ###
+.idea
+*.iml
+
+### Gradle cache ###
+.gradle
+build/
+
+### Module build outputs ###
+dms-*/build/
+buildSrc/build/
+
+### Local files ###
+*.log
