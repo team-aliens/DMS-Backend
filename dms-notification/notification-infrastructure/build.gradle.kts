@@ -16,6 +16,16 @@ dependencies {
 
     // notification
     implementation(Dependencies.FCM)
+
+    // security
+    implementation(Dependencies.SPRING_SECURITY)
+
+    // jwt
+    implementation(Dependencies.JWT)
+
+    implementation(Dependencies.SPRING_VALIDATION)
+    runtimeOnly(Dependencies.JWT_IMPL)
+    runtimeOnly(Dependencies.JWT_JACKSON)
 }
 
 tasks.getByName<Jar>("jar") {
