@@ -1,3 +1,4 @@
+
 package team.aliens.dms.common.error
 
 abstract class DynamicDmsException(
