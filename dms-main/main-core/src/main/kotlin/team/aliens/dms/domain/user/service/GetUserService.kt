@@ -13,4 +13,6 @@ interface GetUserService {
     fun queryUserBySchoolIdAndAuthority(schoolId: UUID, authority: Authority): User
 
     fun getCurrentUser(): User
+
+    fun getCurrentUserId(): UUID
 }
