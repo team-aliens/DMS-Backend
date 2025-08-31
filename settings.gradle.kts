@@ -11,5 +11,9 @@ include("dms-notification:notification-core")
 include("dms-notification:notification-persistence")
 include("dms-notification:notification-infrastructure")
 include("dms-notification:notification-presentation")
+
+include("contracts")
+include("contracts:notification-contract")
+
 include("dms-gateway:gateway-core")
 include("dms-gateway:gateway-infrastructure")

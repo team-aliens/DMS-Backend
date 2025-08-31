@@ -1,23 +1,18 @@
 package team.aliens.dms.persistence.notification.mapper
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.NotificationOfUser
-import team.aliens.dms.domain.user.exception.UserNotFoundException
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.notification.entity.NotificationOfUserJpaEntity
-import team.aliens.dms.persistence.user.repository.UserJpaRepository
 
 @Component
-class NotificationOfUserMapper(
-    private val userRepository: UserJpaRepository
-) : GenericMapper<NotificationOfUser, NotificationOfUserJpaEntity> {
+class NotificationOfUserMapper : GenericMapper<NotificationOfUser, NotificationOfUserJpaEntity> {
 
     override fun toDomain(entity: NotificationOfUserJpaEntity?): NotificationOfUser? {
         return entity?.let {
             NotificationOfUser(
                 id = it.id!!,
-                userId = it.user!!.id!!,
+                userId = it.userId!!,
                 topic = it.topic,
                 linkIdentifier = it.linkIdentifier,
                 title = it.title,
@@ -28,12 +23,10 @@ class NotificationOfUserMapper(
         }
     }
 
-    override fun toEntity(domain: NotificationOfUser): NotificationOfUserJpaEntity {
-        val user = userRepository.findByIdOrNull(domain.userId) ?: throw UserNotFoundException
-
-        return NotificationOfUserJpaEntity(
+    override fun toEntity(domain: NotificationOfUser): NotificationOfUserJpaEntity =
+        NotificationOfUserJpaEntity(
             id = domain.id,
-            user = user,
+            userId = domain.userId,
             topic = domain.topic,
             linkIdentifier = domain.linkIdentifier,
             title = domain.title,
@@ -41,5 +34,4 @@ class NotificationOfUserMapper(
             createdAt = domain.createdAt,
             isRead = domain.isRead
         )
-    }
 }
