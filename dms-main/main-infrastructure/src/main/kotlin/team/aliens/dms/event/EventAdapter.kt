@@ -2,29 +2,29 @@ package team.aliens.dms.event
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
+import team.aliens.dms.NotificationInfo
 import team.aliens.dms.common.spi.EventPort
-import team.aliens.dms.GroupNotificationInfo
-import team.aliens.dms.SingleNotificationInfo
+import java.util.UUID
 
 @Component
 class EventAdapter(
     private val eventPublisher: ApplicationEventPublisher
 ) : EventPort {
 
-    override fun publishNotification(singleNotificationInfo: SignleNotificationInfo) {
+    override fun publishNotification(userId: UUID, notificationInfo: NotificationInfo) {
         eventPublisher.publishEvent(
             SingleNotificationEvent(
-                deviceToken = deviceToken,
-                notification = notification
+                userId = userId,
+                notificationInfo = notificationInfo
             )
         )
     }
 
-    override fun publishNotificationToApplicant(deviceTokens: List<DeviceToken>, notification: Notification) {
+    override fun publishNotificationToApplicant(userIds: List<UUID>, notificationInfo: NotificationInfo) {
         eventPublisher.publishEvent(
             GroupNotificationEvent(
-                deviceTokens = deviceTokens,
-                notification = notification
+                userIds = userIds,
+                notificationInfo = notificationInfo
             )
         )
     }

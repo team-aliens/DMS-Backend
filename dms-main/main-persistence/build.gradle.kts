@@ -7,9 +7,6 @@ dependencies {
     // impl project
     implementation(project(":dms-main:main-core"))
 
-    // notification-contract
-    implementation(project(":contracts:notification-contract"))
-
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
     runtimeOnly(Dependencies.MYSQL_CONNECTOR)
@@ -33,4 +30,10 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+kapt {
+    arguments {
+        arg("querydsl.generatedAnnotationClass", "jakarta.annotation.Generated")
+    }
 }

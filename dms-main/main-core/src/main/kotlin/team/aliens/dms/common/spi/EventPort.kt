@@ -1,15 +1,13 @@
 package team.aliens.dms.common.spi
 
-import team.aliens.dms.GroupNotificationInfo
-import team.aliens.dms.SingleNotificationInfo
-
-
+import team.aliens.dms.NotificationInfo
+import java.util.UUID
 
 interface NotificationEventPort {
 
-    fun publishNotification(singleNotificationInfo: SingleNotificationInfo)
+    fun publishNotification(userId: UUID, notificationInfo: NotificationInfo)
 
-    fun publishNotificationToApplicant(groupNotificationInfo: GroupNotificationInfo)
+    fun publishNotificationToApplicant(userIds: List<UUID>, notificationInfo: NotificationInfo)
 }
 
 interface EventPort : NotificationEventPort

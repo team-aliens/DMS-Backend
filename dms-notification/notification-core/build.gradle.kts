@@ -6,6 +6,8 @@ plugins {
 dependencies {
     // transaction
     implementation(Dependencies.SPRING_TRANSACTION)
+
+    implementation(project(":dms-main:main-core"))
 }
 
 allOpen {

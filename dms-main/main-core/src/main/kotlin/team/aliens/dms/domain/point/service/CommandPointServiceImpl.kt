@@ -1,22 +1,23 @@
 package team.aliens.dms.domain.point.service
 
+import team.aliens.dms.NotificationInfo
+import team.aliens.dms.Topic
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
+import kotlin.toString
 
 @Service
 class CommandPointServiceImpl(
     private val commandPointHistoryPort: CommandPointHistoryPort,
     private val commandPointOptionPort: CommandPointOptionPort,
     private val notificationEventPort: NotificationEventPort,
-    private val deviceTokenPort: QueryDeviceTokenPort,
+    private val queryUserPort: QueryUserPort,
 ) : CommandPointService {
 
     override fun savePointHistory(pointHistory: PointHistory) =
@@ -27,13 +28,24 @@ class CommandPointServiceImpl(
     }
 
     override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?) {
-        studentIds?.let {
-            val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensByStudentIds(studentIds)
+        val userIds = queryUserPort.queryUsersByStudentIds(studentIds!!)
+            .map { it.id }
 
-            notificationEventPort.publishNotificationToApplicant(
-                deviceTokens, Notification.PointNotification(pointHistories.first())
+        val notificationInfo = pointHistories.first().let {
+            NotificationInfo(
+                schoolId = it.schoolId,
+                topic = Topic.POINT,
+                linkIdentifier = it.id.toString(),
+                title = it.getTitle(),
+                content = it.pointName,
+                threadId = it.id.toString(),
+                isSaveRequired = true
             )
         }
+
+        notificationEventPort.publishNotificationToApplicant(
+            userIds, notificationInfo
+        )
 
         commandPointHistoryPort.saveAllPointHistories(pointHistories)
     }
@@ -45,3 +57,4 @@ class CommandPointServiceImpl(
         commandPointOptionPort.deletePointOption(pointOption)
     }
 }
+

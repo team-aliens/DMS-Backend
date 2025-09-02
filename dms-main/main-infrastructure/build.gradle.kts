@@ -11,6 +11,9 @@ dependencies {
     implementation(project(":dms-main:main-core"))
     implementation(project(":dms-main:main-presentation"))
 
+    // notification-contract
+    implementation(project(":contracts:notification-contract"))
+
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
 

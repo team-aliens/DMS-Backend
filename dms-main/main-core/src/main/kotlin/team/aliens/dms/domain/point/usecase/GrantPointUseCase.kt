@@ -26,6 +26,6 @@ class GrantPointUseCase(
             schoolId = user.schoolId
         )
 
-        pointService.saveAllPointHistories(pointHistories, request.studentIdList)
+        pointService.saveAllPointHistories(pointHistories)
     }
 }

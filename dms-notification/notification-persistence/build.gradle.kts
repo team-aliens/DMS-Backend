@@ -28,6 +28,12 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+kapt {
+    arguments {
+        arg("querydsl.generatedAnnotationClass", "jakarta.annotation.Generated")
+    }
+}
+
 detekt {
     ignoreFailures = true
 }
