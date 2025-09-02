@@ -1,13 +1,15 @@
 package team.aliens.dms.common.spi
 
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
+import team.aliens.dms.GroupNotificationInfo
+import team.aliens.dms.SingleNotificationInfo
+
+
 
 interface NotificationEventPort {
 
-    fun publishNotification(deviceToken: DeviceToken, notification: Notification)
+    fun publishNotification(singleNotificationInfo: SingleNotificationInfo)
 
-    fun publishNotificationToApplicant(deviceTokens: List<DeviceToken>, notification: Notification)
+    fun publishNotificationToApplicant(groupNotificationInfo: GroupNotificationInfo)
 }
 
 interface EventPort : NotificationEventPort

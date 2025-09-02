@@ -1,5 +1,4 @@
-package team.aliens.dms.common.annotation
-
+import team.aliens.dms.common.annotation.Topic
 import java.time.LocalDateTime
 import java.util.UUID
 

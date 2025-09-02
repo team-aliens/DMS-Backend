@@ -3,9 +3,6 @@ package team.aliens.dms.domain.outing.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.model.OutingCompanion
@@ -14,7 +11,7 @@ import team.aliens.dms.domain.outing.spi.CommandOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.CommandOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.CommandOutingTimePort
 import team.aliens.dms.domain.outing.spi.CommandOutingTypePort
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import java.util.UUID]
 
 @Service
 class CommandOutingServiceImpl(
@@ -22,8 +19,6 @@ class CommandOutingServiceImpl(
     private val commandOutingCompanionPort: CommandOutingCompanionPort,
     private val commandOutingTypePort: CommandOutingTypePort,
     private val commandOutingTimePort: CommandOutingTimePort,
-    private val queryStudentPort: QueryStudentPort,
-    private val queryDeviceTokenPort: QueryDeviceTokenPort,
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort
 ) : CommandOutingService {
@@ -36,6 +31,19 @@ class CommandOutingServiceImpl(
         val deviceTokens: List<DeviceToken>? = outingApplication.companionIds?.let {
             queryDeviceTokenPort.queryDeviceTokensByStudentIds(it)
         }
+
+        class OutingNotification(
+            schoolId: UUID,
+            outing: OutingApplication
+        ) : Notification(
+            schoolId = schoolId,
+            topic = Topic.OUTING,
+            linkIdentifier = outing.id.toString(),
+            title = "외출이 신청되었습니다",
+            content = "외출 시간은 " + outing.outingTime + " ~ " + outing.arrivalTime + "입니다",
+            threadId = outing.id.toString(),
+            isSaveRequired = true
+        )
 
         return savedOutingApplication
             .also {

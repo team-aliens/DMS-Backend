@@ -18,7 +18,6 @@ class CustomAccessDeniedHandler(
         response: HttpServletResponse?,
         accessDeniedException: AccessDeniedException?
     ) {
-
         val errorCode = SecurityErrorCode.INVALID_ROLE
 
         response?.apply {

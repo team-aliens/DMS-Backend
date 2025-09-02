@@ -8,8 +8,6 @@ enum class NotificationErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    ;
-
     override fun status(): Int = status
     override fun message(): String = message
     override fun code(): String = "NOTIFICATION-$status-$sequence"

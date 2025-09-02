@@ -9,6 +9,9 @@ dependencies {
 
     // aop
     implementation(Dependencies.AOP)
+
+    // notification-contract
+    implementation(project(":contracts:notification-contract"))
 }
 
 allOpen {

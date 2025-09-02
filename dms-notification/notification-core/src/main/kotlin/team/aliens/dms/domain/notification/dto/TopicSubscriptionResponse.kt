@@ -9,7 +9,6 @@ data class TopicSubscriptionGroupsResponse(
 ) {
     companion object {
         fun of(topicSubscriptions: List<TopicSubscription>): TopicSubscriptionGroupsResponse {
-
             return TopicSubscriptionGroupsResponse(
                 TopicGroup.values()
                     .associateWith { mutableListOf<TopicSubscriptionResponse>() }

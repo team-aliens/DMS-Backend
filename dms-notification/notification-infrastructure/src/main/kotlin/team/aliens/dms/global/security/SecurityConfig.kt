@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import team.aliens.dms.domain.auth.model.Authority.MANAGER
-import team.aliens.dms.domain.auth.model.Authority.STUDENT
 import team.aliens.dms.global.filter.FilterConfig
 
 @Configuration
@@ -46,9 +44,10 @@ class SecurityConfig(
             .apply(filterConfig)
 
         http
-            .exceptionHandling { exceptionHandling -> exceptionHandling
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .accessDeniedHandler(accessDeniedHandler)
+            .exceptionHandling { exceptionHandling ->
+                exceptionHandling
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler)
             }
         return http.build()
     }

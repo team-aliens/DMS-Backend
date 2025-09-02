@@ -20,7 +20,6 @@ class DeviceTokenMapper() : GenericMapper<DeviceToken, DeviceTokenJpaEntity> {
     }
 
     override fun toEntity(domain: DeviceToken): DeviceTokenJpaEntity {
-
         return DeviceTokenJpaEntity(
             id = domain.id,
             userId = domain.userId,

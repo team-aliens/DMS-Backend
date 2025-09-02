@@ -28,7 +28,7 @@ class JwtFilter(
     }
 
     private fun resolvedToken(request: HttpServletRequest): String? =
-        request.getHeader(JwtProperties.HEADER)?.also { 
+        request.getHeader(JwtProperties.HEADER)?.also {
             if (it.startsWith(JwtProperties.PREFIX)) {
                 return it.substring(JwtProperties.PREFIX.length)
             }

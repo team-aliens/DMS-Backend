@@ -7,6 +7,9 @@ dependencies {
     // impl project
     implementation(project(":dms-main:main-core"))
 
+    // notification-contract
+    implementation(project(":contracts:notification-contract"))
+
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
     runtimeOnly(Dependencies.MYSQL_CONNECTOR)

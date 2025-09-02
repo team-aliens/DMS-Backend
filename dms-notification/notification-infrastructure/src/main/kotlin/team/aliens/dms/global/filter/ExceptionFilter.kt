@@ -6,10 +6,10 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
+import team.aliens.dms.common.error.DmsException
 import team.aliens.dms.global.error.ErrorProperty
 import team.aliens.dms.global.error.ErrorResponse
 import team.aliens.dms.global.error.NotificationErrorCode
-import team.aliens.dms.common.error.DmsException
 import java.nio.charset.StandardCharsets
 
 class ExceptionFilter(

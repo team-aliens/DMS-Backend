@@ -14,7 +14,8 @@ class SecurityAdapter(
 ) : SecurityPort {
 
     override fun isPasswordMatch(rawPassword: String, encodedPassword: String) = passwordEncoder.matches(
-        rawPassword, encodedPassword
+        rawPassword,
+        encodedPassword
     )
 
     override fun isAuthenticated() =
