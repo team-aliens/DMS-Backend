@@ -17,6 +17,9 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
+    // rabbitmq
+    implementation(Dependencies.RABBITMQ)
+
     // security
     implementation(Dependencies.SPRING_SECURITY)
 

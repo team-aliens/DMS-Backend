@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
+import team.aliens.dms.GroupNotificationInfo
+import team.aliens.dms.SingleNotificationInfo
 import team.aliens.dms.domain.notification.service.NotificationService
 
 @Component
@@ -18,20 +20,27 @@ class NotificationEventHandler(
         event.run {
             when (this) {
                 is SingleNotificationEvent -> {
-                    notificationService.sendMessage(
-                        deviceToken = deviceToken,
-                        notification = notification
+                    notificationService.sendSingleNotification(
+                        SingleNotificationInfo(
+                            userId = userId,
+                            notificationInfo = this.notificationInfo
+                        )
                     )
                 }
+
                 is GroupNotificationEvent -> {
-                    notificationService.sendMessages(
-                        deviceTokens = deviceTokens,
-                        notification = notification
+                    notificationService.sendGroupNotification(
+                        GroupNotificationInfo(
+                            userIds = userIds,
+                            notificationInfo = this.notificationInfo
+                        )
                     )
                 }
+
                 else -> {
-                    notificationService.sendMessagesByTopic(
-                        notification = event.notification
+                    notificationService.sendTopicNotification(
+                        "topic",
+                        this.notificationInfo
                     )
                 }
             }

@@ -22,4 +22,5 @@ object DependencyVersions {
     const val FLYWAY_VERSION = "10.8.1"
     const val SLACK_VERSION = "1.40.3"
     const val SPRING_CLOUD_GATEWAY_VERSION = "4.1.0"
+    
 }

@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":dms-main:main-core"))
     implementation(project(":dms-main:main-presentation"))
 
-    // notification-contract
+    // notification contract
     implementation(project(":contracts:notification-contract"))
 
     // validation
@@ -63,6 +63,8 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
+    // RabbitMq
+    implementation(Dependencies.RABBITMQ)
 }
 
 tasks.getByName<Jar>("jar") {

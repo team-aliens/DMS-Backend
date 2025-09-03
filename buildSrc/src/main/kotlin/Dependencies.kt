@@ -86,6 +86,10 @@ object Dependencies {
     // slack
     const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
 
+    // RabbitMq
+    const val RABBITMQ = "org.springframework.boot:spring-boot-starter-amqp:3.2.3"
+
+
     // spring cloud gateway
     const val SPRING_CLOUD_GATEWAY = "org.springframework.cloud:spring-cloud-starter-gateway:${DependencyVersions.SPRING_CLOUD_GATEWAY_VERSION}"
 }

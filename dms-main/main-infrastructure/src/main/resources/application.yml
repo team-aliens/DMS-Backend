@@ -43,6 +43,12 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
+  rabbitmq:
+    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
 fcm:
   file-url: ${FCM_FILE_URL}
 
