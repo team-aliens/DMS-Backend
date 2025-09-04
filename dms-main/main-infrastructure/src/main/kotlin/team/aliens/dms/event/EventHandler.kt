@@ -7,11 +7,11 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 import team.aliens.dms.GroupNotificationInfo
 import team.aliens.dms.SingleNotificationInfo
-import team.aliens.dms.domain.notification.service.NotificationService
+import team.aliens.dms.thirdparty.rabbitmq.port.RabbitMqPort
 
 @Component
 class NotificationEventHandler(
-    private val notificationService: NotificationService
+    private val rabbitMqPort: RabbitMqPort
 ) {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -20,7 +20,7 @@ class NotificationEventHandler(
         event.run {
             when (this) {
                 is SingleNotificationEvent -> {
-                    notificationService.sendSingleNotification(
+                    rabbitMqPort.sendMessage("exchange","notification.single",
                         SingleNotificationInfo(
                             userId = userId,
                             notificationInfo = this.notificationInfo
@@ -29,7 +29,7 @@ class NotificationEventHandler(
                 }
 
                 is GroupNotificationEvent -> {
-                    notificationService.sendGroupNotification(
+                    rabbitMqPort.sendMessage("exchange","notification.group",
                         GroupNotificationInfo(
                             userIds = userIds,
                             notificationInfo = this.notificationInfo
@@ -38,8 +38,7 @@ class NotificationEventHandler(
                 }
 
                 else -> {
-                    notificationService.sendTopicNotification(
-                        "topic",
+                    rabbitMqPort.sendMessage("exchange","notification.topic",
                         this.notificationInfo
                     )
                 }
