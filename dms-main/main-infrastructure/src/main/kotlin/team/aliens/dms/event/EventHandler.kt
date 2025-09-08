@@ -1,6 +1,5 @@
 package team.aliens.dms.event
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -8,10 +7,11 @@ import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 import team.aliens.dms.GroupNotificationInfo
 import team.aliens.dms.SingleNotificationInfo
+import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
 
 @Component
 class NotificationEventHandler(
-    private val rabbitTemplate: RabbitTemplate
+    private val notificationProducer: NotificationProducer
 ) {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -20,7 +20,7 @@ class NotificationEventHandler(
         event.run {
             when (this) {
                 is SingleNotificationEvent -> {
-                    rabbitTemplate.convertAndSend("exchange","notification.single",
+                    notificationProducer.sendMessage(
                         SingleNotificationInfo(
                             userId = userId,
                             notificationInfo = this.notificationInfo
@@ -29,7 +29,7 @@ class NotificationEventHandler(
                 }
 
                 is GroupNotificationEvent -> {
-                    rabbitTemplate.convertAndSend("exchange","notification.group",
+                    notificationProducer.sendMessage(
                         GroupNotificationInfo(
                             userIds = userIds,
                             notificationInfo = this.notificationInfo
@@ -38,9 +38,7 @@ class NotificationEventHandler(
                 }
 
                 else -> {
-                    rabbitTemplate.convertAndSend("exchange","notification.topic",
-                        this.notificationInfo
-                    )
+                    notificationProducer.sendMessage(this.notificationInfo)
                 }
             }
         }

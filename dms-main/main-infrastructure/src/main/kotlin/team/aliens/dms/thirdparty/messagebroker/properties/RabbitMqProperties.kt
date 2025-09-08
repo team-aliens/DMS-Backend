@@ -1,4 +1,4 @@
-package team.aliens.dms.thirdparty.rabbitmq
+package team.aliens.dms.thirdparty.messagebroker.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
