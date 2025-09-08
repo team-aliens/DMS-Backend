@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.model
 
+import team.aliens.dms.Topic
 import java.time.LocalDateTime
 import java.util.UUID
 
