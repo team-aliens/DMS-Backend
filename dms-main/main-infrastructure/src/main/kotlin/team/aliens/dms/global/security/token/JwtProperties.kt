@@ -6,5 +6,5 @@ object JwtProperties {
     const val ACCESS = "access"
     const val REFRESH = "refresh"
     const val AUTHORITY = "authority"
-    const val SCHOOLID = "school_id"
+    const val SCHOOL_ID = "school_id"
 }
