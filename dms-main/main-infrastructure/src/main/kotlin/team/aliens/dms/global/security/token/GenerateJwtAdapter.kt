@@ -20,28 +20,30 @@ class GenerateJwtAdapter(
     private val commandRefreshTokenPort: CommandRefreshTokenPort,
 ) : JwtPort {
 
-    override fun receiveToken(userId: UUID, authority: Authority) = TokenResponse(
-        accessToken = generateAccessToken(userId, authority),
+    override fun receiveToken(userId: UUID, authority: Authority, schoolId: UUID) = TokenResponse(
+        accessToken = generateAccessToken(userId, authority, schoolId),
         accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
-        refreshToken = generateRefreshToken(userId, authority),
+        refreshToken = generateRefreshToken(userId, authority, schoolId),
         refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
     )
 
-    private fun generateAccessToken(userId: UUID, authority: Authority) =
+    private fun generateAccessToken(userId: UUID, authority: Authority, schoolId: UUID) =
         Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
             .setId(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
+            .claim(JwtProperties.SCHOOLID, schoolId.toString())
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
-    private fun generateRefreshToken(userId: UUID, authority: Authority): String {
+    private fun generateRefreshToken(userId: UUID, authority: Authority, schoolId: UUID): String {
         val token = Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
             .setId(userId.toString())
+            .claim(JwtProperties.SCHOOLID, schoolId.toString())
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()

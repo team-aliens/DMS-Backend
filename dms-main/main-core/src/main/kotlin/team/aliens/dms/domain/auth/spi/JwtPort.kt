@@ -5,5 +5,5 @@ import team.aliens.dms.domain.auth.model.Authority
 import java.util.UUID
 
 interface JwtPort {
-    fun receiveToken(userId: UUID, authority: Authority): TokenResponse
+    fun receiveToken(userId: UUID, authority: Authority, schoolId: UUID): TokenResponse
 }

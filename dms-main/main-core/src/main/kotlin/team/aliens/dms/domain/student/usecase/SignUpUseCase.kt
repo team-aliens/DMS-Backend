@@ -73,7 +73,7 @@ class SignUpUseCase(
         )
 
         val token = jwtPort.receiveToken(
-            userId = user.id, authority = Authority.STUDENT
+            userId = user.id, authority = Authority.STUDENT, schoolId = school.id,
         )
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
