@@ -42,7 +42,9 @@ subprojects {
         implementation(Dependencies.JACKSON)
 
         // java servlet
-        implementation(Dependencies.JAVA_SERVLET)
+        if (!project.path.contains("dms-gateway")) {
+            implementation(Dependencies.JAVA_SERVLET)
+        }
 
         // test
         testImplementation(Dependencies.SPRING_TEST)
