@@ -2,7 +2,7 @@ package team.aliens.dms.event
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
-import team.aliens.dms.NotificationInfo
+import team.aliens.dms.contract.model.NotificationInfo
 import team.aliens.dms.common.spi.EventPort
 import java.util.UUID
 

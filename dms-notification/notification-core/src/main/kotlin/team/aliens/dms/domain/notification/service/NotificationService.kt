@@ -2,7 +2,6 @@ package team.aliens.dms.domain.notification.service
 
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.model.Topic
 
 interface NotificationService :
     GetNotificationService,

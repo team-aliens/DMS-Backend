@@ -1,4 +1,4 @@
-package team.aliens.dms
+package team.aliens.dms.contract.model
 
 import java.time.LocalDateTime
 import java.util.UUID

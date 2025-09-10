@@ -2,6 +2,7 @@ package team.aliens.dms.domain.notification.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
+import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
@@ -25,4 +26,8 @@ class GetNotificationServiceImpl(
 
     override fun getDeviceTokenByToken(token: String) =
         deviceTokenPort.queryDeviceTokenByToken(token) ?: throw DeviceTokenNotFoundException
+
+    override fun getDeviceTokenByUserId(userId: UUID): DeviceToken {
+        deviceTokenPort.queryDeviceTokenByUserId(userId) ?: throw DeviceTokenNotFoundException
+    }
 }

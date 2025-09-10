@@ -1,7 +1,7 @@
 package team.aliens.dms.persistence.notification
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
 import team.aliens.dms.persistence.notification.mapper.TopicSubscriptionMapper

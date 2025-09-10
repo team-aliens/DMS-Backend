@@ -1,4 +1,4 @@
-package team.aliens.dms
+package team.aliens.dms.contract.model
 
 enum class TopicGroup(
     val groupName: String

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.point.service
 
-import team.aliens.dms.NotificationInfo
-import team.aliens.dms.Topic
+import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.domain.point.model.PointHistory
@@ -10,7 +10,6 @@ import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
 import team.aliens.dms.domain.point.spi.CommandPointOptionPort
 import team.aliens.dms.domain.user.spi.QueryUserPort
 import java.util.UUID
-import kotlin.toString
 
 @Service
 class CommandPointServiceImpl(

@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.outing.service
 
-import team.aliens.dms.NotificationInfo
-import team.aliens.dms.Topic
+import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
