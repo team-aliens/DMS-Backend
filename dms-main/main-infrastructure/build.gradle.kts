@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":dms-main:main-core"))
     implementation(project(":dms-main:main-presentation"))
 
-    // notification contract
+    // contract
     implementation(project(":contracts:notification-contract"))
 
     // validation

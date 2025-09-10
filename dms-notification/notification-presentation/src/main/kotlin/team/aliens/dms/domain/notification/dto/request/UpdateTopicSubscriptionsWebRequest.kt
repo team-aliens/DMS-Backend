@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.notification.dto.request
 
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 
 data class UpdateTopicSubscriptionsWebRequest(
     val deviceToken: String,

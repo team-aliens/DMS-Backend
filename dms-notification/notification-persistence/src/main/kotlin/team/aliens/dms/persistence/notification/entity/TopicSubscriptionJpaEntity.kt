@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.MapsId
 import jakarta.persistence.Table
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 import java.io.Serializable
 import java.util.UUID
 

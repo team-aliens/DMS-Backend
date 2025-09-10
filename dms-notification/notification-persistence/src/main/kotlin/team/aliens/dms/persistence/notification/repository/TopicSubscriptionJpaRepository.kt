@@ -2,7 +2,7 @@ package team.aliens.dms.persistence.notification.repository
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.persistence.notification.entity.TopicSubscriptionJpaEntity
 import team.aliens.dms.persistence.notification.entity.TopicSubscriptionJpaEntityId
 import java.util.UUID

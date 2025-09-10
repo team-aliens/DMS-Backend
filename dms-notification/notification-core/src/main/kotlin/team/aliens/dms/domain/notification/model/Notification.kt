@@ -1,9 +1,12 @@
 package team.aliens.dms.domain.notification.model
 
+
+import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.Topic
 import java.time.LocalDateTime
 import java.util.UUID
 
-sealed class Notification(
+data class Notification(
 
     val schoolId: UUID,
 
@@ -34,5 +37,19 @@ sealed class Notification(
 
     fun runIfSaveRequired(function: () -> Unit) {
         if (isSaveRequired) function.invoke()
+    }
+
+    companion object {
+        fun from(notificationInfo: NotificationInfo): Notification {
+            return Notification(
+                schoolId = notificationInfo.schoolId,
+                topic = notificationInfo.topic,
+                linkIdentifier = notificationInfo.linkIdentifier,
+                title = notificationInfo.title,
+                content = notificationInfo.content,
+                threadId = notificationInfo.threadId,
+                isSaveRequired = notificationInfo.isSaveRequired
+            )
+        }
     }
 }

@@ -6,8 +6,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.MulticastMessage
 import org.springframework.stereotype.Component
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.model.Topic
 import team.aliens.dms.domain.notification.spi.NotificationPort
 
 @Component

@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.notification.spi
 
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import java.util.UUID
 

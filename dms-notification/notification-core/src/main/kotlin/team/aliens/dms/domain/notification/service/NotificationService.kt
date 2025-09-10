@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 

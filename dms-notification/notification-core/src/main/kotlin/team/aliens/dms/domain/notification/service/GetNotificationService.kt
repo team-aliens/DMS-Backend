@@ -12,4 +12,8 @@ interface GetNotificationService {
     fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription>
 
     fun getDeviceTokenByToken(token: String): DeviceToken
+
+    fun getDeviceTokenByUserId(userId: UUID): DeviceToken
+
+    fun getDiviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken>
 }

@@ -1,9 +1,10 @@
 package team.aliens.dms.domain.notification.service
 
+
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.model.Topic
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.CommandTopicSubscriptionPort

@@ -7,7 +7,8 @@ dependencies {
     // transaction
     implementation(Dependencies.SPRING_TRANSACTION)
 
-    implementation(project(":dms-main:main-core"))
+    // contract
+    implementation(project(":contracts:notification-contract"))
 }
 
 allOpen {

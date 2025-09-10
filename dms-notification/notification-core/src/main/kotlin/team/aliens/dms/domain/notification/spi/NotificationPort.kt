@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notification.spi
 
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.model.Topic
 
 interface NotificationPort {
 
