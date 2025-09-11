@@ -1,4 +1,4 @@
-package team.aliens.dms.global.security.filter
+package team.aliens.dms.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.cloud.gateway.filter.GatewayFilter
@@ -9,7 +9,7 @@ import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import team.aliens.dms.domain.auth.model.Passport
 import team.aliens.dms.global.client.MainServiceClient
-import team.aliens.dms.global.security.HeaderConstants
+import team.aliens.dms.global.security.HeaderProperties
 import team.aliens.dms.global.security.SecurityPaths
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.global.security.token.JwtParser
@@ -44,7 +44,7 @@ class AuthorizationHeaderGatewayFilterFactory(
                                 .map { serializedPassport ->
                                     val modifiedExchange = exchange.mutate()
                                         .request {
-                                            it.header(HeaderConstants.PASSPORT_HEADER, serializedPassport)
+                                            it.header(HeaderProperties.PASSPORT_HEADER, serializedPassport)
                                         }
                                         .build()
                                     modifiedExchange

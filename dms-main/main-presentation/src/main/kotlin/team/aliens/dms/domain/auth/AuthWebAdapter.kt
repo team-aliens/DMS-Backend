@@ -23,12 +23,15 @@ import team.aliens.dms.domain.auth.dto.request.SendEmailCodeWebRequest
 import team.aliens.dms.domain.auth.dto.request.SignInWebRequest
 import team.aliens.dms.domain.auth.dto.request.WebEmailType
 import team.aliens.dms.domain.auth.dto.response.CheckAccountIdExistenceResponse
+import team.aliens.dms.domain.auth.model.Passport
+import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
 import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
 import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
-import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.SignInUseCase
+import team.aliens.dms.domain.auth.usecase.IssuePassportUseCase
+
 
 @Validated
 @RequestMapping("/auth")
@@ -39,7 +42,8 @@ class AuthWebAdapter(
     private val certifyEmailUseCase: CertifyEmailUseCase,
     private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase,
     private val reissueTokenUseCase: ReissueTokenUseCase,
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val issuePassportUseCase: IssuePassportUseCase
 ) {
 
     @PostMapping("/tokens")
@@ -103,5 +107,10 @@ class AuthWebAdapter(
         return CheckAccountIdExistenceResponse(
             checkAccountIdExistenceUseCase.execute(accountId)
         )
+    }
+
+    @PostMapping("/passport")
+    fun issuePassport(@RequestHeader("Authorization") token: String): Passport {
+        return issuePassportUseCase.execute(token)
     }
 }

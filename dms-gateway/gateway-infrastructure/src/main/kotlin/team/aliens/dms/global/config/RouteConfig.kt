@@ -5,7 +5,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import team.aliens.dms.global.config.properties.ServicesProperties
-import team.aliens.dms.global.security.filter.AuthorizationHeaderGatewayFilterFactory
+import team.aliens.dms.global.filter.AuthorizationHeaderGatewayFilterFactory
 
 @Configuration
 class RouteConfig(

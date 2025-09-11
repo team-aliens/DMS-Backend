@@ -30,7 +30,7 @@ class GenerateJwtAdapter(
     private fun generateAccessToken(userId: UUID, authority: Authority, schoolId: UUID) =
         Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
-            .setHeaderParam(Header.JWT_TYPE, JwtProperties.ACCESS)
+            .setHeaderParam(Header.TYPE, JwtProperties.ACCESS)
             .setId(userId.toString())
             .claim(JwtProperties.AUTHORITY, authority.name)
             .claim(JwtProperties.SCHOOL_ID, schoolId.toString())
@@ -41,7 +41,7 @@ class GenerateJwtAdapter(
     private fun generateRefreshToken(userId: UUID, authority: Authority, schoolId: UUID): String {
         val token = Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
-            .setHeaderParam(Header.JWT_TYPE, JwtProperties.REFRESH)
+            .setHeaderParam(Header.TYPE, JwtProperties.REFRESH)
             .setId(userId.toString())
             .claim(JwtProperties.SCHOOL_ID, schoolId.toString())
             .setIssuedAt(Date())
