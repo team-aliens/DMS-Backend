@@ -49,8 +49,8 @@ COPY ./buildSrc ./buildSrc
 RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 RUN ./gradlew dependencies || true
 
-COPY ./dms-main ./dms-main
-RUN ./gradlew :dms-main:main-infrastructure:clean :dms-main:main-infrastructure:bootJar -x test && \
+COPY ./dms-gateway ./dms-gateway
+RUN ./gradlew :dms-gateway:gateway-presentation:clean :dms-gateway:gateway-presentation:bootJar -x test && \
     rm -rf .gradle /app/.gradle /root/.kotlin /tmp/* /var/tmp/* /tmp/kotlin-daemon*.log* 2>/dev/null || true
 
 
@@ -72,13 +72,13 @@ ENV JAVA_OPTS="\
     -XX:-UsePerfData \
 "
 
-COPY --from=build --chown=appuser:appgroup /app/dms-main/main-infrastructure/build/libs/*.jar /tmp/libs/
+COPY --from=build --chown=appuser:appgroup /app/dms-gateway/gateway-presentation/build/libs/*.jar /tmp/libs/
 RUN find /tmp/libs -name "*.jar" ! -name "*-plain.jar" -exec cp {} /app/app.jar \; && \
     rm -rf /tmp/libs && \
     chown appuser:appgroup /app/app.jar
 
 USER appuser
-EXPOSE 8081
+EXPOSE 8080
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:8081/ || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:8080/ || exit 1
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
