@@ -2,6 +2,7 @@ package team.aliens.dms.persistence.notification
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity
@@ -60,6 +61,21 @@ class DeviceTokenPersistenceAdapter(
             .selectFrom(deviceTokenJpaEntity)
             .join(deviceTokenJpaEntity.user, userJpaEntity)
             .where(userJpaEntity.school.id.eq(schoolId))
+            .fetch()
+            .map {
+                notificationMapper.toDomain(it)!!
+            }
+    }
+
+    override fun queryDeviceTokensBySubscriptionTopicAndSchoolId(
+        topic: Topic,
+        schoolId: UUID
+    ): List<DeviceToken> {
+        return queryFactory
+            .selectFrom(deviceTokenJpaEntity)
+            .join(topicSubscriptionEntity).on(deviceTokenJpaEntity.id.eq(topicSubscriptionEntity.deviceToken.id))
+            .where(topicSubscriptionEntity.topic.eq(topic.name)
+                .and(deviceTokenJpaEntity.schoolId.eq(schoolId)))
             .fetch()
             .map {
                 notificationMapper.toDomain(it)!!

@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.spi
 
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import java.util.UUID
 
@@ -16,4 +17,6 @@ interface QueryDeviceTokenPort {
     fun queryDeviceTokensByStudentIds(studentIds: List<UUID>): List<DeviceToken>
 
     fun queryDeviceTokensBySchoolId(schoolId: UUID): List<DeviceToken>
+
+    fun queryDeviceTokensBySubscriptionTopicAndSchoolId(topic: Topic, schoolId: UUID): List<DeviceToken>
 }

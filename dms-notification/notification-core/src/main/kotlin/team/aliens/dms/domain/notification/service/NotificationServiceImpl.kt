@@ -9,13 +9,13 @@ import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.CommandTopicSubscriptionPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
+import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
-import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @Service
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
-    private val queryUserPort: QueryUserPort,
+    private val queryDeviceTokenPort: QueryDeviceTokenPort,
     private val commandTopicSubscriptionPort: CommandTopicSubscriptionPort,
     private val notificationOfUserPort: CommandNotificationOfUserPort,
     private val queryTopicSubscriptionPort: QueryTopicSubscriptionPort,
@@ -112,9 +112,16 @@ class NotificationServiceImpl(
 
     override fun sendMessagesByTopic(notification: Notification) {
         notification.runIfSaveRequired {
-            val users = queryUserPort.queryUsersBySchoolId(notification.schoolId)
+
+            val userIds = queryDeviceTokenPort.queryDeviceTokensBySubscriptionTopicAndSchoolId(
+                notification.topic,
+                notification.schoolId
+            ).map {
+                it.userId
+            }
+
             notificationOfUserPort.saveNotificationsOfUser(
-                users.map { notification.toNotificationOfUser(it.id) }
+                userIds.map { notification.toNotificationOfUser(it) }
             )
         }
         notificationPort.sendByTopic(
