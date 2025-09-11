@@ -85,4 +85,7 @@ object Dependencies {
 
     // slack
     const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
+
+    //spring cloud gateway
+    const val SPRING_CLOUD_GATEWAY = "org.springframework.cloud:spring-cloud-starter-gateway:${DependencyVersions.SPRING_CLOUD_GATEWAY_VERSION}"
 }
