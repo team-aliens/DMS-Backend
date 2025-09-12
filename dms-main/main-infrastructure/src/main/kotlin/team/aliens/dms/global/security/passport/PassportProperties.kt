@@ -6,9 +6,9 @@ import javax.crypto.SecretKey
 
 @ConfigurationProperties(prefix = "passport")
 class PassportProperties(
-    passportSecretKey: String
+    secretKey: String
 ) {
     val secretKey: SecretKey = Keys.hmacShaKeyFor(
-        passportSecretKey.toByteArray(Charsets.UTF_8)
+        secretKey.toByteArray(Charsets.UTF_8)
     )
 }
