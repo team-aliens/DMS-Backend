@@ -15,7 +15,7 @@ class PassportAdapter(
     private val passportIntegrityGenerator: PassportIntegrityGenerator
 ) : QueryPassportPort {
 
-    override fun queryPassportByToken(token: String): Passport {
+    override fun generatePassportByToken(token: String): Passport {
         val authentication = jwtParser.getAuthentication(token)
         val principal = authentication.principal
 

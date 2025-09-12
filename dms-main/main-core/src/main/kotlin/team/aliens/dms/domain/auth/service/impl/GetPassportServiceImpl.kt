@@ -11,6 +11,6 @@ class GetPassportServiceImpl(
 ) : GetPassportService {
 
     override fun getPassportByToken(token: String): Passport {
-        return queryPassportPort.queryPassportByToken(token)
+        return queryPassportPort.generatePassportByToken(token)
     }
 }

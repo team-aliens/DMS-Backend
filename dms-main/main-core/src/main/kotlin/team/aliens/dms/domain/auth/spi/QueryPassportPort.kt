@@ -4,5 +4,5 @@ import team.aliens.dms.domain.auth.model.Passport
 
 interface QueryPassportPort {
 
-    fun queryPassportByToken(token: String): Passport
+    fun generatePassportByToken(token: String): Passport
 }

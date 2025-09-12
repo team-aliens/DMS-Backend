@@ -27,7 +27,7 @@ import team.aliens.dms.domain.auth.model.Passport
 import team.aliens.dms.domain.auth.usecase.CertifyEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.CertifyEmailUseCase
 import team.aliens.dms.domain.auth.usecase.CheckAccountIdExistenceUseCase
-import team.aliens.dms.domain.auth.usecase.IssuePassportUseCase
+import team.aliens.dms.domain.auth.usecase.CreatePassportUseCase
 import team.aliens.dms.domain.auth.usecase.ReissueTokenUseCase
 import team.aliens.dms.domain.auth.usecase.SendEmailCodeUseCase
 import team.aliens.dms.domain.auth.usecase.SignInUseCase
@@ -42,7 +42,7 @@ class AuthWebAdapter(
     private val checkAccountIdExistenceUseCase: CheckAccountIdExistenceUseCase,
     private val reissueTokenUseCase: ReissueTokenUseCase,
     private val signInUseCase: SignInUseCase,
-    private val issuePassportUseCase: IssuePassportUseCase
+    private val createPassportUseCase: CreatePassportUseCase
 ) {
 
     @PostMapping("/tokens")
@@ -110,6 +110,6 @@ class AuthWebAdapter(
 
     @PostMapping("/passport")
     fun issuePassport(@RequestHeader("Authorization") token: String): Passport {
-        return issuePassportUseCase.execute(token)
+        return createPassportUseCase.execute(token)
     }
 }
