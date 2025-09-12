@@ -24,6 +24,6 @@ dependencies {
 	kapt(Dependencies.CONFIGURATION_PROCESSOR)
 }
 
-tasks.bootJar {
+tasks.getByName<Jar>("jar") {
 	enabled = false
 }

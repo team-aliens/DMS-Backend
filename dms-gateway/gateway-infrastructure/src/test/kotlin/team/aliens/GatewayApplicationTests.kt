@@ -1,4 +1,4 @@
-package team.aliens.dms
+package team.aliens
 
 import org.junit.jupiter.api.Test
 
