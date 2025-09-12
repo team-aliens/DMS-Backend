@@ -1,4 +1,4 @@
-package team.aliens.dms.notification
+package team.aliens.dms
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
