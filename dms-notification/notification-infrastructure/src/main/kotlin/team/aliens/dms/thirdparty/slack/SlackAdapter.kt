@@ -73,16 +73,6 @@ class SlackAdapter(
         return this
     }
 
-    private fun MutableList<LayoutBlock>.addImages(attachmentUrls: List<String>): MutableList<LayoutBlock> {
-        this.addAll(
-            attachmentUrls.map { url ->
-                image { it.imageUrl(url).altText("bug image") }
-            }
-        )
-
-        return this
-    }
-
     private fun MutableList<LayoutBlock>.sendBug() {
         slack.send(
             url,
