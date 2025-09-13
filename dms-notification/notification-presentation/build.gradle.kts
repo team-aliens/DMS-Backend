@@ -9,6 +9,9 @@ dependencies {
     // impl project
     implementation(project(":dms-notification:notification-core"))
 
+    // contract
+    implementation(project(":contracts:notification-contract"))
+
     // web
     implementation(Dependencies.SPRING_WEB)
 
