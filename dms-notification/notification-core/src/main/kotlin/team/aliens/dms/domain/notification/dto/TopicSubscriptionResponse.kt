@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notification.dto
 
-import team.aliens.dms.domain.notification.model.Topic
-import team.aliens.dms.domain.notification.model.TopicGroup
+import team.aliens.dms.contract.model.Topic
+import team.aliens.dms.contract.model.TopicGroup
 import team.aliens.dms.domain.notification.model.TopicSubscription
 
 data class TopicSubscriptionGroupsResponse(
