@@ -59,8 +59,7 @@ class DeviceTokenPersistenceAdapter(
     override fun queryDeviceTokensBySchoolId(schoolId: UUID): List<DeviceToken> {
         return queryFactory
             .selectFrom(deviceTokenJpaEntity)
-            .join(deviceTokenJpaEntity.user, userJpaEntity)
-            .where(userJpaEntity.school.id.eq(schoolId))
+            .where(deviceTokenJpaEntity.school.id.eq(schoolId))
             .fetch()
             .map {
                 notificationMapper.toDomain(it)!!

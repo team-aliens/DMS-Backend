@@ -28,7 +28,7 @@ class GetNotificationServiceImpl(
         deviceTokenPort.queryDeviceTokenByToken(token) ?: throw DeviceTokenNotFoundException
 
     override fun getDeviceTokenByUserId(userId: UUID): DeviceToken {
-        deviceTokenPort.queryDeviceTokenByUserId(userId) ?: throw DeviceTokenNotFoundException
+        return deviceTokenPort.queryDeviceTokenByUserId(userId) ?: throw DeviceTokenNotFoundException
     }
 
     override fun getDiviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken> {
