@@ -8,8 +8,6 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity
 import team.aliens.dms.persistence.notification.mapper.DeviceTokenMapper
 import team.aliens.dms.persistence.notification.repository.DeviceTokenJpaRepository
-import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
-import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import java.util.UUID
 
 @Component
@@ -40,31 +38,9 @@ class DeviceTokenPersistenceAdapter(
     override fun queryDeviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken> =
         queryFactory
             .selectFrom(deviceTokenJpaEntity)
-            .where(deviceTokenJpaEntity.user.id.`in`(userIds))
+            .where(deviceTokenJpaEntity.userId.`in`(userIds))
             .fetch()
             .map { notificationMapper.toDomain(it)!! }
-
-    override fun queryDeviceTokensByStudentIds(studentIds: List<UUID>): List<DeviceToken> {
-        return queryFactory
-            .selectFrom(deviceTokenJpaEntity)
-            .join(userJpaEntity).on(userJpaEntity.id.eq(deviceTokenJpaEntity.user.id))
-            .join(studentJpaEntity).on(userJpaEntity.id.eq(studentJpaEntity.user.id))
-            .where(studentJpaEntity.id.`in`(studentIds))
-            .fetch()
-            .map {
-                notificationMapper.toDomain(it)!!
-            }
-    }
-
-    override fun queryDeviceTokensBySchoolId(schoolId: UUID): List<DeviceToken> {
-        return queryFactory
-            .selectFrom(deviceTokenJpaEntity)
-            .where(deviceTokenJpaEntity.school.id.eq(schoolId))
-            .fetch()
-            .map {
-                notificationMapper.toDomain(it)!!
-            }
-    }
 
     override fun queryDeviceTokensBySubscriptionTopicAndSchoolId(
         topic: Topic,
@@ -73,8 +49,10 @@ class DeviceTokenPersistenceAdapter(
         return queryFactory
             .selectFrom(deviceTokenJpaEntity)
             .join(topicSubscriptionEntity).on(deviceTokenJpaEntity.id.eq(topicSubscriptionEntity.deviceToken.id))
-            .where(topicSubscriptionEntity.topic.eq(topic.name)
-                .and(deviceTokenJpaEntity.schoolId.eq(schoolId)))
+            .where(
+                topicSubscriptionEntity.topic.eq(topic.name)
+                    .and(deviceTokenJpaEntity.schoolId.eq(schoolId))
+            )
             .fetch()
             .map {
                 notificationMapper.toDomain(it)!!
