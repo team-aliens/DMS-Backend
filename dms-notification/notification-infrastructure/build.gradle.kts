@@ -29,6 +29,9 @@ dependencies {
     // jwt
     implementation(Dependencies.JWT)
 
+    // slack
+    implementation(Dependencies.SLACK)
+
     implementation(Dependencies.SPRING_VALIDATION)
     runtimeOnly(Dependencies.JWT_IMPL)
     runtimeOnly(Dependencies.JWT_JACKSON)

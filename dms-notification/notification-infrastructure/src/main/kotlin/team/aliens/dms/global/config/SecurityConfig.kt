@@ -6,6 +6,7 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import team.aliens.dms.global.filter.FilterConfig
 import team.aliens.dms.global.security.CustomAccessDeniedHandler
 import team.aliens.dms.global.security.CustomAuthenticationEntryPoint
 
