@@ -18,7 +18,10 @@ class FilterConfig(
     override fun init(builder: HttpSecurity?) {}
 
     override fun configure(builder: HttpSecurity) {
-        builder.addFilterBefore(PassportFilter(passportValidator, objectMapper), UsernamePasswordAuthenticationFilter::class.java)
+        builder.addFilterBefore(
+            PassportFilter(passportValidator, objectMapper),
+            UsernamePasswordAuthenticationFilter::class.java
+        )
         builder.addFilterBefore(ExceptionFilter(objectMapper, slackAdapter), PassportFilter::class.java)
     }
 }

@@ -15,9 +15,7 @@ class NotificationConsumer(
 ) {
     @RabbitListener(queues = ["notification_queue"])
     fun handleNotificationMessage(message: Any) {
-
         message.run {
-
             when (this) {
                 is GroupNotificationInfo -> {
                     notificationService.sendMessages(

@@ -4,7 +4,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.global.security.principle.CustomDetails
 import java.util.UUID
 
@@ -19,5 +18,4 @@ class SecurityAdapter(
     override fun getCurrentUserSchoolId(): UUID {
         return (SecurityContextHolder.getContext().authentication.principal as CustomDetails).schoolId
     }
-
 }

@@ -1,9 +1,9 @@
 package team.aliens.dms.domain.point.service
 
-import team.aliens.dms.contract.model.NotificationInfo
-import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
+import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.spi.CommandPointHistoryPort
@@ -56,4 +56,3 @@ class CommandPointServiceImpl(
         commandPointOptionPort.deletePointOption(pointOption)
     }
 }
-

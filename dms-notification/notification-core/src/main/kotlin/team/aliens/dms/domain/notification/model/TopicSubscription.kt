@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.notification.model
 
-
 import team.aliens.dms.contract.model.Topic
 import java.util.UUID
 

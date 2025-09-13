@@ -1,7 +1,7 @@
 package team.aliens.dms.domain.notification.dto
 
-import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.contract.model.Topic
+import team.aliens.dms.domain.notification.model.NotificationOfUser
 import java.time.LocalDateTime
 import java.util.UUID
 

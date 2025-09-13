@@ -18,7 +18,6 @@ class CustomAuthenticationEntryPoint(
         response: HttpServletResponse?,
         authException: AuthenticationException?
     ) {
-
         val errorCode = SecurityErrorCode.FORBIDDEN
 
         response?.apply {

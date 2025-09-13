@@ -8,7 +8,6 @@ class SecurityServiceImpl(
     private val securityPort: SecurityPort
 ) : SecurityService {
 
-
     override fun getCurrentUserId() =
         securityPort.getCurrentUserId()
 
