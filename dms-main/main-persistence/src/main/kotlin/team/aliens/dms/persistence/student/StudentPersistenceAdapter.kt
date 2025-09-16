@@ -408,9 +408,9 @@ class StudentPersistenceAdapter(
             .map { student ->
                 ModelStudentVO(
                     id = student.id!!,
-                    studentGcn = createModelStudentGcn(student.grade, student.classRoom, student.number),
-                    studentName = student.name,
-                    studentProfile = student.profileImageUrl
+                    gcn = createModelStudentGcn(student.grade, student.classRoom, student.number),
+                    name = student.name,
+                    profileImageUrl = student.profileImageUrl
                 )
             }
     }

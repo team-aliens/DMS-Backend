@@ -22,7 +22,7 @@ import team.aliens.dms.domain.vote.dto.request.CreateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicWebRequest
 import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
-import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponse
 import team.aliens.dms.domain.vote.dto.response.VotesResponse
 import team.aliens.dms.domain.vote.dto.response.VotingOptionsResponse
 import team.aliens.dms.domain.vote.dto.response.VotingTopicsResponse
@@ -108,7 +108,7 @@ class VoteWebAdapter(
     }
 
     @GetMapping("/excluded-student")
-    fun getAllExcludedStudent(): ExcludedStudentsResponses {
+    fun getAllExcludedStudent(): ExcludedStudentsResponse {
         return queryAllExcludedStudentUseCase.execute()
     }
 
