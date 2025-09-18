@@ -100,7 +100,9 @@ tasks.register<JacocoReport>("jacocoRootReport") {
             }
                 .configureEach {
                     sourceSets(this@subprojects.the<SourceSetContainer>().named("main").get())
-                    executionData(this)
+                    executionData.setFrom(
+                        executionData.files.filter { it.exists() }
+                    )
                 }
         }
     }
