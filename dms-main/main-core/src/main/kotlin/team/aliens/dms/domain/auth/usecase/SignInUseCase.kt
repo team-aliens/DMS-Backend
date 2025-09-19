@@ -2,13 +2,13 @@ package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.contract.model.DeviceTokenInfo
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.spi.JwtPort
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.domain.school.service.SchoolService
 import team.aliens.dms.domain.user.service.UserService
+import team.aliens.dms.external.notification.service.NotificationService
 
 @UseCase
 class SignInUseCase(
@@ -35,7 +35,7 @@ class SignInUseCase(
                 notificationService.deleteDeviceTokenByUserId(user.id)
 
             notificationService.saveDeviceToken(
-                DeviceToken(
+                DeviceTokenInfo(
                     userId = user.id,
                     schoolId = user.schoolId,
                     token = request.deviceToken

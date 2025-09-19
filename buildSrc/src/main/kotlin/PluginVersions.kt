@@ -8,4 +8,5 @@ object PluginVersions {
     const val ALLOPEN_VERSION = "1.9.21"
     const val MOCKK_VERSION = "1.13.2"
     const val DETEKT_VERSION = "1.23.4"
+    const val GRPC_PLUGIN_VERSION = "0.9.4"
 }

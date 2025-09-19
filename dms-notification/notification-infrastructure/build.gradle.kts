@@ -11,8 +11,9 @@ dependencies {
     implementation(project(":dms-notification:notification-persistence"))
     implementation(project(":dms-notification:notification-core"))
 
-    // contract
+    // contracts
     implementation(project(":contracts:notification-contract"))
+    implementation(project(":contracts:notification-proto"))
 
     // logging
     implementation(Dependencies.SENTRY)

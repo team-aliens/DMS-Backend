@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "team.aliens.notification";
+option java_multiple_files = true;
+
+
+service NotificationService {
+  rpc checkDeviceTokenByUserId(UserIdProto) returns (google.protobuf.BoolValue);
+  rpc deleteDeviceTokenByUserId(UserIdProto) returns (google.protobuf.Empty);
+  rpc saveDeviceToken(DeviceTokenProto) returns (DeviceTokenProto);
+}
+
+message UserIdProto {
+  bytes userId = 1;
+}
+
+message DeviceTokenProto {
+  bytes id = 1;
+  bytes userId = 2;
+  bytes schoolId = 3;
+  string token = 4;
+}

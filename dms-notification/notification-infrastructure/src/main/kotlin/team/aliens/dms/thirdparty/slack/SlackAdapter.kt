@@ -3,7 +3,6 @@ package team.aliens.dms.thirdparty.slack
 import com.slack.api.Slack
 import com.slack.api.model.block.Blocks.divider
 import com.slack.api.model.block.Blocks.header
-import com.slack.api.model.block.Blocks.image
 import com.slack.api.model.block.Blocks.section
 import com.slack.api.model.block.LayoutBlock
 import com.slack.api.model.block.composition.BlockCompositions.markdownText

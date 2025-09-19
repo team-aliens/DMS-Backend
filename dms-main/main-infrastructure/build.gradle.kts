@@ -1,3 +1,5 @@
+
+
 plugins {
     id("org.springframework.boot") version PluginVersions.SPRING_BOOT_VERSION
     id("io.spring.dependency-management") version PluginVersions.DEPENDENCY_MANAGER_VERSION
@@ -63,8 +65,9 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
-    // RabbitMq
+    // rabbit mq
     implementation(Dependencies.RABBITMQ)
+
 }
 
 tasks.getByName<Jar>("jar") {

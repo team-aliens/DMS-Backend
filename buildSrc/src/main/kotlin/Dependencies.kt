@@ -87,7 +87,13 @@ object Dependencies {
     const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
 
     // RabbitMq
-    const val RABBITMQ = "org.springframework.boot:spring-boot-starter-amqp:3.2.3"
+    const val RABBITMQ = "org.springframework.boot:spring-boot-starter-amqp:${DependencyVersions.RABBITMQ_VERSION}"
+
+    // grpc
+    const val GRPC_PROTOBUF = "io.grpc:grpc-protobuf:${DependencyVersions.GRPC_VERSION}"
+    const val GRPC_STUB = "io.grpc:grpc-stub:${DependencyVersions.GRPC_VERSION}"
+    const val GRPC_NETTY_SHADED = "io.grpc:grpc-netty-shaded:${DependencyVersions.GRPC_VERSION}"
+
 
 
     // spring cloud gateway
