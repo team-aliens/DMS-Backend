@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   shutdown: graceful
 
 spring:
@@ -65,3 +65,8 @@ logging:
 
 slack:
   url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
+
+grpc:
+  server:
+    port: 8081
+    address: ${

@@ -1,7 +1,6 @@
 
 plugins {
     kotlin("jvm")
-    id("io.gitlab.arturbosch.detekt")
     id("com.google.protobuf") version PluginVersions.GRPC_PLUGIN_VERSION
 }
 
@@ -19,13 +18,17 @@ protobuf {
             task.plugins {
                 create("grpc")
             }
+            task.builtins {
+                maybeCreate("java").apply {
+                    option("annotate_code=false")
+                }
+            }
         }
     }
 }
 
+
 dependencies {
     implementation(Dependencies.GRPC_STUB)
     implementation(Dependencies.GRPC_PROTOBUF)
-    implementation(Dependencies.GRPC_NETTY_SHADED)
 }
-

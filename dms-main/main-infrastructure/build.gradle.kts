@@ -1,5 +1,3 @@
-
-
 plugins {
     id("org.springframework.boot") version PluginVersions.SPRING_BOOT_VERSION
     id("io.spring.dependency-management") version PluginVersions.DEPENDENCY_MANAGER_VERSION
@@ -15,6 +13,7 @@ dependencies {
 
     // contract
     implementation(project(":contracts:notification-contract"))
+    implementation(project(":contracts:notification-proto"))
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
@@ -68,6 +67,10 @@ dependencies {
     // rabbit mq
     implementation(Dependencies.RABBITMQ)
 
+    // grpc
+    implementation(Dependencies.GRPC_PROTOBUF)
+    implementation(Dependencies.GRPC_STUB)
+    implementation(Dependencies.GRPC_NETTY_SHADED)
 }
 
 tasks.getByName<Jar>("jar") {

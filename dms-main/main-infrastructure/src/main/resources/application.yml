@@ -90,4 +90,11 @@ slack:
   url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
 
 passport:
-  secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
+  secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
+
+grpc:
+  client:
+    notification-server:
+      port: ${NOTIFICATION_SERVER_PORT:8081}
+      host: ${NOTIFICATION_SERVER_HOST:localhost}
+      negotiation-type: ${NOTIFICATION_SERVER_NEGOTIATION_TYPE:plaintext}
