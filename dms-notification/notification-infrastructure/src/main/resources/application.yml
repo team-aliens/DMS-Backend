@@ -68,5 +68,6 @@ slack:
 
 grpc:
   server:
-    port: 8081
-    address: ${
+    port: 9090
+    allowed-ips:
+      - ${MAIN_SERVER_IP:}

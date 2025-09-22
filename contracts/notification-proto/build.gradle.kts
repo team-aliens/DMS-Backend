@@ -31,4 +31,6 @@ protobuf {
 dependencies {
     implementation(Dependencies.GRPC_STUB)
     implementation(Dependencies.GRPC_PROTOBUF)
+
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
 }

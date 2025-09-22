@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.model
 
+import team.aliens.dms.contract.model.DeviceTokenInfo
 import java.util.UUID
 
 data class DeviceToken(
@@ -7,4 +8,15 @@ data class DeviceToken(
     val userId: UUID,
     val schoolId: UUID,
     val token: String
-)
+) {
+    companion object {
+        fun from(deviceTokenInfo: DeviceTokenInfo): DeviceToken {
+            return DeviceToken(
+                id = deviceTokenInfo.id,
+                userId = deviceTokenInfo.userId,
+                schoolId = deviceTokenInfo.schoolId,
+                token = deviceTokenInfo.token
+            )
+        }
+    }
+}

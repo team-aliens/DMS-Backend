@@ -1,10 +1,9 @@
-package team.aliens.dms.thirdparty.rpc.notification.config
+package team.aliens.dms.thirdparty.rpc
 
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import team.aliens.dms.thirdparty.rpc.properties.GrpcProperties
 import team.aliens.notification.NotificationServiceGrpc
 
 @Configuration

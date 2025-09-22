@@ -1,4 +1,4 @@
-package team.aliens.dms.thirdparty.rpc.notification.converter
+package team.aliens.dms.thirdparty.rpc
 
 import com.google.protobuf.ByteString
 import java.nio.ByteBuffer

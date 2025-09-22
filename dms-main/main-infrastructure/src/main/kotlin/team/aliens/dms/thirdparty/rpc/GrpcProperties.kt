@@ -1,4 +1,4 @@
-package team.aliens.dms.thirdparty.rpc.properties
+package team.aliens.dms.thirdparty.rpc
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -1,4 +1,4 @@
-package team.aliens.dms.thirdparty.rpc.notification.mapper
+package team.aliens.dms.thirdparty.rpc.mapper
 
 import org.springframework.stereotype.Component
 import team.aliens.dms.contract.model.DeviceTokenInfo
