@@ -16,6 +16,17 @@ class RouteConfig(
     @Bean
     fun customRouteLocator(builder: RouteLocatorBuilder): RouteLocator {
         return builder.routes()
+            .route("dms-notification") { r ->
+                r.path("/notifications/**")
+                    .filters { f ->
+                        f.filter(
+                            authorizationHeaderGatewayFilterFactory.apply(
+                                AuthorizationHeaderGatewayFilterFactory.Config()
+                            )
+                        )
+                    }
+                    .uri(servicesProperties.notificationUrl)
+            }
             .route("dms-main") { r ->
                 r.path("/**")
                     .filters { f ->

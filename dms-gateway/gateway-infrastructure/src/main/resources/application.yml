@@ -31,6 +31,7 @@ spring:
 app:
   services:
     main: ${MAIN_SERVICE_URL:http://localhost:8081}
+    notification: ${NOTIFICATION_SERVICE_URL:http://localhost:8082}
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
