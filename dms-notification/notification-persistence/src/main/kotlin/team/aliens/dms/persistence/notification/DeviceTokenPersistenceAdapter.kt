@@ -6,6 +6,7 @@ import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity
+import team.aliens.dms.persistence.notification.entity.QTopicSubscriptionJpaEntity.topicSubscriptionJpaEntity
 import team.aliens.dms.persistence.notification.mapper.DeviceTokenMapper
 import team.aliens.dms.persistence.notification.repository.DeviceTokenJpaRepository
 import java.util.UUID
@@ -48,9 +49,9 @@ class DeviceTokenPersistenceAdapter(
     ): List<DeviceToken> {
         return queryFactory
             .selectFrom(deviceTokenJpaEntity)
-            .join(topicSubscriptionEntity).on(deviceTokenJpaEntity.id.eq(topicSubscriptionEntity.deviceToken.id))
+            .join(topicSubscriptionJpaEntity).on(deviceTokenJpaEntity.id.eq(topicSubscriptionJpaEntity.deviceToken.id))
             .where(
-                topicSubscriptionEntity.topic.eq(topic.name)
+                topicSubscriptionJpaEntity.id.topic.eq(topic)
                     .and(deviceTokenJpaEntity.schoolId.eq(schoolId))
             )
             .fetch()

@@ -50,7 +50,7 @@ class UserPersistenceAdapter(
             .selectFrom(userJpaEntity)
             .innerJoin(studentJpaEntity)
             .on(userJpaEntity.eq(studentJpaEntity.user))
-            .where(studentJpaEntity.id.in(studentIds))
+            .where(studentJpaEntity.id.`in`(studentIds))
             .fetch()
             .map { userMapper.toDomain(it)!! }
 
