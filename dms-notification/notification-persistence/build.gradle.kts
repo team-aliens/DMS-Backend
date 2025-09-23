@@ -23,6 +23,9 @@ dependencies {
 
     // flyway
     implementation(Dependencies.FLYWAY)
+
+    // time based uuid
+    implementation(Dependencies.UUID_TIME)
 }
 
 allOpen {

@@ -15,7 +15,6 @@ class GrpcConfig(
     fun grpcServer(): Server {
         val server = ServerBuilder
             .forPort(grpcProperties.server.port)
-            .intercept(GrpcIpWhiteListInterceptor(grpcProperties.server.allowedIps))
             .addService(notificationServiceGrpcImpl)
             .build()
             .start()

@@ -4,16 +4,10 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${NOTIFICATION_DB_PORT:3306}/${NOTIFICATION_DB_NAME:dms_notification_prod}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:1234}
 
-  data:
-    redis:
-      host: ${REDIS_HOST:127.0.0.1}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:asdf}
-
   rabbitmq:
     port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:localhost}
+    host: ${RABBITMQ_HOST:localhost} p
