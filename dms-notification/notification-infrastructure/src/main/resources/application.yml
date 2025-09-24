@@ -43,11 +43,11 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
-  rabbitmq:
-    port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
+rabbitmq:
+  port: ${RABBITMQ_PORT:5672}
+  host: ${RABBITMQ_HOST:localhost}
+  username: ${RABBITMQ_USERNAME:guest}
+  password: ${RABBITMQ_PASSWORD:guest}
 
 fcm:
   file-url: ${FCM_FILE_URL}
@@ -62,6 +62,7 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+    org.springframework.amqp: DEBUG
 
 slack:
   url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
@@ -71,3 +72,7 @@ grpc:
     port: 9090
     allowed-ips:
       - ${MAIN_SERVER_IP:}
+
+passport:
+  secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
+

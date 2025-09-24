@@ -10,6 +10,7 @@ dependencies {
     // impl project
     implementation(project(":dms-notification:notification-persistence"))
     implementation(project(":dms-notification:notification-core"))
+    implementation(project(":dms-notification:notification-presentation"))
 
     // contracts
     implementation(project(":contracts:notification-contract"))
