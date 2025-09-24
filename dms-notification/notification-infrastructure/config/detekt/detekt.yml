@@ -280,7 +280,6 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  excludes: ['**/SecurityConfig.kt']
   AnnotationOnSeparateLine:
     active: false
     autoCorrect: true
@@ -348,7 +347,7 @@ formatting:
     active: true
     autoCorrect: true
   NoSemicolons:
-    active: false
+    active: true
     autoCorrect: true
   NoTrailingSpaces:
     active: true
