@@ -25,7 +25,8 @@ class TopicSubscriptionMapper(
     }
 
     override fun toEntity(domain: TopicSubscription): TopicSubscriptionJpaEntity {
-        val deviceToken = deviceTokenRepository.findByIdOrNull(domain.deviceTokenId) ?: throw DeviceTokenNotFoundException
+        val deviceToken = deviceTokenRepository.findByIdOrNull(domain.deviceTokenId)
+            ?: throw DeviceTokenNotFoundException
 
         return TopicSubscriptionJpaEntity(
             id = TopicSubscriptionJpaEntityId(

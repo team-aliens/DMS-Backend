@@ -49,6 +49,6 @@ data class StudyRoom(
     }
 
     companion object {
-        fun precessName(floor: Int, name: String) = "$floor-$name"
+        fun processName(floor: Int, name: String) = "$floor-$name"
     }
 }

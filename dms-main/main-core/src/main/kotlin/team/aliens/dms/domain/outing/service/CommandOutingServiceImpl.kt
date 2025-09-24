@@ -43,7 +43,7 @@ class CommandOutingServiceImpl(
                         topic = Topic.OUTING,
                         linkIdentifier = savedOutingApplication.id.toString(),
                         title = "외출이 신청되었습니다",
-                        content = "외출 시간은 " + savedOutingApplication.outingTime + " ~ " + savedOutingApplication.arrivalTime + "입니다",
+                        content = """외출 시간은 ${savedOutingApplication.outingTime} ~ ${savedOutingApplication.arrivalTime}입니다""",
                         threadId = savedOutingApplication.id.toString(),
                         isSaveRequired = true
                     )
