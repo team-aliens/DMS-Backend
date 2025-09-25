@@ -6,9 +6,7 @@ import team.aliens.dms.common.annotation.Service
 class AuthService(
     checkAuthCodeService: CheckAuthCodeService,
     getAuthCodeService: GetAuthCodeService,
-    commandAuthCodeService: CommandAuthCodeService,
-    getPassportService: GetPassportService
+    commandAuthCodeService: CommandAuthCodeService
 ) : CheckAuthCodeService by checkAuthCodeService,
     GetAuthCodeService by getAuthCodeService,
-    CommandAuthCodeService by commandAuthCodeService,
-    GetPassportService by getPassportService
+    CommandAuthCodeService by commandAuthCodeService

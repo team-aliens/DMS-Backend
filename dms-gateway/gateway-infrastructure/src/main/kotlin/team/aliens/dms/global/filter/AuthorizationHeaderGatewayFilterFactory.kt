@@ -8,18 +8,16 @@ import org.springframework.util.AntPathMatcher
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import team.aliens.dms.domain.auth.model.Passport
-import team.aliens.dms.global.client.MainServiceClient
-import team.aliens.dms.global.security.HeaderProperties
 import team.aliens.dms.global.security.SecurityPaths
 import team.aliens.dms.global.security.exception.InvalidTokenException
-import team.aliens.dms.global.security.token.JwtParser
+import team.aliens.dms.global.security.passport.PassportSecurityProperties
+import team.aliens.dms.global.security.passport.PassportAdapter
 import team.aliens.dms.global.security.token.JwtProperties
 
 @Component
 class AuthorizationHeaderGatewayFilterFactory(
-    private val jwtParser: JwtParser,
     private val objectMapper: ObjectMapper,
-    private val mainServiceClient: MainServiceClient
+    private val passportAdapter: PassportAdapter
 ) : AbstractGatewayFilterFactory<AuthorizationHeaderGatewayFilterFactory.Config>(Config::class.java) {
 
     private val pathMatcher = AntPathMatcher()
@@ -35,23 +33,20 @@ class AuthorizationHeaderGatewayFilterFactory(
 
             Mono.fromCallable { resolveToken(exchange) }
                 .flatMap { token ->
-                    jwtParser.extractUserInfo(token)
-                        .flatMap { _ ->
-                            mainServiceClient.getPassport(token)
+                    passportAdapter.generatePassportByToken(token)
+                }
+                .flatMap { passport ->
+                    Mono.fromCallable { serializePassport(passport) }
+                        .map { serializedPassport ->
+                            val modifiedExchange = exchange.mutate()
+                                .request {
+                                    it.header(PassportSecurityProperties.PASSPORT_HEADER, serializedPassport)
+                                }
+                                .build()
+                            modifiedExchange
                         }
-                        .flatMap { passport ->
-                            Mono.fromCallable { serializePassport(passport) }
-                                .map { serializedPassport ->
-                                    val modifiedExchange = exchange.mutate()
-                                        .request {
-                                            it.header(HeaderProperties.PASSPORT_HEADER, serializedPassport)
-                                        }
-                                        .build()
-                                    modifiedExchange
-                                }
-                                .flatMap { modifiedExchange ->
-                                    chain.filter(modifiedExchange)
-                                }
+                        .flatMap { modifiedExchange ->
+                            chain.filter(modifiedExchange)
                         }
                 }
         }
