@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.notice.service.CommandNoticeService
 import team.aliens.dms.domain.user.service.UserService
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
