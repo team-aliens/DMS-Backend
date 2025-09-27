@@ -62,7 +62,6 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-    org.springframework.amqp: DEBUG
 
 slack:
   url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
