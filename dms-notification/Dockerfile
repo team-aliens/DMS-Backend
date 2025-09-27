@@ -1,3 +1,4 @@
+
 FROM eclipse-temurin:17-jdk-alpine AS build
 
 WORKDIR /app
@@ -45,6 +46,7 @@ RUN mkdir -p /cache/.gradle
 COPY ./build.gradle* ./settings.gradle* ./gradle.properties* ./gradlew* ./
 COPY ./gradle ./gradle
 COPY ./buildSrc ./buildSrc
+COPY ./contracts ./contracts
 
 RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 RUN ./gradlew dependencies || true
