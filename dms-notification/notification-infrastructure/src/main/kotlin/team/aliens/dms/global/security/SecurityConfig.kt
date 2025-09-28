@@ -27,6 +27,9 @@ class SecurityConfig(
 
         http
             .authorizeHttpRequests { authorize ->
+                authorize
+                    // /healthcheck
+                    .requestMatchers(HttpMethod.GET, "/notification").permitAll()
 
                 authorize
                     // /notification

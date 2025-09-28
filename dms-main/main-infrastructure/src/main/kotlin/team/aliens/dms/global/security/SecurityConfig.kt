@@ -31,7 +31,7 @@ class SecurityConfig(
             .authorizeHttpRequests { authorize ->
                 authorize
                     // /healthcheck
-                    .requestMatchers(HttpMethod.GET, "/").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/main").permitAll()
 
                 authorize
                     // /auth

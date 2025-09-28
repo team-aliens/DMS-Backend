@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class HealthCheckWebAdapter {
 
-    @GetMapping
+    @GetMapping("/main")
     fun healthCheck() = "OK"
 }
