@@ -7,7 +7,6 @@ data class GrpcProperties(
     val server: Server
 ) {
     data class Server(
-        val port: Int,
-        val allowedIps: Set<String>
+        val port: Int
     )
 }
