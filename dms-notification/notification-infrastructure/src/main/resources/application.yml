@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
   shutdown: graceful
 
 spring:
@@ -69,8 +69,6 @@ slack:
 grpc:
   server:
     port: 9090
-    allowed-ips:
-      - ${MAIN_SERVER_IP:}
 
 passport:
   secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
