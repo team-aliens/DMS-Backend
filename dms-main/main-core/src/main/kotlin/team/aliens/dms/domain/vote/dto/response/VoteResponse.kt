@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.vote.dto.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import team.aliens.dms.domain.student.spi.vo.ModelStudentVO
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.spi.vo.VotingTopicResultVO
 import java.time.LocalDateTime
@@ -51,7 +52,7 @@ data class ExcludedStudentResponse(
     }
 }
 
-data class ExcludedStudentsResponses(
+data class ExcludedStudentsResponse(
     val excludedStudents: List<ExcludedStudentResponse>
 )
 
@@ -60,13 +61,24 @@ data class ModelStudentResponse(
     val gcn: String,
     val name: String,
     val profileImageUrl: String?
-
 )
 
 data class ModelStudentsResponse(
     val students: List<ModelStudentResponse>
-
-)
+) {
+    companion object {
+        fun of(modelStudents: List<ModelStudentVO>) = ModelStudentsResponse(
+            students = modelStudents.map {
+                ModelStudentResponse(
+                    id = it.id,
+                    gcn = it.gcn,
+                    name = it.name,
+                    profileImageUrl = it.profileImageUrl
+                )
+            }
+        )
+    }
+}
 
 data class VoteResponse(
     val id: UUID,
@@ -104,7 +116,7 @@ data class VotesResponse(
     }
 }
 
-class VotingOption(
+data class VotingOption(
     val id: UUID,
     val votingOptionName: String,
 ) {
@@ -119,7 +131,7 @@ class VotingOption(
     }
 }
 
-class VotingOptionsResponse(
+data class VotingOptionsResponse(
     val votingOptions: List<VotingOption>
 ) {
     companion object {
