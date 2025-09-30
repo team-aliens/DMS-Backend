@@ -27,7 +27,4 @@ class GetUserServiceImpl(
         val currentUserId = securityPort.getCurrentUserId()
         return queryUserById(currentUserId)
     }
-
-    override fun getCurrentUserId() =
-        securityPort.getCurrentUserId()
 }
