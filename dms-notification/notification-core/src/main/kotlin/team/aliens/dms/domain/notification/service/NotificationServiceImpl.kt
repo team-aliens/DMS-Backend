@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
+import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.contract.model.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
@@ -12,6 +13,7 @@ import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 
 @Service
+@Transactional
 class NotificationServiceImpl(
     private val notificationPort: NotificationPort,
     private val queryDeviceTokenPort: QueryDeviceTokenPort,

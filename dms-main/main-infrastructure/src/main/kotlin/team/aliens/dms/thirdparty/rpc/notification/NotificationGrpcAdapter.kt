@@ -33,10 +33,12 @@ class NotificationGrpcAdapter(
     }
 
     override fun checkDeviceTokenByUserId(userId: UUID): Boolean {
-        return notificationStub.checkDeviceTokenByUserId(
+        var boolValue = notificationStub.checkDeviceTokenByUserId(
             UserIdProto.newBuilder()
                 .setUserId(userId.toByteString())
                 .build()
-        ).value
+        )
+
+        return boolValue.value
     }
 }

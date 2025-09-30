@@ -10,6 +10,7 @@ class CheckNotificationServiceImpl(
 ) : CheckNotificationService {
 
     override fun checkDeviceTokenByUserId(userId: UUID): Boolean {
-        return deviceTokenPort.existsDeviceTokenByUserId(userId)
+        val boolean = deviceTokenPort.existsDeviceTokenByUserId(userId)
+        return boolean
     }
 }

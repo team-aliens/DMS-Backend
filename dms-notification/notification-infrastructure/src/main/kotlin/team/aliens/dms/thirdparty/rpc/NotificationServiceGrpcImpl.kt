@@ -46,8 +46,11 @@ class NotificationServiceGrpcImpl(
         val deviceTokenInfo = deviceTokenProtoMapper.toInfo(
             request!!
         )
-        notificationService.saveDeviceToken(
+        val savedDeviceTokenInfo = notificationService.saveDeviceToken(
             DeviceToken.from(deviceTokenInfo)
-        )
+        ).toDeviceTokenInfo()
+
+        responseObserver!!.onNext(deviceTokenProtoMapper.toProto(savedDeviceTokenInfo))
+        responseObserver.onCompleted()
     }
 }

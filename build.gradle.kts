@@ -34,6 +34,14 @@ subprojects {
         config = files("config/detekt/detekt.yml")
     }
 
+    configurations.all {
+        resolutionStrategy {
+            force(Dependencies.GRPC_PROTOBUF_JAVA)
+            force(Dependencies.GRPC_PROTOBUF_JAVA_UTIL)
+        }
+        exclude("io.grpc", "grpc-protobuf-lite")
+    }
+
     dependencies {
 
         // kotlin
@@ -86,6 +94,8 @@ allprojects {
             }
         )
     }
+
+
 
     repositories {
         mavenCentral()

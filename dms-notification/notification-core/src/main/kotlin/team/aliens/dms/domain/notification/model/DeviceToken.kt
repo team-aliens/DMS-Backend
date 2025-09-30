@@ -19,4 +19,13 @@ data class DeviceToken(
             )
         }
     }
+
+    fun toDeviceTokenInfo(): DeviceTokenInfo {
+        return DeviceTokenInfo(
+            id = id,
+            userId = userId,
+            schoolId = schoolId,
+            token = token
+        )
+    }
 }
