@@ -1,6 +1,6 @@
 package team.aliens.dms.common.spi
 
-import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.notification.NotificationInfo
 import java.util.UUID
 
 interface NotificationEventPort {

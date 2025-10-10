@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Component
 import team.aliens.dms.GroupNotificationInfo
 import team.aliens.dms.SingleNotificationInfo
-import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.TopicNotificationInfo
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.service.NotificationService
 
@@ -14,7 +14,8 @@ class NotificationConsumer(
 
 ) {
     @RabbitListener(queues = ["notification_queue"])
-    fun handleNotificationMessage(message: Any) {
+    fun handleNotificationMessage(message: TopicNotificationInfo) {
+
         message.run {
             when (this) {
                 is GroupNotificationInfo -> {
@@ -31,9 +32,9 @@ class NotificationConsumer(
                     )
                 }
 
-                is NotificationInfo -> {
+                else -> {
                     notificationService.sendMessagesByTopic(
-                        Notification.from(this)
+                        Notification.from(this.notificationInfo)
                     )
                 }
             }

@@ -1,6 +1,6 @@
 package team.aliens.dms.domain.notification.model
 
-import team.aliens.dms.contract.model.DeviceTokenInfo
+import team.aliens.dms.contract.model.notification.DeviceTokenInfo
 import java.util.UUID
 
 data class DeviceToken(

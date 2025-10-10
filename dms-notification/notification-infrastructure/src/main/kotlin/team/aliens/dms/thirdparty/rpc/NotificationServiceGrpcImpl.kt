@@ -4,12 +4,12 @@ import com.google.protobuf.BoolValue
 import com.google.protobuf.Empty
 import io.grpc.stub.StreamObserver
 import org.springframework.stereotype.Component
+import team.aliens.dms.contract.remote.notification.grpc.DeviceTokenProto
+import team.aliens.dms.contract.remote.notification.grpc.NotificationServiceGrpc
+import team.aliens.dms.contract.remote.notification.grpc.UserIdProto
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.thirdparty.rpc.mapper.DeviceTokenProtoMapper
-import team.aliens.notification.DeviceTokenProto
-import team.aliens.notification.NotificationServiceGrpc
-import team.aliens.notification.UserIdProto
 
 @Component
 class NotificationServiceGrpcImpl(

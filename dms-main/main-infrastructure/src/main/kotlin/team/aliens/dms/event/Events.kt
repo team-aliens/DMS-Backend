@@ -1,7 +1,7 @@
 package team.aliens.dms.event
 
 import org.springframework.context.ApplicationEvent
-import team.aliens.dms.contract.model.NotificationInfo
+import team.aliens.dms.contract.model.notification.NotificationInfo
 import java.util.UUID
 
 open class TopicNotificationEvent(

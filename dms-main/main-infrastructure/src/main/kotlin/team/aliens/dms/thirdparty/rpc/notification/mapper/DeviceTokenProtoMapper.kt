@@ -1,10 +1,10 @@
 package team.aliens.dms.thirdparty.rpc.notification.mapper
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.contract.model.DeviceTokenInfo
+import team.aliens.dms.contract.model.notification.DeviceTokenInfo
+import team.aliens.dms.contract.remote.notification.grpc.DeviceTokenProto
 import team.aliens.dms.thirdparty.rpc.toByteString
 import team.aliens.dms.thirdparty.rpc.toUUID
-import team.aliens.notification.DeviceTokenProto
 
 @Component
 class DeviceTokenProtoMapper {

@@ -1,5 +1,11 @@
 package team.aliens.dms.thirdparty.messagebroker.config
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
 import org.springframework.amqp.core.Queue
@@ -57,7 +63,17 @@ class RabbitMqConfig(
     }
 
     @Bean
-    fun messageConverter(): MessageConverter {
-        return Jackson2JsonMessageConverter()
+    fun messageConverter(): Jackson2JsonMessageConverter {
+        val mapper = ObjectMapper()
+            .registerModule(JavaTimeModule())
+            .registerKotlinModule()
+            .activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
+            )
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
+        return Jackson2JsonMessageConverter(mapper)
     }
 }

@@ -12,9 +12,11 @@ dependencies {
     implementation(project(":dms-notification:notification-core"))
     implementation(project(":dms-notification:notification-presentation"))
 
-    // contracts
-    implementation(project(":contracts:notification-contract"))
-    implementation(project(":contracts:notification-proto"))
+    // contract
+    implementation(project(":contracts:enum-contracts:notification-enum"))
+    implementation(project(":contracts:model-contracts:notification-model"))
+    implementation(project(":contracts:remote-contracts:notification-remote:grpc-proto"))
+    implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
 
     // logging
     implementation(Dependencies.SENTRY)
@@ -30,13 +32,15 @@ dependencies {
 
     // jwt
     implementation(Dependencies.JWT)
+    implementation(Dependencies.SPRING_VALIDATION)
+    runtimeOnly(Dependencies.JWT_IMPL)
+    runtimeOnly(Dependencies.JWT_JACKSON)
 
     // slack
     implementation(Dependencies.SLACK)
 
-    implementation(Dependencies.SPRING_VALIDATION)
-    runtimeOnly(Dependencies.JWT_IMPL)
-    runtimeOnly(Dependencies.JWT_JACKSON)
+    // jackson
+    implementation(Dependencies.JACKSON_TYPE)
 }
 
 tasks.getByName<Jar>("jar") {

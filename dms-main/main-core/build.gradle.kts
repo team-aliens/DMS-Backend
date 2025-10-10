@@ -10,8 +10,9 @@ dependencies {
     // aop
     implementation(Dependencies.AOP)
 
-    // notification-contract
-    implementation(project(":contracts:notification-contract"))
+    // contract
+    implementation(project(":contracts:model-contracts:notification-model"))
+    implementation(project(":contracts:enum-contracts:notification-enum"))
 }
 
 allOpen {

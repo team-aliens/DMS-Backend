@@ -10,7 +10,7 @@ class NotificationProducer(
 
     fun sendMessage(message: Any) {
         rabbitTemplate.convertAndSend(
-            "exchange", "notification",
+            "notification_exchange", "notification",
             message
         )
     }

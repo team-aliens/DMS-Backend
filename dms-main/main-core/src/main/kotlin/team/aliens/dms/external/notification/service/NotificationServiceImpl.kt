@@ -1,7 +1,7 @@
 package team.aliens.dms.external.notification.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.contract.model.DeviceTokenInfo
+import team.aliens.dms.contract.model.notification.DeviceTokenInfo
 import team.aliens.dms.external.notification.spi.NotificationPort
 import java.util.UUID
 

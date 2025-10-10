@@ -12,8 +12,9 @@ dependencies {
     implementation(project(":dms-main:main-presentation"))
 
     // contract
-    implementation(project(":contracts:notification-contract"))
-    implementation(project(":contracts:notification-proto"))
+    implementation(project(":contracts:model-contracts:notification-model"))
+    implementation(project(":contracts:remote-contracts:notification-remote:grpc-proto"))
+    implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
@@ -71,6 +72,9 @@ dependencies {
     implementation(Dependencies.GRPC_PROTOBUF)
     implementation(Dependencies.GRPC_STUB)
     implementation(Dependencies.GRPC_NETTY_SHADED)
+
+    // jackson
+    implementation(Dependencies.JACKSON_TYPE)
 }
 
 tasks.getByName<Jar>("jar") {

@@ -47,9 +47,15 @@ class NoticePersistenceAdapter(
         )
     }
 
-    override fun saveNotice(notice: Notice) = noticeMapper.toDomain(
-        noticeRepository.save(
+    override fun saveNotice(notice: Notice): Notice {
+        val noticeJpaEntity = noticeRepository.save(
             noticeMapper.toEntity(notice)
         )
-    )!!
+
+        val notice = noticeMapper.toDomain(
+            noticeJpaEntity
+        )!!
+
+        return notice
+    }
 }

@@ -28,10 +28,6 @@ class SecurityConfig(
         http
             .authorizeHttpRequests { authorize ->
                 authorize
-                    // /healthcheck
-                    .requestMatchers(HttpMethod.GET, "/notification").permitAll()
-
-                authorize
                     // /notification
                     .requestMatchers(HttpMethod.DELETE, "/notifications/{notification-of-user-id}").authenticated()
                     .requestMatchers(HttpMethod.DELETE, "/notifications").authenticated()

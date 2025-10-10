@@ -1,6 +1,6 @@
 package team.aliens.dms.external.notification.spi
 
-import team.aliens.dms.contract.model.DeviceTokenInfo
+import team.aliens.dms.contract.model.notification.DeviceTokenInfo
 import java.util.UUID
 
 interface NotificationPort {

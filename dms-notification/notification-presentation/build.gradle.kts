@@ -10,7 +10,7 @@ dependencies {
     implementation(project(":dms-notification:notification-core"))
 
     // contract
-    implementation(project(":contracts:notification-contract"))
+    implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // web
     implementation(Dependencies.SPRING_WEB)

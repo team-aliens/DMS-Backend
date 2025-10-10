@@ -30,10 +30,6 @@ class SecurityConfig(
         http
             .authorizeHttpRequests { authorize ->
                 authorize
-                    // /healthcheck
-                    .requestMatchers(HttpMethod.GET, "/main").permitAll()
-
-                authorize
                     // /auth
                     .requestMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
                     .requestMatchers(HttpMethod.GET, "/auth/email").permitAll()
@@ -90,7 +86,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/notices").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
-                    .requestMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.POST, "/notices").permitAll()
                     .requestMatchers(HttpMethod.PATCH, "/notices/{notice-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
 
@@ -169,23 +165,6 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/remains/available-time").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.DELETE, "/remains/options/{remain-option-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/remains/status/file").hasAuthority(MANAGER.name)
-
-                authorize
-                    // /notifications
-                    .requestMatchers(HttpMethod.POST, "/notifications/token").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
-
-                authorize
-                    // /notification
-                    .requestMatchers(HttpMethod.DELETE, "/notifications/{notification-of-user-id}").authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "/notifications").authenticated()
-                    .requestMatchers(HttpMethod.POST, "/notifications/token").authenticated()
-                    .requestMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
-                    .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
-                    .requestMatchers(HttpMethod.PATCH, "/notifications/topic/toggle").authenticated()
 
                 authorize
                     // /outings

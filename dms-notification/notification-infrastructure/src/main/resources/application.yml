@@ -58,6 +58,8 @@ sentry:
 
 logging:
   level:
+    com.google.firebase: DEBUG
+    okhttp3: DEBUG
     com:
       amazonaws:
         util:

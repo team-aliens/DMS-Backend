@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":dms-notification:notification-core"))
 
     // contract
-    implementation(project(":contracts:notification-contract"))
+    implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // database
     implementation(Dependencies.SPRING_DATA_JPA)

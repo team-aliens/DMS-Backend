@@ -2,7 +2,7 @@ package team.aliens.dms.persistence.notification
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
-import team.aliens.dms.contract.model.Topic
+import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.persistence.notification.entity.QDeviceTokenJpaEntity.deviceTokenJpaEntity

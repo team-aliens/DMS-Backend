@@ -4,7 +4,7 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import team.aliens.notification.NotificationServiceGrpc
+import team.aliens.dms.contract.remote.notification.grpc.NotificationServiceGrpc
 
 @Configuration
 class GrpcConfig(

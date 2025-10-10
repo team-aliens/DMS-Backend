@@ -2,7 +2,7 @@ package team.aliens.dms.domain.auth.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.contract.model.DeviceTokenInfo
+import team.aliens.dms.contract.model.notification.DeviceTokenInfo
 import team.aliens.dms.domain.auth.dto.SignInRequest
 import team.aliens.dms.domain.auth.dto.TokenFeatureResponse
 import team.aliens.dms.domain.auth.spi.JwtPort
