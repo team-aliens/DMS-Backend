@@ -1,6 +1,5 @@
 package team.aliens.dms.global.security.token
 
-import io.jsonwebtoken.Header
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
