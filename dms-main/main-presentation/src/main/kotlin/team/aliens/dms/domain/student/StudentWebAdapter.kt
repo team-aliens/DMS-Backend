@@ -249,7 +249,6 @@ class StudentWebAdapter(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         date: LocalDate
     ): ModelStudentsResponse {
-        val students = getModelStudentsUseCase.execute(date)
-        return ModelStudentsResponse(students = students)
+        return getModelStudentsUseCase.execute(date)
     }
 }

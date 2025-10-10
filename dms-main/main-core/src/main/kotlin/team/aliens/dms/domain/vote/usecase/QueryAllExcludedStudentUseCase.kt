@@ -4,7 +4,7 @@ import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
 import team.aliens.dms.domain.vote.dto.response.ExcludedStudentResponse
-import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponses
+import team.aliens.dms.domain.vote.dto.response.ExcludedStudentsResponse
 import team.aliens.dms.domain.vote.service.VoteService
 
 @UseCase
@@ -13,7 +13,7 @@ class QueryAllExcludedStudentUseCase(
     val studentService: StudentService
 ) {
 
-    fun execute(): ExcludedStudentsResponses {
+    fun execute(): ExcludedStudentsResponse {
         val excludedStudents = voteService.getAllExcludedStudents()
             .map { excludedStudent ->
                 excludedStudent.studentId
@@ -21,7 +21,7 @@ class QueryAllExcludedStudentUseCase(
 
         val students = studentService.getAllStudentsByIdsIn(excludedStudents)
 
-        return ExcludedStudentsResponses(
+        return ExcludedStudentsResponse(
             students.map {
                 ExcludedStudentResponse.of(
                     id = it.id,
