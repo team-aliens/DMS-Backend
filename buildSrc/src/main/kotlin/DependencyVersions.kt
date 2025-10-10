@@ -21,8 +21,8 @@ object DependencyVersions {
     const val FCM_VERSION = "8.1.0"
     const val FLYWAY_VERSION = "10.8.1"
     const val SLACK_VERSION = "1.40.3"
-    const val GRPC_VERSION = "1.64.0"
-    const val GRPC_JAVA_VERSION = "3.25.1"
+    const val GRPC_VERSION = "1.39.0"
+    const val GRPC_PROTOBUF_JAVA_VERSION = "3.17.3"
     const val RABBITMQ_VERSION = "3.2.3"
     const val SPRING_CLOUD_GATEWAY_VERSION = "4.1.0"
     

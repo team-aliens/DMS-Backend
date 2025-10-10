@@ -12,9 +12,11 @@ subprojects {
         version = PluginVersions.JVM_VERSION
     }
 
-    apply {
-        plugin("org.jetbrains.kotlin.kapt")
-        version = PluginVersions.KAPT_VERSION
+    if (!project.path.contains(":contracts:")) {
+        apply {
+            plugin("org.jetbrains.kotlin.kapt")
+            version = PluginVersions.KAPT_VERSION
+        }
     }
 
     apply {
@@ -32,14 +34,6 @@ subprojects {
         buildUponDefaultConfig = true
         autoCorrect = true
         config = files("config/detekt/detekt.yml")
-    }
-
-    configurations.all {
-        resolutionStrategy {
-            force(Dependencies.GRPC_PROTOBUF_JAVA)
-            force(Dependencies.GRPC_PROTOBUF_JAVA_UTIL)
-        }
-        exclude("io.grpc", "grpc-protobuf-lite")
     }
 
     dependencies {
@@ -69,7 +63,9 @@ allprojects {
     group = "team.aliens"
     version = "0.0.1-SNAPSHOT"
 
-    apply(plugin = "jacoco")
+    if (!project.path.contains(":contracts:")) {
+        apply(plugin = "jacoco")
+    }
 
     tasks {
         compileKotlin {
@@ -124,9 +120,7 @@ tasks.register<JacocoReport>("jacocoRootReport") {
     }
 }
 
-tasks.getByName<Jar>("jar") {
-    enabled = false
-}
+
 
 tasks.register<Copy>("installGitHooks") {
     from(file("$rootDir/.githooks"))
