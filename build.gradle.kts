@@ -63,10 +63,6 @@ allprojects {
     group = "team.aliens"
     version = "0.0.1-SNAPSHOT"
 
-    if (!project.path.contains(":contracts:")) {
-        apply(plugin = "jacoco")
-    }
-
     tasks {
         compileKotlin {
             kotlinOptions {
@@ -82,13 +78,25 @@ allprojects {
         }
     }
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
-        javaLauncher.set(
-            javaToolchains.launcherFor {
-                languageVersion.set(JavaLanguageVersion.of(17))
-            }
-        )
+    if (!project.path.contains(":contracts:")) {
+        apply(plugin = "jacoco")
+
+        tasks.withType<Test> {
+            useJUnitPlatform()
+            javaLauncher.set(
+                javaToolchains.launcherFor {
+                    languageVersion.set(JavaLanguageVersion.of(17))
+                }
+            )
+            outputs.upToDateWhen { false }
+        }
+
+        tasks.named<org.gradle.testing.jacoco.tasks.JacocoReport>("jacocoTestReport") {
+            executionData.setFrom(fileTree(project.buildDir).include("jacoco/*.exec"))
+            classDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").output.classesDirs)
+            sourceDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").allSource)
+            outputs.upToDateWhen { false }
+        }
     }
 
 
@@ -98,28 +106,13 @@ allprojects {
     }
 }
 
-tasks.register<JacocoReport>("jacocoRootReport") {
-    subprojects {
-        this@subprojects.plugins.withType<JacocoPlugin>().configureEach {
-            this@subprojects.tasks.matching {
-                it.extensions.findByType<JacocoTaskExtension>() != null
-            }
-                .configureEach {
-                    sourceSets(this@subprojects.the<SourceSetContainer>().named("main").get())
-                    executionData.setFrom(
-                        executionData.files.filter { it.exists() }
-                    )
-                }
-        }
-    }
+tasks.register("jacocoSubReports") {
 
-    reports {
-        xml.outputLocation.set(File("${buildDir}/reports/jacoco/test/jacocoTestReport.xml"))
-        xml.required.set(true)
-        html.required.set(false)
-    }
+    val jacocoProjects = subprojects.filter { it.pluginManager.hasPlugin("jacoco") }
+
+    dependsOn(jacocoProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
+
 }
-
 
 
 tasks.register<Copy>("installGitHooks") {
