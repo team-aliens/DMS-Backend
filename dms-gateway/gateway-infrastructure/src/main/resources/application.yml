@@ -13,9 +13,11 @@ spring:
               - "http://localhost:3000"
               - "http://localhost:3001"
               - "http://localhost:3002"
-              - "https://admin.dms-dsm.com"
-              - "https://admin-dev.dms-dsm.com"
-              - "https://webview.dms-dsm.com"
+              - "https://api-dms.dsmhs.kr"
+              - "https://dev-api-dms.dsmhs.kr"
+              - "https://admin-dms.dsmhs.kr"
+              - "https://admin-dev-dms.dsmhs.kr"
+              - "https://webview-dms.dsmhs.kr"
             allowedMethods:
               - GET
               - POST
