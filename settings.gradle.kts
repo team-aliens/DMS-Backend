@@ -1,6 +1,6 @@
 rootProject.name = "DMS-Backend"
 
-// dms-server
+// main-server
 include(":dms-main")
 include(":dms-main:main-core")
 include(":dms-main:main-persistence")
@@ -14,14 +14,17 @@ include(":dms-notification:notification-persistence")
 include(":dms-notification:notification-infrastructure")
 include(":dms-notification:notification-presentation")
 
+// gateway
+include(":dms-gateway")
+include(":dms-gateway:gateway-core")
+include(":dms-gateway:gateway-infrastructure")
+
 // contracts
 include(":contracts")
 include(":contracts:enum-contracts")
 include(":contracts:enum-contracts:notification-enum")
-
 include(":contracts:model-contracts")
 include(":contracts:model-contracts:notification-model")
-
 include(":contracts:remote-contracts")
 include(":contracts:remote-contracts:notification-remote")
 include(":contracts:remote-contracts:notification-remote:grpc-proto")
