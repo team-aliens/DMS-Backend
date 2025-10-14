@@ -78,7 +78,7 @@ RUN find /tmp/libs -name "*.jar" ! -name "*-plain.jar" -exec cp {} /app/app.jar 
     chown appuser:appgroup /app/app.jar
 
 USER appuser
-EXPOSE 8080
+EXPOSE 8081
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:8080/ || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:8081/ || exit 1
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]

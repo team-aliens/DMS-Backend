@@ -26,13 +26,13 @@ class CustomAuthenticationEntryPoint(
             characterEncoding = "UTF-8"
             status = errorCode.status()
 
-        val errorResponse = mapOf(
-            "status" to errorCode.status(),
-            "message" to errorCode.message(),
-            "code" to errorCode.code()
-        )
+            val errorResponse = mapOf(
+                "status" to errorCode.status(),
+                "message" to errorCode.message(),
+                "code" to errorCode.code()
+            )
 
-        writer.write(objectMapper.writeValueAsString(errorResponse))
+            writer.write(objectMapper.writeValueAsString(errorResponse))
         }
     }
 }

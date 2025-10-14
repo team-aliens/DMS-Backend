@@ -41,6 +41,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.POST, "/auth/code").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/tokens").permitAll()
                     .requestMatchers(HttpMethod.PUT, "/auth/reissue").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/passport").permitAll()
 
                 authorize
                     // /users

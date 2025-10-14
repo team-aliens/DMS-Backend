@@ -42,7 +42,9 @@ subprojects {
         implementation(Dependencies.JACKSON)
 
         // java servlet
-        implementation(Dependencies.JAVA_SERVLET)
+        if (!project.path.contains("dms-gateway")) {
+            implementation(Dependencies.JAVA_SERVLET)
+        }
 
         // test
         testImplementation(Dependencies.SPRING_TEST)
@@ -98,7 +100,9 @@ tasks.register<JacocoReport>("jacocoRootReport") {
             }
                 .configureEach {
                     sourceSets(this@subprojects.the<SourceSetContainer>().named("main").get())
-                    executionData(this)
+                    executionData.setFrom(
+                        executionData.files.filter { it.exists() }
+                    )
                 }
         }
     }

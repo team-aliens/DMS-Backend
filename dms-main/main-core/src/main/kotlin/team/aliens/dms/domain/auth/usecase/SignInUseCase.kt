@@ -25,7 +25,7 @@ class SignInUseCase(
         securityService.checkIsPasswordMatches(request.password, user.password)
 
         val tokenResponse = jwtPort.receiveToken(
-            userId = user.id, authority = user.authority
+            userId = user.id, authority = user.authority, schoolId = user.schoolId
         )
 
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
