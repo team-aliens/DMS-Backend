@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-main:main-core"))
 
     // database

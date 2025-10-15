@@ -7,7 +7,7 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-notification:notification-persistence"))
     implementation(project(":dms-notification:notification-core"))
     implementation(project(":dms-notification:notification-presentation"))

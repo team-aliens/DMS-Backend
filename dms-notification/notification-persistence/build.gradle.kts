@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-notification:notification-core"))
 
     // contract
