@@ -24,5 +24,6 @@ object DependencyVersions {
     const val GRPC_PROTOBUF_JAVA_VERSION = "3.17.3"
     const val RABBITMQ_VERSION = "3.2.3"
     const val SPRING_CLOUD_GATEWAY_VERSION = "4.1.0"
+    const val SPRING_CLOUD_OPENFEIGN_VERSION = "4.1.2"
     
 }

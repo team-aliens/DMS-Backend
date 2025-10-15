@@ -69,7 +69,7 @@ object Dependencies {
     const val DETEKT = "io.gitlab.arturbosch.detekt:detekt-formatting:${PluginVersions.DETEKT_VERSION}"
 
     // open feign
-    const val OPEN_FEIGN = "org.springframework.cloud:spring-cloud-starter-openfeign"
+    const val OPEN_FEIGN = "org.springframework.cloud:spring-cloud-starter-openfeign:${DependencyVersions.SPRING_CLOUD_OPENFEIGN_VERSION}"
 
     // gson
     const val GSON = "com.google.code.gson:gson"
