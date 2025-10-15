@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-main:main-persistence"))
     implementation(project(":dms-main:main-core"))
     implementation(project(":dms-main:main-presentation"))
@@ -77,6 +77,11 @@ dependencies {
     implementation(Dependencies.JACKSON_TYPE)
 }
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    enabled = true
+    classifier = "boot"
+}
+
 tasks.getByName<Jar>("jar") {
-    enabled = false
+    enabled = true
 }
