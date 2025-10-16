@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dms-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "http://localhost:3002"
+              - "https://admin-dms.dsmhs.kr"
+              - "https://admin-dev-dms.dsmhs.kr"
+              - "https://webview-dms.dsmhs.kr"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            exposedHeaders:
+              - "Content-Disposition"
+
+app:
+  services:
+    main: ${MAIN_SERVICE_URL:http://localhost:8081}
+    notification: ${NOTIFICATION_SERVICE_URL:http://localhost:8082}
+
+secret:
+  secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
+
+passport:
+  secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
