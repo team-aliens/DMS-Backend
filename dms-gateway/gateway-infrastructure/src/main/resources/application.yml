@@ -13,8 +13,6 @@ spring:
               - "http://localhost:3000"
               - "http://localhost:3001"
               - "http://localhost:3002"
-              - "https://api-dms.dsmhs.kr"
-              - "https://dev-api-dms.dsmhs.kr"
               - "https://admin-dms.dsmhs.kr"
               - "https://admin-dev-dms.dsmhs.kr"
               - "https://webview-dms.dsmhs.kr"
