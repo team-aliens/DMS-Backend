@@ -50,7 +50,7 @@ rabbitmq:
   password: ${RABBITMQ_PASSWORD:guest}
 
 fcm:
-  file-url: ${FCM_FILE_URL}
+  credentials-base64: ${FCM_BASE64_STRING}
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}

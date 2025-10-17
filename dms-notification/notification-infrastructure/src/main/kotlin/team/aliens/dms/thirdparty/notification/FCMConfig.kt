@@ -6,36 +6,28 @@ import com.google.firebase.FirebaseOptions
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import java.io.File
-import java.io.IOException
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.io.ByteArrayInputStream
 
 @Configuration
 class FCMConfig(
-    @Value("\${fcm.file-url}")
-    private val url: String
+    @Value("\${fcm.credentials-base64}")
+    private val credentialsBase64: String
 ) {
     @PostConstruct
     fun initialize() {
         try {
-            URL(url).openStream().use { inputStream ->
-                Files.copy(inputStream, Paths.get(PATH))
-                val file = File(PATH)
-                if (FirebaseApp.getApps().isEmpty()) {
-                    val options = FirebaseOptions.builder()
-                        .setCredentials(GoogleCredentials.fromStream(file.inputStream()))
-                        .build()
-                    FirebaseApp.initializeApp(options)
-                }
-                file.delete()
+
+            val credentialsBytes = java.util.Base64.getDecoder().decode(credentialsBase64)
+            val inputStream = ByteArrayInputStream(credentialsBytes)
+
+            if (FirebaseApp.getApps().isEmpty()) {
+                val options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(inputStream))
+                    .build()
+                FirebaseApp.initializeApp(options)
             }
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-    companion object {
-        private const val PATH = "./credentials.json"
     }
 }
