@@ -34,7 +34,7 @@ app:
     notification: ${NOTIFICATION_SERVICE_URL:http://localhost:8082}
 
 secret:
-  secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
+  secret-key: ${SECRET_KEY:asdfasdf}
 
 passport:
   secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}

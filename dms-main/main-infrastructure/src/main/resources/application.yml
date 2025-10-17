@@ -90,7 +90,7 @@ slack:
   url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
 
 passport:
-  secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
+  secret-key: ${PASSPORT_SECRET_KEY:asdfasdf}
 
 grpc:
   client:
