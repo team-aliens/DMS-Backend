@@ -4,9 +4,9 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST}:${NOTIFICATION_DB_PORT:3306}/${NOTIFICATION_DB_NAME:stag_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${NOTIFICATION_MYSQL_HOST}:${NOTIFICATION_DB_PORT:3306}/${NOTIFICATION_DB_NAME:stag_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    username: ${NOTIFICATION_MYSQL_USERNAME}
+    password: ${NOTIFICATION_MYSQL_PASSWORD}
 
   rabbitmq:
     port: ${RABBITMQ_PORT:5672}

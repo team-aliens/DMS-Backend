@@ -4,9 +4,9 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${NOTIFICATION_DB_PORT:3308}/${NOTIFICATION_DB_NAME:dms_notification}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
-    username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:1234}
+    url: jdbc:mysql://${NOTIFICATION_MYSQL_HOST:localhost}:${NOTIFICATION_DB_PORT:3308}/${NOTIFICATION_DB_NAME:dms_notification}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    username: ${NOTIFICATION_MYSQL_USERNAME:root}
+    password: ${NOTIFICATION_MYSQL_PASSWORD:1234}
 
   rabbitmq:
     port: ${RABBITMQ_PORT:5672}

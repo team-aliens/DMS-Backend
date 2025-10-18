@@ -4,9 +4,9 @@ spring:
       on-profile: dev
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST}:${DB_PORT:3306}/${DB_NAME:stag_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${MAIN_MYSQL_HOST}:${MAIN_DB_PORT:3306}/${MAIN_DB_NAME:stag_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    username: ${MAIN_MYSQL_USERNAME}
+    password: ${MAIN_MYSQL_PASSWORD}
 
   data:
     redis:
