@@ -4,13 +4,13 @@ import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.common.spi.TaskSchedulerPort
+import team.aliens.dms.contract.model.notification.NotificationInfo
+import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.spi.CommandNoticePort
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 import team.aliens.dms.domain.vote.exception.VotingTopicNotFoundException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingTopic
@@ -24,21 +24,32 @@ class CommandNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort,
-    private val deviceTokenPort: QueryDeviceTokenPort,
     private val taskSchedulerPort: TaskSchedulerPort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
     private val queryVotePort: QueryVotePort,
-    private val queryStudentPort: QueryStudentPort
+    private val queryStudentPort: QueryStudentPort,
+    private val queryUserPort: QueryUserPort,
 ) : CommandNoticeService {
 
     override fun saveNotice(notice: Notice): Notice {
         val schoolId = securityPort.getCurrentUserSchoolId()
-        val deviceTokens: List<DeviceToken> = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
+
+        val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
+            .map { it.id }
 
         return commandNoticePort.saveNotice(notice)
             .also {
                 notificationEventPort.publishNotificationToApplicant(
-                    deviceTokens, Notification.NoticeNotification(schoolId, it)
+                    userIds,
+                    NotificationInfo(
+                        schoolId = schoolId,
+                        topic = Topic.NOTICE,
+                        linkIdentifier = notice.id.toString(),
+                        title = notice.title,
+                        content = "기숙사 공지가 등록되었습니다.",
+                        threadId = notice.id.toString(),
+                        isSaveRequired = true
+                    )
                 )
             }
     }
@@ -50,11 +61,11 @@ class CommandNoticeServiceImpl(
     override fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
         val managerId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
-        val deviceTokens = deviceTokenPort.queryDeviceTokensBySchoolId(schoolId)
+        val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
+            .map { it.id }
+
         val reNoticePrefix = if (isReNotice) "[재공지]" else ""
-
         val votingTopic = queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
-
         val content = generateVoteResultContent(votingTopic)
 
         taskSchedulerPort.scheduleTask(
@@ -69,7 +80,16 @@ class CommandNoticeServiceImpl(
                     )
                 ).also {
                     notificationEventPort.publishNotificationToApplicant(
-                        deviceTokens, Notification.NoticeNotification(schoolId, it)
+                        userIds,
+                        NotificationInfo(
+                            schoolId = schoolId,
+                            topic = Topic.NOTICE,
+                            linkIdentifier = it.id.toString(),
+                            title = it.title,
+                            content = "기숙사 공지가 등록되었습니다.",
+                            threadId = it.id.toString(),
+                            isSaveRequired = true
+                        )
                     )
                 }
             }, reservedTime

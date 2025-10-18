@@ -26,7 +26,11 @@ class CheckStudyRoomServiceImpl(
     }
 
     override fun checkStudyRoomTimeSlotExistsById(studyRoomId: UUID, timeSlotId: UUID) {
-        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(studyRoomId, timeSlotId)) {
+        if (!queryStudyRoomPort.existsStudyRoomTimeSlotByStudyRoomIdAndTimeSlotId(
+                studyRoomId,
+                timeSlotId
+            )
+        ) {
             throw StudyRoomTimeSlotNotFoundException
         }
     }

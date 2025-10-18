@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:mysql://${NOTIFICATION_MYSQL_HOST}:${NOTIFICATION_DB_PORT:3307}/${DB_NAME:dms_notification_prod}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    username: ${NOTIFICATION_MYSQL_USERNAME}
+    password: ${NOTIFICATION_MYSQL_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+
+  rabbitmq:
+    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST}

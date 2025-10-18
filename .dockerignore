@@ -11,7 +11,7 @@
 build/
 
 ### Module build outputs ###
-dms-*/build/
+**/build/
 buildSrc/build/
 
 ### Local files ###

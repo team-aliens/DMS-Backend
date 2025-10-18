@@ -88,7 +88,7 @@ class GetStudyRoomServiceImpl(
                 studentNumber = student.number,
                 seats = studentSeatApplicationsMap[student.id]?.map {
                     StudentSeatInfo.SeatInfo(
-                        seatFullName = StudyRoom.precessName(it.studyRoomFloor, it.studyRoomName) +
+                        seatFullName = StudyRoom.processName(it.studyRoomFloor, it.studyRoomName) +
                             " " + Seat.processName(it.seatNumber, it.seatTypeName),
                         timeSlotId = it.timeSlotId
                     )

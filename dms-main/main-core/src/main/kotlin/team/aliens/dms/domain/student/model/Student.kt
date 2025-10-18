@@ -42,13 +42,15 @@ data class Student(
 
     companion object {
         private const val DECIMAL_NUMBER = 10
-        const val PROFILE_IMAGE = "https://image-dms.s3.ap-northeast-2.amazonaws.com/" +
-            "59fd0067-93ef-4bcb-8722-5bc8786c5156%7C%7C%E1%84%83%E1%85%A1%E1%84%8B" +
-            "%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%B3.png"
+        const val PROFILE_IMAGE = "https://image-dms.s3.ap-northeast-2.amazonaws.com/59fd0067-93ef-4bcb-8722-5bc8786c5156%7C%7C%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%B3.png"
 
         fun processGcn(grade: Int, classRoom: Int, number: Int) = "${grade}${classRoom}${processNumber(number)}"
 
-        fun parseGcn(gcn: String) = Triple(gcn.substring(0, 1).toInt(), gcn.substring(1, 2).toInt(), gcn.substring(2, 4).toInt())
+        fun parseGcn(gcn: String) = Triple(
+            gcn.substring(0, 1).toInt(),
+            gcn.substring(1, 2).toInt(),
+            gcn.substring(2, 4).toInt()
+        )
 
         private fun processNumber(number: Int) = if (number < DECIMAL_NUMBER) "0$number" else number.toString()
     }

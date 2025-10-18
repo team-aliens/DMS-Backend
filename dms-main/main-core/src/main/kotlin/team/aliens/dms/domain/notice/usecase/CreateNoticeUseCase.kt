@@ -6,18 +6,20 @@ import team.aliens.dms.domain.notice.model.Notice
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.user.service.UserService
 import java.time.LocalDateTime
+import java.util.UUID
 
 @UseCase
 class CreateNoticeUseCase(
-    private val userService: UserService,
-    private val noticeService: NoticeService
+    private val noticeService: NoticeService,
+    private val userService: UserService
 ) {
 
     fun execute(title: String, content: String): NoticeIdResponse {
-        val user = userService.getCurrentUser()
+
+        val firstUuid = UUID.fromString("33386262-6332-6663-2d37-6664312d3131")
 
         val notice = Notice(
-            managerId = user.id,
+            managerId = firstUuid,
             title = title,
             content = content,
             createdAt = LocalDateTime.now(),

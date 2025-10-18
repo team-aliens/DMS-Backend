@@ -18,6 +18,7 @@ class StudentDetailsService(
             if (this == null || authority != Authority.STUDENT) {
                 throw InvalidTokenException
             }
+
             return StudentDetails(
                 userId = id,
                 schoolId = schoolId,

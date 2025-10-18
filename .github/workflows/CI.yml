@@ -33,10 +33,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: codecov gradle
-        run: ./gradlew test jacocoRootReport
+        run: ./gradlew test jacocoSubReports
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          files: '**/build/reports/jacoco/test/jacocoTestReport.xml'
