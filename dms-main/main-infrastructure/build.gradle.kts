@@ -6,10 +6,15 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-main:main-persistence"))
     implementation(project(":dms-main:main-core"))
     implementation(project(":dms-main:main-presentation"))
+
+    // contract
+    implementation(project(":contracts:model-contracts:notification-model"))
+    implementation(project(":contracts:remote-contracts:notification-remote:grpc-proto"))
+    implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
@@ -60,8 +65,23 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
+    // rabbit mq
+    implementation(Dependencies.RABBITMQ)
+
+    // grpc
+    implementation(Dependencies.GRPC_PROTOBUF)
+    implementation(Dependencies.GRPC_STUB)
+    implementation(Dependencies.GRPC_NETTY_SHADED)
+
+    // jackson
+    implementation(Dependencies.JACKSON_TYPE)
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    enabled = true
+    classifier = "boot"
 }
 
 tasks.getByName<Jar>("jar") {
-    enabled = false
+    enabled = true
 }

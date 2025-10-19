@@ -1,19 +1,19 @@
 package team.aliens.dms.event
 
 import org.springframework.context.ApplicationEvent
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
+import team.aliens.dms.contract.model.notification.NotificationInfo
+import java.util.UUID
 
 open class TopicNotificationEvent(
-    val notification: Notification
-) : ApplicationEvent(notification)
+    val notificationInfo: NotificationInfo
+) : ApplicationEvent(notificationInfo)
 
 open class GroupNotificationEvent(
-    val deviceTokens: List<DeviceToken>,
-    notification: Notification
-) : TopicNotificationEvent(notification)
+    val userIds: List<UUID>,
+    notificationInfo: NotificationInfo
+) : TopicNotificationEvent(notificationInfo)
 
 class SingleNotificationEvent(
-    val deviceToken: DeviceToken,
-    notification: Notification
-) : TopicNotificationEvent(notification)
+    val userId: UUID,
+    notificationInfo: NotificationInfo
+) : TopicNotificationEvent(notificationInfo)

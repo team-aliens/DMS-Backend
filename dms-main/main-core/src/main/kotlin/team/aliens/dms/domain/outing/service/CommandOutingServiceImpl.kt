@@ -3,9 +3,8 @@ package team.aliens.dms.domain.outing.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
-import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
+import team.aliens.dms.contract.model.notification.NotificationInfo
+import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.outing.model.OutingApplication
 import team.aliens.dms.domain.outing.model.OutingAvailableTime
 import team.aliens.dms.domain.outing.model.OutingCompanion
@@ -14,7 +13,7 @@ import team.aliens.dms.domain.outing.spi.CommandOutingApplicationPort
 import team.aliens.dms.domain.outing.spi.CommandOutingCompanionPort
 import team.aliens.dms.domain.outing.spi.CommandOutingTimePort
 import team.aliens.dms.domain.outing.spi.CommandOutingTypePort
-import team.aliens.dms.domain.student.spi.QueryStudentPort
+import team.aliens.dms.domain.user.spi.QueryUserPort
 
 @Service
 class CommandOutingServiceImpl(
@@ -22,10 +21,9 @@ class CommandOutingServiceImpl(
     private val commandOutingCompanionPort: CommandOutingCompanionPort,
     private val commandOutingTypePort: CommandOutingTypePort,
     private val commandOutingTimePort: CommandOutingTimePort,
-    private val queryStudentPort: QueryStudentPort,
-    private val queryDeviceTokenPort: QueryDeviceTokenPort,
     private val notificationEventPort: NotificationEventPort,
-    private val securityPort: SecurityPort
+    private val securityPort: SecurityPort,
+    private val queryUserPort: QueryUserPort
 ) : CommandOutingService {
 
     override fun saveOutingApplication(outingApplication: OutingApplication): OutingApplication {
@@ -33,17 +31,24 @@ class CommandOutingServiceImpl(
         val savedOutingApplication = commandOutingApplicationPort.saveOutingApplication(outingApplication)
             .copy(companionIds = outingApplication.companionIds)
 
-        val deviceTokens: List<DeviceToken>? = outingApplication.companionIds?.let {
-            queryDeviceTokenPort.queryDeviceTokensByStudentIds(it)
-        }
+        val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
+            .map { it.id }
 
         return savedOutingApplication
             .also {
-                deviceTokens?.let {
-                    notificationEventPort.publishNotificationToApplicant(
-                        it, Notification.OutingNotification(schoolId, outingApplication)
+                notificationEventPort.publishNotificationToApplicant(
+                    userIds,
+                    NotificationInfo(
+                        schoolId = schoolId,
+                        topic = Topic.OUTING,
+                        linkIdentifier = savedOutingApplication.id.toString(),
+                        title = "외출이 신청되었습니다",
+                        content = """외출 시간은 ${savedOutingApplication.outingTime} ~ ${savedOutingApplication.arrivalTime}입니다""",
+                        threadId = savedOutingApplication.id.toString(),
+                        isSaveRequired = true
                     )
-                }
+                )
+
                 saveAllOutingCompanions(savedOutingApplication)
             }
     }
