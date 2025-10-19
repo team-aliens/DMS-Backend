@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-main:main-core"))
 
     // database
@@ -30,4 +30,10 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+kapt {
+    arguments {
+        arg("querydsl.generatedAnnotationClass", "jakarta.annotation.Generated")
+    }
 }

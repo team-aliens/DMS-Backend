@@ -10,8 +10,8 @@ import reactor.core.publisher.Mono
 import team.aliens.dms.domain.auth.model.Passport
 import team.aliens.dms.global.security.SecurityPaths
 import team.aliens.dms.global.security.exception.InvalidTokenException
-import team.aliens.dms.global.security.passport.PassportSecurityProperties
 import team.aliens.dms.global.security.passport.PassportAdapter
+import team.aliens.dms.global.security.passport.PassportSecurityProperties
 import team.aliens.dms.global.security.token.JwtProperties
 
 @Component

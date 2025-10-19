@@ -43,8 +43,11 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
-fcm:
-  file-url: ${FCM_FILE_URL}
+  rabbitmq:
+    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST:localhost}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
@@ -85,3 +88,10 @@ slack:
 
 passport:
   secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
+
+grpc:
+  client:
+    notification-server:
+      port: ${NOTIFICATION_GRPC_SERVER_PORT:9090}
+      host: ${NOTIFICATION_GRPC_SERVER_HOST:localhost}
+      negotiation-type: ${NOTIFICATION_GRPC_SERVER_NEGOTIATION_TYPE:plaintext}

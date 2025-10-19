@@ -5,8 +5,11 @@ plugins {
 }
 
 dependencies {
-    // impl project
+    // layer
     implementation(project(":dms-main:main-core"))
+
+    // contracts
+    implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // web
     implementation(Dependencies.SPRING_WEB)
