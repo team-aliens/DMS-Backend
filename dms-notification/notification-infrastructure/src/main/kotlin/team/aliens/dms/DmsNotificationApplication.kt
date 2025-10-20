@@ -6,8 +6,8 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-class NotificationApplication
+class DmsNotificationApplication
 
 fun main(args: Array<String>) {
-    runApplication<NotificationApplication>(*args)
+    runApplication<DmsNotificationApplication>(*args)
 }
