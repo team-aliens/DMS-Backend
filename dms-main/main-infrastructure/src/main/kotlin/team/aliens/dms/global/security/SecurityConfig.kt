@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
+import team.aliens.dms.domain.manager.model.Manager
 import team.aliens.dms.global.filter.FilterConfig
 
 @Configuration
@@ -86,7 +87,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/notices").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)
-                    .requestMatchers(HttpMethod.POST, "/notices").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/notices").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.PATCH, "/notices/{notice-id}").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.DELETE, "/notices/{notice-id}").hasAuthority(MANAGER.name)
 
