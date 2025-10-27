@@ -10,8 +10,8 @@ class MealScheduler(
 ) {
 
     /**
-     * 매달 20일에 cron job 실행
+     * 매달 28일에 cron job 실행
      */
-    @Scheduled(cron = "0 0 0 20 * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 28 * *", zone = "Asia/Seoul")
     fun saveAllMeals() = saveAllMealsUseCase.execute()
 }
