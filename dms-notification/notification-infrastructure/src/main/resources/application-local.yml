@@ -10,4 +10,4 @@ spring:
 
   rabbitmq:
     port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:localhost} p
+    host: ${RABBITMQ_HOST:localhost}
