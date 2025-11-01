@@ -38,3 +38,7 @@ out/
 
 ### DS_Store ###
 .DS_Store
+
+### Claude Code ###
+CLAUDE.md
+.claude/*
