@@ -4,9 +4,9 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://${MAIN_MYSQL_HOST:127.0.0.1}:${MAIN_DB_PORT:3307}/${MAIN_DB_NAME:dms_main}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    url: jdbc:mysql://${MAIN_MYSQL_HOST:127.0.0.1}:${MAIN_DB_PORT:3311}/${MAIN_DB_NAME:main_prod_mysql}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${MAIN_MYSQL_USERNAME:root}
-    password: ${MAIN_MYSQL_PASSWORD:1234}
+    password: ${MAIN_MYSQL_PASSWORD:}
 
   data:
     redis:
