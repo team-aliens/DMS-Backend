@@ -5,24 +5,32 @@ import team.aliens.dms.contract.model.notification.DeviceTokenInfo
 import team.aliens.dms.contract.model.notification.NotificationInfo
 import java.util.UUID
 
-open class TopicNotificationEvent(
-    val notificationInfo: NotificationInfo
-) : ApplicationEvent(notificationInfo)
+sealed class NotificationEvent(
+    source: Any
+) : ApplicationEvent(source)
 
-open class GroupNotificationEvent(
+class GroupNotificationEvent(
     val userIds: List<UUID>,
-    notificationInfo: NotificationInfo
-) : TopicNotificationEvent(notificationInfo)
+    val notificationInfo: NotificationInfo
+) : NotificationEvent(notificationInfo)
 
 class SingleNotificationEvent(
     val userId: UUID,
-    notificationInfo: NotificationInfo
-) : TopicNotificationEvent(notificationInfo)
+    val notificationInfo: NotificationInfo
+) : NotificationEvent(notificationInfo)
+
+class TopicNotificationEvent(
+    val notificationInfo: NotificationInfo
+) : NotificationEvent(notificationInfo)
+
+sealed class DeviceTokenEvent(
+    source: Any
+) : ApplicationEvent(source)
 
 class SaveDeviceTokenEvent(
     val deviceTokenInfo: DeviceTokenInfo
-) : ApplicationEvent(deviceTokenInfo)
+) : DeviceTokenEvent(deviceTokenInfo)
 
 class DeleteDeviceTokenEvent(
     val userId: UUID
-) : ApplicationEvent(userId)
+) : DeviceTokenEvent(userId)

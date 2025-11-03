@@ -2,9 +2,9 @@ package team.aliens.dms.thirdparty.messagebroker
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Component
-import team.aliens.dms.DeleteDeviceTokenMessage
-import team.aliens.dms.SaveDeviceTokenMessage
-import team.aliens.dms.TopicDeviceTokenMessage
+import team.aliens.dms.contract.remote.rabbitmq.DeleteDeviceTokenMessage
+import team.aliens.dms.contract.remote.rabbitmq.DeviceTokenMessage
+import team.aliens.dms.contract.remote.rabbitmq.SaveDeviceTokenMessage
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.service.NotificationService
 
@@ -14,7 +14,7 @@ class DeviceTokenConsumer(
 ) {
 
     @RabbitListener(queues = ["device_token_queue"])
-    fun handleDeviceTokenMessage(message: TopicDeviceTokenMessage) {
+    fun handleDeviceTokenMessage(message: DeviceTokenMessage) {
         when (message) {
             is SaveDeviceTokenMessage -> {
                 notificationService.saveDeviceToken(

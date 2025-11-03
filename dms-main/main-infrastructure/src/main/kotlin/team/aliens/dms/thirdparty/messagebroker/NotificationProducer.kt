@@ -2,7 +2,8 @@ package team.aliens.dms.thirdparty.messagebroker
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
-import team.aliens.dms.TopicDeviceTokenMessage
+import team.aliens.dms.contract.remote.rabbitmq.DeviceTokenMessage
+import team.aliens.dms.contract.remote.rabbitmq.NotificationMessage
 
 @Component
 class NotificationProducer(
@@ -11,8 +12,8 @@ class NotificationProducer(
 
     fun sendMessage(message: Any) {
         val routingKey = when (message) {
-            is TopicDeviceTokenMessage -> "device_token"
-            else -> "notification"
+            is DeviceTokenMessage -> "device_token"
+            is NotificationMessage -> "notification"
         }
 
         rabbitTemplate.convertAndSend(
