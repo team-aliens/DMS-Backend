@@ -15,7 +15,6 @@ dependencies {
     // contract
     implementation(project(":contracts:enum-contracts:notification-enum"))
     implementation(project(":contracts:model-contracts:notification-model"))
-    implementation(project(":contracts:remote-contracts:notification-remote:grpc-proto"))
     implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
 
     // logging

@@ -4,7 +4,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 import team.aliens.dms.contract.remote.rabbitmq.DeviceTokenMessage
 import team.aliens.dms.contract.remote.rabbitmq.NotificationMessage
-import team.aliens.dms.thirdparty.messagebroker.exception.UnknownMessageExcaption
+import team.aliens.dms.thirdparty.messagebroker.exception.UnknownMessageException
 
 @Component
 class NotificationProducer(
@@ -16,7 +16,7 @@ class NotificationProducer(
             is DeviceTokenMessage -> "device_token"
             is NotificationMessage -> "notification"
             else -> {
-                throw UnknownMessageExcaption
+                throw UnknownMessageException
             }
         }
 
