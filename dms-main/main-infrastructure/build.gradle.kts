@@ -13,7 +13,6 @@ dependencies {
 
     // contract
     implementation(project(":contracts:model-contracts:notification-model"))
-    implementation(project(":contracts:remote-contracts:notification-remote:grpc-proto"))
     implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
 
     // validation
@@ -67,11 +66,6 @@ dependencies {
 
     // rabbit mq
     implementation(Dependencies.RABBITMQ)
-
-    // grpc
-    implementation(Dependencies.GRPC_PROTOBUF)
-    implementation(Dependencies.GRPC_STUB)
-    implementation(Dependencies.GRPC_NETTY_SHADED)
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
