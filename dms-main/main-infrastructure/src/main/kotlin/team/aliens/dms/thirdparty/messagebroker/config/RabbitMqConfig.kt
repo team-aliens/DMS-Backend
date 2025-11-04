@@ -49,7 +49,20 @@ class RabbitMqConfig(
         notificationQueue: Queue,
         notificationExchange: TopicExchange,
     ): Binding {
-        return BindingBuilder.bind(notificationQueue).to(notificationExchange).with("notification.#")
+        return BindingBuilder.bind(notificationQueue).to(notificationExchange).with("notification")
+    }
+
+    @Bean
+    fun deviceTokenQueue(): Queue {
+        return Queue("device_token_queue")
+    }
+
+    @Bean
+    fun deviceTokenBinding(
+        deviceTokenQueue: Queue,
+        notificationExchange: TopicExchange,
+    ): Binding {
+        return BindingBuilder.bind(deviceTokenQueue).to(notificationExchange).with("device_token")
     }
 
     @Bean
