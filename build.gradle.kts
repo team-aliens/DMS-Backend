@@ -96,8 +96,27 @@ allprojects {
         tasks.named<org.gradle.testing.jacoco.tasks.JacocoReport>("jacocoTestReport") {
             dependsOn(tasks.named("test"))
             executionData.setFrom(fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec"))
-            classDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").output.classesDirs)
-            sourceDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").allSource)
+
+            val mainSourceSet = project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+            sourceDirectories.setFrom(mainSourceSet.allSource)
+
+            classDirectories.setFrom(
+                files(mainSourceSet.output.classesDirs.files.map { dir ->
+                    fileTree(dir) {
+                        exclude(
+                            "**/global/config/**",
+                            "**/thirdparty/**/config/**",
+                            "**/scheduler/config/**",
+                            "**/persistence/**/entity/**",
+                            "**/*Application.class",
+                            "**/*Application\$*.class",
+                            "**/*Properties.class",
+                            "**/*Properties\$*.class",
+                            "**/stub/**"
+                        )
+                    }
+                })
+            )
 
             reports {
                 xml.required.set(true)
@@ -116,16 +135,14 @@ allprojects {
     }
 }
 
-// 전체 프로젝트 통합 리포트 (중복 클래스 문제로 인해 서비스별 리포트 사용 권장)
 tasks.register<JacocoReport>("jacocoSubReports") {
     group = "verification"
     description = "Generate Jacoco coverage report for all modules (excluding core modules with duplicate classes)"
 
-    // core 모듈을 제외한 모듈만 포함 (중복 클래스 방지)
     val jacocoProjects = subprojects.filter {
         it.pluginManager.hasPlugin("jacoco") &&
-        !it.childProjects.any() && // 하위 프로젝트가 없는 리프 모듈만
-        !it.path.endsWith("-core") // core 모듈 제외
+        !it.childProjects.any() &&
+        !it.path.endsWith("-core")
     }
 
     dependsOn(jacocoProjects.map { it.tasks.named("test") })
@@ -142,7 +159,26 @@ tasks.register<JacocoReport>("jacocoSubReports") {
     }
 
     sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
-    classDirectories.setFrom(sourceSets.map { it.output.classesDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
 
     reports {
         xml.required.set(true)
@@ -177,7 +213,26 @@ tasks.register<JacocoReport>("jacocoMainServiceReport") {
     }
 
     sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
-    classDirectories.setFrom(sourceSets.map { it.output.classesDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
 
     reports {
         xml.required.set(true)
@@ -201,7 +256,6 @@ tasks.register<JacocoReport>("jacocoNotificationServiceReport") {
     dependsOn(notificationProjects.map { it.tasks.named("test") })
     dependsOn(notificationProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
 
-    // 테스트가 없어도 리포트 생성
     onlyIf {
         executionData.files.any { it.exists() }
     }
@@ -217,7 +271,26 @@ tasks.register<JacocoReport>("jacocoNotificationServiceReport") {
     }
 
     sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
-    classDirectories.setFrom(sourceSets.map { it.output.classesDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
 
     reports {
         xml.required.set(true)
@@ -252,7 +325,26 @@ tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
     }
 
     sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
-    classDirectories.setFrom(sourceSets.map { it.output.classesDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
 
     reports {
         xml.required.set(true)
@@ -264,16 +356,25 @@ tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
     }
 }
 
-// 모든 서비스 리포트 한번에 생성
 tasks.register("jacocoAllServiceReports") {
     group = "verification"
     description = "Generate Jacoco coverage reports for all services"
-    
+
     dependsOn(
         "jacocoMainServiceReport",
-        "jacocoNotificationServiceReport", 
+        "jacocoNotificationServiceReport",
         "jacocoGatewayServiceReport"
     )
+
+    doLast {
+        println()
+        println("========================================")
+        println("Jacoco Reports Generated:")
+        println("  - Main Service: build/reports/jacoco/main-service/html/index.html")
+        println("  - Notification Service: build/reports/jacoco/notification-service/html/index.html")
+        println("  - Gateway Service: build/reports/jacoco/gateway-service/html/index.html")
+        println("========================================")
+    }
 }
 
 
