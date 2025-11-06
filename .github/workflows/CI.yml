@@ -84,33 +84,51 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run all tests with coverage
-        run: ./gradlew test jacocoSubReports --info
+      - name: Run all tests
+        run: ./gradlew test --info
+
+      - name: Generate service-specific coverage reports
+        run: ./gradlew jacocoAllServiceReports --info
 
       - name: Verify Jacoco reports exist
         run: |
-          echo "=== Looking for Jacoco reports ==="
-          find . -name "jacocoTestReport.xml" -type f
+          echo "=== Looking for service-specific Jacoco reports ==="
           echo "=== Main service report ==="
-          ls -la build/reports/jacoco/test/ || echo "No overall report found"
-          
-      - name: Upload overall coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/test/jacocoTestReport.xml
-          fail_ci_if_error: true
-          verbose: true
-          flags: overall
-          name: overall-coverage
+          ls -la build/reports/jacoco/main-service/ || echo "No main service report found"
+          echo "=== Notification service report ==="
+          ls -la build/reports/jacoco/notification-service/ || echo "No notification service report found"
+          echo "=== Gateway service report ==="
+          ls -la build/reports/jacoco/gateway-service/ || echo "No gateway service report found"
 
-      - name: Comment PR with coverage
+      - name: Comment PR with main service coverage
         if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
-            build/reports/jacoco/test/jacocoTestReport.xml
+            build/reports/jacoco/main-service/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 70
           min-coverage-changed-files: 80
-          title: '📊 Overall Code Coverage Report'
+          title: '📊 Main Service Coverage Report'
+
+      - name: Comment PR with notification service coverage
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            build/reports/jacoco/notification-service/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 70
+          min-coverage-changed-files: 80
+          title: '📊 Notification Service Coverage Report'
+
+      - name: Comment PR with gateway service coverage
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            build/reports/jacoco/gateway-service/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 70
+          min-coverage-changed-files: 80
+          title: '📊 Gateway Service Coverage Report'
