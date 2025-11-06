@@ -194,8 +194,8 @@ tasks.register<JacocoReport>("jacocoSubReports") {
 tasks.register<JacocoReport>("jacocoMainServiceReport") {
     group = "verification"
     description = "Generate Jacoco coverage report for dms-main service"
-    
-    val mainProjects = subprojects.filter { 
+
+    val mainProjects = subprojects.filter {
         it.path.startsWith(":dms-main") && it.pluginManager.hasPlugin("jacoco")
     }
 
@@ -241,6 +241,19 @@ tasks.register<JacocoReport>("jacocoMainServiceReport") {
 
         xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/main-service/jacocoTestReport.xml"))
         html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/main-service/html"))
+    }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/main-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Main Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
     }
 }
 
@@ -300,14 +313,27 @@ tasks.register<JacocoReport>("jacocoNotificationServiceReport") {
         xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/notification-service/jacocoTestReport.xml"))
         html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/notification-service/html"))
     }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/notification-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Notification Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
+    }
 }
 
 // dms-gateway 서비스 통합 리포트
 tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
     group = "verification"
     description = "Generate Jacoco coverage report for dms-gateway service"
-    
-    val gatewayProjects = subprojects.filter { 
+
+    val gatewayProjects = subprojects.filter {
         it.path.startsWith(":dms-gateway") && it.pluginManager.hasPlugin("jacoco")
     }
 
@@ -353,6 +379,19 @@ tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
 
         xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/gateway-service/jacocoTestReport.xml"))
         html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/gateway-service/html"))
+    }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/gateway-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Gateway Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
     }
 }
 
