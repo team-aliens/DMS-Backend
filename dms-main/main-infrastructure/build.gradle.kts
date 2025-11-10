@@ -24,6 +24,9 @@ dependencies {
     // thymeleaf
     implementation(Dependencies.SPRING_THYMELEAF)
 
+    // mail
+    implementation(Dependencies.SPRING_MAIL)
+
     // security
     implementation(Dependencies.SPRING_SECURITY)
 
@@ -33,7 +36,6 @@ dependencies {
     runtimeOnly(Dependencies.JWT_JACKSON)
 
     // aws
-    implementation(Dependencies.AWS_SES)
     implementation(Dependencies.SPRING_AWS)
 
     // slack
