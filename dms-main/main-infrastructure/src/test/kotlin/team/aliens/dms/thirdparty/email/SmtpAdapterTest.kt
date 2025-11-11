@@ -2,8 +2,6 @@ package team.aliens.dms.thirdparty.email
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.just
@@ -20,22 +18,10 @@ import team.aliens.dms.thirdparty.email.exception.SendEmailRejectedException
 class SmtpAdapterTest : DescribeSpec({
 
     val javaMailSender = mockk<JavaMailSender>()
-    val smtpProperties = SmtpProperties(
-        host = "smtp.gmail.com",
-        port = 587,
-        username = "test@example.com",
-        password = "password",
-        from = "noreply@example.com",
-        properties = mapOf(
-            "mail.smtp.auth" to "true",
-            "mail.smtp.starttls.enable" to "true"
-        )
-    )
     val templateEngine = mockk<SpringTemplateEngine>()
 
     val smtpAdapter = SmtpAdapter(
         javaMailSender = javaMailSender,
-        smtpProperties = smtpProperties,
         templateEngine = templateEngine
     )
 
@@ -115,41 +101,6 @@ class SmtpAdapterTest : DescribeSpec({
                     smtpAdapter.sendAccountId(email, accountId)
                 }
             }
-        }
-    }
-
-    describe("queryTemplates") {
-        it("SMTP는 템플릿을 서버에 등록하지 않으므로 빈 리스트를 반환한다") {
-            val result = smtpAdapter.queryTemplates()
-
-            result.shouldBeEmpty()
-        }
-    }
-
-    describe("createTemplate") {
-        it("SMTP는 템플릿을 서버에 생성하지 않으므로 아무 동작도 하지 않는다") {
-            smtpAdapter.createTemplate(EmailType.SIGNUP)
-
-            verify(exactly = 0) { templateEngine.process(any<String>(), any<Context>()) }
-            verify(exactly = 0) { javaMailSender.send(any<MimeMessage>()) }
-        }
-    }
-
-    describe("updateTemplate") {
-        it("SMTP는 템플릿을 서버에 업데이트하지 않으므로 아무 동작도 하지 않는다") {
-            smtpAdapter.updateTemplate(EmailType.SIGNUP)
-
-            verify(exactly = 0) { templateEngine.process(any<String>(), any<Context>()) }
-            verify(exactly = 0) { javaMailSender.send(any<MimeMessage>()) }
-        }
-    }
-
-    describe("deleteTemplate") {
-        it("SMTP는 템플릿을 서버에서 삭제하지 않으므로 아무 동작도 하지 않는다") {
-            smtpAdapter.deleteTemplate(EmailType.SIGNUP)
-
-            verify(exactly = 0) { templateEngine.process(any<String>(), any<Context>()) }
-            verify(exactly = 0) { javaMailSender.send(any<MimeMessage>()) }
         }
     }
 })
