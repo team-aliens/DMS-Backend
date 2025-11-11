@@ -18,6 +18,9 @@ object Dependencies {
     // thymeleaf
     const val SPRING_THYMELEAF = "org.springframework.boot:spring-boot-starter-thymeleaf"
 
+    // mail
+    const val SPRING_MAIL = "org.springframework.boot:spring-boot-starter-mail"
+
     // transaction
     const val SPRING_TRANSACTION = "org.springframework:spring-tx:${DependencyVersions.SPRING_TRANSACTION_VERSION}"
 

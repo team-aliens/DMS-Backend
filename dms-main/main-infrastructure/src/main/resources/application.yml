@@ -49,6 +49,22 @@ spring:
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
 
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:2024teamdms@gmail.com}
+    password: ${MAIL_PASSWORD:mojr tzte qhwl gfaj}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
   access-exp: ${ACCESS_EXP:3600}
@@ -69,8 +85,6 @@ cloud:
       auto: false
     s3:
       bucket: ${S3_BUCKET_NAME:dms}
-    ses:
-      source: ${SES_SENDER:asdf}
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}
