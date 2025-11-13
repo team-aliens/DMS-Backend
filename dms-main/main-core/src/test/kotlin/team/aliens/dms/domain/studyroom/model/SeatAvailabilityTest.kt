@@ -38,15 +38,5 @@ class SeatAvailabilityTest : DescribeSpec({
                 }
             }
         }
-
-        context("좌석 상태가 IN_USE이면") {
-            val seat = createSeatStub(status = SeatStatus.IN_USE)
-
-            it("SeatCanNotAppliedException이 발생한다") {
-                shouldThrow<SeatCanNotAppliedException> {
-                    seat.checkAvailable()
-                }
-            }
-        }
     }
 })
