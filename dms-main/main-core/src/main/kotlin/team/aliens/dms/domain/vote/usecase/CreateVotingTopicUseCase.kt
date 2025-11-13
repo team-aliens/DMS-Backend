@@ -5,12 +5,10 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.notice.service.CommandNoticeService
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
-import team.aliens.dms.domain.vote.exception.InvalidPeriodException
 import team.aliens.dms.domain.vote.model.VoteType
 import team.aliens.dms.domain.vote.model.VotingOption
 import team.aliens.dms.domain.vote.model.VotingTopic
 import team.aliens.dms.domain.vote.service.VoteService
-import java.time.LocalDateTime
 
 @UseCase
 class CreateVotingTopicUseCase(
@@ -25,10 +23,6 @@ class CreateVotingTopicUseCase(
     }
 
     fun execute(request: CreateVoteTopicRequest): CreateVotingTopicResponse {
-        if (request.startTime.isAfter(request.endTime) || request.endTime.isBefore(LocalDateTime.now())) {
-            throw InvalidPeriodException
-        }
-
         val managerId = securityService.getCurrentUserId()
 
         val votingTopic = voteService.saveVotingTopic(
@@ -41,6 +35,7 @@ class CreateVotingTopicUseCase(
                 voteType = request.voteType,
             )
         )
+        votingTopic.checkVotingTopicPeriod()
 
         if (votingTopic.voteType == VoteType.APPROVAL_VOTE) {
             addApprovalOptions(votingTopic)
