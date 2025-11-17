@@ -37,14 +37,14 @@ class FCMAdapter : NotificationPort {
         val message = this.getMassageBuilderByNotification(notification)
             .setToken(token)
             .build()
-        firebaseInstance.sendAsync(message)
+        firebaseInstance.send(message)
     }
 
     override fun sendByTopic(
         notification: Notification
     ) {
         val message = this.getMassageBuilderByNotification(notification).build()
-        firebaseInstance.sendAsync(message)
+        firebaseInstance.send(message)
     }
 
     private fun getMassageBuilderByNotification(notification: Notification) =
@@ -66,26 +66,14 @@ class FCMAdapter : NotificationPort {
         tokens: List<String>,
         notification: Notification
     ) {
-        val message = this.getMulticastMassageBuilderByNotification(notification)
-            .addAllTokens(tokens)
-            .build()
-        firebaseInstance.sendMulticastAsync(message)
-    }
-
-    private fun getMulticastMassageBuilderByNotification(notification: Notification) =
-        with(notification) {
-            MulticastMessage
-                .builder()
-                .setNotification(
-                    com.google.firebase.messaging.Notification
-                        .builder()
-                        .setTitle(title)
-                        .setBody(content)
-                        .build()
-                )
-                .setApnsConfig(getApnsConfig(threadId))
+        tokens.forEach {
+            val message = this.getMassageBuilderByNotification(notification)
+                .setToken(it)
+                .build()
+            firebaseInstance.send(message)
         }
-
+    }
+    
     private fun getApnsConfig(threadId: String) =
         ApnsConfig
             .builder()
