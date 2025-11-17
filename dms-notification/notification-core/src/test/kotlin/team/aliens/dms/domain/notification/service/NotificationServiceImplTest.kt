@@ -212,4 +212,5 @@ class NotificationServiceImplTest : DescribeSpec({
             }
         }
     }
+
 })
