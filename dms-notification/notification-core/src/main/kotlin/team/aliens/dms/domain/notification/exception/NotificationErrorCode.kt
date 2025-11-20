@@ -10,7 +10,8 @@ enum class NotificationErrorCode(
 ) : ErrorProperty {
 
     DEVICE_TOKEN_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Notification Token Not Found", 1),
-    NOTIFICATION_OF_USER_NOT_FOUND(ErrorStatus.BAD_REQUEST, "NotificationOfUser Not Found", 2)
+    NOTIFICATION_OF_USER_NOT_FOUND(ErrorStatus.BAD_REQUEST, "NotificationOfUser Not Found", 2),
+    NOTIFICATION_SEND_FAILED(ErrorStatus.INTERNAL_SERVER_ERROR, "Notification Send Failed", 3)
     ;
 
     override fun status(): Int = status

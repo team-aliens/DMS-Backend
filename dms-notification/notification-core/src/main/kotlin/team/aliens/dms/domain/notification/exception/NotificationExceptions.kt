@@ -9,3 +9,7 @@ object DeviceTokenNotFoundException : DmsException(
 object NotificationOfUserNotFoundException : DmsException(
     NotificationErrorCode.NOTIFICATION_OF_USER_NOT_FOUND
 )
+
+object NotificationSendFailedException : DmsException(
+    NotificationErrorCode.NOTIFICATION_SEND_FAILED
+)
