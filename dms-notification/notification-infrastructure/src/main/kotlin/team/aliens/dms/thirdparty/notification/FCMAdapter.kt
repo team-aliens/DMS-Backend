@@ -17,17 +17,17 @@ class FCMAdapter : NotificationPort {
         get() = FirebaseMessaging.getInstance()
 
     override fun subscribeTopic(token: String, topic: Topic) {
-        firebaseInstance.subscribeToTopicAsync(listOf(token), topic.toString())
+        firebaseInstance.subscribeToTopic(listOf(token), topic.toString())
     }
 
     override fun subscribeAllTopics(token: String) {
         Topic.values().forEach {
-            firebaseInstance.subscribeToTopicAsync(listOf(token), it.toString())
+            firebaseInstance.subscribeToTopic(listOf(token), it.toString())
         }
     }
 
     override fun unsubscribeTopic(token: String, topic: Topic) {
-        firebaseInstance.unsubscribeFromTopicAsync(listOf(token), topic.toString())
+        firebaseInstance.unsubscribeFromTopic(listOf(token), topic.toString())
     }
 
     override fun sendMessage(
@@ -37,14 +37,14 @@ class FCMAdapter : NotificationPort {
         val message = this.getMassageBuilderByNotification(notification)
             .setToken(token)
             .build()
-        firebaseInstance.sendAsync(message)
+        firebaseInstance.send(message)
     }
 
     override fun sendByTopic(
         notification: Notification
     ) {
         val message = this.getMassageBuilderByNotification(notification).build()
-        firebaseInstance.sendAsync(message)
+        firebaseInstance.send(message)
     }
 
     private fun getMassageBuilderByNotification(notification: Notification) =
@@ -69,7 +69,7 @@ class FCMAdapter : NotificationPort {
         val message = this.getMulticastMassageBuilderByNotification(notification)
             .addAllTokens(tokens)
             .build()
-        firebaseInstance.sendMulticastAsync(message)
+        firebaseInstance.sendEachForMulticast(message)
     }
 
     private fun getMulticastMassageBuilderByNotification(notification: Notification) =
