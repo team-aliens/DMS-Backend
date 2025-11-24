@@ -18,8 +18,16 @@ sealed class DeviceTokenMessage
 
 data class SaveDeviceTokenMessage(
     val deviceTokenInfo: DeviceTokenInfo
-) : DeviceTokenMessage()
+) : DeviceTokenMessage() {
+    companion object {
+        const val TYPE = "SaveDeviceTokenMessage"
+    }
+}
 
 data class DeleteDeviceTokenMessage(
     val userId: UUID
-) : DeviceTokenMessage()
+) : DeviceTokenMessage() {
+    companion object {
+        const val TYPE = "DeleteDeviceTokenMessage"
+    }
+}
