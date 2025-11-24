@@ -16,6 +16,7 @@ import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
 import team.aliens.dms.persistence.outbox.entity.OutboxJpaEntity
 import team.aliens.dms.persistence.outbox.entity.OutboxStatus
 import team.aliens.dms.persistence.outbox.repository.OutboxJpaRepository
+import java.util.UUID
 
 @Component
 class NotificationEventHandler(
@@ -24,12 +25,13 @@ class NotificationEventHandler(
     private val objectMapper: ObjectMapper
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
+    private val outboxIdHolder = ThreadLocal<UUID>()
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun saveOutbox(event: NotificationEvent) {
         val (eventType, message) = createMessage(event)
 
-        outboxRepository.save(
+        val saved = outboxRepository.save(
             OutboxJpaEntity(
                 aggregateType = "notification",
                 eventType = eventType,
@@ -37,20 +39,21 @@ class NotificationEventHandler(
                 status = OutboxStatus.PENDING
             )
         )
+        outboxIdHolder.set(saved.id)
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun publishMessage(event: NotificationEvent) {
         val (_, message) = createMessage(event)
+        val outboxId = outboxIdHolder.get()
 
         try {
             notificationProducer.sendMessage(message)
-            outboxRepository.findByStatusAndPayload(
-                OutboxStatus.PENDING,
-                objectMapper.writeValueAsString(message)
-            )?.let { outboxRepository.delete(it) }
+            outboxId?.let { outboxRepository.deleteById(it) }
         } catch (e: Exception) {
             log.warn("Failed to send notification immediately, will be retried by scheduler", e)
+        } finally {
+            outboxIdHolder.remove()
         }
     }
 

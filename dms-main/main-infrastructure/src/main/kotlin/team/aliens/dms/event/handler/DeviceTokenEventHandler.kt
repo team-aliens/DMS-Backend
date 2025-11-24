@@ -14,6 +14,7 @@ import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
 import team.aliens.dms.persistence.outbox.entity.OutboxJpaEntity
 import team.aliens.dms.persistence.outbox.entity.OutboxStatus
 import team.aliens.dms.persistence.outbox.repository.OutboxJpaRepository
+import java.util.UUID
 
 @Component
 class DeviceTokenEventHandler(
@@ -22,12 +23,13 @@ class DeviceTokenEventHandler(
     private val objectMapper: ObjectMapper
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
+    private val outboxIdHolder = ThreadLocal<UUID>()
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun saveOutbox(event: DeviceTokenEvent) {
         val (eventType, message) = createMessage(event)
 
-        outboxRepository.save(
+        val saved = outboxRepository.save(
             OutboxJpaEntity(
                 aggregateType = "device_token",
                 eventType = eventType,
@@ -35,20 +37,21 @@ class DeviceTokenEventHandler(
                 status = OutboxStatus.PENDING
             )
         )
+        outboxIdHolder.set(saved.id)
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun publishMessage(event: DeviceTokenEvent) {
         val (_, message) = createMessage(event)
+        val outboxId = outboxIdHolder.get()
 
         try {
             notificationProducer.sendMessage(message)
-            outboxRepository.findByStatusAndPayload(
-                OutboxStatus.PENDING,
-                objectMapper.writeValueAsString(message)
-            )?.let { outboxRepository.delete(it) }
+            outboxId?.let { outboxRepository.deleteById(it) }
         } catch (e: Exception) {
             log.warn("Failed to send device token message immediately, will be retried by scheduler", e)
+        } finally {
+            outboxIdHolder.remove()
         }
     }
 

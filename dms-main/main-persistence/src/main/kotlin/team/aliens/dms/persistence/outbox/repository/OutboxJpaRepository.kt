@@ -7,5 +7,4 @@ import java.util.UUID
 
 interface OutboxJpaRepository : JpaRepository<OutboxJpaEntity, UUID> {
     fun findByStatus(status: OutboxStatus): List<OutboxJpaEntity>
-    fun findByStatusAndPayload(status: OutboxStatus, payload: String): OutboxJpaEntity?
 }
