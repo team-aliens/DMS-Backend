@@ -24,6 +24,10 @@ dependencies {
 
     // flyway
     implementation(Dependencies.FLYWAY)
+
+    // testcontainers
+    testImplementation(Dependencies.TESTCONTAINERS)
+    testImplementation(Dependencies.TESTCONTAINERS_MYSQL)
 }
 
 allOpen {
