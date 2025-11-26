@@ -14,7 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.tag.dto.*
+import team.aliens.dms.domain.tag.dto.CreateTagWebRequest
+import team.aliens.dms.domain.tag.dto.GrantTagRequest
+import team.aliens.dms.domain.tag.dto.GrantTagWebRequest
+import team.aliens.dms.domain.tag.dto.TagIdResponse
+import team.aliens.dms.domain.tag.dto.TagsResponse
+import team.aliens.dms.domain.tag.dto.UpdateTagWebRequest
 import team.aliens.dms.domain.tag.usecase.CancelGrantedTagUseCase
 import team.aliens.dms.domain.tag.usecase.CreateTagUseCase
 import team.aliens.dms.domain.tag.usecase.GrantTagUseCase

@@ -4,7 +4,7 @@ import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.volunteer.model.AvailableGrade
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
-import java.util.*
+import java.util.UUID
 
 internal fun createVolunteerStub(
     id: UUID = UUID.randomUUID(),

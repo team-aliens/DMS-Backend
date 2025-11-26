@@ -5,20 +5,20 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
+import team.aliens.dms.common.dto.OutboxData
+import team.aliens.dms.common.dto.OutboxStatus
+import team.aliens.dms.common.spi.OutboxPort
 import team.aliens.dms.contract.remote.rabbitmq.DeleteDeviceTokenMessage
 import team.aliens.dms.contract.remote.rabbitmq.SaveDeviceTokenMessage
 import team.aliens.dms.event.DeleteDeviceTokenEvent
 import team.aliens.dms.event.DeviceTokenEvent
 import team.aliens.dms.event.SaveDeviceTokenEvent
 import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
-import team.aliens.dms.persistence.outbox.entity.OutboxJpaEntity
-import team.aliens.dms.persistence.outbox.entity.OutboxStatus
-import team.aliens.dms.persistence.outbox.repository.OutboxJpaRepository
 import java.util.UUID
 
 @Component
 class DeviceTokenEventHandler(
-    private val outboxRepository: OutboxJpaRepository,
+    private val outboxPort: OutboxPort,
     private val notificationProducer: NotificationProducer,
     private val objectMapper: ObjectMapper
 ) {
@@ -29,8 +29,9 @@ class DeviceTokenEventHandler(
     fun saveOutbox(event: DeviceTokenEvent) {
         val (eventType, message) = createMessage(event)
 
-        val saved = outboxRepository.save(
-            OutboxJpaEntity(
+        val saved = outboxPort.save(
+            OutboxData(
+                id = null,
                 aggregateType = "device_token",
                 eventType = eventType,
                 payload = objectMapper.writeValueAsString(message),
@@ -47,7 +48,7 @@ class DeviceTokenEventHandler(
 
         try {
             notificationProducer.sendMessage(message)
-            outboxId?.let { outboxRepository.deleteById(it) }
+            outboxId?.let { outboxPort.deleteById(it) }
         } catch (e: Exception) {
             log.warn("Failed to send device token message immediately, will be retried by scheduler", e)
         } finally {
