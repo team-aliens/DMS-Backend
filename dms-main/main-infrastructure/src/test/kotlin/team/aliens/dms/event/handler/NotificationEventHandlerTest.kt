@@ -1,6 +1,8 @@
 package team.aliens.dms.event.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.Runs
 import io.mockk.every
@@ -18,15 +20,17 @@ import java.util.UUID
 
 class NotificationEventHandlerTest : DescribeSpec({
 
+    isolationMode = IsolationMode.InstancePerLeaf
+
     val outboxPort = mockk<OutboxPort>()
     val notificationProducer = mockk<NotificationProducer>()
-    val objectMapper = ObjectMapper()
+    val objectMapper = ObjectMapper().registerModule(JavaTimeModule())
     val notificationEventHandler = NotificationEventHandler(outboxPort, notificationProducer, objectMapper)
 
     describe("saveOutbox") {
         context("SingleNotificationEvent가 발생하면") {
             val userId = UUID.randomUUID()
-            val notificationInfo = mockk<NotificationInfo>()
+            val notificationInfo = mockk<NotificationInfo>(relaxed = true)
             val event = SingleNotificationEvent(
                 userId = userId,
                 notificationInfo = notificationInfo
@@ -63,7 +67,7 @@ class NotificationEventHandlerTest : DescribeSpec({
     describe("publishMessage") {
         context("메시지 전송에 성공하면") {
             val userId = UUID.randomUUID()
-            val notificationInfo = mockk<NotificationInfo>()
+            val notificationInfo = mockk<NotificationInfo>(relaxed = true)
             val event = SingleNotificationEvent(
                 userId = userId,
                 notificationInfo = notificationInfo
@@ -95,7 +99,7 @@ class NotificationEventHandlerTest : DescribeSpec({
 
         context("메시지 전송에 실패하면") {
             val userId = UUID.randomUUID()
-            val notificationInfo = mockk<NotificationInfo>()
+            val notificationInfo = mockk<NotificationInfo>(relaxed = true)
             val event = SingleNotificationEvent(
                 userId = userId,
                 notificationInfo = notificationInfo

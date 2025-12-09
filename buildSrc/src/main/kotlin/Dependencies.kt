@@ -59,6 +59,7 @@ object Dependencies {
     const val KOTEST_ASSERTIONS = "io.kotest:kotest-assertions-core:${DependencyVersions.KOTEST_VERSION}"
     const val TESTCONTAINERS = "org.testcontainers:testcontainers:${DependencyVersions.TESTCONTAINERS_VERSION}"
     const val TESTCONTAINERS_MYSQL = "org.testcontainers:mysql:${DependencyVersions.TESTCONTAINERS_VERSION}"
+    const val TESTCONTAINERS_RABBITMQ = "org.testcontainers:rabbitmq:${DependencyVersions.TESTCONTAINERS_VERSION}"
 
     // time based uuid
     const val UUID_TIME = "com.fasterxml.uuid:java-uuid-generator:${DependencyVersions.UUID_TIME_VERSION}"

@@ -1,6 +1,7 @@
 package team.aliens.dms.event.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.Runs
 import io.mockk.every
@@ -17,6 +18,8 @@ import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
 import java.util.UUID
 
 class DeviceTokenEventHandlerTest : DescribeSpec({
+
+    isolationMode = IsolationMode.InstancePerLeaf
 
     val outboxPort = mockk<OutboxPort>()
     val notificationProducer = mockk<NotificationProducer>()
@@ -72,6 +75,7 @@ class DeviceTokenEventHandlerTest : DescribeSpec({
             val savedOutbox = OutboxData(
                 id = outboxId,
                 aggregateType = "device_token",
+
                 eventType = "SaveDeviceTokenMessage",
                 payload = objectMapper.writeValueAsString(SaveDeviceTokenMessage(deviceTokenInfo)),
                 status = OutboxStatus.PENDING,

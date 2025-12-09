@@ -14,6 +14,7 @@ dependencies {
     // contract
     implementation(project(":contracts:model-contracts:notification-model"))
     implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
+    implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // validation
     implementation(Dependencies.SPRING_VALIDATION)
@@ -71,6 +72,16 @@ dependencies {
 
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
+
+    // test
+    testImplementation(Dependencies.SPRING_TEST)
+    testImplementation(Dependencies.KOTEST)
+    testImplementation(Dependencies.KOTEST_ASSERTIONS)
+    testImplementation(Dependencies.SPRING_KOTEST)
+    testImplementation(Dependencies.TESTCONTAINERS)
+    testImplementation(Dependencies.TESTCONTAINERS_MYSQL)
+    testImplementation(Dependencies.TESTCONTAINERS_RABBITMQ)
+    testImplementation(Dependencies.SPRING_DATA_JPA)
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
