@@ -19,13 +19,25 @@ sealed class NotificationMessage
 data class GroupNotificationMessage(
     val userIds: List<UUID>,
     val notificationInfo: NotificationInfo
-) : NotificationMessage()
+) : NotificationMessage() {
+    companion object {
+        const val TYPE = "GroupNotificationMessage"
+    }
+}
 
 data class SingleNotificationMessage(
     val userId: UUID,
     val notificationInfo: NotificationInfo
-) : NotificationMessage()
+) : NotificationMessage() {
+    companion object {
+        const val TYPE = "SingleNotificationMessage"
+    }
+}
 
 data class TopicNotificationMessage(
     val notificationInfo: NotificationInfo
-) : NotificationMessage()
+) : NotificationMessage() {
+    companion object {
+        const val TYPE = "TopicNotificationMessage"
+    }
+}

@@ -4,7 +4,7 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://${NOTIFICATION_MYSQL_HOST}:${NOTIFICATION_DB_PORT:3307}/${DB_NAME:dms_notification_prod}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    url: jdbc:mysql://${NOTIFICATION_MYSQL_HOST:localhost}:${NOTIFICATION_DB_PORT:3313}/${NOTIFICATION_DB_NAME:notification_stag_mysql}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${NOTIFICATION_MYSQL_USERNAME}
     password: ${NOTIFICATION_MYSQL_PASSWORD}
 
