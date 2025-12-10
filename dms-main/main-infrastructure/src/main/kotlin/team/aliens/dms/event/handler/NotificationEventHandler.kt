@@ -25,7 +25,7 @@ class NotificationEventHandler(
     private val objectMapper: ObjectMapper
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
-    private val outboxIdHolder = ThreadLocal<UUID>()
+    private val outboxIdsByEventIdentity = ThreadLocal<MutableMap<Int, UUID>>()
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun saveOutbox(event: NotificationEvent) {
@@ -40,13 +40,19 @@ class NotificationEventHandler(
                 status = OutboxStatus.PENDING
             )
         )
-        outboxIdHolder.set(saved.id)
+
+        val map = outboxIdsByEventIdentity.get() ?: mutableMapOf<Int, UUID>().also {
+            outboxIdsByEventIdentity.set(it)
+        }
+
+        map[System.identityHashCode(event)] = saved.id!!
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun publishMessage(event: NotificationEvent) {
         val (_, message) = createMessage(event)
-        val outboxId = outboxIdHolder.get()
+        val map = outboxIdsByEventIdentity.get()
+        val outboxId = map.remove(System.identityHashCode(event))
 
         try {
             notificationProducer.sendMessage(message)
@@ -54,7 +60,9 @@ class NotificationEventHandler(
         } catch (e: Exception) {
             log.warn("Failed to send notification immediately, will be retried by scheduler", e)
         } finally {
-            outboxIdHolder.remove()
+            if (map.isNullOrEmpty()) {
+                outboxIdsByEventIdentity.remove()
+            }
         }
     }
 
