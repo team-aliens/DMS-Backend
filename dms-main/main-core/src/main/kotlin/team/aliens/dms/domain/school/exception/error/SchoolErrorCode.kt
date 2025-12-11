@@ -9,7 +9,7 @@ enum class SchoolErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    ANSWER_MISMATCH(ErrorStatus.UNAUTHORIZED, "Answer Mismatch", 1),
+    ANSWER_MISMATCH(ErrorStatus.UNPROCESSABLE_ENTITY, "Answer Mismatch", 1),
     SCHOOL_CODE_MISMATCH(ErrorStatus.UNAUTHORIZED, "School Code Mismatch", 2),
     SCHOOL_MISMATCH(ErrorStatus.UNAUTHORIZED, "School Mismatch", 3),
 
