@@ -2,11 +2,15 @@ package team.aliens.dms.domain.volunteer.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationAlreadyAssigned
+import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotFoundException
+import team.aliens.dms.domain.volunteer.exception.VolunteerInvalidScoreRangeException
+import team.aliens.dms.domain.volunteer.exception.VolunteerNotFoundException
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.model.VolunteerScore
 import team.aliens.dms.domain.volunteer.spi.CommandVolunteerScorePort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerScorePort
+import java.util.UUID
 
 @Service
 class CommandVolunteerScoreServiceImpl(
@@ -29,5 +33,20 @@ class CommandVolunteerScoreServiceImpl(
         )
 
         commandVolunteerScorePort.saveVolunteerScore(volunteerScore)
+    }
+
+    override fun updateVolunteerScore(applicationId: UUID, updateScore: Int) {
+
+        val volunteerApplication = queryVolunteerScorePort.queryVolunteerApplicationById(applicationId)
+            ?: throw VolunteerApplicationNotFoundException
+
+        val volunteer = queryVolunteerScorePort.queryVolunteerById(volunteerApplication.volunteerId)
+            ?: throw VolunteerNotFoundException
+
+        if (updateScore < volunteer.minScore || updateScore > volunteer.maxScore) {
+            throw VolunteerInvalidScoreRangeException
+        }
+
+        commandVolunteerScorePort.updateVolunteerScore(applicationId, updateScore)
     }
 }

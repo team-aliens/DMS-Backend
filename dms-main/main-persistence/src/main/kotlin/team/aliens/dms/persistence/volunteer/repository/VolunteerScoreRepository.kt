@@ -7,4 +7,6 @@ import java.util.UUID
 interface VolunteerScoreRepository : CrudRepository<VolunteerScoreJpaEntity, UUID> {
 
     fun existsByVolunteerApplicationId(applicationId: UUID): Boolean
+
+    fun findByVolunteerApplicationId(volunteerApplicationId: UUID): VolunteerScoreJpaEntity?
 }

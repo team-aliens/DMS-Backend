@@ -13,28 +13,31 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
-import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
+import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
+import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
+import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerScoreRequest
 import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteersResponse
 import team.aliens.dms.domain.volunteer.dto.response.CurrentVolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.CreateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.DeleteVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.ExcludeVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.ManagerGetAllVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAppliedStudentUseCase
-import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryCurrentVolunteerApplicantsUseCase
-import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
-import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCase
-import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
-import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.ExcludeVolunteerApplicationUseCase
+import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerScoreUseCase
+
 import java.util.UUID
 
 @Validated
@@ -53,7 +56,8 @@ class VolunteerWebAdapter(
     private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase,
     private val queryAppliedStudentUseCase: QueryAppliedStudentUseCase,
     private val queryCurrentVolunteerApplicantsUseCase: QueryCurrentVolunteerApplicantsUseCase,
-    private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase
+    private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase,
+    private val updateVolunteerScoreUseCase: UpdateVolunteerScoreUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -154,5 +158,14 @@ class VolunteerWebAdapter(
     @GetMapping("/current")
     fun queryAppliedStudent(): CurrentVolunteerApplicantsResponse {
         return queryCurrentVolunteerApplicantsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/score/{volunteer-application-id}")
+    fun updateVolunteerScore(
+        @PathVariable("volunteer-application-id") @NotNull applicationId: UUID,
+        @Valid @RequestBody request: UpdateVolunteerScoreRequest
+    ) {
+        updateVolunteerScoreUseCase.execute(applicationId, request.updateScore)
     }
 }

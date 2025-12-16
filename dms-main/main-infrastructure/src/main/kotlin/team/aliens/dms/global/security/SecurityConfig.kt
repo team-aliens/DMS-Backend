@@ -204,6 +204,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.DELETE, "/volunteers/cancellation/{volunteer-id}").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/volunteers").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/volunteers/my/application").hasAuthority(STUDENT.name)
+                    .requestMatchers(HttpMethod.PATCH, "/volunteers/score/{volunteer-application-id}").hasAuthority(MANAGER.name)
 
                 authorize
                     // /votes
