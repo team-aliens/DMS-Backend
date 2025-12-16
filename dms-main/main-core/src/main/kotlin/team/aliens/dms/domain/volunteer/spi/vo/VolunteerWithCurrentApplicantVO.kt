@@ -9,8 +9,8 @@ import java.util.UUID
 open class VolunteerWithCurrentApplicantVO(
     val id: UUID,
     val name: String,
-    val score: Int,
-    val optionalScore: Int,
+    val maxScore: Int,
+    val minScore: Int,
     val currentApplicants: Int,
     val maxApplicants: Int,
     val availableSex: Sex,
@@ -22,8 +22,8 @@ open class VolunteerWithCurrentApplicantVO(
     fun toVolunteer() = Volunteer(
         id = id,
         name = name,
-        score = score,
-        optionalScore = optionalScore,
+        maxScore = maxScore,
+        minScore = minScore,
         maxApplicants = maxApplicants,
         availableSex = availableSex,
         availableGrade = availableGrade,

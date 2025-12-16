@@ -17,8 +17,8 @@ class UpdateVolunteerUseCase(
                 name = updateVolunteerRequest.name,
                 availableSex = updateVolunteerRequest.availableSex,
                 availableGrade = updateVolunteerRequest.availableGrade,
-                score = updateVolunteerRequest.score,
-                optionalScore = updateVolunteerRequest.optionalScore,
+                maxScore = updateVolunteerRequest.maxScore,
+                minScore = updateVolunteerRequest.minScore,
                 maxApplicants = updateVolunteerRequest.maxApplicants,
             )
         )

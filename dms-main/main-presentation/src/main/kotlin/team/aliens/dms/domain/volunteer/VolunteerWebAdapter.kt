@@ -88,8 +88,8 @@ class VolunteerWebAdapter(
                 name = createVolunteerWebRequest.name,
                 availableGrade = createVolunteerWebRequest.availableGrade,
                 availableSex = createVolunteerWebRequest.availableSex,
-                score = createVolunteerWebRequest.score!!,
-                optionalScore = createVolunteerWebRequest.optionalScore!!,
+                maxScore = createVolunteerWebRequest.maxScore!!,
+                minScore = createVolunteerWebRequest.minScore!!,
                 maxApplicants = createVolunteerWebRequest.maxApplicants!!,
             )
         )
@@ -106,8 +106,8 @@ class VolunteerWebAdapter(
                 name = updateVolunteerWebRequest.name,
                 availableGrade = updateVolunteerWebRequest.availableGrade,
                 availableSex = updateVolunteerWebRequest.availableSex,
-                score = updateVolunteerWebRequest.score!!,
-                optionalScore = updateVolunteerWebRequest.optionalScore!!,
+                maxScore = updateVolunteerWebRequest.maxScore!!,
+                minScore = updateVolunteerWebRequest.minScore!!,
                 maxApplicants = updateVolunteerWebRequest.maxApplicants!!,
                 volunteerId = volunteerId
             )

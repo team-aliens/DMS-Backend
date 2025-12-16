@@ -14,9 +14,9 @@ data class Volunteer(
 
     val name: String,
 
-    val score: Int,
+    val maxScore: Int,
 
-    val optionalScore: Int = 0,
+    val minScore: Int = 0,
 
     val maxApplicants: Int,
 

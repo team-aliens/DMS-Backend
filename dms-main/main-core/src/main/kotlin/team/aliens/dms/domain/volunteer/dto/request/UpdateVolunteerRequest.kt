@@ -8,8 +8,8 @@ data class UpdateVolunteerRequest(
     val name: String,
     val availableSex: Sex,
     val availableGrade: AvailableGrade,
-    val score: Int,
-    val optionalScore: Int,
+    val maxScore: Int,
+    val minScore: Int,
     val maxApplicants: Int,
     val volunteerId: UUID
 )
