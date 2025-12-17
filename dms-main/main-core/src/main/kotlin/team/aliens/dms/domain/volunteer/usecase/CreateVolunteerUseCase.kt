@@ -19,8 +19,8 @@ class CreateVolunteerUseCase(
             name = createVolunteerRequest.name,
             availableSex = createVolunteerRequest.availableSex,
             availableGrade = createVolunteerRequest.availableGrade,
-            score = createVolunteerRequest.score,
-            optionalScore = createVolunteerRequest.optionalScore,
+            maxScore = createVolunteerRequest.maxScore,
+            minScore = createVolunteerRequest.minScore,
             maxApplicants = createVolunteerRequest.maxApplicants,
             schoolId = schoolId
         )

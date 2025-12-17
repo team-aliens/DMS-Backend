@@ -67,8 +67,8 @@ class VolunteerPersistenceAdapter(
                         QQueryVolunteerWithCurrentApplicantVO(
                             volunteerJpaEntity.id,
                             volunteerJpaEntity.name,
-                            volunteerJpaEntity.score,
-                            volunteerJpaEntity.optionalScore,
+                            volunteerJpaEntity.maxScore,
+                            volunteerJpaEntity.minScore,
                             set(volunteerApplicationJpaEntity.id),
                             volunteerJpaEntity.maxApplicants,
                             volunteerJpaEntity.availableSex,

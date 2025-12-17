@@ -25,3 +25,7 @@ object VolunteerApplicationNotAssigned : DmsException(
 object VolunteerApplicationAlreadyExists : DmsException(
     VolunteerErrorCode.VOLUNTEER_APPLICATION_ALREADY_EXISTS
 )
+
+object VolunteerInvalidScoreRangeException : DmsException(
+    VolunteerErrorCode.VOLUNTEER_INVALID_SCORE_RANGE
+)

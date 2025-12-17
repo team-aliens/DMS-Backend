@@ -17,8 +17,8 @@ class VolunteerMapper(
             Volunteer(
                 id = it.id!!,
                 name = it.name,
-                score = it.score,
-                optionalScore = it.optionalScore,
+                maxScore = it.maxScore,
+                minScore = it.minScore,
                 maxApplicants = it.maxApplicants,
                 availableSex = it.availableSex,
                 availableGrade = it.availableGrade,
@@ -32,8 +32,8 @@ class VolunteerMapper(
         return VolunteerJpaEntity(
             id = domain.id,
             name = domain.name,
-            score = domain.score,
-            optionalScore = domain.optionalScore,
+            maxScore = domain.maxScore,
+            minScore = domain.minScore,
             maxApplicants = domain.maxApplicants,
             availableSex = domain.availableSex,
             availableGrade = domain.availableGrade,
