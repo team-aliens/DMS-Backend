@@ -19,7 +19,8 @@ class CommandVolunteerScoreServiceImpl(
 ) : CommandVolunteerScoreService {
 
     override fun createVolunteerScore(
-        volunteerApplication: VolunteerApplication, volunteer: Volunteer
+        volunteerApplication: VolunteerApplication,
+        volunteer: Volunteer
     ) {
         volunteerApplication.checkIsApproved()
 

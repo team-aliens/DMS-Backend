@@ -1,6 +1,5 @@
 package team.aliens.dms.persistence.volunteer
 
-import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.volunteer.exception.VolunteerApplicationNotFoundException
