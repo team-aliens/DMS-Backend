@@ -46,7 +46,7 @@ class CreateVotingTopicUseCase(
             addApprovalOptions(votingTopic)
         }
 
-        noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, false)
+        noticeService.voteResultNotice(votingTopic.id, request.endTime, false)
 
         return CreateVotingTopicResponse(votingTopic.id)
     }
