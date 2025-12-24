@@ -58,7 +58,7 @@ class CommandNoticeServiceImpl(
         commandNoticePort.deleteNotice(notice)
     }
 
-    override fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
+    override fun voteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean) {
         val managerId = securityPort.getCurrentUserId()
         val schoolId = securityPort.getCurrentUserSchoolId()
         val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
@@ -68,32 +68,28 @@ class CommandNoticeServiceImpl(
         val votingTopic = queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
         val content = generateVoteResultContent(votingTopic)
 
-        taskSchedulerPort.scheduleTask(
-            votingTopicId, {
-                commandNoticePort.saveNotice(
-                    Notice(
-                        title = reNoticePrefix + votingTopic.topicName,
-                        content = content,
-                        managerId = managerId,
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now()
-                    )
-                ).also {
-                    notificationEventPort.publishNotificationToApplicant(
-                        userIds,
-                        NotificationInfo(
-                            schoolId = schoolId,
-                            topic = Topic.NOTICE,
-                            linkIdentifier = it.id.toString(),
-                            title = it.title,
-                            content = "기숙사 공지가 등록되었습니다.",
-                            threadId = it.id.toString(),
-                            isSaveRequired = true
-                        )
-                    )
-                }
-            }, reservedTime
-        )
+        commandNoticePort.saveNotice(
+            Notice(
+                title = reNoticePrefix + votingTopic.topicName,
+                content = content,
+                managerId = managerId,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            )
+        ).also {
+            notificationEventPort.publishNotificationToApplicant(
+                userIds,
+                NotificationInfo(
+                    schoolId = schoolId,
+                    topic = Topic.NOTICE,
+                    linkIdentifier = it.id.toString(),
+                    title = it.title,
+                    content = "기숙사 공지가 등록되었습니다.",
+                    threadId = it.id.toString(),
+                    isSaveRequired = true
+                )
+            )
+        }
     }
 
     private fun generateVoteResultContent(votingTopic: VotingTopic): String {
