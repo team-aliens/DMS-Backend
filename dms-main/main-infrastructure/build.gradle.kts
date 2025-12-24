@@ -70,6 +70,9 @@ dependencies {
     // rabbit mq
     implementation(Dependencies.RABBITMQ)
 
+    // quartz
+    implementation(Dependencies.QUARTZ)
+
     // jackson
     implementation(Dependencies.JACKSON_TYPE)
 
