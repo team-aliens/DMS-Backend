@@ -51,4 +51,8 @@ class VolunteerScorePersistenceAdapter(
     override fun queryVolunteerById(volunteerId: UUID): Volunteer? =
         volunteerRepository.findByIdOrNull(volunteerId)
             ?.let { volunteerMapper.toDomain(it) }
+
+    override fun queryScoreByApplicationId(applicationId: UUID): VolunteerScore? =
+        volunteerScoreRepository.findByVolunteerApplicationId(applicationId)
+            ?.let { volunteerScoreMapper.toDomain(it) }
 }
