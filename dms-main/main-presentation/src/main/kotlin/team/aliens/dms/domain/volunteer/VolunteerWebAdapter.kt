@@ -21,6 +21,7 @@ import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteersResponse
 import team.aliens.dms.domain.volunteer.dto.response.CurrentVolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteerAssignScoreResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
@@ -37,6 +38,7 @@ import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCas
 import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerScoreUseCase
 import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryAssignScoreUseCase
 import java.util.UUID
 
 @Validated
@@ -56,7 +58,8 @@ class VolunteerWebAdapter(
     private val queryAppliedStudentUseCase: QueryAppliedStudentUseCase,
     private val queryCurrentVolunteerApplicantsUseCase: QueryCurrentVolunteerApplicantsUseCase,
     private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase,
-    private val updateVolunteerScoreUseCase: UpdateVolunteerScoreUseCase
+    private val updateVolunteerScoreUseCase: UpdateVolunteerScoreUseCase,
+    private val queryAssignScoreUseCase: QueryAssignScoreUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -166,5 +169,13 @@ class VolunteerWebAdapter(
         @Valid @RequestBody request: UpdateVolunteerScoreRequest
     ) {
         updateVolunteerScoreUseCase.execute(applicationId, request.updateScore)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/score/{volunteer-application-id}")
+    fun getAssignScore(
+        @PathVariable("volunteer-application-id") @NotNull applicationId: UUID
+    ): VolunteerAssignScoreResponse {
+        return queryAssignScoreUseCase.execute(applicationId)
     }
 }

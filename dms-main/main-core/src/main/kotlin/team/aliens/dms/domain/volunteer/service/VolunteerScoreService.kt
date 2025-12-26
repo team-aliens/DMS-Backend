@@ -4,5 +4,7 @@ import team.aliens.dms.common.annotation.Service
 
 @Service
 class VolunteerScoreService(
-    commandVolunteerScoreService: CommandVolunteerScoreService
-) : CommandVolunteerScoreService by commandVolunteerScoreService
+    commandVolunteerScoreService: CommandVolunteerScoreService,
+    getVolunteerScoreService: GetVolunteerScoreService
+) : CommandVolunteerScoreService by commandVolunteerScoreService,
+    GetVolunteerScoreService by getVolunteerScoreService
