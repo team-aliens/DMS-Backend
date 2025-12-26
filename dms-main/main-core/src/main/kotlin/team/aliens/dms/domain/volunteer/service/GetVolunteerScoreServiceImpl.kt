@@ -9,7 +9,7 @@ import java.util.UUID
 @Service
 class GetVolunteerScoreServiceImpl(
     private val queryVolunteerScorePort: QueryVolunteerScorePort
-) : GetVolunteerScoreService  {
+) : GetVolunteerScoreService {
 
     override fun getVolunteerApplicationScoreById(applicationId: UUID): VolunteerScore {
         return queryVolunteerScorePort.queryScoreByApplicationId(applicationId)
