@@ -9,15 +9,18 @@ import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
+import team.aliens.dms.domain.volunteer.spi.QueryVolunteerScorePort
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
+import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import java.util.UUID
 
 @Service
 class GetVolunteerServiceImpl(
     private val queryVolunteerApplicationPort: QueryVolunteerApplicationPort,
-    private val queryVolunteerPort: QueryVolunteerPort
+    private val queryVolunteerPort: QueryVolunteerPort,
+    private val queryVolunteerScorePort: QueryVolunteerScorePort
 ) : GetVolunteerService {
 
     override fun getVolunteerApplicationById(volunteerApplicationId: UUID): VolunteerApplication =
@@ -63,4 +66,7 @@ class GetVolunteerServiceImpl(
     override fun getVolunteerApplicationsWithVolunteersByStudentId(studentId: UUID): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>> {
         return queryVolunteerApplicationPort.getVolunteerApplicationsWithVolunteersByStudentId(studentId)
     }
+
+    override fun getAllVolunteerScoresWithVO(): List<VolunteerScoreWithStudentVO> =
+        queryVolunteerScorePort.queryAllVolunteerScoresWithStudentVO()
 }
