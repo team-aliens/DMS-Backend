@@ -25,4 +25,5 @@ object DependencyVersions {
     const val RABBITMQ_VERSION = "3.2.3"
     const val SPRING_CLOUD_GATEWAY_VERSION = "4.1.0"
     const val OPEN_FEIGN_VERSION = "4.1.0"
+    const val TESTCONTAINERS_VERSION = "1.19.3"
 }

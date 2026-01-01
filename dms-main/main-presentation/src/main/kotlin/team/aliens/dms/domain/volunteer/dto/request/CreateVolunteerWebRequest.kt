@@ -17,10 +17,10 @@ data class CreateVolunteerWebRequest(
     val availableGrade: AvailableGrade,
 
     @field:NotNull
-    val score: Int?,
+    val maxScore: Int?,
 
     @field:NotNull
-    val optionalScore: Int?,
+    val minScore: Int?,
 
     @field:NotNull
     val maxApplicants: Int?

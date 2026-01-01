@@ -9,7 +9,8 @@ enum class SchedulerErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    TASK_SCHEDULER_ERROR(ErrorStatus.INTERNAL_SERVER_ERROR, "Task Scheduler Error", 1);
+    TASK_SCHEDULER_ERROR(ErrorStatus.INTERNAL_SERVER_ERROR, "Task Scheduler Error", 1),
+    UNKNOWN_EVENT_TYPE(ErrorStatus.INTERNAL_SERVER_ERROR, "Unknown Event Type", 2);
 
     override fun status(): Int = status
     override fun message(): String = message

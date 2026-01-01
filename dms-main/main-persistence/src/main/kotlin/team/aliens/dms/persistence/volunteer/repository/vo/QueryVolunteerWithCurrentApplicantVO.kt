@@ -10,8 +10,8 @@ import java.util.UUID
 class QueryVolunteerWithCurrentApplicantVO @QueryProjection constructor(
     id: UUID,
     name: String,
-    score: Int,
-    optionalScore: Int,
+    maxScore: Int,
+    minScore: Int,
     currentApplicants: Set<UUID>,
     maxApplicants: Int,
     availableSex: Sex,
@@ -21,8 +21,8 @@ class QueryVolunteerWithCurrentApplicantVO @QueryProjection constructor(
 ) : VolunteerWithCurrentApplicantVO(
     id = id,
     name = name,
-    score = score,
-    optionalScore = optionalScore,
+    maxScore = maxScore,
+    minScore = minScore,
     currentApplicants = currentApplicants.size,
     maxApplicants = maxApplicants,
     availableSex = availableSex,

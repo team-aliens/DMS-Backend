@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerRequest
 import team.aliens.dms.domain.volunteer.dto.request.CreateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerRequest
+import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerScoreRequest
 import team.aliens.dms.domain.volunteer.dto.request.UpdateVolunteerWebRequest
 import team.aliens.dms.domain.volunteer.dto.response.AvailableVolunteersResponse
 import team.aliens.dms.domain.volunteer.dto.response.CurrentVolunteerApplicantsResponse
 import team.aliens.dms.domain.volunteer.dto.response.QueryMyVolunteerApplicationResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteerApplicantsResponse
+import team.aliens.dms.domain.volunteer.dto.response.VolunteerAssignScoreResponse
 import team.aliens.dms.domain.volunteer.dto.response.VolunteersResponse
 import team.aliens.dms.domain.volunteer.usecase.ApplyVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.ApproveVolunteerApplicationUseCase
@@ -29,11 +31,13 @@ import team.aliens.dms.domain.volunteer.usecase.DeleteVolunteerUseCase
 import team.aliens.dms.domain.volunteer.usecase.ExcludeVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.ManagerGetAllVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAppliedStudentUseCase
+import team.aliens.dms.domain.volunteer.usecase.QueryAssignScoreUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryAvailableVolunteersUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryCurrentVolunteerApplicantsUseCase
 import team.aliens.dms.domain.volunteer.usecase.QueryMyVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.RejectVolunteerApplicationUseCase
 import team.aliens.dms.domain.volunteer.usecase.UnapplyVolunteerUseCase
+import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerScoreUseCase
 import team.aliens.dms.domain.volunteer.usecase.UpdateVolunteerUseCase
 import java.util.UUID
 
@@ -53,7 +57,9 @@ class VolunteerWebAdapter(
     private val managerGetAllVolunteersUseCase: ManagerGetAllVolunteersUseCase,
     private val queryAppliedStudentUseCase: QueryAppliedStudentUseCase,
     private val queryCurrentVolunteerApplicantsUseCase: QueryCurrentVolunteerApplicantsUseCase,
-    private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase
+    private val excludeVolunteerApplicationUseCase: ExcludeVolunteerApplicationUseCase,
+    private val updateVolunteerScoreUseCase: UpdateVolunteerScoreUseCase,
+    private val queryAssignScoreUseCase: QueryAssignScoreUseCase
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -88,8 +94,8 @@ class VolunteerWebAdapter(
                 name = createVolunteerWebRequest.name,
                 availableGrade = createVolunteerWebRequest.availableGrade,
                 availableSex = createVolunteerWebRequest.availableSex,
-                score = createVolunteerWebRequest.score!!,
-                optionalScore = createVolunteerWebRequest.optionalScore!!,
+                maxScore = createVolunteerWebRequest.maxScore!!,
+                minScore = createVolunteerWebRequest.minScore!!,
                 maxApplicants = createVolunteerWebRequest.maxApplicants!!,
             )
         )
@@ -106,8 +112,8 @@ class VolunteerWebAdapter(
                 name = updateVolunteerWebRequest.name,
                 availableGrade = updateVolunteerWebRequest.availableGrade,
                 availableSex = updateVolunteerWebRequest.availableSex,
-                score = updateVolunteerWebRequest.score!!,
-                optionalScore = updateVolunteerWebRequest.optionalScore!!,
+                maxScore = updateVolunteerWebRequest.maxScore!!,
+                minScore = updateVolunteerWebRequest.minScore!!,
                 maxApplicants = updateVolunteerWebRequest.maxApplicants!!,
                 volunteerId = volunteerId
             )
@@ -154,5 +160,22 @@ class VolunteerWebAdapter(
     @GetMapping("/current")
     fun queryAppliedStudent(): CurrentVolunteerApplicantsResponse {
         return queryCurrentVolunteerApplicantsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/score/{volunteer-application-id}")
+    fun updateVolunteerScore(
+        @PathVariable("volunteer-application-id") @NotNull applicationId: UUID,
+        @Valid @RequestBody request: UpdateVolunteerScoreRequest
+    ) {
+        updateVolunteerScoreUseCase.execute(applicationId, request.updateScore)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/score/{volunteer-application-id}")
+    fun getAssignScore(
+        @PathVariable("volunteer-application-id") @NotNull applicationId: UUID
+    ): VolunteerAssignScoreResponse {
+        return queryAssignScoreUseCase.execute(applicationId)
     }
 }

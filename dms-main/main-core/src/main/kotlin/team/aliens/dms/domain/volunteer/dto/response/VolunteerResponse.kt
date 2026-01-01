@@ -51,8 +51,8 @@ data class VolunteerApplicationResponse(
 data class VolunteerResponse(
     val id: UUID,
     val name: String,
-    val score: Int,
-    val optionalScore: Int,
+    val maxScore: Int,
+    val minScore: Int,
     val currentApplicants: Int,
     val maxApplicants: Int,
     val availableSex: Sex,
@@ -63,8 +63,8 @@ data class VolunteerResponse(
             return VolunteerResponse(
                 id = volunteerWithCurrentApplicantVO.id,
                 name = volunteerWithCurrentApplicantVO.name,
-                score = volunteerWithCurrentApplicantVO.score,
-                optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
+                maxScore = volunteerWithCurrentApplicantVO.maxScore,
+                minScore = volunteerWithCurrentApplicantVO.minScore,
                 currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
                 maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants,
                 availableSex = volunteerWithCurrentApplicantVO.availableSex,
@@ -137,8 +137,8 @@ data class AvailableVolunteerResponse(
             return AvailableVolunteerResponse(
                 id = volunteerWithCurrentApplicantVO.id,
                 name = volunteerWithCurrentApplicantVO.name,
-                score = volunteerWithCurrentApplicantVO.score,
-                optionalScore = volunteerWithCurrentApplicantVO.optionalScore,
+                score = volunteerWithCurrentApplicantVO.maxScore,
+                optionalScore = volunteerWithCurrentApplicantVO.minScore,
                 currentApplicants = volunteerWithCurrentApplicantVO.currentApplicants,
                 maxApplicants = volunteerWithCurrentApplicantVO.maxApplicants,
                 status = volunteerWithCurrentApplicantVO.status

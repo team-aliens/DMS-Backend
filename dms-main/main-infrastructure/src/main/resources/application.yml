@@ -27,7 +27,7 @@ spring:
     open-in-view: false
 
   flyway:
-    enabled: ${FLYWAY_ENABLED:false}
+    enabled: true
     baseline-on-migrate: ${BASELINE_ON_MIGRATE}
     baseline-version: 0
 

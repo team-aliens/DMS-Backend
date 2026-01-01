@@ -4,7 +4,7 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://${MAIN_MYSQL_HOST}:${MAIN_DB_PORT:3306}/${MAIN_DB_NAME:prod_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
+    url: jdbc:mysql://${MAIN_MYSQL_HOST:127.0.0.1}:${MAIN_DB_PORT:3306}/${MAIN_DB_NAME:prod_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
     username: ${MAIN_MYSQL_USERNAME}
     password: ${MAIN_MYSQL_PASSWORD}
 
@@ -17,4 +17,4 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: false
+        show_sql: ${MAIN_PROD_SHOW_SQL:false}

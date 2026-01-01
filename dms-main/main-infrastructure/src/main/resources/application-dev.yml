@@ -13,3 +13,8 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:1234}
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: ${MAIN_DEV_SHOW_SQL:false}

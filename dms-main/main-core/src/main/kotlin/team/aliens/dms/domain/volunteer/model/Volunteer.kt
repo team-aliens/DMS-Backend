@@ -4,6 +4,7 @@ import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
+import team.aliens.dms.domain.volunteer.exception.VolunteerInvalidScoreRangeException
 import team.aliens.dms.domain.volunteer.exception.VolunteerNotAvailableException
 import java.util.UUID
 
@@ -14,9 +15,9 @@ data class Volunteer(
 
     val name: String,
 
-    val score: Int,
+    val maxScore: Int,
 
-    val optionalScore: Int = 0,
+    val minScore: Int = 0,
 
     val maxApplicants: Int,
 
@@ -26,6 +27,12 @@ data class Volunteer(
 
     override val schoolId: UUID
 ) : SchoolIdDomain {
+
+    init {
+        if (minScore > maxScore) {
+            throw VolunteerInvalidScoreRangeException
+        }
+    }
 
     fun isAvailable(student: Student): Boolean {
         return this.availableGrade.grades.contains(student.grade) &&

@@ -24,10 +24,10 @@ class VolunteerJpaEntity(
     val name: String,
 
     @Column(columnDefinition = "INT", nullable = false)
-    val score: Int,
+    val maxScore: Int,
 
     @Column(columnDefinition = "INT", nullable = false)
-    val optionalScore: Int,
+    val minScore: Int,
 
     @Column(columnDefinition = "INT UNSIGNED", nullable = false)
     val maxApplicants: Int,
