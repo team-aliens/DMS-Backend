@@ -29,9 +29,8 @@ class QuartzSchedulerAdapter(
             .usingJobData("isReNotice", isReNotice)
             .build()
 
-
         val trigger: Trigger = TriggerBuilder.newTrigger()
-            .withIdentity("notice-trigger","notice")
+            .withIdentity("notice-trigger", "notice")
             .startAt(Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()))
             .build()
 

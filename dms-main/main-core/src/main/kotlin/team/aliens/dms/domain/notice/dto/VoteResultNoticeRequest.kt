@@ -3,7 +3,7 @@ package team.aliens.dms.domain.notice.dto
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class VoteResultNoticeRequest (
+data class VoteResultNoticeRequest(
     val votingTopicId: UUID,
     val reservedTime: LocalDateTime,
     val isReNotice: Boolean
