@@ -15,28 +15,28 @@ class ConvertVolunteerScoreToPointUseCase(
 ) {
 
     fun execute() {
-        val volunteerScores = volunteerService.getAllVolunteerScoresWithVO()
+        val volunteerScoreWithStudentVOs = volunteerService.getAllVolunteerScoresWithVO()
 
-        val pointHistories = volunteerScores.map { volunteerScore ->
+        val pointHistories = volunteerScoreWithStudentVOs.map { volunteerScoreWithStudentVO ->
             PointHistory(
-                studentName = volunteerScore.studentName,
+                studentName = volunteerScoreWithStudentVO.studentName,
                 studentGcn = Student.processGcn(
-                    volunteerScore.studentGrade,
-                    volunteerScore.studentClassRoom,
-                    volunteerScore.studentNumber
+                    volunteerScoreWithStudentVO.studentGrade,
+                    volunteerScoreWithStudentVO.studentClassRoom,
+                    volunteerScoreWithStudentVO.studentNumber
                 ),
-                bonusTotal = volunteerScore.bonusTotal + volunteerScore.assignScore,
-                minusTotal = volunteerScore.minusTotal,
+                bonusTotal = volunteerScoreWithStudentVO.bonusTotal + volunteerScoreWithStudentVO.assignScore,
+                minusTotal = volunteerScoreWithStudentVO.minusTotal,
                 isCancel = false,
                 pointName = "봉사활동 상점",
-                pointScore = volunteerScore.assignScore,
+                pointScore = volunteerScoreWithStudentVO.assignScore,
                 pointType = PointType.BONUS,
                 createdAt = LocalDateTime.now(),
-                schoolId = volunteerScore.schoolId
+                schoolId = volunteerScoreWithStudentVO.schoolId
             )
         }
 
-        val studentIds = volunteerScores.map { it.studentId }
+        val studentIds = volunteerScoreWithStudentVOs.map { it.studentId }
         pointService.saveAllPointHistories(pointHistories, studentIds)
 
         volunteerService.deleteAllVolunteerScores()
