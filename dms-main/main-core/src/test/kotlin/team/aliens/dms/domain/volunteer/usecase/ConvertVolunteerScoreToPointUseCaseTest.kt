@@ -5,22 +5,11 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointOption
 import team.aliens.dms.domain.point.model.PointType
-import team.aliens.dms.domain.point.service.CommandPointService
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.point.stub.GetPointServiceStub
-import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.volunteer.model.Volunteer
-import team.aliens.dms.domain.volunteer.model.VolunteerApplication
-import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
-import team.aliens.dms.domain.volunteer.service.CommandVolunteerService
-import team.aliens.dms.domain.volunteer.service.GetVolunteerService
 import team.aliens.dms.domain.volunteer.service.VolunteerService
-import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
-import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
-import team.aliens.dms.domain.volunteer.spi.vo.VolunteerWithCurrentApplicantVO
 import team.aliens.dms.domain.volunteer.stub.GetVolunteerServiceStub
 import java.util.UUID
 
