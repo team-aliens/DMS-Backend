@@ -27,6 +27,6 @@ abstract class CommandVolunteerServiceStub : CommandVolunteerService {
     override fun updateVolunteerScore(applicationId: UUID, updateScore: Int) =
         throw UnsupportedOperationException()
 
-    override fun deleteAllVolunteerScores() =
+    override fun deleteAllVolunteerScores(): Unit =
         throw UnsupportedOperationException()
 }
