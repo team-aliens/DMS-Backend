@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.volunteer.stub
+package team.aliens.dms.domain.point.stub
 
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointOption
@@ -18,6 +18,6 @@ abstract class CommandPointServiceStub : CommandPointService {
     override fun deletePointOption(pointOption: PointOption) =
         throw UnsupportedOperationException()
 
-    override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?) =
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?): Unit =
         throw UnsupportedOperationException()
 }
