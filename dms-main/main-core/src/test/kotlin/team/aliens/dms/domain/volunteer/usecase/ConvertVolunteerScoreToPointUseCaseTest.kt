@@ -7,9 +7,12 @@ import io.kotest.matchers.shouldBe
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
+import team.aliens.dms.domain.point.stub.CommandPointServiceStub
 import team.aliens.dms.domain.point.stub.GetPointServiceStub
 import team.aliens.dms.domain.volunteer.service.VolunteerService
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
+import team.aliens.dms.domain.volunteer.stub.CheckVolunteerServiceStub
+import team.aliens.dms.domain.volunteer.stub.CommandVolunteerServiceStub
 import team.aliens.dms.domain.volunteer.stub.GetVolunteerServiceStub
 import java.util.UUID
 
@@ -76,6 +79,7 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
                     studentNumber = 1,
                     assignScore = 10,
                     bonusTotal = 5,
+                    minusTotal = 0,
                     schoolId = schoolId
                 ),
                 VolunteerScoreWithStudentVO(
