@@ -14,6 +14,7 @@ import team.aliens.dms.domain.volunteer.spi.VolunteerScorePort
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
+import team.aliens.dms.persistence.user.entity.QUserJpaEntity.userJpaEntity
 import team.aliens.dms.persistence.volunteer.entity.QVolunteerScoreJpaEntity.volunteerScoreJpaEntity
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerApplicationMapper
 import team.aliens.dms.persistence.volunteer.mapper.VolunteerMapper
@@ -91,12 +92,13 @@ class VolunteerScorePersistenceAdapter(
                         .otherwise(0)
                         .sum()
                         .coalesce(0),
-                    studentJpaEntity.schoolId
+                    userJpaEntity.school.id
                 )
             )
             .from(volunteerScoreJpaEntity)
             .join(volunteerScoreJpaEntity.volunteerApplication)
-            .join(studentJpaEntity).on(volunteerScoreJpaEntity.volunteerApplication.studentId.eq(studentJpaEntity.id))
+            .join(studentJpaEntity).on(volunteerScoreJpaEntity.volunteerApplication.student.id.eq(studentJpaEntity.id))
+            .join(studentJpaEntity.user, userJpaEntity)
             .leftJoin(pointHistoryJpaEntity).on(
                 pointHistoryJpaEntity.studentGcn.eq(gcnExpression),
                 pointHistoryJpaEntity.isCancel.eq(false)
@@ -108,7 +110,7 @@ class VolunteerScorePersistenceAdapter(
                 studentJpaEntity.classRoom,
                 studentJpaEntity.number,
                 volunteerScoreJpaEntity.assignScore,
-                studentJpaEntity.schoolId
+                userJpaEntity.school.id
             )
             .fetch()
             .map { it.toDomain() }
