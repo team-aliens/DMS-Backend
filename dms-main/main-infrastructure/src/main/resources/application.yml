@@ -52,7 +52,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: ${QUARTZ_INITIALIZE_SCHEMA:always}
+      initialize-schema: never
     properties:
       org:
         quartz:
