@@ -7,6 +7,7 @@ import team.aliens.dms.domain.volunteer.exception.VolunteerNotFoundException
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
+import team.aliens.dms.domain.volunteer.model.VolunteerScore
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerApplicationPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerPort
 import team.aliens.dms.domain.volunteer.spi.QueryVolunteerScorePort
@@ -69,4 +70,9 @@ class GetVolunteerServiceImpl(
 
     override fun getAllVolunteerScoresWithVO(): List<VolunteerScoreWithStudentVO> =
         queryVolunteerScorePort.queryAllVolunteerScoresWithStudentVO()
+
+    override fun getVolunteerApplicationScoreById(applicationId: UUID): VolunteerScore {
+        return queryVolunteerScorePort.queryScoreByApplicationId(applicationId)
+            ?: throw VolunteerApplicationNotFoundException
+    }
 }

@@ -9,5 +9,5 @@ class VolunteerScoreScheudler(
     private val convertVolunteerScoreToPointUseCase: ConvertVolunteerScoreToPointUseCase
 ) {
     @Scheduled(cron = "0 0 0 28 * *", zone = "Asia/Seoul")
-    fun convertVolunteerScoreToPoint() = convertVolunteerScoreToPointUseCase
+    fun convertVolunteerScoreToPoint() = convertVolunteerScoreToPointUseCase.execute()
 }

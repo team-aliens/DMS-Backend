@@ -2,7 +2,7 @@ package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
-import team.aliens.dms.domain.notice.service.CommandNoticeService
+import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.vote.dto.request.CreateVoteTopicRequest
 import team.aliens.dms.domain.vote.dto.response.CreateVotingTopicResponse
 import team.aliens.dms.domain.vote.exception.InvalidPeriodException
@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 class CreateVotingTopicUseCase(
     private val voteService: VoteService,
     private val securityService: SecurityService,
-    private val noticeService: CommandNoticeService
+    private val noticeService: NoticeService
 ) {
 
     companion object {
@@ -30,6 +30,7 @@ class CreateVotingTopicUseCase(
         }
 
         val managerId = securityService.getCurrentUserId()
+        val schoolId = securityService.getCurrentSchoolId()
 
         val votingTopic = voteService.saveVotingTopic(
             VotingTopic(
@@ -46,8 +47,7 @@ class CreateVotingTopicUseCase(
             addApprovalOptions(votingTopic)
         }
 
-        noticeService.voteResultNotice(votingTopic.id, request.endTime, false)
-
+        noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, false, managerId, schoolId)
         return CreateVotingTopicResponse(votingTopic.id)
     }
 

@@ -20,13 +20,17 @@ class QuartzSchedulerAdapter(
     override fun scheduleVoteResultNotice(
         votingTopicId: UUID,
         startTime: LocalDateTime,
-        isReNotice: Boolean
+        isReNotice: Boolean,
+        managerId: UUID,
+        schoolId: UUID
     ) {
 
         val jobDetail = JobBuilder.newJob(VoteResultNoticeJob::class.java)
             .withIdentity(votingTopicId.toString(), "notice")
             .usingJobData("startTime", startTime.toString())
             .usingJobData("isReNotice", isReNotice)
+            .usingJobData("managerId", managerId.toString())
+            .usingJobData("schoolId", schoolId.toString())
             .build()
 
         val trigger: Trigger = TriggerBuilder.newTrigger()

@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.exception.InvalidPeriodException
@@ -10,7 +11,8 @@ import java.time.LocalDateTime
 @UseCase
 class UpdateVotingTopicUseCase(
     private val voteService: VoteService,
-    private val noticeService: NoticeService
+    private val noticeService: NoticeService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
@@ -31,7 +33,10 @@ class UpdateVotingTopicUseCase(
             )
         )
 
+        val managerId = securityService.getCurrentUserId()
+        val schoolId = securityService.getCurrentSchoolId()
+
         noticeService.cancelVoteResultNotice(votingTopic.id)
-        noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, isReNotice)
+        noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, isReNotice, managerId, schoolId)
     }
 }
