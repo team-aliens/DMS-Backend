@@ -12,7 +12,9 @@ class VoteResultNoticeUseCase(
         noticeService.voteResultNotice(
             voteResultNoticeRequest.votingTopicId,
             voteResultNoticeRequest.reservedTime,
-            voteResultNoticeRequest.isReNotice
+            voteResultNoticeRequest.isReNotice,
+            voteResultNoticeRequest.managerId,
+            voteResultNoticeRequest.schoolId
         )
     }
 }

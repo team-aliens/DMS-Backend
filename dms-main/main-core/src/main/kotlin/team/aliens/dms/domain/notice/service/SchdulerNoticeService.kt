@@ -5,7 +5,7 @@ import java.util.UUID
 
 interface SchdulerNoticeService {
 
-    fun scheduleVoteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean)
+    fun scheduleVoteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean, managerId: UUID, schoolId: UUID)
 
     fun cancelVoteResultNotice(votingTopicId: UUID)
 }

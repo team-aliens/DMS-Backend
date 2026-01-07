@@ -58,9 +58,7 @@ class CommandNoticeServiceImpl(
         commandNoticePort.deleteNotice(notice)
     }
 
-    override fun voteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean) {
-        val managerId = securityPort.getCurrentUserId()
-        val schoolId = securityPort.getCurrentUserSchoolId()
+    override fun voteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean, managerId: UUID, schoolId: UUID) {
         val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
             .map { it.id }
 

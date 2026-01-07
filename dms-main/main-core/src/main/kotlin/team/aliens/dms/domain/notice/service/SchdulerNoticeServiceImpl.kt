@@ -12,9 +12,11 @@ class SchdulerNoticeServiceImpl(
     override fun scheduleVoteResultNotice(
         votingTopicId: UUID,
         startTime: LocalDateTime,
-        isReNotice: Boolean
+        isReNotice: Boolean,
+        managerId: UUID,
+        schoolId: UUID
     ) {
-        schdulerNoticePort.scheduleVoteResultNotice(votingTopicId, startTime, isReNotice)
+        schdulerNoticePort.scheduleVoteResultNotice(votingTopicId, startTime, isReNotice, managerId, schoolId)
     }
 
     override fun cancelVoteResultNotice(votingTopicId: UUID) {
