@@ -34,6 +34,7 @@ class CommandPointServiceImpl(
             NotificationInfo(
                 schoolId = it.schoolId,
                 topic = Topic.POINT,
+                pointDetailTopic = it.getPointDetailTopic(),
                 linkIdentifier = it.id.toString(),
                 title = it.getTitle(),
                 content = it.pointName,

@@ -2,6 +2,7 @@ package team.aliens.dms.domain.point.model
 
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
+import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.exception.PointHistoryCanNotCancelException
 import java.time.LocalDateTime
@@ -71,6 +72,12 @@ data class PointHistory(
         when (pointType) {
             PointType.BONUS -> "상점이 부과되었습니다."
             PointType.MINUS -> "벌점이 부과되었습니다."
+        }
+
+    fun getPointDetailTopic(): PointDetailTopic =
+        when (pointType) {
+            PointType.BONUS -> PointDetailTopic.PLUS
+            PointType.MINUS -> PointDetailTopic.MINUS
         }
 
     private fun calculateCanceledPointTotal(pointTotal: Pair<Int, Int>): Pair<Int, Int> {

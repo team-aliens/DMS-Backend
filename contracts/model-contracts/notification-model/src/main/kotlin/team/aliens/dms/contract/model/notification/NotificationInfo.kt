@@ -9,6 +9,8 @@ open class NotificationInfo(
 
     val topic: Topic,
 
+    val pointDetailTopic: PointDetailTopic? = null,
+
     val linkIdentifier: String?,
 
     val title: String,
