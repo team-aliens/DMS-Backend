@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.vote.usecase
 
 import team.aliens.dms.common.annotation.UseCase
-import team.aliens.dms.common.spi.TaskSchedulerPort
-import team.aliens.dms.domain.notice.service.CommandNoticeService
+import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.notice.service.NoticeService
 import team.aliens.dms.domain.vote.dto.request.UpdateVotingTopicRequest
 import team.aliens.dms.domain.vote.exception.InvalidPeriodException
 import team.aliens.dms.domain.vote.service.VoteService
@@ -10,9 +10,9 @@ import java.time.LocalDateTime
 
 @UseCase
 class UpdateVotingTopicUseCase(
-    private val taskSchedulerPort: TaskSchedulerPort,
     private val voteService: VoteService,
-    private val noticeService: CommandNoticeService
+    private val noticeService: NoticeService,
+    private val securityService: SecurityService
 ) {
 
     fun execute(request: UpdateVotingTopicRequest) {
@@ -33,7 +33,10 @@ class UpdateVotingTopicUseCase(
             )
         )
 
-        taskSchedulerPort.cancelTask(request.id)
-        noticeService.scheduleVoteResultNotice(request.id, request.endTime, isReNotice)
+        val managerId = securityService.getCurrentUserId()
+        val schoolId = securityService.getCurrentSchoolId()
+
+        noticeService.cancelVoteResultNotice(votingTopic.id)
+        noticeService.scheduleVoteResultNotice(votingTopic.id, request.endTime, isReNotice, managerId, schoolId)
     }
 }

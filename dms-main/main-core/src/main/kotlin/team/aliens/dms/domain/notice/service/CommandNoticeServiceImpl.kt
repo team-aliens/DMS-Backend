@@ -3,7 +3,6 @@ package team.aliens.dms.domain.notice.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.common.spi.TaskSchedulerPort
 import team.aliens.dms.contract.model.notification.NotificationInfo
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notice.model.Notice
@@ -24,7 +23,6 @@ class CommandNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort,
-    private val taskSchedulerPort: TaskSchedulerPort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
     private val queryVotePort: QueryVotePort,
     private val queryStudentPort: QueryStudentPort,
@@ -58,9 +56,7 @@ class CommandNoticeServiceImpl(
         commandNoticePort.deleteNotice(notice)
     }
 
-    override fun scheduleVoteResultNotice(votingTopicId: UUID, reservedTime: LocalDateTime, isReNotice: Boolean) {
-        val managerId = securityPort.getCurrentUserId()
-        val schoolId = securityPort.getCurrentUserSchoolId()
+    override fun voteResultNotice(votingTopicId: UUID, startTime: LocalDateTime, isReNotice: Boolean, managerId: UUID, schoolId: UUID) {
         val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
             .map { it.id }
 
@@ -68,32 +64,28 @@ class CommandNoticeServiceImpl(
         val votingTopic = queryVotingTopicPort.queryVotingTopicById(votingTopicId) ?: throw VotingTopicNotFoundException
         val content = generateVoteResultContent(votingTopic)
 
-        taskSchedulerPort.scheduleTask(
-            votingTopicId, {
-                commandNoticePort.saveNotice(
-                    Notice(
-                        title = reNoticePrefix + votingTopic.topicName,
-                        content = content,
-                        managerId = managerId,
-                        createdAt = LocalDateTime.now(),
-                        updatedAt = LocalDateTime.now()
-                    )
-                ).also {
-                    notificationEventPort.publishNotificationToApplicant(
-                        userIds,
-                        NotificationInfo(
-                            schoolId = schoolId,
-                            topic = Topic.NOTICE,
-                            linkIdentifier = it.id.toString(),
-                            title = it.title,
-                            content = "기숙사 공지가 등록되었습니다.",
-                            threadId = it.id.toString(),
-                            isSaveRequired = true
-                        )
-                    )
-                }
-            }, reservedTime
-        )
+        commandNoticePort.saveNotice(
+            Notice(
+                title = reNoticePrefix + votingTopic.topicName,
+                content = content,
+                managerId = managerId,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            )
+        ).also {
+            notificationEventPort.publishNotificationToApplicant(
+                userIds,
+                NotificationInfo(
+                    schoolId = schoolId,
+                    topic = Topic.NOTICE,
+                    linkIdentifier = it.id.toString(),
+                    title = it.title,
+                    content = "기숙사 공지가 등록되었습니다.",
+                    threadId = it.id.toString(),
+                    isSaveRequired = true
+                )
+            )
+        }
     }
 
     private fun generateVoteResultContent(votingTopic: VotingTopic): String {

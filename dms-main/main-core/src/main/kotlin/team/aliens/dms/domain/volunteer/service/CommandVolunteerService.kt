@@ -15,4 +15,10 @@ interface CommandVolunteerService {
     fun saveVolunteer(volunteer: Volunteer): Volunteer
 
     fun deleteVolunteer(volunteer: Volunteer)
+
+    fun createVolunteerScore(volunteerApplication: VolunteerApplication, volunteer: Volunteer)
+
+    fun updateVolunteerScore(applicationId: UUID, updateScore: Int)
+
+    fun deleteAllVolunteerScores()
 }

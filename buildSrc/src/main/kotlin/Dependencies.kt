@@ -104,4 +104,7 @@ object Dependencies {
 
     // spring cloud gateway
     const val SPRING_CLOUD_GATEWAY = "org.springframework.cloud:spring-cloud-starter-gateway:${DependencyVersions.SPRING_CLOUD_GATEWAY_VERSION}"
+
+    // quartz
+    const val QUARTZ = "org.springframework.boot:spring-boot-starter-quartz"
 }
