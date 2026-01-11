@@ -12,12 +12,13 @@ import java.util.UUID
 class VoteResultNoticeJob(
     private val voteResultNoticeUseCase: VoteResultNoticeUseCase,
 ) : Job {
-    override fun execute(context: JobExecutionContext?) {
-        val votingTopicId: UUID = UUID.fromString(context!!.jobDetail.key.name)
-        val startTime: LocalDateTime = LocalDateTime.parse(context.jobDetail.jobDataMap.get("startTime") as String)
-        val isReNotice: Boolean = context.jobDetail.jobDataMap.get("isReNotice") as Boolean
-        val managerId: UUID = UUID.fromString(context.jobDetail.jobDataMap.get("managerId") as String)
-        val schoolId: UUID = UUID.fromString(context.jobDetail.jobDataMap.get("schoolId") as String)
+    override fun execute(context: JobExecutionContext) {
+        val dataMap = context.jobDetail.jobDataMap
+        val votingTopicId: UUID = UUID.fromString(context.jobDetail.key.name)
+        val startTime: LocalDateTime = LocalDateTime.parse(dataMap.getString("startTime"))
+        val isReNotice: Boolean = dataMap.getBoolean("isReNotice")
+        val managerId: UUID = UUID.fromString(dataMap.getString("managerId"))
+        val schoolId: UUID = UUID.fromString(dataMap.getString("schoolId"))
 
         voteResultNoticeUseCase.execute(
             VoteResultNoticeRequest(

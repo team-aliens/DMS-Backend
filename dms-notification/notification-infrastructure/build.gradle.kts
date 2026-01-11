@@ -26,6 +26,9 @@ dependencies {
     // rabbitmq
     implementation(Dependencies.RABBITMQ)
 
+    // quartz
+    implementation(Dependencies.QUARTZ)
+
     // security
     implementation(Dependencies.SPRING_SECURITY)
 

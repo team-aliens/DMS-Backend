@@ -1,8 +1,10 @@
-package team.aliens.dms.scheduler
+package team.aliens.dms.scheduler.quartz.job
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.quartz.DisallowConcurrentExecution
+import org.quartz.Job
+import org.quartz.JobExecutionContext
 import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.common.dto.OutboxData
@@ -17,20 +19,20 @@ import team.aliens.dms.scheduler.error.exception.UnknownEventTypeException
 import team.aliens.dms.thirdparty.messagebroker.NotificationProducer
 
 @Component
-class OutboxScheduler(
+@DisallowConcurrentExecution
+class OutboxJob(
     private val outboxPort: OutboxPort,
     private val notificationProducer: NotificationProducer,
     private val objectMapper: ObjectMapper
-) {
+) : Job {
     private val log = LoggerFactory.getLogger(this::class.java)
 
     companion object {
         private const val MAX_RETRY_COUNT = 3
     }
 
-    @Scheduled(fixedDelay = 5000)
     @Transactional
-    fun processOutbox() {
+    override fun execute(context: JobExecutionContext?) {
         val pendingOutboxes = outboxPort.findByStatus(OutboxStatus.PENDING)
 
         pendingOutboxes.forEach { outbox ->
@@ -39,7 +41,6 @@ class OutboxScheduler(
                 notificationProducer.sendMessage(message)
                 outboxPort.delete(outbox)
             } catch (e: Exception) {
-                log.error("Failed to process outbox: ${outbox.id}", e)
                 handleFailure(outbox)
             }
         }
@@ -76,7 +77,6 @@ class OutboxScheduler(
                     retryCount = newRetryCount
                 )
             )
-            log.error("Outbox message exceeded max retry count: ${outbox.id}")
         }
     }
 }
