@@ -3,7 +3,6 @@ package team.aliens.dms.scheduler.quartz
 import org.quartz.JobBuilder
 import org.quartz.JobKey
 import org.quartz.Scheduler
-import org.quartz.Trigger
 import org.quartz.TriggerBuilder
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.spi.OnetimeSchdulerNoticePort
@@ -33,8 +32,8 @@ class QuartzSchedulerAdapter(
             .usingJobData("schoolId", schoolId.toString())
             .build()
 
-        val trigger: Trigger = TriggerBuilder.newTrigger()
-            .withIdentity("notice-trigger", "notice")
+        val trigger = TriggerBuilder.newTrigger()
+            .withIdentity(votingTopicId.toString(), "notice")
             .startAt(Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()))
             .build()
 

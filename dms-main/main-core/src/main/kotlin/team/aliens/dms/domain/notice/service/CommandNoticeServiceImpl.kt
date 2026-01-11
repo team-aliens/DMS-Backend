@@ -3,7 +3,6 @@ package team.aliens.dms.domain.notice.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.NotificationEventPort
 import team.aliens.dms.common.spi.SecurityPort
-import team.aliens.dms.common.spi.TaskSchedulerPort
 import team.aliens.dms.contract.model.notification.NotificationInfo
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notice.model.Notice
@@ -24,7 +23,6 @@ class CommandNoticeServiceImpl(
     private val commandNoticePort: CommandNoticePort,
     private val notificationEventPort: NotificationEventPort,
     private val securityPort: SecurityPort,
-    private val taskSchedulerPort: TaskSchedulerPort,
     private val queryVotingTopicPort: QueryVotingTopicPort,
     private val queryVotePort: QueryVotePort,
     private val queryStudentPort: QueryStudentPort,
