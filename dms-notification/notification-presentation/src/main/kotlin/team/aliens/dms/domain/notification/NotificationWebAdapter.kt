@@ -19,8 +19,9 @@ import team.aliens.dms.domain.notification.dto.TopicSubscriptionGroupsResponse
 import team.aliens.dms.domain.notification.dto.request.DeviceTokenWebRequest
 import team.aliens.dms.domain.notification.dto.request.TopicRequest
 import team.aliens.dms.domain.notification.dto.request.UpdateTopicSubscriptionsWebRequest
-import team.aliens.dms.domain.notification.usecase.QueryAndReadMyNotificationsUseCase
+import team.aliens.dms.domain.notification.usecase.QueryMyNotificationsUseCase
 import team.aliens.dms.domain.notification.usecase.QueryTopicSubscriptionUseCase
+import team.aliens.dms.domain.notification.usecase.ReadNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveMyAllNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.RemoveNotificationUseCase
 import team.aliens.dms.domain.notification.usecase.SetDeviceTokenUseCase
@@ -35,7 +36,8 @@ import java.util.UUID
 @RestController
 class NotificationWebAdapter(
     private val setDeviceTokenUseCase: SetDeviceTokenUseCase,
-    private val queryAndReadMyNotificationsUseCase: QueryAndReadMyNotificationsUseCase,
+    private val queryMyNotificationsUseCase: QueryMyNotificationsUseCase,
+    private val readNotificationUseCase: ReadNotificationUseCase,
     private val subscribeTopicUseCase: SubscribeTopicUseCase,
     private val unsubscribeTopicUseCase: UnsubscribeTopicUseCase,
     private val updateTopicSubscriptionsUseCase: UpdateTopicSubscriptionsUseCase,
@@ -54,7 +56,13 @@ class NotificationWebAdapter(
 
     @GetMapping
     fun queryMyNotifications(): NotificationsResponse {
-        return queryAndReadMyNotificationsUseCase.execute()
+        return queryMyNotificationsUseCase.execute()
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{notification-of-user-id}/read")
+    fun readNotification(@PathVariable("notification-of-user-id") notificationOfUserId: UUID) {
+        readNotificationUseCase.execute(notificationOfUserId)
     }
 
     @PostMapping("/topic")

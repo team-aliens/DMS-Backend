@@ -9,6 +9,8 @@ interface GetNotificationService {
 
     fun getNotificationOfUsersByUserId(userId: UUID): List<NotificationOfUser>
 
+    fun getNotificationOfUserById(notificationOfUserId: UUID): NotificationOfUser
+
     fun getTopicSubscriptionsByToken(token: String): List<TopicSubscription>
 
     fun getDeviceTokenByToken(token: String): DeviceToken
