@@ -31,25 +31,23 @@ class CommandNoticeServiceImpl(
 
     override fun saveNotice(notice: Notice): Notice {
         val schoolId = securityPort.getCurrentUserSchoolId()
+        val userIds = queryUserPort.queryUsersBySchoolId(schoolId).map { it.id }
 
-        val userIds = queryUserPort.queryUsersBySchoolId(schoolId)
-            .map { it.id }
+        return commandNoticePort.saveNotice(notice).also { savedNotice ->
 
-        return commandNoticePort.saveNotice(notice)
-            .also {
-                notificationEventPort.publishNotificationToApplicant(
-                    userIds,
-                    NotificationInfo(
-                        schoolId = schoolId,
-                        topic = Topic.NOTICE,
-                        linkIdentifier = notice.id.toString(),
-                        title = notice.title,
-                        content = "기숙사 공지가 등록되었습니다.",
-                        threadId = notice.id.toString(),
-                        isSaveRequired = true
-                    )
+            notificationEventPort.publishNotificationToApplicant(
+                userIds,
+                NotificationInfo(
+                    schoolId = schoolId,
+                    topic = Topic.NOTICE,
+                    linkIdentifier = savedNotice.id.toString(),
+                    title = notice.title,
+                    content = "기숙사 공지가 등록되었습니다.",
+                    threadId = savedNotice.id.toString(),
+                    isSaveRequired = true
                 )
-            }
+            )
+        }
     }
 
     override fun deleteNotice(notice: Notice) {
