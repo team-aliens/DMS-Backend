@@ -37,6 +37,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
                     .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
                     .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/notifications/{notification-of-user-id}/read").authenticated()
                     .requestMatchers(HttpMethod.PATCH, "/notifications/topic/toggle").authenticated()
             }
         http
