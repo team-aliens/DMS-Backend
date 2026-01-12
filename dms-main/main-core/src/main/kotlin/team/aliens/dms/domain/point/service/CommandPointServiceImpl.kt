@@ -33,9 +33,13 @@ class CommandPointServiceImpl(
 
         val saved = commandPointHistoryPort.saveAllPointHistories(pointHistories)
 
+        if (saved.isEmpty() || studentIds.isNullOrEmpty()) {
+            return saved
+        }
+
         val first = saved.first()
 
-        val userIds = queryUserPort.queryUsersByStudentIds(studentIds!!)
+        val userIds = queryUserPort.queryUsersByStudentIds(studentIds)
             .map { it.id }
 
         val notificationInfo = NotificationInfo(

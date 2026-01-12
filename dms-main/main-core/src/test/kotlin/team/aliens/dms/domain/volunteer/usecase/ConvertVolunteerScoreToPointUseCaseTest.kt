@@ -5,9 +5,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import team.aliens.dms.domain.point.model.PointHistory
@@ -57,8 +55,8 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
             val pointHistoriesSlot = slot<List<PointHistory>>()
 
             every { volunteerService.getAllVolunteerScoresWithVO() } returns volunteerScores
-            every { volunteerService.deleteAllVolunteerScores() } just runs
-            every { pointService.saveAllPointHistories(capture(pointHistoriesSlot), any()) } just runs
+            every { volunteerService.deleteAllVolunteerScores() } returns Unit
+            every { pointService.saveAllPointHistories(capture(pointHistoriesSlot), any()) } returns emptyList()
 
             useCase.execute()
 
@@ -100,11 +98,12 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
 
         context("봉사 점수가 없을 때") {
             val volunteerService = mockk<VolunteerService>()
-            val pointService = mockk<PointService>(relaxed = true)
+            val pointService = mockk<PointService>()
             val useCase = ConvertVolunteerScoreToPointUseCase(volunteerService, pointService)
 
             every { volunteerService.getAllVolunteerScoresWithVO() } returns emptyList()
-            every { volunteerService.deleteAllVolunteerScores() } just runs
+            every { volunteerService.deleteAllVolunteerScores() } returns Unit
+            every { pointService.saveAllPointHistories(emptyList(), emptyList()) } returns emptyList()
 
             useCase.execute()
 
