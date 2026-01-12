@@ -4,6 +4,7 @@ import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.volunteer.model.Volunteer
 import team.aliens.dms.domain.volunteer.model.VolunteerApplication
 import team.aliens.dms.domain.volunteer.model.VolunteerApplicationStatus
+import team.aliens.dms.domain.volunteer.model.VolunteerScore
 import team.aliens.dms.domain.volunteer.service.GetVolunteerService
 import team.aliens.dms.domain.volunteer.spi.vo.CurrentVolunteerApplicantVO
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerApplicantVO
@@ -36,6 +37,8 @@ abstract class GetVolunteerServiceStub : GetVolunteerService {
     override fun getVolunteerApplicationsWithVolunteersByStudentId(
         studentId: UUID
     ): List<Triple<VolunteerApplication, Volunteer, VolunteerApplicationStatus>> =
+        throw UnsupportedOperationException()
+    override fun getVolunteerApplicationScoreById(applicationId: UUID): VolunteerScore =
         throw UnsupportedOperationException()
     override fun getAllVolunteerScoresWithVO(): List<VolunteerScoreWithStudentVO> =
         throw UnsupportedOperationException()
