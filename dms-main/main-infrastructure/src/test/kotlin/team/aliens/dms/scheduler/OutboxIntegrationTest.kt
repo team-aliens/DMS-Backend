@@ -29,20 +29,21 @@ import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.contract.remote.rabbitmq.SingleNotificationMessage
 import team.aliens.dms.persistence.outbox.mapper.OutboxMapper
 import team.aliens.dms.persistence.outbox.repository.OutboxJpaRepository
+import team.aliens.dms.scheduler.quartz.job.OutboxJob
 import java.time.LocalDateTime
 import java.util.UUID
 
 @SpringBootTest(
     properties = [
         "spring.flyway.enabled=false",
-        "spring.mail.properties.mail.smtp.auth=true",
-        "spring.mail.properties.mail.smtp.starttls.enable=true"
+        "spring.jpa.hibernate.ddl-auto=create",
+        "spring.quartz.jdbc.initialize-schema=always"
     ]
 )
 @Import(OutboxIntegrationTest.TestConfig::class)
 class OutboxIntegrationTest(
     private val outboxPort: OutboxPort,
-    private val outboxScheduler: OutboxScheduler,
+    private val outboxJob: OutboxJob,
     private val rabbitTemplate: RabbitTemplate,
     private val objectMapper: ObjectMapper,
     private val outboxJpaRepository: OutboxJpaRepository
@@ -120,7 +121,7 @@ class OutboxIntegrationTest(
                     val saved = outboxPort.save(outbox)
                     saved.id shouldNotBe null
 
-                    outboxScheduler.processOutbox()
+                    outboxJob.execute(null)
 
                     val remaining = outboxPort.findByStatus(OutboxStatus.PENDING)
                     remaining shouldHaveSize 0
@@ -153,7 +154,7 @@ class OutboxIntegrationTest(
 
                     outboxPort.save(outbox)
 
-                    outboxScheduler.processOutbox()
+                    outboxJob.execute(null)
 
                     val pending = outboxPort.findByStatus(OutboxStatus.PENDING)
                     pending shouldHaveSize 1
@@ -177,7 +178,7 @@ class OutboxIntegrationTest(
 
                     outboxPort.save(outbox)
 
-                    outboxScheduler.processOutbox()
+                    outboxJob.execute(null)
 
                     val failed = outboxPort.findByStatus(OutboxStatus.FAILED)
                     failed shouldHaveSize 1
@@ -199,7 +200,7 @@ class OutboxIntegrationTest(
 
                     outboxPort.save(outbox)
 
-                    outboxScheduler.processOutbox()
+                    outboxJob.execute(null)
 
                     val pending = outboxPort.findByStatus(OutboxStatus.PENDING)
                     pending shouldHaveSize 1
@@ -256,7 +257,7 @@ class OutboxIntegrationTest(
                     outboxPort.save(outbox1)
                     outboxPort.save(outbox2)
 
-                    outboxScheduler.processOutbox()
+                    outboxJob.execute(null)
 
                     val remaining = outboxPort.findByStatus(OutboxStatus.PENDING)
                     remaining shouldHaveSize 0

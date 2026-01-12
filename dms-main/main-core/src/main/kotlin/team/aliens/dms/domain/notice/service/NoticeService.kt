@@ -6,7 +6,9 @@ import team.aliens.dms.common.annotation.Service
 class NoticeService(
     getNoticeService: GetNoticeService,
     checkNoticeService: CheckNoticeService,
-    commandNoticeService: CommandNoticeService
+    commandNoticeService: CommandNoticeService,
+    schdulerNoticeService: SchdulerNoticeService
 ) : GetNoticeService by getNoticeService,
     CheckNoticeService by checkNoticeService,
-    CommandNoticeService by commandNoticeService
+    CommandNoticeService by commandNoticeService,
+    SchdulerNoticeService by schdulerNoticeService

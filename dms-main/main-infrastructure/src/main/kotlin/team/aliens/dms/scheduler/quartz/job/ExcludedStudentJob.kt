@@ -1,6 +1,8 @@
-package team.aliens.dms.scheduler
+package team.aliens.dms.scheduler.quartz.job
 
-import org.springframework.scheduling.annotation.Scheduled
+import org.quartz.DisallowConcurrentExecution
+import org.quartz.Job
+import org.quartz.JobExecutionContext
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.vote.usecase.DeleteAllExcludedStudentsUseCase
 import java.time.DayOfWeek
@@ -9,12 +11,11 @@ import java.time.YearMonth
 import java.time.temporal.TemporalAdjusters
 
 @Component
-class ExcludedStudentScheduler(
-    private val deleteAllExcludedStudentsUseCase: DeleteAllExcludedStudentsUseCase,
-) {
-
-    @Scheduled(cron = "0 0 0 * * MON", zone = "Asia/Seoul")
-    fun deleteAllExcludedStudentsIfLastMonday() {
+@DisallowConcurrentExecution
+class ExcludedStudentJob(
+    private val deleteAllExcludedStudentsUseCase: DeleteAllExcludedStudentsUseCase
+) : Job {
+    override fun execute(context: JobExecutionContext) {
         val today = LocalDate.now()
 
         val lastMonday = YearMonth.from(today)
