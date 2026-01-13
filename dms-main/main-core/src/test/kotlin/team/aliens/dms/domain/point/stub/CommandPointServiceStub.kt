@@ -18,6 +18,6 @@ abstract class CommandPointServiceStub : CommandPointService {
     override fun deletePointOption(pointOption: PointOption) =
         throw UnsupportedOperationException()
 
-    override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?): Unit =
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?): List<PointHistory> =
         throw UnsupportedOperationException()
 }

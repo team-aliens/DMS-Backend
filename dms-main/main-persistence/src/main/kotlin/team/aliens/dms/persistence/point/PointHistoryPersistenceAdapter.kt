@@ -148,12 +148,12 @@ class PointHistoryPersistenceAdapter(
             }
     }
 
-    override fun saveAllPointHistories(pointHistories: List<PointHistory>) {
-        pointHistoryRepository.saveAll(
-            pointHistories.map {
-                pointHistoryMapper.toEntity(it)
-            }
-        )
+    override fun saveAllPointHistories(pointHistories: List<PointHistory>): List<PointHistory> {
+        return pointHistoryRepository
+            .saveAllAndFlush(
+                pointHistories.map { pointHistoryMapper.toEntity(it) }
+            )
+            .mapNotNull { pointHistoryMapper.toDomain(it) }
     }
 
     override fun queryPointHistoryByGcnIn(gcns: List<String>) =

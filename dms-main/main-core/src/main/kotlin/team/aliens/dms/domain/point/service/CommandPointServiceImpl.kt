@@ -26,28 +26,36 @@ class CommandPointServiceImpl(
         commandPointHistoryPort.deletePointHistory(pointHistory)
     }
 
-    override fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?) {
-        val userIds = queryUserPort.queryUsersByStudentIds(studentIds!!)
-            .map { it.id }
+    override fun saveAllPointHistories(
+        pointHistories: List<PointHistory>,
+        studentIds: List<UUID>?
+    ): List<PointHistory> {
 
-        val notificationInfo = pointHistories.first().let {
-            NotificationInfo(
-                schoolId = it.schoolId,
-                topic = Topic.POINT,
-                pointDetailTopic = it.getPointDetailTopic(),
-                linkIdentifier = it.id.toString(),
-                title = it.getTitle(),
-                content = it.pointName,
-                threadId = it.id.toString(),
-                isSaveRequired = true
-            )
+        val saved = commandPointHistoryPort.saveAllPointHistories(pointHistories)
+
+        if (saved.isEmpty() || studentIds.isNullOrEmpty()) {
+            return saved
         }
 
-        notificationEventPort.publishNotificationToApplicant(
-            userIds, notificationInfo
+        val first = saved.first()
+
+        val userIds = queryUserPort.queryUsersByStudentIds(studentIds)
+            .map { it.id }
+
+        val notificationInfo = NotificationInfo(
+            schoolId = first.schoolId,
+            topic = Topic.POINT,
+            pointDetailTopic = first.getPointDetailTopic(),
+            linkIdentifier = first.id.toString(),
+            title = first.getTitle(),
+            content = first.pointName,
+            threadId = first.id.toString(),
+            isSaveRequired = true
         )
 
-        commandPointHistoryPort.saveAllPointHistories(pointHistories)
+        notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
+
+        return saved
     }
 
     override fun savePointOption(pointOption: PointOption): PointOption =
