@@ -2,7 +2,9 @@ package team.aliens.dms.domain.volunteer.usecase
 
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import team.aliens.dms.domain.point.model.PointHistory
@@ -51,7 +53,7 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
 
             every { volunteerService.getAllVolunteerScoresWithVO() } returns volunteerScores
             every { volunteerService.deleteAllVolunteerScores() } just runs
-            every { pointService.saveAllPointHistories(any(), any()) } just runs
+            coEvery { pointService.saveAllPointHistories(any(), any()) } returns emptyList()
 
             it("봉사 점수를 상점으로 변환한다") {
                 shouldNotThrowAny {
@@ -67,7 +69,7 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
 
             every { volunteerService.getAllVolunteerScoresWithVO() } returns emptyList()
             every { volunteerService.deleteAllVolunteerScores() } just runs
-            every { pointService.saveAllPointHistories(any(), any()) } just runs
+            coEvery { pointService.saveAllPointHistories(any(), any()) } returns emptyList()
 
             it("봉사 점수가 없어도 정상 처리된다") {
                 shouldNotThrowAny {
