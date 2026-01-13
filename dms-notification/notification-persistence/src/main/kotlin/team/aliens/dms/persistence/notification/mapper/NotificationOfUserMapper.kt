@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.notification.mapper
 
 import org.springframework.stereotype.Component
-import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.notification.entity.NotificationOfUserJpaEntity
