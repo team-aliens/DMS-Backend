@@ -18,56 +18,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        service: [main, notification, gateway]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-          cache: 'gradle'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Verify Docker is running
-        run: docker info
-
-      - name: Run tests for ${{ matrix.service }} service
-        run: |
-          if [ "${{ matrix.service }}" = "main" ]; then
-            ./gradlew :dms-main:test jacocoMainServiceReport --info
-          elif [ "${{ matrix.service }}" = "notification" ]; then
-            ./gradlew :dms-notification:test jacocoNotificationServiceReport --info
-          elif [ "${{ matrix.service }}" = "gateway" ]; then
-            ./gradlew :dms-gateway:test jacocoGatewayServiceReport --info
-          fi
-
-      - name: Upload coverage for ${{ matrix.service }}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/${{ matrix.service }}-service/jacocoTestReport.xml
-          flags: ${{ matrix.service }}-service
-          name: ${{ matrix.service }}-service-coverage
-          fail_ci_if_error: false
-          verbose: true
-
-  test-all:
-    runs-on: ubuntu-latest
-    needs: test
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -95,6 +45,36 @@ jobs:
 
       - name: Generate service-specific coverage reports
         run: ./gradlew jacocoAllServiceReports --info
+
+      - name: Upload coverage to Codecov (Main)
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/jacoco/main-service/jacocoTestReport.xml
+          flags: main-service
+          name: main-service-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload coverage to Codecov (Notification)
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/jacoco/notification-service/jacocoTestReport.xml
+          flags: notification-service
+          name: notification-service-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload coverage to Codecov (Gateway)
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/jacoco/gateway-service/jacocoTestReport.xml
+          flags: gateway-service
+          name: gateway-service-coverage
+          fail_ci_if_error: false
+          verbose: true
 
       - name: Delete previous coverage comments
         if: github.event_name == 'pull_request'
