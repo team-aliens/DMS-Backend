@@ -106,6 +106,19 @@ jobs:
           echo "=== Gateway service report ==="
           ls -la build/reports/jacoco/gateway-service/ || echo "No gateway service report found"
 
+      - name: Delete previous JaCoCo comments
+        if: github.event_name == 'pull_request'
+        run: |
+          COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
+            --jq '.[] | select(.body | contains("Coverage Report")) | .id')
+
+          for comment_id in $COMMENTS; do
+            echo "Deleting comment $comment_id"
+            gh api repos/${{ github.repository }}/issues/comments/$comment_id -X DELETE
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Comment PR with main service coverage
         if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
