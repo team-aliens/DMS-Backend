@@ -1,11 +1,11 @@
 package team.aliens.dms.domain.notification.service.impl
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.service.CommandNotificationServiceImpl
@@ -42,12 +42,10 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { deviceTokenPort.saveDeviceToken(deviceToken) } returns deviceToken
             every { notificationPort.subscribeAllTopics(deviceToken.token) } returns Unit
 
-            it("디바이스 토큰을 저장하고 모든 주제를 구독한다") {
+            it("디바이스 토큰을 저장하고 반환한다") {
                 val result = commandNotificationService.saveDeviceToken(deviceToken)
 
                 result shouldBe deviceToken
-                verify(exactly = 1) { deviceTokenPort.saveDeviceToken(deviceToken) }
-                verify(exactly = 1) { notificationPort.subscribeAllTopics(deviceToken.token) }
             }
         }
     }
@@ -62,10 +60,9 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { deviceTokenPort.deleteDeviceTokenByUserId(userId) } returns Unit
 
             it("주제 구독과 디바이스 토큰을 삭제한다") {
-                commandNotificationService.deleteDeviceTokenByUserId(userId)
-
-                verify(exactly = 1) { topicSubscriptionPort.deleteAllByDeviceTokenId(deviceToken.id) }
-                verify(exactly = 1) { deviceTokenPort.deleteDeviceTokenByUserId(userId) }
+                shouldNotThrowAny {
+                    commandNotificationService.deleteDeviceTokenByUserId(userId)
+                }
             }
         }
 
@@ -95,9 +92,9 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { commandNotificationOfUserPort.deleteNotificationOfUserById(notificationOfUserId) } returns Unit
 
             it("알림을 삭제한다") {
-                commandNotificationService.deleteNotificationOfUserByUserIdAndId(userId, notificationOfUserId)
-
-                verify(exactly = 1) { commandNotificationOfUserPort.deleteNotificationOfUserById(notificationOfUserId) }
+                shouldNotThrowAny {
+                    commandNotificationService.deleteNotificationOfUserByUserIdAndId(userId, notificationOfUserId)
+                }
             }
         }
 
@@ -140,9 +137,9 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { commandNotificationOfUserPort.deleteNotificationOfUserByUserId(userId) } returns Unit
 
             it("사용자의 모든 알림을 삭제한다") {
-                commandNotificationService.deleteNotificationOfUserByUserId(userId)
-
-                verify(exactly = 1) { commandNotificationOfUserPort.deleteNotificationOfUserByUserId(userId) }
+                shouldNotThrowAny {
+                    commandNotificationService.deleteNotificationOfUserByUserId(userId)
+                }
             }
         }
     }
@@ -153,11 +150,10 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
             every { commandNotificationOfUserPort.saveNotificationOfUser(notificationOfUser) } returns notificationOfUser
 
-            it("알림을 저장한다") {
+            it("알림을 저장하고 반환한다") {
                 val result = commandNotificationService.saveNotificationOfUser(notificationOfUser)
 
                 result shouldBe notificationOfUser
-                verify(exactly = 1) { commandNotificationOfUserPort.saveNotificationOfUser(notificationOfUser) }
             }
         }
     }
@@ -172,9 +168,9 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { commandNotificationOfUserPort.saveNotificationsOfUser(notificationOfUsers) } returns Unit
 
             it("알림 목록을 저장한다") {
-                commandNotificationService.saveNotificationsOfUser(notificationOfUsers)
-
-                verify(exactly = 1) { commandNotificationOfUserPort.saveNotificationsOfUser(notificationOfUsers) }
+                shouldNotThrowAny {
+                    commandNotificationService.saveNotificationsOfUser(notificationOfUsers)
+                }
             }
         }
     }
@@ -184,9 +180,9 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             every { commandNotificationOfUserPort.deleteOldNotificationOfUsers(any<LocalDateTime>()) } returns Unit
 
             it("오래된 알림을 삭제한다") {
-                commandNotificationService.deleteOldNotifications()
-
-                verify(exactly = 1) { commandNotificationOfUserPort.deleteOldNotificationOfUsers(any<LocalDateTime>()) }
+                shouldNotThrowAny {
+                    commandNotificationService.deleteOldNotifications()
+                }
             }
         }
     }

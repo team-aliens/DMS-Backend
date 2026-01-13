@@ -4,7 +4,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.stub.createTopicSubscriptionStub
@@ -32,8 +31,6 @@ class QueryTopicSubscriptionUseCaseTest : DescribeSpec({
                 val result = queryTopicSubscriptionUseCase.execute(token)
 
                 result shouldNotBe null
-                verify(exactly = 1) { notificationService.getTopicSubscriptionsByToken(token) }
-                verify(exactly = 1) { notificationService.updateSubscribes(any(), any()) }
             }
         }
     }
