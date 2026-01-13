@@ -41,6 +41,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Verify Docker is running
+        run: docker info
+
       - name: Run tests for ${{ matrix.service }} service
         run: |
           if [ "${{ matrix.service }}" = "main" ]; then
@@ -83,6 +86,9 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Verify Docker is running
+        run: docker info
 
       - name: Run all tests
         run: ./gradlew test --info
