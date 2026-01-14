@@ -18,6 +18,56 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        service: [main, notification, gateway]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Verify Docker is running
+        run: docker info
+
+      - name: Run tests for ${{ matrix.service }} service
+        run: |
+          if [ "${{ matrix.service }}" = "main" ]; then
+            ./gradlew :dms-main:test jacocoMainServiceReport --info
+          elif [ "${{ matrix.service }}" = "notification" ]; then
+            ./gradlew :dms-notification:test jacocoNotificationServiceReport --info
+          elif [ "${{ matrix.service }}" = "gateway" ]; then
+            ./gradlew :dms-gateway:test jacocoGatewayServiceReport --info
+          fi
+
+      - name: Upload coverage for ${{ matrix.service }}
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/jacoco/${{ matrix.service }}-service/jacocoTestReport.xml
+          flags: ${{ matrix.service }}-service
+          name: ${{ matrix.service }}-service-coverage
+          fail_ci_if_error: false
+          verbose: true
+
+  test-all:
+    runs-on: ubuntu-latest
+    needs: test
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,95 +96,58 @@ jobs:
       - name: Generate service-specific coverage reports
         run: ./gradlew jacocoAllServiceReports --info
 
-      - name: Upload coverage to Codecov (Main)
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/main-service/jacocoTestReport.xml
-          flags: main-service
-          name: main-service-coverage
-          fail_ci_if_error: false
-          verbose: true
+      - name: Verify Jacoco reports exist
+        run: |
+          echo "=== Looking for service-specific Jacoco reports ==="
+          echo "=== Main service report ==="
+          ls -la build/reports/jacoco/main-service/ || echo "No main service report found"
+          echo "=== Notification service report ==="
+          ls -la build/reports/jacoco/notification-service/ || echo "No notification service report found"
+          echo "=== Gateway service report ==="
+          ls -la build/reports/jacoco/gateway-service/ || echo "No gateway service report found"
 
-      - name: Upload coverage to Codecov (Notification)
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/notification-service/jacocoTestReport.xml
-          flags: notification-service
-          name: notification-service-coverage
-          fail_ci_if_error: false
-          verbose: true
-
-      - name: Upload coverage to Codecov (Gateway)
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/gateway-service/jacocoTestReport.xml
-          flags: gateway-service
-          name: gateway-service-coverage
-          fail_ci_if_error: false
-          verbose: true
-
-      - name: Delete previous coverage comments
+      - name: Delete previous JaCoCo comments
         if: github.event_name == 'pull_request'
         run: |
-          gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
-            --jq '.[] | select(.body | contains("## 📊 Test Coverage Summary")) | .id' | \
-          while read comment_id; do
+          COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
+            --jq '.[] | select(.body | contains("Coverage Report")) | .id')
+
+          for comment_id in $COMMENTS; do
+            echo "Deleting comment $comment_id"
             gh api repos/${{ github.repository }}/issues/comments/$comment_id -X DELETE
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate coverage comment
+      - name: Comment PR with main service coverage
         if: github.event_name == 'pull_request'
-        run: |
-          parse_coverage() {
-            local xml_file=$1
-            if [ ! -f "$xml_file" ]; then
-              echo "N/A"
-              return
-            fi
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            build/reports/jacoco/main-service/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 24
+          min-coverage-changed-files: 50
+          title: '📊 Main Service Coverage Report'
 
-            local missed=$(grep -o 'type="INSTRUCTION"[^>]*' "$xml_file" | grep -o 'missed="[0-9]*"' | head -1 | grep -o '[0-9]*')
-            local covered=$(grep -o 'type="INSTRUCTION"[^>]*' "$xml_file" | grep -o 'covered="[0-9]*"' | head -1 | grep -o '[0-9]*')
+      - name: Comment PR with notification service coverage
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            build/reports/jacoco/notification-service/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 25
+          min-coverage-changed-files: 50
+          title: '📊 Notification Service Coverage Report'
 
-            if [ -z "$missed" ] || [ -z "$covered" ]; then
-              echo "N/A"
-              return
-            fi
-
-            local total=$((missed + covered))
-            if [ $total -eq 0 ]; then
-              echo "0.00%"
-            else
-              local coverage=$(awk "BEGIN {printf \"%.2f\", ($covered / $total) * 100}")
-              echo "${coverage}%"
-            fi
-          }
-
-          MAIN_COVERAGE=$(parse_coverage "build/reports/jacoco/main-service/jacocoTestReport.xml")
-          NOTIFICATION_COVERAGE=$(parse_coverage "build/reports/jacoco/notification-service/jacocoTestReport.xml")
-          GATEWAY_COVERAGE=$(parse_coverage "build/reports/jacoco/gateway-service/jacocoTestReport.xml")
-
-          COMMENT_BODY=$(cat << 'EOF'
-          ## 📊 Test Coverage Summary
-
-          | Service | Overall Coverage |
-          |---------|------------------|
-          | Main | MAIN_COV |
-          | Notification | NOTIFICATION_COV |
-          | Gateway | GATEWAY_COV |
-
-          > Coverage reports generated by JaCoCo
-          EOF
-          )
-
-          COMMENT_BODY="${COMMENT_BODY//MAIN_COV/$MAIN_COVERAGE}"
-          COMMENT_BODY="${COMMENT_BODY//NOTIFICATION_COV/$NOTIFICATION_COVERAGE}"
-          COMMENT_BODY="${COMMENT_BODY//GATEWAY_COV/$GATEWAY_COVERAGE}"
-
-          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT_BODY"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment PR with gateway service coverage
+        if: github.event_name == 'pull_request'
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            build/reports/jacoco/gateway-service/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 0
+          min-coverage-changed-files: 50
+          title: '📊 Gateway Service Coverage Report'
