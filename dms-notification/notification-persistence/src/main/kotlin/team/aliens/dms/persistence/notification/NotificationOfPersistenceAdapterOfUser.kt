@@ -37,6 +37,7 @@ class NotificationOfPersistenceAdapterOfUser(
         queryFactory
             .selectFrom(notificationOfUserJpaEntity)
             .where(notificationOfUserJpaEntity.userId.eq(userId))
+            .orderBy(notificationOfUserJpaEntity.createdAt.desc())
             .fetch().map { notificationOfUserMapper.toDomain(it)!! }
 
     override fun queryNotificationOfUserById(notificationOfUserId: UUID) = notificationOfUserMapper.toDomain(
