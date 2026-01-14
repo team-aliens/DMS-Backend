@@ -54,6 +54,13 @@ jobs:
             ./gradlew :dms-gateway:test jacocoGatewayServiceReport --info
           fi
 
+      - name: Upload JaCoCo report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-${{ matrix.service }}
+          path: build/reports/jacoco/${{ matrix.service }}-service/
+          retention-days: 1
+
       - name: Upload coverage for ${{ matrix.service }}
         uses: codecov/codecov-action@v4
         with:
@@ -64,9 +71,10 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-  test-all:
+  coverage-report:
     runs-on: ubuntu-latest
     needs: test
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout code
@@ -74,31 +82,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - name: Download all JaCoCo reports
+        uses: actions/download-artifact@v4
         with:
-          java-version: '17'
-          distribution: 'zulu'
-          cache: 'gradle'
+          path: build/reports/jacoco/
+          pattern: jacoco-report-*
+          merge-multiple: false
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Verify Docker is running
-        run: docker info
-
-      - name: Run all tests
-        run: ./gradlew test --info
-
-      - name: Generate service-specific coverage reports
-        run: ./gradlew jacocoAllServiceReports --info
-
-      - name: Verify Jacoco reports exist
+      - name: Move reports to correct location
         run: |
-          echo "=== Looking for service-specific Jacoco reports ==="
+          mkdir -p build/reports/jacoco/main-service
+          mkdir -p build/reports/jacoco/notification-service
+          mkdir -p build/reports/jacoco/gateway-service
+          cp -r build/reports/jacoco/jacoco-report-main/* build/reports/jacoco/main-service/ 2>/dev/null || true
+          cp -r build/reports/jacoco/jacoco-report-notification/* build/reports/jacoco/notification-service/ 2>/dev/null || true
+          cp -r build/reports/jacoco/jacoco-report-gateway/* build/reports/jacoco/gateway-service/ 2>/dev/null || true
+
+      - name: Verify JaCoCo reports exist
+        run: |
           echo "=== Main service report ==="
           ls -la build/reports/jacoco/main-service/ || echo "No main service report found"
           echo "=== Notification service report ==="
@@ -107,7 +108,6 @@ jobs:
           ls -la build/reports/jacoco/gateway-service/ || echo "No gateway service report found"
 
       - name: Delete previous JaCoCo comments
-        if: github.event_name == 'pull_request'
         run: |
           COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments \
             --jq '.[] | select(.body | contains("Coverage Report")) | .id')
@@ -120,7 +120,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment PR with main service coverage
-        if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
@@ -131,7 +130,6 @@ jobs:
           title: '📊 Main Service Coverage Report'
 
       - name: Comment PR with notification service coverage
-        if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
@@ -142,7 +140,6 @@ jobs:
           title: '📊 Notification Service Coverage Report'
 
       - name: Comment PR with gateway service coverage
-        if: github.event_name == 'pull_request'
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
