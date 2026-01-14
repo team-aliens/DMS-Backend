@@ -31,6 +31,7 @@ data class Notification(
         NotificationOfUser(
             userId = userId,
             topic = topic,
+            pointDetailTopic = pointDetailTopic,
             linkIdentifier = linkIdentifier,
             title = title,
             content = content,
@@ -46,6 +47,7 @@ data class Notification(
             return Notification(
                 schoolId = notificationInfo.schoolId,
                 topic = notificationInfo.topic,
+                pointDetailTopic = notificationInfo.pointDetailTopic,
                 linkIdentifier = notificationInfo.linkIdentifier,
                 title = notificationInfo.title,
                 content = notificationInfo.content,
