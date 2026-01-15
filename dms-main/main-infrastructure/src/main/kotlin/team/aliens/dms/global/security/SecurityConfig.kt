@@ -84,6 +84,7 @@ class SecurityConfig(
 
                 authorize
                     // /notices
+                    .requestMatchers(HttpMethod.GET, "/notices/latest").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/notices/status").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/notices").hasAnyAuthority(STUDENT.name, MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/notices/{notice-id}").hasAnyAuthority(STUDENT.name, MANAGER.name)

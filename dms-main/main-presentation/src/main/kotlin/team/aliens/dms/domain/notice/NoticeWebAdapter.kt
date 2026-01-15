@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import team.aliens.dms.domain.notice.dto.LatestNoticeResponse
 import team.aliens.dms.domain.notice.dto.NoticeIdResponse
 import team.aliens.dms.domain.notice.dto.NoticeResponse
 import team.aliens.dms.domain.notice.dto.NoticesResponse
@@ -23,6 +24,7 @@ import team.aliens.dms.domain.notice.dto.request.WebOrderType
 import team.aliens.dms.domain.notice.dto.response.GetNoticeStatusResponse
 import team.aliens.dms.domain.notice.usecase.CreateNoticeUseCase
 import team.aliens.dms.domain.notice.usecase.QueryAllNoticesUseCase
+import team.aliens.dms.domain.notice.usecase.QueryLatestNoticeUseCase
 import team.aliens.dms.domain.notice.usecase.QueryNoticeDetailsUseCase
 import team.aliens.dms.domain.notice.usecase.QueryNoticeStatusUseCase
 import team.aliens.dms.domain.notice.usecase.RemoveNoticeUseCase
@@ -36,6 +38,7 @@ class NoticeWebAdapter(
     private val queryNoticeStatusUseCase: QueryNoticeStatusUseCase,
     private val queryNoticeDetailsUseCase: QueryNoticeDetailsUseCase,
     private val queryAllNoticesUseCase: QueryAllNoticesUseCase,
+    private val queryLatestNoticeUseCase: QueryLatestNoticeUseCase,
     private val removeNoticeUseCase: RemoveNoticeUseCase,
     private val updateNoticeUseCase: UpdateNoticeUseCase,
     private val createNoticeUseCase: CreateNoticeUseCase
@@ -46,6 +49,11 @@ class NoticeWebAdapter(
         val result = queryNoticeStatusUseCase.execute()
 
         return GetNoticeStatusResponse(result)
+    }
+
+    @GetMapping("/latest")
+    fun getLatestNotice(): LatestNoticeResponse? {
+        return queryLatestNoticeUseCase.execute()
     }
 
     @GetMapping("/{notice-id}")

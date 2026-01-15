@@ -16,5 +16,7 @@ interface NoticeJpaRepository : JpaRepository<NoticeJpaEntity, UUID> {
 
     fun findAllByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId: UUID): List<NoticeJpaEntity>
 
+    fun findFirstByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId: UUID): NoticeJpaEntity?
+
     fun findByIdAndManagerUserId(id: UUID, managerId: UUID): NoticeJpaEntity?
 }
