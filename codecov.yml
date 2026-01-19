@@ -1,13 +1,97 @@
 codecov:
   require_ci_to_pass: yes
 
+# PR에 댓글 설정
 comment:
-  layout: "reach,diff,flags,files,footer"
+  layout: "header,diff,flags,components,files,footer"
   behavior: default
   require_changes: false
-  branches:
-    - main
+  after_n_builds: 4  # overall + main + notification + gateway
+
+# 서비스별 플래그 설정
+flag_management:
+  default_rules:
+    carryforward: true
+    
+flags:
+  overall:
+    paths:
+      - dms-main/
+      - dms-notification/
+      - dms-gateway/
+    carryforward: false
+    
+  main-service:
+    paths:
+      - dms-main/
+    carryforward: true
+    
+  notification-service:
+    paths:
+      - dms-notification/
+    carryforward: true
+    
+  gateway-service:
+    paths:
+      - dms-gateway/
+    carryforward: true
+
+# 서비스별 컴포넌트 설정
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: 70%
+        
+  individual_components:
+    - component_id: main-service
+      name: Main Service
+      paths:
+        - dms-main/**
+      
+    - component_id: notification-service
+      name: Notification Service
+      paths:
+        - dms-notification/**
+      
+    - component_id: gateway-service
+      name: Gateway Service
+      paths:
+        - dms-gateway/**
 
 coverage:
+  precision: 2
+  round: down
+  range: "60...100"
+  
   status:
-    patch: off
+    project:
+      default:
+        target: 70%
+        threshold: 2%
+        base: auto
+        
+    patch:
+      default:
+        target: 80%
+        threshold: 5%
+        
+    changes:
+      default:
+        target: 70%
+
+# 커버리지에서 제외할 파일
+ignore:
+  - "**/test/**"
+  - "**/stub/**"
+  - "**/*Test.kt"
+  - "**/*Tests.kt"
+  - "**/config/**"
+  - "**/exception/**"
+  - "**/dto/**"
+  - "**/entity/**"
+  - "**/*Application.kt"
+  - "**/contracts/**"
+  - "**/*Request.kt"
+  - "**/*Response.kt"
+  - "**/*Properties.kt"

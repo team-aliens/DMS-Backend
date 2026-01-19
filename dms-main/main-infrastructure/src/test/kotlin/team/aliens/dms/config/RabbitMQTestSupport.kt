@@ -3,10 +3,12 @@ package team.aliens.dms.config
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.testcontainers.containers.RabbitMQContainer
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 object RabbitMQTestContainer {
     val instance: RabbitMQContainer = RabbitMQContainer(DockerImageName.parse("rabbitmq:3.11-management"))
         .apply {
+            withStartupTimeout(Duration.ofMinutes(5))
             start()
         }
 

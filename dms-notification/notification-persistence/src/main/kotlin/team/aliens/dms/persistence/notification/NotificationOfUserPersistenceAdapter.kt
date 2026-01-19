@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Component
-class NotificationOfPersistenceAdapterOfUser(
+class NotificationOfUserPersistenceAdapter(
     private val notificationOfUserMapper: NotificationOfUserMapper,
     private val notificationOfUserRepository: NotificationOfUserJpaRepository,
     private val queryFactory: JPAQueryFactory

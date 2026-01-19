@@ -83,9 +83,11 @@ class OutboxIntegrationTest(
     init {
         this.afterEach {
             outboxJpaRepository.deleteAll()
-            rabbitTemplate.execute { channel ->
-                channel.queuePurge("notification_queue")
-                null
+            runCatching {
+                rabbitTemplate.execute { channel ->
+                    channel.queuePurge("notification_queue")
+                    null
+                }
             }
         }
 

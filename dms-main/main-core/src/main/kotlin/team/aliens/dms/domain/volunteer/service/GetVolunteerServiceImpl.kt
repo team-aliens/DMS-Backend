@@ -49,6 +49,7 @@ class GetVolunteerServiceImpl(
 
         return volunteers.filter { volunteer ->
             volunteer.toVolunteer().isAvailable(student)
+
         }
     }
 
