@@ -53,6 +53,9 @@ spring:
     job-store-type: jdbc
     jdbc:
       initialize-schema: never
+    overwrite-existing-jobs: true
+    auto-startup: true
+    wait-for-jobs-to-complete-on-shutdown: true
     properties:
       org:
         quartz:
@@ -65,6 +68,9 @@ spring:
             tablePrefix: QRTZ_
             isClustered: ${QUARTZ_CLUSTERED:false}
             useProperties: false
+            misfireThreshold: 300000
+            acquireTriggersWithinLock: true
+            txIsolationLevelSerializable: false
           threadPool:
             class: org.quartz.simpl.SimpleThreadPool
             threadCount: 10
