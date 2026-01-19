@@ -6,7 +6,6 @@ import team.aliens.dms.common.dto.OutboxStatus
 import team.aliens.dms.common.spi.OutboxPort
 import team.aliens.dms.persistence.outbox.mapper.OutboxMapper
 import team.aliens.dms.persistence.outbox.repository.OutboxJpaRepository
-import java.util.UUID
 
 @Component
 class OutboxPersistenceAdapter(
@@ -18,10 +17,6 @@ class OutboxPersistenceAdapter(
         val entity = outboxMapper.toEntity(outbox)
         val saved = outboxJpaRepository.save(entity)
         return outboxMapper.toDomain(saved)
-    }
-
-    override fun deleteById(id: UUID) {
-        outboxJpaRepository.deleteById(id)
     }
 
     override fun findByStatus(status: OutboxStatus): List<OutboxData> {
