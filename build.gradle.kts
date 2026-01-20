@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.testing.jacoco.tasks.JacocoReport
 
 plugins {
     kotlin("jvm") version PluginVersions.JVM_VERSION
@@ -89,12 +90,40 @@ allprojects {
                 }
             )
             outputs.upToDateWhen { false }
+            finalizedBy("jacocoTestReport")
         }
 
         tasks.named<org.gradle.testing.jacoco.tasks.JacocoReport>("jacocoTestReport") {
-            executionData.setFrom(fileTree(project.buildDir).include("jacoco/*.exec"))
-            classDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").output.classesDirs)
-            sourceDirectories.setFrom(project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main").allSource)
+            dependsOn(tasks.named("test"))
+            executionData.setFrom(fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec"))
+
+            val mainSourceSet = project.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+            sourceDirectories.setFrom(mainSourceSet.allSource)
+
+            classDirectories.setFrom(
+                files(mainSourceSet.output.classesDirs.files.map { dir ->
+                    fileTree(dir) {
+                        exclude(
+                            "**/global/config/**",
+                            "**/thirdparty/**/config/**",
+                            "**/scheduler/config/**",
+                            "**/persistence/**/entity/**",
+                            "**/*Application.class",
+                            "**/*Application\$*.class",
+                            "**/*Properties.class",
+                            "**/*Properties\$*.class",
+                            "**/stub/**"
+                        )
+                    }
+                })
+            )
+
+            reports {
+                xml.required.set(true)
+                html.required.set(true)
+                csv.required.set(false)
+            }
+
             outputs.upToDateWhen { false }
         }
     }
@@ -106,12 +135,285 @@ allprojects {
     }
 }
 
-tasks.register("jacocoSubReports") {
+tasks.register<JacocoReport>("jacocoSubReports") {
+    group = "verification"
+    description = "Generate Jacoco coverage report for all modules (excluding core modules with duplicate classes)"
 
-    val jacocoProjects = subprojects.filter { it.pluginManager.hasPlugin("jacoco") }
+    val jacocoProjects = subprojects.filter {
+        it.pluginManager.hasPlugin("jacoco") &&
+        !it.childProjects.any() &&
+        !it.path.endsWith("-core")
+    }
 
+    dependsOn(jacocoProjects.map { it.tasks.named("test") })
     dependsOn(jacocoProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
 
+    executionData.setFrom(
+        jacocoProjects.map { project ->
+            fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec")
+        }
+    )
+
+    val sourceSets = jacocoProjects.map {
+        it.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+    }
+
+    sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/test/html"))
+    }
+}
+
+// dms-main 서비스 통합 리포트
+tasks.register<JacocoReport>("jacocoMainServiceReport") {
+    group = "verification"
+    description = "Generate Jacoco coverage report for dms-main service"
+
+    val mainProjects = subprojects.filter {
+        it.path.startsWith(":dms-main") && it.pluginManager.hasPlugin("jacoco")
+    }
+
+    dependsOn(mainProjects.map { it.tasks.named("test") })
+    dependsOn(mainProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
+
+    executionData.setFrom(
+        mainProjects.map { project ->
+            fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec")
+        }
+    )
+
+    val sourceSets = mainProjects.map {
+        it.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+    }
+
+    sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/main-service/jacocoTestReport.xml"))
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/main-service/html"))
+    }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/main-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Main Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
+    }
+}
+
+// dms-notification 서비스 통합 리포트
+tasks.register<JacocoReport>("jacocoNotificationServiceReport") {
+    group = "verification"
+    description = "Generate Jacoco coverage report for dms-notification service"
+
+    val notificationProjects = subprojects.filter {
+        it.path.startsWith(":dms-notification") && it.pluginManager.hasPlugin("jacoco")
+    }
+
+    dependsOn(notificationProjects.map { it.tasks.named("test") })
+    dependsOn(notificationProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
+
+    onlyIf {
+        executionData.files.any { it.exists() }
+    }
+
+    executionData.setFrom(
+        notificationProjects.map { project ->
+            fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec")
+        }
+    )
+
+    val sourceSets = notificationProjects.map {
+        it.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+    }
+
+    sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/notification-service/jacocoTestReport.xml"))
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/notification-service/html"))
+    }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/notification-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Notification Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
+    }
+}
+
+// dms-gateway 서비스 통합 리포트
+tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
+    group = "verification"
+    description = "Generate Jacoco coverage report for dms-gateway service"
+
+    val gatewayProjects = subprojects.filter {
+        it.path.startsWith(":dms-gateway") && it.pluginManager.hasPlugin("jacoco")
+    }
+
+    dependsOn(gatewayProjects.map { it.tasks.named("test") })
+    dependsOn(gatewayProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
+
+    executionData.setFrom(
+        gatewayProjects.map { project ->
+            fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec")
+        }
+    )
+
+    val sourceSets = gatewayProjects.map {
+        it.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
+    }
+
+    sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
+
+    classDirectories.setFrom(
+        files(sourceSets.map { sourceSet ->
+            sourceSet.output.classesDirs.files.map { dir ->
+                fileTree(dir) {
+                    exclude(
+                        "**/global/config/**",
+                        "**/thirdparty/**/config/**",
+                        "**/scheduler/config/**",
+                        "**/persistence/**/entity/**",
+                        "**/*Application.class",
+                        "**/*Application\$*.class",
+                        "**/*Properties.class",
+                        "**/*Properties\$*.class",
+                        "**/stub/**"
+                    )
+                }
+            }
+        }.flatten())
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/gateway-service/jacocoTestReport.xml"))
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/gateway-service/html"))
+    }
+
+    doLast {
+        val reportDir = layout.buildDirectory.dir("reports/jacoco/gateway-service/html").get().asFile
+        val indexFile = File(reportDir, "index.html")
+        if (indexFile.exists()) {
+            val content = indexFile.readText()
+            val updatedContent = content.replace(
+                "<h1>DMS-Backend</h1>",
+                "<h1>DMS-Gateway Service</h1>"
+            )
+            indexFile.writeText(updatedContent)
+        }
+    }
+}
+
+tasks.register("jacocoAllServiceReports") {
+    group = "verification"
+    description = "Generate Jacoco coverage reports for all services"
+
+    dependsOn(
+        "jacocoMainServiceReport",
+        "jacocoNotificationServiceReport",
+        "jacocoGatewayServiceReport"
+    )
+
+    doLast {
+        println()
+        println("========================================")
+        println("Jacoco Reports Generated:")
+        println("  - Main Service: build/reports/jacoco/main-service/html/index.html")
+        println("  - Notification Service: build/reports/jacoco/notification-service/html/index.html")
+        println("  - Gateway Service: build/reports/jacoco/gateway-service/html/index.html")
+        println("========================================")
+    }
 }
 
 

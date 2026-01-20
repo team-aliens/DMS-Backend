@@ -3,6 +3,7 @@ package team.aliens.dms.config
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.utility.DockerImageName
+import java.time.Duration
 
 object MySQLTestContainer {
     val instance: MySQLContainer<*> = MySQLContainer(DockerImageName.parse("mysql:8.0.28"))
@@ -10,6 +11,7 @@ object MySQLTestContainer {
             withDatabaseName("dms")
             withUsername("test")
             withPassword("test")
+            withStartupTimeout(Duration.ofMinutes(5))
             start()
         }
 
