@@ -37,6 +37,10 @@ class NoticePersistenceAdapter(
         }
     }
 
+    override fun queryLatestNoticeBySchoolId(schoolId: UUID) = noticeMapper.toDomain(
+        noticeRepository.findFirstByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId)
+    )
+
     override fun queryNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID) = noticeMapper.toDomain(
         noticeRepository.findByIdAndManagerUserId(noticeId, managerId)
     )

@@ -13,5 +13,7 @@ interface QueryNoticePort {
 
     fun queryAllNoticesBySchoolIdAndOrder(schoolId: UUID, orderType: OrderType): List<Notice>
 
+    fun queryLatestNoticeBySchoolId(schoolId: UUID): Notice?
+
     fun queryNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID): Notice?
 }

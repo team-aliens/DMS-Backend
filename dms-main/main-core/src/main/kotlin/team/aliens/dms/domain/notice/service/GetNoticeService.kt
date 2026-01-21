@@ -8,6 +8,8 @@ interface GetNoticeService {
 
     fun getAllNoticesBySchoolIdAndOrder(schoolId: UUID, orderType: OrderType): List<Notice>
 
+    fun getLatestNoticeBySchoolId(schoolId: UUID): Notice?
+
     fun getNoticeById(noticeId: UUID): Notice
 
     fun getNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID): Notice

@@ -16,6 +16,10 @@ class GetNoticeServiceImpl(
         return queryNoticePort.queryAllNoticesBySchoolIdAndOrder(schoolId, orderType)
     }
 
+    override fun getLatestNoticeBySchoolId(schoolId: UUID): Notice? {
+        return queryNoticePort.queryLatestNoticeBySchoolId(schoolId)
+    }
+
     override fun getNoticeById(noticeId: UUID): Notice {
         return queryNoticePort.queryNoticeById(noticeId)
             ?: throw NoticeNotFoundException
