@@ -76,7 +76,7 @@ data class PointHistory(
 
     fun getPointDetailTopic(): PointDetailTopic =
         when (pointType) {
-            PointType.BONUS -> PointDetailTopic.PLUS
+            PointType.BONUS -> PointDetailTopic.BONUS
             PointType.MINUS -> PointDetailTopic.MINUS
         }
 
