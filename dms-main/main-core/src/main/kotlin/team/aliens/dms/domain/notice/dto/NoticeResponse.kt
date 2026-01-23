@@ -37,3 +37,17 @@ data class NoticesResponse(
 data class NoticeIdResponse(
     val noticeId: UUID
 )
+
+data class LatestNoticeResponse(
+    val id: UUID,
+    val title: String
+) {
+    companion object {
+        fun of(notice: Notice): LatestNoticeResponse {
+            return LatestNoticeResponse(
+                id = notice.id,
+                title = notice.title
+            )
+        }
+    }
+}

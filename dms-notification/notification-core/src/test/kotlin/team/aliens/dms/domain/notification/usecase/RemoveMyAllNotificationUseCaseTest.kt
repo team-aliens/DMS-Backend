@@ -1,0 +1,35 @@
+package team.aliens.dms.domain.notification.usecase
+
+import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.core.spec.style.DescribeSpec
+import io.mockk.every
+import io.mockk.mockk
+import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.notification.service.NotificationService
+import java.util.UUID
+
+class RemoveMyAllNotificationUseCaseTest : DescribeSpec({
+
+    val securityService = mockk<SecurityService>()
+    val notificationService = mockk<NotificationService>()
+
+    val removeMyAllNotificationUseCase = RemoveMyAllNotificationUseCase(
+        securityService = securityService,
+        notificationService = notificationService
+    )
+
+    describe("execute") {
+        context("내 모든 알림을 삭제하면") {
+            val userId = UUID.randomUUID()
+
+            every { securityService.getCurrentUserId() } returns userId
+            every { notificationService.deleteNotificationOfUserByUserId(userId) } returns Unit
+
+            it("모든 알림을 삭제한다") {
+                shouldNotThrowAny {
+                    removeMyAllNotificationUseCase.execute()
+                }
+            }
+        }
+    }
+})

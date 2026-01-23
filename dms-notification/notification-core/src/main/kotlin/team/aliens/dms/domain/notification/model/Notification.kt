@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.notification.model
 
 import team.aliens.dms.contract.model.notification.NotificationInfo
+import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.contract.model.notification.Topic
 import java.time.LocalDateTime
 import java.util.UUID
@@ -10,6 +11,8 @@ data class Notification(
     val schoolId: UUID,
 
     val topic: Topic,
+
+    val pointDetailTopic: PointDetailTopic? = null,
 
     val linkIdentifier: String?,
 
@@ -28,6 +31,7 @@ data class Notification(
         NotificationOfUser(
             userId = userId,
             topic = topic,
+            pointDetailTopic = pointDetailTopic,
             linkIdentifier = linkIdentifier,
             title = title,
             content = content,
@@ -43,6 +47,7 @@ data class Notification(
             return Notification(
                 schoolId = notificationInfo.schoolId,
                 topic = notificationInfo.topic,
+                pointDetailTopic = notificationInfo.pointDetailTopic,
                 linkIdentifier = notificationInfo.linkIdentifier,
                 title = notificationInfo.title,
                 content = notificationInfo.content,

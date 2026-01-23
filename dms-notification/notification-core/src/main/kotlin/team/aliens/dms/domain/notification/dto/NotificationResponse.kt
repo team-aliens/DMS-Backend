@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.dto
 
+import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import java.time.LocalDateTime
@@ -19,6 +20,7 @@ data class NotificationsResponse(
 data class NotificationResponse(
     val id: UUID,
     val topic: Topic,
+    val pointDetailTopic: PointDetailTopic?,
     val linkIdentifier: String?,
     val title: String,
     val content: String,
@@ -30,6 +32,7 @@ data class NotificationResponse(
             NotificationResponse(
                 id = id,
                 topic = topic,
+                pointDetailTopic = pointDetailTopic,
                 linkIdentifier = linkIdentifier,
                 title = title,
                 content = content,

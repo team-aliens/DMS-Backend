@@ -37,6 +37,10 @@ class NoticePersistenceAdapter(
         }
     }
 
+    override fun queryLatestNoticeBySchoolId(schoolId: UUID) = noticeMapper.toDomain(
+        noticeRepository.findFirstByManagerUserSchoolIdOrderByCreatedAtDesc(schoolId)
+    )
+
     override fun queryNoticeByIdAndManagerId(noticeId: UUID, managerId: UUID) = noticeMapper.toDomain(
         noticeRepository.findByIdAndManagerUserId(noticeId, managerId)
     )
@@ -47,15 +51,10 @@ class NoticePersistenceAdapter(
         )
     }
 
-    override fun saveNotice(notice: Notice): Notice {
-        val noticeJpaEntity = noticeRepository.save(
-            noticeMapper.toEntity(notice)
-        )
-
-        val notice = noticeMapper.toDomain(
-            noticeJpaEntity
+    override fun saveNotice(notice: Notice): Notice =
+        noticeMapper.toDomain(
+            noticeRepository.saveAndFlush(
+                noticeMapper.toEntity(notice)
+            )
         )!!
-
-        return notice
-    }
 }

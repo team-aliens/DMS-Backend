@@ -43,6 +43,27 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: DMS-Notification-Scheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: ${QUARTZ_CLUSTERED:false} 
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+            threadPriority: 5
+
 rabbitmq:
   port: ${RABBITMQ_PORT:5672}
   host: ${RABBITMQ_HOST:localhost}

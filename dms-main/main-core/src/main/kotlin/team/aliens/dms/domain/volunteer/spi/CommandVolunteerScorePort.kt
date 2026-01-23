@@ -8,4 +8,6 @@ interface CommandVolunteerScorePort {
     fun saveVolunteerScore(volunteerScore: VolunteerScore)
 
     fun updateVolunteerScore(applicationId: UUID, updateScore: Int)
+
+    fun deleteAllVolunteerScores()
 }

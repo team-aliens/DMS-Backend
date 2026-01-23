@@ -124,7 +124,7 @@ class FCMAdapter : NotificationPort {
                 )
                 .setApnsConfig(getApnsConfig(threadId))
         }
-
+    
     private fun getApnsConfig(threadId: String) =
         ApnsConfig
             .builder()

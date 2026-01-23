@@ -10,7 +10,7 @@ interface CommandPointService {
 
     fun deletePointHistory(pointHistory: PointHistory)
 
-    fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?)
+    fun saveAllPointHistories(pointHistories: List<PointHistory>, studentIds: List<UUID>?): List<PointHistory>
 
     fun savePointOption(pointOption: PointOption): PointOption
 
