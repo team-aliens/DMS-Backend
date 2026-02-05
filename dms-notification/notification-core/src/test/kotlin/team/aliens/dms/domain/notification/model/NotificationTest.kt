@@ -2,8 +2,6 @@ package team.aliens.dms.domain.notification.model
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.mockk
-import io.mockk.verify
 import team.aliens.dms.contract.model.notification.Topic
 import java.util.UUID
 
