@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.dto
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.model.NotificationOfUser
@@ -20,6 +21,7 @@ data class NotificationsResponse(
 data class NotificationResponse(
     val id: UUID,
     val topic: Topic,
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     val pointDetailTopic: PointDetailTopic?,
     val linkIdentifier: String?,
     val title: String,
