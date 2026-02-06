@@ -7,8 +7,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import team.aliens.dms.domain.point.model.PointHistory
-import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.volunteer.service.VolunteerService
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
