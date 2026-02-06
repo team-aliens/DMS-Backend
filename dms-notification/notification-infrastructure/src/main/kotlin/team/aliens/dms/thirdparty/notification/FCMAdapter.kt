@@ -49,7 +49,6 @@ class FCMAdapter : NotificationPort {
             throw NotificationSendFailedException
         }
     }
-
     override fun sendByTopic(
         notification: Notification
     ) {
@@ -124,7 +123,7 @@ class FCMAdapter : NotificationPort {
                 )
                 .setApnsConfig(getApnsConfig(threadId))
         }
-    
+
     private fun getApnsConfig(threadId: String) =
         ApnsConfig
             .builder()
