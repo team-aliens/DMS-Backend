@@ -3,10 +3,12 @@ package team.aliens.dms.domain.volunteer.usecase
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import team.aliens.dms.domain.point.service.PointService
 import team.aliens.dms.domain.volunteer.service.VolunteerService
 import team.aliens.dms.domain.volunteer.spi.vo.VolunteerScoreWithStudentVO
@@ -15,7 +17,7 @@ import java.util.UUID
 class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
 
     describe("execute") {
-        context("봉사 점수가 있을 때") {
+        context("봉사 점수가 존재하는 경우") {
             val volunteerService = mockk<VolunteerService>()
             val pointService = mockk<PointService>()
             val useCase = ConvertVolunteerScoreToPointUseCase(volunteerService, pointService)
@@ -53,14 +55,20 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
             every { volunteerService.deleteAllVolunteerScores() } just runs
             coEvery { pointService.saveAllPointHistories(any(), any()) } returns emptyList()
 
-            it("봉사 점수를 상점으로 변환한다") {
+            it("봉사 점수를 상점 이력으로 변환한다") {
                 shouldNotThrowAny {
                     useCase.execute()
                 }
+
+                coVerify(exactly = 1) {
+                    pointService.saveAllPointHistories(any(), listOf(studentId1, studentId2))
+                }
+                verify(exactly = 1) { volunteerService.getAllVolunteerScoresWithVO() }
+                verify(exactly = 1) { volunteerService.deleteAllVolunteerScores() }
             }
         }
 
-        context("봉사 점수가 없을 때") {
+        context("봉사 점수가 없는 경우") {
             val volunteerService = mockk<VolunteerService>()
             val pointService = mockk<PointService>()
             val useCase = ConvertVolunteerScoreToPointUseCase(volunteerService, pointService)
@@ -69,10 +77,14 @@ class ConvertVolunteerScoreToPointUseCaseTest : DescribeSpec({
             every { volunteerService.deleteAllVolunteerScores() } just runs
             coEvery { pointService.saveAllPointHistories(any(), any()) } returns emptyList()
 
-            it("봉사 점수가 없어도 정상 처리된다") {
+            it("봉사 점수가 없어도 정상 처리한다") {
                 shouldNotThrowAny {
                     useCase.execute()
                 }
+
+                coVerify(exactly = 1) { pointService.saveAllPointHistories(emptyList(), emptyList()) }
+                verify(exactly = 1) { volunteerService.getAllVolunteerScoresWithVO() }
+                verify(exactly = 1) { volunteerService.deleteAllVolunteerScores() }
             }
         }
     }
