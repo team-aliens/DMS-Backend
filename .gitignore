@@ -43,3 +43,8 @@ out/
 CLAUDE.md
 .claude/*
 tmpclaude-*
+
+### AI/Agent Files ###
+AGENTS.md
+.opencode/
+**/SKILL.md

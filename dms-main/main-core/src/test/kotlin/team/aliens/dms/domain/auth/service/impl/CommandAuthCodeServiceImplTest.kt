@@ -2,8 +2,11 @@ package team.aliens.dms.domain.auth.service.impl
 
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
@@ -45,6 +48,14 @@ class CommandAuthCodeServiceImplTest : DescribeSpec({
                 shouldNotThrowAny {
                     commandAuthCodeService.saveIncreasedAuthCodeLimitByEmailAndType(email, type)
                 }
+
+                val savedSlot = slot<AuthCodeLimit>()
+                verify(exactly = 1) { commandAuthCodeLimitPort.saveAuthCodeLimit(capture(savedSlot)) }
+                savedSlot.captured.email shouldBe email
+                savedSlot.captured.type shouldBe type
+                savedSlot.captured.attemptCount shouldBe 3
+                savedSlot.captured.isVerified shouldBe false
+                savedSlot.captured.expirationTime shouldBe AuthCodeLimit.EXPIRED
             }
         }
     }
