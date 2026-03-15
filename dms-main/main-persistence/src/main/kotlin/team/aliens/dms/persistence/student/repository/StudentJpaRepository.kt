@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.student.repository
 
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.student.entity.StudentJpaEntity
@@ -19,5 +20,6 @@ interface StudentJpaRepository : CrudRepository<StudentJpaEntity, UUID> {
 
     fun existsByUserId(userId: UUID): Boolean
 
+    @EntityGraph(attributePaths = ["room"])
     fun findAllByIdIn(ids: List<UUID>): List<StudentJpaEntity>
 }
