@@ -43,3 +43,5 @@ out/
 CLAUDE.md
 .claude/*
 tmpclaude-*
+.opencode/
+AGENTS.md
