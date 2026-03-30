@@ -24,7 +24,11 @@ class DeviceTokenPersistenceAdapter(
 
     override fun saveDeviceToken(deviceToken: DeviceToken) = notificationMapper.toDomain(
         deviceTokenRepository.save(
-            notificationMapper.toEntity(deviceToken)
+            notificationMapper.toEntity(
+                deviceTokenRepository.findByUserId(deviceToken.userId)
+                    ?.let { deviceToken.copy(id = it.id!!) }
+                    ?: deviceToken
+            )
         )
     )!!
 
