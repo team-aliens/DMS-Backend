@@ -27,7 +27,7 @@ class TeacherJpaEntity(
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
-    val user: UserJpaEntity,
+    val user: UserJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,

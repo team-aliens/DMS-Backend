@@ -18,7 +18,7 @@ class DaybreakStudyTypeJpaEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
-    val schoolJpaEntity: SchoolJpaEntity,
+    val schoolJpaEntity: SchoolJpaEntity?,
 
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String
