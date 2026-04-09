@@ -3,7 +3,7 @@ package team.aliens.dms.domain.daybreak.model
 import team.aliens.dms.common.model.SchoolIdDomain
 import java.util.UUID
 
-data class StudyType(
+data class DaybreakStudyType(
 
     val id: UUID,
 
