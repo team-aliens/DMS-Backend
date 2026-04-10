@@ -17,6 +17,7 @@ import team.aliens.dms.global.security.passport.PassportSecurityProperties
 import team.aliens.dms.global.security.passport.PassportValidator
 import team.aliens.dms.global.security.principle.ManagerDetails
 import team.aliens.dms.global.security.principle.StudentDetails
+import team.aliens.dms.global.security.principle.TeacherDetails
 
 class PassportFilter(
     private val passportValidator: PassportValidator,
@@ -78,6 +79,11 @@ class PassportFilter(
                 authority = passport.user.authority
             )
             Authority.MANAGER -> ManagerDetails(
+                userId = passport.user.id,
+                schoolId = passport.user.schoolId,
+                authority = passport.user.authority
+            )
+            Authority.TEACHER -> TeacherDetails(
                 userId = passport.user.id,
                 schoolId = passport.user.schoolId,
                 authority = passport.user.authority
