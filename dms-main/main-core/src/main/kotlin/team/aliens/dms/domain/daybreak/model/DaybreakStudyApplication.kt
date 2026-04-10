@@ -10,7 +10,7 @@ data class DaybreakStudyApplication(
 
     val id: UUID,
 
-    val studyType: DaybreakStudyType,
+    val studyTypeId: UUID,
 
     val startDate: LocalDate,
 
