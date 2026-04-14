@@ -23,7 +23,7 @@ class QueryAvailableFeaturesUseCase(
             remainService = availableFeatures.remainService,
             outingService = availableFeatures.outingService,
             volunteerService = availableFeatures.volunteerService,
-            daybreakService =
+            daybreakService = availableFeatures.daybreakService
         )
     }
 }

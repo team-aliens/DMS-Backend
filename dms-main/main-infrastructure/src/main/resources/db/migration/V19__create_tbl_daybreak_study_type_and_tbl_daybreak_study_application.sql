@@ -24,5 +24,7 @@ CREATE TABLE tbl_daybreak_study_application (
     FOREIGN KEY (type_id) REFERENCES tbl_daybreak_study_type (id)
 );
 
+alter table tbl_available_feature add column daybreak_service tinyint(1) not null;
+
 
 
