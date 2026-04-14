@@ -7,9 +7,9 @@ import team.aliens.dms.domain.user.spi.QueryUserPort
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import java.util.UUID
 
-class TeacherDetailsService (
+class TeacherDetailsService(
     private val queryUserPort: QueryUserPort,
-):UserDetailsService {
+) : UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
         queryUserPort.queryUserById(UUID.fromString(username)).apply {

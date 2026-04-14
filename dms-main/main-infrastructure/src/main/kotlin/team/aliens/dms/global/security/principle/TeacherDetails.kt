@@ -10,7 +10,7 @@ class TeacherDetails(
     override val userId: UUID,
     override val schoolId: UUID,
     override val authority: Authority
-):UserDetails, CustomDetails {
+) : UserDetails, CustomDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(Authority.TEACHER.name))
