@@ -8,7 +8,7 @@ import java.util.UUID
 @Aggregate
 data class DaybreakStudyApplication(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val studyTypeId: UUID,
 
