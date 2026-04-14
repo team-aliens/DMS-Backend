@@ -10,7 +10,6 @@ import jakarta.persistence.MapsId
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.persistence.Id
-import team.aliens.dms.domain.teacher.model.Role
 import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.util.UUID
 
@@ -30,7 +29,4 @@ class TeacherJpaEntity(
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
-    val role: Role
 )

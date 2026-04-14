@@ -6,14 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails
 import team.aliens.dms.domain.auth.model.Authority
 import java.util.UUID
 
-class TeacherDetails(
+class GeneralTeacherDetails(
     override val userId: UUID,
     override val schoolId: UUID,
     override val authority: Authority
 ) : UserDetails, CustomDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(Authority.TEACHER.name))
+        return mutableListOf(SimpleGrantedAuthority(Authority.GENERAL_TEACHER.name))
     }
 
     override fun getPassword(): String? = null

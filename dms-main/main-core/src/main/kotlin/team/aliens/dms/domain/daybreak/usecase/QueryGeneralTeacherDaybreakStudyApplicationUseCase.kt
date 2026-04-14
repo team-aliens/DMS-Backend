@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.daybreak.usecase
+/*package team.aliens.dms.domain.daybreak.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.dto.PageData
@@ -8,7 +8,6 @@ import team.aliens.dms.domain.daybreak.dto.response.HeadTeacherDaybreakStudyAppl
 import team.aliens.dms.domain.daybreak.dto.response.TeacherDaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
-import team.aliens.dms.domain.teacher.model.Role
 import team.aliens.dms.domain.teacher.service.TeacherService
 import java.util.UUID
 
@@ -34,3 +33,4 @@ class QueryTeacherDaybreakStudyApplicationUseCase(
         }
     }
 }
+*/
