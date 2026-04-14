@@ -6,4 +6,7 @@ import team.aliens.dms.persistence.daybreak.entity.DaybreakStudyApplicationJpaEn
 import java.util.UUID
 
 @Repository
-interface DaybreakStudyApplicationJpaRepository : CrudRepository<DaybreakStudyApplicationJpaEntity, UUID>
+interface DaybreakStudyApplicationJpaRepository : CrudRepository<DaybreakStudyApplicationJpaEntity, UUID> {
+
+    fun findAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplicationJpaEntity?>
+}

@@ -145,11 +145,19 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .fetch()
     }
 
+    override fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication> {
+        return daybreakStudyApplicationRepository.findAllByIdIn(ids).mapNotNull {
+            daybreakStudyApplicationMapper.toDomain(it)
+        }
+    }
+
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {
         daybreakStudyApplicationRepository.save(daybreakStudyApplicationMapper.toEntity(application))
     }
 
-    override fun changeStatusDaybreakStudyApplication(status: Status) {
-        TODO("Not yet implemented")
+    override fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>) {
+       val applicationEntities = applications.map { daybreakStudyApplicationMapper.toEntity(it) }
+
+        daybreakStudyApplicationRepository.saveAll(applicationEntities)
     }
 }

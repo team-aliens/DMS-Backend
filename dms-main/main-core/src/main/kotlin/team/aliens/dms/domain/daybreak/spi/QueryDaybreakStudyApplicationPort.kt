@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.daybreak.spi
 
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.vo.GeneralTeacherDaybreakStudyApplicationVO
 import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicationVO
@@ -26,4 +27,6 @@ interface QueryDaybreakStudyApplicationPort {
         grade: Int? = null,
         pageData: PageData = PageData.DEFAULT
     ): List<ManagerDaybreakStudyApplicationVO>
+
+    fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>
 }
