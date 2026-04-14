@@ -15,13 +15,15 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.dto.ApplyDaybreakStudyApplicationWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
+import team.aliens.dms.domain.daybreak.dto.response.GeneralTeacherDaybreakStudyApplicationsResponse
+import team.aliens.dms.domain.daybreak.dto.response.HeadTeacherDaybreakStudyApplicationsResponse
 import team.aliens.dms.domain.daybreak.dto.response.ManagerDaybreakStudyApplicationsResponse
-import team.aliens.dms.domain.daybreak.dto.response.TeacherDaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
+import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryManagerDaybreakStudyApplicationUseCase
-import team.aliens.dms.domain.daybreak.usecase.QueryTeacherDaybreakStudyApplicationUseCase
 import java.util.UUID
 
 @Validated
@@ -29,7 +31,8 @@ import java.util.UUID
 @RequestMapping("/daybreaks")
 class DaybreakWebAdapter(
     private val applyDaybreakStudyApplicationUseCase: ApplyDaybreakStudyApplicationUseCase,
-    private val queryTeacherDaybreakStudyApplicationUsecase: QueryTeacherDaybreakStudyApplicationUseCase,
+    private val queryGeneralTeacherDaybreakStudyApplicationUseCase: QueryGeneralTeacherDaybreakStudyApplicationUseCase,
+    private val queryHeadTeacherDaybreakStudyApplicationUseCase: QueryHeadTeacherDaybreakStudyApplicationUseCase,
     private val queryManagerDaybreakStudyApplicationUseCase: QueryManagerDaybreakStudyApplicationUseCase,
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase
 ) {
@@ -49,13 +52,22 @@ class DaybreakWebAdapter(
     }
 
     @ResponseStatus(code = HttpStatus.OK)
-    @GetMapping("/teacher/study-application")
+    @GetMapping("/general/study-application")
+    fun getDaybreakStudyApplications(
+        @RequestParam(value = "type_id", required = false) typeId: UUID?,
+        @ModelAttribute pageData: PageData
+    ): GeneralTeacherDaybreakStudyApplicationsResponse {
+        return queryGeneralTeacherDaybreakStudyApplicationUseCase.execute(typeId, pageData)
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping("/head/study-application")
     fun getDaybreakStudyApplications(
         @RequestParam(value = "type_id", required = false) typeId: UUID?,
         @RequestParam(value = "status", required = false) status: Status?,
         @ModelAttribute pageData: PageData
-    ): TeacherDaybreakStudyApplicationResponse {
-        return queryTeacherDaybreakStudyApplicationUsecase.execute(typeId, status, pageData)
+    ): HeadTeacherDaybreakStudyApplicationsResponse {
+        return queryHeadTeacherDaybreakStudyApplicationUseCase.execute(typeId, status, pageData)
     }
 
     @ResponseStatus(code = HttpStatus.OK)

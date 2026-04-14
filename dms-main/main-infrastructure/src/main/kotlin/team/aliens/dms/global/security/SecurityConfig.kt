@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
-import team.aliens.dms.domain.auth.model.Authority.TEACHER
+import team.aliens.dms.domain.auth.model.Authority.GENERAL_TEACHER
+import team.aliens.dms.domain.auth.model.Authority.HEAD_TEACHER
+
 import team.aliens.dms.global.filter.FilterConfig
 
 @Configuration
@@ -228,9 +230,9 @@ class SecurityConfig(
                 authorize
                     // /daybreaks
                     .requestMatchers(HttpMethod.POST, "/daybreaks/study-application").hasAuthority(STUDENT.name)
-                    .requestMatchers(HttpMethod.GET, "/daybreaks/teacher/study-application").hasAuthority(TEACHER.name)
-                    .requestMatchers(HttpMethod.GET, "/daybreaks/manager/study-application").hasAuthority(MANAGER.name)
-                    .requestMatchers(HttpMethod.GET, "/daybreaks/study-type").hasAnyAuthority(TEACHER.name,STUDENT.name)
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/general/study-application").hasAuthority(GENERAL_TEACHER.name)
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/head/study-application").hasAuthority(HEAD_TEACHER.name)
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/study-type").hasAnyAuthority(HEAD_TEACHER.name,GENERAL_TEACHER.name,STUDENT.name)
                 .anyRequest().denyAll()
             }
         http

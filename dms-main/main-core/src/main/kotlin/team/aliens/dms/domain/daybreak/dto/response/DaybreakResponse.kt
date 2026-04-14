@@ -5,15 +5,14 @@ import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicatio
 import team.aliens.dms.domain.daybreak.spi.vo.ManagerDaybreakStudyApplicationVO
 import java.util.UUID
 
-abstract class TeacherDaybreakStudyApplicationResponse
 
 data class GeneralTeacherDaybreakStudyApplicationsResponse(
     val applications: List<GeneralTeacherDaybreakStudyApplicationVO>
-) : TeacherDaybreakStudyApplicationResponse()
+)
 
 data class HeadTeacherDaybreakStudyApplicationsResponse(
     val applications: List<HeadTeacherDaybreakStudyApplicationVO>
-) : TeacherDaybreakStudyApplicationResponse()
+)
 
 data class ManagerDaybreakStudyApplicationsResponse(
     val applications: List<ManagerDaybreakStudyApplicationVO>
