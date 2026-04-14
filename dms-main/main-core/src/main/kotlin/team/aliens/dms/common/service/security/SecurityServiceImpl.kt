@@ -23,4 +23,7 @@ class SecurityServiceImpl(
 
     override fun getCurrentSchoolId() =
         securityPort.getCurrentUserSchoolId()
+
+    override fun getCurrentUserAuthority() =
+        securityPort.getCurrentUserAuthority()
 }
