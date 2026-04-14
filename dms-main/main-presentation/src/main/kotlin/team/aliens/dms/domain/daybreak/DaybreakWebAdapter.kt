@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.daybreak
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,6 +29,8 @@ import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryManagerDaybreakStudyApplicationUseCase
+import java.time.LocalDate
+import java.util.Date
 import java.util.UUID
 
 @Validated
@@ -60,19 +63,21 @@ class DaybreakWebAdapter(
     @GetMapping("/general/study-application")
     fun getDaybreakStudyApplications(
         @RequestParam(value = "type_id", required = false) typeId: UUID?,
+        @RequestParam(value = "date", required = true)  date: LocalDate,
         @ModelAttribute pageData: PageData
     ): GeneralTeacherDaybreakStudyApplicationsResponse {
-        return queryGeneralTeacherDaybreakStudyApplicationUseCase.execute(typeId, pageData)
+        return queryGeneralTeacherDaybreakStudyApplicationUseCase.execute(typeId, date, pageData)
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/head/study-application")
     fun getDaybreakStudyApplications(
         @RequestParam(value = "type_id", required = false) typeId: UUID?,
+        @RequestParam(value = "date", required = true) date: LocalDate,
         @RequestParam(value = "status", required = false) status: Status?,
         @ModelAttribute pageData: PageData
     ): HeadTeacherDaybreakStudyApplicationsResponse {
-        return queryHeadTeacherDaybreakStudyApplicationUseCase.execute(typeId, status, pageData)
+        return queryHeadTeacherDaybreakStudyApplicationUseCase.execute(typeId, date, status, pageData)
     }
 
     @ResponseStatus(code = HttpStatus.OK)

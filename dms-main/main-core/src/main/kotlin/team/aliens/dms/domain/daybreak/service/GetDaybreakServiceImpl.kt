@@ -9,6 +9,7 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.QueryDaybreakStudyApplicationPort
 import team.aliens.dms.domain.daybreak.spi.QueryDaybreakStudyTypePort
+import java.time.LocalDate
 import java.util.UUID
 
 @Service
@@ -23,19 +24,23 @@ class GetDaybreakServiceImpl(
 
     override fun generalTeacherGetDaybreakStudyApplications(
         typeId: UUID?,
+        date: LocalDate,
         pageData: PageData
     ) = queryDaybreakStudyApplicationPort.generalTeacherGetDaybreakStudyApplications(
         typeId = typeId,
+        date = date,
         pageData = pageData
     )
 
     override fun headTeacherGetDaybreakStudyApplications(
         typeId: UUID?,
+        date: LocalDate,
         status: Status?,
         pageData: PageData
     ) = queryDaybreakStudyApplicationPort.headTeacherGetDaybreakStudyApplications(
         typeId = typeId,
         status = status,
+        date = date,
         pageData = pageData
     )
 

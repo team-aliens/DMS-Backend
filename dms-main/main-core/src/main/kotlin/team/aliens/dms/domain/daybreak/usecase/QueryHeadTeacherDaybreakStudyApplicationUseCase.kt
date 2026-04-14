@@ -5,6 +5,8 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.dto.response.HeadTeacherDaybreakStudyApplicationsResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
+import java.time.LocalDate
+import java.util.Date
 import java.util.UUID
 
 @UseCase
@@ -12,7 +14,7 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCase (
     private val daybreakService: DaybreakService
 ){
 
-    fun execute(typeId: UUID?, status: Status?, pageData: PageData): HeadTeacherDaybreakStudyApplicationsResponse {
-        return HeadTeacherDaybreakStudyApplicationsResponse(daybreakService.headTeacherGetDaybreakStudyApplications(typeId, status, pageData))
+    fun execute(typeId: UUID?, date: LocalDate, status: Status?, pageData: PageData): HeadTeacherDaybreakStudyApplicationsResponse {
+        return HeadTeacherDaybreakStudyApplicationsResponse(daybreakService.headTeacherGetDaybreakStudyApplications(typeId, date, status, pageData))
     }
 }
