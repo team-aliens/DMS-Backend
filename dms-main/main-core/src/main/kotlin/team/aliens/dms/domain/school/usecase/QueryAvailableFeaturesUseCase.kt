@@ -22,7 +22,8 @@ class QueryAvailableFeaturesUseCase(
             studyRoomService = availableFeatures.studyRoomService,
             remainService = availableFeatures.remainService,
             outingService = availableFeatures.outingService,
-            volunteerService = availableFeatures.volunteerService
+            volunteerService = availableFeatures.volunteerService,
+            daybreakService =
         )
     }
 }
