@@ -22,7 +22,7 @@ class DaybreakStudyApplicationJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(1000)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(200)", nullable = false)
     val reason: String,
 
     @Enumerated(EnumType.STRING)
@@ -51,4 +51,4 @@ class DaybreakStudyApplicationJpaEntity(
     @JoinColumn(name = "teacher_id", nullable = false)
     val teacherJpaEntity: TeacherJpaEntity,
 
-): BaseEntity(id)
+) : BaseEntity(id)
