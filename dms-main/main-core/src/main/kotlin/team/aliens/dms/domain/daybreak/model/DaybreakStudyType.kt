@@ -11,4 +11,4 @@ data class DaybreakStudyType(
 
     override val schoolId: UUID
 
-): SchoolIdDomain
+) : SchoolIdDomain

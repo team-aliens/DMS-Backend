@@ -7,10 +7,10 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 
 @UseCase
-class CreateDaybreakStudyTypeUseCase (
+class CreateDaybreakStudyTypeUseCase(
     private val daybreakService: DaybreakService,
     private val securityService: SecurityService
-){
+) {
 
     fun execute(request: CreateDaybreakStudyTypeRequest) {
 

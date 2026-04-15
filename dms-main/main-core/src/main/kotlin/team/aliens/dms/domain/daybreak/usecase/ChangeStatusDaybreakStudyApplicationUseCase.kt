@@ -11,7 +11,7 @@ class ChangeStatusDaybreakStudyApplicationUseCase(
     private val securityService: SecurityService
 ) {
 
-    fun execute(request : ChangeDaybreakStudyApplicationStatusRequest) {
+    fun execute(request: ChangeDaybreakStudyApplicationStatusRequest) {
 
         val authority = securityService.getCurrentUserAuthority()
 

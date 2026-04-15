@@ -31,7 +31,7 @@ data class DaybreakStudyApplication(
 ) : SchoolIdDomain {
 
     fun changeStatus(authority: Authority, newStatus: Status) {
-        if(isTerminalStatus()) throw InvalidRoleException
+        if (isTerminalStatus()) throw InvalidRoleException
 
         when (authority) {
             Authority.GENERAL_TEACHER -> validateGeneralTeacherTransition(newStatus)
@@ -45,11 +45,10 @@ data class DaybreakStudyApplication(
     private fun isTerminalStatus() =
         status == Status.REJECTED || status == Status.SECOND_APPROVED
 
-
     private fun validateGeneralTeacherTransition(newStatus: Status) {
         if (this.status != Status.PENDING) throw InvalidRoleException
 
-        if(newStatus != Status.FIRST_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
+        if (newStatus != Status.FIRST_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
     }
 
     private fun validateHeadTeacherTransition(newStatus: Status) {

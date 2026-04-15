@@ -72,7 +72,7 @@ class AvailableFeatureAspect(
 
     @Before(
         "within(team.aliens.dms.domain.daybreak.usecase.*) && " +
-                "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
     )
     fun beforeDaybreakService() {
         val availableFeature = getAvailableFeature()

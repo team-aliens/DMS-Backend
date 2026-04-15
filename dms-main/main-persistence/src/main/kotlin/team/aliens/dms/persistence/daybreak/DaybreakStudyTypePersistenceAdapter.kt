@@ -5,7 +5,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.spi.DaybreakStudyTypePort
-import team.aliens.dms.persistence.daybreak.entity.QDaybreakStudyApplicationJpaEntity.daybreakStudyApplicationJpaEntity
 import team.aliens.dms.persistence.daybreak.entity.QDaybreakStudyTypeJpaEntity.daybreakStudyTypeJpaEntity
 import team.aliens.dms.persistence.daybreak.mapper.DaybreakStudyTypeMapper
 import team.aliens.dms.persistence.daybreak.repository.DaybreakStudyTypeJpaRepository

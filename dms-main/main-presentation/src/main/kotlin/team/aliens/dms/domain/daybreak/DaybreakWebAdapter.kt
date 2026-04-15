@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationWebRequest
-import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
+import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusRequest
+import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeWebRequest
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
@@ -65,7 +65,7 @@ class DaybreakWebAdapter(
     @GetMapping("/general/study-application")
     fun getDaybreakStudyApplications(
         @RequestParam(value = "type_id", required = false) typeId: UUID?,
-        @RequestParam(value = "date", required = true)  date: LocalDate,
+        @RequestParam(value = "date", required = true) date: LocalDate,
         @ModelAttribute pageData: PageData
     ): GeneralTeacherDaybreakStudyApplicationsResponse {
         return queryGeneralTeacherDaybreakStudyApplicationUseCase.execute(typeId, date, pageData)
@@ -93,13 +93,15 @@ class DaybreakWebAdapter(
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/study-type")
-    fun getDaybreakStudyTypes() : DaybreakStudyTypesResponse {
+    fun getDaybreakStudyTypes(): DaybreakStudyTypesResponse {
         return queryDaybreakStudyTypesUseCase.execute()
     }
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping("/study-application")
-    fun changeDaybreakStudyApplicationStatus(@RequestBody @Valid request: ChangeDaybreakStudyApplicationStatusWebRequest) {
+    fun changeDaybreakStudyApplicationStatus(
+        @RequestBody @Valid request: ChangeDaybreakStudyApplicationStatusWebRequest
+    ) {
         changeStatusDaybreakStudyApplicationUseCase.execute(
             ChangeDaybreakStudyApplicationStatusRequest(
                 applicationIds = request.applicationIds,

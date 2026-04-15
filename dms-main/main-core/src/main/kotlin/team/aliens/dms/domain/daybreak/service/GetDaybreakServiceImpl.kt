@@ -2,7 +2,6 @@ package team.aliens.dms.domain.daybreak.service
 
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationNotFoundException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyTypeNotFoundException
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
@@ -18,9 +17,8 @@ class GetDaybreakServiceImpl(
     private val queryDaybreakStudyApplicationPort: QueryDaybreakStudyApplicationPort
 ) : GetDaybreakService {
 
-    override fun getDaybreakStudyTypeById(id: UUID): DaybreakStudyType
-    = queryDaybreakStudyTypePort.daybreakStudyTypeById(id) ?: throw DaybreakStudyTypeNotFoundException
-
+    override fun getDaybreakStudyTypeById(id: UUID): DaybreakStudyType =
+        queryDaybreakStudyTypePort.daybreakStudyTypeById(id) ?: throw DaybreakStudyTypeNotFoundException
 
     override fun generalTeacherGetDaybreakStudyApplications(
         typeId: UUID?,
@@ -52,11 +50,10 @@ class GetDaybreakServiceImpl(
         pageData = pageData
     )
 
-    override fun getDaybreakStudyTypesBySchoolId(schoolId: UUID)
-    = queryDaybreakStudyTypePort.daybreakStudyTypesBySchoolId(schoolId)
+    override fun getDaybreakStudyTypesBySchoolId(schoolId: UUID) =
+        queryDaybreakStudyTypePort.daybreakStudyTypesBySchoolId(schoolId)
 
     override fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication> {
         return queryDaybreakStudyApplicationPort.getAllByIdIn(ids)
     }
-
 }

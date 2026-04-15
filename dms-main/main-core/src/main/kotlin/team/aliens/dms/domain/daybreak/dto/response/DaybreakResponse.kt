@@ -5,7 +5,6 @@ import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicatio
 import team.aliens.dms.domain.daybreak.spi.vo.ManagerDaybreakStudyApplicationVO
 import java.util.UUID
 
-
 data class GeneralTeacherDaybreakStudyApplicationsResponse(
     val applications: List<GeneralTeacherDaybreakStudyApplicationVO>
 )

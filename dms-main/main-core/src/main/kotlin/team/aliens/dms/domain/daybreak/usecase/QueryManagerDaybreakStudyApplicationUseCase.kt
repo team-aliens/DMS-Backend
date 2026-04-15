@@ -10,6 +10,8 @@ class QueryManagerDaybreakStudyApplicationUseCase(
     private val daybreakService: DaybreakService,
 ) {
     fun execute(grade: Int?, pageData: PageData): ManagerDaybreakStudyApplicationsResponse {
-        return ManagerDaybreakStudyApplicationsResponse(daybreakService.managerGetDaybreakStudyApplications(grade, pageData))
+        return ManagerDaybreakStudyApplicationsResponse(
+            daybreakService.managerGetDaybreakStudyApplications(grade, pageData)
+        )
     }
 }

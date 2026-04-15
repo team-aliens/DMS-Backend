@@ -152,7 +152,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
     }
 
     override fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>) {
-       val applicationEntities = applications.map { daybreakStudyApplicationMapper.toEntity(it) }
+        val applicationEntities = applications.map { daybreakStudyApplicationMapper.toEntity(it) }
 
         daybreakStudyApplicationRepository.saveAll(applicationEntities)
     }

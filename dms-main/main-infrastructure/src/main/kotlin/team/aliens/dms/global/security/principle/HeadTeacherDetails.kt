@@ -10,7 +10,7 @@ class HeadTeacherDetails(
     override val userId: UUID,
     override val schoolId: UUID,
     override val authority: Authority
-):UserDetails, CustomDetails {
+) : UserDetails, CustomDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(Authority.HEAD_TEACHER.name))
@@ -27,5 +27,4 @@ class HeadTeacherDetails(
     override fun isCredentialsNonExpired(): Boolean = true
 
     override fun isEnabled(): Boolean = true
-
 }

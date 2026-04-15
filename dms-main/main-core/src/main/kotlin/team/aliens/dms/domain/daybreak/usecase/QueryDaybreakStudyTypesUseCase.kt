@@ -7,12 +7,12 @@ import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse.D
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 
 @UseCase
-class QueryDaybreakStudyTypesUseCase (
+class QueryDaybreakStudyTypesUseCase(
     private val daybreakService: DaybreakService,
     private val securityService: SecurityService
-){
+) {
 
-    fun execute(): DaybreakStudyTypesResponse{
+    fun execute(): DaybreakStudyTypesResponse {
 
         val schoolId = securityService.getCurrentSchoolId()
 

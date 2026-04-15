@@ -13,6 +13,8 @@ class QueryGeneralTeacherDaybreakStudyApplicationUseCase(
 ) {
 
     fun execute(typeId: UUID?, date: LocalDate, pageData: PageData): GeneralTeacherDaybreakStudyApplicationsResponse {
-        return GeneralTeacherDaybreakStudyApplicationsResponse(daybreakService.generalTeacherGetDaybreakStudyApplications(typeId, date, pageData))
+        return GeneralTeacherDaybreakStudyApplicationsResponse(
+            daybreakService.generalTeacherGetDaybreakStudyApplications(typeId, date, pageData)
+        )
     }
 }

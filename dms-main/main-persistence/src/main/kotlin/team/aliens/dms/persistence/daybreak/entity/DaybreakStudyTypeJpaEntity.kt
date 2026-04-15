@@ -23,4 +23,4 @@ class DaybreakStudyTypeJpaEntity(
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     val name: String
 
-): BaseUUIDEntity(id)
+) : BaseUUIDEntity(id)
