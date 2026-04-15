@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.daybreak
 
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotNull
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
-import team.aliens.dms.domain.daybreak.dto.ApplyDaybreakStudyApplicationWebRequest
-import team.aliens.dms.domain.daybreak.dto.ChangeDaybreakStudyApplicationStatusWebRequest
+import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationWebRequest
+import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
 import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusRequest
+import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeRequest
+import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeWebRequest
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
 import team.aliens.dms.domain.daybreak.dto.response.GeneralTeacherDaybreakStudyApplicationsResponse
 import team.aliens.dms.domain.daybreak.dto.response.HeadTeacherDaybreakStudyApplicationsResponse
@@ -25,12 +26,12 @@ import team.aliens.dms.domain.daybreak.dto.response.ManagerDaybreakStudyApplicat
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.CreateDaybreakStudyTypeUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryManagerDaybreakStudyApplicationUseCase
 import java.time.LocalDate
-import java.util.Date
 import java.util.UUID
 
 @Validated
@@ -42,7 +43,8 @@ class DaybreakWebAdapter(
     private val queryHeadTeacherDaybreakStudyApplicationUseCase: QueryHeadTeacherDaybreakStudyApplicationUseCase,
     private val queryManagerDaybreakStudyApplicationUseCase: QueryManagerDaybreakStudyApplicationUseCase,
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase,
-    private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase
+    private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
+    private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase
 ) {
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -102,6 +104,16 @@ class DaybreakWebAdapter(
             ChangeDaybreakStudyApplicationStatusRequest(
                 applicationIds = request.applicationIds,
                 status = request.status
+            )
+        )
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @PostMapping("/study-type")
+    fun createDaybreakStudyType(@RequestBody @Valid request: CreateDaybreakStudyTypeWebRequest) {
+        createDaybreakStudyTypeUseCase.execute(
+            CreateDaybreakStudyTypeRequest(
+                name = request.name
             )
         )
     }

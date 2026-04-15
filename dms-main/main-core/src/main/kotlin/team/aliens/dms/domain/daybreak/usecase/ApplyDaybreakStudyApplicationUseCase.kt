@@ -20,7 +20,7 @@ class ApplyDaybreakStudyApplicationUseCase(
         val student = studentService.getCurrentStudent()
         val schoolId = securityService.getCurrentSchoolId()
 
-        daybreakService.checkDaybreakStudyApplicationByStudentId(student.id)
+        daybreakService.checkDaybreakStudyApplicationExists(student.id)
 
         val studyType = daybreakService.getDaybreakStudyTypeById(request.typeId)
 

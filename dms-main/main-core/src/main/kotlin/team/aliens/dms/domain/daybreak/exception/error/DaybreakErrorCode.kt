@@ -10,6 +10,7 @@ enum class DaybreakErrorCode(
 ) : ErrorProperty {
 
     EXIST_DAYBREAK_STUDY_APPLICATION(ErrorStatus.CONFLICT, "Exist Daybreak Study Application", 1),
+    EXIST_DAYBREAK_STUDY_TYPE(ErrorStatus.CONFLICT, "Exist Daybreak Type of Daybreak", 2),
 
     NOT_FOUND_DAYBREAK_STUDY_APPLICATION(ErrorStatus.NOT_FOUND, "Not Found Daybreak Study Application", 1),
     NOT_FOUND_DAYBREAK_STUDY_TYPE(ErrorStatus.NOT_FOUND, "Not Found Daybreak Study Type ", 1);

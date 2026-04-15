@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.daybreak.dto
+package team.aliens.dms.domain.daybreak.dto.request
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull

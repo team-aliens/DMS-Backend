@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class DaybreakStudyType(
 
-    val id: UUID,
+    val id: UUID = UUID(0, 0),
 
     val name: String,
 

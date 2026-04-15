@@ -7,4 +7,6 @@ interface QueryDaybreakStudyTypePort {
     fun daybreakStudyTypeById(id: UUID): DaybreakStudyType?
 
     fun daybreakStudyTypesBySchoolId(id: UUID): List<DaybreakStudyType>
+
+    fun existsDaybreakStudyTypeBySchoolIdAndName(schoolId: UUID, name: String): Boolean
 }
