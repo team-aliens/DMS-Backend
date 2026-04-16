@@ -62,12 +62,12 @@ class ChangeStatusDaybreakStudyApplicationUseCaseTest : DescribeSpec({
                     verify(exactly = 1) {
                         daybreakService.saveAllDaybreakStudyApplications(any())
                     }
-                }
 
-                clearAllMocks()
+                    clearAllMocks()
+                }
             }
         }
-        context("권한에 따른 옳지 않는 상태 변경 요청이 왔다면"){
+        context("권한에 따른 옳지 않는 상태 변경 요청이 왔다면") {
             it("예외를 반환한다") {
                 val applicationId = UUID.randomUUID()
                 val mockApplication = mockk<DaybreakStudyApplication>(relaxed = true)

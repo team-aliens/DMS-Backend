@@ -11,15 +11,15 @@ import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeReques
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import java.util.UUID
 
-class CreateDaybreakStudyTypeUseCaseTest : DescribeSpec ({
+class CreateDaybreakStudyTypeUseCaseTest : DescribeSpec({
 
     val daybreakService = mockk<DaybreakService>()
     val securityService = mockk<SecurityService>()
 
     val useCase = CreateDaybreakStudyTypeUseCase(daybreakService, securityService)
 
-    describe("execute"){
-        context("올바른 요청이 들어오면"){
+    describe("execute") {
+        context("올바른 요청이 들어오면") {
             val schoolId = UUID.randomUUID()
 
             val request = CreateDaybreakStudyTypeRequest(
@@ -43,7 +43,6 @@ class CreateDaybreakStudyTypeUseCaseTest : DescribeSpec ({
                     daybreakService.saveDaybreakStudyType(any())
                 }
             }
-
         }
     }
 })

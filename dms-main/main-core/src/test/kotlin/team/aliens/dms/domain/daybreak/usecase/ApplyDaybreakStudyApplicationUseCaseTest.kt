@@ -68,8 +68,6 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
                 verify(exactly = 1) {
                     daybreakService.saveDaybreakStudyApplication(any())
                 }
-
-
             }
         }
         context("이미 신청내역이 존재한다면") {
@@ -83,7 +81,9 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
                 // given
                 every { studentService.getCurrentStudent() } returns mockStudent
                 every { securityService.getCurrentSchoolId() } returns UUID.randomUUID()
-                every { daybreakService.checkDaybreakStudyApplicationExists(studentId) } throws DaybreakStudyApplicationAlreadyExistsException
+                every {
+                    daybreakService.checkDaybreakStudyApplicationExists(studentId)
+                } throws DaybreakStudyApplicationAlreadyExistsException
 
                 // when & then
                 shouldThrow<DaybreakStudyApplicationAlreadyExistsException> {
