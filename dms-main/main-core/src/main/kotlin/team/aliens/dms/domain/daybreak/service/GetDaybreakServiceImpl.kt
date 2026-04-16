@@ -33,11 +33,13 @@ class GetDaybreakServiceImpl(
     )
 
     override fun headTeacherGetDaybreakStudyApplications(
+        grade: Int,
         typeId: UUID?,
         date: LocalDate,
         status: Status?,
         pageData: PageData
     ) = queryDaybreakStudyApplicationPort.headTeacherGetDaybreakStudyApplications(
+        grade = grade,
         typeId = typeId,
         status = status,
         date = date,

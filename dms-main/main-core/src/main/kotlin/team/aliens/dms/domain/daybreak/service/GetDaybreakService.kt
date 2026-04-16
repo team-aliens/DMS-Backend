@@ -22,6 +22,7 @@ interface GetDaybreakService {
     ): List<GeneralTeacherDaybreakStudyApplicationVO>
 
     fun headTeacherGetDaybreakStudyApplications(
+        grade: Int,
         typeId: UUID? = null,
         date: LocalDate,
         status: Status? = null,

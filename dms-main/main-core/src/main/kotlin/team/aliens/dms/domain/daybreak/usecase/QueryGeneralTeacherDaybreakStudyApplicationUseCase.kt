@@ -5,10 +5,8 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.response.GeneralTeacherDaybreakStudyApplicationsResponse
 import team.aliens.dms.domain.daybreak.service.DaybreakService
-import team.aliens.dms.domain.student.service.StudentService
 import java.time.LocalDate
 import java.util.UUID
-import kotlin.coroutines.suspendCoroutine
 
 @UseCase
 class QueryGeneralTeacherDaybreakStudyApplicationUseCase(

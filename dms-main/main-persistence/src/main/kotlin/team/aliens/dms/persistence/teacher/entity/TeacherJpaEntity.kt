@@ -27,4 +27,7 @@ class TeacherJpaEntity(
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     val name: String,
 
+    @Column(columnDefinition = "TINYINT UNSIGNED", nullable = true)
+    val grade: Int
+
 )
