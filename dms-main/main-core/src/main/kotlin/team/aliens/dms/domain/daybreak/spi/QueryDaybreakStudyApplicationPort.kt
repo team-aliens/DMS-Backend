@@ -14,6 +14,7 @@ interface QueryDaybreakStudyApplicationPort {
     fun existActiveDaybreakStudyApplicationByStudentId(studentId: UUID): Boolean
 
     fun generalTeacherGetDaybreakStudyApplications(
+        teacherId: UUID,
         typeId: UUID? = null,
         date: LocalDate,
         pageData: PageData = PageData.DEFAULT

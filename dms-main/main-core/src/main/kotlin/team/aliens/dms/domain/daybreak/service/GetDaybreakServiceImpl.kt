@@ -21,10 +21,12 @@ class GetDaybreakServiceImpl(
         queryDaybreakStudyTypePort.daybreakStudyTypeById(id) ?: throw DaybreakStudyTypeNotFoundException
 
     override fun generalTeacherGetDaybreakStudyApplications(
+        teacherId: UUID,
         typeId: UUID?,
         date: LocalDate,
         pageData: PageData
     ) = queryDaybreakStudyApplicationPort.generalTeacherGetDaybreakStudyApplications(
+        teacherId = teacherId,
         typeId = typeId,
         date = date,
         pageData = pageData

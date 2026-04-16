@@ -42,6 +42,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
     }
 
     override fun generalTeacherGetDaybreakStudyApplications(
+        teacherId: UUID,
         typeId: UUID?,
         date: LocalDate,
         pageData: PageData
@@ -66,7 +67,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
                 dateFilter(date),
-                typeFilter(typeId)
+                typeFilter(typeId),
+                daybreakStudyApplicationJpaEntity.teacherJpaEntity.id.eq(teacherId),
             )
             .offset(pageData.offset)
             .limit(pageData.size)
