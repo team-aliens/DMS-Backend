@@ -104,7 +104,7 @@ class DaybreakWebAdapter(
     ) {
         changeStatusDaybreakStudyApplicationUseCase.execute(
             ChangeDaybreakStudyApplicationStatusRequest(
-                applicationIds = request.applicationIds,
+                applicationIdList = request.applicationIdList,
                 status = request.status
             )
         )

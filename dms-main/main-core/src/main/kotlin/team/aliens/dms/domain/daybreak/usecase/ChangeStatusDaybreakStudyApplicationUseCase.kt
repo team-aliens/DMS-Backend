@@ -15,7 +15,7 @@ class ChangeStatusDaybreakStudyApplicationUseCase(
 
         val authority = securityService.getCurrentUserAuthority()
 
-        val applications = daybreakService.getAllByIdIn(request.applicationIds)
+        val applications = daybreakService.getAllByIdIn(request.applicationIdList)
 
         applications.forEach { it.changeStatus(authority, request.status) }
 

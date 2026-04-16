@@ -7,7 +7,7 @@ import java.util.UUID
 data class ChangeDaybreakStudyApplicationStatusWebRequest(
 
     @field:NotNull
-    val applicationIds: List<UUID>,
+    val applicationIdList: List<UUID>,
 
     @field:NotNull
     val status: Status
