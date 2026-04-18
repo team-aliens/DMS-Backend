@@ -232,6 +232,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.POST, "/daybreaks/study-application").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/general/study-application").hasAuthority(GENERAL_TEACHER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/head/study-application").hasAuthority(HEAD_TEACHER.name)
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/manager/study-application").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-type").hasAnyAuthority(HEAD_TEACHER.name,GENERAL_TEACHER.name,STUDENT.name)
                     .requestMatchers(HttpMethod.PATCH, "/daybreaks/study-application").hasAnyAuthority(HEAD_TEACHER.name, GENERAL_TEACHER.name)
                     .requestMatchers(HttpMethod.POST, "/daybreaks/study-type").hasAuthority(HEAD_TEACHER.name)
