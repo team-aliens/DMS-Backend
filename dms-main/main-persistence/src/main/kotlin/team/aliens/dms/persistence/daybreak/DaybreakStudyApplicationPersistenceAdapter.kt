@@ -1,21 +1,18 @@
 package team.aliens.dms.persistence.daybreak
 
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.DaybreakStudyApplicationPort
-import team.aliens.dms.domain.daybreak.spi.vo.GeneralTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.ManagerDaybreakStudyApplicationVO
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.persistence.daybreak.entity.QDaybreakStudyApplicationJpaEntity.daybreakStudyApplicationJpaEntity
 import team.aliens.dms.persistence.daybreak.mapper.DaybreakStudyApplicationMapper
 import team.aliens.dms.persistence.daybreak.repository.DaybreakStudyApplicationJpaRepository
-import team.aliens.dms.persistence.daybreak.repository.vo.QQueryGeneralTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.persistence.daybreak.repository.vo.QQueryHeadTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.persistence.daybreak.repository.vo.QQueryManagerDaybreakStudyApplicationVO
+import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
 import java.time.LocalTime
@@ -46,21 +43,22 @@ class DaybreakStudyApplicationPersistenceAdapter(
         typeId: UUID?,
         date: LocalDate,
         pageData: PageData
-    ): List<GeneralTeacherDaybreakStudyApplicationVO> {
+    ): List<DaybreakStudyApplicationVO> {
         return queryFactory
             .select(
-                QQueryGeneralTeacherDaybreakStudyApplicationVO(
+                QQueryDaybreakStudyApplicationVO(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
-                    daybreakStudyApplicationJpaEntity.status,
                     daybreakStudyApplicationJpaEntity.reason,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
-                    studentJpaEntity.number
+                    studentJpaEntity.number,
+                    Expressions.nullExpression(),
+                    daybreakStudyApplicationJpaEntity.status
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -82,13 +80,12 @@ class DaybreakStudyApplicationPersistenceAdapter(
         date: LocalDate,
         status: Status?,
         pageData: PageData
-    ): List<HeadTeacherDaybreakStudyApplicationVO> {
+    ): List<DaybreakStudyApplicationVO> {
         return queryFactory
             .select(
-                QQueryHeadTeacherDaybreakStudyApplicationVO(
+                QQueryDaybreakStudyApplicationVO(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
-                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
@@ -96,7 +93,9 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
-                    studentJpaEntity.number
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -116,14 +115,13 @@ class DaybreakStudyApplicationPersistenceAdapter(
     override fun managerGetDaybreakStudyApplications(
         grade: Int?,
         pageData: PageData
-    ): List<ManagerDaybreakStudyApplicationVO> {
+    ): List<DaybreakStudyApplicationVO> {
         println(grade)
         return queryFactory
             .select(
-                QQueryManagerDaybreakStudyApplicationVO(
+                QQueryDaybreakStudyApplicationVO(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
-                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
@@ -131,7 +129,9 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
-                    studentJpaEntity.number
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)

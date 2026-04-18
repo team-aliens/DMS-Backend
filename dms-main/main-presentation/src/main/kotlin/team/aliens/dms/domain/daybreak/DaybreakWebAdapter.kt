@@ -19,10 +19,8 @@ import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicatio
 import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeWebRequest
+import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
-import team.aliens.dms.domain.daybreak.dto.response.GeneralTeacherDaybreakStudyApplicationsResponse
-import team.aliens.dms.domain.daybreak.dto.response.HeadTeacherDaybreakStudyApplicationsResponse
-import team.aliens.dms.domain.daybreak.dto.response.ManagerDaybreakStudyApplicationsResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
@@ -67,7 +65,7 @@ class DaybreakWebAdapter(
         @RequestParam(value = "type_id", required = false) typeId: UUID?,
         @RequestParam(value = "date", required = true) date: LocalDate,
         @ModelAttribute pageData: PageData
-    ): GeneralTeacherDaybreakStudyApplicationsResponse {
+    ): DaybreakStudyApplicationResponse {
         return queryGeneralTeacherDaybreakStudyApplicationUseCase.execute(typeId, date, pageData)
     }
 
@@ -78,7 +76,7 @@ class DaybreakWebAdapter(
         @RequestParam(value = "date", required = true) date: LocalDate,
         @RequestParam(value = "status", required = false) status: Status?,
         @ModelAttribute pageData: PageData
-    ): HeadTeacherDaybreakStudyApplicationsResponse {
+    ): DaybreakStudyApplicationResponse {
         return queryHeadTeacherDaybreakStudyApplicationUseCase.execute(typeId, date, status, pageData)
     }
 
@@ -87,7 +85,7 @@ class DaybreakWebAdapter(
     fun getDaybreakStudyApplications(
         @RequestParam(value = "grade", required = false) grade: Int?,
         @ModelAttribute pageData: PageData
-    ): ManagerDaybreakStudyApplicationsResponse {
+    ): DaybreakStudyApplicationResponse {
         return queryManagerDaybreakStudyApplicationUseCase.execute(grade, pageData)
     }
 

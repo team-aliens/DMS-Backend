@@ -1,20 +1,10 @@
 package team.aliens.dms.domain.daybreak.dto.response
 
-import team.aliens.dms.domain.daybreak.spi.vo.GeneralTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.ManagerDaybreakStudyApplicationVO
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import java.util.UUID
 
-data class GeneralTeacherDaybreakStudyApplicationsResponse(
-    val applications: List<GeneralTeacherDaybreakStudyApplicationVO>
-)
-
-data class HeadTeacherDaybreakStudyApplicationsResponse(
-    val applications: List<HeadTeacherDaybreakStudyApplicationVO>
-)
-
-data class ManagerDaybreakStudyApplicationsResponse(
-    val applications: List<ManagerDaybreakStudyApplicationVO>
+data class DaybreakStudyApplicationResponse(
+    val applications: List<DaybreakStudyApplicationVO>
 )
 
 data class DaybreakStudyTypesResponse(

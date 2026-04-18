@@ -3,9 +3,7 @@ package team.aliens.dms.domain.daybreak.spi
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.Status
-import team.aliens.dms.domain.daybreak.spi.vo.GeneralTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.HeadTeacherDaybreakStudyApplicationVO
-import team.aliens.dms.domain.daybreak.spi.vo.ManagerDaybreakStudyApplicationVO
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import java.time.LocalDate
 import java.util.UUID
 
@@ -18,7 +16,7 @@ interface QueryDaybreakStudyApplicationPort {
         typeId: UUID? = null,
         date: LocalDate,
         pageData: PageData = PageData.DEFAULT
-    ): List<GeneralTeacherDaybreakStudyApplicationVO>
+    ): List<DaybreakStudyApplicationVO>
 
     fun headTeacherGetDaybreakStudyApplications(
         grade: Int,
@@ -26,12 +24,12 @@ interface QueryDaybreakStudyApplicationPort {
         date: LocalDate,
         status: Status? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<HeadTeacherDaybreakStudyApplicationVO>
+    ): List<DaybreakStudyApplicationVO>
 
     fun managerGetDaybreakStudyApplications(
         grade: Int? = null,
         pageData: PageData = PageData.DEFAULT
-    ): List<ManagerDaybreakStudyApplicationVO>
+    ): List<DaybreakStudyApplicationVO>
 
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>
 }
