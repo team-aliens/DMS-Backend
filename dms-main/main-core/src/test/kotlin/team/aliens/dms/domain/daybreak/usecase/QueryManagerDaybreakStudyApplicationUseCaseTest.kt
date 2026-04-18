@@ -13,15 +13,15 @@ class QueryManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
     val useCase = QueryManagerDaybreakStudyApplicationUseCase(daybreakService)
 
-    describe("execute"){
-        context("사감 선생님이 새벽 자습 신청 목록을 조회하면"){
+    describe("execute") {
+        context("사감 선생님이 새벽 자습 신청 목록을 조회하면") {
 
             val pageData = PageData(page = 1, size = 10)
             val grade = 1
 
             every { daybreakService.managerGetDaybreakStudyApplications(grade, pageData) } returns mockk()
 
-            it("새벽 자습 신청 목록을 반환한다"){
+            it("새벽 자습 신청 목록을 반환한다") {
                 shouldNotThrowAny {
 
                     val response = useCase.execute(
@@ -34,5 +34,4 @@ class QueryManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
         }
     }
-
 })
