@@ -20,6 +20,8 @@ data class AvailableFeature(
 
     val outingService: Boolean,
 
-    val volunteerService: Boolean
+    val volunteerService: Boolean,
+
+    val daybreakService: Boolean
 
 )

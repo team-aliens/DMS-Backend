@@ -1,5 +1,6 @@
 package team.aliens.dms.common.spi
 
+import team.aliens.dms.domain.auth.model.Authority
 import java.util.UUID
 
 interface SecurityPort {
@@ -15,4 +16,6 @@ interface SecurityPort {
     fun encodePassword(password: String): String
 
     fun isStudent(): Boolean
+
+    fun getCurrentUserAuthority(): Authority
 }

@@ -33,7 +33,8 @@ internal fun createAvailableFeatureStub(
     pointService: Boolean = true,
     noticeService: Boolean = true,
     outingService: Boolean = true,
-    volunteerService: Boolean = true
+    volunteerService: Boolean = true,
+    daybreakService: Boolean = true,
 ) = AvailableFeature(
     schoolId = schoolId,
     mealService = mealService,
@@ -42,5 +43,6 @@ internal fun createAvailableFeatureStub(
     pointService = pointService,
     noticeService = noticeService,
     outingService = outingService,
-    volunteerService = volunteerService
+    volunteerService = volunteerService,
+    daybreakService = daybreakService,
 )
