@@ -116,7 +116,6 @@ class DaybreakStudyApplicationPersistenceAdapter(
         status: Status,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
-        println(grade)
         return queryFactory
             .select(
                 QQueryDaybreakStudyApplicationVO(
