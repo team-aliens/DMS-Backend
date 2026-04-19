@@ -9,6 +9,7 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.QueryDaybreakStudyApplicationPort
 import team.aliens.dms.domain.daybreak.spi.QueryDaybreakStudyTypePort
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import java.time.LocalDate
 import java.util.UUID
 
@@ -39,21 +40,33 @@ class GetDaybreakServiceImpl(
         date: LocalDate,
         status: Status?,
         pageData: PageData
-    ) = queryDaybreakStudyApplicationPort.headTeacherGetDaybreakStudyApplications(
-        grade = grade,
-        typeId = typeId,
-        status = status,
-        date = date,
-        pageData = pageData
-    )
+    ): List<DaybreakStudyApplicationVO> {
+        val validHeadTeacherStatuses = listOf(Status.SECOND_APPROVED, Status.REJECTED)
+
+        val effectiveStatus = if (status in validHeadTeacherStatuses) status!! else Status.FIRST_APPROVED
+
+        return queryDaybreakStudyApplicationPort.headTeacherGetDaybreakStudyApplications(
+            grade = grade,
+            typeId = typeId,
+            status = effectiveStatus,
+            date = date,
+            pageData = pageData
+        )
+    }
 
     override fun managerGetDaybreakStudyApplications(
         grade: Int?,
         pageData: PageData
-    ) = queryDaybreakStudyApplicationPort.managerGetDaybreakStudyApplications(
-        grade = grade,
-        pageData = pageData
-    )
+    ): List<DaybreakStudyApplicationVO> {
+
+        val status = Status.SECOND_APPROVED
+
+        return queryDaybreakStudyApplicationPort.managerGetDaybreakStudyApplications(
+            grade = grade,
+            status = status,
+            pageData = pageData
+        )
+    }
 
     override fun getDaybreakStudyTypesBySchoolId(schoolId: UUID) =
         queryDaybreakStudyTypePort.daybreakStudyTypesBySchoolId(schoolId)

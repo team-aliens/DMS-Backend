@@ -28,6 +28,7 @@ interface QueryDaybreakStudyApplicationPort {
 
     fun managerGetDaybreakStudyApplications(
         grade: Int? = null,
+        status: Status,
         pageData: PageData = PageData.DEFAULT
     ): List<DaybreakStudyApplicationVO>
 

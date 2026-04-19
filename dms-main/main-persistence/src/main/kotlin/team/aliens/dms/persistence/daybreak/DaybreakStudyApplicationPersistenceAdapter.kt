@@ -1,6 +1,5 @@
 package team.aliens.dms.persistence.daybreak
 
-import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
@@ -103,7 +102,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .where(
                 dateFilter(date),
                 typeFilter(typeId),
-                statusFilter(status),
+                daybreakStudyApplicationJpaEntity.status.eq(status),
                 daybreakStudyApplicationJpaEntity.studentJpaEntity.grade.eq(grade)
             )
             .offset(pageData.offset)
@@ -114,6 +113,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
 
     override fun managerGetDaybreakStudyApplications(
         grade: Int?,
+        status: Status,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
         println(grade)
@@ -137,8 +137,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .from(daybreakStudyApplicationJpaEntity)
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
-                daybreakStudyApplicationJpaEntity.status.eq(Status.SECOND_APPROVED),
-                grade?.let { studentJpaEntity.grade.eq(it) }
+                daybreakStudyApplicationJpaEntity.status.eq(status),
+                gradeFilter(grade),
             )
             .offset(pageData.offset)
             .limit(pageData.size)
@@ -170,9 +170,6 @@ class DaybreakStudyApplicationPersistenceAdapter(
     private fun typeFilter(typeId: UUID?) =
         typeId?.let { daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.id.eq(it) }
 
-    private fun statusFilter(status: Status?): BooleanExpression {
-        val validHeadTeacherStatuses = listOf(Status.SECOND_APPROVED, Status.REJECTED)
-        val effectiveStatus = if (status in validHeadTeacherStatuses) status!! else Status.FIRST_APPROVED
-        return daybreakStudyApplicationJpaEntity.status.eq(effectiveStatus)
-    }
+    private fun gradeFilter(grade: Int?) =
+        grade?.let { daybreakStudyApplicationJpaEntity.studentJpaEntity.grade.eq(it) }
 }
