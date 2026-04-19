@@ -29,8 +29,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .selectOne()
             .from(daybreakStudyApplicationJpaEntity)
             .where(
-                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId)
-                    .and(daybreakStudyApplicationJpaEntity.status.ne(Status.EXPIRED))
+                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+                daybreakStudyApplicationJpaEntity.status.notIn(Status.EXPIRED, Status.REJECTED)
             )
             .fetchFirst()
 
