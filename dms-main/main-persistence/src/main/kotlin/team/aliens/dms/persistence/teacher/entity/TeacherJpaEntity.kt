@@ -28,6 +28,6 @@ class TeacherJpaEntity(
     val name: String,
 
     @Column(columnDefinition = "TINYINT UNSIGNED", nullable = true)
-    val grade: Int
+    val grade: Int?
 
 )
