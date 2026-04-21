@@ -17,7 +17,7 @@ class TeacherWebAdapter(
 ) {
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping()
+    @GetMapping("/general")
     fun queryGeneralTeachers(): TeachersResponse {
         return queryGeneralTeacherUseCase.execute()
     }
