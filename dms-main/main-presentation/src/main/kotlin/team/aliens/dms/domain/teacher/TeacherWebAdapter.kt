@@ -14,7 +14,7 @@ import team.aliens.dms.domain.teacher.usecase.QueryGeneralTeacherUseCase
 @RestController
 class TeacherWebAdapter(
     private val queryGeneralTeacherUseCase: QueryGeneralTeacherUseCase
-){
+) {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()

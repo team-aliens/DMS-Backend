@@ -18,15 +18,15 @@ class QueryGeneralTeacherUseCaseTest : DescribeSpec({
     val useCase = QueryGeneralTeacherUseCase(teacherService, securityService)
 
     describe("execute") {
-        context("학생이 담당선생님을 조회하면"){
+        context("학생이 담당선생님을 조회하면") {
 
             val schoolId = UUID.randomUUID()
 
             every { securityService.getCurrentSchoolId() } returns schoolId
             every { teacherService.getGeneralTeachersBySchoolId(schoolId) } returns emptyList()
 
-            it("담당선생님을 반환한다"){
-                shouldNotThrowAny{
+            it("담당선생님을 반환한다") {
+                shouldNotThrowAny {
                     val response = useCase.execute()
 
                     response shouldNotBe null
