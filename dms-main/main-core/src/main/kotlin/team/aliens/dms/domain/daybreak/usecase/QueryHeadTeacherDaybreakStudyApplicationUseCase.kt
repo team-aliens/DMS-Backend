@@ -22,7 +22,7 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCase(
         val teacher = teacherService.getTeacherById(securityService.getCurrentUserId())
 
         return DaybreakStudyApplicationResponse(
-            daybreakService.headTeacherGetDaybreakStudyApplications(teacher.grade, typeId, date, status, pageData)
+            daybreakService.headTeacherGetDaybreakStudyApplications(teacher.grade!!, typeId, date, status, pageData)
         )
     }
 }
