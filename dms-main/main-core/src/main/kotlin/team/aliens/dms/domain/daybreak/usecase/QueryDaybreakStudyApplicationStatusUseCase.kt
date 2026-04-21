@@ -11,7 +11,7 @@ class QueryDaybreakStudyApplicationStatusUseCase(
     private val studentService: StudentService
 ) {
 
-    fun execute() : DaybreakStudyApplicationStatusResponse{
+    fun execute(): DaybreakStudyApplicationStatusResponse {
         val student = studentService.getCurrentStudent()
 
         val statusInfo = daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(student.id)
