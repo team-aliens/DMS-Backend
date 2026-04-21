@@ -239,7 +239,7 @@ class SecurityConfig(
 
                 authorize
                     // /teachers
-                    .requestMatchers(HttpMethod.GET, "teachers").hasAuthority(STUDENT.name)
+                    .requestMatchers(HttpMethod.GET, "/teachers").hasAuthority(STUDENT.name)
                 .anyRequest().denyAll()
             }
         http
