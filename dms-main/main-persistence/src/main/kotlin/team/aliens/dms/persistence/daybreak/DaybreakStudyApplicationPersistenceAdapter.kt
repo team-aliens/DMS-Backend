@@ -7,10 +7,12 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.DaybreakStudyApplicationPort
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationStatusVO
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.persistence.daybreak.entity.QDaybreakStudyApplicationJpaEntity.daybreakStudyApplicationJpaEntity
 import team.aliens.dms.persistence.daybreak.mapper.DaybreakStudyApplicationMapper
 import team.aliens.dms.persistence.daybreak.repository.DaybreakStudyApplicationJpaRepository
+import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationStatusVO
 import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
@@ -148,6 +150,21 @@ class DaybreakStudyApplicationPersistenceAdapter(
         return daybreakStudyApplicationRepository.findAllByIdIn(ids).mapNotNull {
             daybreakStudyApplicationMapper.toDomain(it)
         }
+    }
+
+    override fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID): DaybreakStudyApplicationStatusVO? {
+        return queryFactory
+            .select(
+                QQueryDaybreakStudyApplicationStatusVO(
+                    daybreakStudyApplicationJpaEntity.status,
+                    daybreakStudyApplicationJpaEntity.startDate,
+                    daybreakStudyApplicationJpaEntity.endDate
+                )
+            )
+            .from(daybreakStudyApplicationJpaEntity)
+            .where(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId))
+            .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
+            .fetchFirst()
     }
 
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {

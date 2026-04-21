@@ -75,4 +75,8 @@ class GetDaybreakServiceImpl(
         return queryDaybreakStudyApplicationPort.getAllByIdIn(ids)
             .apply { if (size != ids.size) throw DaybreakStudyApplicationNotFoundException }
     }
+
+    override fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID) =
+        queryDaybreakStudyApplicationPort.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) ?: throw DaybreakStudyApplicationNotFoundException
+
 }

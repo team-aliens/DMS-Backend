@@ -4,6 +4,7 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.model.Status
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationStatusVO
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import java.time.LocalDate
 import java.util.UUID
@@ -35,4 +36,6 @@ interface GetDaybreakService {
     fun getDaybreakStudyTypesBySchoolId(schoolId: UUID): List<DaybreakStudyType>
 
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>
+
+    fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID): DaybreakStudyApplicationStatusVO
 }

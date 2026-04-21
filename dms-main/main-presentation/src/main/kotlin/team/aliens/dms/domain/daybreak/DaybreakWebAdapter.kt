@@ -20,11 +20,13 @@ import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicatio
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeWebRequest
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationResponse
+import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationStatusResponse
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.CreateDaybreakStudyTypeUseCase
+import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyApplicationStatusUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
@@ -42,7 +44,8 @@ class DaybreakWebAdapter(
     private val queryManagerDaybreakStudyApplicationUseCase: QueryManagerDaybreakStudyApplicationUseCase,
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase,
     private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
-    private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase
+    private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase,
+    private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase
 ) {
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -116,5 +119,11 @@ class DaybreakWebAdapter(
                 name = request.name
             )
         )
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping("/study-application/my")
+    fun getRecentDaybreakStudyApplicationStatus(): DaybreakStudyApplicationStatusResponse {
+        return queryDaybreakStudyApplicationStatusUseCase.execute()
     }
 }

@@ -236,10 +236,14 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-type").hasAnyAuthority(HEAD_TEACHER.name,GENERAL_TEACHER.name,STUDENT.name)
                     .requestMatchers(HttpMethod.PATCH, "/daybreaks/study-application").hasAnyAuthority(HEAD_TEACHER.name, GENERAL_TEACHER.name)
                     .requestMatchers(HttpMethod.POST, "/daybreaks/study-type").hasAuthority(HEAD_TEACHER.name)
+<<<<<<< HEAD
 
                 authorize
                     // /teachers
                     .requestMatchers(HttpMethod.GET, "/teachers/general").hasAuthority(STUDENT.name)
+=======
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/study-application/my").hasAuthority(STUDENT.name)
+>>>>>>> 38018b506 (feat: (987) 새벽 자습 신청 상태 조회 기능 추가)
                 .anyRequest().denyAll()
             }
         http
