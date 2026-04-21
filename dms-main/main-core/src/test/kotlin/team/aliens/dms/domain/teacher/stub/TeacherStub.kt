@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.teahcer.stub
+package team.aliens.dms.domain.teacher.stub
 
 import team.aliens.dms.domain.teacher.model.Teacher
 import java.util.UUID

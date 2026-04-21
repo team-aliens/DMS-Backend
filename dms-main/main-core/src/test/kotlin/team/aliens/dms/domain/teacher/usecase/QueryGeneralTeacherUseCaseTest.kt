@@ -1,4 +1,4 @@
-package team.aliens.dms.domain.teahcer.usecase
+package team.aliens.dms.domain.teacher.usecase
 
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
@@ -7,7 +7,6 @@ import io.mockk.every
 import io.mockk.mockk
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.teacher.service.TeacherService
-import team.aliens.dms.domain.teacher.usecase.QueryGeneralTeacherUseCase
 import java.util.UUID
 
 class QueryGeneralTeacherUseCaseTest : DescribeSpec({
