@@ -78,4 +78,7 @@ class GetDaybreakServiceImpl(
 
     override fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID) =
         queryDaybreakStudyApplicationPort.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) ?: throw DaybreakStudyApplicationNotFoundException
+
+    override fun findExpiredDaybreakStudyApplications() =
+        queryDaybreakStudyApplicationPort.findExpiredDaybreakStudyApplications()
 }
