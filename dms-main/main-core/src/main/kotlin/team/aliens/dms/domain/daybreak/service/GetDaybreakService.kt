@@ -38,4 +38,6 @@ interface GetDaybreakService {
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>
 
     fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID): DaybreakStudyApplicationStatusVO
+
+    fun findExpiredDaybreakStudyApplications(): List<DaybreakStudyApplication>
 }
