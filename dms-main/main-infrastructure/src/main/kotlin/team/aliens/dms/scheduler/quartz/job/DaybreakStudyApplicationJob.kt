@@ -10,7 +10,7 @@ import team.aliens.dms.domain.daybreak.usecase.ExpireDaybreakStudyApplicationUse
 @DisallowConcurrentExecution
 class DaybreakStudyApplicationJob(
     private val useCase: ExpireDaybreakStudyApplicationUseCase
-) : Job{
+) : Job {
     override fun execute(p0: JobExecutionContext?) {
         useCase.execute()
     }

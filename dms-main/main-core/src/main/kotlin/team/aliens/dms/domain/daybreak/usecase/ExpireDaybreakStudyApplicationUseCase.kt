@@ -18,5 +18,4 @@ class ExpireDaybreakStudyApplicationUseCase(
 
         daybreakService.saveAllDaybreakStudyApplications(applications)
     }
-
 }

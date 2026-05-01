@@ -170,8 +170,10 @@ class DaybreakStudyApplicationPersistenceAdapter(
     override fun findExpiredDaybreakStudyApplications(): List<DaybreakStudyApplication> {
         return queryFactory
             .selectFrom(daybreakStudyApplicationJpaEntity)
-            .where(daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
-                daybreakStudyApplicationJpaEntity.status.notIn(Status.EXPIRED))
+            .where(
+                daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.status.notIn(Status.EXPIRED)
+            )
             .fetch()
             .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
     }
