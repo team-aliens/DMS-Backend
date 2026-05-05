@@ -15,6 +15,8 @@ import team.aliens.dms.global.security.SecurityPaths
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.global.security.passport.PassportSecurityProperties
 import team.aliens.dms.global.security.passport.PassportValidator
+import team.aliens.dms.global.security.principle.GeneralTeacherDetails
+import team.aliens.dms.global.security.principle.HeadTeacherDetails
 import team.aliens.dms.global.security.principle.ManagerDetails
 import team.aliens.dms.global.security.principle.StudentDetails
 
@@ -78,6 +80,16 @@ class PassportFilter(
                 authority = passport.user.authority
             )
             Authority.MANAGER -> ManagerDetails(
+                userId = passport.user.id,
+                schoolId = passport.user.schoolId,
+                authority = passport.user.authority
+            )
+            Authority.GENERAL_TEACHER -> GeneralTeacherDetails(
+                userId = passport.user.id,
+                schoolId = passport.user.schoolId,
+                authority = passport.user.authority
+            )
+            Authority.HEAD_TEACHER -> HeadTeacherDetails(
                 userId = passport.user.id,
                 schoolId = passport.user.schoolId,
                 authority = passport.user.authority

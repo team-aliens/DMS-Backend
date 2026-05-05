@@ -34,4 +34,8 @@ class SecurityAdapter(
         val authority = (SecurityContextHolder.getContext().authentication.principal as CustomDetails).authority
         return authority == Authority.STUDENT
     }
+
+    override fun getCurrentUserAuthority(): Authority {
+        return (SecurityContextHolder.getContext().authentication.principal as CustomDetails).authority
+    }
 }

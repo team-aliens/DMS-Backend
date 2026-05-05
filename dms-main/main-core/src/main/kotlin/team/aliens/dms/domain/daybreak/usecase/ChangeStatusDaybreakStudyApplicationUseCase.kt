@@ -1,0 +1,24 @@
+package team.aliens.dms.domain.daybreak.usecase
+
+import team.aliens.dms.common.annotation.UseCase
+import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusRequest
+import team.aliens.dms.domain.daybreak.service.DaybreakService
+
+@UseCase
+class ChangeStatusDaybreakStudyApplicationUseCase(
+    private val daybreakService: DaybreakService,
+    private val securityService: SecurityService
+) {
+
+    fun execute(request: ChangeDaybreakStudyApplicationStatusRequest) {
+
+        val authority = securityService.getCurrentUserAuthority()
+
+        val applications = daybreakService.getAllByIdIn(request.applicationIdList)
+
+        applications.forEach { it.changeStatus(authority, request.status) }
+
+        daybreakService.saveAllDaybreakStudyApplications(applications)
+    }
+}

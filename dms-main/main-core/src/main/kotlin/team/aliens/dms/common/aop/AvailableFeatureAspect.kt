@@ -70,6 +70,17 @@ class AvailableFeatureAspect(
         }
     }
 
+    @Before(
+        "within(team.aliens.dms.domain.daybreak.usecase.*) && " +
+            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
+    )
+    fun beforeDaybreakService() {
+        val availableFeature = getAvailableFeature()
+        if (!availableFeature.daybreakService) {
+            throw FeatureNotAvailableException
+        }
+    }
+
     private fun getAvailableFeature(): AvailableFeature {
         val user = userService.getCurrentUser()
         return schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
