@@ -16,6 +16,8 @@ spring:
               - "https://admin-dms.dsmhs.kr"
               - "https://admin-dev-dms.dsmhs.kr"
               - "https://webview-dms.dsmhs.kr"
+              - "https://head-teacher-dms.dsmhs.kr"
+              - "https://general-teacher-dms.dsmhs.kr"
             allowedMethods:
               - GET
               - POST
