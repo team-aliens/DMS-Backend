@@ -33,7 +33,7 @@ class CommandDaybreakServiceImpl(
 
         val firstApplication = applications.first()
         val studentIds = applications.map { it.studentId }
-        val userIds = queryStudentPort.queryAllStudentsByIdsIn(studentIds).map { it.userId!! }
+        val userIds = queryStudentPort.queryAllStudentsByIdsIn(studentIds).mapNotNull { it.userId }
 
         if (firstApplication.status == Status.SECOND_APPROVED || firstApplication.status == Status.REJECTED) {
 
