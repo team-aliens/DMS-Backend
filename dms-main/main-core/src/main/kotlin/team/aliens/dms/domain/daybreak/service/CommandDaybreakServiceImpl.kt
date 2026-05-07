@@ -9,14 +9,14 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.CommandDaybreakStudyApplicationPort
 import team.aliens.dms.domain.daybreak.spi.CommandDaybreakStudyTypePort
-import team.aliens.dms.domain.student.service.StudentService
+import team.aliens.dms.domain.student.spi.QueryStudentPort
 
 @Service
 class CommandDaybreakServiceImpl(
     private val commandDaybreakStudyApplicationPort: CommandDaybreakStudyApplicationPort,
     private val commandDaybreakStudyTypePort: CommandDaybreakStudyTypePort,
     private val notificationEventPort: NotificationEventPort,
-    private val studentService: StudentService
+    private val queryStudentPort: QueryStudentPort
 ) : CommandDaybreakService {
 
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {
@@ -32,10 +32,10 @@ class CommandDaybreakServiceImpl(
         commandDaybreakStudyApplicationPort.saveAllDaybreakStudyApplications(applications)
 
         val firstApplication = applications.first()
-        val studentIds = applications.map { it.studentId}
-        val userIds = studentService.getAllStudentsByIdsIn(studentIds).map { it.userId!! }
+        val studentIds = applications.map { it.studentId }
+        val userIds = queryStudentPort.queryAllStudentsByIdsIn(studentIds).map { it.userId!! }
 
-        if(firstApplication.status == Status.SECOND_APPROVED || firstApplication.status == Status.REJECTED) {
+        if (firstApplication.status == Status.SECOND_APPROVED || firstApplication.status == Status.REJECTED) {
 
             val notificationInfo = NotificationInfo(
                 schoolId = firstApplication.schoolId,
