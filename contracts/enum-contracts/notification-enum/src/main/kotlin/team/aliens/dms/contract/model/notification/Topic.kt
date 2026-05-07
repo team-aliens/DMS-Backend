@@ -6,7 +6,8 @@ enum class TopicGroup(
     NOTICE("공지"),
     STUDY_ROOM("자습실"),
     POINT("상벌점"),
-    OUTING("외출")
+    OUTING("외출"),
+    DAYBREAK_STUDY_APPLICATION("새벽 자습 신청")
 }
 
 enum class Topic(
@@ -30,5 +31,8 @@ enum class Topic(
 
     OUTING(
         topicGroup = TopicGroup.OUTING
+    ),
+    DAYBREAK_STUDY_APPLICATION(
+        topicGroup = TopicGroup.DAYBREAK_STUDY_APPLICATION
     )
 }
