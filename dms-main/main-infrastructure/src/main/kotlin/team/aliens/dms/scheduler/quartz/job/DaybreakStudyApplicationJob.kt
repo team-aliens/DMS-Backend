@@ -11,7 +11,7 @@ import team.aliens.dms.domain.daybreak.usecase.ExpireDaybreakStudyApplicationUse
 class DaybreakStudyApplicationJob(
     private val useCase: ExpireDaybreakStudyApplicationUseCase
 ) : Job {
-    override fun execute(p0: JobExecutionContext?) {
+    override fun execute(context: JobExecutionContext?) {
         useCase.execute()
     }
 }
