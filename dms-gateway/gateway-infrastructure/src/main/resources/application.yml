@@ -19,7 +19,6 @@ spring:
               - "https://head-teacher-dms.dsmhs.kr"
               - "https://general-teacher-dms.dsmhs.kr"
               - "https://student-dms.dsmhs.kr"
-              - "https://student-dms.vercel.app"
             allowedMethods:
               - GET
               - POST
