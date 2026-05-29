@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import org.springframework.amqp.core.AcknowledgeMode
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
 import org.springframework.amqp.core.Queue
 import org.springframework.amqp.core.TopicExchange
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -32,6 +34,21 @@ class RabbitMqConfig(
         connectionFactory.setUsername(rabbitMqProperties.username)
         connectionFactory.setPassword(rabbitMqProperties.password)
         return connectionFactory
+    }
+
+    @Bean
+    fun rabbitListenerContainerFactory(
+        connectionFactory: ConnectionFactory,
+        messageConverter: MessageConverter,
+    ): SimpleRabbitListenerContainerFactory {
+        val factory = SimpleRabbitListenerContainerFactory()
+        factory.setConnectionFactory(connectionFactory)
+        factory.setMessageConverter(messageConverter)
+
+        // 수동 ACK 모드
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL)
+
+        return factory
     }
 
     @Bean
