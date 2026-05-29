@@ -8,6 +8,7 @@ import org.quartz.Trigger
 import org.quartz.TriggerBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import team.aliens.dms.scheduler.quartz.job.DaybreakStudyApplicationJob
 import team.aliens.dms.scheduler.quartz.job.ExcludedStudentJob
 import team.aliens.dms.scheduler.quartz.job.MealJob
 import team.aliens.dms.scheduler.quartz.job.OutboxJob
@@ -146,6 +147,28 @@ class QuartzConfig {
             .withDescription("Every 28th day of month at midnight (Asia/Seoul)")
             .withSchedule(
                 CronScheduleBuilder.cronSchedule("0 0 0 28 * ?")
+                    .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
+            )
+            .build()
+    }
+
+    @Bean
+    fun expireDaybreakStudyApplicationJobDetail(): JobDetail {
+        return JobBuilder.newJob(DaybreakStudyApplicationJob::class.java)
+            .withIdentity("expireDaybreakStudyApplicationJob", "daybreak")
+            .withDescription("Expire daybreak study application")
+            .storeDurably()
+            .build()
+    }
+
+    @Bean
+    fun expireDaybreakStudyApplicationJobTrigger(expireDaybreakStudyApplicationJobDetail: JobDetail): Trigger {
+        return TriggerBuilder.newTrigger()
+            .forJob(expireDaybreakStudyApplicationJobDetail)
+            .withIdentity("expireDaybreakStudyApplicationJobTrigger", "daybreak")
+            .withDescription("Every day at midnight (Asia/Seoul)")
+            .withSchedule(
+                CronScheduleBuilder.cronSchedule("0 0 0 * * ?")
                     .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
             )
             .build()
