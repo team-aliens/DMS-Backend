@@ -211,16 +211,31 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
 
             // 학년 헤더 행
             sheet.createRow(rowIdx).also { row ->
-                row.createCell(0).apply { setCellValue("연번"); cellStyle = headerStyle }
-                row.createCell(1).apply { setCellValue("${grade}학년"); cellStyle = headerStyle }
-                row.createCell(2).apply { setCellValue("이름"); cellStyle = headerStyle }
+                row.createCell(0).apply {
+                    setCellValue("연번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(1).apply {
+                    setCellValue("${grade}학년");
+                    cellStyle = headerStyle
+                }
+                row.createCell(2).apply {
+                    setCellValue("이름");
+                    cellStyle = headerStyle
+                }
                 days.forEachIndexed { i, day ->
                     val col = 3 + i * 2
-                    row.createCell(col).apply { setCellValue(day); cellStyle = headerStyle }
+                    row.createCell(col).apply {
+                        setCellValue(day);
+                        cellStyle = headerStyle
+                    }
                     row.createCell(col + 1).apply { cellStyle = headerStyle }
                     sheet.addMergedRegion(CellRangeAddress(rowIdx, rowIdx, col, col + 1))
                 }
-                row.createCell(11).apply { setCellValue("비고"); cellStyle = headerStyle }
+                row.createCell(11).apply {
+                    setCellValue("비고");
+                    cellStyle = headerStyle
+                }
             }
             rowIdx++
 
@@ -228,8 +243,14 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             sheet.createRow(rowIdx).also { row ->
                 listOf(0, 1, 2, 11).forEach { row.createCell(it).cellStyle = headerStyle }
                 repeat(4) { i ->
-                    row.createCell(3 + i * 2).apply { setCellValue("신청"); cellStyle = headerStyle }
-                    row.createCell(4 + i * 2).apply { setCellValue("출석"); cellStyle = headerStyle }
+                    row.createCell(3 + i * 2).apply {
+                        setCellValue("신청");
+                        cellStyle = headerStyle
+                    }
+                    row.createCell(4 + i * 2).apply {
+                        setCellValue("출석");
+                        cellStyle = headerStyle
+                    }
                 }
             }
             rowIdx++
@@ -237,9 +258,15 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             // 데이터 행
             gradeApplications.forEachIndexed { idx, application ->
                 sheet.createRow(rowIdx++).also { row ->
-                    row.createCell(0).apply { setCellValue((idx + 1).toDouble()); cellStyle = dataStyle }
+                    row.createCell(0).apply {
+                        setCellValue((idx + 1).toDouble());
+                        cellStyle = dataStyle
+                    }
                     row.createCell(1).apply { cellStyle = dataStyle }
-                    row.createCell(2).apply { setCellValue(application.studentName); cellStyle = dataStyle }
+                    row.createCell(2).apply {
+                        setCellValue(application.studentName);
+                        cellStyle = dataStyle
+                    }
                     weekdays.forEachIndexed { dayIdx, weekday ->
                         val applyCol = 3 + dayIdx * 2
                         row.createCell(applyCol).apply {
@@ -253,14 +280,14 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             }
         }
 
-        sheet.setColumnWidth(0, 1800)   // 연번
-        sheet.setColumnWidth(1, 3000)   // 학번
-        sheet.setColumnWidth(2, 3500)   // 이름
+        sheet.setColumnWidth(0, 1800) // 연번
+        sheet.setColumnWidth(1, 3000) // 학번
+        sheet.setColumnWidth(2, 3500) // 이름
         repeat(4) { i ->
-            sheet.setColumnWidth(3 + i * 2, 2500)  // 신청
-            sheet.setColumnWidth(4 + i * 2, 2500)  // 출석
+            sheet.setColumnWidth(3 + i * 2, 2500) // 신청
+            sheet.setColumnWidth(4 + i * 2, 2500) // 출석
         }
-        sheet.setColumnWidth(11, 4000)  // 비고
+        sheet.setColumnWidth(11, 4000) // 비고
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)
