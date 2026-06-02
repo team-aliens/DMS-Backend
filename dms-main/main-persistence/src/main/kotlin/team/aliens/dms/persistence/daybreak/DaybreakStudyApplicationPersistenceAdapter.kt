@@ -15,6 +15,7 @@ import team.aliens.dms.persistence.daybreak.repository.DaybreakStudyApplicationJ
 import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationStatusVO
 import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.UUID
@@ -140,6 +141,13 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .where(
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 gradeFilter(grade),
+                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now().with(DayOfWeek.THURSDAY)),
+                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now().with(DayOfWeek.MONDAY)),
+            )
+            .orderBy(
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
             )
             .offset(pageData.offset)
             .limit(pageData.size)
