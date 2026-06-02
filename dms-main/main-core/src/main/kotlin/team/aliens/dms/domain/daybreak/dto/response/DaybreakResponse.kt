@@ -23,3 +23,8 @@ data class DaybreakStudyApplicationStatusResponse(
     val startDate: LocalDate,
     val endDate: LocalDate
 )
+
+data class ExportManagerDaybreakStudyApplicationResponse(
+    val file: ByteArray,
+    val fileName: String
+)
