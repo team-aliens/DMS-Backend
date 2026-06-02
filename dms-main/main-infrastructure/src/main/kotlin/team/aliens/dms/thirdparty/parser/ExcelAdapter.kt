@@ -1,8 +1,11 @@
 package team.aliens.dms.thirdparty.parser
 
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
@@ -18,6 +21,8 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.port.ExcelPort
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Component
@@ -169,6 +174,120 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             lastRowNum += 18
         }
         formatWorkSheet(sheet)
+
+        ByteArrayOutputStream().use { stream ->
+            workbook.write(stream)
+            return stream.toByteArray()
+        }
+    }
+
+    override fun writeDaybreakStudyApplicationExcelFile(applications: List<DaybreakStudyApplicationVO>): ByteArray {
+        val workbook = XSSFWorkbook()
+        val sheet: Sheet = workbook.createSheet()
+
+        val today = LocalDate.now()
+        val monday = today.with(DayOfWeek.MONDAY)
+        val weekdays = (0..3).map { monday.plusDays(it.toLong()) }
+
+        val headerStyle = getHeaderCellStyle(workbook)
+        val dataStyle = getDefaultCellStyle(workbook).apply { setBorder() }
+
+        // 제목 행
+        sheet.createRow(0).also { row ->
+            row.createCell(0).apply {
+                setCellValue("새 벽 자 습(23:30 ~ 1:30)   작성일: ${today.monthValue}월 ${today.dayOfMonth}일")
+                cellStyle = headerStyle
+            }
+            (1..11).forEach { row.createCell(it).cellStyle = headerStyle }
+        }
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 0, 11))
+
+        val applicationsByGrade = applications.groupBy { it.studentGcn[0].digitToInt() }
+        val days = listOf("(월)", "(화)", "(수)", "(목)")
+        var rowIdx = 1
+
+        for (grade in 1..3) {
+            val gradeApplications = applicationsByGrade[grade] ?: emptyList()
+
+            // 학년 헤더 행
+            sheet.createRow(rowIdx).also { row ->
+                row.createCell(0).apply {
+                    setCellValue("연번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(1).apply {
+                    setCellValue("${grade}학년");
+                    cellStyle = headerStyle
+                }
+                row.createCell(2).apply {
+                    setCellValue("이름");
+                    cellStyle = headerStyle
+                }
+                days.forEachIndexed { i, day ->
+                    val col = 3 + i * 2
+                    row.createCell(col).apply {
+                        setCellValue(day);
+                        cellStyle = headerStyle
+                    }
+                    row.createCell(col + 1).apply { cellStyle = headerStyle }
+                    sheet.addMergedRegion(CellRangeAddress(rowIdx, rowIdx, col, col + 1))
+                }
+                row.createCell(11).apply {
+                    setCellValue("비고");
+                    cellStyle = headerStyle
+                }
+            }
+            rowIdx++
+
+            // 신청/출석 서브헤더 행
+            sheet.createRow(rowIdx).also { row ->
+                listOf(0, 1, 2, 11).forEach { row.createCell(it).cellStyle = headerStyle }
+                repeat(4) { i ->
+                    row.createCell(3 + i * 2).apply {
+                        setCellValue("신청");
+                        cellStyle = headerStyle
+                    }
+                    row.createCell(4 + i * 2).apply {
+                        setCellValue("출석");
+                        cellStyle = headerStyle
+                    }
+                }
+            }
+            rowIdx++
+
+            // 데이터 행
+            gradeApplications.forEachIndexed { idx, application ->
+                sheet.createRow(rowIdx++).also { row ->
+                    row.createCell(0).apply {
+                        setCellValue((idx + 1).toDouble());
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(1).apply { cellStyle = dataStyle }
+                    row.createCell(2).apply {
+                        setCellValue(application.studentName);
+                        cellStyle = dataStyle
+                    }
+                    weekdays.forEachIndexed { dayIdx, weekday ->
+                        val applyCol = 3 + dayIdx * 2
+                        row.createCell(applyCol).apply {
+                            if (weekday in application.startDate..application.endDate) setCellValue("o")
+                            cellStyle = dataStyle
+                        }
+                        row.createCell(applyCol + 1).apply { cellStyle = dataStyle }
+                    }
+                    row.createCell(11).apply { cellStyle = dataStyle }
+                }
+            }
+        }
+
+        sheet.setColumnWidth(0, 1800) // 연번
+        sheet.setColumnWidth(1, 3000) // 학번
+        sheet.setColumnWidth(2, 3500) // 이름
+        repeat(4) { i ->
+            sheet.setColumnWidth(3 + i * 2, 2500) // 신청
+            sheet.setColumnWidth(4 + i * 2, 2500) // 출석
+        }
+        sheet.setColumnWidth(11, 4000) // 비고
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)

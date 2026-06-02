@@ -14,6 +14,7 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.UUID
 
@@ -38,7 +39,7 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val request = ApplyDaybreakStudyApplicationRequest(
                 typeId = typeId,
                 startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(3),
+                endDate = LocalDate.now().with(DayOfWeek.THURSDAY),
                 reason = "아침 공부",
                 teacherId = UUID.randomUUID()
             )

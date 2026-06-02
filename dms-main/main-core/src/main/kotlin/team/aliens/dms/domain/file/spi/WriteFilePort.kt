@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.file.spi
 
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
@@ -31,4 +32,6 @@ interface WriteFilePort {
     ): ByteArray
 
     fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>): ByteArray
+
+    fun writeDaybreakStudyApplicationExcelFile(applications: List<DaybreakStudyApplicationVO>): ByteArray
 }

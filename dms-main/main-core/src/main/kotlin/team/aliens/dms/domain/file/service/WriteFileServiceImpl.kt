@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.file.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
@@ -41,4 +42,7 @@ class WriteFileServiceImpl(
 
     override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>) =
         writeFilePort.writeOutingApplicationExcelFile(outingApplicationExcelVos)
+
+    override fun writeDaybreakStudyApplicationExcelFile(applications: List<DaybreakStudyApplicationVO>) =
+        writeFilePort.writeDaybreakStudyApplicationExcelFile(applications)
 }
