@@ -25,7 +25,7 @@ class ApplyDaybreakStudyApplicationUseCase(
         val studyType = daybreakService.getDaybreakStudyTypeById(request.typeId)
 
         daybreakService.saveDaybreakStudyApplication(
-            DaybreakStudyApplication(
+            DaybreakStudyApplication.create(
                 studentId = student.id,
                 studyTypeId = studyType.id,
                 startDate = request.startDate,
