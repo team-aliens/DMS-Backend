@@ -172,7 +172,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .selectFrom(daybreakStudyApplicationJpaEntity)
             .where(
                 daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
-                daybreakStudyApplicationJpaEntity.status.notIn(Status.EXPIRED)
+                daybreakStudyApplicationJpaEntity.status.eq(Status.SECOND_APPROVED)
             )
             .fetch()
             .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
