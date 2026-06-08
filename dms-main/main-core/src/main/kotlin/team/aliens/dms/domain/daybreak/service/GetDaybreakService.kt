@@ -33,6 +33,10 @@ interface GetDaybreakService {
         pageData: PageData = PageData.DEFAULT
     ): List<DaybreakStudyApplicationVO>
 
+    fun exportManagerDaybreakStudyApplications(
+        grade: Int? = null
+    ): List<DaybreakStudyApplicationVO>
+
     fun getDaybreakStudyTypesBySchoolId(schoolId: UUID): List<DaybreakStudyType>
 
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>

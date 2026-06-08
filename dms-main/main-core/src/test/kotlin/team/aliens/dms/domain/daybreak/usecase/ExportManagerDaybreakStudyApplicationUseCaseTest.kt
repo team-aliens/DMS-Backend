@@ -23,7 +23,7 @@ class ExportManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val applications = mockk<List<DaybreakStudyApplicationVO>>()
             val fileBytes = byteArrayOf(1, 2, 3)
 
-            every { daybreakService.managerGetDaybreakStudyApplications(null, any()) } returns applications
+            every { daybreakService.exportManagerDaybreakStudyApplications(null) } returns applications
             every { fileService.writeDaybreakStudyApplicationExcelFile(applications) } returns fileBytes
 
             it("엑셀 파일과 파일명을 반환한다") {
@@ -42,7 +42,7 @@ class ExportManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val applications = mockk<List<DaybreakStudyApplicationVO>>()
             val fileBytes = byteArrayOf(4, 5, 6)
 
-            every { daybreakService.managerGetDaybreakStudyApplications(grade, any()) } returns applications
+            every { daybreakService.exportManagerDaybreakStudyApplications(grade) } returns applications
             every { fileService.writeDaybreakStudyApplicationExcelFile(applications) } returns fileBytes
 
             it("해당 학년의 엑셀 파일과 파일명을 반환한다") {

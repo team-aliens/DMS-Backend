@@ -33,6 +33,11 @@ interface QueryDaybreakStudyApplicationPort {
         pageData: PageData = PageData.DEFAULT
     ): List<DaybreakStudyApplicationVO>
 
+    fun exportManagerDaybreakStudyApplications(
+        grade: Int? = null,
+        status: Status
+    ): List<DaybreakStudyApplicationVO>
+
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>
 
     fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID): DaybreakStudyApplicationStatusVO?

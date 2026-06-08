@@ -154,6 +154,43 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .fetch()
     }
 
+    override fun exportManagerDaybreakStudyApplications(
+        grade: Int?,
+        status: Status
+    ): List<DaybreakStudyApplicationVO> {
+        return queryFactory
+            .select(
+                QQueryDaybreakStudyApplicationVO(
+                    daybreakStudyApplicationJpaEntity.id,
+                    daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
+                    daybreakStudyApplicationJpaEntity.createdAt,
+                    daybreakStudyApplicationJpaEntity.startDate,
+                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
+                )
+            )
+            .from(daybreakStudyApplicationJpaEntity)
+            .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
+            .where(
+                daybreakStudyApplicationJpaEntity.status.eq(status),
+                gradeFilter(grade),
+                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
+            )
+            .orderBy(
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
+            )
+            .fetch()
+    }
+
     override fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication> {
         return daybreakStudyApplicationRepository.findAllByIdIn(ids).mapNotNull {
             daybreakStudyApplicationMapper.toDomain(it)
