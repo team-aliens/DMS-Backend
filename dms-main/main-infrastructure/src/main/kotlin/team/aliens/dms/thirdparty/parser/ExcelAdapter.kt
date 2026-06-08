@@ -207,19 +207,43 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
 
             // 학년 헤더 행
             sheet.createRow(rowIdx++).also { row ->
-                row.createCell(0).apply { setCellValue("연번"); cellStyle = headerStyle }
-                row.createCell(1).apply { setCellValue("학번"); cellStyle = headerStyle }
-                row.createCell(2).apply { setCellValue("이름"); cellStyle = headerStyle }
-                row.createCell(3).apply { setCellValue("출석"); cellStyle = headerStyle }
-                row.createCell(4).apply { setCellValue("비고"); cellStyle = headerStyle }
+                row.createCell(0).apply {
+                    setCellValue("연번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(1).apply {
+                    setCellValue("학번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(2).apply {
+                    setCellValue("이름");
+                    cellStyle = headerStyle
+                }
+                row.createCell(3).apply {
+                    setCellValue("출석");
+                    cellStyle = headerStyle
+                }
+                row.createCell(4).apply {
+                    setCellValue("비고");
+                    cellStyle = headerStyle
+                }
             }
 
             // 데이터 행
             gradeApplications.forEachIndexed { idx, application ->
                 sheet.createRow(rowIdx++).also { row ->
-                    row.createCell(0).apply { setCellValue((idx + 1).toDouble()); cellStyle = dataStyle }
-                    row.createCell(1).apply { setCellValue(application.studentGcn); cellStyle = dataStyle }
-                    row.createCell(2).apply { setCellValue(application.studentName); cellStyle = dataStyle }
+                    row.createCell(0).apply {
+                        setCellValue((idx + 1).toDouble());
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(1).apply {
+                        setCellValue(application.studentGcn);
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(2).apply {
+                        setCellValue(application.studentName);
+                        cellStyle = dataStyle
+                    }
                     row.createCell(3).apply { cellStyle = dataStyle }
                     row.createCell(4).apply { cellStyle = dataStyle }
                 }
