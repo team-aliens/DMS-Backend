@@ -115,6 +115,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
     }
 
     override fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int?,
         status: Status,
         pageData: PageData
@@ -139,6 +140,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .from(daybreakStudyApplicationJpaEntity)
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
+                daybreakStudyApplicationJpaEntity.schoolJpaEntity.id.eq(schoolId),
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 gradeFilter(grade),
                 daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),

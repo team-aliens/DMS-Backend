@@ -28,6 +28,7 @@ interface QueryDaybreakStudyApplicationPort {
     ): List<DaybreakStudyApplicationVO>
 
     fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int? = null,
         status: Status,
         pageData: PageData = PageData.DEFAULT
