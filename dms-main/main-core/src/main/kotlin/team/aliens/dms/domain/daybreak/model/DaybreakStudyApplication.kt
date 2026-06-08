@@ -46,7 +46,10 @@ data class DaybreakStudyApplication(
             schoolId: UUID
         ): DaybreakStudyApplication {
             val today = LocalDate.now()
-            val monday = today.with(DayOfWeek.MONDAY)
+            val monday = if (today.dayOfWeek >= DayOfWeek.FRIDAY)
+                today.with(DayOfWeek.MONDAY).plusWeeks(1)
+            else
+                today.with(DayOfWeek.MONDAY)
             val thursday = monday.plusDays(3)
 
             if (startDate > endDate) throw DaybreakStartDateAfterEndDateException

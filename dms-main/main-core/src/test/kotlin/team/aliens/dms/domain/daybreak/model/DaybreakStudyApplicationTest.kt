@@ -1,13 +1,123 @@
 package team.aliens.dms.domain.daybreak.model
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
+import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
 import team.aliens.dms.domain.daybreak.stub.createDaybreakStudyApplicationStub
 import team.aliens.dms.domain.user.exception.InvalidRoleException
+import java.time.LocalDate
+import java.util.UUID
 
 class DaybreakStudyApplicationTest : DescribeSpec({
+
+    describe("create") {
+
+        fun create(today: LocalDate, startDate: LocalDate, endDate: LocalDate) {
+            mockkStatic(LocalDate::class)
+            every { LocalDate.now() } returns today
+            try {
+                DaybreakStudyApplication.create(
+                    studyTypeId = UUID.randomUUID(),
+                    startDate = startDate,
+                    endDate = endDate,
+                    reason = "신청합니다",
+                    status = Status.PENDING,
+                    teacherId = UUID.randomUUID(),
+                    studentId = UUID.randomUUID(),
+                    schoolId = UUID.randomUUID()
+                )
+            } finally {
+                unmockkStatic(LocalDate::class)
+            }
+        }
+
+        context("월요일에 이번 주 월~목 범위로 신청하면") {
+            val monday = LocalDate.of(2025, 6, 2)
+            it("정상적으로 생성된다") {
+                shouldNotThrowAny { create(today = monday, startDate = monday, endDate = monday.plusDays(3)) }
+            }
+        }
+
+        context("목요일에 이번 주 목요일 하루만 신청하면") {
+            val thursday = LocalDate.of(2025, 6, 5)
+            it("정상적으로 생성된다") {
+                shouldNotThrowAny { create(today = thursday, startDate = thursday, endDate = thursday) }
+            }
+        }
+
+        context("금요일에 다음 주 월~목으로 신청하면") {
+            val friday = LocalDate.of(2025, 6, 6)
+            val nextMonday = LocalDate.of(2025, 6, 9)
+            val nextThursday = LocalDate.of(2025, 6, 12)
+            it("정상적으로 생성된다") {
+                shouldNotThrowAny { create(today = friday, startDate = nextMonday, endDate = nextThursday) }
+            }
+        }
+
+        context("토요일에 다음 주 월~목으로 신청하면") {
+            val saturday = LocalDate.of(2025, 6, 7)
+            val nextMonday = LocalDate.of(2025, 6, 9)
+            val nextThursday = LocalDate.of(2025, 6, 12)
+            it("정상적으로 생성된다") {
+                shouldNotThrowAny { create(today = saturday, startDate = nextMonday, endDate = nextThursday) }
+            }
+        }
+
+        context("일요일에 다음 주 월~목으로 신청하면") {
+            val sunday = LocalDate.of(2025, 6, 8)
+            val nextMonday = LocalDate.of(2025, 6, 9)
+            val nextThursday = LocalDate.of(2025, 6, 12)
+            it("정상적으로 생성된다") {
+                shouldNotThrowAny { create(today = sunday, startDate = nextMonday, endDate = nextThursday) }
+            }
+        }
+
+        context("금요일에 이번 주 목요일(과거)로 신청하면") {
+            val friday = LocalDate.of(2025, 6, 6)
+            val thisThursday = LocalDate.of(2025, 6, 5)
+            it("DaybreakPastDateException을 던진다") {
+                shouldThrow<DaybreakPastDateException> {
+                    create(today = friday, startDate = thisThursday, endDate = thisThursday)
+                }
+            }
+        }
+
+        context("금요일에 다음 주 금요일로 신청하면") {
+            val friday = LocalDate.of(2025, 6, 6)
+            val nextFriday = LocalDate.of(2025, 6, 13)
+            it("DaybreakInvalidDateRangeException을 던진다") {
+                shouldThrow<DaybreakInvalidDateRangeException> {
+                    create(today = friday, startDate = nextFriday, endDate = nextFriday)
+                }
+            }
+        }
+
+        context("startDate가 endDate보다 늦으면") {
+            val monday = LocalDate.of(2025, 6, 2)
+            it("DaybreakStartDateAfterEndDateException을 던진다") {
+                shouldThrow<DaybreakStartDateAfterEndDateException> {
+                    create(today = monday, startDate = monday.plusDays(2), endDate = monday)
+                }
+            }
+        }
+
+        context("과거 날짜로 신청하면") {
+            val wednesday = LocalDate.of(2025, 6, 4)
+            it("DaybreakPastDateException을 던진다") {
+                shouldThrow<DaybreakPastDateException> {
+                    create(today = wednesday, startDate = wednesday.minusDays(1), endDate = wednesday)
+                }
+            }
+        }
+    }
 
     describe("changeApplicationStatus") {
 
