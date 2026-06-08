@@ -34,6 +34,7 @@ interface QueryDaybreakStudyApplicationPort {
     ): List<DaybreakStudyApplicationVO>
 
     fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int? = null,
         status: Status
     ): List<DaybreakStudyApplicationVO>

@@ -34,6 +34,7 @@ interface GetDaybreakService {
     ): List<DaybreakStudyApplicationVO>
 
     fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int? = null
     ): List<DaybreakStudyApplicationVO>
 

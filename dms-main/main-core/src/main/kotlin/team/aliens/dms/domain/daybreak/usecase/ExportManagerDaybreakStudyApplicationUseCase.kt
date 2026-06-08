@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.daybreak.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.response.ExportManagerDaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.file.service.FileService
@@ -11,9 +12,11 @@ import java.time.format.DateTimeFormatter
 class ExportManagerDaybreakStudyApplicationUseCase(
     private val daybreakService: DaybreakService,
     private val fileService: FileService,
+    private val securityService: SecurityService,
 ) {
     fun execute(grade: Int?): ExportManagerDaybreakStudyApplicationResponse {
-        val applications = daybreakService.exportManagerDaybreakStudyApplications(grade)
+        val schoolId = securityService.getCurrentSchoolId()
+        val applications = daybreakService.exportManagerDaybreakStudyApplications(schoolId, grade)
         val file = fileService.writeDaybreakStudyApplicationExcelFile(applications)
         val fileName = "새벽자습_신청현황_${LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}"
         return ExportManagerDaybreakStudyApplicationResponse(file = file, fileName = fileName)

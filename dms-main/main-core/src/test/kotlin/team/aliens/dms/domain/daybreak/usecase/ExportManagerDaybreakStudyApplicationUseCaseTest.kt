@@ -6,24 +6,33 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.domain.file.service.FileService
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 class ExportManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
     val daybreakService = mockk<DaybreakService>()
     val fileService = mockk<FileService>()
+    val securityService = mockk<SecurityService>()
 
-    val useCase = ExportManagerDaybreakStudyApplicationUseCase(daybreakService, fileService)
+    val useCase = ExportManagerDaybreakStudyApplicationUseCase(daybreakService, fileService, securityService)
+
+    val schoolId = UUID.randomUUID()
+
+    beforeTest {
+        every { securityService.getCurrentSchoolId() } returns schoolId
+    }
 
     describe("execute") {
         context("학년 필터 없이 새벽 자습 신청 엑셀을 export하면") {
             val applications = mockk<List<DaybreakStudyApplicationVO>>()
             val fileBytes = byteArrayOf(1, 2, 3)
 
-            every { daybreakService.exportManagerDaybreakStudyApplications(null) } returns applications
+            every { daybreakService.exportManagerDaybreakStudyApplications(schoolId, null) } returns applications
             every { fileService.writeDaybreakStudyApplicationExcelFile(applications) } returns fileBytes
 
             it("엑셀 파일과 파일명을 반환한다") {
@@ -42,7 +51,7 @@ class ExportManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val applications = mockk<List<DaybreakStudyApplicationVO>>()
             val fileBytes = byteArrayOf(4, 5, 6)
 
-            every { daybreakService.exportManagerDaybreakStudyApplications(grade) } returns applications
+            every { daybreakService.exportManagerDaybreakStudyApplications(schoolId, grade) } returns applications
             every { fileService.writeDaybreakStudyApplicationExcelFile(applications) } returns fileBytes
 
             it("해당 학년의 엑셀 파일과 파일명을 반환한다") {

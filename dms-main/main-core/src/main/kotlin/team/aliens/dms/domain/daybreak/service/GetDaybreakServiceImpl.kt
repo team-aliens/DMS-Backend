@@ -66,9 +66,11 @@ class GetDaybreakServiceImpl(
     }
 
     override fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int?
     ): List<DaybreakStudyApplicationVO> {
         return queryDaybreakStudyApplicationPort.exportManagerDaybreakStudyApplications(
+            schoolId = schoolId,
             grade = grade,
             status = Status.SECOND_APPROVED
         )
