@@ -28,9 +28,16 @@ interface QueryDaybreakStudyApplicationPort {
     ): List<DaybreakStudyApplicationVO>
 
     fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int? = null,
         status: Status,
         pageData: PageData = PageData.DEFAULT
+    ): List<DaybreakStudyApplicationVO>
+
+    fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
+        grade: Int? = null,
+        status: Status
     ): List<DaybreakStudyApplicationVO>
 
     fun getAllByIdIn(ids: List<UUID>): List<DaybreakStudyApplication>

@@ -35,6 +35,7 @@ class TeacherPersistenceAdapter(
             )
             .from(teacherJpaEntity)
             .where(teacherJpaEntity.user.authority.eq(authority))
+            .orderBy(teacherJpaEntity.name.asc())
             .fetch()
     }
 }

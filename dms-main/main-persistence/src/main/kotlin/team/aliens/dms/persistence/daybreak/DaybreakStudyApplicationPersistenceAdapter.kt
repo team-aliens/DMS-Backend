@@ -68,6 +68,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 dateFilter(date),
                 typeFilter(typeId),
                 daybreakStudyApplicationJpaEntity.teacherJpaEntity.id.eq(teacherId),
+                daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING),
             )
             .offset(pageData.offset)
             .limit(pageData.size)
@@ -114,6 +115,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
     }
 
     override fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int?,
         status: Status,
         pageData: PageData
@@ -138,11 +140,58 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .from(daybreakStudyApplicationJpaEntity)
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
+                daybreakStudyApplicationJpaEntity.schoolJpaEntity.id.eq(schoolId),
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 gradeFilter(grade),
+                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
+            )
+            .orderBy(
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
             )
             .offset(pageData.offset)
             .limit(pageData.size)
+            .fetch()
+    }
+
+    override fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
+        grade: Int?,
+        status: Status
+    ): List<DaybreakStudyApplicationVO> {
+        return queryFactory
+            .select(
+                QQueryDaybreakStudyApplicationVO(
+                    daybreakStudyApplicationJpaEntity.id,
+                    daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
+                    daybreakStudyApplicationJpaEntity.createdAt,
+                    daybreakStudyApplicationJpaEntity.startDate,
+                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
+                )
+            )
+            .from(daybreakStudyApplicationJpaEntity)
+            .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
+            .where(
+                daybreakStudyApplicationJpaEntity.schoolJpaEntity.id.eq(schoolId),
+                daybreakStudyApplicationJpaEntity.status.eq(status),
+                gradeFilter(grade),
+                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
+            )
+            .orderBy(
+                studentJpaEntity.grade.asc(),
+                studentJpaEntity.classRoom.asc(),
+                studentJpaEntity.number.asc()
+            )
             .fetch()
     }
 
