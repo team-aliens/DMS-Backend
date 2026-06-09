@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.daybreak
 
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.common.extension.setExcelContentDisposition
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusRequest
@@ -26,6 +28,7 @@ import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.CreateDaybreakStudyTypeUseCase
+import team.aliens.dms.domain.daybreak.usecase.ExportManagerDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyApplicationStatusUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
@@ -42,6 +45,7 @@ class DaybreakWebAdapter(
     private val queryGeneralTeacherDaybreakStudyApplicationUseCase: QueryGeneralTeacherDaybreakStudyApplicationUseCase,
     private val queryHeadTeacherDaybreakStudyApplicationUseCase: QueryHeadTeacherDaybreakStudyApplicationUseCase,
     private val queryManagerDaybreakStudyApplicationUseCase: QueryManagerDaybreakStudyApplicationUseCase,
+    private val exportManagerDaybreakStudyApplicationUseCase: ExportManagerDaybreakStudyApplicationUseCase,
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase,
     private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
     private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase,
@@ -90,6 +94,17 @@ class DaybreakWebAdapter(
         @ModelAttribute pageData: PageData
     ): DaybreakStudyApplicationResponse {
         return queryManagerDaybreakStudyApplicationUseCase.execute(grade, pageData)
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping("/manager/study-application/export")
+    fun exportManagerDaybreakStudyApplications(
+        @RequestParam(value = "grade", required = false) grade: Int?,
+        httpResponse: HttpServletResponse
+    ): ByteArray {
+        val response = exportManagerDaybreakStudyApplicationUseCase.execute(grade)
+        httpResponse.setExcelContentDisposition(response.fileName)
+        return response.file
     }
 
     @ResponseStatus(code = HttpStatus.OK)

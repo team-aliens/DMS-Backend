@@ -29,8 +29,14 @@ interface GetDaybreakService {
     ): List<DaybreakStudyApplicationVO>
 
     fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int? = null,
         pageData: PageData = PageData.DEFAULT
+    ): List<DaybreakStudyApplicationVO>
+
+    fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
+        grade: Int? = null
     ): List<DaybreakStudyApplicationVO>
 
     fun getDaybreakStudyTypesBySchoolId(schoolId: UUID): List<DaybreakStudyType>

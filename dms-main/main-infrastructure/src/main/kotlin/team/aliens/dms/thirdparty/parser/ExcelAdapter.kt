@@ -1,8 +1,11 @@
 package team.aliens.dms.thirdparty.parser
 
 import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.springframework.stereotype.Component
+import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
 import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
@@ -18,6 +21,7 @@ import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.port.ExcelPort
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Component
@@ -169,6 +173,88 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             lastRowNum += 18
         }
         formatWorkSheet(sheet)
+
+        ByteArrayOutputStream().use { stream ->
+            workbook.write(stream)
+            return stream.toByteArray()
+        }
+    }
+
+    override fun writeDaybreakStudyApplicationExcelFile(applications: List<DaybreakStudyApplicationVO>): ByteArray {
+        val workbook = XSSFWorkbook()
+        val sheet: Sheet = workbook.createSheet()
+
+        val today = LocalDate.now()
+
+        val headerStyle = getHeaderCellStyle(workbook)
+        val dataStyle = getDefaultCellStyle(workbook).apply { setBorder() }
+
+        // 제목 행
+        sheet.createRow(0).also { row ->
+            row.createCell(0).apply {
+                setCellValue("새 벽 자 습(23:30 ~ 1:30)   작성일: ${today.monthValue}월 ${today.dayOfMonth}일")
+                cellStyle = headerStyle
+            }
+            (1..4).forEach { row.createCell(it).cellStyle = headerStyle }
+        }
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 0, 4))
+
+        val applicationsByGrade = applications.groupBy { it.studentGcn[0].digitToInt() }
+        var rowIdx = 1
+
+        for (grade in 1..3) {
+            val gradeApplications = applicationsByGrade[grade] ?: emptyList()
+
+            // 학년 헤더 행
+            sheet.createRow(rowIdx++).also { row ->
+                row.createCell(0).apply {
+                    setCellValue("연번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(1).apply {
+                    setCellValue("학번");
+                    cellStyle = headerStyle
+                }
+                row.createCell(2).apply {
+                    setCellValue("이름");
+                    cellStyle = headerStyle
+                }
+                row.createCell(3).apply {
+                    setCellValue("출석");
+                    cellStyle = headerStyle
+                }
+                row.createCell(4).apply {
+                    setCellValue("비고");
+                    cellStyle = headerStyle
+                }
+            }
+
+            // 데이터 행
+            gradeApplications.forEachIndexed { idx, application ->
+                sheet.createRow(rowIdx++).also { row ->
+                    row.createCell(0).apply {
+                        setCellValue((idx + 1).toDouble());
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(1).apply {
+                        setCellValue(application.studentGcn);
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(2).apply {
+                        setCellValue(application.studentName);
+                        cellStyle = dataStyle
+                    }
+                    row.createCell(3).apply { cellStyle = dataStyle }
+                    row.createCell(4).apply { cellStyle = dataStyle }
+                }
+            }
+        }
+
+        sheet.setColumnWidth(0, 1800) // 연번
+        sheet.setColumnWidth(1, 3000) // 학번
+        sheet.setColumnWidth(2, 3500) // 이름
+        sheet.setColumnWidth(3, 2500) // 출석
+        sheet.setColumnWidth(4, 4000) // 비고
 
         ByteArrayOutputStream().use { stream ->
             workbook.write(stream)

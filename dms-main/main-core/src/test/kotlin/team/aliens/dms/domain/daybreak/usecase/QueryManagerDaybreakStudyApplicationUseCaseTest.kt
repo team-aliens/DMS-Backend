@@ -6,20 +6,25 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 import team.aliens.dms.common.dto.PageData
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.service.DaybreakService
+import java.util.UUID
 
 class QueryManagerDaybreakStudyApplicationUseCaseTest : DescribeSpec({
     val daybreakService = mockk<DaybreakService>()
+    val securityService = mockk<SecurityService>()
 
-    val useCase = QueryManagerDaybreakStudyApplicationUseCase(daybreakService)
+    val useCase = QueryManagerDaybreakStudyApplicationUseCase(daybreakService, securityService)
 
     describe("execute") {
         context("사감 선생님이 새벽 자습 신청 목록을 조회하면") {
 
+            val schoolId = UUID.randomUUID()
             val pageData = PageData(page = 1, size = 10)
             val grade = 1
 
-            every { daybreakService.managerGetDaybreakStudyApplications(grade, pageData) } returns mockk()
+            every { securityService.getCurrentSchoolId() } returns schoolId
+            every { daybreakService.managerGetDaybreakStudyApplications(schoolId, grade, pageData) } returns mockk()
 
             it("새벽 자습 신청 목록을 반환한다") {
                 shouldNotThrowAny {

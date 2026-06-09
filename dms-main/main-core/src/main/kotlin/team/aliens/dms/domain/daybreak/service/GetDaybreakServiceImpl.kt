@@ -55,16 +55,26 @@ class GetDaybreakServiceImpl(
     }
 
     override fun managerGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int?,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
-
-        val status = Status.SECOND_APPROVED
-
         return queryDaybreakStudyApplicationPort.managerGetDaybreakStudyApplications(
+            schoolId = schoolId,
             grade = grade,
-            status = status,
+            status = Status.SECOND_APPROVED,
             pageData = pageData
+        )
+    }
+
+    override fun exportManagerDaybreakStudyApplications(
+        schoolId: UUID,
+        grade: Int?
+    ): List<DaybreakStudyApplicationVO> {
+        return queryDaybreakStudyApplicationPort.exportManagerDaybreakStudyApplications(
+            schoolId = schoolId,
+            grade = grade,
+            status = Status.SECOND_APPROVED
         )
     }
 
