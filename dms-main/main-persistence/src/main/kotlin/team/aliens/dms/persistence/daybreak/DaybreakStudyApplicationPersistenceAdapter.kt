@@ -73,7 +73,6 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .offset(pageData.offset)
             .limit(pageData.size)
             .orderBy(
-                daybreakStudyApplicationJpaEntity.createdAt.desc(),
                 studentJpaEntity.grade.asc(),
                 studentJpaEntity.classRoom.asc(),
                 studentJpaEntity.number.asc())
@@ -115,7 +114,6 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .offset(pageData.offset)
             .limit(pageData.size)
             .orderBy(
-                daybreakStudyApplicationJpaEntity.createdAt.desc(),
                 studentJpaEntity.grade.asc(),
                 studentJpaEntity.classRoom.asc(),
                 studentJpaEntity.number.asc())
