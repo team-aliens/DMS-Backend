@@ -19,12 +19,10 @@ class ExpireDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
     describe("execute") {
         context("만료 스케줄러가 실행되면") {
-            it("기간이 지난 새벽 자습 신청의 상태를 EXPIRED로 바꾼다") {
+            it("SECOND_APPROVED 상태인 기간 만료 신청의 상태를 EXPIRED로 바꾼다") {
                 val applications = listOf(
-                    createDaybreakStudyApplicationStub(status = Status.PENDING),
-                    createDaybreakStudyApplicationStub(status = Status.FIRST_APPROVED),
                     createDaybreakStudyApplicationStub(status = Status.SECOND_APPROVED),
-                    createDaybreakStudyApplicationStub(status = Status.REJECTED),
+                    createDaybreakStudyApplicationStub(status = Status.SECOND_APPROVED),
                 )
 
                 every { daybreakService.findExpiredDaybreakStudyApplications() } returns applications
