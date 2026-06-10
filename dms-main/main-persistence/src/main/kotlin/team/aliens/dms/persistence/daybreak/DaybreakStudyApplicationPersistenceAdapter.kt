@@ -233,10 +233,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
     }
 
     private fun dateFilter(date: LocalDate) =
-        daybreakStudyApplicationJpaEntity.createdAt.between(
-            date.atStartOfDay(),
-            date.atTime(LocalTime.MAX)
-        )
+        daybreakStudyApplicationJpaEntity.startDate.loe(date)
+            .and(daybreakStudyApplicationJpaEntity.endDate.goe(date))
 
     private fun typeFilter(typeId: UUID?) =
         typeId?.let { daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.id.eq(it) }
