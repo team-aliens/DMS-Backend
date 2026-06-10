@@ -16,7 +16,6 @@ import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApp
 import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
 @Component
@@ -213,6 +212,20 @@ class DaybreakStudyApplicationPersistenceAdapter(
             )
             .fetch()
             .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
+    }
+
+    override fun deleteOutdatedDaybreakStudyApplications() {
+        queryFactory
+            .delete(daybreakStudyApplicationJpaEntity)
+            .where(
+                daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.status.`in`(
+                    Status.PENDING,
+                    Status.FIRST_APPROVED,
+                    Status.REJECTED
+                )
+            )
+            .execute()
     }
 
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {

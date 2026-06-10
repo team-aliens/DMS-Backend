@@ -5,17 +5,15 @@ import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 
 @SchedulerUseCase
-class ExpireDaybreakStudyApplicationUseCase(
+class CloseDaybreakStudyApplicationUseCase(
     private val daybreakService: DaybreakService
 ) {
 
     fun execute() {
         val applications = daybreakService.findExpiredDaybreakStudyApplications()
-
-        applications.forEach {
-            it.status = Status.EXPIRED
-        }
-
+        applications.forEach { it.status = Status.EXPIRED }
         daybreakService.saveAllDaybreakStudyApplications(applications)
+
+        daybreakService.deleteOutdatedDaybreakStudyApplications()
     }
 }

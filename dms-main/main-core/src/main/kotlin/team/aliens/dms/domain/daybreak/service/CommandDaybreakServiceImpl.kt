@@ -51,4 +51,8 @@ class CommandDaybreakServiceImpl(
             notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
         }
     }
+
+    override fun deleteOutdatedDaybreakStudyApplications() {
+        commandDaybreakStudyApplicationPort.deleteOutdatedDaybreakStudyApplications()
+    }
 }

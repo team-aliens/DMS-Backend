@@ -7,4 +7,6 @@ interface CommandDaybreakStudyApplicationPort {
     fun saveDaybreakStudyApplication(application: DaybreakStudyApplication)
 
     fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>)
+
+    fun deleteOutdatedDaybreakStudyApplications()
 }

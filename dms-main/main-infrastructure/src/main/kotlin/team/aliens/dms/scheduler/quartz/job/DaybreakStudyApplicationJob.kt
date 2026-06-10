@@ -4,12 +4,12 @@ import org.quartz.DisallowConcurrentExecution
 import org.quartz.Job
 import org.quartz.JobExecutionContext
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.daybreak.usecase.ExpireDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.CloseDaybreakStudyApplicationUseCase
 
 @Component
 @DisallowConcurrentExecution
 class DaybreakStudyApplicationJob(
-    private val useCase: ExpireDaybreakStudyApplicationUseCase
+    private val useCase: CloseDaybreakStudyApplicationUseCase
 ) : Job {
     override fun execute(context: JobExecutionContext?) {
         useCase.execute()

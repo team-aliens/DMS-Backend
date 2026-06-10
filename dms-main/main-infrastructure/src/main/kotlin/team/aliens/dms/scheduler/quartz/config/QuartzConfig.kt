@@ -166,9 +166,9 @@ class QuartzConfig {
         return TriggerBuilder.newTrigger()
             .forJob(expireDaybreakStudyApplicationJobDetail)
             .withIdentity("expireDaybreakStudyApplicationJobTrigger", "daybreak")
-            .withDescription("Every day at midnight (Asia/Seoul)")
+            .withDescription("Every Friday at midnight (Asia/Seoul)")
             .withSchedule(
-                CronScheduleBuilder.cronSchedule("0 0 0 * * ?")
+                CronScheduleBuilder.cronSchedule("0 0 0 ? * FRI")
                     .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
             )
             .build()
