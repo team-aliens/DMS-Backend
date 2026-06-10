@@ -76,7 +76,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
     override fun headTeacherGetDaybreakStudyApplications(
         grade: Int,
         typeId: UUID?,
-        status: Status?,
+        status: Status,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
         return queryFactory
