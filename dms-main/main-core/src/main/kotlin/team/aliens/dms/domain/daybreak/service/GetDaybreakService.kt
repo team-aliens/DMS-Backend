@@ -6,7 +6,6 @@ import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationStatusVO
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationVO
-import java.time.LocalDate
 import java.util.UUID
 
 interface GetDaybreakService {
@@ -16,14 +15,12 @@ interface GetDaybreakService {
     fun generalTeacherGetDaybreakStudyApplications(
         teacherId: UUID,
         typeId: UUID? = null,
-        date: LocalDate,
         pageData: PageData = PageData.DEFAULT
     ): List<DaybreakStudyApplicationVO>
 
     fun headTeacherGetDaybreakStudyApplications(
         grade: Int,
         typeId: UUID? = null,
-        date: LocalDate,
         status: Status? = null,
         pageData: PageData = PageData.DEFAULT
     ): List<DaybreakStudyApplicationVO>

@@ -8,7 +8,6 @@ import io.mockk.mockk
 import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.service.DaybreakService
-import java.time.LocalDate
 import java.util.UUID
 
 class QueryGeneralTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
@@ -23,18 +22,16 @@ class QueryGeneralTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             val teacherId = UUID.randomUUID()
             val typeId = UUID.randomUUID()
-            val date = LocalDate.now()
             val pageData = PageData(page = 1, size = 10)
 
             every { securityService.getCurrentUserId() } returns teacherId
-            every { daybreakService.generalTeacherGetDaybreakStudyApplications(teacherId, typeId, date, pageData) } returns mockk()
+            every { daybreakService.generalTeacherGetDaybreakStudyApplications(teacherId, typeId, pageData) } returns mockk()
 
             it("새벽 자습 신청 목록을 반환한다") {
                 shouldNotThrowAny {
 
                     val response = useCase.execute(
                         typeId = typeId,
-                        date = date,
                         pageData = pageData
                     )
 
