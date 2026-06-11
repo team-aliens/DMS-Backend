@@ -16,7 +16,6 @@ import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApp
 import team.aliens.dms.persistence.daybreak.repository.vo.QQueryDaybreakStudyApplicationVO
 import team.aliens.dms.persistence.student.entity.QStudentJpaEntity.studentJpaEntity
 import java.time.LocalDate
-import java.time.LocalTime
 import java.util.UUID
 
 @Component
@@ -42,7 +41,6 @@ class DaybreakStudyApplicationPersistenceAdapter(
     override fun generalTeacherGetDaybreakStudyApplications(
         teacherId: UUID,
         typeId: UUID?,
-        date: LocalDate,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
         return queryFactory
@@ -65,22 +63,20 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .from(daybreakStudyApplicationJpaEntity)
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
-                dateFilter(date),
                 typeFilter(typeId),
                 daybreakStudyApplicationJpaEntity.teacherJpaEntity.id.eq(teacherId),
                 daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING),
             )
             .offset(pageData.offset)
             .limit(pageData.size)
-            .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
+            .orderBy(*gcnOrder())
             .fetch()
     }
 
     override fun headTeacherGetDaybreakStudyApplications(
         grade: Int,
         typeId: UUID?,
-        date: LocalDate,
-        status: Status?,
+        status: Status,
         pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
         return queryFactory
@@ -103,14 +99,13 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .from(daybreakStudyApplicationJpaEntity)
             .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
             .where(
-                dateFilter(date),
                 typeFilter(typeId),
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 daybreakStudyApplicationJpaEntity.studentJpaEntity.grade.eq(grade)
             )
             .offset(pageData.offset)
             .limit(pageData.size)
-            .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
+            .orderBy(*gcnOrder())
             .fetch()
     }
 
@@ -146,11 +141,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
                 daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
             )
-            .orderBy(
-                studentJpaEntity.grade.asc(),
-                studentJpaEntity.classRoom.asc(),
-                studentJpaEntity.number.asc()
-            )
+            .orderBy(*gcnOrder())
             .offset(pageData.offset)
             .limit(pageData.size)
             .fetch()
@@ -187,11 +178,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
                 daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
             )
-            .orderBy(
-                studentJpaEntity.grade.asc(),
-                studentJpaEntity.classRoom.asc(),
-                studentJpaEntity.number.asc()
-            )
+            .orderBy(*gcnOrder())
             .fetch()
     }
 
@@ -216,6 +203,31 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .fetchFirst()
     }
 
+    override fun findExpiredDaybreakStudyApplications(): List<DaybreakStudyApplication> {
+        return queryFactory
+            .selectFrom(daybreakStudyApplicationJpaEntity)
+            .where(
+                daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.status.eq(Status.SECOND_APPROVED)
+            )
+            .fetch()
+            .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
+    }
+
+    override fun deleteOutdatedDaybreakStudyApplications() {
+        queryFactory
+            .delete(daybreakStudyApplicationJpaEntity)
+            .where(
+                daybreakStudyApplicationJpaEntity.endDate.lt(LocalDate.now()),
+                daybreakStudyApplicationJpaEntity.status.`in`(
+                    Status.PENDING,
+                    Status.FIRST_APPROVED,
+                    Status.REJECTED
+                )
+            )
+            .execute()
+    }
+
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {
         daybreakStudyApplicationRepository.save(daybreakStudyApplicationMapper.toEntity(application))
     }
@@ -226,11 +238,11 @@ class DaybreakStudyApplicationPersistenceAdapter(
         daybreakStudyApplicationRepository.saveAll(applicationEntities)
     }
 
-    private fun dateFilter(date: LocalDate) =
-        daybreakStudyApplicationJpaEntity.createdAt.between(
-            date.atStartOfDay(),
-            date.atTime(LocalTime.MAX)
-        )
+    private fun gcnOrder() = arrayOf(
+        studentJpaEntity.grade.asc(),
+        studentJpaEntity.classRoom.asc(),
+        studentJpaEntity.number.asc()
+    )
 
     private fun typeFilter(typeId: UUID?) =
         typeId?.let { daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.id.eq(it) }

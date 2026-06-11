@@ -5,7 +5,6 @@ import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.service.DaybreakService
-import java.time.LocalDate
 import java.util.UUID
 
 @ReadOnlyUseCase
@@ -14,12 +13,12 @@ class QueryGeneralTeacherDaybreakStudyApplicationUseCase(
     private val securityService: SecurityService
 ) {
 
-    fun execute(typeId: UUID?, date: LocalDate, pageData: PageData): DaybreakStudyApplicationResponse {
+    fun execute(typeId: UUID?, pageData: PageData): DaybreakStudyApplicationResponse {
 
         val teacherId = securityService.getCurrentUserId()
 
         return DaybreakStudyApplicationResponse(
-            daybreakService.generalTeacherGetDaybreakStudyApplications(teacherId, typeId, date, pageData)
+            daybreakService.generalTeacherGetDaybreakStudyApplications(teacherId, typeId, pageData)
         )
     }
 }
