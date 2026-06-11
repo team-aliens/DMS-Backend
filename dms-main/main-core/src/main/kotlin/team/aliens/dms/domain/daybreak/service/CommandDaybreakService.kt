@@ -10,4 +10,6 @@ interface CommandDaybreakService {
     fun saveDaybreakStudyType(type: DaybreakStudyType)
 
     fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>)
+
+    fun deleteOutdatedDaybreakStudyApplications()
 }

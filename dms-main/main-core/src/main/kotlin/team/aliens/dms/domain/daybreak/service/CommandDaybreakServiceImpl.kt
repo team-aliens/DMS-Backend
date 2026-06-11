@@ -29,6 +29,8 @@ class CommandDaybreakServiceImpl(
 
     override fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>) {
 
+        if (applications.isEmpty()) return
+
         commandDaybreakStudyApplicationPort.saveAllDaybreakStudyApplications(applications)
 
         val firstApplication = applications.first()
@@ -48,5 +50,9 @@ class CommandDaybreakServiceImpl(
             )
             notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
         }
+    }
+
+    override fun deleteOutdatedDaybreakStudyApplications() {
+        commandDaybreakStudyApplicationPort.deleteOutdatedDaybreakStudyApplications()
     }
 }

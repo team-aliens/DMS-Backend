@@ -5,7 +5,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
@@ -34,11 +36,13 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val studentId = UUID.randomUUID()
             val schoolId = UUID.randomUUID()
             val typeId = UUID.randomUUID()
+            val monday = LocalDate.of(2025, 6, 2)
+            val thursday = LocalDate.of(2025, 6, 5)
 
             val request = ApplyDaybreakStudyApplicationRequest(
                 typeId = typeId,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(3),
+                startDate = monday,
+                endDate = thursday,
                 reason = "아침 공부",
                 teacherId = UUID.randomUUID()
             )
@@ -51,22 +55,27 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
 
             it("신청 정보를 정상적으로 저장한다") {
+                mockkStatic(LocalDate::class)
+                every { LocalDate.now() } returns monday
+                try {
+                    // given
+                    every { studentService.getCurrentStudent() } returns mockStudent
+                    every { securityService.getCurrentSchoolId() } returns schoolId
+                    every { daybreakService.checkDaybreakStudyApplicationExists(studentId) } just runs
+                    every { daybreakService.getDaybreakStudyTypeById(typeId) } returns mockStudyType
+                    every { daybreakService.saveDaybreakStudyApplication(any()) } just runs
 
-                // given
-                every { studentService.getCurrentStudent() } returns mockStudent
-                every { securityService.getCurrentSchoolId() } returns schoolId
-                every { daybreakService.checkDaybreakStudyApplicationExists(studentId) } just runs
-                every { daybreakService.getDaybreakStudyTypeById(typeId) } returns mockStudyType
-                every { daybreakService.saveDaybreakStudyApplication(any()) } just runs
+                    // when
+                    useCase.execute(request)
 
-                // when
-                useCase.execute(request)
-
-                verify(exactly = 1) {
-                    daybreakService.checkDaybreakStudyApplicationExists(studentId)
-                }
-                verify(exactly = 1) {
-                    daybreakService.saveDaybreakStudyApplication(any())
+                    verify(exactly = 1) {
+                        daybreakService.checkDaybreakStudyApplicationExists(studentId)
+                    }
+                    verify(exactly = 1) {
+                        daybreakService.saveDaybreakStudyApplication(any())
+                    }
+                } finally {
+                    unmockkStatic(LocalDate::class)
                 }
             }
         }

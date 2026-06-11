@@ -11,7 +11,6 @@ import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.teacher.model.Teacher
 import team.aliens.dms.domain.teacher.service.TeacherService
-import java.time.LocalDate
 import java.util.UUID
 
 class QueryHeadTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
@@ -27,7 +26,6 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             val userId = UUID.randomUUID()
             val typeId = UUID.randomUUID()
-            val date = LocalDate.now()
             val status = Status.FIRST_APPROVED
             val pageData = PageData(page = 1, size = 10)
             val grade = 1
@@ -38,13 +36,12 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             every { securityService.getCurrentUserId() } returns userId
             every { teacherService.getTeacherById(userId) } returns mockTeacher
-            every { daybreakService.headTeacherGetDaybreakStudyApplications(grade, typeId, date, status, pageData) } returns mockk()
+            every { daybreakService.headTeacherGetDaybreakStudyApplications(grade, typeId, status, pageData) } returns mockk()
 
             it("새벽 자습 신청 목록을 반환한다") {
                 shouldNotThrowAny {
                     val response = useCase.execute(
                         typeId = typeId,
-                        date = date,
                         status = status,
                         pageData = pageData
                     )

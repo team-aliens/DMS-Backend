@@ -16,13 +16,13 @@ class CreateNoticeUseCaseTest : DescribeSpec({
 
     val useCase = CreateNoticeUseCase(noticeService, securityService)
 
-    describe("execute"){
-        context("사감선생님이 공지를 생성하면"){
+    describe("execute") {
+        context("사감선생님이 공지를 생성하면") {
 
             val managerId = UUID.randomUUID()
             val noticeId = UUID.randomUUID()
 
-            it("공지를 생성한다"){
+            it("공지를 생성한다") {
                 // given
                 every { securityService.getCurrentUserId() } returns managerId
                 every { noticeService.saveNotice(any()) } answers {
@@ -42,11 +42,14 @@ class CreateNoticeUseCaseTest : DescribeSpec({
 
                 // then
                 verify(exactly = 1) { securityService.getCurrentUserId() }
-                verify(exactly = 1) { noticeService.saveNotice(match {
-                    it.managerId == managerId &&
-                    it.title == "제목" &&
-                    it.content == "내용"
-                })
+                verify(exactly = 1) {
+                    noticeService.saveNotice(
+                        match {
+                            it.managerId == managerId &&
+                                it.title == "제목" &&
+                                it.content == "내용"
+                        }
+                    )
                 }
             }
         }
