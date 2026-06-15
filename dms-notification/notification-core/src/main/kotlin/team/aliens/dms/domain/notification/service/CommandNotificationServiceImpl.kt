@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.NotificationOfUser
@@ -31,14 +30,10 @@ class CommandNotificationServiceImpl(
     }
 
     override fun deleteDeviceTokenByUserId(userId: UUID) {
-        val deviceToken = deviceTokenPort.queryDeviceTokenByUserId(userId)
+        val deviceToken = deviceTokenPort.queryDeviceTokenByUserId(userId) ?: return
 
-        if (deviceToken != null) {
-            topicSubscriptionPort.deleteAllByDeviceTokenId(deviceToken.id)
-            deviceTokenPort.deleteDeviceTokenByUserId(userId)
-        } else {
-            throw DeviceTokenNotFoundException
-        }
+        topicSubscriptionPort.deleteAllByDeviceTokenId(deviceToken.id)
+        deviceTokenPort.deleteDeviceTokenByUserId(userId)
     }
 
     override fun deleteNotificationOfUserByUserIdAndId(userId: UUID, notificationOfUserId: UUID) {
