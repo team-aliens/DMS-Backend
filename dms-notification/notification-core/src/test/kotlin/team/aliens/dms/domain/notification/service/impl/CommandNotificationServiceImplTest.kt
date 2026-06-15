@@ -6,7 +6,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
+import io.mockk.verify
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.service.CommandNotificationServiceImpl
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
@@ -71,10 +71,11 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
             every { deviceTokenPort.queryDeviceTokenByUserId(userId) } returns null
 
-            it("DeviceTokenNotFoundException을 발생시킨다") {
-                shouldThrow<DeviceTokenNotFoundException> {
+            it("예외 없이 아무 동작도 하지 않는다") {
+                shouldNotThrowAny {
                     commandNotificationService.deleteDeviceTokenByUserId(userId)
                 }
+                verify(exactly = 0) { deviceTokenPort.deleteDeviceTokenByUserId(userId) }
             }
         }
     }
