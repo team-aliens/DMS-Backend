@@ -65,7 +65,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .where(
                 typeFilter(typeId),
                 daybreakStudyApplicationJpaEntity.teacherJpaEntity.id.eq(teacherId),
-                daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING),
+                daybreakStudyApplicationJpaEntity.status.ne(Status.EXPIRED),
             )
             .offset(pageData.offset)
             .limit(pageData.size)
