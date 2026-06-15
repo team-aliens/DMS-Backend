@@ -1,5 +1,6 @@
 package team.aliens.dms.domain.notification.service
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -9,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import team.aliens.dms.contract.model.notification.Topic
-import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.NotificationOfUser
@@ -91,10 +91,11 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
             every { deviceTokenPort.queryDeviceTokenByUserId(userId) } returns null
 
-            it("DeviceTokenNotFoundException을 던진다") {
-                shouldThrow<DeviceTokenNotFoundException> {
+            it("예외 없이 아무 동작도 하지 않는다") {
+                shouldNotThrowAny {
                     service.deleteDeviceTokenByUserId(userId)
                 }
+                verify(exactly = 0) { deviceTokenPort.deleteDeviceTokenByUserId(userId) }
             }
         }
     }
