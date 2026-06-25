@@ -40,22 +40,16 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         createTagStub(id = thirdWarningTagId,   name = WarningTag.THIRD_WARNING.warningMessage,    schoolId = schoolId),
     )
 
-    fun mockSaveAndDelete() {
-        every { tagService.deleteAllStudentTagsByStudentIdIn(any()) } just runs
-        every { tagService.saveAllStudentTags(any()) } just runs
-    }
-
     describe("execute") {
 
         context("감점이 기준 미만(SAFE)인 학생만 있을 때") {
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns emptyList()
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 10)
-            )
-            mockSaveAndDelete()
-
             it("아무 태그도 저장하지 않는다") {
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns emptyList()
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 10)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
@@ -65,14 +59,13 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         }
 
         context("경고 태그가 없는 학생이 감점 15점(경고 1단계 기준)일 때") {
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns emptyList()
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
-            )
-            mockSaveAndDelete()
-
             it("경고 1단계 태그가 저장된다") {
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns emptyList()
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
@@ -84,22 +77,21 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         }
 
         context("경고 1단계(완료) 태그를 가진 학생이 감점 20점(경고 2단계 기준)일 때") {
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns listOf(
-                StudentTagDetailVO(
-                    studentId = studentId,
-                    studentName = "홍길동",
-                    tagId = cFirstWarningTagId,
-                    tagColor = "#FF4646",
-                    tagName = WarningTag.C_FIRST_WARNING.warningMessage
-                )
-            )
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
-            )
-            mockSaveAndDelete()
-
             it("경고 2단계 태그로 업그레이드된다") {
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns listOf(
+                    StudentTagDetailVO(
+                        studentId = studentId,
+                        studentName = "홍길동",
+                        tagId = cFirstWarningTagId,
+                        tagColor = "#FF4646",
+                        tagName = WarningTag.C_FIRST_WARNING.warningMessage
+                    )
+                )
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
@@ -111,22 +103,21 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         }
 
         context("경고 1단계(완료) 태그를 가진 학생이 아직 감점 15점(경고 2단계 미만)일 때") {
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns listOf(
-                StudentTagDetailVO(
-                    studentId = studentId,
-                    studentName = "홍길동",
-                    tagId = cFirstWarningTagId,
-                    tagColor = "#FF4646",
-                    tagName = WarningTag.C_FIRST_WARNING.warningMessage
-                )
-            )
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
-            )
-            mockSaveAndDelete()
-
             it("업그레이드하지 않는다") {
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns listOf(
+                    StudentTagDetailVO(
+                        studentId = studentId,
+                        studentName = "홍길동",
+                        tagId = cFirstWarningTagId,
+                        tagColor = "#FF4646",
+                        tagName = WarningTag.C_FIRST_WARNING.warningMessage
+                    )
+                )
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
@@ -137,22 +128,21 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         }
 
         context("경고 1단계(미완료) 태그를 가진 학생이 감점 20점일 때") {
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns listOf(
-                StudentTagDetailVO(
-                    studentId = studentId,
-                    studentName = "홍길동",
-                    tagId = firstWarningTagId,
-                    tagColor = "#FF4646",
-                    tagName = WarningTag.FIRST_WARNING.warningMessage
-                )
-            )
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
-            )
-            mockSaveAndDelete()
-
             it("처벌 미이행이므로 업그레이드하지 않는다") {
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns listOf(
+                    StudentTagDetailVO(
+                        studentId = studentId,
+                        studentName = "홍길동",
+                        tagId = firstWarningTagId,
+                        tagColor = "#FF4646",
+                        tagName = WarningTag.FIRST_WARNING.warningMessage
+                    )
+                )
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
@@ -163,23 +153,22 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
         }
 
         context("일반 태그(경고 태그 아님)만 가진 학생이 감점 15점일 때") {
-            val generalTagId = UUID.randomUUID()
-            every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
-            every { tagService.getAllStudentTagDetails() } returns listOf(
-                StudentTagDetailVO(
-                    studentId = studentId,
-                    studentName = "홍길동",
-                    tagId = generalTagId,
-                    tagColor = "#0000FF",
-                    tagName = "소프트웨어개발과"
-                )
-            )
-            every { pointService.getPointTotalsGroupByStudent() } returns listOf(
-                StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
-            )
-            mockSaveAndDelete()
-
             it("TagNotFoundException 없이 경고 1단계 태그가 저장된다") {
+                val generalTagId = UUID.randomUUID()
+                every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
+                every { tagService.getAllStudentTagDetails() } returns listOf(
+                    StudentTagDetailVO(
+                        studentId = studentId,
+                        studentName = "홍길동",
+                        tagId = generalTagId,
+                        tagColor = "#0000FF",
+                        tagName = "소프트웨어개발과"
+                    )
+                )
+                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                    StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
+                )
+                every { tagService.deleteStudentTagById(any(), any()) } just runs
                 val savedTags = slot<List<StudentTag>>()
                 every { tagService.saveAllStudentTags(capture(savedTags)) } just runs
 
