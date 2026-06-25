@@ -23,7 +23,7 @@ class UpdateStudentTagsUseCase(
             .filter { it.tagName in warningTagNames }
             .groupBy { it.studentId }
 
-        val studentIdsToDelete = mutableListOf<UUID>()
+        val warningTagsToDelete = mutableListOf<StudentTagDetailVO>()
         val tagsToSave = mutableListOf<StudentTag>()
 
         for (studentPoint in pointService.getPointTotalsGroupByStudent()) {
@@ -44,13 +44,13 @@ class UpdateStudentTagsUseCase(
                 if (completedLowerTag != null) {
                     val nextLevel = completedLowerTag.nextLevel() ?: continue
                     val tagId = warningTagByName[nextLevel.warningMessage] ?: continue
-                    studentIdsToDelete.add(studentPoint.studentId)
+                    warningTagsToDelete.addAll(currentWarningTags)
                     tagsToSave.add(StudentTag(studentPoint.studentId, tagId, LocalDateTime.now()))
                 }
             }
         }
 
-        tagService.deleteAllStudentTagsByStudentIdIn(studentIdsToDelete)
+        warningTagsToDelete.forEach { tagService.deleteStudentTagById(it.studentId, it.tagId) }
         tagService.saveAllStudentTags(tagsToSave)
     }
 }
