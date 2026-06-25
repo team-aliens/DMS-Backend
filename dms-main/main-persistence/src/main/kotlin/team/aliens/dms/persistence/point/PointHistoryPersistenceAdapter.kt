@@ -170,7 +170,7 @@ class PointHistoryPersistenceAdapter(
             .where(
                 latestPointHistory.studentGcn.eq(
                     Expressions.stringTemplate(
-                        "CONCAT({0}, {1}, LPAD(CAST({2} AS string), 2, '0'))",
+                        "CONCAT({0}, {1}, LPAD(CAST({2} AS CHAR), 2, '0'))",
                         studentJpaEntity.grade,
                         studentJpaEntity.classRoom,
                         studentJpaEntity.number
