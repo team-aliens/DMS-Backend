@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.point
 
+import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
@@ -168,9 +169,12 @@ class PointHistoryPersistenceAdapter(
             .from(latestPointHistory)
             .where(
                 latestPointHistory.studentGcn.eq(
-                    studentJpaEntity.grade.stringValue().toString() +
-                        studentJpaEntity.classRoom.stringValue() +
-                        studentJpaEntity.number.stringValue().toString().padStart(2, '0')
+                    Expressions.stringTemplate(
+                        "CONCAT({0}, {1}, LPAD(CAST({2} AS CHAR), 2, '0'))",
+                        studentJpaEntity.grade,
+                        studentJpaEntity.classRoom,
+                        studentJpaEntity.number
+                    )
                 ),
                 latestPointHistory.studentName.eq(studentJpaEntity.name)
             )
