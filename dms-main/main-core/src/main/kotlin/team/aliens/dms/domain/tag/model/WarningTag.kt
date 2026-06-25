@@ -69,6 +69,5 @@ enum class WarningTag(val warningMessage: String, val point: Int) {
         )
     }
 
-    fun nextLevel() =
-        entries[this.ordinal + 1]
+    fun nextLevel(): WarningTag? = entries.getOrNull(this.ordinal + 1)
 }
