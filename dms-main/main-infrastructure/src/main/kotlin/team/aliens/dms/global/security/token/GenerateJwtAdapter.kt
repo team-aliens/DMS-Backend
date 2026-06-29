@@ -27,15 +27,6 @@ class GenerateJwtAdapter(
         refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
     )
 
-    /**
-     * 토큰 재발급 시 refresh token 은 회전(재발급)시키지 않고 access token 만 새로 발급한다.
-     *
-     * 기존에는 재발급 시에도 [receiveToken] 을 호출해 refresh token 까지 새로 발급/교체했는데,
-     * 이 경우 기존 refresh token 이 즉시 무효화되어 재발급 응답 유실/동시 요청 시
-     * 클라이언트가 무효화된 옛 토큰을 들고 있다가 다음 재발급에서 404 를 받아 로그아웃되는 문제가 있었다.
-     *
-     * refresh token 값은 그대로 유지하되 TTL 만 갱신하여 기존 슬라이딩 세션 동작은 보존한다.
-     */
     override fun reissueAccessToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse {
         // refresh token 값은 유지하고 TTL(만료 시간)만 갱신하여 슬라이딩 세션을 유지한다.
         commandRefreshTokenPort.save(
