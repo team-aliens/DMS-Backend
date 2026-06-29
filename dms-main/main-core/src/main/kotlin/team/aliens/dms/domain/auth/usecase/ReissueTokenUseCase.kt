@@ -20,8 +20,8 @@ class ReissueTokenUseCase(
 
         val user = userService.queryUserById(queryToken.userId)
 
-        val tokenResponse = jwtPort.receiveToken(
-            userId = queryToken.userId, authority = queryToken.authority, schoolId = user.schoolId
+        val tokenResponse = jwtPort.reissueAccessToken(
+            refreshToken = queryToken, schoolId = user.schoolId
         )
 
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
