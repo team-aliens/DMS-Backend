@@ -100,6 +100,16 @@ secret:
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
 
+gemini:
+  base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
+  api-key: ${GEMINI_API_KEY:gemini_api_key}
+  model: ${GEMINI_MODEL:gemini-2.5-flash}
+
+groq:
+  base-url: ${GROQ_BASE_URL:https://api.groq.com}
+  api-key: ${GROQ_API_KEY:groq_api_key}
+  model: ${GROQ_MODEL:llama-3.3-70b-versatile}
+
 cloud:
   aws:
     credentials:
