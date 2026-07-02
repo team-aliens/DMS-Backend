@@ -27,6 +27,20 @@ class GenerateJwtAdapter(
         refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
     )
 
+    override fun reissueAccessToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse {
+        // refresh token 값은 유지하고 TTL(만료 시간)만 갱신하여 슬라이딩 세션을 유지한다.
+        commandRefreshTokenPort.save(
+            refreshToken.copy(expirationTime = securityProperties.refreshExp)
+        )
+
+        return TokenResponse(
+            accessToken = generateAccessToken(refreshToken.userId, refreshToken.authority, schoolId),
+            accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
+            refreshToken = refreshToken.token,
+            refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
+        )
+    }
+
     private fun generateAccessToken(userId: UUID, authority: Authority, schoolId: UUID) =
         Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
