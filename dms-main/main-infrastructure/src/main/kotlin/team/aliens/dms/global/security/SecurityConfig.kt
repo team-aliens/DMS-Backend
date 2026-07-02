@@ -244,8 +244,8 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/teachers/general").hasAuthority(STUDENT.name)
 
                 authorize
-                    // /chatbot
-                    .requestMatchers(HttpMethod.POST, "/chatbot/questions").hasAuthority(STUDENT.name)
+                    // /chatbots
+                    .requestMatchers(HttpMethod.POST, "/chatbots/questions").hasAuthority(STUDENT.name)
                 .anyRequest().denyAll()
             }
         http
