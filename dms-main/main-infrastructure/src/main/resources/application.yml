@@ -99,9 +99,6 @@ spring:
           gemini-feign-client:
             connect-timeout: 5000
             read-timeout: 30000
-          groq-feign-client:
-            connect-timeout: 5000
-            read-timeout: 30000
 
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
@@ -115,11 +112,6 @@ gemini:
   base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
   api-key: ${GEMINI_API_KEY:gemini_api_key}
   model: ${GEMINI_MODEL:gemini-2.5-flash}
-
-groq:
-  base-url: ${GROQ_BASE_URL:https://api.groq.com}
-  api-key: ${GROQ_API_KEY:groq_api_key}
-  model: ${GROQ_MODEL:llama-3.3-70b-versatile}
 
 cloud:
   aws:
