@@ -2,12 +2,14 @@ package team.aliens.dms.thirdparty.ai
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
 import team.aliens.dms.domain.chatbot.spi.ChatAiPort
 import team.aliens.dms.thirdparty.ai.client.GeminiClient
 import team.aliens.dms.thirdparty.ai.client.dto.GeminiGenerateContentRequest
 
+@Primary
 @Component
 class GeminiClientAdapter(
     @Value("\${gemini.api-key}")

@@ -9,13 +9,6 @@ import team.aliens.dms.domain.chatbot.spi.ChatAiPort
 import team.aliens.dms.thirdparty.ai.client.GroqClient
 import team.aliens.dms.thirdparty.ai.client.dto.GroqChatCompletionRequest
 
-/**
- * Groq 기반 ChatAiPort 구현체.
- *
- * @Primary 로 지정되어 있어, ChatAiPort 주입 시 기존 GeminiClientAdapter 대신 이 구현이 사용된다.
- * Gemini 로 되돌리려면 이 @Primary 를 제거(또는 이 클래스 제거)하면 된다.
- */
-@Primary
 @Component
 class GroqClientAdapter(
     @Value("\${groq.api-key}")
