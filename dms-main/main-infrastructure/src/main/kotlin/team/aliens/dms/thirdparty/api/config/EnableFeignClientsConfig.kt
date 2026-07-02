@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 import team.aliens.dms.thirdparty.api.error.FeignClientErrorDecoder
 
 @ImportAutoConfiguration(FeignAutoConfiguration::class)
-@EnableFeignClients(basePackages = ["team.aliens.dms.thirdparty.api"])
+@EnableFeignClients(basePackages = ["team.aliens.dms.thirdparty"])
 @Configuration
 class EnableFeignClientsConfig {
 
