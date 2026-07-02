@@ -92,6 +92,17 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
+  cloud:
+    openfeign:
+      client:
+        config:
+          gemini-feign-client:
+            connect-timeout: 5000
+            read-timeout: 30000
+          groq-feign-client:
+            connect-timeout: 5000
+            read-timeout: 30000
+
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
   access-exp: ${ACCESS_EXP:3600}
