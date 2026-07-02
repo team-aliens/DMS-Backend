@@ -33,11 +33,11 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
     val cSecondWarningTagId = UUID.randomUUID()
 
     val warningTagEntities = listOf(
-        createTagStub(id = firstWarningTagId,   name = WarningTag.FIRST_WARNING.warningMessage,    schoolId = schoolId),
-        createTagStub(id = cFirstWarningTagId,  name = WarningTag.C_FIRST_WARNING.warningMessage,  schoolId = schoolId),
-        createTagStub(id = secondWarningTagId,  name = WarningTag.SECOND_WARNING.warningMessage,   schoolId = schoolId),
+        createTagStub(id = firstWarningTagId, name = WarningTag.FIRST_WARNING.warningMessage, schoolId = schoolId),
+        createTagStub(id = cFirstWarningTagId, name = WarningTag.C_FIRST_WARNING.warningMessage, schoolId = schoolId),
+        createTagStub(id = secondWarningTagId, name = WarningTag.SECOND_WARNING.warningMessage, schoolId = schoolId),
         createTagStub(id = cSecondWarningTagId, name = WarningTag.C_SECOND_WARNING.warningMessage, schoolId = schoolId),
-        createTagStub(id = thirdWarningTagId,   name = WarningTag.THIRD_WARNING.warningMessage,    schoolId = schoolId),
+        createTagStub(id = thirdWarningTagId, name = WarningTag.THIRD_WARNING.warningMessage, schoolId = schoolId),
     )
 
     describe("execute") {
