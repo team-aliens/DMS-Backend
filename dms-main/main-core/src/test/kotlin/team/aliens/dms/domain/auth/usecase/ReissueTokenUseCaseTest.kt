@@ -56,7 +56,6 @@ class ReissueTokenUseCaseTest : DescribeSpec({
 
                 result.refreshToken shouldBe token
             }
-
         }
     }
 })
