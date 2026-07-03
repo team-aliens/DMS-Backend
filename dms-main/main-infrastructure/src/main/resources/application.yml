@@ -92,6 +92,14 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
+  cloud:
+    openfeign:
+      client:
+        config:
+          gemini-feign-client:
+            connect-timeout: 5000
+            read-timeout: 30000
+
 secret:
   secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
   access-exp: ${ACCESS_EXP:3600}
@@ -99,6 +107,11 @@ secret:
 
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
+
+gemini:
+  base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
+  api-key: ${GEMINI_API_KEY:gemini_api_key}
+  model: ${GEMINI_MODEL:gemini-2.5-flash}
 
 cloud:
   aws:
