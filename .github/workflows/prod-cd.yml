@@ -175,18 +175,40 @@ jobs:
           fi
           echo "target instance: $INSTANCE_ID"
 
-          # 2) 인스턴스에서 실행할 명령(JSON). \$ 는 인스턴스에서 평가됨
-          cat > /tmp/params.json <<JSON
-          { "commands": [
-            "set -e",
-            "cd ${DEPLOY_PATH}",
-            "ACCOUNT=\$(aws sts get-caller-identity --query Account --output text)",
-            "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin \$ACCOUNT.dkr.ecr.${AWS_REGION}.amazonaws.com",
-            "docker compose pull",
-            "docker compose up -d",
-            "docker compose ps"
-          ] }
-          JSON
+          # 2) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
+          cat > /tmp/remote.sh <<'EOS'
+          set -eu
+          cd "$DEPLOY_PATH"
+          ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "${ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          docker compose pull
+          docker compose up -d
+          docker compose ps
+
+          # 헬스 게이트: 모든 컨테이너가 healthy(헬스체크 없으면 running)가 될 때까지 최대 180초 대기
+          deadline=$(( $(date +%s) + 180 ))
+          for cid in $(docker compose ps -aq); do
+            name=$(docker inspect -f '{{.Name}}' "$cid")
+            while :; do
+              state=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$cid")
+              if [ "$state" = "healthy" ] || [ "$state" = "running" ]; then
+                echo "$name: $state"
+                break
+              fi
+              if [ "$(date +%s)" -ge "$deadline" ]; then
+                echo "$name: $state (health check timeout)"
+                docker logs --tail 100 "$cid" || true
+                exit 1
+              fi
+              sleep 5
+            done
+          done
+          EOS
+
+          # 변수 주입 줄 + 본문을 commands 배열로 안전하게 JSON 인코딩
+          jq -n --arg region "$AWS_REGION" --arg path "$DEPLOY_PATH" --rawfile body /tmp/remote.sh \
+            '{commands: [("AWS_REGION=" + ($region | @sh)), ("DEPLOY_PATH=" + ($path | @sh)), $body]}' \
+            > /tmp/params.json
 
           # 3) SSM 전송
           COMMAND_ID=$(aws ssm send-command \
