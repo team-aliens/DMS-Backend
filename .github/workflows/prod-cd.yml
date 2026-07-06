@@ -135,9 +135,9 @@ jobs:
           file: dms-${{ matrix.service }}/Dockerfile
           push: true
           provenance: false
-          tags: |
-            ${{ steps.ecr.outputs.registry }}/${{ matrix.ecr_repo }}:latest
-            ${{ steps.ecr.outputs.registry }}/${{ matrix.ecr_repo }}:${{ github.sha }}
+          # :latest는 여기서 밀지 않는다 — 배포가 확정된 시점(deploy 잡)에 :<sha>를 승격.
+          # 빌드만 성공하고 배포는 안 된 이미지가 latest를 오염시키는 것을 방지
+          tags: ${{ steps.ecr.outputs.registry }}/${{ matrix.ecr_repo }}:${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.service }}
           cache-to: type=gha,mode=max,scope=${{ matrix.service }}
 
@@ -162,6 +162,7 @@ jobs:
         env:
           TARGET: ${{ matrix.target }}
           DEPLOY_PATH: ${{ matrix.path }}
+          ECR_REPO: ${{ matrix.ecr_repo }}
         run: |
           set -euo pipefail
 
@@ -175,7 +176,27 @@ jobs:
           fi
           echo "target instance: $INSTANCE_ID"
 
-          # 2) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
+          # 2) 배포 확정 시점에 :<sha> 이미지를 :latest로 승격 (인스턴스의 compose는 latest를 pull)
+          IMAGE=$(aws ecr batch-get-image \
+            --repository-name "${ECR_REPO}" \
+            --image-ids imageTag="${GITHUB_SHA}" \
+            --output json)
+          MANIFEST=$(jq -r '.images[0].imageManifest // empty' <<<"$IMAGE")
+          MEDIA_TYPE=$(jq -r '.images[0].imageManifestMediaType // empty' <<<"$IMAGE")
+          if [ -z "$MANIFEST" ]; then
+            echo "::error::image ${ECR_REPO}:${GITHUB_SHA} not found in ECR"; exit 1
+          fi
+          # 재실행 시 latest가 이미 같은 이미지를 가리키면 ImageAlreadyExistsException — 정상 케이스
+          if ! PUT_OUT=$(aws ecr put-image \
+              --repository-name "${ECR_REPO}" \
+              --image-tag latest \
+              --image-manifest "$MANIFEST" \
+              --image-manifest-media-type "$MEDIA_TYPE" 2>&1); then
+            grep -q ImageAlreadyExistsException <<<"$PUT_OUT" || { echo "$PUT_OUT"; exit 1; }
+          fi
+          echo "promoted ${ECR_REPO}:${GITHUB_SHA::7} -> latest"
+
+          # 3) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
           cat > /tmp/remote.sh <<'EOS'
           set -eu
           cd "$DEPLOY_PATH"
@@ -210,7 +231,7 @@ jobs:
             '{commands: [("AWS_REGION=" + ($region | @sh)), ("DEPLOY_PATH=" + ($path | @sh)), $body]}' \
             > /tmp/params.json
 
-          # 3) SSM 전송
+          # 4) SSM 전송
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "$INSTANCE_ID" \
             --document-name "AWS-RunShellScript" \
@@ -219,7 +240,7 @@ jobs:
             --query "Command.CommandId" --output text)
           echo "ssm command: $COMMAND_ID"
 
-          # 4) 완료 대기 — `aws ssm wait`는 100초(5초×20회)면 포기하므로 직접 폴링 (최대 10분)
+          # 5) 완료 대기 — `aws ssm wait`는 100초(5초×20회)면 포기하므로 직접 폴링 (최대 10분)
           STATUS=Pending
           for _ in $(seq 1 60); do
             STATUS=$(aws ssm get-command-invocation \
