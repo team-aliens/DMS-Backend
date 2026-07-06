@@ -28,6 +28,9 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: filter
         with:
+          # 기본값은 레포 기본 브랜치(develop) 기준 비교라 develop→main 머지 시 diff가 비어
+          # 배포가 전부 스킵됨. main 자신을 base로 두면 "직전 푸시 커밋과 비교"로 동작
+          base: main
           filters: |
             shared:
               - 'buildSrc/**'
