@@ -8,14 +8,12 @@ import java.io.FileOutputStream
 import java.net.URLEncoder
 import java.util.UUID
 
-fun MultipartFile.toFile() =
-    File("${UUID.randomUUID()}_$originalFilename").let {
-        FileOutputStream(it).run {
-            this.write(bytes)
-            this.close()
-        }
-        it
-    }
+fun MultipartFile.toFile(): File {
+    val tempDir = System.getProperty("java.io.tmpdir")
+    val file = File(tempDir, "${UUID.randomUUID()}_$originalFilename")
+    FileOutputStream(file).use { it.write(bytes) }
+    return file
+}
 
 fun HttpServletResponse.setExcelContentDisposition(fileName: String) {
     setHeader(
