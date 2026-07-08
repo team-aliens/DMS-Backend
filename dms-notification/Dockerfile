@@ -58,7 +58,7 @@ RUN ./gradlew :dms-notification:notification-infrastructure:clean :dms-notificat
 
 FROM eclipse-temurin:17-jre-alpine
 
-RUN apk add --no-cache tzdata && \
+RUN apk add --no-cache tzdata curl && \
     addgroup -g 1001 appgroup && \
     adduser -u 1001 -G appgroup -s /bin/sh -D appuser
 
@@ -80,7 +80,9 @@ RUN find /tmp/libs -name "*.jar" ! -name "*-plain.jar" -exec cp {} /app/app.jar 
     chown appuser:appgroup /app/app.jar
 
 USER appuser
-EXPOSE 8080
+# notification의 server.port는 8082 (application.yml)
+EXPOSE 8082
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -f http://localhost:8080/ || exit 1
+# 전용 헬스 엔드포인트가 없어 HTTP 응답 수신 여부로 기동 판정 (curl exit 22 = 4xx/5xx 응답도 서버 기동으로 간주)
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD curl -sf -o /dev/null http://localhost:8082/ || [ $? -eq 22 ]
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
