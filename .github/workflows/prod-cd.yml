@@ -5,10 +5,6 @@ on:
     branches: [main]
   workflow_dispatch: {}   # 수동 실행 = 전체 강제 배포
 
-concurrency:
-  group: prod-cd
-  cancel-in-progress: false   # 배포 도중 취소 금지
-
 permissions:
   contents: read
 
@@ -23,6 +19,8 @@ jobs:
       any: ${{ steps.set.outputs.any }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
         id: filter
@@ -90,6 +88,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
         with:
           java-version: '17'
@@ -110,6 +110,8 @@ jobs:
       matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Configure AWS credentials (access key)
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
@@ -132,13 +134,13 @@ jobs:
           file: dms-${{ matrix.service }}/Dockerfile
           push: true
           provenance: false
-          # :latest는 여기서 밀지 않는다 — 배포가 확정된 시점(deploy 잡)에 :<sha>를 승격.
-          # 빌드만 성공하고 배포는 안 된 이미지가 latest를 오염시키는 것을 방지
+          # :latest는 여기서 밀지 않는다 — deploy 잡에서 배포 성공이 확인된 시점에 :<sha>를 승격.
+          # 빌드만 성공하고 배포는 안 됐거나 실패한 이미지가 latest를 오염시키는 것을 방지
           tags: ${{ steps.ecr.outputs.registry }}/${{ matrix.ecr_repo }}:${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.service }}
           cache-to: type=gha,mode=max,scope=${{ matrix.service }}
 
-  # ── 3) 배포 (변경된 서비스만, SSM → compose pull+up) ───────────────
+  # ── 3) 배포 (변경된 서비스만, SSM → :sha pull+up, 성공 시 latest 승격) ───────────────
   deploy:
     needs: [changes, build-push]
     if: needs.changes.outputs.any == 'true'
@@ -173,33 +175,17 @@ jobs:
           fi
           echo "target instance: $INSTANCE_ID"
 
-          # 2) 배포 확정 시점에 :<sha> 이미지를 :latest로 승격 (인스턴스의 compose는 latest를 pull)
-          IMAGE=$(aws ecr batch-get-image \
-            --repository-name "${ECR_REPO}" \
-            --image-ids imageTag="${GITHUB_SHA}" \
-            --output json)
-          MANIFEST=$(jq -r '.images[0].imageManifest // empty' <<<"$IMAGE")
-          MEDIA_TYPE=$(jq -r '.images[0].imageManifestMediaType // empty' <<<"$IMAGE")
-          if [ -z "$MANIFEST" ]; then
-            echo "::error::image ${ECR_REPO}:${GITHUB_SHA} not found in ECR"; exit 1
-          fi
-          # 재실행 시 latest가 이미 같은 이미지를 가리키면 ImageAlreadyExistsException — 정상 케이스
-          if ! PUT_OUT=$(aws ecr put-image \
-              --repository-name "${ECR_REPO}" \
-              --image-tag latest \
-              --image-manifest "$MANIFEST" \
-              --image-manifest-media-type "$MEDIA_TYPE" 2>&1); then
-            grep -q ImageAlreadyExistsException <<<"$PUT_OUT" || { echo "$PUT_OUT"; exit 1; }
-          fi
-          echo "promoted ${ECR_REPO}:${GITHUB_SHA::7} -> latest"
-
-          # 3) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
+          # 2) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
+          #    latest는 아직 승격하지 않은 상태 — 이번에 빌드한 :<sha> 이미지를 직접 pull해서
+          #    로컬에서만 :latest로 재태깅한 뒤 compose를 올린다 (ECR의 latest는 배포 성공 후에 승격)
           cat > /tmp/remote.sh <<'EOS'
           set -eu
           cd "$DEPLOY_PATH"
           ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "${ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-          docker compose pull
+          REGISTRY="${ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
+          docker pull "${REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
+          docker tag "${REGISTRY}/${ECR_REPO}:${IMAGE_TAG}" "${REGISTRY}/${ECR_REPO}:latest"
           docker compose up -d
           docker compose ps
 
@@ -224,11 +210,12 @@ jobs:
           EOS
 
           # 변수 주입 줄 + 본문을 commands 배열로 안전하게 JSON 인코딩
-          jq -n --arg region "$AWS_REGION" --arg path "$DEPLOY_PATH" --rawfile body /tmp/remote.sh \
-            '{commands: [("AWS_REGION=" + ($region | @sh)), ("DEPLOY_PATH=" + ($path | @sh)), $body]}' \
+          jq -n --arg region "$AWS_REGION" --arg path "$DEPLOY_PATH" \
+                --arg repo "$ECR_REPO" --arg tag "$GITHUB_SHA" --rawfile body /tmp/remote.sh \
+            '{commands: [("AWS_REGION=" + ($region | @sh)), ("DEPLOY_PATH=" + ($path | @sh)), ("ECR_REPO=" + ($repo | @sh)), ("IMAGE_TAG=" + ($tag | @sh)), $body]}' \
             > /tmp/params.json
 
-          # 4) SSM 전송
+          # 3) SSM 전송
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "$INSTANCE_ID" \
             --document-name "AWS-RunShellScript" \
@@ -237,7 +224,7 @@ jobs:
             --query "Command.CommandId" --output text)
           echo "ssm command: $COMMAND_ID"
 
-          # 5) 완료 대기 — `aws ssm wait`는 100초(5초×20회)면 포기하므로 직접 폴링 (최대 10분)
+          # 4) 완료 대기 — `aws ssm wait`는 100초(5초×20회)면 포기하므로 직접 폴링 (최대 10분)
           STATUS=Pending
           for _ in $(seq 1 60); do
             STATUS=$(aws ssm get-command-invocation \
@@ -262,3 +249,23 @@ jobs:
               --query StandardErrorContent --output text
             exit 1
           fi
+
+          # 5) 배포가 에러 없이 끝난 것을 확인한 시점에만 ECR의 :latest를 이번 이미지로 승격
+          IMAGE=$(aws ecr batch-get-image \
+            --repository-name "${ECR_REPO}" \
+            --image-ids imageTag="${GITHUB_SHA}" \
+            --output json)
+          MANIFEST=$(jq -r '.images[0].imageManifest // empty' <<<"$IMAGE")
+          MEDIA_TYPE=$(jq -r '.images[0].imageManifestMediaType // empty' <<<"$IMAGE")
+          if [ -z "$MANIFEST" ]; then
+            echo "::error::image ${ECR_REPO}:${GITHUB_SHA} not found in ECR"; exit 1
+          fi
+          # 재실행 시 latest가 이미 같은 이미지를 가리키면 ImageAlreadyExistsException — 정상 케이스
+          if ! PUT_OUT=$(aws ecr put-image \
+              --repository-name "${ECR_REPO}" \
+              --image-tag latest \
+              --image-manifest "$MANIFEST" \
+              --image-manifest-media-type "$MEDIA_TYPE" 2>&1); then
+            grep -q ImageAlreadyExistsException <<<"$PUT_OUT" || { echo "$PUT_OUT"; exit 1; }
+          fi
+          echo "promoted ${ECR_REPO}:${GITHUB_SHA::7} -> latest"
