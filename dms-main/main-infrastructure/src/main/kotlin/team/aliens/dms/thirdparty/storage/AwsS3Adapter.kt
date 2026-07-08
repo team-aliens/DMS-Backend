@@ -36,7 +36,7 @@ class AwsS3Adapter(
             }
 
             amazonS3Client.putObject(
-                PutObjectRequest(awsProperties.bucket, fileName, inputStream, objectMetadata)
+                PutObjectRequest(awsProperties.bucket, buildKey(fileName), inputStream, objectMetadata)
                     .withCannedAcl(
                         CannedAccessControlList.PublicRead
                     )
@@ -49,16 +49,21 @@ class AwsS3Adapter(
     }
 
     override fun getResourceUrl(fileName: String): String {
-        return amazonS3Client.getResourceUrl(awsProperties.bucket, fileName)
+        return amazonS3Client.getResourceUrl(awsProperties.bucket, buildKey(fileName))
     }
 
     override fun getUploadUrl(fileName: String): String {
 
         val generatePresignedUrlRequest =
-            GeneratePresignedUrlRequest(awsProperties.bucket, fileName)
+            GeneratePresignedUrlRequest(awsProperties.bucket, buildKey(fileName))
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(Timestamp.valueOf(LocalDateTime.now().plusHours(4)))
 
         return amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest).toString()
+    }
+
+    private fun buildKey(fileName: String): String {
+        val prefix = awsProperties.prefix.trim('/')
+        return if (prefix.isEmpty()) fileName else "$prefix/$fileName"
     }
 }
