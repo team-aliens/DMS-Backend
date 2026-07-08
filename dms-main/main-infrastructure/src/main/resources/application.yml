@@ -125,6 +125,7 @@ cloud:
       auto: false
     s3:
       bucket: ${S3_BUCKET_NAME:dms}
+      prefix: ${S3_PREFIX_NAME:dsm_DMS}
 
 sentry:
   dsn: ${SENTRY_DSN:asdf}
