@@ -153,7 +153,7 @@ class QuartzConfig {
     }
 
     @Bean
-    fun expireDaybreakStudyApplicationJobDetail(): JobDetail {
+    fun closeDaybreakStudyApplicationJobDetail(): JobDetail {
         return JobBuilder.newJob(DaybreakStudyApplicationJob::class.java)
             .withIdentity("expireDaybreakStudyApplicationJob", "daybreak")
             .withDescription("Expire daybreak study application")
@@ -162,13 +162,13 @@ class QuartzConfig {
     }
 
     @Bean
-    fun expireDaybreakStudyApplicationJobTrigger(expireDaybreakStudyApplicationJobDetail: JobDetail): Trigger {
+    fun closeDaybreakStudyApplicationJobTrigger(closeDaybreakStudyApplicationJobDetail: JobDetail): Trigger {
         return TriggerBuilder.newTrigger()
-            .forJob(expireDaybreakStudyApplicationJobDetail)
+            .forJob(closeDaybreakStudyApplicationJobDetail)
             .withIdentity("expireDaybreakStudyApplicationJobTrigger", "daybreak")
-            .withDescription("Every Friday at midnight (Asia/Seoul)")
+            .withDescription("Every Saturday at midnight (Asia/Seoul)")
             .withSchedule(
-                CronScheduleBuilder.cronSchedule("0 0 0 ? * FRI")
+                CronScheduleBuilder.cronSchedule("0 0 0 ? * SAT")
                     .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
             )
             .build()

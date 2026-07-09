@@ -242,6 +242,10 @@ class SecurityConfig(
                 authorize
                     // /teachers
                     .requestMatchers(HttpMethod.GET, "/teachers/general").hasAuthority(STUDENT.name)
+
+                authorize
+                    // /chatbots
+                    .requestMatchers(HttpMethod.POST, "/chatbots/questions").hasAuthority(STUDENT.name)
                 .anyRequest().denyAll()
             }
         http
