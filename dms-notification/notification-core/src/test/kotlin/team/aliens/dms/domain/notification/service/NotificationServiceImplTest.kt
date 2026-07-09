@@ -2,10 +2,12 @@ package team.aliens.dms.domain.notification.service
 
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.DescribeSpec
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
@@ -172,6 +174,29 @@ class NotificationServiceImplTest : DescribeSpec({
                 shouldNotThrowAny {
                     service.sendMessages(deviceTokens, notification)
                 }
+            }
+        }
+
+        context("디바이스 토큰이 하나도 없으면") {
+            val notification = Notification(
+                schoolId = UUID.randomUUID(),
+                topic = Topic.NOTICE,
+                linkIdentifier = null,
+                title = "title",
+                content = "content",
+                threadId = "thread-id",
+                isSaveRequired = true
+            )
+
+            it("알림 전송을 시도하지 않는다") {
+                clearMocks(notificationPort, notificationOfUserPort, answers = false)
+
+                shouldNotThrowAny {
+                    service.sendMessages(emptyList(), notification)
+                }
+
+                verify(exactly = 0) { notificationPort.sendMessages(any(), any()) }
+                verify(exactly = 0) { notificationOfUserPort.saveNotificationsOfUser(any()) }
             }
         }
     }
