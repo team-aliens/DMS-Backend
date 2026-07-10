@@ -50,8 +50,8 @@ RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 RUN ./gradlew dependencies || true
 
 COPY ./dms-gateway ./dms-gateway
-RUN ./gradlew :dms-gateway:gateway-infrastructure:clean :dms-gateway:gateway-infrastructure:bootJar -x test && \
-    rm -rf .gradle /app/.gradle /root/.kotlin /tmp/* /var/tmp/* /tmp/kotlin-daemon*.log* 2>/dev/null || true
+RUN ./gradlew :dms-gateway:gateway-infrastructure:clean :dms-gateway:gateway-infrastructure:bootJar -x test
+RUN rm -rf .gradle /app/.gradle /root/.kotlin /tmp/* /var/tmp/* /tmp/kotlin-daemon*.log* 2>/dev/null || true
 
 
 FROM eclipse-temurin:17-jre-alpine
