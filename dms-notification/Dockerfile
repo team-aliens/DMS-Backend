@@ -52,8 +52,8 @@ RUN sed -i 's/\r$//' gradlew && chmod +x gradlew
 RUN ./gradlew dependencies || true
 
 COPY ./dms-notification ./dms-notification
-RUN ./gradlew :dms-notification:notification-infrastructure:clean :dms-notification:notification-infrastructure:bootJar -x test && \
-    rm -rf .gradle /app/.gradle /root/.kotlin /tmp/* /var/tmp/* /tmp/kotlin-daemon*.log* 2>/dev/null || true
+RUN ./gradlew :dms-notification:notification-infrastructure:clean :dms-notification:notification-infrastructure:bootJar -x test
+RUN rm -rf .gradle /app/.gradle /root/.kotlin /tmp/* /var/tmp/* /tmp/kotlin-daemon*.log* 2>/dev/null || true
 
 
 FROM eclipse-temurin:17-jre-alpine
