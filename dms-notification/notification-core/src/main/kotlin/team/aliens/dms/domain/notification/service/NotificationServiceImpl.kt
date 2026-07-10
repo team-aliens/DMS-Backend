@@ -100,6 +100,9 @@ class NotificationServiceImpl(
     }
 
     override fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification) {
+        if (deviceTokens.isEmpty()) {
+            return
+        }
         notification.runIfSaveRequired {
             notificationOfUserPort.saveNotificationsOfUser(
                 deviceTokens.map { notification.toNotificationOfUser(it.userId) }

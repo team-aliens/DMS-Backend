@@ -49,7 +49,7 @@ class NotificationConsumer(
             channel.basicAck(deliveryTag, false)
 
         } catch (e: Exception) {
-            channel.basicNack(deliveryTag, false, true)
+            channel.basicNack(deliveryTag, false, false)
             throw e
         }
     }
