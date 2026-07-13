@@ -67,15 +67,15 @@ jobs:
           # 서비스별 ECR 레포가 따로 없고 dsm-dms 하나만 존재 — 이미지 태그 접두사(서비스명)로 구분
           # gateway: 공유 or 본인 모듈
           if [ "$SHARED" = "true" ] || [ "$GW" = "true" ]; then
-            add gateway dsm-dms dms-prod-gateway /home/ubuntu/DMS-Infra/infra/compose/gateway
+            add gateway dsm-dms dms-prod-gateway /opt/dms/gateway
           fi
           # main: 공유 or contracts or 본인 모듈
           if [ "$SHARED" = "true" ] || [ "$CONTRACTS" = "true" ] || [ "$MN" = "true" ]; then
-            add main dsm-dms dms-prod-main /home/ubuntu/DMS-Infra/infra/compose/main
+            add main dsm-dms dms-prod-main /opt/dms/main
           fi
           # notification: 공유 or contracts or 본인 모듈
           if [ "$SHARED" = "true" ] || [ "$CONTRACTS" = "true" ] || [ "$NT" = "true" ]; then
-            add notification dsm-dms dms-prod-notification /home/ubuntu/DMS-Infra/infra/compose/notification
+            add notification dsm-dms dms-prod-notification /opt/dms/notification
           fi
 
           echo "matrix={\"include\":$inc}" >> "$GITHUB_OUTPUT"
