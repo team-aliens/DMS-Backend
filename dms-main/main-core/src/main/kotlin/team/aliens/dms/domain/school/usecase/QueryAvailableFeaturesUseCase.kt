@@ -19,10 +19,7 @@ class QueryAvailableFeaturesUseCase(
             mealService = availableFeatures.mealService,
             noticeService = availableFeatures.noticeService,
             pointService = availableFeatures.pointService,
-            studyRoomService = availableFeatures.studyRoomService,
             remainService = availableFeatures.remainService,
-            outingService = availableFeatures.outingService,
-            volunteerService = availableFeatures.volunteerService,
             daybreakService = availableFeatures.daybreakService
         )
     }

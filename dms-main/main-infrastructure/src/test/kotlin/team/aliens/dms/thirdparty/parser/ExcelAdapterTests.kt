@@ -10,10 +10,7 @@ import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
-import team.aliens.dms.domain.studyroom.model.TimeSlot
-import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.util.UUID
 
 class ExcelAdapterTests {
@@ -102,62 +99,4 @@ class ExcelAdapterTests {
 //            { assertEquals(datasList.captured[0].size, attributes.captured.size) }
 //        )
 //    }
-
-    private val timeSlotStub by lazy {
-        TimeSlot(
-            id = UUID.randomUUID(),
-            schoolId = UUID.randomUUID(),
-            startTime = LocalTime.of(0, 0),
-            endTime = LocalTime.of(0, 0)
-        )
-    }
-
-    private val timeSlotsStub by lazy {
-        listOf(
-            timeSlotStub,
-            timeSlotStub.copy(id = UUID.randomUUID()),
-            timeSlotStub.copy(id = UUID.randomUUID())
-        )
-    }
-
-    private val studentSeatInfosStub by lazy {
-        listOf(
-            StudentSeatInfo(
-                studentName = "",
-                studentGrade = 1,
-                studentClassRoom = 2,
-                studentNumber = 3,
-                seats = listOf(
-                    StudentSeatInfo.SeatInfo(
-                        seatFullName = "",
-                        timeSlotId = UUID.randomUUID()
-                    )
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `속성과 요소의 수가 일치한다 (writeStudyRoomApplicationStatusExcelFile)`() {
-
-        // given
-        val attributes = slot<List<String>>()
-        val datasList = slot<List<List<String>>>()
-
-        every {
-            excelAdapter["createExcelSheet"](capture(attributes), capture(datasList)) // , Consumer<Sheet> {}
-        } returns byteArrayOf()
-
-        // when
-        excelAdapter.writeStudyRoomApplicationStatusExcelFile(
-            timeSlots = timeSlotsStub,
-            studentSeats = studentSeatInfosStub
-        )
-
-        // then
-        assertAll(
-            { assertEquals(studentSeatInfosStub.size, datasList.captured.size) },
-            { assertEquals(datasList.captured[0].size, attributes.captured.size) }
-        )
-    }
 }

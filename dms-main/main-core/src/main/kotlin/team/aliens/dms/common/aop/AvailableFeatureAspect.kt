@@ -49,17 +49,6 @@ class AvailableFeatureAspect(
     }
 
     @Before(
-        "within(team.aliens.dms.domain.studyroom.usecase.*) && " +
-            "!@target(team.aliens.dms.common.annotation.SchedulerUseCase)"
-    )
-    fun beforeStudyRoomService() {
-        val availableFeature = getAvailableFeature()
-        if (!availableFeature.studyRoomService) {
-            throw FeatureNotAvailableException
-        }
-    }
-
-    @Before(
         "within(team.aliens.dms.domain.remain.usecase.*) && " +
             "!@annotation(team.aliens.dms.common.annotation.SchedulerUseCase)"
     )
