@@ -13,8 +13,6 @@ import team.aliens.dms.scheduler.quartz.job.ExcludedStudentJob
 import team.aliens.dms.scheduler.quartz.job.MealJob
 import team.aliens.dms.scheduler.quartz.job.OutboxJob
 import team.aliens.dms.scheduler.quartz.job.StudentTagJob
-import team.aliens.dms.scheduler.quartz.job.StudyRoomJob
-import team.aliens.dms.scheduler.quartz.job.VolunteerScoreJob
 
 @Configuration
 class QuartzConfig {
@@ -87,28 +85,6 @@ class QuartzConfig {
     }
 
     @Bean
-    fun studyRoomJobDetail(): JobDetail {
-        return JobBuilder.newJob(StudyRoomJob::class.java)
-            .withIdentity("studyRoomJob", "studyroom")
-            .withDescription("Reset all study rooms daily")
-            .storeDurably()
-            .build()
-    }
-
-    @Bean
-    fun studyRoomJobTrigger(studyRoomJobDetail: JobDetail): Trigger {
-        return TriggerBuilder.newTrigger()
-            .forJob(studyRoomJobDetail)
-            .withIdentity("studyRoomJobTrigger", "studyroom")
-            .withDescription("Every day at 5:00 AM (Asia/Seoul)")
-            .withSchedule(
-                CronScheduleBuilder.cronSchedule("0 0 5 * * ?")
-                    .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
-            )
-            .build()
-    }
-
-    @Bean
     fun mealJobDetail(): JobDetail {
         return JobBuilder.newJob(MealJob::class.java)
             .withIdentity("mealJob", "meal")
@@ -122,28 +98,6 @@ class QuartzConfig {
         return TriggerBuilder.newTrigger()
             .forJob(mealJobDetail)
             .withIdentity("mealJobTrigger", "meal")
-            .withDescription("Every 28th day of month at midnight (Asia/Seoul)")
-            .withSchedule(
-                CronScheduleBuilder.cronSchedule("0 0 0 28 * ?")
-                    .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
-            )
-            .build()
-    }
-
-    @Bean
-    fun volunteerScoreJobDetail(): JobDetail {
-        return JobBuilder.newJob(VolunteerScoreJob::class.java)
-            .withIdentity("volunteerScoreJob", "volunteer")
-            .withDescription("Convert volunteer score to point monthly")
-            .storeDurably()
-            .build()
-    }
-
-    @Bean
-    fun volunteerScoreJobTrigger(volunteerScoreJobDetail: JobDetail): Trigger {
-        return TriggerBuilder.newTrigger()
-            .forJob(volunteerScoreJobDetail)
-            .withIdentity("volunteerScoreJobTrigger", "volunteer")
             .withDescription("Every 28th day of month at midnight (Asia/Seoul)")
             .withSchedule(
                 CronScheduleBuilder.cronSchedule("0 0 0 28 * ?")
