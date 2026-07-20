@@ -28,21 +28,15 @@ internal fun createSchoolStub(
 internal fun createAvailableFeatureStub(
     schoolId: UUID = UUID.randomUUID(),
     mealService: Boolean = true,
-    studyRoomService: Boolean = true,
     remainService: Boolean = true,
     pointService: Boolean = true,
     noticeService: Boolean = true,
-    outingService: Boolean = true,
-    volunteerService: Boolean = true,
     daybreakService: Boolean = true,
 ) = AvailableFeature(
     schoolId = schoolId,
     mealService = mealService,
-    studyRoomService = studyRoomService,
     remainService = remainService,
     pointService = pointService,
     noticeService = noticeService,
-    outingService = outingService,
-    volunteerService = volunteerService,
     daybreakService = daybreakService,
 )

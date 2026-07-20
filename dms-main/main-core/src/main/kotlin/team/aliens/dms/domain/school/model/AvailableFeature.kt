@@ -14,13 +14,7 @@ data class AvailableFeature(
 
     val pointService: Boolean,
 
-    val studyRoomService: Boolean,
-
     val remainService: Boolean,
-
-    val outingService: Boolean,
-
-    val volunteerService: Boolean,
 
     val daybreakService: Boolean
 

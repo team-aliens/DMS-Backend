@@ -14,7 +14,6 @@ data class TokenFeatureResponse(
         val mealService: Boolean,
         val noticeService: Boolean,
         val pointService: Boolean,
-        val studyRoomService: Boolean,
         val remainService: Boolean
     )
 
@@ -29,7 +28,6 @@ data class TokenFeatureResponse(
                     mealService = availableFeatures.mealService,
                     noticeService = availableFeatures.noticeService,
                     pointService = availableFeatures.pointService,
-                    studyRoomService = availableFeatures.studyRoomService,
                     remainService = availableFeatures.remainService
                 )
             )

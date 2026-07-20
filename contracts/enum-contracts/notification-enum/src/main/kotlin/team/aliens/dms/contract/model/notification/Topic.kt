@@ -4,9 +4,7 @@ enum class TopicGroup(
     val groupName: String
 ) {
     NOTICE("공지"),
-    STUDY_ROOM("자습실"),
     POINT("상벌점"),
-    OUTING("외출"),
     DAYBREAK_STUDY_APPLICATION("새벽 자습 신청")
 }
 
@@ -17,21 +15,10 @@ enum class Topic(
         topicGroup = TopicGroup.NOTICE
     ),
 
-    STUDY_ROOM_TIME_SLOT(
-        topicGroup = TopicGroup.STUDY_ROOM
-    ),
-
-    STUDY_ROOM_APPLY(
-        topicGroup = TopicGroup.STUDY_ROOM
-    ),
-
     POINT(
         topicGroup = TopicGroup.POINT
     ),
 
-    OUTING(
-        topicGroup = TopicGroup.OUTING
-    ),
     DAYBREAK_STUDY_APPLICATION(
         topicGroup = TopicGroup.DAYBREAK_STUDY_APPLICATION
     )
