@@ -3,7 +3,6 @@ package team.aliens.dms.scheduler.quartz.config
 import org.quartz.CronScheduleBuilder
 import org.quartz.JobBuilder
 import org.quartz.JobDetail
-import org.quartz.SimpleScheduleBuilder
 import org.quartz.Trigger
 import org.quartz.TriggerBuilder
 import org.springframework.context.annotation.Bean
@@ -12,34 +11,10 @@ import team.aliens.dms.scheduler.quartz.job.DaybreakStudyApplicationJob
 import team.aliens.dms.scheduler.quartz.job.ExcludedStudentJob
 import team.aliens.dms.scheduler.quartz.job.MealJob
 import team.aliens.dms.scheduler.quartz.job.NotificationJob
-import team.aliens.dms.scheduler.quartz.job.OutboxJob
 import team.aliens.dms.scheduler.quartz.job.StudentTagJob
 
 @Configuration
 class QuartzConfig {
-
-    @Bean
-    fun outboxJobDetail(): JobDetail {
-        return JobBuilder.newJob(OutboxJob::class.java)
-            .withIdentity("outboxJob", "outbox")
-            .withDescription("Process pending outbox messages")
-            .storeDurably()
-            .build()
-    }
-
-    @Bean
-    fun outboxJobTrigger(outboxJobDetail: JobDetail): Trigger {
-        return TriggerBuilder.newTrigger()
-            .forJob(outboxJobDetail)
-            .withIdentity("outboxJobTrigger", "outbox")
-            .withDescription("Trigger every 5 seconds")
-            .withSchedule(
-                SimpleScheduleBuilder.simpleSchedule()
-                    .withIntervalInSeconds(5)
-                    .repeatForever()
-            )
-            .build()
-    }
 
     @Bean
     fun excludedStudentJobDetail(): JobDetail {
