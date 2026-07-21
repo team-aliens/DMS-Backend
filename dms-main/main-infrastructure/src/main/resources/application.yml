@@ -43,12 +43,6 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
-  rabbitmq:
-    port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:localhost}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-
   quartz:
     job-store-type: jdbc
     jdbc:
