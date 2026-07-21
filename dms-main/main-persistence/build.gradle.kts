@@ -7,6 +7,9 @@ dependencies {
     // layer
     implementation(project(":dms-main:main-core"))
 
+    // contract
+    implementation(project(":contracts:enum-contracts:notification-enum"))
+
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
     runtimeOnly(Dependencies.MYSQL_CONNECTOR)
