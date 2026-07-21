@@ -134,6 +134,3 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-
-passport:
-  secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}
