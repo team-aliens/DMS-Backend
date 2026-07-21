@@ -43,12 +43,6 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
-  rabbitmq:
-    port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:localhost}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-
   quartz:
     job-store-type: jdbc
     jdbc:
@@ -112,6 +106,9 @@ gemini:
   base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
   api-key: ${GEMINI_API_KEY:gemini_api_key}
   model: ${GEMINI_MODEL:gemini-2.5-flash}
+
+fcm:
+  credentials-base64: ${FCM_BASE64_STRING}
 
 cloud:
   aws:

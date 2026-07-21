@@ -257,77 +257,6 @@ tasks.register<JacocoReport>("jacocoMainServiceReport") {
     }
 }
 
-// dms-notification 서비스 통합 리포트
-tasks.register<JacocoReport>("jacocoNotificationServiceReport") {
-    group = "verification"
-    description = "Generate Jacoco coverage report for dms-notification service"
-
-    val notificationProjects = subprojects.filter {
-        it.path.startsWith(":dms-notification") && it.pluginManager.hasPlugin("jacoco")
-    }
-
-    dependsOn(notificationProjects.map { it.tasks.named("test") })
-    dependsOn(notificationProjects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })
-
-    onlyIf {
-        executionData.files.any { it.exists() }
-    }
-
-    executionData.setFrom(
-        notificationProjects.map { project ->
-            fileTree(project.layout.buildDirectory.get().asFile).include("jacoco/*.exec")
-        }
-    )
-
-    val sourceSets = notificationProjects.map {
-        it.the<org.gradle.api.tasks.SourceSetContainer>().getByName("main")
-    }
-
-    sourceDirectories.setFrom(sourceSets.map { it.allSource.srcDirs }.flatten())
-
-    classDirectories.setFrom(
-        files(sourceSets.map { sourceSet ->
-            sourceSet.output.classesDirs.files.map { dir ->
-                fileTree(dir) {
-                    exclude(
-                        "**/global/config/**",
-                        "**/thirdparty/**/config/**",
-                        "**/scheduler/config/**",
-                        "**/persistence/**/entity/**",
-                        "**/*Application.class",
-                        "**/*Application\$*.class",
-                        "**/*Properties.class",
-                        "**/*Properties\$*.class",
-                        "**/stub/**"
-                    )
-                }
-            }
-        }.flatten())
-    )
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-        csv.required.set(false)
-
-        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/notification-service/jacocoTestReport.xml"))
-        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/notification-service/html"))
-    }
-
-    doLast {
-        val reportDir = layout.buildDirectory.dir("reports/jacoco/notification-service/html").get().asFile
-        val indexFile = File(reportDir, "index.html")
-        if (indexFile.exists()) {
-            val content = indexFile.readText()
-            val updatedContent = content.replace(
-                "<h1>DMS-Backend</h1>",
-                "<h1>DMS-Notification Service</h1>"
-            )
-            indexFile.writeText(updatedContent)
-        }
-    }
-}
-
 // dms-gateway 서비스 통합 리포트
 tasks.register<JacocoReport>("jacocoGatewayServiceReport") {
     group = "verification"
@@ -401,7 +330,6 @@ tasks.register("jacocoAllServiceReports") {
 
     dependsOn(
         "jacocoMainServiceReport",
-        "jacocoNotificationServiceReport",
         "jacocoGatewayServiceReport"
     )
 
@@ -410,7 +338,6 @@ tasks.register("jacocoAllServiceReports") {
         println("========================================")
         println("Jacoco Reports Generated:")
         println("  - Main Service: build/reports/jacoco/main-service/html/index.html")
-        println("  - Notification Service: build/reports/jacoco/notification-service/html/index.html")
         println("  - Gateway Service: build/reports/jacoco/gateway-service/html/index.html")
         println("========================================")
     }
