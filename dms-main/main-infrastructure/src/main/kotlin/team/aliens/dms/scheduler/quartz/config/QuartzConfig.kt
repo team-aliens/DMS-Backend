@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration
 import team.aliens.dms.scheduler.quartz.job.DaybreakStudyApplicationJob
 import team.aliens.dms.scheduler.quartz.job.ExcludedStudentJob
 import team.aliens.dms.scheduler.quartz.job.MealJob
+import team.aliens.dms.scheduler.quartz.job.NotificationJob
 import team.aliens.dms.scheduler.quartz.job.OutboxJob
 import team.aliens.dms.scheduler.quartz.job.StudentTagJob
 
@@ -101,6 +102,28 @@ class QuartzConfig {
             .withDescription("Every 28th day of month at midnight (Asia/Seoul)")
             .withSchedule(
                 CronScheduleBuilder.cronSchedule("0 0 0 28 * ?")
+                    .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
+            )
+            .build()
+    }
+
+    @Bean
+    fun notificationJobDetail(): JobDetail {
+        return JobBuilder.newJob(NotificationJob::class.java)
+            .withIdentity("notificationJob", "notification")
+            .withDescription("Delete old notifications daily")
+            .storeDurably()
+            .build()
+    }
+
+    @Bean
+    fun notificationJobTrigger(notificationJobDetail: JobDetail): Trigger {
+        return TriggerBuilder.newTrigger()
+            .forJob(notificationJobDetail)
+            .withIdentity("notificationJobTrigger", "notification")
+            .withDescription("Every day at midnight (Asia/Seoul)")
+            .withSchedule(
+                CronScheduleBuilder.cronSchedule("0 0 0 * * ?")
                     .inTimeZone(java.util.TimeZone.getTimeZone("Asia/Seoul"))
             )
             .build()
