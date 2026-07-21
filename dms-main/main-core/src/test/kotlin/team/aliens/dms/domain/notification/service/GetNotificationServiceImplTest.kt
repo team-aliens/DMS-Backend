@@ -171,7 +171,7 @@ class GetNotificationServiceImplTest : DescribeSpec({
 
             every { deviceTokenPort.queryDeviceTokensByUserIds(userIds) } returns deviceTokens
 
-            val result = service.getDiviceTokensByUserIds(userIds)
+            val result = service.getDeviceTokensByUserIds(userIds)
 
             it("디바이스 토큰 목록을 반환한다") {
                 result shouldBe deviceTokens
