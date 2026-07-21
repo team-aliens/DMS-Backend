@@ -2,7 +2,6 @@ package team.aliens.dms.event.handler
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import team.aliens.dms.contract.model.notification.DeviceTokenInfo

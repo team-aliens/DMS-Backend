@@ -52,13 +52,13 @@ class NotificationEventHandlerTest : DescribeSpec({
                 notificationInfo = notificationInfo
             )
 
-            every { notificationService.getDiviceTokensByUserIds(userIds) } returns deviceTokens
+            every { notificationService.getDeviceTokensByUserIds(userIds) } returns deviceTokens
 
             it("해당 유저들의 디바이스 토큰들로 알림을 보낸다") {
                 notificationEventHandler.handleNotification(event)
 
                 verify {
-                    notificationService.getDiviceTokensByUserIds(userIds)
+                    notificationService.getDeviceTokensByUserIds(userIds)
                     notificationService.sendMessages(deviceTokens, any<Notification>())
                 }
             }
