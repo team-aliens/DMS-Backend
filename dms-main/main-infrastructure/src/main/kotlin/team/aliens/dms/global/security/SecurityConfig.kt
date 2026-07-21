@@ -246,6 +246,19 @@ class SecurityConfig(
                 authorize
                     // /chatbots
                     .requestMatchers(HttpMethod.POST, "/chatbots/questions").hasAuthority(STUDENT.name)
+
+                authorize
+                    // /notifications
+                    .requestMatchers(HttpMethod.DELETE, "/notifications/{notification-of-user-id}").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "/notifications").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/notifications/token").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/notifications/topic").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "/notifications/topic").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/notifications/topic").authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/notifications/topic").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/notifications").authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/notifications/{notification-of-user-id}/read").authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/notifications/topic/toggle").authenticated()
                 .anyRequest().denyAll()
             }
         http
