@@ -17,5 +17,5 @@ interface GetNotificationService {
 
     fun getDeviceTokenByUserId(userId: UUID): DeviceToken
 
-    fun getDiviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken>
+    fun getDeviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken>
 }

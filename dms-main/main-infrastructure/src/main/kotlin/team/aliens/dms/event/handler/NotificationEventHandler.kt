@@ -26,7 +26,7 @@ class NotificationEventHandler(
             )
 
             is GroupNotificationEvent -> notificationService.sendMessages(
-                notificationService.getDiviceTokensByUserIds(event.userIds),
+                notificationService.getDeviceTokensByUserIds(event.userIds),
                 Notification.from(event.notificationInfo)
             )
 
