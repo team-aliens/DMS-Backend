@@ -113,6 +113,9 @@ gemini:
   api-key: ${GEMINI_API_KEY:gemini_api_key}
   model: ${GEMINI_MODEL:gemini-2.5-flash}
 
+fcm:
+  credentials-base64: ${FCM_BASE64_STRING}
+
 cloud:
   aws:
     credentials:
