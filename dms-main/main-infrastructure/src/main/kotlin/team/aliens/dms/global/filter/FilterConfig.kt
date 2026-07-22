@@ -6,17 +6,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.stereotype.Component
-import team.aliens.dms.global.security.passport.PassportValidator
+import team.aliens.dms.global.security.token.JwtParser
 
 @Component
 class FilterConfig(
-    private val passportValidator: PassportValidator,
+    private val jwtParser: JwtParser,
     private val objectMapper: ObjectMapper,
 ) : SecurityConfigurer<DefaultSecurityFilterChain, HttpSecurity> {
     override fun init(builder: HttpSecurity?) {}
 
     override fun configure(builder: HttpSecurity) {
-        builder.addFilterBefore(PassportFilter(passportValidator, objectMapper), UsernamePasswordAuthenticationFilter::class.java)
-        builder.addFilterBefore(ExceptionFilter(objectMapper), PassportFilter::class.java)
+        builder.addFilterBefore(JwtAuthenticationFilter(jwtParser), UsernamePasswordAuthenticationFilter::class.java)
+        builder.addFilterBefore(ExceptionFilter(objectMapper), JwtAuthenticationFilter::class.java)
     }
 }

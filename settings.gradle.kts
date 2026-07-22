@@ -7,11 +7,6 @@ include(":dms-main:main-persistence")
 include(":dms-main:main-infrastructure")
 include(":dms-main:main-presentation")
 
-// gateway
-include(":dms-gateway")
-include(":dms-gateway:gateway-core")
-include(":dms-gateway:gateway-infrastructure")
-
 // contracts
 include(":contracts")
 include(":contracts:enum-contracts")
