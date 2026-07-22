@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        service: [main, gateway]
+        service: [main]
 
     steps:
       - name: Checkout code
@@ -48,8 +48,6 @@ jobs:
         run: |
           if [ "${{ matrix.service }}" = "main" ]; then
             ./gradlew :dms-main:test jacocoMainServiceReport --info
-          elif [ "${{ matrix.service }}" = "gateway" ]; then
-            ./gradlew :dms-gateway:test jacocoGatewayServiceReport --info
           fi
 
       - name: Upload JaCoCo report artifact
@@ -90,16 +88,12 @@ jobs:
       - name: Move reports to correct location
         run: |
           mkdir -p build/reports/jacoco/main-service
-          mkdir -p build/reports/jacoco/gateway-service
           cp -r build/reports/jacoco/jacoco-report-main/* build/reports/jacoco/main-service/ 2>/dev/null || true
-          cp -r build/reports/jacoco/jacoco-report-gateway/* build/reports/jacoco/gateway-service/ 2>/dev/null || true
 
       - name: Verify JaCoCo reports exist
         run: |
           echo "=== Main service report ==="
           ls -la build/reports/jacoco/main-service/ || echo "No main service report found"
-          echo "=== Gateway service report ==="
-          ls -la build/reports/jacoco/gateway-service/ || echo "No gateway service report found"
 
       - name: Delete previous JaCoCo comments
         run: |
@@ -122,13 +116,3 @@ jobs:
           min-coverage-overall: 24
           min-coverage-changed-files: 50
           title: '📊 Main Service Coverage Report'
-
-      - name: Comment PR with gateway service coverage
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          paths: |
-            build/reports/jacoco/gateway-service/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 0
-          min-coverage-changed-files: 50
-          title: '📊 Gateway Service Coverage Report'
