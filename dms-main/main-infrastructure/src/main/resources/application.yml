@@ -99,6 +99,29 @@ secret:
   access-exp: ${ACCESS_EXP:3600}
   refresh-exp: ${REFRESH_EXP:1205600}
 
+cors:
+  allowed-origins:
+    - "http://localhost:3000"
+    - "http://localhost:3001"
+    - "http://localhost:3002"
+    - "https://admin-dms.dsmhs.kr"
+    - "https://admin-dev-dms.dsmhs.kr"
+    - "https://webview-dms.dsmhs.kr"
+    - "https://head-teacher-dms.dsmhs.kr"
+    - "https://general-teacher-dms.dsmhs.kr"
+    - "https://student-dms.dsmhs.kr"
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+    - OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+  exposed-headers:
+    - "Content-Disposition"
+
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
 

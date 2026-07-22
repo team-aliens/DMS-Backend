@@ -3,11 +3,11 @@ package team.aliens.dms.global.security
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfigurationSource
 import team.aliens.dms.domain.auth.model.Authority.MANAGER
 import team.aliens.dms.domain.auth.model.Authority.STUDENT
 import team.aliens.dms.domain.auth.model.Authority.GENERAL_TEACHER
@@ -19,7 +19,8 @@ import team.aliens.dms.global.filter.FilterConfig
 class SecurityConfig(
     private val authenticationEntryPoint: CustomAuthenticationEntryPoint,
     private val accessDeniedHandler: CustomAccessDeniedHandler,
-    private val filterConfig: FilterConfig
+    private val filterConfig: FilterConfig,
+    private val corsConfigurationSource: CorsConfigurationSource,
 ) {
 
     @Bean
@@ -27,7 +28,7 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .formLogin { it.disable() }
-            .cors(Customizer.withDefaults())
+            .cors { it.configurationSource(corsConfigurationSource) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
         http
