@@ -27,9 +27,10 @@ import team.aliens.dms.global.security.token.JwtProperties
 import java.util.UUID
 import kotlin.reflect.KClass
 
-private fun mockRequest(uri: String, authorizationHeader: String?): HttpServletRequest {
+private fun mockRequest(uri: String, authorizationHeader: String?, method: String = "GET"): HttpServletRequest {
     val request = mockk<HttpServletRequest>(relaxed = true)
     every { request.requestURI } returns uri
+    every { request.method } returns method
     every { request.dispatcherType } returns DispatcherType.REQUEST
     every { request.getHeader(JwtProperties.HEADER) } returns authorizationHeader
     every { request.getAttribute(any()) } returns null
@@ -49,13 +50,33 @@ class JwtAuthenticationFilterTest : DescribeSpec({
 
     describe("doFilter") {
         context("permitAll 경로면") {
-            val request = mockRequest(uri = "/auth/tokens", authorizationHeader = null)
+            val request = mockRequest(uri = "/auth/tokens", method = "POST", authorizationHeader = null)
 
             it("JWT 검증 없이 다음 필터로 넘긴다") {
                 filter.doFilter(request, response, filterChain)
 
                 verify(exactly = 0) { jwtParser.extractUserInfo(any()) }
                 verify(exactly = 1) { filterChain.doFilter(request, response) }
+            }
+        }
+
+        context("permitAll 경로여도 등록된 메서드가 아니면 (/schools/code)") {
+            it("GET은 JWT 검증 없이 다음 필터로 넘긴다") {
+                val request = mockRequest(uri = "/schools/code", method = "GET", authorizationHeader = null)
+
+                filter.doFilter(request, response, filterChain)
+
+                verify(exactly = 0) { jwtParser.extractUserInfo(any()) }
+                verify(exactly = 1) { filterChain.doFilter(request, response) }
+            }
+
+            it("PATCH는 JWT 검증을 한다") {
+                val request = mockRequest(uri = "/schools/code", method = "PATCH", authorizationHeader = null)
+
+                shouldThrow<InvalidTokenException> {
+                    filter.doFilter(request, response, filterChain)
+                }
+                verify(exactly = 0) { filterChain.doFilter(any(), any()) }
             }
         }
 

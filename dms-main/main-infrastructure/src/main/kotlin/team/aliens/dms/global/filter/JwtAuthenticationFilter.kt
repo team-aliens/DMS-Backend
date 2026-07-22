@@ -3,6 +3,7 @@ package team.aliens.dms.global.filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -27,8 +28,10 @@ class JwtAuthenticationFilter(
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.requestURI
+        val method = HttpMethod.valueOf(request.method)
         return SecurityPaths.PERMIT_ALL_PATHS.any { permitPath ->
-            pathMatcher.match(permitPath, path)
+            pathMatcher.match(permitPath.path, path) &&
+                (permitPath.method == null || permitPath.method == method)
         }
     }
 
