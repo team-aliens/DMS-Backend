@@ -49,8 +49,11 @@ class JwtParser(
     }
 
     private fun parseUserInfo(claims: Claims): PassportUser {
+        val authorityValue = claims.get(JwtProperties.AUTHORITY, String::class.java)
+            ?: throw InvalidTokenException
+
         val authority = try {
-            Authority.valueOf(claims.get(JwtProperties.AUTHORITY, String::class.java))
+            Authority.valueOf(authorityValue)
         } catch (e: IllegalArgumentException) {
             throw InvalidTokenException
         }

@@ -18,18 +18,22 @@ private fun buildToken(
     type: String = JwtProperties.ACCESS,
     userId: UUID = UUID.randomUUID(),
     schoolId: UUID = UUID.randomUUID(),
-    authority: String = Authority.STUDENT.name,
+    authority: String? = Authority.STUDENT.name,
     expiration: Date = Date(System.currentTimeMillis() + 3_600_000)
 ): String {
-    return Jwts.builder()
+    val builder = Jwts.builder()
         .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
         .setHeaderParam(Header.TYPE, type)
         .setId(userId.toString())
-        .claim(JwtProperties.AUTHORITY, authority)
         .claim(JwtProperties.SCHOOL_ID, schoolId.toString())
         .setIssuedAt(Date())
         .setExpiration(expiration)
-        .compact()
+
+    if (authority != null) {
+        builder.claim(JwtProperties.AUTHORITY, authority)
+    }
+
+    return builder.compact()
 }
 
 class JwtParserTest : DescribeSpec({
@@ -98,6 +102,16 @@ class JwtParserTest : DescribeSpec({
 
         context("authority 클레임이 유효하지 않은 값이면") {
             val token = buildToken(securityProperties, authority = "NOT_A_REAL_AUTHORITY")
+
+            it("InvalidTokenException을 던진다") {
+                shouldThrow<InvalidTokenException> {
+                    jwtParser.extractUserInfo(token)
+                }
+            }
+        }
+
+        context("authority 클레임이 아예 없으면") {
+            val token = buildToken(securityProperties, authority = null)
 
             it("InvalidTokenException을 던진다") {
                 shouldThrow<InvalidTokenException> {
