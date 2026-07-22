@@ -6,7 +6,7 @@ comment:
   layout: "header,diff,flags,components,files,footer"
   behavior: default
   require_changes: false
-  after_n_builds: 3  # overall + main + notification
+  after_n_builds: 1  # main (CI.yml에서 codecov-action을 main-service 1회만 호출)
 
 # 서비스별 플래그 설정
 flag_management:
