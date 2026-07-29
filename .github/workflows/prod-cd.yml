@@ -8,6 +8,11 @@ on:
 permissions:
   contents: read
 
+# 동시 배포 방지 — 연속 푸시가 와도 한 번에 하나만 순차 실행 (진행 중인 배포는 끊지 않고 대기)
+concurrency:
+  group: prod-cd
+  cancel-in-progress: false
+
 env:
   AWS_REGION: ap-northeast-2
   ECR_REGISTRY: 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
