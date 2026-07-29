@@ -3,89 +3,20 @@ name: CD for Prod
 on:
   push:
     branches: [main]
-  workflow_dispatch: {}   # 수동 실행 = 전체 강제 배포
+  workflow_dispatch: {}   # 수동 배포
 
 permissions:
   contents: read
 
 env:
   AWS_REGION: ap-northeast-2
+  ECR_REGISTRY: 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
+  ECR_REPO: dsm-dms
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set.outputs.matrix }}
-      any: ${{ steps.set.outputs.any }}
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-        with:
-          persist-credentials: false
-
-      - uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
-        id: filter
-        with:
-          base: main
-          filters: |
-            shared:
-              - 'buildSrc/**'
-              - 'gradle/**'
-              - 'build.gradle.kts'
-              - 'settings.gradle.kts'
-              - 'gradle.properties'
-              - 'gradlew'
-              - 'gradlew.bat'
-            contracts:
-              - 'contracts/**'
-            gateway:
-              - 'dms-gateway/**'
-            main:
-              - 'dms-main/**'
-            notification:
-              - 'dms-notification/**'
-
-      - id: set
-        env:
-          SHARED: ${{ steps.filter.outputs.shared }}
-          CONTRACTS: ${{ steps.filter.outputs.contracts }}
-          GW: ${{ steps.filter.outputs.gateway }}
-          MN: ${{ steps.filter.outputs.main }}
-          NT: ${{ steps.filter.outputs.notification }}
-          EVENT: ${{ github.event_name }}
-        run: |
-          set -euo pipefail
-
-          # 수동 실행(workflow_dispatch)은 전체 강제 배포
-          if [ "$EVENT" = "workflow_dispatch" ]; then SHARED=true; fi
-
-          inc='[]'
-          add() {
-            inc=$(jq -c --arg s "$1" --arg e "$2" --arg t "$3" --arg p "$4" \
-              '. + [{service:$s, ecr_repo:$e, target:$t, path:$p}]' <<<"$inc")
-          }
-
-          # 서비스별 ECR 레포가 따로 없고 dsm-dms 하나만 존재 — 이미지 태그 접두사(서비스명)로 구분
-          # gateway: 공유 or 본인 모듈
-          if [ "$SHARED" = "true" ] || [ "$GW" = "true" ]; then
-            add gateway dsm-dms dms-prod-gateway /home/ubuntu/DMS-Infra/infra/compose/gateway
-          fi
-          # main: 공유 or contracts or 본인 모듈
-          if [ "$SHARED" = "true" ] || [ "$CONTRACTS" = "true" ] || [ "$MN" = "true" ]; then
-            add main dsm-dms dms-prod-main /home/ubuntu/DMS-Infra/infra/compose/main
-          fi
-          # notification: 공유 or contracts or 본인 모듈
-          if [ "$SHARED" = "true" ] || [ "$CONTRACTS" = "true" ] || [ "$NT" = "true" ]; then
-            add notification dsm-dms dms-prod-notification /home/ubuntu/DMS-Infra/infra/compose/notification
-          fi
-
-          echo "matrix={\"include\":$inc}" >> "$GITHUB_OUTPUT"
-          if [ "$inc" = "[]" ]; then echo "any=false" >> "$GITHUB_OUTPUT"; else echo "any=true" >> "$GITHUB_OUTPUT"; fi
-          echo "deploy targets: $inc"
-
-  # ── 1) 테스트 게이트 (변경 있을 때만) ──────────────────────────────
+  # ── 1) 테스트 게이트 ──────────────────────────────
+  #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다
   test:
-    needs: changes
-    if: needs.changes.outputs.any == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -99,22 +30,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
       - run: chmod +x gradlew
       - name: Run tests
-        run: ./gradlew test --build-cache --no-daemon
+        run: ./gradlew :dms-main:test --build-cache --no-daemon
 
   # ── 2) 이미지 빌드 & ECR 푸시 ─────────────────────
   build-push:
-    needs: [changes, test]
-    if: needs.changes.outputs.any == 'true'
+    needs: test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           persist-credentials: false
 
-      - name: Configure AWS credentials (access key)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -122,155 +49,57 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: ecr
         uses: aws-actions/amazon-ecr-login@d539f0932e70871a027e9d5a9d8fc38589180a64 # v2
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
 
-      - name: Build & push ${{ matrix.service }}
+      - name: Build & push image
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
-          context: .                                  # 멀티모듈이라 컨텍스트는 레포 루트
-          file: dms-${{ matrix.service }}/Dockerfile
+          context: .                       # 멀티모듈이라 컨텍스트는 레포 루트
+          file: dms-main/Dockerfile
           push: true
           provenance: false
-          # :latest는 여기서 밀지 않는다 — deploy 잡에서 배포 성공이 확인된 시점에 :<sha>를 승격.
-          # 빌드만 성공하고 배포는 안 됐거나 실패한 이미지가 latest를 오염시키는 것을 방지
-          # 레포 하나(dsm-dms)를 서비스 3개가 공유하므로 태그 앞에 서비스명을 붙여 구분
-          tags: ${{ steps.ecr.outputs.registry }}/${{ matrix.ecr_repo }}:${{ matrix.service }}-${{ github.sha }}
-          cache-from: type=gha,scope=${{ matrix.service }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+          # 서버 docker-compose.yml이 :latest를 참조하므로 latest를 밀고,
+          # 롤백/추적용으로 커밋 SHA 태그도 함께 푸시
+          tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:latest
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-  # ── 3) 배포 (변경된 서비스만, SSM → :sha pull+up, 성공 시 latest 승격) ───────────────
+  # ── 3) EC2 SSH 배포 (pull + compose up) ───────────
   deploy:
-    needs: [changes, build-push]
-    if: needs.changes.outputs.any == 'true'
+    needs: build-push
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
     steps:
-      - name: Configure AWS credentials (access key)
-        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Deploy ${{ matrix.service }} via SSM
-        env:
-          TARGET: ${{ matrix.target }}
-          DEPLOY_PATH: ${{ matrix.path }}
-          ECR_REPO: ${{ matrix.ecr_repo }}
+      - name: Prepare SSH key
         run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy on EC2
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" 'bash -se' <<'REMOTE'
           set -euo pipefail
-
-          # 1) Name 태그로 실행 중인 인스턴스 ID 찾기
-          INSTANCE_ID=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,Values=${TARGET}" \
-                      "Name=instance-state-name,Values=running" \
-            --query "Reservations[].Instances[].InstanceId | [0]" --output text)
-          if [ -z "$INSTANCE_ID" ] || [ "$INSTANCE_ID" = "None" ]; then
-            echo "::error::running instance not found for tag Name=${TARGET}"; exit 1
-          fi
-          echo "target instance: $INSTANCE_ID"
-
-          # 2) 인스턴스에서 실행할 스크립트 (인스턴스의 /bin/sh가 dash일 수 있어 POSIX sh 문법만 사용)
-          #    latest는 아직 승격하지 않은 상태 — 이번에 빌드한 :<sha> 이미지를 직접 pull해서
-          #    로컬에서만 :latest로 재태깅한 뒤 compose를 올린다 (ECR의 latest는 배포 성공 후에 승격)
-          cat > /tmp/remote.sh <<'EOS'
-          set -eu
-          cd "$DEPLOY_PATH"
-          ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-          REGISTRY="${ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-          aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$REGISTRY"
-          docker pull "${REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
-          docker tag "${REGISTRY}/${ECR_REPO}:${IMAGE_TAG}" "${REGISTRY}/${ECR_REPO}:latest"
-          docker compose up -d
-          docker compose ps
-
-          # 헬스 게이트: 모든 컨테이너가 healthy(헬스체크 없으면 running)가 될 때까지 최대 180초 대기
-          deadline=$(( $(date +%s) + 180 ))
-          for cid in $(docker compose ps -aq); do
-            name=$(docker inspect -f '{{.Name}}' "$cid")
-            while :; do
-              state=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$cid")
-              if [ "$state" = "healthy" ] || [ "$state" = "running" ]; then
-                echo "$name: $state"
-                break
-              fi
-              if [ "$(date +%s)" -ge "$deadline" ]; then
-                echo "$name: $state (health check timeout)"
-                docker logs --tail 100 "$cid" || true
-                exit 1
-              fi
-              sleep 5
-            done
+          cd ~
+          # 서버의 ~/.aws 자격증명으로 ECR 로그인
+          aws ecr get-login-password --region ap-northeast-2 \
+            | docker login --username AWS --password-stdin 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
+          # 최신 이미지 pull 후 app 컨테이너만 재기동 (mysql/redis/nginx는 그대로 유지)
+          docker compose pull app
+          docker compose up -d app
+          # app 이 healthy 가 될 때까지 최대 120초 대기
+          cid=$(docker compose ps -q app)
+          for i in $(seq 1 24); do
+            s=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$cid")
+            if [ "$s" = healthy ] || [ "$s" = running ]; then echo "app: $s"; break; fi
+            if [ "$i" -eq 24 ]; then echo "health timeout: $s"; docker compose logs --tail=80 app; exit 1; fi
+            sleep 5
           done
-          EOS
-
-          # 변수 주입 줄 + 본문을 commands 배열로 안전하게 JSON 인코딩
-          jq -n --arg region "$AWS_REGION" --arg path "$DEPLOY_PATH" \
-                --arg repo "$ECR_REPO" --arg tag "${{ matrix.service }}-$GITHUB_SHA" --rawfile body /tmp/remote.sh \
-            '{commands: [("AWS_REGION=" + ($region | @sh)), ("DEPLOY_PATH=" + ($path | @sh)), ("ECR_REPO=" + ($repo | @sh)), ("IMAGE_TAG=" + ($tag | @sh)), $body]}' \
-            > /tmp/params.json
-
-          # 3) SSM 전송
-          COMMAND_ID=$(aws ssm send-command \
-            --instance-ids "$INSTANCE_ID" \
-            --document-name "AWS-RunShellScript" \
-            --comment "deploy ${{ matrix.service }} @ ${GITHUB_SHA::7}" \
-            --parameters file:///tmp/params.json \
-            --query "Command.CommandId" --output text)
-          echo "ssm command: $COMMAND_ID"
-
-          # 4) 완료 대기 — `aws ssm wait`는 100초(5초×20회)면 포기하므로 직접 폴링 (최대 10분)
-          STATUS=Pending
-          for _ in $(seq 1 60); do
-            STATUS=$(aws ssm get-command-invocation \
-              --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" \
-              --query Status --output text 2>/dev/null || echo Pending)
-            case "$STATUS" in
-              Success|Failed|Cancelled|TimedOut) break ;;
-            esac
-            sleep 10
-          done
-
-          echo "----- stdout -----"
-          aws ssm get-command-invocation \
-            --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" \
-            --query StandardOutputContent --output text
-          echo "----- status: $STATUS -----"
-
-          if [ "$STATUS" != "Success" ]; then
-            echo "----- stderr -----"
-            aws ssm get-command-invocation \
-              --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" \
-              --query StandardErrorContent --output text
-            exit 1
-          fi
-
-          # 5) 배포가 에러 없이 끝난 것을 확인한 시점에만 ECR의 :<service>-latest를 이번 이미지로 승격
-          #    (레포 하나를 서비스 3개가 공유하므로 latest 태그도 서비스별로 분리)
-          SERVICE_TAG="${{ matrix.service }}-${GITHUB_SHA}"
-          LATEST_TAG="${{ matrix.service }}-latest"
-          IMAGE=$(aws ecr batch-get-image \
-            --repository-name "${ECR_REPO}" \
-            --image-ids imageTag="${SERVICE_TAG}" \
-            --output json)
-          MANIFEST=$(jq -r '.images[0].imageManifest // empty' <<<"$IMAGE")
-          MEDIA_TYPE=$(jq -r '.images[0].imageManifestMediaType // empty' <<<"$IMAGE")
-          if [ -z "$MANIFEST" ]; then
-            echo "::error::image ${ECR_REPO}:${SERVICE_TAG} not found in ECR"; exit 1
-          fi
-          # 재실행 시 latest가 이미 같은 이미지를 가리키면 ImageAlreadyExistsException — 정상 케이스
-          if ! PUT_OUT=$(aws ecr put-image \
-              --repository-name "${ECR_REPO}" \
-              --image-tag "${LATEST_TAG}" \
-              --image-manifest "$MANIFEST" \
-              --image-manifest-media-type "$MEDIA_TYPE" 2>&1); then
-            grep -q ImageAlreadyExistsException <<<"$PUT_OUT" || { echo "$PUT_OUT"; exit 1; }
-          fi
-          echo "promoted ${ECR_REPO}:${SERVICE_TAG} -> ${LATEST_TAG}"
+          # 이전 이미지 정리
+          docker image prune -f
+          REMOTE
