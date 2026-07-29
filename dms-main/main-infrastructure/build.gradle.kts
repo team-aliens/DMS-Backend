@@ -13,7 +13,6 @@ dependencies {
 
     // contract
     implementation(project(":contracts:model-contracts:notification-model"))
-    implementation(project(":contracts:remote-contracts:notification-remote:rabbitmq-message"))
     implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // validation
@@ -38,9 +37,6 @@ dependencies {
 
     // aws
     implementation(Dependencies.SPRING_AWS)
-
-    // slack
-    implementation(Dependencies.SLACK)
 
     // configuration
     kapt(Dependencies.CONFIGURATION_PROCESSOR)
@@ -67,9 +63,6 @@ dependencies {
     // notification
     implementation(Dependencies.FCM)
 
-    // rabbit mq
-    implementation(Dependencies.RABBITMQ)
-
     // quartz
     implementation(Dependencies.QUARTZ)
 
@@ -83,7 +76,6 @@ dependencies {
     testImplementation(Dependencies.SPRING_KOTEST)
     testImplementation(Dependencies.TESTCONTAINERS)
     testImplementation(Dependencies.TESTCONTAINERS_MYSQL)
-    testImplementation(Dependencies.TESTCONTAINERS_RABBITMQ)
     testImplementation(Dependencies.SPRING_DATA_JPA)
 }
 

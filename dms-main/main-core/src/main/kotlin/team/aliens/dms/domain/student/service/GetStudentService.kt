@@ -55,7 +55,5 @@ interface GetStudentService {
 
     fun getAllStudentsByName(name: String?, schoolId: UUID): List<AllStudentsVO>
 
-    fun isApplicant(studentId: UUID): Boolean
-
     fun getModelStudents(date: LocalDate, schoolId: UUID): List<ModelStudentVO>
 }

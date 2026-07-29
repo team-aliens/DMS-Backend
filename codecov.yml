@@ -6,7 +6,7 @@ comment:
   layout: "header,diff,flags,components,files,footer"
   behavior: default
   require_changes: false
-  after_n_builds: 4  # overall + main + notification + gateway
+  after_n_builds: 1  # main (CI.yml에서 codecov-action을 main-service 1회만 호출)
 
 # 서비스별 플래그 설정
 flag_management:
@@ -18,22 +18,16 @@ flags:
     paths:
       - dms-main/
       - dms-notification/
-      - dms-gateway/
     carryforward: false
-    
+
   main-service:
     paths:
       - dms-main/
     carryforward: true
-    
+
   notification-service:
     paths:
       - dms-notification/
-    carryforward: true
-    
-  gateway-service:
-    paths:
-      - dms-gateway/
     carryforward: true
 
 # 서비스별 컴포넌트 설정
@@ -53,11 +47,6 @@ component_management:
       name: Notification Service
       paths:
         - dms-notification/**
-      
-    - component_id: gateway-service
-      name: Gateway Service
-      paths:
-        - dms-gateway/**
 
 coverage:
   precision: 2

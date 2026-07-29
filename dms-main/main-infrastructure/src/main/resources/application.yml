@@ -43,12 +43,6 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
-  rabbitmq:
-    port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:localhost}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-
   quartz:
     job-store-type: jdbc
     jdbc:
@@ -105,6 +99,29 @@ secret:
   access-exp: ${ACCESS_EXP:3600}
   refresh-exp: ${REFRESH_EXP:1205600}
 
+cors:
+  allowed-origins:
+    - "http://localhost:3000"
+    - "http://localhost:3001"
+    - "http://localhost:3002"
+    - "https://admin-dms.dsmhs.kr"
+    - "https://admin-dev-dms.dsmhs.kr"
+    - "https://webview-dms.dsmhs.kr"
+    - "https://head-teacher-dms.dsmhs.kr"
+    - "https://general-teacher-dms.dsmhs.kr"
+    - "https://student-dms.dsmhs.kr"
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+    - OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+  exposed-headers:
+    - "Content-Disposition"
+
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
 
@@ -112,6 +129,9 @@ gemini:
   base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
   api-key: ${GEMINI_API_KEY:gemini_api_key}
   model: ${GEMINI_MODEL:gemini-2.5-flash}
+
+fcm:
+  credentials-base64: ${FCM_BASE64_STRING}
 
 cloud:
   aws:
@@ -137,9 +157,3 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-
-slack:
-  url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/null/null/null}
-
-passport:
-  secret-key: ${PASSPORT_SECRET_KEY:qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop}

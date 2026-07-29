@@ -1,6 +1,5 @@
 package team.aliens.dms.thirdparty.parser
 
-import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellRangeAddress
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -10,14 +9,11 @@ import team.aliens.dms.domain.file.spi.ParseFilePort
 import team.aliens.dms.domain.file.spi.WriteFilePort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
-import team.aliens.dms.domain.outing.spi.vo.OutingApplicationVO
 import team.aliens.dms.domain.point.model.PointHistory
 import team.aliens.dms.domain.point.model.PointType
 import team.aliens.dms.domain.remain.dto.StudentRemainInfo
 import team.aliens.dms.domain.student.model.Sex
 import team.aliens.dms.domain.student.model.Student
-import team.aliens.dms.domain.studyroom.model.TimeSlot
-import team.aliens.dms.domain.studyroom.spi.vo.StudentSeatInfo
 import team.aliens.dms.thirdparty.parser.port.ExcelPort
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -260,120 +256,5 @@ class ExcelAdapter : ParseFilePort, WriteFilePort, ExcelPort() {
             workbook.write(stream)
             return stream.toByteArray()
         }
-    }
-
-    override fun addStudyRoomApplicationStatusExcelFile(
-        baseFile: File,
-        timeSlots: List<TimeSlot>,
-        studentSeatsMap: Map<Pair<String, String>, StudentSeatInfo>,
-    ): ByteArray {
-        val workbook = transferToExcel(baseFile)
-        val worksheet = workbook.getSheetAt(0)
-
-        val columnCount = worksheet.getRow(0).lastCellNum.toInt()
-        insertDataAtRow(
-            row = worksheet.getRow(0),
-            startIdx = columnCount,
-            data = timeSlots.map { it.name },
-            style = getHeaderCellStyle(workbook)
-        )
-
-        val gcns = getExcelInfo(worksheet) { row ->
-            row.run {
-                Pair(
-                    Student.processGcn(getIntValue(0), getIntValue(1), getIntValue(2)),
-                    getStringValue(3)
-                )
-            }
-        }
-
-        for (i in 1..worksheet.lastRowNum) {
-            val row = worksheet.getRow(i)
-            if (row.isFirstCellBlank()) continue
-
-            val studentSeats = studentSeatsMap[gcns[i - 1]]?.seats
-            insertDataAtRow(
-                row = row,
-                startIdx = columnCount,
-                data = timeSlots.map { timeSlot ->
-                    studentSeats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
-                },
-                style = getDefaultCellStyle(workbook)
-            )
-        }
-        formatWorkSheet(worksheet)
-
-        ByteArrayOutputStream().use { stream ->
-            workbook.write(stream)
-            return stream.toByteArray()
-        }
-    }
-
-    override fun writeStudyRoomApplicationStatusExcelFile(
-        timeSlots: List<TimeSlot>,
-        studentSeats: List<StudentSeatInfo>,
-    ): ByteArray {
-        val attributes = listOf("학년", "반", "번호", "이름", *timeSlots.map { it.name }.toTypedArray())
-
-        val seatInfosList = studentSeats.map { studentSeat ->
-            listOf(
-                studentSeat.studentGrade.toString(),
-                studentSeat.studentClassRoom.toString(),
-                studentSeat.studentNumber.toString(),
-                studentSeat.studentName,
-                *timeSlots.map { timeSlot ->
-                    studentSeat.seats?.singleOrNull { it.timeSlotId == timeSlot.id }?.seatFullName
-                }.toTypedArray()
-            )
-        }
-
-        return createExcelSheet(
-            attributes = attributes,
-            dataList = seatInfosList
-        )
-    }
-
-    override fun writeOutingApplicationExcelFile(outingApplicationExcelVos: List<OutingApplicationVO>): ByteArray {
-        val attributes = mutableListOf("ㅤ학번ㅤ", "ㅤ이름ㅤ", "외출 유형", "외출 시간", "도착 시간", "외출 확인", "복귀 확인")
-
-        val outingApplicationInfoSet = outingApplicationExcelVos.map { outingApplication ->
-            val outingApplicationInfoList = mutableListOf(
-                listOf(
-                    outingApplication.studentGcn,
-                    outingApplication.studentName,
-                    outingApplication.outingType,
-                    outingApplication.outingTime.toString(),
-                    outingApplication.arrivalTime.toString(),
-                    null,
-                    null
-                )
-            )
-
-            for (outingCompanions in outingApplication.outingCompanionVOs)
-                if (outingCompanions.studentGcn.isNotBlank())
-                    outingApplicationInfoList.add(
-                        listOf(
-                            outingCompanions.studentGcn,
-                            outingCompanions.studentName,
-                            null,
-                            null,
-                            outingApplication.outingTime.toString(),
-                            outingApplication.arrivalTime.toString(),
-                            null,
-                            null
-                        )
-                    )
-
-            outingApplicationInfoList
-        }
-
-        return createGroupExcelSheet(
-            attributes = attributes,
-            dataListSet = outingApplicationInfoSet,
-            colors = listOf(
-                IndexedColors.WHITE,
-                IndexedColors.LIGHT_GREEN
-            )
-        )
     }
 }

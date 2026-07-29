@@ -19,10 +19,7 @@ class AvailableFeatureMapper(
                 mealService = entity.mealService,
                 noticeService = entity.noticeService,
                 pointService = entity.pointService,
-                studyRoomService = entity.studyRoomService,
                 remainService = entity.remainService,
-                outingService = entity.outingService,
-                volunteerService = entity.volunteerService,
                 daybreakService = entity.daybreakService,
             )
         }
@@ -37,10 +34,7 @@ class AvailableFeatureMapper(
             mealService = domain.mealService,
             noticeService = domain.noticeService,
             pointService = domain.pointService,
-            studyRoomService = domain.studyRoomService,
             remainService = domain.remainService,
-            outingService = domain.outingService,
-            volunteerService = domain.volunteerService,
             daybreakService = domain.daybreakService
         )
     }

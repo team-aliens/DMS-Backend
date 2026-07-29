@@ -29,10 +29,7 @@ data class AvailableFeaturesResponse(
     val mealService: Boolean,
     val noticeService: Boolean,
     val pointService: Boolean,
-    val studyRoomService: Boolean,
     val remainService: Boolean,
-    val outingService: Boolean,
-    val volunteerService: Boolean,
     val daybreakService: Boolean
 )
 

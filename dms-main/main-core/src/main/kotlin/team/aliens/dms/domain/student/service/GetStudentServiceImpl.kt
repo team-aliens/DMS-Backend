@@ -5,7 +5,6 @@ import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
 import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
-import team.aliens.dms.domain.outing.spi.QueryOutingApplicationPort
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
 import team.aliens.dms.domain.student.exception.StudentNotFoundException
@@ -21,7 +20,6 @@ import java.util.function.Function
 class GetStudentServiceImpl(
     private val securityPort: SecurityPort,
     private val queryStudentPort: QueryStudentPort,
-    private val queryOutingApplicationPort: QueryOutingApplicationPort,
 ) : GetStudentService {
 
     override fun getCurrentStudent(): Student {
@@ -116,29 +114,6 @@ class GetStudentServiceImpl(
             )
         }
 
-    override fun isApplicant(studentId: UUID): Boolean =
-        queryOutingApplicationPort.isApplicant(studentId)
-
-    private fun getUpdatedStudent(
-        studentVOs: List<ExcelStudentVO>,
-        updateStudent: Function<ExcelStudentVO, Student>,
-    ): List<Student> {
-        val invalidStudentNames = mutableListOf<String>()
-
-        return studentVOs.mapNotNull { studentVO ->
-            try {
-                updateStudent.apply(studentVO)
-            } catch (e: Exception) {
-                invalidStudentNames.add(studentVO.name)
-                null
-            }
-        }.apply {
-            if (invalidStudentNames.isNotEmpty()) {
-                throw StudentUpdateInfoNotFoundException(invalidStudentNames)
-            }
-        }
-    }
-
     override fun getModelStudents(date: LocalDate, schoolId: UUID): List<ModelStudentVO> {
         val firstDayOfMonth = date.withDayOfMonth(1)
         val lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth())
@@ -159,6 +134,26 @@ class GetStudentServiceImpl(
                 name = student.name,
                 profileImageUrl = student.profileImageUrl
             )
+        }
+    }
+
+    private fun getUpdatedStudent(
+        studentVOs: List<ExcelStudentVO>,
+        updateStudent: Function<ExcelStudentVO, Student>,
+    ): List<Student> {
+        val invalidStudentNames = mutableListOf<String>()
+
+        return studentVOs.mapNotNull { studentVO ->
+            try {
+                updateStudent.apply(studentVO)
+            } catch (e: Exception) {
+                invalidStudentNames.add(studentVO.name)
+                null
+            }
+        }.apply {
+            if (invalidStudentNames.isNotEmpty()) {
+                throw StudentUpdateInfoNotFoundException(invalidStudentNames)
+            }
         }
     }
 }
