@@ -105,11 +105,14 @@ jobs:
           # 최신 이미지 pull 후 app 컨테이너만 재기동 (mysql/redis/nginx는 그대로 유지)
           docker compose pull app
           docker compose up -d app
-          # app 이 healthy 가 될 때까지 최대 120초 대기
+          # app 컨테이너 상태 확인
           cid=$(docker compose ps -q app)
+          if [ -z "$cid" ]; then echo "app container not found"; docker compose logs --tail=80 app; exit 1; fi
+          # healthy 가 될 때까지 최대 120초 대기 (중간에 죽으면 즉시 실패)
           for i in $(seq 1 24); do
             s=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$cid")
             if [ "$s" = healthy ] || [ "$s" = running ]; then echo "app: $s"; break; fi
+            case "$s" in exited|dead) echo "app terminated: $s"; docker compose logs --tail=80 app; exit 1;; esac
             if [ "$i" -eq 24 ]; then echo "health timeout: $s"; docker compose logs --tail=80 app; exit 1; fi
             sleep 5
           done
