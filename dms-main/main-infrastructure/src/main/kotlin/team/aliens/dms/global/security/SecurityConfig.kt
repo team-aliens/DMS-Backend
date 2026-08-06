@@ -34,6 +34,9 @@ class SecurityConfig(
         http
             .authorizeHttpRequests { authorize ->
                 authorize
+                    .requestMatchers("/").permitAll()
+
+                authorize
                     // /auth
                     .requestMatchers(HttpMethod.GET, "/auth/account-id").permitAll()
                     .requestMatchers(HttpMethod.GET, "/auth/email").permitAll()

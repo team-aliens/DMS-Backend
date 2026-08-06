@@ -19,7 +19,7 @@ class CustomAuthenticationEntryPoint(
         authException: AuthenticationException?
     ) {
 
-        val errorCode = SecurityErrorCode.FORBIDDEN
+        val errorCode = SecurityErrorCode.INVALID_TOKEN
 
         response?.apply {
             contentType = "application/json"
