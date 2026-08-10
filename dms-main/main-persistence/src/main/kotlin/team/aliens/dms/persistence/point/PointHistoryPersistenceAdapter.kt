@@ -176,7 +176,8 @@ class PointHistoryPersistenceAdapter(
             .from(latestPointHistory)
             .where(
                 latestPointHistory.studentGcn.eq(pointHistoryJpaEntity.studentGcn),
-                latestPointHistory.studentName.eq(pointHistoryJpaEntity.studentName)
+                latestPointHistory.studentName.eq(pointHistoryJpaEntity.studentName),
+                latestPointHistory.school.id.eq(pointHistoryJpaEntity.school.id)
             )
 
         return queryFactory
@@ -190,7 +191,8 @@ class PointHistoryPersistenceAdapter(
             .from(studentJpaEntity)
             .join(pointHistoryJpaEntity).on(
                 pointHistoryJpaEntity.studentGcn.eq(studentGcn),
-                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name)
+                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                pointHistoryJpaEntity.school.id.eq(studentJpaEntity.room.school.id)
             )
             .where(
                 pointHistoryJpaEntity.createdAt.eq(latestCreatedAt)
