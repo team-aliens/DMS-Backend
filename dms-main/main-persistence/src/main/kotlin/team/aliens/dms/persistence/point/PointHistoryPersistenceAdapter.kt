@@ -164,22 +164,21 @@ class PointHistoryPersistenceAdapter(
     override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
         val latestPointHistory = QPointHistoryJpaEntity("latestPointHistory")
 
-        val history = JPAExpressions
-            .select(latestPointHistory.id)
+        val studentGcn = Expressions.stringTemplate(
+            "CONCAT({0}, {1}, LPAD(CAST({2} AS string), 2, '0'))",
+            studentJpaEntity.grade,
+            studentJpaEntity.classRoom,
+            studentJpaEntity.number
+        )
+
+        val latestCreatedAt = JPAExpressions
+            .select(latestPointHistory.createdAt.max())
             .from(latestPointHistory)
             .where(
-                latestPointHistory.studentGcn.eq(
-                    Expressions.stringTemplate(
-                        "CONCAT({0}, {1}, LPAD(CAST({2} AS CHAR), 2, '0'))",
-                        studentJpaEntity.grade,
-                        studentJpaEntity.classRoom,
-                        studentJpaEntity.number
-                    )
-                ),
-                latestPointHistory.studentName.eq(studentJpaEntity.name)
+                latestPointHistory.studentGcn.eq(pointHistoryJpaEntity.studentGcn),
+                latestPointHistory.studentName.eq(pointHistoryJpaEntity.studentName),
+                latestPointHistory.school.id.eq(pointHistoryJpaEntity.school.id)
             )
-            .orderBy(latestPointHistory.createdAt.desc())
-            .limit(1)
 
         return queryFactory
             .select(
@@ -191,7 +190,12 @@ class PointHistoryPersistenceAdapter(
             )
             .from(studentJpaEntity)
             .join(pointHistoryJpaEntity).on(
-                pointHistoryJpaEntity.id.`in`(history)
+                pointHistoryJpaEntity.studentGcn.eq(studentGcn),
+                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                pointHistoryJpaEntity.school.id.eq(studentJpaEntity.room.school.id)
+            )
+            .where(
+                pointHistoryJpaEntity.createdAt.eq(latestCreatedAt)
             )
             .fetch()
     }
