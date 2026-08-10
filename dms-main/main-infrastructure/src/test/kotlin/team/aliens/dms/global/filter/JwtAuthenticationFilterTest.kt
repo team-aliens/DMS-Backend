@@ -49,45 +49,25 @@ class JwtAuthenticationFilterTest : DescribeSpec({
     val filterChain = mockk<FilterChain>(relaxed = true)
 
     describe("doFilter") {
-        context("permitAll 경로면") {
-            val request = mockRequest(uri = "/auth/tokens", method = "POST", authorizationHeader = null)
+        context("Authorization 헤더가 없으면") {
+            it("경로·메서드와 무관하게 인증을 세우지 않고 다음 필터로 넘긴다") {
+                forAll(
+                    row("/auth/tokens", "POST"),
+                    row("/schools/code", "GET"),
+                    row("/schools/code", "PATCH"),
+                    row("/students", "GET"),
+                ) { uri: String, method: String ->
 
-            it("JWT 검증 없이 다음 필터로 넘긴다") {
-                filter.doFilter(request, response, filterChain)
+                    val request = mockRequest(uri = uri, method = method, authorizationHeader = null)
 
-                verify(exactly = 0) { jwtParser.extractUserInfo(any()) }
-                verify(exactly = 1) { filterChain.doFilter(request, response) }
-            }
-        }
-
-        context("permitAll 경로여도 등록된 메서드가 아니면 (/schools/code)") {
-            it("GET은 JWT 검증 없이 다음 필터로 넘긴다") {
-                val request = mockRequest(uri = "/schools/code", method = "GET", authorizationHeader = null)
-
-                filter.doFilter(request, response, filterChain)
-
-                verify(exactly = 0) { jwtParser.extractUserInfo(any()) }
-                verify(exactly = 1) { filterChain.doFilter(request, response) }
-            }
-
-            it("PATCH는 JWT 검증을 한다") {
-                val request = mockRequest(uri = "/schools/code", method = "PATCH", authorizationHeader = null)
-
-                shouldThrow<InvalidTokenException> {
                     filter.doFilter(request, response, filterChain)
-                }
-                verify(exactly = 0) { filterChain.doFilter(any(), any()) }
-            }
-        }
 
-        context("인증이 필요한 경로인데 Authorization 헤더가 없으면") {
-            val request = mockRequest(uri = "/students", authorizationHeader = null)
+                    verify(exactly = 0) { jwtParser.extractUserInfo(any()) }
+                    verify(exactly = 1) { filterChain.doFilter(request, response) }
+                    SecurityContextHolder.getContext().authentication shouldBe null
 
-            it("InvalidTokenException을 던지고 다음 필터로 넘어가지 않는다") {
-                shouldThrow<InvalidTokenException> {
-                    filter.doFilter(request, response, filterChain)
+                    SecurityContextHolder.clearContext()
                 }
-                verify(exactly = 0) { filterChain.doFilter(any(), any()) }
             }
         }
 
