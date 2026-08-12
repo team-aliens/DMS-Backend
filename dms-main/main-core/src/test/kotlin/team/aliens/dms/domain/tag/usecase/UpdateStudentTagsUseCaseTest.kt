@@ -46,7 +46,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
             it("아무 태그도 저장하지 않는다") {
                 every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
                 every { tagService.getAllStudentTagDetails() } returns emptyList()
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 10)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs
@@ -62,7 +62,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
             it("경고 1단계 태그가 저장된다") {
                 every { tagService.getTagsByTagNameIn(any()) } returns warningTagEntities
                 every { tagService.getAllStudentTagDetails() } returns emptyList()
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs
@@ -88,7 +88,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
                         tagName = WarningTag.C_FIRST_WARNING.warningMessage
                     )
                 )
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs
@@ -114,7 +114,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
                         tagName = WarningTag.C_FIRST_WARNING.warningMessage
                     )
                 )
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs
@@ -139,7 +139,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
                         tagName = WarningTag.FIRST_WARNING.warningMessage
                     )
                 )
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 20)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs
@@ -165,7 +165,7 @@ class UpdateStudentTagsUseCaseTest : DescribeSpec({
                         tagName = "소프트웨어개발과"
                     )
                 )
-                every { pointService.getPointTotalsGroupByStudent() } returns listOf(
+                every { pointService.getPointTotalsGroupByStudent(schoolId = null) } returns listOf(
                     StudentTotalVO(studentId, bonusTotal = 0, minusTotal = 15)
                 )
                 every { tagService.deleteStudentTagById(any(), any()) } just runs

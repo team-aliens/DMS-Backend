@@ -3,15 +3,12 @@ package team.aliens.dms.global.filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.PassportUser
-import team.aliens.dms.global.security.SecurityPaths
 import team.aliens.dms.global.security.exception.InvalidTokenException
 import team.aliens.dms.global.security.principle.GeneralTeacherDetails
 import team.aliens.dms.global.security.principle.HeadTeacherDetails
@@ -24,34 +21,26 @@ class JwtAuthenticationFilter(
     private val jwtParser: JwtParser
 ) : OncePerRequestFilter() {
 
-    private val pathMatcher = AntPathMatcher()
-
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        val path = request.requestURI
-        val method = HttpMethod.valueOf(request.method)
-        return SecurityPaths.PERMIT_ALL_PATHS.any { permitPath ->
-            pathMatcher.match(permitPath.path, path) &&
-                (permitPath.method == null || permitPath.method == method)
-        }
-    }
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val token = resolveToken(request)
-        val user = jwtParser.extractUserInfo(token)
+        val token = resolveTokenOrNull(request)
 
-        SecurityContextHolder.clearContext()
-        SecurityContextHolder.getContext().authentication = createAuthentication(user)
+        if (token != null) {
+            val user = jwtParser.extractUserInfo(token)
+
+            SecurityContextHolder.clearContext()
+            SecurityContextHolder.getContext().authentication = createAuthentication(user)
+        }
 
         filterChain.doFilter(request, response)
     }
 
-    private fun resolveToken(request: HttpServletRequest): String {
+    private fun resolveTokenOrNull(request: HttpServletRequest): String? {
         val authorizationHeader = request.getHeader(JwtProperties.HEADER)
-            ?: throw InvalidTokenException
+            ?: return null
 
         if (!authorizationHeader.startsWith(JwtProperties.PREFIX)) {
             throw InvalidTokenException

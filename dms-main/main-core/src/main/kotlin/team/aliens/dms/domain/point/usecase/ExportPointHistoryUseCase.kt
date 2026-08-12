@@ -24,7 +24,7 @@ class ExportPointHistoryUseCase(
         val user = userService.getCurrentUser()
         val school = schoolService.getSchoolById(user.schoolId)
 
-        val students = studentService.getStudentsByNameAndSortAndFilter(
+        val students = studentService.getStudentsByNameAndSortAndTag(
             schoolId = school.id
         )
 

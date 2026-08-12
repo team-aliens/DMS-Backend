@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -12,7 +11,6 @@ import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
-import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
@@ -161,38 +159,34 @@ class PointHistoryPersistenceAdapter(
         pointHistoryRepository.findByStudentGcnIn(gcns)
             .map { pointHistoryMapper.toDomain(it)!! }
 
-    override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
-        val latestPointHistory = QPointHistoryJpaEntity("latestPointHistory")
-
-        val history = JPAExpressions
-            .select(latestPointHistory.id)
-            .from(latestPointHistory)
-            .where(
-                latestPointHistory.studentGcn.eq(
-                    Expressions.stringTemplate(
-                        "CONCAT({0}, {1}, LPAD(CAST({2} AS CHAR), 2, '0'))",
-                        studentJpaEntity.grade,
-                        studentJpaEntity.classRoom,
-                        studentJpaEntity.number
-                    )
-                ),
-                latestPointHistory.studentName.eq(studentJpaEntity.name)
-            )
-            .orderBy(latestPointHistory.createdAt.desc())
-            .limit(1)
+    override fun queryPointTotalsGroupByStudent(schoolId: UUID?): List<StudentTotalVO> {
+        val studentGcn = Expressions.stringTemplate(
+            "CONCAT({0}, {1}, LPAD(CAST({2} AS string), 2, '0'))",
+            studentJpaEntity.grade,
+            studentJpaEntity.classRoom,
+            studentJpaEntity.number
+        )
 
         return queryFactory
             .select(
                 QQueryStudentTotalVO(
                     studentJpaEntity.id,
                     pointHistoryJpaEntity.bonusTotal,
-                    pointHistoryJpaEntity.minusTotal
+                    pointHistoryJpaEntity.minusTotal,
+                    pointHistoryJpaEntity.createdAt
                 )
             )
             .from(studentJpaEntity)
             .join(pointHistoryJpaEntity).on(
-                pointHistoryJpaEntity.id.`in`(history)
+                pointHistoryJpaEntity.studentGcn.eq(studentGcn),
+                pointHistoryJpaEntity.studentName.eq(studentJpaEntity.name),
+                pointHistoryJpaEntity.school.id.eq(studentJpaEntity.room.school.id)
+            )
+            .where(
+                schoolId?.let { studentJpaEntity.room.school.id.eq(it) }
             )
             .fetch()
+            .groupBy { it.studentId }
+            .map { (_, histories) -> histories.maxBy { it.createdAt } }
     }
 }
