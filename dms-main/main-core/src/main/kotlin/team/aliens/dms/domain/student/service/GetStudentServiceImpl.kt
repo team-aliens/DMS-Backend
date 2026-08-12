@@ -3,7 +3,6 @@ package team.aliens.dms.domain.student.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.common.spi.SecurityPort
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
-import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.room.exception.RoomNotFoundException
 import team.aliens.dms.domain.room.model.Room
@@ -45,13 +44,12 @@ class GetStudentServiceImpl(
     override fun getStudentByUserId(userId: UUID) =
         queryStudentPort.queryStudentByUserId(userId) ?: throw StudentNotFoundException
 
-    override fun getStudentsByNameAndSortAndFilter(
+    override fun getStudentsByNameAndSortAndTag(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilter,
         tagIds: List<UUID>?,
-    ) = queryStudentPort.queryStudentsByNameAndSortAndFilter(name, sort, schoolId, pointFilter, tagIds)
+    ) = queryStudentPort.queryStudentsByNameAndSortAndTag(name, sort, schoolId, tagIds)
 
     override fun getRoommates(studentId: UUID, roomNumber: String, schoolId: UUID): List<Student> {
         return queryStudentPort.queryStudentsByRoomNumberAndSchoolId(roomNumber, schoolId)

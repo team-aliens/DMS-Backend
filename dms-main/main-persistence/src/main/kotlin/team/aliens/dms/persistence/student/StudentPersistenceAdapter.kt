@@ -7,14 +7,11 @@ import com.querydsl.core.group.GroupBy.list
 import com.querydsl.core.types.Expression
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
-import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.JPAExpressions.select
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import team.aliens.dms.domain.manager.dto.PointFilter
-import team.aliens.dms.domain.manager.dto.PointFilterType
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.model.PointType
@@ -155,23 +152,20 @@ class StudentPersistenceAdapter(
         return tuple.toTypedArray()
     }
 
-    override fun queryStudentsByNameAndSortAndFilter(
+    override fun queryStudentsByNameAndSortAndTag(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilter,
         tagIds: List<UUID>?
     ): List<StudentWithTag> {
         return queryFactory
             .selectFrom(studentJpaEntity)
             .join(studentJpaEntity.room, roomJpaEntity)
-            .leftJoin(studentTagJpaEntity).on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id)).fetchJoin()
+            .leftJoin(studentTagJpaEntity).on(studentJpaEntity.id.eq(studentTagJpaEntity.student.id))
             .leftJoin(tagJpaEntity).on(studentTagJpaEntity.tag.id.eq(tagJpaEntity.id))
-            .leftJoin(pointHistoryJpaEntity).on(eqStudentRecentPointHistory())
             .where(
                 roomJpaEntity.school.id.eq(schoolId),
                 nameContains(name),
-                pointTotalBetween(pointFilter),
                 hasAllTags(tagIds)
             )
             .orderBy(
@@ -192,8 +186,6 @@ class StudentPersistenceAdapter(
                             roomJpaEntity.number,
                             studentJpaEntity.profileImageUrl,
                             studentJpaEntity.sex,
-                            pointHistoryJpaEntity.bonusTotal,
-                            pointHistoryJpaEntity.minusTotal,
                             list(tagJpaEntity)
                         )
                     )
@@ -208,8 +200,8 @@ class StudentPersistenceAdapter(
                     roomNumber = it.roomNumber,
                     profileImageUrl = it.profileImageUrl,
                     sex = it.sex,
-                    bonusPoint = it.bonusPoint,
-                    minusPoint = it.minusPoint,
+                    bonusPoint = 0,
+                    minusPoint = 0,
                     tags = it.tags
                         .map { tag ->
                             tagMapper.toDomain(tag)!!
@@ -219,35 +211,6 @@ class StudentPersistenceAdapter(
     }
 
     private fun nameContains(name: String?) = name?.run { studentJpaEntity.name.contains(this) }
-
-    private fun pointTotalBetween(pointFilter: PointFilter): BooleanExpression? {
-        if (pointFilter.filterType == null) {
-            return null
-        }
-
-        return when (pointFilter.filterType) {
-            PointFilterType.BONUS -> {
-                CaseBuilder()
-                    .`when`(pointHistoryJpaEntity.isNotNull)
-                    .then(pointHistoryJpaEntity.bonusTotal)
-                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
-            }
-
-            PointFilterType.MINUS -> {
-                CaseBuilder()
-                    .`when`(pointHistoryJpaEntity.isNotNull)
-                    .then(pointHistoryJpaEntity.minusTotal)
-                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
-            }
-
-            else -> {
-                CaseBuilder()
-                    .`when`(pointHistoryJpaEntity.isNotNull)
-                    .then(pointHistoryJpaEntity.bonusTotal.subtract(pointHistoryJpaEntity.minusTotal))
-                    .otherwise(0).between(pointFilter.minPoint, pointFilter.maxPoint)
-            }
-        }
-    }
 
     private fun hasAllTags(tagIds: List<UUID>?): BooleanExpression? =
         tagIds?.run {

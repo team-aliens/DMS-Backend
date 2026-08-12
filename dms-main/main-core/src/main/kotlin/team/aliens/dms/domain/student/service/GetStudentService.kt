@@ -1,7 +1,6 @@
 package team.aliens.dms.domain.student.service
 
 import team.aliens.dms.domain.file.spi.vo.ExcelStudentVO
-import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
@@ -26,11 +25,10 @@ interface GetStudentService {
 
     fun getStudentByUserId(userId: UUID): Student
 
-    fun getStudentsByNameAndSortAndFilter(
+    fun getStudentsByNameAndSortAndTag(
         name: String? = null,
         sort: Sort = Sort.GCN,
         schoolId: UUID,
-        pointFilter: PointFilter = PointFilter(null, null, null),
         tagIds: List<UUID>? = null
     ): List<StudentWithTag>
 
