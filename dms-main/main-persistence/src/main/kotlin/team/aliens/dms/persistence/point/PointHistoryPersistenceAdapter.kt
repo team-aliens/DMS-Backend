@@ -1,7 +1,6 @@
 package team.aliens.dms.persistence.point
 
 import com.querydsl.core.types.dsl.Expressions
-import com.querydsl.jpa.JPAExpressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -12,7 +11,6 @@ import team.aliens.dms.domain.point.spi.PointHistoryPort
 import team.aliens.dms.domain.point.spi.vo.PointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentPointHistoryVO
 import team.aliens.dms.domain.point.spi.vo.StudentTotalVO
-import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity
 import team.aliens.dms.persistence.point.entity.QPointHistoryJpaEntity.pointHistoryJpaEntity
 import team.aliens.dms.persistence.point.mapper.PointHistoryMapper
 import team.aliens.dms.persistence.point.repository.PointHistoryJpaRepository
@@ -161,9 +159,7 @@ class PointHistoryPersistenceAdapter(
         pointHistoryRepository.findByStudentGcnIn(gcns)
             .map { pointHistoryMapper.toDomain(it)!! }
 
-    override fun queryPointTotalsGroupByStudent(): List<StudentTotalVO> {
-        val latestPointHistory = QPointHistoryJpaEntity("latestPointHistory")
-
+    override fun queryPointTotalsGroupByStudent(schoolId: UUID?): List<StudentTotalVO> {
         val studentGcn = Expressions.stringTemplate(
             "CONCAT({0}, {1}, LPAD(CAST({2} AS string), 2, '0'))",
             studentJpaEntity.grade,
@@ -171,21 +167,13 @@ class PointHistoryPersistenceAdapter(
             studentJpaEntity.number
         )
 
-        val latestCreatedAt = JPAExpressions
-            .select(latestPointHistory.createdAt.max())
-            .from(latestPointHistory)
-            .where(
-                latestPointHistory.studentGcn.eq(pointHistoryJpaEntity.studentGcn),
-                latestPointHistory.studentName.eq(pointHistoryJpaEntity.studentName),
-                latestPointHistory.school.id.eq(pointHistoryJpaEntity.school.id)
-            )
-
         return queryFactory
             .select(
                 QQueryStudentTotalVO(
                     studentJpaEntity.id,
                     pointHistoryJpaEntity.bonusTotal,
-                    pointHistoryJpaEntity.minusTotal
+                    pointHistoryJpaEntity.minusTotal,
+                    pointHistoryJpaEntity.createdAt
                 )
             )
             .from(studentJpaEntity)
@@ -195,8 +183,10 @@ class PointHistoryPersistenceAdapter(
                 pointHistoryJpaEntity.school.id.eq(studentJpaEntity.room.school.id)
             )
             .where(
-                pointHistoryJpaEntity.createdAt.eq(latestCreatedAt)
+                schoolId?.let { studentJpaEntity.room.school.id.eq(it) }
             )
             .fetch()
+            .groupBy { it.studentId }
+            .map { (_, histories) -> histories.maxBy { it.createdAt } }
     }
 }
