@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.student.spi
 
-import team.aliens.dms.domain.manager.dto.PointFilter
 import team.aliens.dms.domain.manager.dto.Sort
 import team.aliens.dms.domain.manager.spi.vo.StudentWithTag
 import team.aliens.dms.domain.point.spi.vo.StudentWithPointVO
@@ -26,11 +25,10 @@ interface QueryStudentPort {
 
     fun queryBySchoolIdAndRoomNumberAndRoomLocationIn(schoolId: UUID, roomNumberLocations: List<Pair<String, String>>): List<Student>
 
-    fun queryStudentsByNameAndSortAndFilter(
+    fun queryStudentsByNameAndSortAndTag(
         name: String?,
         sort: Sort,
         schoolId: UUID,
-        pointFilter: PointFilter,
         tagIds: List<UUID>?
     ): List<StudentWithTag>
 

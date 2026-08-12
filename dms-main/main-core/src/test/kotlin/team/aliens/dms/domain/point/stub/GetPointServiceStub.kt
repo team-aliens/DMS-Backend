@@ -70,5 +70,6 @@ abstract class GetPointServiceStub : GetPointService {
         schoolId: UUID
     ): List<PointHistory> = throw UnsupportedOperationException()
 
-    override fun getPointTotalsGroupByStudent(): List<StudentTotalVO> = throw UnsupportedOperationException()
+    override fun getPointTotalsGroupByStudent(schoolId: UUID?): List<StudentTotalVO> =
+        throw UnsupportedOperationException()
 }

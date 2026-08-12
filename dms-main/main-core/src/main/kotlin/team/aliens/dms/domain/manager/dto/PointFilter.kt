@@ -14,4 +14,18 @@ data class PointFilter(
             }
         }
     }
+
+    fun matches(bonusPoint: Int, minusPoint: Int): Boolean {
+        val type = filterType ?: return true
+        val min = minPoint ?: return true
+        val max = maxPoint ?: return true
+
+        val totalPoint = when (type) {
+            PointFilterType.BONUS -> bonusPoint
+            PointFilterType.MINUS -> minusPoint
+            PointFilterType.ALL -> bonusPoint - minusPoint
+        }
+
+        return totalPoint in min..max
+    }
 }
