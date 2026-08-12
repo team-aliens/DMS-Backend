@@ -45,5 +45,5 @@ interface QueryPointHistoryPort {
         gcns: List<String>
     ): List<PointHistory>
 
-    fun queryPointTotalsGroupByStudent(schoolId: UUID? = null): List<StudentTotalVO>
+    fun queryPointTotalsGroupByStudent(schoolId: UUID?): List<StudentTotalVO>
 }

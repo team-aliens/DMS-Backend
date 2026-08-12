@@ -26,7 +26,7 @@ class UpdateStudentTagsUseCase(
         val warningTagsToDelete = mutableListOf<StudentTagDetailVO>()
         val tagsToSave = mutableListOf<StudentTag>()
 
-        for (studentPoint in pointService.getPointTotalsGroupByStudent()) {
+        for (studentPoint in pointService.getPointTotalsGroupByStudent(schoolId = null)) {
             val requiredLevel = WarningTag.byPoint(studentPoint.minusTotal)
             if (requiredLevel == WarningTag.SAFE) continue
 
