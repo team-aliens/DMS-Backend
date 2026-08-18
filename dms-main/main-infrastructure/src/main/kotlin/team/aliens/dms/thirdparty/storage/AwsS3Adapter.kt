@@ -3,7 +3,6 @@ package team.aliens.dms.thirdparty.storage
 import com.amazonaws.HttpMethod
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.internal.Mimetypes
-import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
@@ -37,9 +36,6 @@ class AwsS3Adapter(
 
             amazonS3Client.putObject(
                 PutObjectRequest(awsProperties.bucket, buildKey(fileName), inputStream, objectMetadata)
-                    .withCannedAcl(
-                        CannedAccessControlList.PublicRead
-                    )
             )
 
             file.delete()
