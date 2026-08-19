@@ -6,7 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.service.NotificationService
-import team.aliens.dms.stub.createTopicSubscriptionStub
+import team.aliens.dms.domain.notification.stub.createTopicSubscriptionStub
 
 class QueryTopicSubscriptionUseCaseTest : DescribeSpec({
 

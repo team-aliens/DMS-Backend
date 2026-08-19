@@ -31,8 +31,6 @@ class SignInUseCase(
         val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
         if (!request.deviceToken.isNullOrBlank()) {
-            eventPort.publishDeleteDeviceToken(user.id)
-
             eventPort.publishSaveDeviceToken(
                 DeviceTokenInfo(
                     userId = user.id,

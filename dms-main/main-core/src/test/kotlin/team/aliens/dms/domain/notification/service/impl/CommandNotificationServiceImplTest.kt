@@ -14,8 +14,8 @@ import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
-import team.aliens.dms.stub.createDeviceTokenStub
-import team.aliens.dms.stub.createNotificationOfUserStub
+import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
+import team.aliens.dms.domain.notification.stub.createNotificationOfUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 

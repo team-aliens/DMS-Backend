@@ -10,9 +10,9 @@ import team.aliens.dms.domain.notification.service.GetNotificationServiceImpl
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
-import team.aliens.dms.stub.createDeviceTokenStub
-import team.aliens.dms.stub.createNotificationOfUserStub
-import team.aliens.dms.stub.createTopicSubscriptionStub
+import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
+import team.aliens.dms.domain.notification.stub.createNotificationOfUserStub
+import team.aliens.dms.domain.notification.stub.createTopicSubscriptionStub
 import java.util.UUID
 
 class GetNotificationServiceImplTest : DescribeSpec({

@@ -7,7 +7,7 @@ import io.mockk.mockk
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.notification.dto.SetDeviceTokenRequest
 import team.aliens.dms.domain.notification.service.NotificationService
-import team.aliens.dms.stub.createDeviceTokenStub
+import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
 import java.util.UUID
 
 class SetDeviceTokenUseCaseTest : DescribeSpec({
