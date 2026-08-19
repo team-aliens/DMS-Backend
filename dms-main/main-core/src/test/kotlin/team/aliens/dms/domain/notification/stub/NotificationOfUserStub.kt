@@ -1,4 +1,4 @@
-package team.aliens.dms.stub
+package team.aliens.dms.domain.notification.stub
 
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.model.NotificationOfUser
