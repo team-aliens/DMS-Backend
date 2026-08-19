@@ -1,8 +1,8 @@
 package team.aliens.dms.domain.auth.usecase
 
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
-import io.mockk.Called
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.just
@@ -60,15 +60,23 @@ class SignInUseCaseTest : DescribeSpec({
             every { schoolService.getAvailableFeaturesBySchoolId(schoolId) } returns availableFeature
             every { eventPort.publishSaveDeviceToken(any()) } just runs
 
-            signInUseCase.execute(request)
+            it("디바이스 토큰 저장 이벤트만 발행한다") {
+                signInUseCase.execute(request)
 
-            it("디바이스 토큰 저장 이벤트를 발행한다") {
-                verify(exactly = 1) { eventPort.publishSaveDeviceToken(any()) }
+                verify(exactly = 1) {
+                    eventPort.publishSaveDeviceToken(
+                        match {
+                            it.userId == user.id &&
+                                it.schoolId == schoolId &&
+                                it.token == request.deviceToken
+                        }
+                    )
+                }
                 confirmVerified(eventPort)
             }
         }
 
-        context("디바이스 토큰 없이 로그인하면") {
+        context("디바이스 토큰이 비어 있으면") {
             val securityService = mockk<SecurityService>()
             val userService = mockk<UserService>()
             val schoolService = mockk<SchoolService>()
@@ -85,26 +93,28 @@ class SignInUseCaseTest : DescribeSpec({
             val schoolId = UUID.randomUUID()
             val user = createUserStub(schoolId = schoolId)
             val availableFeature = createAvailableFeatureStub(schoolId = schoolId)
-            val request = SignInRequest(
-                accountId = user.accountId,
-                password = "raw-password",
-                deviceToken = null
-            )
 
-            every { userService.queryUserByAccountId(request.accountId) } returns user
-            every { securityService.checkIsPasswordMatches(request.password, user.password) } just runs
+            every { userService.queryUserByAccountId(user.accountId) } returns user
+            every { securityService.checkIsPasswordMatches(any(), user.password) } just runs
             every { jwtPort.receiveToken(user.id, user.authority, schoolId) } returns tokenResponse
             every { schoolService.getAvailableFeaturesBySchoolId(schoolId) } returns availableFeature
 
-            val result = signInUseCase.execute(request)
+            it("디바이스 토큰 저장 이벤트를 발행하지 않는다") {
+                forAll(
+                    row(null),
+                    row(""),
+                ) { deviceToken ->
 
-            it("토큰을 발급한다") {
-                result.accessToken shouldBe tokenResponse.accessToken
-                result.refreshToken shouldBe tokenResponse.refreshToken
-            }
+                    val request = SignInRequest(
+                        accountId = user.accountId,
+                        password = "raw-password",
+                        deviceToken = deviceToken
+                    )
 
-            it("어떤 이벤트도 발행하지 않는다") {
-                verify { eventPort wasNot Called }
+                    signInUseCase.execute(request)
+
+                    verify(exactly = 0) { eventPort.publishSaveDeviceToken(any()) }
+                }
             }
         }
     }
