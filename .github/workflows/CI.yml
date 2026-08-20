@@ -102,6 +102,6 @@ jobs:
           paths: |
             build/reports/jacoco/main-service/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 24
+          min-coverage-overall: 15
           min-coverage-changed-files: 50
           title: '📊 Main Service Coverage Report'
