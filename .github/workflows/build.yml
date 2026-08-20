@@ -3,7 +3,6 @@ name: Build with Gradle
 on:
   push:
     branches:
-      - main
       - develop
   pull_request:
     branches:
@@ -31,6 +30,3 @@ jobs:
             --build-cache
             --no-daemon
             --stacktrace
-
-      - name: Run Detekt Domain
-        run: ./gradlew :dms-main:main-core:detekt

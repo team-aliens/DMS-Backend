@@ -46,7 +46,7 @@ class CommandDaybreakServiceImpl(
                 title = firstApplication.getTitle(),
                 content = "새벽 자습 신청 상태가 변경되었습니다.",
                 threadId = firstApplication.id.toString(),
-                isSaveRequired = true
+                isSaveRequired = false
             )
             notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
         }

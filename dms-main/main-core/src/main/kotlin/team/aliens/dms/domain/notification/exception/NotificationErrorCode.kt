@@ -9,8 +9,8 @@ enum class NotificationErrorCode(
     private val sequence: Int
 ) : ErrorProperty {
 
-    DEVICE_TOKEN_NOT_FOUND(ErrorStatus.BAD_REQUEST, "Notification Token Not Found", 1),
-    NOTIFICATION_OF_USER_NOT_FOUND(ErrorStatus.BAD_REQUEST, "NotificationOfUser Not Found", 2),
+    DEVICE_TOKEN_NOT_FOUND(ErrorStatus.NOT_FOUND, "Notification Token Not Found", 1),
+    NOTIFICATION_OF_USER_NOT_FOUND(ErrorStatus.NOT_FOUND, "NotificationOfUser Not Found", 2),
     NOTIFICATION_SEND_FAILED(ErrorStatus.INTERNAL_SERVER_ERROR, "Notification Send Failed", 3)
     ;
 

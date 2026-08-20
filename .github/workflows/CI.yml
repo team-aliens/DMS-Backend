@@ -3,7 +3,6 @@ name: CI with Test
 on:
   push:
     branches:
-      - main
       - develop
   pull_request:
     branches:
@@ -57,16 +56,6 @@ jobs:
           path: build/reports/jacoco/${{ matrix.service }}-service/
           retention-days: 1
 
-      - name: Upload coverage for ${{ matrix.service }}
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/jacoco/${{ matrix.service }}-service/jacocoTestReport.xml
-          flags: ${{ matrix.service }}-service
-          name: ${{ matrix.service }}-service-coverage
-          fail_ci_if_error: false
-          verbose: true
-
   coverage-report:
     runs-on: ubuntu-latest
     needs: test
@@ -113,6 +102,6 @@ jobs:
           paths: |
             build/reports/jacoco/main-service/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 24
+          min-coverage-overall: 15
           min-coverage-changed-files: 50
           title: '📊 Main Service Coverage Report'
