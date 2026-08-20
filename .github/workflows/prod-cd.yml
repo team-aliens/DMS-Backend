@@ -20,7 +20,9 @@ env:
 
 jobs:
   # ── 1) 테스트 게이트 ──────────────────────────────
-  #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다
+  #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다.
+  #  main push 시 도는 워크플로우는 이것 하나뿐이므로 detekt까지 여기서 본다(check = test + detekt).
+  #  ※ :dms-main:test 는 껍데기 프로젝트 자신의 test 라 NO-SOURCE 로 통과한다 — 서브모듈까지 도는 check 를 쓸 것
   test:
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +36,10 @@ jobs:
           cache: 'gradle'
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
       - run: chmod +x gradlew
+      - name: Verify Docker is running   # main-persistence 테스트가 Testcontainers 를 쓴다
+        run: docker info
       - name: Run tests
-        run: ./gradlew :dms-main:test --build-cache --no-daemon
+        run: ./gradlew check --build-cache --no-daemon
 
   # ── 2) 이미지 빌드 & ECR 푸시 ─────────────────────
   build-push:
