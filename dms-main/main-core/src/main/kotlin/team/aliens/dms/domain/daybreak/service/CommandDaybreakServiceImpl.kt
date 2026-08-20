@@ -37,7 +37,7 @@ class CommandDaybreakServiceImpl(
         val studentIds = applications.map { it.studentId }
         val userIds = queryStudentPort.queryAllStudentsByIdsIn(studentIds).mapNotNull { it.userId }
 
-        if (firstApplication.status == Status.SECOND_APPROVED || firstApplication.status == Status.REJECTED) {
+        if (isDaybreakStudyFcmSendable(firstApplication)) {
 
             val notificationInfo = NotificationInfo(
                 schoolId = firstApplication.schoolId,
@@ -55,4 +55,11 @@ class CommandDaybreakServiceImpl(
     override fun deleteOutdatedDaybreakStudyApplications() {
         commandDaybreakStudyApplicationPort.deleteOutdatedDaybreakStudyApplications()
     }
+
+    private fun isDaybreakStudyFcmSendable(application: DaybreakStudyApplication): Boolean =
+        application.status in setOf(
+            Status.FIRST_APPROVED,
+            Status.SECOND_APPROVED,
+            Status.REJECTED,
+        )
 }
