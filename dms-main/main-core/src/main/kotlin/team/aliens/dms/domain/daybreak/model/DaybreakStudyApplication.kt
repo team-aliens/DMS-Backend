@@ -95,11 +95,12 @@ data class DaybreakStudyApplication(
         if (newStatus != Status.SECOND_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
     }
 
-    // REJECTED와 SECOND_APPROVED만 알림을 발송함
+    // REJECTED, FIRST_APPROVED, SECOND_APPROVED만 알림을 발송함
     fun getTitle(): String =
         when (status) {
             Status.REJECTED -> "새벽 자습 신청이 거절되었습니다"
-            Status.SECOND_APPROVED -> "새벽 자습 신청이 승인되었습니다"
+            Status.FIRST_APPROVED -> "새벽 자습 신청이 1차 승인되었습니다."
+            Status.SECOND_APPROVED -> "새벽 자습 신청이 최종 승인되었습니다."
             else -> ""
         }
 }
