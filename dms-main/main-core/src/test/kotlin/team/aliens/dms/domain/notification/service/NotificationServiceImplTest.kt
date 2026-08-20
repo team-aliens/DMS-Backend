@@ -133,10 +133,15 @@ class NotificationServiceImplTest : DescribeSpec({
 
             every { notificationPort.sendMessage(any(), any()) } just runs
 
-            it("알림을 전송한다") {
+            it("알림함에 저장하지 않고 알림을 전송한다") {
+                clearMocks(notificationPort, notificationOfUserPort, answers = false)
+
                 shouldNotThrowAny {
                     service.sendMessage(deviceToken, notification)
                 }
+
+                verify(exactly = 1) { notificationPort.sendMessage(any(), any()) }
+                verify(exactly = 0) { notificationOfUserPort.saveNotificationOfUser(any()) }
             }
         }
     }
@@ -174,6 +179,45 @@ class NotificationServiceImplTest : DescribeSpec({
                 shouldNotThrowAny {
                     service.sendMessages(deviceTokens, notification)
                 }
+            }
+        }
+
+        context("여러 디바이스에 저장이 필요하지 않은 알림을 전송하면") {
+            val deviceTokens = listOf(
+                DeviceToken(
+                    id = UUID.randomUUID(),
+                    userId = UUID.randomUUID(),
+                    schoolId = UUID.randomUUID(),
+                    token = "token1"
+                ),
+                DeviceToken(
+                    id = UUID.randomUUID(),
+                    userId = UUID.randomUUID(),
+                    schoolId = UUID.randomUUID(),
+                    token = "token2"
+                )
+            )
+            val notification = Notification(
+                schoolId = UUID.randomUUID(),
+                topic = Topic.DAYBREAK_STUDY_APPLICATION,
+                linkIdentifier = null,
+                title = "title",
+                content = "content",
+                threadId = "thread-id",
+                isSaveRequired = false
+            )
+
+            every { notificationPort.sendMessages(any(), any()) } just runs
+
+            it("알림함에 저장하지 않고 여러 알림을 전송한다") {
+                clearMocks(notificationPort, notificationOfUserPort, answers = false)
+
+                shouldNotThrowAny {
+                    service.sendMessages(deviceTokens, notification)
+                }
+
+                verify(exactly = 1) { notificationPort.sendMessages(any(), any()) }
+                verify(exactly = 0) { notificationOfUserPort.saveNotificationsOfUser(any()) }
             }
         }
 
