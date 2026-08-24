@@ -10,7 +10,7 @@ internal fun createDaybreakStudyApplicationStub(
     studyTypeId: UUID = UUID.randomUUID(),
     startDate: LocalDate = LocalDate.now(),
     endDate: LocalDate = LocalDate.now().plusDays(3),
-    reason: String = "아침 자습 신청합니다.",
+    reason: String = "새벽 자습 신청합니다.",
     status: Status = Status.PENDING,
     teacherId: UUID = UUID.randomUUID(),
     studentId: UUID = UUID.randomUUID(),
