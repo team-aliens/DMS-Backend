@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.daybreak.usecase
 
 import team.aliens.dms.common.annotation.ReadOnlyUseCase
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudentSchoolMismatchException
@@ -15,7 +16,7 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCase(
     private val securityService: SecurityService
 ) {
 
-    fun execute(studentId: UUID): DaybreakStudyApplicationResponse {
+    fun execute(studentId: UUID, pageData: PageData): DaybreakStudyApplicationResponse {
 
         val student = studentService.getStudentById(studentId)
 
@@ -24,7 +25,7 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCase(
         }
 
         return DaybreakStudyApplicationResponse(
-            daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
+            daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId, pageData)
         )
     }
 }
