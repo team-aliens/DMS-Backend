@@ -17,34 +17,35 @@ import java.util.UUID
 
 class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
 
-    val daybreakService = mockk<DaybreakService>()
-    val studentService = mockk<StudentService>()
-    val securityService = mockk<SecurityService>()
-
-    val useCase = QueryStudentDaybreakStudyApplicationHistoryUseCase(
-        daybreakService,
-        studentService,
-        securityService
-    )
-
     describe("execute") {
         context("같은 학교 소속 학생의 이력을 조회하면") {
-
-            val studentId = UUID.randomUUID()
-            val schoolId = UUID.randomUUID()
-
-            val mockStudent = mockk<Student> {
-                every { this@mockk.schoolId } returns schoolId
-            }
-            val mockApplications = listOf(mockk<DaybreakStudyApplicationVO>())
-
-            every { studentService.getStudentById(studentId) } returns mockStudent
-            every { securityService.getCurrentSchoolId() } returns schoolId
-            every {
-                daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
-            } returns mockApplications
-
             it("이력 목록을 반환한다") {
+
+                // given
+                val daybreakService = mockk<DaybreakService>()
+                val studentService = mockk<StudentService>()
+                val securityService = mockk<SecurityService>()
+                val useCase = QueryStudentDaybreakStudyApplicationHistoryUseCase(
+                    daybreakService,
+                    studentService,
+                    securityService
+                )
+
+                val studentId = UUID.randomUUID()
+                val schoolId = UUID.randomUUID()
+
+                val mockStudent = mockk<Student> {
+                    every { this@mockk.schoolId } returns schoolId
+                }
+                val mockApplications = listOf(mockk<DaybreakStudyApplicationVO>())
+
+                every { studentService.getStudentById(studentId) } returns mockStudent
+                every { securityService.getCurrentSchoolId() } returns schoolId
+                every {
+                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
+                } returns mockApplications
+
+                // when & then
                 shouldNotThrowAny {
                     val response = useCase.execute(studentId)
 
@@ -58,23 +59,34 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
         }
 
         context("다른 학교 소속 학생의 이력을 조회하면") {
-
-            val studentId = UUID.randomUUID()
-
-            val mockStudent = mockk<Student> {
-                every { this@mockk.schoolId } returns UUID.randomUUID()
-            }
-
-            every { studentService.getStudentById(studentId) } returns mockStudent
-            every { securityService.getCurrentSchoolId() } returns UUID.randomUUID()
-
             it("DaybreakStudentSchoolMismatchException이 발생한다") {
+
+                // given
+                val daybreakService = mockk<DaybreakService>()
+                val studentService = mockk<StudentService>()
+                val securityService = mockk<SecurityService>()
+                val useCase = QueryStudentDaybreakStudyApplicationHistoryUseCase(
+                    daybreakService,
+                    studentService,
+                    securityService
+                )
+
+                val studentId = UUID.randomUUID()
+
+                val mockStudent = mockk<Student> {
+                    every { this@mockk.schoolId } returns UUID.randomUUID()
+                }
+
+                every { studentService.getStudentById(studentId) } returns mockStudent
+                every { securityService.getCurrentSchoolId() } returns UUID.randomUUID()
+
+                // when & then
                 shouldThrow<DaybreakStudentSchoolMismatchException> {
                     useCase.execute(studentId)
                 }
 
                 verify(exactly = 0) {
-                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
+                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(any())
                 }
             }
         }
