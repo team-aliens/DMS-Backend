@@ -45,5 +45,8 @@ interface GetDaybreakService {
     fun findExpiredDaybreakStudyApplications(): List<DaybreakStudyApplication>
 
     // 학생의 새벽자습 신청 이력(상태가 SECONDE_APPROVED + EXPIRED)을 조회하는 메서드
-    fun getStudentDaybreakStudyApplicationHistoryByStudentId(studentId: UUID): List<DaybreakStudyApplicationVO>
+    fun getStudentDaybreakStudyApplicationHistoryByStudentId(
+        studentId: UUID,
+        pageData: PageData = PageData.DEFAULT
+    ): List<DaybreakStudyApplicationVO>
 }
