@@ -30,3 +30,7 @@ object DaybreakPastDateException : DmsException(
 object DaybreakInvalidDateRangeException : DmsException(
     DaybreakErrorCode.DAYBREAK_INVALID_DATE_RANGE
 )
+
+object DaybreakStudentSchoolMismatchException : DmsException(
+    DaybreakErrorCode.DAYBREAK_STUDENT_SCHOOL_MISMATCH
+)
