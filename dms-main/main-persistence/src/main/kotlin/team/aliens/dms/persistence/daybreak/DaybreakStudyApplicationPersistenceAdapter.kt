@@ -214,6 +214,37 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
     }
 
+    // status가 EXPIRED, SECOND_APPROVED인 것만 조회
+    override fun getStudentDaybreakStudyApplicationHistoryByStudentId(
+        studentId: UUID
+    ): List<DaybreakStudyApplicationVO> {
+        return queryFactory
+            .select(
+                QQueryDaybreakStudyApplicationVO(
+                    daybreakStudyApplicationJpaEntity.id,
+                    daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
+                    daybreakStudyApplicationJpaEntity.createdAt,
+                    daybreakStudyApplicationJpaEntity.startDate,
+                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
+                )
+            )
+            .from(daybreakStudyApplicationJpaEntity)
+            .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
+            .where(
+                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+                daybreakStudyApplicationJpaEntity.status.`in`(Status.EXPIRED, Status.SECOND_APPROVED)
+            )
+            .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
+            .fetch()
+    }
+
     override fun deleteOutdatedDaybreakStudyApplications() {
         queryFactory
             .delete(daybreakStudyApplicationJpaEntity)

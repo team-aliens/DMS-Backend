@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -34,6 +35,7 @@ import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryManagerDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.QueryStudentDaybreakStudyApplicationHistoryUseCase
 import java.util.UUID
 
 @Validated
@@ -48,7 +50,8 @@ class DaybreakWebAdapter(
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase,
     private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
     private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase,
-    private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase
+    private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase,
+    private val queryStudentDaybreakStudyApplicationHistoryUseCase: QueryStudentDaybreakStudyApplicationHistoryUseCase
 ) {
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -137,5 +140,13 @@ class DaybreakWebAdapter(
     @GetMapping("/study-application/my")
     fun getRecentDaybreakStudyApplicationStatus(): DaybreakStudyApplicationStatusResponse {
         return queryDaybreakStudyApplicationStatusUseCase.execute()
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping("/study-application/history/{student-id}")
+    fun getStudentDaybreakStudyApplicationHistory(
+        @PathVariable("student-id") studentId: UUID
+    ): DaybreakStudyApplicationResponse {
+        return queryStudentDaybreakStudyApplicationHistoryUseCase.execute(studentId)
     }
 }
