@@ -145,8 +145,9 @@ class DaybreakWebAdapter(
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/study-application/history/{student-id}")
     fun getStudentDaybreakStudyApplicationHistory(
-        @PathVariable("student-id") studentId: UUID
+        @PathVariable("student-id") studentId: UUID,
+        @ModelAttribute pageData: PageData
     ): DaybreakStudyApplicationResponse {
-        return queryStudentDaybreakStudyApplicationHistoryUseCase.execute(studentId)
+        return queryStudentDaybreakStudyApplicationHistoryUseCase.execute(studentId, pageData)
     }
 }

@@ -216,7 +216,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
 
     // status가 EXPIRED, SECOND_APPROVED인 것만 조회
     override fun getStudentDaybreakStudyApplicationHistoryByStudentId(
-        studentId: UUID
+        studentId: UUID,
+        pageData: PageData
     ): List<DaybreakStudyApplicationVO> {
         return queryFactory
             .select(
@@ -241,6 +242,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
                 daybreakStudyApplicationJpaEntity.status.`in`(Status.EXPIRED, Status.SECOND_APPROVED)
             )
+            .offset(pageData.offset)
+            .limit(pageData.size)
             .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
             .fetch()
     }

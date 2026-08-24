@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import team.aliens.dms.common.dto.PageData
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudentSchoolMismatchException
 import team.aliens.dms.domain.daybreak.service.DaybreakService
@@ -33,6 +34,7 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
 
                 val studentId = UUID.randomUUID()
                 val schoolId = UUID.randomUUID()
+                val pageData = PageData(page = 0, size = 10)
 
                 val mockStudent = mockk<Student> {
                     every { this@mockk.schoolId } returns schoolId
@@ -42,18 +44,18 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
                 every { studentService.getStudentById(studentId) } returns mockStudent
                 every { securityService.getCurrentSchoolId() } returns schoolId
                 every {
-                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
+                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId, pageData)
                 } returns mockApplications
 
                 // when & then
                 shouldNotThrowAny {
-                    val response = useCase.execute(studentId)
+                    val response = useCase.execute(studentId, pageData)
 
                     response.applications shouldBe mockApplications
                 }
 
                 verify(exactly = 1) {
-                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId)
+                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId, pageData)
                 }
             }
         }
@@ -72,6 +74,7 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
                 )
 
                 val studentId = UUID.randomUUID()
+                val pageData = PageData(page = 0, size = 10)
 
                 val mockStudent = mockk<Student> {
                     every { this@mockk.schoolId } returns UUID.randomUUID()
@@ -82,11 +85,11 @@ class QueryStudentDaybreakStudyApplicationHistoryUseCaseTest : DescribeSpec({
 
                 // when & then
                 shouldThrow<DaybreakStudentSchoolMismatchException> {
-                    useCase.execute(studentId)
+                    useCase.execute(studentId, pageData)
                 }
 
                 verify(exactly = 0) {
-                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(any())
+                    daybreakService.getStudentDaybreakStudyApplicationHistoryByStudentId(any(), any())
                 }
             }
         }
