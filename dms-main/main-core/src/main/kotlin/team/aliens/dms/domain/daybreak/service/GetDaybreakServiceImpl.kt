@@ -91,14 +91,6 @@ class GetDaybreakServiceImpl(
     override fun getStudentDaybreakStudyApplicationHistoryByStudentId(
         studentId: UUID,
         pageData: PageData
-    ): List<DaybreakStudyApplicationVO> {
-        val applications =
-            queryDaybreakStudyApplicationPort.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId, pageData)
-
-        if (applications.isEmpty()) {
-            throw DaybreakStudyApplicationNotFoundException
-        }
-
-        return applications
-    }
+    ): List<DaybreakStudyApplicationVO> =
+        queryDaybreakStudyApplicationPort.getStudentDaybreakStudyApplicationHistoryByStudentId(studentId, pageData)
 }
