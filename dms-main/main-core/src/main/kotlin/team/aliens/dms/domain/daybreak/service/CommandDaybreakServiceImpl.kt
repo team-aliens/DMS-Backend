@@ -10,6 +10,7 @@ import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.spi.CommandDaybreakStudyApplicationPort
 import team.aliens.dms.domain.daybreak.spi.CommandDaybreakStudyTypePort
 import team.aliens.dms.domain.student.spi.QueryStudentPort
+import java.util.UUID
 
 @Service
 class CommandDaybreakServiceImpl(
@@ -54,6 +55,10 @@ class CommandDaybreakServiceImpl(
 
     override fun deleteOutdatedDaybreakStudyApplications() {
         commandDaybreakStudyApplicationPort.deleteOutdatedDaybreakStudyApplications()
+    }
+
+    override fun deleteDaybreakStudyApplication(studentId: UUID) {
+        commandDaybreakStudyApplicationPort.deleteDaybreakStudyApplication(studentId)
     }
 
     private fun isDaybreakStudyFcmSendable(application: DaybreakStudyApplication): Boolean =

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
@@ -27,6 +28,7 @@ import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationStat
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.CancelDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.CreateDaybreakStudyTypeUseCase
 import team.aliens.dms.domain.daybreak.usecase.ExportManagerDaybreakStudyApplicationUseCase
@@ -51,7 +53,8 @@ class DaybreakWebAdapter(
     private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
     private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase,
     private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase,
-    private val queryStudentDaybreakStudyApplicationHistoryUseCase: QueryStudentDaybreakStudyApplicationHistoryUseCase
+    private val queryStudentDaybreakStudyApplicationHistoryUseCase: QueryStudentDaybreakStudyApplicationHistoryUseCase,
+    private val cancelDaybreakStudyApplicationUseCase: CancelDaybreakStudyApplicationUseCase
 ) {
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -148,5 +151,11 @@ class DaybreakWebAdapter(
         @PathVariable("student-id") studentId: UUID
     ): DaybreakStudyApplicationResponse {
         return queryStudentDaybreakStudyApplicationHistoryUseCase.execute(studentId)
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/study-application/my")
+    fun cancelDaybreakStudyApplication() {
+        cancelDaybreakStudyApplicationUseCase.execute()
     }
 }

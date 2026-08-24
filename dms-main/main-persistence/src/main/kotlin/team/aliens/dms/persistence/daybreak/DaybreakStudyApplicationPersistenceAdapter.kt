@@ -259,6 +259,15 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .execute()
     }
 
+    override fun deleteDaybreakStudyApplication(studentId: UUID) {
+        queryFactory
+            .delete(daybreakStudyApplicationJpaEntity)
+            .where(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+                daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)
+            )
+            .execute()
+    }
+
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {
         daybreakStudyApplicationRepository.save(daybreakStudyApplicationMapper.toEntity(application))
     }

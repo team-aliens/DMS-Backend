@@ -34,3 +34,7 @@ object DaybreakInvalidDateRangeException : DmsException(
 object DaybreakStudentSchoolMismatchException : DmsException(
     DaybreakErrorCode.DAYBREAK_STUDENT_SCHOOL_MISMATCH
 )
+
+object DaybreakStudyApplicationCanNotCancelException : DmsException(
+    DaybreakErrorCode.DAYBREAK_CAN_NOT_CANCEL_STUDY_APPLICATION
+)
