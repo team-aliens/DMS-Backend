@@ -243,6 +243,7 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-application/my").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/manager/study-application/export").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-application/history/{student-id}").hasAnyAuthority(HEAD_TEACHER.name, GENERAL_TEACHER.name)
+                    .requestMatchers(HttpMethod.DELETE, "/daybreaks/study-application/my").hasAuthority(STUDENT.name)
 
                 authorize
                     // /teachers

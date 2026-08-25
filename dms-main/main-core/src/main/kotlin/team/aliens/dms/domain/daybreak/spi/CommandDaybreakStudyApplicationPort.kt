@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.daybreak.spi
 
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyApplication
+import java.util.UUID
 
 interface CommandDaybreakStudyApplicationPort {
 
@@ -9,4 +10,7 @@ interface CommandDaybreakStudyApplicationPort {
     fun saveAllDaybreakStudyApplications(applications: List<DaybreakStudyApplication>)
 
     fun deleteOutdatedDaybreakStudyApplications()
+
+    // 삭제 성공 여부를 반환한다
+    fun deleteDaybreakStudyApplication(studentId: UUID): Boolean
 }
