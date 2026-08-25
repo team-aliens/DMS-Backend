@@ -57,9 +57,8 @@ class CommandDaybreakServiceImpl(
         commandDaybreakStudyApplicationPort.deleteOutdatedDaybreakStudyApplications()
     }
 
-    override fun deleteDaybreakStudyApplication(studentId: UUID) {
+    override fun deleteDaybreakStudyApplication(studentId: UUID) =
         commandDaybreakStudyApplicationPort.deleteDaybreakStudyApplication(studentId)
-    }
 
     private fun isDaybreakStudyFcmSendable(application: DaybreakStudyApplication): Boolean =
         application.status in setOf(

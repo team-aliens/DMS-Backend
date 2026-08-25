@@ -262,13 +262,15 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .execute()
     }
 
-    override fun deleteDaybreakStudyApplication(studentId: UUID) {
-        queryFactory
+    override fun deleteDaybreakStudyApplication(studentId: UUID): Boolean {
+        val deletedCount = queryFactory
             .delete(daybreakStudyApplicationJpaEntity)
             .where(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
                 daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)
             )
             .execute()
+
+        return deletedCount > 0
     }
 
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {

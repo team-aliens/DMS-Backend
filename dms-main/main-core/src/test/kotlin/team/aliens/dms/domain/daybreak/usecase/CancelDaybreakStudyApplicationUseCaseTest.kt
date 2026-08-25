@@ -4,12 +4,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.clearMocks
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
-import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationNotFoundException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotCancelException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationNotFoundException
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.daybreak.spi.vo.DaybreakStudyApplicationStatusVO
@@ -48,10 +46,29 @@ class CancelDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             it("신청을 삭제한다") {
                 every { studentService.getCurrentStudent() } returns mockStudent
                 every { daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) } returns applicationStatus
-                every { daybreakService.deleteDaybreakStudyApplication(studentId) } just runs
+                every { daybreakService.deleteDaybreakStudyApplication(studentId) } returns true
                 useCase.execute()
 
                 verify(exactly = 1) { daybreakService.deleteDaybreakStudyApplication(studentId) }
+            }
+        }
+
+        context("PENDING 상태를 확인한 뒤 삭제 직전에 상태가 바뀌어 삭제된 신청이 없으면") {
+
+            val applicationStatus = DaybreakStudyApplicationStatusVO(
+                status = Status.PENDING,
+                startDate = LocalDate.now(),
+                endDate = LocalDate.now().plusDays(3)
+            )
+
+            it("예외를 반환한다.") {
+                every { studentService.getCurrentStudent() } returns mockStudent
+                every { daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) } returns applicationStatus
+                every { daybreakService.deleteDaybreakStudyApplication(studentId) } returns false
+
+                shouldThrow<DaybreakStudyApplicationCanNotCancelException> {
+                    useCase.execute()
+                }
             }
         }
 
@@ -66,29 +83,29 @@ class CancelDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             it("예외를 반환한다.") {
                 every { studentService.getCurrentStudent() } returns mockStudent
                 every { daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) } returns applicationStatus
-                every { daybreakService.deleteDaybreakStudyApplication(studentId) } just runs
+                every { daybreakService.deleteDaybreakStudyApplication(studentId) } returns true
 
                 shouldThrow<DaybreakStudyApplicationCanNotCancelException> {
                     useCase.execute()
                 }
 
                 verify(exactly = 0) { daybreakService.deleteDaybreakStudyApplication(studentId) }
-
             }
         }
 
         context("신청이 없을 때 요청이 들어오면") {
             it("예외를 반환한다.") {
                 every { studentService.getCurrentStudent() } returns mockStudent
-                every { daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId) } throws DaybreakStudyApplicationNotFoundException
-                every { daybreakService.deleteDaybreakStudyApplication(studentId) } just runs
+                every {
+                    daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId)
+                } throws DaybreakStudyApplicationNotFoundException
+                every { daybreakService.deleteDaybreakStudyApplication(studentId) } returns true
 
                 shouldThrow<DaybreakStudyApplicationNotFoundException> {
                     useCase.execute()
                 }
 
                 verify(exactly = 0) { daybreakService.deleteDaybreakStudyApplication(studentId) }
-
             }
         }
     }

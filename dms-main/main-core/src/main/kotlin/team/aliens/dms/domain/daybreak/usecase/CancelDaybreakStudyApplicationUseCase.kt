@@ -16,10 +16,13 @@ class CancelDaybreakStudyApplicationUseCase(
         val studentId = studentService.getCurrentStudent().id
         val recentApplication = daybreakService.getRecentDaybreakStudyApplicationStatusByStudentId(studentId)
 
-        if(recentApplication.status != Status.PENDING) {
+        if (recentApplication.status != Status.PENDING) {
             throw DaybreakStudyApplicationCanNotCancelException
         }
 
-        daybreakService.deleteDaybreakStudyApplication(studentId)
+        // 위 상태 확인과 삭제 사이에 선생님이 상태를 바꾸면 삭제 조건에 걸리지 않아 아무것도 지워지지 않는다
+        if (!daybreakService.deleteDaybreakStudyApplication(studentId)) {
+            throw DaybreakStudyApplicationCanNotCancelException
+        }
     }
 }

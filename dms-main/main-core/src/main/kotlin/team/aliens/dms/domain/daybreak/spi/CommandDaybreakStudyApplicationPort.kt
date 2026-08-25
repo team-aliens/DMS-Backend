@@ -11,5 +11,6 @@ interface CommandDaybreakStudyApplicationPort {
 
     fun deleteOutdatedDaybreakStudyApplications()
 
-    fun deleteDaybreakStudyApplication(studentId: UUID)
+    // 삭제 성공 여부를 반환한다
+    fun deleteDaybreakStudyApplication(studentId: UUID): Boolean
 }
