@@ -24,4 +24,6 @@ enum class DaybreakErrorCode(
     override fun status(): Int = status
     override fun message(): String = message
     override fun code(): String = "DAYBREAK-$status-$sequence"
+
+    //sdfljksadfjkl
 }
