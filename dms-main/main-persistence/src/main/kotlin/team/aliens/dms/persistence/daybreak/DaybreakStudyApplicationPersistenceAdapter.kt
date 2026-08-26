@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.daybreak
 
+import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
@@ -69,7 +70,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             )
             .offset(pageData.offset)
             .limit(pageData.size)
-            .orderBy(*gcnOrder())
+            .orderBy(statusOrder(), *gcnOrder())
             .fetch()
     }
 
@@ -282,6 +283,15 @@ class DaybreakStudyApplicationPersistenceAdapter(
 
         daybreakStudyApplicationRepository.saveAll(applicationEntities)
     }
+
+    // PENDING -> REJECTED -> FIRST_APPROVED -> SECOND_APPROVED 순으로 정렬
+    private fun statusOrder() = CaseBuilder()
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)).then(0)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.REJECTED)).then(1)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.FIRST_APPROVED)).then(2)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.SECOND_APPROVED)).then(3)
+        .otherwise(4)
+        .asc()
 
     private fun gcnOrder() = arrayOf(
         studentJpaEntity.grade.asc(),
