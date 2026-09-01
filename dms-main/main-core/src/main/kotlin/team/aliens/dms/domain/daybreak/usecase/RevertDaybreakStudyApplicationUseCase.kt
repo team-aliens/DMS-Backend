@@ -20,7 +20,7 @@ class RevertDaybreakStudyApplicationUseCase(
 
         applications.forEach {
             if (it.schoolId != currentSchoolId) throw DaybreakStudentSchoolMismatchException
--            it.revert()
+            it.revert()
         }
 
         daybreakService.saveAllDaybreakStudyApplications(applications)
