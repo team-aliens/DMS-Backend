@@ -3,6 +3,8 @@ package team.aliens.dms.domain.daybreak.model
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -11,6 +13,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
 import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.daybreak.stub.createDaybreakStudyApplicationStub
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import java.time.LocalDate
@@ -189,6 +192,34 @@ class DaybreakStudyApplicationTest : DescribeSpec({
                 val application = createDaybreakStudyApplicationStub(status = Status.PENDING)
                 shouldThrow<InvalidRoleException> {
                     application.changeStatus(Authority.STUDENT, Status.FIRST_APPROVED)
+                }
+            }
+        }
+    }
+
+    describe("revert") {
+
+        it("SECOND_APPROVED 상태를 FIRST_APPROVED로 되돌린다") {
+            val application = createDaybreakStudyApplicationStub(status = Status.SECOND_APPROVED)
+            application.revert()
+            application.status shouldBe Status.FIRST_APPROVED
+        }
+
+        it("REJECTED 상태를 FIRST_APPROVED로 되돌린다") {
+            val application = createDaybreakStudyApplicationStub(status = Status.REJECTED)
+            application.revert()
+            application.status shouldBe Status.FIRST_APPROVED
+        }
+
+        it("되돌릴 수 없는 상태면 DaybreakStudyApplicationCanNotRevertException을 던진다") {
+            forAll(
+                row(Status.PENDING),
+                row(Status.FIRST_APPROVED),
+                row(Status.EXPIRED),
+            ) { status ->
+                val application = createDaybreakStudyApplicationStub(status = status)
+                shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                    application.revert()
                 }
             }
         }
