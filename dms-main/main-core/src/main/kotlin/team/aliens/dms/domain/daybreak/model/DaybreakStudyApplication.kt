@@ -6,6 +6,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
 import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -93,6 +94,14 @@ data class DaybreakStudyApplication(
     private fun validateHeadTeacherTransition(newStatus: Status) {
         if (status != Status.FIRST_APPROVED) throw InvalidRoleException
         if (newStatus != Status.SECOND_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
+    }
+
+    // 부장선생님이 내린 최종 승인(SECOND_APPROVED)/거절(REJECTED)을 1차 승인 상태로 되돌린다
+    fun revert() {
+        this.status = when (status) {
+            Status.SECOND_APPROVED, Status.REJECTED -> Status.FIRST_APPROVED
+            else -> throw DaybreakStudyApplicationCanNotRevertException
+        }
     }
 
     // REJECTED, FIRST_APPROVED, SECOND_APPROVED만 알림을 발송함

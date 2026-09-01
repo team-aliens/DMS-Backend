@@ -38,3 +38,7 @@ object DaybreakStudentSchoolMismatchException : DmsException(
 object DaybreakStudyApplicationCanNotCancelException : DmsException(
     DaybreakErrorCode.DAYBREAK_CAN_NOT_CANCEL_STUDY_APPLICATION
 )
+
+object DaybreakStudyApplicationCanNotRevertException : DmsException(
+    DaybreakErrorCode.DAYBREAK_CAN_NOT_REVERT_STUDY_APPLICATION
+)
