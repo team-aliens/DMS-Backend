@@ -188,6 +188,15 @@ class DaybreakStudyApplicationTest : DescribeSpec({
                 }
             }
 
+            it("상태를 변경하면 직전 상태를 기록한다") {
+                val application = createDaybreakStudyApplicationStub(status = Status.PENDING)
+                application.changeStatus(Authority.GENERAL_TEACHER, Status.FIRST_APPROVED)
+                application.previousStatus shouldBe Status.PENDING
+
+                application.changeStatus(Authority.HEAD_TEACHER, Status.SECOND_APPROVED)
+                application.previousStatus shouldBe Status.FIRST_APPROVED
+            }
+
             it("허용되지 않은 권한(예: STUDENT)으로 변경을 시도하면 예외가 발생한다") {
                 val application = createDaybreakStudyApplicationStub(status = Status.PENDING)
                 shouldThrow<InvalidRoleException> {
@@ -199,16 +208,47 @@ class DaybreakStudyApplicationTest : DescribeSpec({
 
     describe("revert") {
 
-        it("SECOND_APPROVED 상태를 FIRST_APPROVED로 되돌린다") {
-            val application = createDaybreakStudyApplicationStub(status = Status.SECOND_APPROVED)
-            application.revert()
-            application.status shouldBe Status.FIRST_APPROVED
+        it("직전 상태로 되돌린다") {
+            forAll(
+                row(Status.SECOND_APPROVED, Status.FIRST_APPROVED),
+                row(Status.REJECTED, Status.FIRST_APPROVED),
+                row(Status.REJECTED, Status.PENDING),
+            ) { status, previousStatus ->
+                val application = createDaybreakStudyApplicationStub(
+                    status = status,
+                    previousStatus = previousStatus
+                )
+
+                application.revert()
+
+                application.status shouldBe previousStatus
+            }
         }
 
-        it("REJECTED 상태를 FIRST_APPROVED로 되돌린다") {
-            val application = createDaybreakStudyApplicationStub(status = Status.REJECTED)
+        it("되돌린 뒤에는 직전 상태가 비어 다시 되돌릴 수 없다") {
+            val application = createDaybreakStudyApplicationStub(
+                status = Status.SECOND_APPROVED,
+                previousStatus = Status.FIRST_APPROVED
+            )
+
             application.revert()
-            application.status shouldBe Status.FIRST_APPROVED
+
+            application.previousStatus shouldBe null
+            shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                application.revert()
+            }
+        }
+
+        it("직전 상태가 없으면 DaybreakStudyApplicationCanNotRevertException을 던진다") {
+            forAll(
+                row(Status.SECOND_APPROVED),
+                row(Status.REJECTED),
+            ) { status ->
+                val application = createDaybreakStudyApplicationStub(status = status, previousStatus = null)
+                shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                    application.revert()
+                }
+            }
         }
 
         it("되돌릴 수 없는 상태면 DaybreakStudyApplicationCanNotRevertException을 던진다") {
@@ -217,7 +257,10 @@ class DaybreakStudyApplicationTest : DescribeSpec({
                 row(Status.FIRST_APPROVED),
                 row(Status.EXPIRED),
             ) { status ->
-                val application = createDaybreakStudyApplicationStub(status = status)
+                val application = createDaybreakStudyApplicationStub(
+                    status = status,
+                    previousStatus = Status.FIRST_APPROVED
+                )
                 shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
                     application.revert()
                 }
