@@ -3,6 +3,8 @@ package team.aliens.dms.domain.daybreak.model
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -11,6 +13,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
 import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.daybreak.stub.createDaybreakStudyApplicationStub
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import java.time.LocalDate
@@ -185,10 +188,81 @@ class DaybreakStudyApplicationTest : DescribeSpec({
                 }
             }
 
+            it("상태를 변경하면 직전 상태를 기록한다") {
+                val application = createDaybreakStudyApplicationStub(status = Status.PENDING)
+                application.changeStatus(Authority.GENERAL_TEACHER, Status.FIRST_APPROVED)
+                application.previousStatus shouldBe Status.PENDING
+
+                application.changeStatus(Authority.HEAD_TEACHER, Status.SECOND_APPROVED)
+                application.previousStatus shouldBe Status.FIRST_APPROVED
+            }
+
             it("허용되지 않은 권한(예: STUDENT)으로 변경을 시도하면 예외가 발생한다") {
                 val application = createDaybreakStudyApplicationStub(status = Status.PENDING)
                 shouldThrow<InvalidRoleException> {
                     application.changeStatus(Authority.STUDENT, Status.FIRST_APPROVED)
+                }
+            }
+        }
+    }
+
+    describe("revert") {
+
+        it("직전 상태로 되돌린다") {
+            forAll(
+                row(Status.SECOND_APPROVED, Status.FIRST_APPROVED),
+                row(Status.REJECTED, Status.FIRST_APPROVED),
+                row(Status.REJECTED, Status.PENDING),
+            ) { status, previousStatus ->
+                val application = createDaybreakStudyApplicationStub(
+                    status = status,
+                    previousStatus = previousStatus
+                )
+
+                application.revert()
+
+                application.status shouldBe previousStatus
+            }
+        }
+
+        it("되돌린 뒤에는 직전 상태가 비어 다시 되돌릴 수 없다") {
+            val application = createDaybreakStudyApplicationStub(
+                status = Status.SECOND_APPROVED,
+                previousStatus = Status.FIRST_APPROVED
+            )
+
+            application.revert()
+
+            application.previousStatus shouldBe null
+            shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                application.revert()
+            }
+        }
+
+        it("직전 상태가 없으면 DaybreakStudyApplicationCanNotRevertException을 던진다") {
+            forAll(
+                row(Status.SECOND_APPROVED),
+                row(Status.REJECTED),
+            ) { status ->
+                val application = createDaybreakStudyApplicationStub(status = status, previousStatus = null)
+                shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                    application.revert()
+                }
+            }
+        }
+
+        it("되돌릴 수 없는 상태면 DaybreakStudyApplicationCanNotRevertException을 던진다") {
+            forAll(
+                row(Status.PENDING),
+                row(Status.FIRST_APPROVED),
+                row(Status.EXPIRED),
+            ) { status ->
+                val application = createDaybreakStudyApplicationStub(
+                    status = status,
+                    previousStatus = Status.FIRST_APPROVED
+                )
+                shouldThrow<DaybreakStudyApplicationCanNotRevertException> {
+                    application.revert()
                 }
             }
         }

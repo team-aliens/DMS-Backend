@@ -19,6 +19,7 @@ enum class DaybreakErrorCode(
     DAYBREAK_PAST_DATE(ErrorStatus.BAD_REQUEST, "Daybreak Application Date Cannot Be In The Past", 2),
     DAYBREAK_INVALID_DATE_RANGE(ErrorStatus.BAD_REQUEST, "Daybreak Application Date Must Be Within Monday To Thursday", 3),
     DAYBREAK_CAN_NOT_CANCEL_STUDY_APPLICATION(ErrorStatus.BAD_REQUEST, "Daybreak Study Application Can Not Cancel", 4),
+    DAYBREAK_CAN_NOT_REVERT_STUDY_APPLICATION(ErrorStatus.BAD_REQUEST, "Daybreak Study Application Can Not Revert", 5),
 
     DAYBREAK_STUDENT_SCHOOL_MISMATCH(ErrorStatus.FORBIDDEN, "Student Does Not Belong To Current School", 1);
 

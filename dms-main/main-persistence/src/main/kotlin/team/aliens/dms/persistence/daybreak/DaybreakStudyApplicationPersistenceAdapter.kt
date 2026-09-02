@@ -266,7 +266,8 @@ class DaybreakStudyApplicationPersistenceAdapter(
     override fun deleteDaybreakStudyApplication(studentId: UUID): Boolean {
         val deletedCount = queryFactory
             .delete(daybreakStudyApplicationJpaEntity)
-            .where(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+            .where(
+                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
                 daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)
             )
             .execute()

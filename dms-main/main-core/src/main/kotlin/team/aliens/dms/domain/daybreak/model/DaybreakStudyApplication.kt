@@ -6,6 +6,7 @@ import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
 import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
+import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -25,6 +26,9 @@ data class DaybreakStudyApplication(
     val reason: String,
 
     var status: Status,
+
+    // 되돌리기를 위해 직전 상태를 보관한다. 상태 변경 이력이 없으면 null
+    var previousStatus: Status? = null,
 
     val teacherId: UUID,
 
@@ -78,6 +82,7 @@ data class DaybreakStudyApplication(
             else -> throw InvalidRoleException
         }
 
+        this.previousStatus = this.status
         this.status = newStatus
     }
 
@@ -93,6 +98,16 @@ data class DaybreakStudyApplication(
     private fun validateHeadTeacherTransition(newStatus: Status) {
         if (status != Status.FIRST_APPROVED) throw InvalidRoleException
         if (newStatus != Status.SECOND_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
+    }
+
+    // 최종 승인(SECOND_APPROVED)/거절(REJECTED)을 직전 상태로 되돌린다.
+    fun revert() {
+        if (!isTerminalStatus()) throw DaybreakStudyApplicationCanNotRevertException
+
+        val previous = previousStatus ?: throw DaybreakStudyApplicationCanNotRevertException
+
+        this.status = previous
+        this.previousStatus = null
     }
 
     // REJECTED, FIRST_APPROVED, SECOND_APPROVED만 알림을 발송함
