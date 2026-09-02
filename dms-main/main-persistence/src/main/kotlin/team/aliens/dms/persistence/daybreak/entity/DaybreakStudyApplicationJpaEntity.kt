@@ -29,6 +29,10 @@ class DaybreakStudyApplicationJpaEntity(
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     var status: Status,
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "previous_status", columnDefinition = "VARCHAR(20)")
+    var previousStatus: Status? = null,
+
     @Column(columnDefinition = "DATE", nullable = false)
     val startDate: LocalDate,
 

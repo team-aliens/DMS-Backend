@@ -25,6 +25,7 @@ class DaybreakStudyApplicationMapper(
                 endDate = it.endDate,
                 reason = it.reason,
                 status = it.status,
+                previousStatus = it.previousStatus,
                 teacherId = it.teacherJpaEntity.id,
                 studentId = it.studentJpaEntity.id!!,
                 schoolId = it.schoolJpaEntity.id!!
@@ -39,6 +40,7 @@ class DaybreakStudyApplicationMapper(
             endDate = domain.endDate,
             reason = domain.reason,
             status = domain.status,
+            previousStatus = domain.previousStatus,
             daybreakStudyTypeJpaEntity = entityManager.getReference(DaybreakStudyTypeJpaEntity::class.java, domain.studyTypeId),
             studentJpaEntity = entityManager.getReference(StudentJpaEntity::class.java, domain.studentId),
             teacherJpaEntity = entityManager.getReference(TeacherJpaEntity::class.java, domain.teacherId),
