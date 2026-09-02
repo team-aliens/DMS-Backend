@@ -1,5 +1,6 @@
 package team.aliens.dms.persistence.daybreak
 
+import com.querydsl.core.types.dsl.CaseBuilder
 import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
@@ -69,7 +70,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             )
             .offset(pageData.offset)
             .limit(pageData.size)
-            .orderBy(*gcnOrder())
+            .orderBy(statusOrder(), *gcnOrder())
             .fetch()
     }
 
@@ -214,6 +215,40 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .mapNotNull { daybreakStudyApplicationMapper.toDomain(it) }
     }
 
+    // status가 EXPIRED, SECOND_APPROVED인 것만 조회
+    override fun getStudentDaybreakStudyApplicationHistoryByStudentId(
+        studentId: UUID,
+        pageData: PageData
+    ): List<DaybreakStudyApplicationVO> {
+        return queryFactory
+            .select(
+                QQueryDaybreakStudyApplicationVO(
+                    daybreakStudyApplicationJpaEntity.id,
+                    daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
+                    daybreakStudyApplicationJpaEntity.createdAt,
+                    daybreakStudyApplicationJpaEntity.startDate,
+                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.name,
+                    studentJpaEntity.grade,
+                    studentJpaEntity.classRoom,
+                    studentJpaEntity.number,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
+                    Expressions.nullExpression()
+                )
+            )
+            .from(daybreakStudyApplicationJpaEntity)
+            .join(studentJpaEntity).on(daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentJpaEntity.id))
+            .where(
+                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+                daybreakStudyApplicationJpaEntity.status.`in`(Status.EXPIRED, Status.SECOND_APPROVED)
+            )
+            .offset(pageData.offset)
+            .limit(pageData.size)
+            .orderBy(daybreakStudyApplicationJpaEntity.createdAt.desc())
+            .fetch()
+    }
+
     override fun deleteOutdatedDaybreakStudyApplications() {
         queryFactory
             .delete(daybreakStudyApplicationJpaEntity)
@@ -228,6 +263,18 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .execute()
     }
 
+    override fun deleteDaybreakStudyApplication(studentId: UUID): Boolean {
+        val deletedCount = queryFactory
+            .delete(daybreakStudyApplicationJpaEntity)
+            .where(
+                daybreakStudyApplicationJpaEntity.studentJpaEntity.id.eq(studentId),
+                daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)
+            )
+            .execute()
+
+        return deletedCount > 0
+    }
+
     override fun saveDaybreakStudyApplication(application: DaybreakStudyApplication) {
         daybreakStudyApplicationRepository.save(daybreakStudyApplicationMapper.toEntity(application))
     }
@@ -237,6 +284,15 @@ class DaybreakStudyApplicationPersistenceAdapter(
 
         daybreakStudyApplicationRepository.saveAll(applicationEntities)
     }
+
+    // PENDING -> REJECTED -> FIRST_APPROVED -> SECOND_APPROVED 순으로 정렬
+    private fun statusOrder() = CaseBuilder()
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.PENDING)).then(0)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.REJECTED)).then(1)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.FIRST_APPROVED)).then(2)
+        .`when`(daybreakStudyApplicationJpaEntity.status.eq(Status.SECOND_APPROVED)).then(3)
+        .otherwise(4)
+        .asc()
 
     private fun gcnOrder() = arrayOf(
         studentJpaEntity.grade.asc(),

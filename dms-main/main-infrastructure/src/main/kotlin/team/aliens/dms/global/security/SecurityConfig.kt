@@ -238,10 +238,13 @@ class SecurityConfig(
                     .requestMatchers(HttpMethod.GET, "/daybreaks/head/study-application").hasAuthority(HEAD_TEACHER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/manager/study-application").hasAuthority(MANAGER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-type").hasAnyAuthority(HEAD_TEACHER.name,GENERAL_TEACHER.name,STUDENT.name)
+                    .requestMatchers(HttpMethod.PATCH, "/daybreaks/study-application/revert").hasAuthority(HEAD_TEACHER.name)
                     .requestMatchers(HttpMethod.PATCH, "/daybreaks/study-application").hasAnyAuthority(HEAD_TEACHER.name, GENERAL_TEACHER.name)
                     .requestMatchers(HttpMethod.POST, "/daybreaks/study-type").hasAuthority(HEAD_TEACHER.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/study-application/my").hasAuthority(STUDENT.name)
                     .requestMatchers(HttpMethod.GET, "/daybreaks/manager/study-application/export").hasAuthority(MANAGER.name)
+                    .requestMatchers(HttpMethod.GET, "/daybreaks/study-application/history/{student-id}").hasAnyAuthority(HEAD_TEACHER.name, GENERAL_TEACHER.name)
+                    .requestMatchers(HttpMethod.DELETE, "/daybreaks/study-application/my").hasAuthority(STUDENT.name)
 
                 authorize
                     // /teachers

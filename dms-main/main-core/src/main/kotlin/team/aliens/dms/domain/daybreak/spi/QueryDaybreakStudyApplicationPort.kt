@@ -42,4 +42,9 @@ interface QueryDaybreakStudyApplicationPort {
     fun getRecentDaybreakStudyApplicationStatusByStudentId(studentId: UUID): DaybreakStudyApplicationStatusVO?
 
     fun findExpiredDaybreakStudyApplications(): List<DaybreakStudyApplication>
+
+    fun getStudentDaybreakStudyApplicationHistoryByStudentId(
+        studentId: UUID,
+        pageData: PageData = PageData.DEFAULT
+    ): List<DaybreakStudyApplicationVO>
 }

@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,11 +23,14 @@ import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicatio
 import team.aliens.dms.domain.daybreak.dto.request.ChangeDaybreakStudyApplicationStatusWebRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeRequest
 import team.aliens.dms.domain.daybreak.dto.request.CreateDaybreakStudyTypeWebRequest
+import team.aliens.dms.domain.daybreak.dto.request.RevertDaybreakStudyApplicationRequest
+import team.aliens.dms.domain.daybreak.dto.request.RevertDaybreakStudyApplicationWebRequest
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationResponse
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyApplicationStatusResponse
 import team.aliens.dms.domain.daybreak.dto.response.DaybreakStudyTypesResponse
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.usecase.ApplyDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.CancelDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.ChangeStatusDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.CreateDaybreakStudyTypeUseCase
 import team.aliens.dms.domain.daybreak.usecase.ExportManagerDaybreakStudyApplicationUseCase
@@ -34,6 +39,8 @@ import team.aliens.dms.domain.daybreak.usecase.QueryDaybreakStudyTypesUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryGeneralTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryHeadTeacherDaybreakStudyApplicationUseCase
 import team.aliens.dms.domain.daybreak.usecase.QueryManagerDaybreakStudyApplicationUseCase
+import team.aliens.dms.domain.daybreak.usecase.QueryStudentDaybreakStudyApplicationHistoryUseCase
+import team.aliens.dms.domain.daybreak.usecase.RevertDaybreakStudyApplicationUseCase
 import java.util.UUID
 
 @Validated
@@ -48,7 +55,10 @@ class DaybreakWebAdapter(
     private val queryDaybreakStudyTypesUseCase: QueryDaybreakStudyTypesUseCase,
     private val changeStatusDaybreakStudyApplicationUseCase: ChangeStatusDaybreakStudyApplicationUseCase,
     private val createDaybreakStudyTypeUseCase: CreateDaybreakStudyTypeUseCase,
-    private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase
+    private val queryDaybreakStudyApplicationStatusUseCase: QueryDaybreakStudyApplicationStatusUseCase,
+    private val queryStudentDaybreakStudyApplicationHistoryUseCase: QueryStudentDaybreakStudyApplicationHistoryUseCase,
+    private val cancelDaybreakStudyApplicationUseCase: CancelDaybreakStudyApplicationUseCase,
+    private val revertDaybreakStudyApplicationUseCase: RevertDaybreakStudyApplicationUseCase
 ) {
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -137,5 +147,30 @@ class DaybreakWebAdapter(
     @GetMapping("/study-application/my")
     fun getRecentDaybreakStudyApplicationStatus(): DaybreakStudyApplicationStatusResponse {
         return queryDaybreakStudyApplicationStatusUseCase.execute()
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @GetMapping("/study-application/history/{student-id}")
+    fun getStudentDaybreakStudyApplicationHistory(
+        @PathVariable("student-id") studentId: UUID,
+        @ModelAttribute pageData: PageData
+    ): DaybreakStudyApplicationResponse {
+        return queryStudentDaybreakStudyApplicationHistoryUseCase.execute(studentId, pageData)
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @DeleteMapping("/study-application/my")
+    fun cancelDaybreakStudyApplication() {
+        cancelDaybreakStudyApplicationUseCase.execute()
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PatchMapping("/study-application/revert")
+    fun revertDaybreakStudyApplication(
+        @RequestBody @Valid request: RevertDaybreakStudyApplicationWebRequest
+    ) {
+        revertDaybreakStudyApplicationUseCase.execute(
+            RevertDaybreakStudyApplicationRequest(request.applicationIdList)
+        )
     }
 }
