@@ -27,6 +27,9 @@ data class DaybreakStudyApplication(
 
     var status: Status,
 
+    // 되돌리기를 위해 직전 상태를 보관한다. 상태 변경 이력이 없으면 null
+    var previousStatus: Status? = null,
+
     val teacherId: UUID,
 
     val studentId: UUID,
@@ -79,6 +82,7 @@ data class DaybreakStudyApplication(
             else -> throw InvalidRoleException
         }
 
+        this.previousStatus = this.status
         this.status = newStatus
     }
 
@@ -96,12 +100,14 @@ data class DaybreakStudyApplication(
         if (newStatus != Status.SECOND_APPROVED && newStatus != Status.REJECTED) throw InvalidRoleException
     }
 
-    // 부장선생님이 내린 최종 승인(SECOND_APPROVED)/거절(REJECTED)을 1차 승인 상태로 되돌린다
+    // 최종 승인(SECOND_APPROVED)/거절(REJECTED)을 직전 상태로 되돌린다.
     fun revert() {
-        this.status = when (status) {
-            Status.SECOND_APPROVED, Status.REJECTED -> Status.FIRST_APPROVED
-            else -> throw DaybreakStudyApplicationCanNotRevertException
-        }
+        if (!isTerminalStatus()) throw DaybreakStudyApplicationCanNotRevertException
+
+        val previous = previousStatus ?: throw DaybreakStudyApplicationCanNotRevertException
+
+        this.status = previous
+        this.previousStatus = null
     }
 
     // REJECTED, FIRST_APPROVED, SECOND_APPROVED만 알림을 발송함
