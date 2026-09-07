@@ -69,6 +69,15 @@ P --> PA(adapter);
 | 소유권·학교 스코프 | **유스케이스** |
 
 마지막 줄만 유스케이스인 이유: 새 쿼리가 아니라 이미 가져온 값 둘의 비교이고, 횡단 관심사(`securityService`)가 끼기 때문입니다.
+소유권 위반을 **"빈 결과"로 뭉개지 않고 전용 예외로 표현**하려는 것이기도 합니다 — `RemoveNoticeUseCase`가
+`notice.managerId != user.id`로 `IsNotWriterException`(403)을 던지는 게 기준 형태입니다.
+
+> ⚠️ **일부 옛 코드는 아직 이 규칙을 안 따릅니다.** `UpdateNoticeUseCase`는 `getNoticeByIdAndManagerId(noticeId, user.id)`로
+> **쿼리 `WHERE`절에서** 작성자를 거릅니다. 이 경로는 소유권 위반이 "행 없음"이 되어 403이 아니라
+> **`NoticeNotFoundException`(404)** 이 나갑니다 — 같은 도메인 안에서 삭제는 403, 수정은 404인 상태입니다.
+>
+> **신규 코드는 표의 규칙(유스케이스에서 비교)을 따르세요.** 남은 경로는 별도 이슈로 리팩토링합니다.
+> 응답 코드가 404 → 403으로 바뀌므로 클라이언트 합의가 필요합니다.
 
 ---
 
