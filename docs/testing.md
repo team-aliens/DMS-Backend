@@ -18,6 +18,7 @@ main-core/src/test/kotlin/team/aliens/dms/domain/<도메인>/
 
 - 테스트 클래스는 **대상과 같은 패키지**에 `<대상클래스>Test`로 만듭니다
 - 비즈니스 로직이 전부 core에 있으므로 검증도 여기서 합니다
+- 현재는 usecase, model, stub만 작성하고 있습니다.
 - `main-infrastructure`에 JWT·필터·어댑터 테스트가 소수 있지만 예외적인 경우입니다. `main-persistence`·`main-presentation`에는 테스트가 없습니다
 
 ---
