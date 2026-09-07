@@ -66,9 +66,20 @@ main-infrastructure/src/main/resources/db/migration/V<버전>__<snake_case_설�
 ### 규칙
 
 * **이미 적용된 마이그레이션은 절대 수정하지 않습니다.** checksum이 깨져 다음 배포가 실패합니다
+* **새 변경은 항상 최신 번호 뒤에 붙입니다.** 운영 DB에 이미 적용된 최고 버전보다 낮은 번호를 쓰면 안 됩니다
 * 번호를 이미 뺏겼다면 **서브버전**을 씁니다 — `V21_1`은 버전 21.1로 해석되어 V21과 V22 사이에 들어갑니다 (기존 파일명을 안 건드림)
 * 뒤늦게 넣는 `CREATE TABLE`은 **그 테이블이 처음 만들어졌던 시점의 스키마**로 작성합니다. 이후 `ALTER`들이 재적용되며 최종 상태에 도달하는 게 올바른 순서입니다
 * **엔티티를 바꾸면 마이그레이션을 반드시 함께 추가**합니다 (`ddl-auto: validate`)
+
+> ⚠️ **서브버전은 "빈 DB에서 스키마를 처음부터 재현하기 위한" 보완이지, 운영 DB에 뒤늦게 반영하는 수단이 아닙니다.**
+>
+> `spring.flyway.out-of-order`를 설정하지 않았으므로 **기본값 `false`** 입니다. 이미 더 높은 버전이 적용된 DB에서는
+> 나중에 추가된 낮은 버전이 **실행되지 않습니다.**
+>
+> 실제 사례가 `V21_1__create_notification_tables.sql`입니다. notification이 별도 서비스였을 때 이 테이블들은 그쪽의
+> 베이스라인이라 `CREATE TABLE`이 이 리포에 없었고, `ALTER`(V22~V25)만 넘어와서 빈 DB의 Flyway가 실패했습니다.
+> 이 파일은 **그 구멍을 메우는 용도**이고, 해당 테이블이 이미 있는 운영 DB에서는 돌면 안 됩니다(중복 생성 에러).
+> 이미 데이터가 있는 물리 DB를 합치는 건 마이그레이션 파일로 풀 문제가 아니라 별도 운영 작업입니다.
 
 ### `validate`가 잡지 못하는 것
 
@@ -83,6 +94,24 @@ main-infrastructure/src/main/resources/db/migration/V<버전>__<snake_case_설�
 **빈 DB에 Flyway만 돌려서는 스키마가 만들어지지 않습니다.** 새 환경은 덤프 복원이 전제입니다.
 
 기존 DB를 옮길 때는 `flyway_schema_history`를 **직접 조회해** 마지막 성공 버전을 확인하고, 그 값으로 baseline을 잡습니다(추측 금지).
+
+`application.yml`의 값은 이렇습니다.
+
+```yaml
+  flyway:
+    baseline-on-migrate: ${BASELINE_ON_MIGRATE}
+    baseline-version: 0          # ← 리터럴. 환경변수로 덮어쓰는 것이 전제
+```
+
+**`baseline-version`을 그대로 두면 baseline이 0으로 잡혀 `V1`부터 재생됩니다.** `V1`은 이미 존재하는
+`tbl_outing_application`을 `ALTER`하므로 옮긴 DB에서 실패합니다. 그래서 이관 때는 반드시 이렇게 합니다.
+
+1. 원본 DB의 `flyway_schema_history`를 조회해 **마지막 성공 버전**을 확인한다
+2. `BASELINE_ON_MIGRATE=true` + `SPRING_FLYWAY_BASELINE_VERSION=<확인한 버전>` 으로 **최초 1회만** 기동한다
+3. baseline 이후 버전만 재생되므로, 그 구간의 `DROP TABLE` 대상 테이블은 **스키마만**(`mysqldump --no-data`) 미리 만들어둔다
+
+> ⚠️ **`.env`에 값을 넣는 것만으로는 반영되지 않습니다.** docker-compose에 그 환경변수를 컨테이너로 전달하는 줄이
+> 없으면 조용히 `0`으로 떨어집니다 — 실제로 이걸 빠뜨려 baseline이 0이 된 실패가 있었습니다.
 
 ---
 

@@ -18,7 +18,7 @@ Kotlin · Spring Boot 3.2 · Java 17 · MySQL 8 · Redis · JPA/QueryDSL · Flyw
 
 # 문서 목록
 
-- `architecture.md` — 시스템 아키텍쳐
-- `database.md` — DB 설계 및 flyway 사용법
-- `git-convention.md` — Git 관련 규칙
-- `testing.md` — 테스트 코드 작성 방법
+- [architecture.md](docs/architecture.md) — 시스템 아키텍처
+- [database.md](docs/database.md) — DB 설계 및 flyway 사용법
+- [git-convention.md](docs/git-convention.md) — Git 관련 규칙
+- [testing.md](docs/testing.md) — 테스트 코드 작성 방법

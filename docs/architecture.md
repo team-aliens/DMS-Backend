@@ -22,9 +22,8 @@
 ```mermaid
 flowchart TD
 WA[webAdapter] --> UC[usecase];
-UC -->|getService| P(command / query port);
-UC -->|commandService| P;
-UC -->|checkService| P;
+UC -->|getService / commandService / checkService| S[service];
+S --> P(command / query port);
 P --> PA(adapter);
 ```
 
@@ -80,6 +79,18 @@ P --> PA(adapter);
 
 경합이 실재하는 경로에서는 락 대신 **영향 행 수로 성공/실패를 판정**합니다.
 판단 기준은 "그 상태를 동시에 바꿀 수 있는 다른 주체가 실재하는가"입니다.
+
+**단, 영향 행 수는 조건절이 갖춰져야 판정이 됩니다.**
+
+* `UPDATE`/`DELETE`의 **`WHERE`에 바꾸기 전 상태를 조건으로 넣고**, 반환된 영향 행 수를 검사해야 합니다.
+  `deleteDaybreakStudyApplication`이 `studentId` + `status = PENDING`으로 지우고 `deletedCount > 0`을 올리는 게 이 형태입니다
+* `WHERE`에 PK만 걸면 두 트랜잭션이 **각각 1행을 갱신하고 나중 것이 앞의 변경을 덮어씁니다.**
+  이때의 1은 "내가 이겼다"가 아니라 그냥 "행이 있었다"입니다 — 아무것도 검출하지 못합니다
+* 바꾸기 전 상태를 조건으로 표현할 수 없거나, 불변식이 여러 행·여러 테이블에 걸치면 이 방법으로는 안 잡힙니다.
+  그때는 `SELECT ... FOR UPDATE`나 낙관적 락이 필요합니다 (현재 리포에는 둘 다 없습니다)
+
+**사전 조회는 지우지 마세요.** 영향 행 수만 보면 "대상 없음(404)"과 "상태가 안 맞아 불가(400)"가 한 예외로 뭉개집니다.
+사전 조회로 두 상황을 구분하고, 영향 행 수 검사는 **그 사이의 레이스만** 잡는 용도로 얹습니다.
 
 ---
 
