@@ -1,7 +1,6 @@
 package team.aliens.dms.global.filter
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.sentry.Sentry
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -27,18 +26,11 @@ class ExceptionFilter(
         } catch (e: DmsException) {
             e.printStackTrace()
             errorToJson(e.errorProperty, response)
-            Sentry.captureException(e)
         } catch (e: Exception) {
             e.printStackTrace()
-            when (e.cause) {
-                is DmsException -> {
-                    errorToJson((e.cause as DmsException).errorProperty, response)
-                    Sentry.captureException(e)
-                }
-                else -> {
-                    errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
-                    Sentry.captureException(e)
-                }
+            when (val cause = e.cause) {
+                is DmsException -> errorToJson(cause.errorProperty, response)
+                else -> errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
             }
         }
     }
