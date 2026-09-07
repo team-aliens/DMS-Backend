@@ -106,9 +106,6 @@ base는 **`develop`**입니다. 템플릿(`.github/PULL_REQUEST_TEMPLATE.md`)을
 * `build`(전체 gradle build), `CI`(테스트 + 커버리지 코멘트)
 * CodeRabbit 리뷰
 
-> **CodeRabbit이 `CHANGES_REQUESTED`를 내면 스레드를 전부 resolve해도 자동으로 안 풀립니다.**
-> CI가 전부 성공인데 머지가 막혀 있으면 리뷰 상태를 확인하세요. PR에 `@coderabbitai approve`로 해제합니다.
-
 > 리뷰 지적을 **근거를 대고 반려하는 것도 정상 대응**입니다. 단 근거는 비즈니스 규칙이나 실측이어야 합니다.
 
 ---
