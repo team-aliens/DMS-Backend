@@ -22,8 +22,9 @@
 ```mermaid
 flowchart TD
 WA[webAdapter] --> UC[usecase];
-UC -->|getService / commandService / checkService| S[service];
-S --> P(command / query port);
+UC -->|getService| P(command / query port);
+UC -->|commandService| P;
+UC -->|checkService| P;
 P --> PA(adapter);
 ```
 
