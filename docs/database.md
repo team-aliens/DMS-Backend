@@ -20,8 +20,7 @@
 ---
 
 ## ERD
-![DMS(1).png](../../../../%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C/DMS%281%29.png)
-
+![DMS-ERD.png](images/DMS-ERD.png)
 ### 테이블 (도메인별)
 
 | 도메인 | 테이블 |
