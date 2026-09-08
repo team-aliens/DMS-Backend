@@ -1,7 +1,0 @@
-config:
-  name: dms
-  service_type: be
-  port: 8080
-  domain:
-    prod: api.dms-dsm.com
-    stag: dev-api.dms-dsm.com

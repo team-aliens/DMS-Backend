@@ -14,7 +14,6 @@ import io.mockk.runs
 import io.mockk.verify
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.request.RevertDaybreakStudyApplicationRequest
-import team.aliens.dms.domain.daybreak.exception.DaybreakStudentSchoolMismatchException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationNotFoundException
 import team.aliens.dms.domain.daybreak.model.Status
@@ -32,11 +31,11 @@ class RevertDaybreakStudyApplicationUseCaseTest : DescribeSpec({
         clearMocks(daybreakService, securityService)
     }
 
-    describe("execute"){
+    describe("execute") {
 
-        context("최종 승인(SECOND_APPROVED) 또는 거절(REJECTED)한 새벽자습 신청이라면"){
+        context("최종 승인(SECOND_APPROVED) 또는 거절(REJECTED)한 새벽자습 신청이라면") {
 
-            it("각각 직전 상태로 되돌려 저장한다"){
+            it("각각 직전 상태로 되돌려 저장한다") {
                 val schoolId = UUID.randomUUID()
                 val applicationIdList = listOf(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID())
 
@@ -79,9 +78,9 @@ class RevertDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
         }
 
-        context("직전 상태가 없는 신청이 포함되면"){
+        context("직전 상태가 없는 신청이 포함되면") {
 
-            it("DaybreakStudyApplicationCanNotRevertException을 던지고 저장하지 않는다"){
+            it("DaybreakStudyApplicationCanNotRevertException을 던지고 저장하지 않는다") {
                 val schoolId = UUID.randomUUID()
                 val applicationId = UUID.randomUUID()
                 val applications = listOf(
@@ -104,9 +103,9 @@ class RevertDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
         }
 
-        context("되돌릴 수 없는 상태(PENDING, FIRST_APPROVED, EXPIRED)의 신청이 포함되면"){
+        context("되돌릴 수 없는 상태(PENDING, FIRST_APPROVED, EXPIRED)의 신청이 포함되면") {
 
-            it("DaybreakStudyApplicationCanNotRevertException을 던지고 저장하지 않는다"){
+            it("DaybreakStudyApplicationCanNotRevertException을 던지고 저장하지 않는다") {
                 forAll(
                     row(Status.PENDING),
                     row(Status.FIRST_APPROVED),
@@ -136,9 +135,9 @@ class RevertDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
         }
 
-        context("존재하지 않는 신청 id가 포함되면"){
+        context("존재하지 않는 신청 id가 포함되면") {
 
-            it("DaybreakStudyApplicationNotFoundException을 그대로 전파하고 저장하지 않는다"){
+            it("DaybreakStudyApplicationNotFoundException을 그대로 전파하고 저장하지 않는다") {
                 val applicationIdList = listOf(UUID.randomUUID(), UUID.randomUUID())
 
                 every { securityService.getCurrentSchoolId() } returns UUID.randomUUID()
@@ -153,6 +152,5 @@ class RevertDaybreakStudyApplicationUseCaseTest : DescribeSpec({
                 verify(exactly = 0) { daybreakService.saveAllDaybreakStudyApplications(any()) }
             }
         }
-
     }
 })

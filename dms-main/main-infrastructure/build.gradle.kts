@@ -57,9 +57,6 @@ dependencies {
     // aop
     implementation(Dependencies.AOP)
 
-    // logging
-    implementation(Dependencies.SENTRY)
-
     // notification
     implementation(Dependencies.FCM)
 

@@ -15,7 +15,6 @@ object DependencyVersions {
     const val MOCKK_VERSION = "1.13.10"
     const val SPRING_KOTEST_VERSION = "1.1.3"
     const val KOTEST_VERSION = "5.7.2"
-    const val SENTRY_VERSION = "6.2.1"
     const val ASPECTJ_VERSION = "1.9.7"
     const val FCM_VERSION = "9.3.0"
     const val FLYWAY_VERSION = "10.8.1"
