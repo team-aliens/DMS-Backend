@@ -73,6 +73,7 @@ git commit -m "docs: (#1080) 온보딩 문서 추가"
 | `style` | 포맷·detekt 등 스타일 변경 |
 | `chore` | 빌드·설정·CI 등 기타 |
 | `docs` | 문서 |
+| `perf` | 성능 개선 |
 | `merge` | develop 머지 커밋 |
 
 여러 커밋을 모아 develop에 머지할 때는 `merge: (#이슈번호) 요약` 형태를 씁니다.
