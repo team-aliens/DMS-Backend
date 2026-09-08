@@ -1,14 +1,20 @@
 name: CD for Prod
 
+# main 브랜치 push 로는 배포되지 않는다. GitHub Release 를 publish 해야 운영에 반영된다.
 on:
-  push:
-    branches: [main]
-  workflow_dispatch: {}   # 수동 배포
+  release:
+    types: [published]
+  workflow_dispatch:        # 수동 배포 · 롤백 — 되돌릴 태그를 직접 지정한다
+    inputs:
+      tag:
+        description: '배포할 릴리스 태그 (예: v2.2.9)'
+        required: true
+        type: string
 
 permissions:
   contents: read
 
-# 동시 배포 방지 — 연속 푸시가 와도 한 번에 하나만 순차 실행 (진행 중인 배포는 끊지 않고 대기)
+# 동시 배포 방지 — 릴리스가 연달아 나와도 한 번에 하나만 순차 실행 (진행 중인 배포는 끊지 않고 대기)
 concurrency:
   group: prod-cd
   cancel-in-progress: false
@@ -19,15 +25,37 @@ env:
   ECR_REPO: dsm-dms
 
 jobs:
+  # ── 0) 배포 대상 버전 확정 ────────────────────────
+  #  이후 모든 job 은 브랜치가 아니라 이 태그를 checkout 한다.
+  resolve:
+    # 프리릴리스는 운영에 나가지 않는다. 수동 실행(롤백)은 항상 허용.
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - id: resolve
+        env:
+          TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TAG:-}" ]; then
+            echo "배포할 릴리스 태그를 찾지 못했다" >&2
+            exit 1
+          fi
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
+          echo "### 배포 대상: \`$TAG\`" >> "$GITHUB_STEP_SUMMARY"
+
   # ── 1) 테스트 게이트 ──────────────────────────────
   #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다.
-  #  main push 시 도는 워크플로우는 이것 하나뿐이므로 detekt까지 여기서 본다(check = test + detekt).
   #  ※ :dms-main:test 는 껍데기 프로젝트 자신의 test 라 NO-SOURCE 로 통과한다 — 서브모듈까지 도는 check 를 쓸 것
   test:
+    needs: resolve
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          ref: ${{ needs.resolve.outputs.version }}
           persist-credentials: false
       - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
         with:
@@ -43,12 +71,17 @@ jobs:
 
   # ── 2) 이미지 빌드 & ECR 푸시 ─────────────────────
   build-push:
-    needs: test
+    needs: [resolve, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          ref: ${{ needs.resolve.outputs.version }}
           persist-credentials: false
+
+      - name: Resolve commit sha        # 릴리스 태그가 가리키는 실제 커밋 (수동 실행 시 github.sha 와 다를 수 있다)
+        id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
@@ -70,17 +103,18 @@ jobs:
           file: dms-main/Dockerfile
           push: true
           provenance: false
-          # 서버 docker-compose.yml이 :latest를 참조하므로 latest를 밀고,
-          # 롤백/추적용으로 커밋 SHA 태그도 함께 푸시
+          # 릴리스 태그가 정본이고, 서버 docker-compose.yml이 :latest를 참조하므로 latest도 같은 이미지로 민다.
+          # (latest = "가장 최근 릴리스"이지 "가장 최근 main 커밋"이 아니다)
           tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ needs.resolve.outputs.version }}
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:latest
-            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ github.sha }}
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ steps.commit.outputs.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
   # ── 3) EC2 SSH 배포 (pull + compose up) ───────────
   deploy:
-    needs: build-push
+    needs: [resolve, build-push]
     runs-on: ubuntu-latest
     steps:
       - name: Prepare SSH key
@@ -98,9 +132,12 @@ jobs:
       - name: Deploy on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
+          VERSION: ${{ needs.resolve.outputs.version }}
         run: |
-          ssh -i ~/.ssh/deploy_key "ubuntu@$EC2_HOST" 'bash -se' <<'REMOTE'
+          ssh -i ~/.ssh/deploy_key "ubuntu@$EC2_HOST" bash -se -- "$VERSION" <<'REMOTE'
           set -euo pipefail
+          VERSION="${1:-unknown}"
+          echo "deploying $VERSION"
           cd ~
           # 서버의 ~/.aws 자격증명으로 ECR 로그인
           aws ecr get-login-password --region ap-northeast-2 \
@@ -121,4 +158,9 @@ jobs:
           done
           # 이전 이미지 정리
           docker image prune -f
+          echo "deployed $VERSION"
           REMOTE
+
+      - name: Summary
+        run: |
+          echo "### 배포 완료 — \`${{ needs.resolve.outputs.version }}\`" >> "$GITHUB_STEP_SUMMARY"
