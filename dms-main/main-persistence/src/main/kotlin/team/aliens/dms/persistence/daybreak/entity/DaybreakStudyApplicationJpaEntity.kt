@@ -51,7 +51,7 @@ class DaybreakStudyApplicationJpaEntity(
     @JoinColumn(name = "type_id", nullable = false)
     val daybreakStudyTypeJpaEntity: DaybreakStudyTypeJpaEntity,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     val teacherJpaEntity: TeacherJpaEntity,
 
