@@ -13,14 +13,13 @@ import team.aliens.dms.persistence.teacher.entity.TeacherJpaEntity
 @Component
 class DaybreakStudyApplicationMapper(
     private val entityManager: EntityManager,
-    private val daybreakStudyTypeMapper: DaybreakStudyTypeMapper
 ) : GenericMapper<DaybreakStudyApplication, DaybreakStudyApplicationJpaEntity> {
 
     override fun toDomain(entity: DaybreakStudyApplicationJpaEntity?): DaybreakStudyApplication? {
         return entity?.let {
             DaybreakStudyApplication(
                 id = it.id!!,
-                studyTypeId = daybreakStudyTypeMapper.toDomain(it.daybreakStudyTypeJpaEntity)!!.id,
+                studyTypeId = it.daybreakStudyTypeJpaEntity.id!!,
                 startDate = it.startDate,
                 endDate = it.endDate,
                 reason = it.reason,
