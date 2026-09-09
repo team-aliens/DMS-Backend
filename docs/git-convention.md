@@ -41,11 +41,20 @@ main            운영 배포 브랜치
 * 작업 브랜치는 **`develop`에서 따고 `develop`으로 PR**합니다
 * `main`은 develop을 머지해 배포할 때만 갱신합니다
 
-> ⚠️ **`main` push는 곧 운영 배포입니다.** `prod-cd.yml`이 트리거되어 빌드 → ECR → EC2 재기동까지 돕니다.
-> 블루그린 미적용이라 재시작 구간에 502가 나가므로, 문서 수정이라도 `main`에 직접 push하지 마세요.
+> ⚠️ **운영 배포는 GitHub Release를 publish할 때 실행됩니다.** `main` push나 태그 push만으로는 배포되지 않습니다.
+> `prod-cd.yml`이 릴리스 태그를 커밋으로 확정한 뒤 테스트 → 이미지 빌드/ECR → EC2 재기동까지 돕니다.
 
-> 현재는 GitHub Release를 통해 운영 배포를 관리하고 있습니다. 새로운 태그를 생성하고 거기에 main을 merge하고,
-> push하면 배포가 됩니다.
+**배포 절차**
+
+1. `develop`을 `main`에 머지합니다
+2. 배포할 `main` 커밋에 태그(`vX.Y.Z`)를 만들어 push합니다
+3. 그 태그로 **GitHub Release를 publish**합니다 → 여기서 배포가 시작됩니다
+
+* 프리릴리스로 표시한 Release는 자동 배포되지 않습니다
+* **롤백**은 Actions에서 `CD for Prod`를 수동 실행(`workflow_dispatch`)하고, 되돌릴 릴리스 태그를 입력합니다.
+  이미 존재하는 릴리스 태그만 받습니다(브랜치명·임의 커밋은 거부).
+
+> 블루그린 미적용이라 재시작 구간에 502가 나갑니다. `main`에 직접 push하지 마세요.
 
 ---
 
@@ -127,5 +136,5 @@ push  →  pre-push 훅이 detekt 실행
    ↓
 develop으로 PR  →  CI + CodeRabbit 통과  →  머지
    ↓
-배포할 때 develop을 main에 머지
+배포할 때 develop을 main에 머지  →  태그 push  →  GitHub Release publish  →  운영 배포
 ```
