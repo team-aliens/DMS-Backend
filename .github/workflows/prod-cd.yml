@@ -33,7 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.resolve.outputs.version }}
+      sha: ${{ steps.resolve.outputs.sha }}
     steps:
+      # 태그를 해석하기만 하면 되므로 트리/블롭은 받지 않는다 (filter=tree:0)
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          filter: tree:0
+          persist-credentials: false
+
       - id: resolve
         env:
           TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.tag }}
@@ -43,8 +51,21 @@ jobs:
             echo "배포할 릴리스 태그를 찾지 못했다" >&2
             exit 1
           fi
+          # 이 값이 그대로 ECR 이미지 태그가 된다 — OCI 태그 문자셋(128자)을 벗어나면 push 가 깨진다.
+          # git 은 태그명에 '/' 도 셸 메타문자($( ) · 백틱 · ; · |)도 허용하므로 여기서 같이 걸러낸다.
+          if ! printf '%s' "$TAG" | grep -Eq '^[A-Za-z0-9_][A-Za-z0-9._-]{0,127}$'; then
+            echo "이미지 태그로 쓸 수 없는 형식이다: $TAG" >&2
+            exit 1
+          fi
+          # 수동 실행에 브랜치명이나 임의 커밋을 넣어 Release 없이 운영에 나가는 걸 막는다.
+          # 동시에 애노테이트 태그를 커밋 SHA 로 푼다 — 이후 job 은 태그가 아니라 이 SHA 를 checkout 한다.
+          if ! SHA=$(git rev-parse -q --verify "refs/tags/$TAG^{commit}"); then
+            echo "refs/tags 에 없는 태그다: $TAG" >&2
+            exit 1
+          fi
           echo "version=$TAG" >> "$GITHUB_OUTPUT"
-          echo "### 배포 대상: \`$TAG\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          printf '### 배포 대상: `%s` (%s)\n' "$TAG" "$SHA" >> "$GITHUB_STEP_SUMMARY"
 
   # ── 1) 테스트 게이트 ──────────────────────────────
   #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다.
@@ -55,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
-          ref: ${{ needs.resolve.outputs.version }}
+          ref: ${{ needs.resolve.outputs.sha }}   # 태그가 아니라 resolve 가 확정한 커밋
           persist-credentials: false
       - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
         with:
@@ -76,12 +97,8 @@ jobs:
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
-          ref: ${{ needs.resolve.outputs.version }}
+          ref: ${{ needs.resolve.outputs.sha }}
           persist-credentials: false
-
-      - name: Resolve commit sha        # 릴리스 태그가 가리키는 실제 커밋 (수동 실행 시 github.sha 와 다를 수 있다)
-        id: commit
-        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
@@ -108,7 +125,7 @@ jobs:
           tags: |
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ needs.resolve.outputs.version }}
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:latest
-            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ steps.commit.outputs.sha }}
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ needs.resolve.outputs.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -162,5 +179,7 @@ jobs:
           REMOTE
 
       - name: Summary
+        env:   # run: 에 직접 보간하면 태그명에 들어간 $( ) · 백틱이 러너에서 실행된다
+          DEPLOY_VERSION: ${{ needs.resolve.outputs.version }}
         run: |
-          echo "### 배포 완료 — \`${{ needs.resolve.outputs.version }}\`" >> "$GITHUB_STEP_SUMMARY"
+          printf '### 배포 완료 — `%s`\n' "$DEPLOY_VERSION" >> "$GITHUB_STEP_SUMMARY"
