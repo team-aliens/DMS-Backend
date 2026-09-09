@@ -53,6 +53,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
                     daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
@@ -89,6 +90,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
                     daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
@@ -125,6 +127,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
                     daybreakStudyApplicationJpaEntity.reason,
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
@@ -162,6 +165,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
                     daybreakStudyApplicationJpaEntity.reason,
+                    Expressions.nullExpression(),
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
@@ -229,12 +233,13 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.startDate,
                     daybreakStudyApplicationJpaEntity.endDate,
                     daybreakStudyApplicationJpaEntity.reason,
+                    Expressions.nullExpression(),
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
                     studentJpaEntity.number,
                     daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
-                    Expressions.nullExpression()
+                    daybreakStudyApplicationJpaEntity.status
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
