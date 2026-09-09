@@ -12,6 +12,7 @@ open class DaybreakStudyApplicationVO(
     val startDate: LocalDate,
     val endDate: LocalDate,
     val reason: String,
+    val studentId: UUID?,
     val studentName: String,
     val studentGcn: String,
     val teacherName: String? = null,
