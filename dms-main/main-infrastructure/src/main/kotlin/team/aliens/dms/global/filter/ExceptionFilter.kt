@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
 import team.aliens.dms.common.error.DmsException
@@ -16,6 +17,8 @@ class ExceptionFilter(
     private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
 
+    private val log = LoggerFactory.getLogger(this::class.java)
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -24,15 +27,16 @@ class ExceptionFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (e: DmsException) {
-            e.printStackTrace()
+            logBusinessException(e)
             errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
-            e.printStackTrace()
-            when (val cause = e.cause) {
-                is DmsException -> errorToJson(cause.errorProperty, response)
-                else -> errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
-            }
+            log.error("unexpected exception", e)
+            errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
         }
+    }
+
+    private fun logBusinessException(e: DmsException) {
+        log.info("business exception: {} {}", e.errorProperty.code(), e.errorProperty.message())
     }
 
     private fun errorToJson(errorProperty: ErrorProperty, response: HttpServletResponse) {
