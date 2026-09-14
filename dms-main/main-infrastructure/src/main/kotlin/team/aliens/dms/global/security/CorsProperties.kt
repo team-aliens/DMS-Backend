@@ -9,4 +9,5 @@ class CorsProperties(
     val allowedHeaders: List<String>,
     val allowCredentials: Boolean,
     val exposedHeaders: List<String>,
+    val maxAge: Long,
 )

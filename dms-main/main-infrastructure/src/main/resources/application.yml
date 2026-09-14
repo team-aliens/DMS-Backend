@@ -121,6 +121,7 @@ cors:
   allow-credentials: true
   exposed-headers:
     - "Content-Disposition"
+  max-age: 3600
 
 open-feign:
   neis-key: ${NEIS_KEY:asdf}
