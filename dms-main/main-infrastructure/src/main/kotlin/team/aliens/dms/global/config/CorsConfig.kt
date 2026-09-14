@@ -20,6 +20,7 @@ class CorsConfig(
             allowedHeaders = corsProperties.allowedHeaders
             allowCredentials = corsProperties.allowCredentials
             exposedHeaders = corsProperties.exposedHeaders
+            maxAge = corsProperties.maxAge
         }
 
         return UrlBasedCorsConfigurationSource().apply {
