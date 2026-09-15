@@ -30,8 +30,17 @@ class ExceptionFilter(
             logBusinessException(e)
             errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
-            log.error("unexpected exception", e)
-            errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
+            // 컨트롤러/유스케이스에서 던진 DmsException은 FrameworkServlet이 ServletException으로 감싸서 올라온다
+            when (val cause = e.cause) {
+                is DmsException -> {
+                    logBusinessException(cause)
+                    errorToJson(cause.errorProperty, response)
+                }
+                else -> {
+                    log.error("unexpected exception", e)
+                    errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
+                }
+            }
         }
     }
 
