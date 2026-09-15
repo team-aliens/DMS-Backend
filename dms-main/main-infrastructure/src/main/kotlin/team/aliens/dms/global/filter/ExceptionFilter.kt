@@ -13,6 +13,10 @@ import team.aliens.dms.global.error.ErrorResponse
 import team.aliens.dms.global.error.GlobalErrorCode
 import java.nio.charset.StandardCharsets
 
+/**
+ * 필터 체인(JwtAuthenticationFilter 등)에서 던진 예외를 JSON 응답으로 바꾼다.
+ * 컨트롤러/유스케이스/서비스에서 던진 예외는 DispatcherServlet 안에서 GlobalErrorHandler가 처리하므로 여기까지 오지 않는다.
+ **/
 class ExceptionFilter(
     private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
@@ -30,17 +34,8 @@ class ExceptionFilter(
             logBusinessException(e)
             errorToJson(e.errorProperty, response)
         } catch (e: Exception) {
-            // 컨트롤러/유스케이스에서 던진 DmsException은 FrameworkServlet이 ServletException으로 감싸서 올라온다
-            when (val cause = e.cause) {
-                is DmsException -> {
-                    logBusinessException(cause)
-                    errorToJson(cause.errorProperty, response)
-                }
-                else -> {
-                    log.error("unexpected exception", e)
-                    errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
-                }
-            }
+            log.error("unexpected exception", e)
+            errorToJson(GlobalErrorCode.INTERNAL_SERVER_ERROR, response)
         }
     }
 
