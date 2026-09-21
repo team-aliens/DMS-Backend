@@ -18,18 +18,18 @@ class NoticeJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "manager_id", nullable = false)
     val manager: ManagerJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
+    @Column(length = 100, nullable = false)
     val title: String,
 
-    @Column(columnDefinition = "VARCHAR(1000)", nullable = false)
+    @Column(length = 1000, nullable = false)
     val content: String,
 
     override val createdAt: LocalDateTime,
 
-    @Column(columnDefinition = "DATETIME", nullable = false)
+    @Column(nullable = false)
     val updatedAt: LocalDateTime = createdAt
 
 ) : BaseEntity(id)

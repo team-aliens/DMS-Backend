@@ -23,16 +23,13 @@ class MealJpaEntity(
 
     @MapsId("schoolId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(255)")
     val breakfast: String?,
 
-    @Column(columnDefinition = "VARCHAR(255)")
     val lunch: String?,
 
-    @Column(columnDefinition = "VARCHAR(255)")
     val dinner: String?
 
 )
@@ -40,7 +37,7 @@ class MealJpaEntity(
 @Embeddable
 data class MealJpaEntityId(
 
-    @Column(columnDefinition = "DATE", nullable = false)
+    @Column(nullable = false)
     val mealDate: LocalDate,
 
     @Column(nullable = false)

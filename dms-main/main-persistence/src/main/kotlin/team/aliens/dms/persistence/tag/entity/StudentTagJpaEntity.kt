@@ -19,12 +19,12 @@ class StudentTagJpaEntity(
 
     @MapsId("studentId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     val student: StudentJpaEntity?,
 
     @MapsId("tagId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "tag_id", nullable = false)
     val tag: TagJpaEntity?
 
 ) : BaseTimeEntity()

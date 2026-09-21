@@ -20,33 +20,33 @@ class PointHistoryJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(30)", nullable = false)
+    @Column(length = 30, nullable = false)
     val studentName: String,
 
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @Column(length = 5, nullable = false)
     val studentGcn: String,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val bonusTotal: Int,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val minusTotal: Int,
 
-    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @Column(nullable = false)
     val isCancel: Boolean,
 
-    @Column(columnDefinition = "VARCHAR(30)", nullable = false)
+    @Column(length = 30, nullable = false)
     val pointName: String,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val pointScore: Int,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @Column(length = 5, nullable = false)
     val pointType: PointType,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
     override val createdAt: LocalDateTime

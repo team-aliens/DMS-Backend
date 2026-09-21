@@ -24,14 +24,14 @@ class TagJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "CHAR(7)", nullable = false)
+    @Column(length = 7, nullable = false)
     val color: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?
 
 ) : BaseUUIDEntity(id)

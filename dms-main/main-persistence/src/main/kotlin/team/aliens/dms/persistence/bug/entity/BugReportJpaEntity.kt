@@ -22,14 +22,14 @@ class BugReportJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     val student: StudentJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(300)", nullable = false)
+    @Column(length = 300, nullable = false)
     val content: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(7)", nullable = false)
+    @Column(length = 7, nullable = false)
     val developmentArea: DevelopmentArea,
 
     override val createdAt: LocalDateTime,
