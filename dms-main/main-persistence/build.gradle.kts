@@ -12,7 +12,7 @@ dependencies {
 
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
-    runtimeOnly(Dependencies.MYSQL_CONNECTOR)
+    runtimeOnly(Dependencies.POSTGRESQL_DRIVER)
     implementation(Dependencies.REDIS)
     implementation(Dependencies.SPRING_REDIS)
 
@@ -30,7 +30,7 @@ dependencies {
 
     // testcontainers
     testImplementation(Dependencies.TESTCONTAINERS)
-    testImplementation(Dependencies.TESTCONTAINERS_MYSQL)
+    testImplementation(Dependencies.TESTCONTAINERS_POSTGRESQL)
 }
 
 allOpen {

@@ -10,7 +10,7 @@ object DependencyVersions {
     const val QUERYDSL_VERSION = "5.0.0"
     const val JAKARTA_ANNOTATION_VERSION = "2.1.1"
     const val JAKARTA_PERSISTENCE_VERSION = "3.1.0"
-    const val MYSQL = "8.0.28"
+    const val POSTGRESQL = "42.7.13"
     const val APACHE_POI_VERSION = "3.7"
     const val MOCKK_VERSION = "1.13.10"
     const val SPRING_KOTEST_VERSION = "1.1.3"

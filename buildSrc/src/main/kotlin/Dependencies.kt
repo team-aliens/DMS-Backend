@@ -29,7 +29,7 @@ object Dependencies {
 
     // database
     const val SPRING_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa:${PluginVersions.SPRING_BOOT_VERSION}"
-    const val MYSQL_CONNECTOR = "mysql:mysql-connector-java:${DependencyVersions.MYSQL}"
+    const val POSTGRESQL_DRIVER = "org.postgresql:postgresql:${DependencyVersions.POSTGRESQL}"
     const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis:${PluginVersions.SPRING_BOOT_VERSION}"
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
 
@@ -58,7 +58,7 @@ object Dependencies {
     const val KOTEST = "io.kotest:kotest-runner-junit5:${DependencyVersions.KOTEST_VERSION}"
     const val KOTEST_ASSERTIONS = "io.kotest:kotest-assertions-core:${DependencyVersions.KOTEST_VERSION}"
     const val TESTCONTAINERS = "org.testcontainers:testcontainers:${DependencyVersions.TESTCONTAINERS_VERSION}"
-    const val TESTCONTAINERS_MYSQL = "org.testcontainers:mysql:${DependencyVersions.TESTCONTAINERS_VERSION}"
+    const val TESTCONTAINERS_POSTGRESQL = "org.testcontainers:postgresql:${DependencyVersions.TESTCONTAINERS_VERSION}"
     const val TESTCONTAINERS_RABBITMQ = "org.testcontainers:rabbitmq:${DependencyVersions.TESTCONTAINERS_VERSION}"
 
     // time based uuid
@@ -84,7 +84,7 @@ object Dependencies {
     const val FCM = "com.google.firebase:firebase-admin:${DependencyVersions.FCM_VERSION}"
 
     // flyway
-    const val FLYWAY = "org.flywaydb:flyway-mysql:${DependencyVersions.FLYWAY_VERSION}"
+    const val FLYWAY = "org.flywaydb:flyway-database-postgresql:${DependencyVersions.FLYWAY_VERSION}"
 
     // slack
     const val SLACK = "com.slack.api:slack-api-client:${DependencyVersions.SLACK_VERSION}"
