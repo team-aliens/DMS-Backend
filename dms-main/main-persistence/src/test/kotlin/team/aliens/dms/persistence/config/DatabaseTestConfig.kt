@@ -6,7 +6,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 
 @DataJpaTest
@@ -16,21 +16,22 @@ abstract class DatabaseTestConfig : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
 
     companion object {
-        private val mysql = MySQLContainer(DockerImageName.parse("mysql:8.0.28"))
-            .apply {
-                withDatabaseName("dms")
-                withUsername("test")
-                withPassword("test")
-                start()
-            }
+        private val postgres = PostgreSQLContainer(
+            DockerImageName.parse("pgvector/pgvector:pg16").asCompatibleSubstituteFor("postgres")
+        ).apply {
+            withDatabaseName("dms")
+            withUsername("test")
+            withPassword("test")
+            start()
+        }
 
         @JvmStatic
         @DynamicPropertySource
         fun configureProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url", mysql::getJdbcUrl)
-            registry.add("spring.datasource.username", mysql::getUsername)
-            registry.add("spring.datasource.password", mysql::getPassword)
-            registry.add("spring.datasource.driver-class-name") { "com.mysql.cj.jdbc.Driver" }
+            registry.add("spring.datasource.url", postgres::getJdbcUrl)
+            registry.add("spring.datasource.username", postgres::getUsername)
+            registry.add("spring.datasource.password", postgres::getPassword)
+            registry.add("spring.datasource.driver-class-name") { "org.postgresql.Driver" }
             registry.add("spring.jpa.hibernate.ddl-auto") { "create-drop" }
         }
     }
