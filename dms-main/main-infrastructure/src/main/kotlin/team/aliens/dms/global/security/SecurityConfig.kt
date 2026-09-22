@@ -253,6 +253,8 @@ class SecurityConfig(
                 authorize
                     // /chatbots
                     .requestMatchers(HttpMethod.POST, "/chatbots/questions").hasAuthority(STUDENT.name)
+                    .requestMatchers(HttpMethod.POST, "/chatbots/documents").hasAuthority(HEAD_TEACHER.name)
+                    .requestMatchers(HttpMethod.DELETE, "/chatbots/documents/{document-id}").hasAuthority(HEAD_TEACHER.name)
 
                 authorize
                     // /notifications
