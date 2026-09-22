@@ -17,13 +17,6 @@
 
 > Redis에 든 값은 **영속화 설정이 없습니다.** 재시작하면 전원 로그아웃됩니다.
 
-> ⚠️ **코드는 PostgreSQL, 운영 DB는 아직 MySQL 8.0입니다.** 이 문서의 스키마·Flyway 내용은 PostgreSQL 기준이고,
-> [백업](#백업) 절만 이관 전 현황(MySQL)입니다. 데이터 이관과 컷오버는 별도 작업입니다.
->
-> 전환 범위: 엔티티 `columnDefinition` 124곳 제거, Flyway V1~V28(29파일) → `V1__baseline.sql`,
-> 드라이버·방언·Quartz delegate 교체, 테스트 컨테이너를 `pgvector/pgvector:pg16`으로.
-> 이미지에 pgvector가 들어 있는 건 챗봇 RAG의 벡터 컬럼을 대비한 선택입니다.
-
 ---
 
 ## ERD
@@ -56,7 +49,6 @@
 * **`columnDefinition`에 DB 타입 문자열을 쓰지 않습니다.** 자세한 규칙은 [code-convention.md](./code-convention.md) "JPA 엔티티 매핑" 절
 * **인덱스 이름은 `idx_<테이블>_<컬럼>`으로 짓습니다.** PostgreSQL의 인덱스 이름은 **테이블이 아니라 스키마 전역에서 유일**해야 합니다 — `school_id` 같은 이름을 여러 테이블에 쓰면 두 번째부터 `relation "school_id" already exists`로 실패합니다
 * **FK 컬럼에는 인덱스를 직접 만듭니다.** MySQL은 FK를 걸면 인덱스를 자동 생성했지만 **PostgreSQL은 만들지 않습니다.** baseline에 있는 인덱스 대부분이 이것입니다
-* **이메일은 대소문자를 구분합니다.** MySQL의 ci collation이 비교에서 무시해주던 동작을 PostgreSQL에서 재현하지 않기로 했습니다(`ihansaem`과 `Ihansaem`은 다른 주소). 저장값은 입력 원본 그대로 두고, `lower()` 비교나 `citext`를 쓰지 않습니다
 
 ---
 
@@ -89,41 +81,6 @@ main-infrastructure/src/main/resources/db/migration/V<버전>__<snake_case_설�
 * enum 값을 추가할 땐 **이름 길이가 `length = n`에 들어가는지** 세어보세요. 부팅으로는 안 걸리고 INSERT에서 터집니다
 * **인덱스는 반드시 마이그레이션으로** 넣으세요. 서버에서 직접 만들면 새 환경에서 조용히 누락됩니다
 
-### 베이스라인 — `V1`이 전체 스키마입니다
-
-PostgreSQL로 옮기면서 Flyway 히스토리를 새로 시작했고, **`V1__baseline.sql` 하나가 앱 테이블 29개 + Quartz 11개를 전부 만듭니다.**
-빈 DB에 Flyway만 돌려도 스키마가 완성되므로 **새 환경에 덤프 복원이 필요 없습니다.**
-
-`V1`은 손으로 번역하지 않았습니다. 두 방향을 모두 뽑아 대조해서 만들었습니다.
-
-```
-① 엔티티 → Hibernate ddl-auto:create → 빈 PG → pg_dump   (validate 통과가 구조적으로 보장됨)
-② 운영 MySQL 덤프(mysqldump --no-data)                    (인덱스·제약·nullability의 진실)
-③ ①을 뼈대로 ②와 대조해 차이를 보정                       ← V1__baseline.sql
-```
-
-①만 쓰면 **DB에만 있고 엔티티에 선언이 없는 것들**을 잃고(실제로 인덱스 25개와 UNIQUE 1개가 그랬습니다),
-②만 쓰면 Hibernate가 기대하는 타입과 어긋나 `validate`가 기동을 막습니다.
-
-베이스라인을 손보게 되면 같은 방법으로 다시 대조하세요. 검증 종료 조건은 **빈 PG 컨테이너 → Flyway migrate → `validate` → 스프링 컨텍스트 기동**까지입니다.
-컴파일과 단위 테스트는 DB를 띄우지 않으므로 스키마에 대해 아무것도 증명하지 않습니다.
-
-> ⚠️ **팀원 로컬 DB는 새로 만드세요.** 기존 MySQL 로컬에는 옛 히스토리(V1~V28)가 남아 있어 새 `V1`과 checksum이 어긋납니다.
-> `flyway repair`가 아니라 **PostgreSQL 컨테이너를 새로 띄우는 것**이 정답입니다.
-
-`application.yml`의 Flyway 설정은 이렇습니다.
-
-```yaml
-  flyway:
-    enabled: true
-    baseline-on-migrate: ${BASELINE_ON_MIGRATE}
-    baseline-version: 0
-```
-
-`baseline-on-migrate`는 **히스토리 테이블이 없는 비어 있지 않은 DB**에만 관여합니다. 새로 만든 빈 PostgreSQL에는
-해당이 없으니 `BASELINE_ON_MIGRATE=false`로 둡니다. 이 값은 **플레이스홀더라 환경변수가 없으면 기동이 실패**하므로
-로컬에서도 `.env`나 compose에 반드시 넣어야 합니다.
-
 ---
 
 ## 마이그레이션 체크리스트
@@ -138,20 +95,6 @@ PostgreSQL로 옮기면서 Flyway 히스토리를 새로 시작했고, **`V1__ba
 * [ ] **`columnDefinition`에 DB 타입 문자열을 쓰지 않았는가**
 * [ ] 로컬에서 **빈 PostgreSQL에** 앱을 띄워 Flyway + `validate` 통과를 확인했는가
 
----
-
-## 알려진 스키마 부채
-
-* **`tbl_point_history`에 학생 FK가 없습니다.** 이름 + 학번 문자열(GCN) 스냅샷으로만 학생과 잇습니다.
-  진급하면 GCN이 바뀌어 과거 이력과 끊기고, 문자열 재조립 때문에 쿼리가 복잡해집니다. `minus_total`은 상쇄 항목이 있어 **단조 증가가 아닙니다.**
-* **인프라 설정(compose, 백업 타이머, 모니터링)은 여전히 형상관리 밖(운영 서버)에만 있습니다.**
-  인덱스는 baseline을 만들 때 운영 덤프와 대조해 흡수했으므로 **인덱스 부채는 해소됐습니다.**
-* **`tbl_point_option.created_at`이 baseline에서 nullable입니다.** 엔티티(`BaseTimeEntity`)는 `NOT NULL`인데
-  운영에 NULL 16건이 있어 이관이 실패하지 않도록 열어뒀습니다. 그 16건을 백필하면 `NOT NULL`로 되돌릴 수 있습니다.
-* **환경변수 이름이 아직 `MAIN_MYSQL_HOST`입니다.** 값은 PostgreSQL 호스트를 가리킵니다 — 컷오버 때 이름을 바꿉니다.
-* 운영 DB 이름은 `dms`가 아니라 `prod_dms`입니다 (dev는 `stag_dms`).
-
----
 
 ## QueryDSL 주의
 
