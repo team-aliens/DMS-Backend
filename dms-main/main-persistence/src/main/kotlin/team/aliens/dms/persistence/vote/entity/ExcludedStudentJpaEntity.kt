@@ -23,10 +23,10 @@ class ExcludedStudentJpaEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     val student: StudentJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?
 )

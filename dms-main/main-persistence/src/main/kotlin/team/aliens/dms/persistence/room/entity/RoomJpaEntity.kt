@@ -23,10 +23,10 @@ class RoomJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(4)", nullable = false, unique = true)
+    @Column(length = 4, nullable = false, unique = true)
     val number: String
 
 ) : BaseUUIDEntity(id)

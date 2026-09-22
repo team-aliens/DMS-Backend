@@ -10,7 +10,7 @@ spring:
     timeout-per-shutdown-phase: "60s"
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -23,7 +23,6 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
   flyway:
@@ -58,7 +57,7 @@ spring:
             instanceId: AUTO
           jobStore:
             class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
             tablePrefix: QRTZ_
             isClustered: ${QUARTZ_CLUSTERED:false}
             useProperties: false

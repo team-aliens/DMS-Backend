@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @MappedSuperclass
 abstract class BaseTimeEntity(
 
-    @Column(nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
+    @Column(nullable = false, updatable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
 
 )

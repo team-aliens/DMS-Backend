@@ -52,6 +52,29 @@ data class NotificationOfUser(val isRead: Boolean = false /* ... */) {
 
 ---
 
+## JPA 엔티티 매핑
+
+**`columnDefinition`에 DB 타입 문자열을 쓰지 않습니다.** 타입은 JPA 표준 속성으로 표현하고, 실제 컬럼 타입은 Flyway 마이그레이션이 정합니다. 엔티티에 타입 문자열을 박아두면 DB 엔진을 바꿀 때 엔티티를 전부 고쳐야 합니다.
+
+| 필드 타입 | 매핑 |
+| --- | --- |
+| `String`, 255자 | 아무것도 안 씀 — **255가 JPA 기본값**입니다 |
+| `String`, 그 외 길이 | `length = n` |
+| `Int`·`Boolean`·`LocalDate`·`LocalTime`·`LocalDateTime`·`UUID` | 아무것도 안 씀 — `length`는 문자열에만 적용됩니다 |
+
+```kotlin
+@Column(nullable = false)                       val address: String   // varchar(255)
+@Column(length = 20, nullable = false)          val name: String      // varchar(20)
+@Column(nullable = false)                       val grade: Int        // 숫자라 length 무의미
+@JoinColumn(name = "room_id", nullable = false) val room: RoomJpaEntity?
+```
+
+* **enum 컬럼**(`@Enumerated(EnumType.STRING)`)은 `length`가 **가장 긴 상수 이름**보다 커야 합니다. `ddl-auto: validate`는 길이를 안 보니 부팅으로는 안 걸리고 INSERT할 때 터집니다([database.md](./database.md)).
+* 길이를 바꾸면 **마이그레이션도 같이** 넣으세요. 엔티티만 고치면 실제 컬럼은 그대로입니다.
+* DB 고유 타입이 꼭 필요하면(`TEXT`, `vector` 등) `columnDefinition`을 쓰되, **그 엔티티가 DB에 종속된다**는 걸 알고 쓰세요.
+
+---
+
 ## 존재/중복 검사
 
 `CheckXxxService` + `CheckXxxServiceImpl`에 두고, 위반이면 throw·반환은 `Unit`. 유스케이스는 호출만 하고 happy path로 진행합니다.

@@ -26,20 +26,20 @@ class PointFilterJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val name: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @Column(length = 5, nullable = false)
     val pointType: PointType,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val maxPoint: Int,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val minPoint: Int
 
 ) : BaseUUIDEntity(id)

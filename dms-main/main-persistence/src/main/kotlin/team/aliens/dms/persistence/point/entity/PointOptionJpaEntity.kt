@@ -21,17 +21,17 @@ class PointOptionJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(30)", nullable = false)
+    @Column(length = 30, nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val score: Int,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @Column(length = 5, nullable = false)
     val type: PointType,
 
     override val createdAt: LocalDateTime,

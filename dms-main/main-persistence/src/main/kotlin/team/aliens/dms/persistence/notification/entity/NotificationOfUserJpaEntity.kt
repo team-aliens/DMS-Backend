@@ -18,30 +18,30 @@ class NotificationOfUserJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @Column(nullable = false)
     val userId: UUID?,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(length = 30, nullable = false)
     val topic: Topic,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = true)
+    @Column(length = 20, nullable = true)
     val pointDetailTopic: PointDetailTopic?,
 
-    @Column(columnDefinition = "VARCHAR(500)")
+    @Column(length = 500)
     val linkIdentifier: String?,
 
-    @Column(columnDefinition = "VARCHAR(500)", nullable = false)
+    @Column(length = 500, nullable = false)
     val title: String,
 
-    @Column(columnDefinition = "VARCHAR(500)", nullable = false)
+    @Column(length = 500, nullable = false)
     val content: String,
 
-    @Column(columnDefinition = "DATETIME(6)", nullable = false)
+    @Column(nullable = false)
     val createdAt: LocalDateTime,
 
-    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @Column(nullable = false)
     @ColumnDefault("false")
     val isRead: Boolean
 

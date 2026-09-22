@@ -1,25 +1,26 @@
 package team.aliens.dms.config
 
 import org.springframework.test.context.DynamicPropertyRegistry
-import org.testcontainers.containers.MySQLContainer
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 import java.time.Duration
 
-object MySQLTestContainer {
-    val instance: MySQLContainer<*> = MySQLContainer(DockerImageName.parse("mysql:8.0.28"))
-        .apply {
-            withDatabaseName("dms")
-            withUsername("test")
-            withPassword("test")
-            withStartupTimeout(Duration.ofMinutes(5))
-            start()
-        }
+object PostgreSQLTestContainer {
+    val instance: PostgreSQLContainer<*> = PostgreSQLContainer(
+        DockerImageName.parse("pgvector/pgvector:pg16").asCompatibleSubstituteFor("postgres")
+    ).apply {
+        withDatabaseName("dms")
+        withUsername("test")
+        withPassword("test")
+        withStartupTimeout(Duration.ofMinutes(5))
+        start()
+    }
 
     fun configure(registry: DynamicPropertyRegistry) {
         registry.add("spring.datasource.url", instance::getJdbcUrl)
         registry.add("spring.datasource.username", instance::getUsername)
         registry.add("spring.datasource.password", instance::getPassword)
-        registry.add("spring.datasource.driver-class-name") { "com.mysql.cj.jdbc.Driver" }
+        registry.add("spring.datasource.driver-class-name") { "org.postgresql.Driver" }
         registry.add("spring.jpa.hibernate.ddl-auto") { "create-drop" }
     }
 }

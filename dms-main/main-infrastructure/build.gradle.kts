@@ -72,7 +72,7 @@ dependencies {
     testImplementation(Dependencies.KOTEST_ASSERTIONS)
     testImplementation(Dependencies.SPRING_KOTEST)
     testImplementation(Dependencies.TESTCONTAINERS)
-    testImplementation(Dependencies.TESTCONTAINERS_MYSQL)
+    testImplementation(Dependencies.TESTCONTAINERS_POSTGRESQL)
     testImplementation(Dependencies.SPRING_DATA_JPA)
 }
 

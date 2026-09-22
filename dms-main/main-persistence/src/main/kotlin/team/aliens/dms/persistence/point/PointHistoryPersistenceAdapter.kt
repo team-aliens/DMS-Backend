@@ -161,7 +161,7 @@ class PointHistoryPersistenceAdapter(
 
     override fun queryPointTotalsGroupByStudent(schoolId: UUID?): List<StudentTotalVO> {
         val studentGcn = Expressions.stringTemplate(
-            "CONCAT({0}, {1}, LPAD(CAST({2} AS string), 2, '0'))",
+            "CONCAT(CAST({0} AS string), CAST({1} AS string), LPAD(CAST({2} AS string), 2, '0'))",
             studentJpaEntity.grade,
             studentJpaEntity.classRoom,
             studentJpaEntity.number

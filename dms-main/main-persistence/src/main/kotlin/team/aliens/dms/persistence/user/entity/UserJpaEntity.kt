@@ -23,25 +23,24 @@ class UserJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false, unique = true)
+    @Column(length = 20, nullable = false, unique = true)
     val accountId: String,
 
-    @Column(columnDefinition = "CHAR(60)", nullable = false)
+    @Column(length = 60, nullable = false)
     val password: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     val email: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(7)", nullable = false)
+    @Column(length = 20, nullable = false)
     val authority: Authority,
 
     override val createdAt: LocalDateTime,
 
-    @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?,
 
 ) : BaseEntity(id)

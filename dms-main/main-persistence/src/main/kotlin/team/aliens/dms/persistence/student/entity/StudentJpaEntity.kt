@@ -26,35 +26,34 @@ class StudentJpaEntity(
     id: UUID?,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
-    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = true)
+    @JoinColumn(name = "user_id", nullable = true)
     val user: UserJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     val room: RoomJpaEntity?,
 
-    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    @Column(length = 1, nullable = false)
     val roomLocation: String,
 
-    @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
+    @Column(nullable = false)
     val grade: Int,
 
-    @Column(name = "class_room", columnDefinition = "TINYINT UNSIGNED", nullable = false)
+    @Column(name = "class_room", nullable = false)
     val classRoom: Int,
 
-    @Column(columnDefinition = "TINYINT UNSIGNED", nullable = false)
+    @Column(nullable = false)
     val number: Int,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "VARCHAR(500)", nullable = false)
+    @Column(length = 500, nullable = false)
     val profileImageUrl: String,
 
-    @Column(columnDefinition = "VARCHAR(6)", nullable = false)
+    @Column(length = 6, nullable = false)
     @Enumerated(EnumType.STRING)
     val sex: Sex,
 
-    @Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime?,
 ) : BaseUUIDEntity(id)

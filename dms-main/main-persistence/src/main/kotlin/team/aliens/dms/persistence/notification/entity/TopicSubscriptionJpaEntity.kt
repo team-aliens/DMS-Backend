@@ -24,10 +24,10 @@ class TopicSubscriptionJpaEntity(
 
     @MapsId("deviceTokenId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_token_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "device_token_id", nullable = false)
     val deviceToken: DeviceTokenJpaEntity,
 
-    @Column(columnDefinition = "BIT(1)", nullable = false)
+    @Column(nullable = false)
     val isSubscribed: Boolean
 
 )
@@ -39,7 +39,7 @@ data class TopicSubscriptionJpaEntityId(
     val deviceTokenId: UUID,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(length = 30, nullable = false)
     val topic: Topic
 
 ) : Serializable
