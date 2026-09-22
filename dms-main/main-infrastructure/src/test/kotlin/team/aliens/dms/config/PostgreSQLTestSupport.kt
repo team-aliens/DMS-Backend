@@ -12,6 +12,7 @@ object PostgreSQLTestContainer {
         withDatabaseName("dms")
         withUsername("test")
         withPassword("test")
+        withInitScript("db/init-pgvector.sql")
         withStartupTimeout(Duration.ofMinutes(5))
         start()
     }
