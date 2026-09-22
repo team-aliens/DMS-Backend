@@ -5,6 +5,14 @@ plugins {
     kotlin("plugin.jpa") version PluginVersions.JPA_PLUGIN_VERSION
 }
 
+dependencyManagement {
+    dependencies {
+        // Spring Boot 3.2.3 BOM 이 flyway-core 를 9.22.3 으로 고정하는데
+        // flyway-database-postgresql 은 10.8.1 이라 AbstractMethodError 가 난다.
+        dependency("org.flywaydb:flyway-core:${DependencyVersions.FLYWAY_VERSION}")
+    }
+}
+
 dependencies {
     // layer
     implementation(project(":dms-main:main-persistence"))
