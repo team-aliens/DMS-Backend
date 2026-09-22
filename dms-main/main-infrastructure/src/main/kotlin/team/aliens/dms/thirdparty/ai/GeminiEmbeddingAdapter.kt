@@ -46,8 +46,8 @@ class GeminiEmbeddingAdapter(
         }
     }
 
-   // Gemini가 반환한 임베딩 벡터의 길이를 1로 맞춰서, 코사인 유사도와 내적을 동일하게 계산할 수 있도록 하는 것.
-   private fun normalize(vector: FloatArray): FloatArray {
+    // Gemini가 반환한 임베딩 벡터의 길이를 1로 맞춰서, 코사인 유사도와 내적을 동일하게 계산할 수 있도록 하는 것.
+    private fun normalize(vector: FloatArray): FloatArray {
         if (vector.size != dimension) {
             logger.error("Gemini 임베딩 차원이 설정과 다릅니다. 설정={} 응답={}", dimension, vector.size)
             throw ChatbotEmbeddingFailedException
