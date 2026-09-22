@@ -11,6 +11,10 @@ object DependencyVersions {
     const val JAKARTA_ANNOTATION_VERSION = "2.1.1"
     const val JAKARTA_PERSISTENCE_VERSION = "3.1.0"
     const val POSTGRESQL = "42.7.13"
+
+    // hibernate-vector 는 Spring Boot BOM 이 관리하지 않으므로, BOM 이 정하는 hibernate-core 와 같은 버전을 직접 맞춘다.
+    // Boot 버전을 올리면 이 값도 함께 올려야 한다(어긋나면 #1108 과 같은 AbstractMethodError 가 난다).
+    const val HIBERNATE_VERSION = "6.4.4.Final"
     const val APACHE_POI_VERSION = "3.7"
     const val MOCKK_VERSION = "1.13.10"
     const val SPRING_KOTEST_VERSION = "1.1.3"

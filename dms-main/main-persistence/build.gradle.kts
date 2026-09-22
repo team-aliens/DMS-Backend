@@ -13,6 +13,7 @@ dependencies {
     // database
     implementation(Dependencies.SPRING_DATA_JPA)
     runtimeOnly(Dependencies.POSTGRESQL_DRIVER)
+    runtimeOnly(Dependencies.HIBERNATE_VECTOR)
     implementation(Dependencies.REDIS)
     implementation(Dependencies.SPRING_REDIS)
 

@@ -30,6 +30,9 @@ object Dependencies {
     // database
     const val SPRING_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa:${PluginVersions.SPRING_BOOT_VERSION}"
     const val POSTGRESQL_DRIVER = "org.postgresql:postgresql:${DependencyVersions.POSTGRESQL}"
+
+    // pgvector 의 vector 타입 매핑(@JdbcTypeCode(SqlTypes.VECTOR)). ServiceLoader 로 자동 등록돼 설정이 필요 없다
+    const val HIBERNATE_VECTOR = "org.hibernate.orm:hibernate-vector:${DependencyVersions.HIBERNATE_VERSION}"
     const val SPRING_REDIS = "org.springframework.boot:spring-boot-starter-data-redis:${PluginVersions.SPRING_BOOT_VERSION}"
     const val REDIS = "org.springframework.data:spring-data-redis:${DependencyVersions.REDIS_VERSION}"
 
