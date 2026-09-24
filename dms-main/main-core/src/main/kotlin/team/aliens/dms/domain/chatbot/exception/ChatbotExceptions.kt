@@ -6,6 +6,10 @@ object ChatbotDocumentInvalidExtensionException : DmsException(
     ChatbotErrorCode.CHATBOT_DOCUMENT_INVALID_EXTENSION
 )
 
+object ChatbotDocumentFileNameTooLongException : DmsException(
+    ChatbotErrorCode.CHATBOT_DOCUMENT_FILE_NAME_TOO_LONG
+)
+
 object ChatbotDocumentSchoolMismatchException : DmsException(
     ChatbotErrorCode.CHATBOT_DOCUMENT_SCHOOL_MISMATCH
 )

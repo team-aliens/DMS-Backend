@@ -42,8 +42,14 @@ data class ChatbotDocument(
 
         private const val TITLE_MAX_LENGTH = 100
 
+        // tbl_chatbot_document.source_uri 길이. 파일 이름이 키라서 자르지 않고 거절한다
+        private const val SOURCE_URI_MAX_LENGTH = 500
+
         fun isAllowedExtension(fileName: String): Boolean =
             fileName.substringAfterLast('.', "").lowercase() in ALLOWED_EXTENSIONS
+
+        fun isAllowedFileNameLength(fileName: String): Boolean =
+            fileName.length <= SOURCE_URI_MAX_LENGTH
 
         // 마크다운 첫 H1 을 제목으로, 없으면 확장자를 뗀 파일 이름
         fun titleOf(fileName: String, content: String): String =
