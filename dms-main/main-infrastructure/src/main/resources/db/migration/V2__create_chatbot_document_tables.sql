@@ -1,6 +1,6 @@
 -- 이슈 #1104 챗봇 문서 인제스천
--- 매니저가 올린 md/txt 파일 하나 = tbl_chatbot_document 한 행, 그 파일을 헤딩 단위로 자른 결과 = tbl_chatbot_document_chunk.
--- 유사도 검색은 pgvector 가 한다(청크의 embedding 컬럼). 확장 생성에는 슈퍼유저 권한이 필요하다.
+-- 매니저가 올린 md/txt 파일 하나 = tbl_chatbot_document, 그 파일을 헤딩 단위로 자른 결과 = tbl_chatbot_document_chunk.
+-- 유사도 검색은 pgvector 가 한다(청크의 embedding 컬럼)
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE tbl_chatbot_document (
@@ -58,6 +58,3 @@ ALTER TABLE ONLY tbl_chatbot_document_chunk
 -- PostgreSQL 은 FK 컬럼에 인덱스를 자동으로 만들지 않는다
 CREATE INDEX idx_chatbot_document_school_id ON tbl_chatbot_document (school_id);
 CREATE INDEX idx_chatbot_document_chunk_school_id ON tbl_chatbot_document_chunk (school_id);
-
--- embedding 에는 ANN(HNSW) 인덱스를 걸지 않는다. 청크가 수백 개 수준이라 전수 스캔이 더 빠르고,
--- 인덱스는 검색 지연이 실측으로 문제가 됐을 때 추가한다(수만~수십만 벡터부터).

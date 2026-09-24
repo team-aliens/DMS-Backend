@@ -39,7 +39,7 @@ data class ChatbotDocument(
         val ALLOWED_EXTENSIONS = setOf("md", "txt")
 
         private const val H1_PREFIX = "# "
-        // tbl_chatbot_document.title VARCHAR(100)
+
         private const val TITLE_MAX_LENGTH = 100
 
         fun isAllowedExtension(fileName: String): Boolean =
@@ -54,7 +54,7 @@ data class ChatbotDocument(
                 ?.take(TITLE_MAX_LENGTH)
                 ?: fileName.substringBeforeLast('.').take(TITLE_MAX_LENGTH)
 
-        // 원문 SHA-256 hex. 같은 값이면 재인제스천을 건너뛴다
+        // 원문을 SHA-256으로 해쉬
         fun contentHashOf(content: String): String =
             MessageDigest.getInstance("SHA-256")
                 .digest(content.toByteArray(Charsets.UTF_8))
