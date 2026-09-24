@@ -1,6 +1,5 @@
 package team.aliens.dms.domain.chatbot.service
 
-import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.chatbot.model.ChatbotDocument
 import team.aliens.dms.domain.chatbot.model.ChatbotDocumentChunk
@@ -11,12 +10,7 @@ import team.aliens.dms.domain.chatbot.spi.QueryChatbotDocumentPort
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * 옛 청크 삭제 → 문서 저장 → 새 청크 저장이 한 트랜잭션이어야 해서 클래스에 건다.
- * 임베딩 API 호출도 그 안에 들어가지만, 인제스천은 매니저가 파일을 올릴 때만 도는 드문 작업이라 감수한다.
- */
 @Service
-@Transactional
 class CommandChatbotServiceImpl(
     private val embeddingPort: EmbeddingPort,
     private val chunker: ChatbotDocumentChunker,
