@@ -22,6 +22,7 @@ abstract class DatabaseTestConfig : DescribeSpec() {
             withDatabaseName("dms")
             withUsername("test")
             withPassword("test")
+            withInitScript("db/init-pgvector.sql")
             start()
         }
 

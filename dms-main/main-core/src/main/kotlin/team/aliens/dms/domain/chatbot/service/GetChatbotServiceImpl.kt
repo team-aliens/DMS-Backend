@@ -1,19 +1,30 @@
 package team.aliens.dms.domain.chatbot.service
 
 import team.aliens.dms.common.annotation.Service
+import team.aliens.dms.domain.chatbot.exception.ChatbotDocumentNotFoundException
+import team.aliens.dms.domain.chatbot.model.ChatbotDocument
 import team.aliens.dms.domain.chatbot.spi.ChatAiPort
+import team.aliens.dms.domain.chatbot.spi.QueryChatbotDocumentPort
 import team.aliens.dms.domain.chatbot.spi.RegulationDocumentPort
+import java.util.UUID
 
 @Service
-class ChatbotServiceImpl(
+class GetChatbotServiceImpl(
     private val regulationDocumentPort: RegulationDocumentPort,
-    private val chatAiPort: ChatAiPort
-) : ChatbotService {
+    private val chatAiPort: ChatAiPort,
+    private val queryChatbotDocumentPort: QueryChatbotDocumentPort
+) : GetChatbotService {
 
+    // 아직 규정 전문을 통째로 넣는다(stuffing). 검색 기반 답변은 인덱스가 채워진 뒤 다음 PR에서 교체한다
     override fun generateAnswer(question: String): String {
         val regulation = regulationDocumentPort.loadRegulation()
         val systemInstruction = buildSystemInstruction(regulation)
         return chatAiPort.generateAnswer(systemInstruction, question)
+    }
+
+    override fun getChatbotDocumentById(documentId: UUID): ChatbotDocument {
+        return queryChatbotDocumentPort.queryChatbotDocumentById(documentId)
+            ?: throw ChatbotDocumentNotFoundException
     }
 
     private fun buildSystemInstruction(regulation: String): String {

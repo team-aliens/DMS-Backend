@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
+import team.aliens.dms.thirdparty.ai.client.dto.GeminiBatchEmbedContentsRequest
+import team.aliens.dms.thirdparty.ai.client.dto.GeminiBatchEmbedContentsResponse
 import team.aliens.dms.thirdparty.ai.client.dto.GeminiGenerateContentRequest
 import team.aliens.dms.thirdparty.ai.client.dto.GeminiGenerateContentResponse
 
@@ -17,4 +19,11 @@ interface GeminiClient {
         @RequestHeader("x-goog-api-key") apiKey: String,
         @RequestBody request: GeminiGenerateContentRequest
     ): GeminiGenerateContentResponse
+
+    @PostMapping("/v1beta/models/{model}:batchEmbedContents")
+    fun batchEmbedContents(
+        @PathVariable("model") model: String,
+        @RequestHeader("x-goog-api-key") apiKey: String,
+        @RequestBody request: GeminiBatchEmbedContentsRequest
+    ): GeminiBatchEmbedContentsResponse
 }
