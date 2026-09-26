@@ -34,7 +34,7 @@ class ChatbotQueryLogJpaEntity(
     @Column(columnDefinition = "TEXT")
     val answer: String?,
 
-    // 쉼표로 이은 청크 id. 청크는 재업로드 때 교체되므로 FK 를 걸지 않는다
+    // 쉼표로 이은 청크 id
     @Column(columnDefinition = "TEXT", nullable = false)
     val retrievedChunkIds: String,
 

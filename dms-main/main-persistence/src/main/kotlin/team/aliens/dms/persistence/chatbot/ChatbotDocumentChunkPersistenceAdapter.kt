@@ -23,7 +23,6 @@ class ChatbotDocumentChunkPersistenceAdapter(
     /**
      * cosine_distance 는 hibernate-vector 가 등록한 HQL 함수로, SQL 에서는 pgvector 의 <=>(코사인 거리)가 된다.
      * 학교당 청크 수가 적어 ANN 인덱스 없이 전수 비교(정확 검색)한다.
-     * 나중에 HNSW 인덱스를 추가하면 연산자와 짝이 맞는 vector_cosine_ops 로 만들어야 인덱스를 탄다.
      */
     override fun searchChatbotDocumentChunks(
         schoolId: UUID,
