@@ -61,10 +61,9 @@ data class NotificationOfUser(val isRead: Boolean = false /* ... */) {
 | 위치 | `domain/<도메인>/spi/vo/XxxVO` | `domain/<도메인>/model/` |
 | 식별자·저장 | 없음 (`@Aggregate`·`SchoolIdDomain` 아님) | 있음 |
 | 만드는 곳 | 어댑터 (DB 조회, 외부 API·파일 응답) | 도메인 / 영속성 매퍼 |
-| 동작 | 없음 — 값만 담습니다 | 불변식·상태 전이 메서드 |
+| 동작 | 없음 — 값만 담는다 | 불변식·상태 전이 메서드 |
 
 * **포트의 반환값(드물게 입력값)으로만 씁니다.** 서비스는 받은 VO를 그대로 넘기고, 응답 DTO가 VO를 그대로 담아도 됩니다(`DaybreakResponse`).
-* **도메인 서비스가 조립한 결과는 VO가 아닙니다.** 포트를 거치지 않은 값은 `model/`에 둡니다(`ChatbotAnswer`).
 * 이름은 `XxxVO`, persistence 쪽 구현은 `QueryXxxVO`입니다.
 
 ### QueryDSL 프로젝션 — `open class` + 상속
@@ -77,11 +76,7 @@ open class TeacherVO(val id: UUID, val name: String)
 class QueryTeacherVO @QueryProjection constructor(id: UUID, name: String) : TeacherVO(id, name)
 ```
 
-QueryDSL이 `@QueryProjection` 생성자로 하위 클래스를 바로 만들고, 어댑터는 core 타입으로 반환합니다. 매퍼가 필요 없습니다. **core VO가 `data class`가 아닌 이유가 이 상속입니다**(`data class`는 상속할 수 없음).
-
-### 어댑터가 조립하는 값 — `data class`
-
-native query의 인터페이스 프로젝션, 외부 API 응답, 파싱 결과처럼 상속으로 연결할 수 없으면 core VO를 `data class`로 두고 어댑터에서 옮겨 담습니다(`RetrievedChunkVO`, `ChatAiAnswerVO`, `ExcelStudentVO`).
+QueryDSL이 `@QueryProjection` 생성자로 하위 클래스를 바로 만들고, 어댑터는 core 타입으로 반환합니다. 매퍼가 필요 없습니다. **core VO가 `data class`가 아닌 이유는 이 상속 때문입니다**(`data class`는 상속할 수 없음).
 
 ---
 
