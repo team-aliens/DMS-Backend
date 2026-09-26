@@ -1,12 +1,19 @@
 package team.aliens.dms.persistence.chatbot.repository.vo
 
+import com.querydsl.core.annotations.QueryProjection
+import team.aliens.dms.domain.chatbot.spi.vo.RetrievedChunkVO
 import java.util.UUID
 
-// 유사도 검색 네이티브 쿼리의 인터페이스 프로젝션. 게터 이름이 SELECT 의 별칭과 같아야 한다
-interface QueryRetrievedChunkVO {
-    val chunkId: UUID
-    val documentTitle: String
-    val sectionPath: String
-    val content: String
-    val distance: Double
-}
+class QueryRetrievedChunkVO @QueryProjection constructor(
+    chunkId: UUID,
+    documentTitle: String,
+    sectionPath: String,
+    content: String,
+    distance: Double
+) : RetrievedChunkVO(
+    chunkId = chunkId,
+    documentTitle = documentTitle,
+    sectionPath = sectionPath,
+    content = content,
+    distance = distance
+)
