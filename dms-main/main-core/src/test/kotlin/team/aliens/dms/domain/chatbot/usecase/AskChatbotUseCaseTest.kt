@@ -6,28 +6,50 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
+import team.aliens.dms.domain.chatbot.model.ChatbotAnswer
+import team.aliens.dms.domain.chatbot.model.ChatbotAnswerMode
+import team.aliens.dms.domain.chatbot.model.ChatbotQueryStatus
+import team.aliens.dms.domain.chatbot.model.TokenUsage
 import team.aliens.dms.domain.chatbot.service.ChatbotService
+import java.util.UUID
 
 class AskChatbotUseCaseTest : DescribeSpec({
 
-    val chatbotService = mockk<ChatbotService>()
-
-    val useCase = AskChatbotUseCase(chatbotService)
+    val schoolId = UUID.randomUUID()
+    val mode = ChatbotAnswerMode.RAG
 
     describe("execute") {
         context("학생이 질문을 하면") {
 
             val question = "통금 시간이 몇 시야?"
-            val answer = "평일 통금 시간은 오후 10시입니다."
+            val answer = ChatbotAnswer(
+                answer = "평일 통금 시간은 오후 10시입니다.",
+                mode = mode,
+                status = ChatbotQueryStatus.ANSWERED,
+                retrievedChunkIds = listOf(UUID.randomUUID()),
+                usage = TokenUsage(promptTokens = 100, candidatesTokens = 20, totalTokens = 120)
+            )
 
-            it("챗봇 답변을 반환한다") {
-                every { chatbotService.generateAnswer(question) } returns answer
+            it("챗봇 답변을 반환하고 질의 로그를 남긴다") {
+                val chatbotService = mockk<ChatbotService>()
+                val securityService = mockk<SecurityService>()
+                val useCase = AskChatbotUseCase(chatbotService, securityService)
 
-                val response = useCase.execute(question)
+                every { securityService.getCurrentSchoolId() } returns schoolId
+                every { chatbotService.generateAnswer(schoolId, question, mode) } returns answer
+                every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
 
-                response.answer shouldBe answer
-                verify(exactly = 1) { chatbotService.generateAnswer(question) }
+                val response = useCase.execute(question, mode)
+
+                response.answer shouldBe answer.answer
+                verify(exactly = 1) { chatbotService.generateAnswer(schoolId, question, mode) }
+                verify(exactly = 1) {
+                    chatbotService.saveChatbotQueryLog(
+                        match { it.status == ChatbotQueryStatus.ANSWERED && it.answer == answer.answer }
+                    )
+                }
             }
         }
 
@@ -35,13 +57,22 @@ class AskChatbotUseCaseTest : DescribeSpec({
 
             val question = "통금 시간이 몇 시야?"
 
-            it("ChatbotAnswerGenerationFailedException 이 발생한다") {
+            it("ChatbotAnswerGenerationFailedException 이 발생하고 FAILED 로그를 남긴다") {
+                val chatbotService = mockk<ChatbotService>()
+                val securityService = mockk<SecurityService>()
+                val useCase = AskChatbotUseCase(chatbotService, securityService)
+
+                every { securityService.getCurrentSchoolId() } returns schoolId
                 every {
-                    chatbotService.generateAnswer(question)
+                    chatbotService.generateAnswer(schoolId, question, mode)
                 } throws ChatbotAnswerGenerationFailedException
+                every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
 
                 shouldThrow<ChatbotAnswerGenerationFailedException> {
-                    useCase.execute(question)
+                    useCase.execute(question, mode)
+                }
+                verify(exactly = 1) {
+                    chatbotService.saveChatbotQueryLog(match { it.status == ChatbotQueryStatus.FAILED })
                 }
             }
         }
