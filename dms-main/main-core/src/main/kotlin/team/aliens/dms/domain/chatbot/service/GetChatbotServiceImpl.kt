@@ -50,7 +50,7 @@ class GetChatbotServiceImpl(
             ?: throw ChatbotDocumentNotFoundException
     }
 
-    // 검색 순서(가까운 순) 그대로 이어 붙인다. trimIndent 는 끼워 넣은 여러 줄 본문 때문에 동작하지 않으므로 문자열을 직접 잇는다
+    // 검색 순서(가까운 순) 그대로 이어 붙인다.
     private fun buildSystemInstruction(chunks: List<RetrievedChunkVO>): String {
         val excerpts = chunks.joinToString("\n\n") { "### ${it.documentTitle} > ${it.sectionPath}\n${it.content}" }
         return "$ROLE_INSTRUCTION\n\n$EXCERPT_HEADER\n$excerpts"
