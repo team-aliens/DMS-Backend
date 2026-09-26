@@ -3,6 +3,7 @@ package team.aliens.dms.domain.chatbot.usecase
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -15,6 +16,10 @@ import team.aliens.dms.domain.chatbot.service.ChatbotService
 import java.util.UUID
 
 class AskChatbotUseCaseTest : DescribeSpec({
+
+    val chatbotService = mockk<ChatbotService>()
+    val securityService = mockk<SecurityService>()
+    val useCase = AskChatbotUseCase(chatbotService, securityService)
 
     val schoolId = UUID.randomUUID()
 
@@ -30,9 +35,6 @@ class AskChatbotUseCaseTest : DescribeSpec({
             )
 
             it("챗봇 답변을 반환하고 질의 로그를 남긴다") {
-                val chatbotService = mockk<ChatbotService>()
-                val securityService = mockk<SecurityService>()
-                val useCase = AskChatbotUseCase(chatbotService, securityService)
 
                 every { securityService.getCurrentSchoolId() } returns schoolId
                 every { chatbotService.generateAnswer(schoolId, question) } returns answer
@@ -47,6 +49,7 @@ class AskChatbotUseCaseTest : DescribeSpec({
                         match { it.status == ChatbotQueryStatus.ANSWERED && it.answer == answer.answer }
                     )
                 }
+                clearAllMocks()
             }
         }
 
@@ -55,9 +58,6 @@ class AskChatbotUseCaseTest : DescribeSpec({
             val question = "통금 시간이 몇 시야?"
 
             it("ChatbotAnswerGenerationFailedException 이 발생하고 FAILED 로그를 남긴다") {
-                val chatbotService = mockk<ChatbotService>()
-                val securityService = mockk<SecurityService>()
-                val useCase = AskChatbotUseCase(chatbotService, securityService)
 
                 every { securityService.getCurrentSchoolId() } returns schoolId
                 every {
@@ -71,6 +71,7 @@ class AskChatbotUseCaseTest : DescribeSpec({
                 verify(exactly = 1) {
                     chatbotService.saveChatbotQueryLog(match { it.status == ChatbotQueryStatus.FAILED })
                 }
+                clearAllMocks()
             }
         }
     }
