@@ -20,9 +20,6 @@ CREATE TABLE tbl_chatbot_document
     CONSTRAINT fk_chatbot_document_school_id FOREIGN KEY (school_id) REFERENCES tbl_school (id)
 );
 
-CREATE INDEX idx_chatbot_document_school_id
-    ON tbl_chatbot_document (school_id);
-
 CREATE TABLE tbl_chatbot_document_chunk
 (
     id           uuid                           NOT NULL PRIMARY KEY,

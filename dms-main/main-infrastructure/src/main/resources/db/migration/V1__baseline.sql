@@ -55,7 +55,6 @@ CREATE TABLE tbl_room
     id        uuid       NOT NULL PRIMARY KEY,
     school_id uuid       NOT NULL,
 
-    CONSTRAINT tbl_room_number_key UNIQUE (number),
     CONSTRAINT tbl_room_school_id_number_key UNIQUE (school_id, number),
     CONSTRAINT fkjssn7mu4yy6d91vh705s0xekr FOREIGN KEY (school_id) REFERENCES tbl_school (id)
 );
@@ -79,9 +78,6 @@ CREATE TABLE tbl_student
     CONSTRAINT fk7kod8l539q1mq1uws15wkg50e FOREIGN KEY (user_id) REFERENCES tbl_user (id),
     CONSTRAINT fkngjvmmejph90txmm2ri4owhj1 FOREIGN KEY (room_id) REFERENCES tbl_room (id)
 );
-
-CREATE INDEX idx_student_user_id
-    ON tbl_student (user_id);
 
 CREATE INDEX idx_student_room_id
     ON tbl_student (room_id);
