@@ -5,12 +5,12 @@ import team.aliens.dms.domain.chatbot.exception.ChatbotDocumentNotFoundException
 import team.aliens.dms.domain.chatbot.model.ChatbotAnswer
 import team.aliens.dms.domain.chatbot.model.ChatbotDocument
 import team.aliens.dms.domain.chatbot.model.ChatbotQueryStatus
-import team.aliens.dms.domain.chatbot.model.RetrievedChunk
 import team.aliens.dms.domain.chatbot.model.TokenUsage
 import team.aliens.dms.domain.chatbot.spi.ChatAiPort
 import team.aliens.dms.domain.chatbot.spi.EmbeddingPort
 import team.aliens.dms.domain.chatbot.spi.QueryChatbotDocumentChunkPort
 import team.aliens.dms.domain.chatbot.spi.QueryChatbotDocumentPort
+import team.aliens.dms.domain.chatbot.spi.vo.RetrievedChunkVO
 import java.util.UUID
 
 @Service
@@ -51,7 +51,7 @@ class GetChatbotServiceImpl(
     }
 
     // 검색 순서(가까운 순) 그대로 이어 붙인다. trimIndent 는 끼워 넣은 여러 줄 본문 때문에 동작하지 않으므로 문자열을 직접 잇는다
-    private fun buildSystemInstruction(chunks: List<RetrievedChunk>): String {
+    private fun buildSystemInstruction(chunks: List<RetrievedChunkVO>): String {
         val excerpts = chunks.joinToString("\n\n") { "### ${it.documentTitle} > ${it.sectionPath}\n${it.content}" }
         return "$ROLE_INSTRUCTION\n\n$EXCERPT_HEADER\n$excerpts"
     }

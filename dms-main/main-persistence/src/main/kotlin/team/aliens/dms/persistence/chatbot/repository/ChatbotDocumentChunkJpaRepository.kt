@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import team.aliens.dms.persistence.chatbot.entity.ChatbotDocumentChunkJpaEntity
-import team.aliens.dms.persistence.chatbot.repository.vo.RetrievedChunkVO
+import team.aliens.dms.persistence.chatbot.repository.vo.QueryRetrievedChunkVO
 import java.util.UUID
 
 @Repository
@@ -37,5 +37,5 @@ interface ChatbotDocumentChunkJpaRepository : CrudRepository<ChatbotDocumentChun
         @Param("schoolId") schoolId: UUID,
         @Param("embedding") embedding: String,
         @Param("limit") limit: Int
-    ): List<RetrievedChunkVO>
+    ): List<QueryRetrievedChunkVO>
 }

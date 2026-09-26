@@ -4,8 +4,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
-import team.aliens.dms.domain.chatbot.model.ChatAiAnswer
 import team.aliens.dms.domain.chatbot.spi.ChatAiPort
+import team.aliens.dms.domain.chatbot.spi.vo.ChatAiAnswerVO
 import team.aliens.dms.thirdparty.ai.client.GeminiClient
 import team.aliens.dms.thirdparty.ai.client.dto.GeminiGenerateContentRequest
 
@@ -20,14 +20,14 @@ class GeminiClientAdapter(
 
     private val logger = LoggerFactory.getLogger(GeminiClientAdapter::class.java)
 
-    override fun generateAnswer(systemInstruction: String, question: String): ChatAiAnswer {
+    override fun generateAnswer(systemInstruction: String, question: String): ChatAiAnswerVO {
         return runCatching {
             val response = geminiClient.generateContent(
                 model = model,
                 apiKey = apiKey,
                 request = GeminiGenerateContentRequest.of(systemInstruction, question)
             )
-            response.firstText()?.let { ChatAiAnswer(text = it, usage = response.tokenUsage()) }
+            response.firstText()?.let { ChatAiAnswerVO(text = it, usage = response.tokenUsage()) }
         }.onFailure {
             logger.error("Gemini 응답 생성에 실패했습니다.", it)
         }.getOrNull() ?: throw ChatbotAnswerGenerationFailedException

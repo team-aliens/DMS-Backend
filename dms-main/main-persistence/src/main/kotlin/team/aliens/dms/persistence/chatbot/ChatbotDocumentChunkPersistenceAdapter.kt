@@ -2,8 +2,8 @@ package team.aliens.dms.persistence.chatbot
 
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.chatbot.model.ChatbotDocumentChunk
-import team.aliens.dms.domain.chatbot.model.RetrievedChunk
 import team.aliens.dms.domain.chatbot.spi.ChatbotDocumentChunkPort
+import team.aliens.dms.domain.chatbot.spi.vo.RetrievedChunkVO
 import team.aliens.dms.persistence.chatbot.mapper.ChatbotDocumentChunkMapper
 import team.aliens.dms.persistence.chatbot.repository.ChatbotDocumentChunkJpaRepository
 import java.util.UUID
@@ -18,13 +18,13 @@ class ChatbotDocumentChunkPersistenceAdapter(
         schoolId: UUID,
         queryEmbedding: FloatArray,
         limit: Int
-    ): List<RetrievedChunk> {
+    ): List<RetrievedChunkVO> {
         return chatbotDocumentChunkRepository.searchBySchoolIdOrderByCosineDistance(
             schoolId = schoolId,
             embedding = toVectorLiteral(queryEmbedding),
             limit = limit
         ).map {
-            RetrievedChunk(
+            RetrievedChunkVO(
                 chunkId = it.chunkId,
                 documentTitle = it.documentTitle,
                 sectionPath = it.sectionPath,
