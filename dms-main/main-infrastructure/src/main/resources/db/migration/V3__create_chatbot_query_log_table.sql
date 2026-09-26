@@ -6,7 +6,6 @@ CREATE TABLE tbl_chatbot_query_log
     question            text         NOT NULL,
     status              varchar(20)  NOT NULL,
     answer              text,
-    -- 쉼표로 이은 청크 id. 청크는 문서를 다시 올리면 교체되므로 FK 를 걸지 않는다
     retrieved_chunk_ids text         NOT NULL,
     prompt_tokens       integer      NOT NULL,
     cached_tokens       integer      NOT NULL,
