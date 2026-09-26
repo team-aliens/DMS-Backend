@@ -8,5 +8,9 @@ interface EmbeddingPort {
      */
     fun embeddingModel(): String
 
+    // 색인용 문서 임베딩(taskType = RETRIEVAL_DOCUMENT)
     fun embedAll(texts: List<String>): List<FloatArray>
+
+    // 검색용 질문 임베딩(taskType = RETRIEVAL_QUERY). 문서 벡터와 같은 방식으로 L2 정규화한다
+    fun embedQuery(text: String): FloatArray
 }
