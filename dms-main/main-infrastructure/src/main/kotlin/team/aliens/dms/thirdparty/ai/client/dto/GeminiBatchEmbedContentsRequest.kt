@@ -23,18 +23,25 @@ data class GeminiBatchEmbedContentsRequest(
     )
 
     companion object {
-        // 색인용 문서 임베딩. 질의 쪽은 RETRIEVAL_QUERY 로 따로 요청한다
+        // 색인용 문서 임베딩
         private const val TASK_TYPE_DOCUMENT = "RETRIEVAL_DOCUMENT"
 
+        // 검색용 질문 임베딩. 문서 쪽(RETRIEVAL_DOCUMENT)과 짝을 이뤄야 검색 품질이 나온다
+        private const val TASK_TYPE_QUERY = "RETRIEVAL_QUERY"
+
         fun ofDocuments(model: String, dimension: Int, texts: List<String>) = GeminiBatchEmbedContentsRequest(
-            requests = texts.map {
-                EmbedRequest(
-                    model = "models/$model",
-                    content = Content(parts = listOf(Part(it))),
-                    taskType = TASK_TYPE_DOCUMENT,
-                    outputDimensionality = dimension
-                )
-            }
+            requests = texts.map { embedRequest(model, dimension, it, TASK_TYPE_DOCUMENT) }
+        )
+
+        fun ofQuery(model: String, dimension: Int, text: String) = GeminiBatchEmbedContentsRequest(
+            requests = listOf(embedRequest(model, dimension, text, TASK_TYPE_QUERY))
+        )
+
+        private fun embedRequest(model: String, dimension: Int, text: String, taskType: String) = EmbedRequest(
+            model = "models/$model",
+            content = Content(parts = listOf(Part(text))),
+            taskType = taskType,
+            outputDimensionality = dimension
         )
     }
 }

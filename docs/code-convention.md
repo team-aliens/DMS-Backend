@@ -52,6 +52,34 @@ data class NotificationOfUser(val isRead: Boolean = false /* ... */) {
 
 ---
 
+## VO
+
+**VO는 포트를 사이에 두고 core와 어댑터가 주고받는, 식별자가 없고 저장되지 않는 읽기용 값 묶음입니다.** 대부분 조인·집계 결과(읽기 프로젝션)이고, 조회는 도메인 모델을 거치지 않는다는 원칙([architecture.md](./architecture.md))을 구현하는 수단입니다.
+
+| | VO | 도메인 모델 |
+| --- | --- | --- |
+| 위치 | `domain/<도메인>/spi/vo/XxxVO` | `domain/<도메인>/model/` |
+| 식별자·저장 | 없음 (`@Aggregate`·`SchoolIdDomain` 아님) | 있음 |
+| 만드는 곳 | 어댑터 (DB 조회, 외부 API·파일 응답) | 도메인 / 영속성 매퍼 |
+| 동작 | 없음 — 값만 담는다 | 불변식·상태 전이 메서드 |
+
+* **포트의 반환값(드물게 입력값)으로만 씁니다.** 서비스는 받은 VO를 그대로 넘기고, 응답 DTO가 VO를 그대로 담아도 됩니다(`DaybreakResponse`).
+* 이름은 `XxxVO`, persistence 쪽 구현은 `QueryXxxVO`입니다.
+
+### QueryDSL 프로젝션 — `open class` + 상속
+
+```kotlin
+// core: domain/teacher/spi/vo
+open class TeacherVO(val id: UUID, val name: String)
+
+// persistence: persistence/teacher/repository/vo
+class QueryTeacherVO @QueryProjection constructor(id: UUID, name: String) : TeacherVO(id, name)
+```
+
+QueryDSL이 `@QueryProjection` 생성자로 하위 클래스를 바로 만들고, 어댑터는 core 타입으로 반환합니다. 매퍼가 필요 없습니다. **core VO가 `data class`가 아닌 이유는 이 상속 때문입니다**(`data class`는 상속할 수 없음).
+
+---
+
 ## JPA 엔티티 매핑
 
 **`columnDefinition`에 DB 타입 문자열을 쓰지 않습니다.** 타입은 JPA 표준 속성으로 표현하고, 실제 컬럼 타입은 Flyway 마이그레이션이 정합니다. 엔티티에 타입 문자열을 박아두면 DB 엔진을 바꿀 때 엔티티를 전부 고쳐야 합니다.

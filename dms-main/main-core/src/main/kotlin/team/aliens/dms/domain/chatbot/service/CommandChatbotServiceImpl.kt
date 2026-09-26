@@ -3,8 +3,10 @@ package team.aliens.dms.domain.chatbot.service
 import team.aliens.dms.common.annotation.Service
 import team.aliens.dms.domain.chatbot.model.ChatbotDocument
 import team.aliens.dms.domain.chatbot.model.ChatbotDocumentChunk
+import team.aliens.dms.domain.chatbot.model.ChatbotQueryLog
 import team.aliens.dms.domain.chatbot.spi.CommandChatbotDocumentChunkPort
 import team.aliens.dms.domain.chatbot.spi.CommandChatbotDocumentPort
+import team.aliens.dms.domain.chatbot.spi.CommandChatbotQueryLogPort
 import team.aliens.dms.domain.chatbot.spi.EmbeddingPort
 import team.aliens.dms.domain.chatbot.spi.QueryChatbotDocumentPort
 import java.time.LocalDateTime
@@ -16,7 +18,8 @@ class CommandChatbotServiceImpl(
     private val chunker: ChatbotDocumentChunker,
     private val queryChatbotDocumentPort: QueryChatbotDocumentPort,
     private val commandChatbotDocumentPort: CommandChatbotDocumentPort,
-    private val commandChatbotDocumentChunkPort: CommandChatbotDocumentChunkPort
+    private val commandChatbotDocumentChunkPort: CommandChatbotDocumentChunkPort,
+    private val commandChatbotQueryLogPort: CommandChatbotQueryLogPort
 ) : CommandChatbotService {
 
     override fun ingestChatbotDocument(
@@ -85,5 +88,9 @@ class CommandChatbotServiceImpl(
     override fun deleteChatbotDocument(document: ChatbotDocument) {
         // 청크 행은 FK ON DELETE CASCADE 로 문서와 함께 지워진다
         commandChatbotDocumentPort.deleteChatbotDocument(document)
+    }
+
+    override fun saveChatbotQueryLog(queryLog: ChatbotQueryLog) {
+        commandChatbotQueryLogPort.saveChatbotQueryLog(queryLog)
     }
 }

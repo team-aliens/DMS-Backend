@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
-import io.mockk.confirmVerified
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,6 +19,10 @@ import java.util.UUID
 
 class UploadChatbotDocumentUseCaseTest : DescribeSpec({
 
+    val chatbotService = mockk<ChatbotService>()
+    val securityService = mockk<SecurityService>()
+    val useCase = UploadChatbotDocumentUseCase(chatbotService, securityService)
+
     val schoolId = UUID.randomUUID()
     val content = "# 기숙사 생활 규정\n\n## 외박\n외박은 전날 18시까지 신청한다."
     val publishedAt = LocalDateTime.of(2026, 3, 1, 0, 0)
@@ -31,9 +35,6 @@ class UploadChatbotDocumentUseCaseTest : DescribeSpec({
                     row("notice.txt"),
                     row("RULES.MD")
                 ) { fileName ->
-                    val chatbotService = mockk<ChatbotService>()
-                    val securityService = mockk<SecurityService>()
-                    val useCase = UploadChatbotDocumentUseCase(chatbotService, securityService)
                     val document = createChatbotDocumentStub(sourceUri = fileName, schoolId = schoolId)
 
                     every { securityService.getCurrentSchoolId() } returns schoolId
@@ -47,6 +48,8 @@ class UploadChatbotDocumentUseCaseTest : DescribeSpec({
                     verify(exactly = 1) {
                         chatbotService.ingestChatbotDocument(schoolId, fileName, content, publishedAt)
                     }
+
+                    clearAllMocks()
                 }
             }
         }
@@ -59,27 +62,25 @@ class UploadChatbotDocumentUseCaseTest : DescribeSpec({
                     row("rules"),
                     row("rules.md.exe")
                 ) { fileName ->
-                    val chatbotService = mockk<ChatbotService>()
-                    val securityService = mockk<SecurityService>()
-                    val useCase = UploadChatbotDocumentUseCase(chatbotService, securityService)
 
                     shouldThrow<ChatbotDocumentInvalidExtensionException> {
                         useCase.execute(fileName, content, publishedAt)
                     }
+
+                    clearAllMocks()
                 }
             }
         }
 
         context("파일 이름이 500자를 넘으면") {
             it("ChatbotDocumentFileNameTooLongException 이 발생하고 인제스천하지 않는다") {
-                val chatbotService = mockk<ChatbotService>()
-                val securityService = mockk<SecurityService>()
-                val useCase = UploadChatbotDocumentUseCase(chatbotService, securityService)
                 val fileName = "a".repeat(498) + ".md"
 
                 shouldThrow<ChatbotDocumentFileNameTooLongException> {
                     useCase.execute(fileName, content, publishedAt)
                 }
+
+                clearAllMocks()
             }
         }
     }

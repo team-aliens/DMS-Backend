@@ -1,6 +1,7 @@
 package team.aliens.dms.domain.chatbot.service
 
 import team.aliens.dms.domain.chatbot.model.ChatbotDocument
+import team.aliens.dms.domain.chatbot.model.ChatbotQueryLog
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -20,4 +21,6 @@ interface CommandChatbotService {
 
     /** 문서를 지운다. 청크는 FK CASCADE 로 함께 지워진다 */
     fun deleteChatbotDocument(document: ChatbotDocument)
+
+    fun saveChatbotQueryLog(queryLog: ChatbotQueryLog)
 }

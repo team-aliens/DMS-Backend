@@ -16,7 +16,6 @@ enum class ChatbotErrorCode(
 
     CHATBOT_DOCUMENT_NOT_FOUND(ErrorStatus.NOT_FOUND, "Chatbot Document Not Found", 1),
 
-    REGULATION_DOCUMENT_NOT_FOUND(ErrorStatus.INTERNAL_SERVER_ERROR, "Regulation Document Not Found", 1),
     CHATBOT_ANSWER_GENERATION_FAILED(ErrorStatus.INTERNAL_SERVER_ERROR, "Chatbot Answer Generation Failed", 2),
     CHATBOT_EMBEDDING_FAILED(ErrorStatus.INTERNAL_SERVER_ERROR, "Chatbot Embedding Failed", 3)
     ;
