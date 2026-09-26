@@ -9,7 +9,6 @@ import io.mockk.verify
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
 import team.aliens.dms.domain.chatbot.model.ChatbotAnswer
-import team.aliens.dms.domain.chatbot.model.ChatbotAnswerMode
 import team.aliens.dms.domain.chatbot.model.ChatbotQueryStatus
 import team.aliens.dms.domain.chatbot.model.TokenUsage
 import team.aliens.dms.domain.chatbot.service.ChatbotService
@@ -18,7 +17,6 @@ import java.util.UUID
 class AskChatbotUseCaseTest : DescribeSpec({
 
     val schoolId = UUID.randomUUID()
-    val mode = ChatbotAnswerMode.RAG
 
     describe("execute") {
         context("학생이 질문을 하면") {
@@ -26,7 +24,6 @@ class AskChatbotUseCaseTest : DescribeSpec({
             val question = "통금 시간이 몇 시야?"
             val answer = ChatbotAnswer(
                 answer = "평일 통금 시간은 오후 10시입니다.",
-                mode = mode,
                 status = ChatbotQueryStatus.ANSWERED,
                 retrievedChunkIds = listOf(UUID.randomUUID()),
                 usage = TokenUsage(promptTokens = 100, candidatesTokens = 20, totalTokens = 120)
@@ -38,13 +35,13 @@ class AskChatbotUseCaseTest : DescribeSpec({
                 val useCase = AskChatbotUseCase(chatbotService, securityService)
 
                 every { securityService.getCurrentSchoolId() } returns schoolId
-                every { chatbotService.generateAnswer(schoolId, question, mode) } returns answer
+                every { chatbotService.generateAnswer(schoolId, question) } returns answer
                 every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
 
-                val response = useCase.execute(question, mode)
+                val response = useCase.execute(question)
 
                 response.answer shouldBe answer.answer
-                verify(exactly = 1) { chatbotService.generateAnswer(schoolId, question, mode) }
+                verify(exactly = 1) { chatbotService.generateAnswer(schoolId, question) }
                 verify(exactly = 1) {
                     chatbotService.saveChatbotQueryLog(
                         match { it.status == ChatbotQueryStatus.ANSWERED && it.answer == answer.answer }
@@ -64,12 +61,12 @@ class AskChatbotUseCaseTest : DescribeSpec({
 
                 every { securityService.getCurrentSchoolId() } returns schoolId
                 every {
-                    chatbotService.generateAnswer(schoolId, question, mode)
+                    chatbotService.generateAnswer(schoolId, question)
                 } throws ChatbotAnswerGenerationFailedException
                 every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
 
                 shouldThrow<ChatbotAnswerGenerationFailedException> {
-                    useCase.execute(question, mode)
+                    useCase.execute(question)
                 }
                 verify(exactly = 1) {
                     chatbotService.saveChatbotQueryLog(match { it.status == ChatbotQueryStatus.FAILED })

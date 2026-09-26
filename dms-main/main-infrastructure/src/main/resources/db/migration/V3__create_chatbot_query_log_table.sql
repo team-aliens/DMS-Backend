@@ -1,10 +1,9 @@
--- #1105 챗봇 질의 로그: STUFFING(문서 전문)과 RAG(검색 청크)의 토큰 사용량·응답 시간 비교용
+-- #1105 챗봇 질의 로그: 질문별 검색 청크·토큰 사용량·응답 시간 기록
 CREATE TABLE tbl_chatbot_query_log
 (
     id                  uuid         NOT NULL PRIMARY KEY,
     school_id           uuid         NOT NULL,
     question            text         NOT NULL,
-    answer_mode         varchar(20)  NOT NULL,
     status              varchar(20)  NOT NULL,
     answer              text,
     -- 쉼표로 이은 청크 id. 청크는 문서를 다시 올리면 교체되므로 FK 를 걸지 않는다

@@ -19,7 +19,6 @@ class ChatbotQueryLogMapper(
             ChatbotQueryLog(
                 id = it.id!!,
                 question = it.question,
-                answerMode = it.answerMode,
                 status = it.status,
                 answer = it.answer,
                 retrievedChunkIds = splitChunkIds(it.retrievedChunkIds),
@@ -44,7 +43,6 @@ class ChatbotQueryLogMapper(
             id = domain.id,
             school = school,
             question = domain.question,
-            answerMode = domain.answerMode,
             status = domain.status,
             answer = domain.answer,
             retrievedChunkIds = domain.retrievedChunkIds.joinToString(CHUNK_ID_SEPARATOR),

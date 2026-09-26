@@ -35,7 +35,7 @@ class ChatbotWebAdapter(
 
     @PostMapping("/questions")
     fun askQuestion(@RequestBody @Valid request: AskChatbotWebRequest): ChatbotAnswerResponse {
-        return askChatbotUseCase.execute(request.question, request.mode)
+        return askChatbotUseCase.execute(request.question)
     }
 
     // md/txt 파일 하나. 같은 이름의 파일을 다시 올리면 그 문서가 교체된다

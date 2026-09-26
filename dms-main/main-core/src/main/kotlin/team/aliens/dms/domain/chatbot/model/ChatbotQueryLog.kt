@@ -12,8 +12,6 @@ data class ChatbotQueryLog(
 
     val question: String,
 
-    val answerMode: ChatbotAnswerMode,
-
     val status: ChatbotQueryStatus,
 
     // 실패하면 null
@@ -36,13 +34,11 @@ data class ChatbotQueryLog(
         fun of(
             schoolId: UUID,
             question: String,
-            mode: ChatbotAnswerMode,
             answer: ChatbotAnswer?,
             responseTimeMs: Long,
             createdAt: LocalDateTime
         ) = ChatbotQueryLog(
             question = question,
-            answerMode = mode,
             status = answer?.status ?: ChatbotQueryStatus.FAILED,
             answer = answer?.answer,
             retrievedChunkIds = answer?.retrievedChunkIds.orEmpty(),
