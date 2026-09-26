@@ -22,5 +22,5 @@ interface CommandChatbotService {
     /** 문서를 지운다. 청크는 FK CASCADE 로 함께 지워진다 */
     fun deleteChatbotDocument(document: ChatbotDocument)
 
-    fun saveChatbotQueryLog(queryLog: ChatbotQueryLog): ChatbotQueryLog
+    fun saveChatbotQueryLog(queryLog: ChatbotQueryLog)
 }

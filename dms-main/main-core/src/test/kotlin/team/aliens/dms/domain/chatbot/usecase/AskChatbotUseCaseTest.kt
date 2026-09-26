@@ -5,7 +5,9 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
@@ -38,7 +40,7 @@ class AskChatbotUseCaseTest : DescribeSpec({
 
                 every { securityService.getCurrentSchoolId() } returns schoolId
                 every { chatbotService.generateAnswer(schoolId, question) } returns answer
-                every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
+                every { chatbotService.saveChatbotQueryLog(any()) } just runs
 
                 val response = useCase.execute(question)
 
@@ -63,7 +65,7 @@ class AskChatbotUseCaseTest : DescribeSpec({
                 every {
                     chatbotService.generateAnswer(schoolId, question)
                 } throws ChatbotAnswerGenerationFailedException
-                every { chatbotService.saveChatbotQueryLog(any()) } answers { firstArg() }
+                every { chatbotService.saveChatbotQueryLog(any()) } just runs
 
                 shouldThrow<ChatbotAnswerGenerationFailedException> {
                     useCase.execute(question)

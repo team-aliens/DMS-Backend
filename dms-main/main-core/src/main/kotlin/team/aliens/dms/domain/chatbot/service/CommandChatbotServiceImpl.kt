@@ -90,7 +90,7 @@ class CommandChatbotServiceImpl(
         commandChatbotDocumentPort.deleteChatbotDocument(document)
     }
 
-    override fun saveChatbotQueryLog(queryLog: ChatbotQueryLog): ChatbotQueryLog {
-        return commandChatbotQueryLogPort.saveChatbotQueryLog(queryLog)
+    override fun saveChatbotQueryLog(queryLog: ChatbotQueryLog) {
+        commandChatbotQueryLogPort.saveChatbotQueryLog(queryLog)
     }
 }
