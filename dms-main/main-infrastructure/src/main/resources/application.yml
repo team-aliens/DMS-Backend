@@ -10,7 +10,7 @@ spring:
     timeout-per-shutdown-phase: "60s"
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -23,7 +23,6 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
   flyway:
@@ -58,7 +57,7 @@ spring:
             instanceId: AUTO
           jobStore:
             class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
             tablePrefix: QRTZ_
             isClustered: ${QUARTZ_CLUSTERED:false}
             useProperties: false
@@ -73,8 +72,8 @@ spring:
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
     port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:2024teamdms@gmail.com}
-    password: ${MAIL_PASSWORD:mojr tzte qhwl gfaj}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -95,7 +94,7 @@ spring:
             read-timeout: 30000
 
 secret:
-  secret-key: ${SECRET_KEY:asdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfdsasdfghgfds}
+  secret-key: ${SECRET_KEY}
   access-exp: ${ACCESS_EXP:3600}
   refresh-exp: ${REFRESH_EXP:1205600}
 
@@ -124,12 +123,19 @@ cors:
   max-age: 3600
 
 open-feign:
-  neis-key: ${NEIS_KEY:asdf}
+  neis-key: ${NEIS_KEY}
 
 gemini:
   base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
-  api-key: ${GEMINI_API_KEY:gemini_api_key}
-  model: ${GEMINI_MODEL:gemini-2.5-flash}
+  api-key: ${GEMINI_API_KEY}
+  model: ${GEMINI_MODEL}
+
+chatbot:
+  embedding:
+    model: ${CHATBOT_EMBEDDING_MODEL:gemini-embedding-001}
+    # 이 값은 청크 테이블의 vector(768) 컬럼과 반드시 같아야 한다.
+    # 바꾸려면 마이그레이션으로 컬럼을 다시 만들고, 엔티티의 EMBEDDING_DIMENSION 과 저장된 청크도 전부 다시 만들어야 한다
+    dimension: 768
 
 fcm:
   credentials-base64: ${FCM_BASE64_STRING}
@@ -137,8 +143,8 @@ fcm:
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS:access}
-      secret-key: ${AWS_SECRET:secret}
+      access-key: ${AWS_ACCESS}
+      secret-key: ${AWS_SECRET}
     region:
       static: ${AWS_REGION:ap-northeast-2}
       auto: false

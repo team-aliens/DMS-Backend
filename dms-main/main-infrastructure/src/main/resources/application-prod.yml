@@ -4,15 +4,15 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://${MAIN_MYSQL_HOST:127.0.0.1}:${MAIN_DB_PORT:3306}/${MAIN_DB_NAME:prod_dms}?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&tinyInt1isBit=false&rewriteBatchedStatements=true
-    username: ${MAIN_MYSQL_USERNAME}
-    password: ${MAIN_MYSQL_PASSWORD}
+    url: jdbc:postgresql://${MAIN_DB_HOST}:${MAIN_DB_PORT:5432}/${MAIN_DB_NAME}?reWriteBatchedInserts=true
+    username: ${MAIN_DB_USERNAME}
+    password: ${MAIN_DB_PASSWORD}
 
   data:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:1234}
+      password: ${REDIS_PASSWORD}
 
   jpa:
     properties:

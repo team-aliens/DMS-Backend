@@ -19,22 +19,22 @@ class AvailableFeatureJpaEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
-    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @Column(nullable = false)
     val mealService: Boolean,
 
-    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @Column(nullable = false)
     val noticeService: Boolean,
 
-    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @Column(nullable = false)
     val pointService: Boolean,
 
-    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @Column(nullable = false)
     val remainService: Boolean,
 
-    @Column(columnDefinition = "TINYINT(1)", nullable = false)
+    @Column(nullable = false)
     val daybreakService: Boolean
 
 )

@@ -15,14 +15,14 @@ class PhraseJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(30)", nullable = false)
+    @Column(length = 30, nullable = false)
     val content: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(5)", nullable = false)
+    @Column(length = 5, nullable = false)
     val type: PointType,
 
-    @Column(columnDefinition = "INT", nullable = false)
+    @Column(nullable = false)
     val standard: Int
 
 ) : BaseUUIDEntity(id)

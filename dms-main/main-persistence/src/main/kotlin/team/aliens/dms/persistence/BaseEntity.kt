@@ -14,6 +14,6 @@ abstract class BaseEntity(
     @Id
     @GeneratedValue(generator = "timeBasedUUID")
     @GenericGenerator(name = "timeBasedUUID", strategy = "team.aliens.dms.persistence.TimeBasedUUIDGenerator")
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    @Column(nullable = false)
     val id: UUID? = if (id == UUID(0, 0)) null else id
 }

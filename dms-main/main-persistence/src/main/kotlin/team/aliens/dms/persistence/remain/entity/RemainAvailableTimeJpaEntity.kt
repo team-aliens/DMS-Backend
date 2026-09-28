@@ -25,21 +25,21 @@ class RemainAvailableTimeJpaEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "school_id", nullable = false)
     val school: SchoolJpaEntity?,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val startDayOfWeek: DayOfWeek,
 
-    @Column(columnDefinition = "TIME", nullable = false)
+    @Column(nullable = false)
     val startTime: LocalTime,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val endDayOfWeek: DayOfWeek,
 
-    @Column(columnDefinition = "TIME", nullable = false)
+    @Column(nullable = false)
     val endTime: LocalTime
 
 )

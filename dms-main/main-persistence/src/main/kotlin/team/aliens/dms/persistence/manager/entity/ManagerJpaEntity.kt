@@ -21,12 +21,12 @@ class ManagerJpaEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     val user: UserJpaEntity?,
 
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(nullable = false)
     val profileImageUrl: String
 )

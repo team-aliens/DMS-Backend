@@ -19,25 +19,24 @@ class SchoolJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(length = 20, nullable = false)
     val name: String,
 
-    @Column(columnDefinition = "CHAR(8)", nullable = false, unique = true)
+    @Column(length = 8, nullable = false, unique = true)
     val code: String,
 
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
+    @Column(length = 100, nullable = false)
     val question: String,
 
-    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
+    @Column(length = 100, nullable = false)
     val answer: String,
 
-    @Column(columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(nullable = false)
     val address: String,
 
-    @Column(columnDefinition = "DATE", nullable = false)
+    @Column(nullable = false)
     val contractStartedAt: LocalDate,
 
-    @Column(columnDefinition = "DATE")
     val contractEndedAt: LocalDate?
 
 ) : BaseUUIDEntity(id)

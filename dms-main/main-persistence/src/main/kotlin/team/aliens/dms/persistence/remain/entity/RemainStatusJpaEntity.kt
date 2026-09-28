@@ -25,11 +25,11 @@ class RemainStatusJpaEntity(
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.MERGE])
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     val student: StudentJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "remain_option_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "remain_option_id", nullable = false)
     val remainOption: RemainOptionJpaEntity?,
 
     override val createdAt: LocalDateTime

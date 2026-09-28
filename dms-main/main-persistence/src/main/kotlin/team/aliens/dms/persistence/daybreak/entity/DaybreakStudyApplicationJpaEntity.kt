@@ -22,21 +22,21 @@ class DaybreakStudyApplicationJpaEntity(
 
     id: UUID?,
 
-    @Column(columnDefinition = "VARCHAR(200)", nullable = false)
+    @Column(length = 200, nullable = false)
     val reason: String,
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(length = 20, nullable = false)
     val status: Status,
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "previous_status", columnDefinition = "VARCHAR(20)")
+    @Column(name = "previous_status", length = 20)
     val previousStatus: Status? = null,
 
-    @Column(columnDefinition = "DATE", nullable = false)
+    @Column(nullable = false)
     val startDate: LocalDate,
 
-    @Column(columnDefinition = "DATE", nullable = false)
+    @Column(nullable = false)
     val endDate: LocalDate,
 
     @ManyToOne(fetch = FetchType.LAZY)

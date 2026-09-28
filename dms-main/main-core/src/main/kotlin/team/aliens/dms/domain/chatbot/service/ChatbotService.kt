@@ -1,6 +1,10 @@
 package team.aliens.dms.domain.chatbot.service
 
-interface ChatbotService {
+import team.aliens.dms.common.annotation.Service
 
-    fun generateAnswer(question: String): String
-}
+@Service
+class ChatbotService(
+    getChatbotService: GetChatbotService,
+    commandChatbotService: CommandChatbotService
+) : GetChatbotService by getChatbotService,
+    CommandChatbotService by commandChatbotService

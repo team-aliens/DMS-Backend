@@ -51,3 +51,5 @@ AGENTS.md
 AGENTS.md
 .opencode/
 **/SKILL.md
+# local env vars (EnvFile / spring.config.import)
+.env

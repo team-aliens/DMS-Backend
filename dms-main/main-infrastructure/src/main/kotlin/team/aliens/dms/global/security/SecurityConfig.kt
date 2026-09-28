@@ -254,6 +254,10 @@ class SecurityConfig(
                     // /chatbots
                     .requestMatchers(HttpMethod.POST, "/chatbots/questions").hasAuthority(STUDENT.name)
 
+                    // 현재는 부장 선생님 계정으로만 업로드 가능하도록 설정
+                    .requestMatchers(HttpMethod.POST, "/chatbots/documents").hasAuthority(HEAD_TEACHER.name)
+                    .requestMatchers(HttpMethod.DELETE, "/chatbots/documents/{document-id}").hasAuthority(HEAD_TEACHER.name)
+
                 authorize
                     // /notifications
                     .requestMatchers(HttpMethod.DELETE, "/notifications/{notification-of-user-id}").authenticated()

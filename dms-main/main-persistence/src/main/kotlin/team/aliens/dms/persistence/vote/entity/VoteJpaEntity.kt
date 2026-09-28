@@ -1,6 +1,5 @@
 package team.aliens.dms.persistence.vote.entity
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -18,22 +17,21 @@ class VoteJpaEntity(
     id: UUID?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voting_topic_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "voting_topic_id", nullable = false)
     val votingTopic: VotingTopicJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", columnDefinition = "BINARY(16)", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     val student: StudentJpaEntity?,
 
-    @Column(columnDefinition = "DATETIME(6)")
     val votedAt: LocalDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "selected_option_id", columnDefinition = "BINARY(16)", nullable = true)
+    @JoinColumn(name = "selected_option_id", nullable = true)
     val selectedOption: VotingOptionJpaEntity?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "selected_student_id", columnDefinition = "BINARY(16)", nullable = true)
+    @JoinColumn(name = "selected_student_id", nullable = true)
     val selectedStudent: StudentJpaEntity?
 
 ) : BaseEntity(id)
