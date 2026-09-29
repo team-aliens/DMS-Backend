@@ -53,3 +53,6 @@ AGENTS.md
 **/SKILL.md
 # local env vars (EnvFile / spring.config.import)
 .env
+
+### CD docker build context ###
+docker-context/
