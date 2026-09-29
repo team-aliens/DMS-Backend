@@ -67,10 +67,9 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           printf '### 배포 대상: `%s` (%s)\n' "$TAG" "$SHA" >> "$GITHUB_STEP_SUMMARY"
 
-  # ── 1) 테스트 게이트 ──────────────────────────────
-  #  Dockerfile은 -x test로 빌드하므로, 배포 전 테스트는 여기서 돌린다.
-  #  ※ :dms-main:test 는 껍데기 프로젝트 자신의 test 라 NO-SOURCE 로 통과한다 — 서브모듈까지 도는 check 를 쓸 것
-  test:
+  # ── 1) 테스트 + jar 빌드 & ECR 푸시 ───────────────
+  #  테스트를 통과한 바로 그 jar 를 이미지에 담는다. Dockerfile 은 컴파일하지 않고 jar 만 복사한다.
+  build-push:
     needs: resolve
     runs-on: ubuntu-latest
     steps:
@@ -87,18 +86,19 @@ jobs:
       - run: chmod +x gradlew
       - name: Verify Docker is running   # main-persistence 테스트가 Testcontainers 를 쓴다
         run: docker info
-      - name: Run tests
-        run: ./gradlew check --build-cache --no-daemon
+      - name: Test & build jar
+        run: ./gradlew check :dms-main:main-infrastructure:bootJar --build-cache --no-daemon
 
-  # ── 2) 이미지 빌드 & ECR 푸시 ─────────────────────
-  build-push:
-    needs: [resolve, test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-        with:
-          ref: ${{ needs.resolve.outputs.sha }}
-          persist-credentials: false
+      - name: Prepare docker context
+        run: |
+          set -euo pipefail
+          jars=(dms-main/main-infrastructure/build/libs/*-boot.jar)
+          if [ "${#jars[@]}" -ne 1 ] || [ ! -f "${jars[0]}" ]; then
+            echo "boot jar 를 하나로 특정하지 못했다: ${jars[*]}" >&2
+            exit 1
+          fi
+          mkdir -p docker-context
+          cp "${jars[0]}" docker-context/app.jar
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
@@ -116,7 +116,7 @@ jobs:
       - name: Build & push image
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
-          context: .                       # 멀티모듈이라 컨텍스트는 레포 루트
+          context: docker-context
           file: dms-main/Dockerfile
           push: true
           provenance: false
@@ -126,10 +126,8 @@ jobs:
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ needs.resolve.outputs.version }}
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:latest
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:${{ needs.resolve.outputs.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
-  # ── 3) EC2 SSH 배포 (pull + compose up) ───────────
+  # ── 2) EC2 SSH 배포 (pull + compose up) ───────────
   deploy:
     needs: [resolve, build-push]
     runs-on: ubuntu-latest
