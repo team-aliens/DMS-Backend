@@ -11,10 +11,9 @@ import io.mockk.runs
 import io.mockk.verify
 import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.chatbot.exception.ChatbotAnswerGenerationFailedException
-import team.aliens.dms.domain.chatbot.model.ChatbotAnswer
 import team.aliens.dms.domain.chatbot.model.ChatbotQueryStatus
-import team.aliens.dms.domain.chatbot.model.TokenUsage
 import team.aliens.dms.domain.chatbot.service.ChatbotService
+import team.aliens.dms.domain.chatbot.stub.createChatbotAnswerStub
 import java.util.UUID
 
 class AskChatbotUseCaseTest : DescribeSpec({
@@ -29,12 +28,7 @@ class AskChatbotUseCaseTest : DescribeSpec({
         context("학생이 질문을 하면") {
 
             val question = "통금 시간이 몇 시야?"
-            val answer = ChatbotAnswer(
-                answer = "평일 통금 시간은 오후 10시입니다.",
-                status = ChatbotQueryStatus.ANSWERED,
-                retrievedChunkIds = listOf(UUID.randomUUID()),
-                usage = TokenUsage(promptTokens = 100, candidatesTokens = 20, totalTokens = 120)
-            )
+            val answer = createChatbotAnswerStub()
 
             it("챗봇 답변을 반환하고 질의 로그를 남긴다") {
 
