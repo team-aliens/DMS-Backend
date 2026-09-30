@@ -16,7 +16,7 @@ class CheckNotificationServiceImplTest : DescribeSpec({
     )
 
     describe("checkDeviceTokenByUserId") {
-        context("사용자 ID로 디바이스 토큰 존재를 확인하면") {
+        context("디바이스 토큰이 있는 사용자 ID로 확인하면") {
             val userId = UUID.randomUUID()
 
             every { deviceTokenPort.existsDeviceTokenByUserId(userId) } returns true
@@ -28,7 +28,7 @@ class CheckNotificationServiceImplTest : DescribeSpec({
             }
         }
 
-        context("존재하지 않는 사용자 ID로 확인하면") {
+        context("디바이스 토큰이 없는 사용자 ID로 확인하면") {
             val userId = UUID.randomUUID()
 
             every { deviceTokenPort.existsDeviceTokenByUserId(userId) } returns false

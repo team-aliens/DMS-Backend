@@ -9,15 +9,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
+import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
+import team.aliens.dms.domain.notification.stub.createNotificationOfUserStub
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -39,12 +38,7 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
     describe("saveDeviceToken") {
         context("디바이스 토큰을 저장하면") {
-            val deviceToken = DeviceToken(
-                id = UUID.randomUUID(),
-                userId = UUID.randomUUID(),
-                schoolId = UUID.randomUUID(),
-                token = "device-token"
-            )
+            val deviceToken = createDeviceTokenStub()
 
             every { deviceTokenPort.saveDeviceToken(deviceToken) } returns deviceToken
             every { notificationPort.subscribeAllTopics(deviceToken.token) } just runs
@@ -64,12 +58,7 @@ class CommandNotificationServiceImplTest : DescribeSpec({
     describe("deleteDeviceTokenByUserId") {
         context("사용자 ID로 디바이스 토큰을 삭제하면") {
             val userId = UUID.randomUUID()
-            val deviceToken = DeviceToken(
-                id = UUID.randomUUID(),
-                userId = userId,
-                schoolId = UUID.randomUUID(),
-                token = "token"
-            )
+            val deviceToken = createDeviceTokenStub(userId = userId)
 
             every { deviceTokenPort.queryDeviceTokenByUserId(userId) } returns deviceToken
             every { topicSubscriptionPort.deleteAllByDeviceTokenId(deviceToken.id) } just runs
@@ -103,47 +92,29 @@ class CommandNotificationServiceImplTest : DescribeSpec({
     describe("deleteNotificationOfUserByUserIdAndId") {
         context("사용자의 알림을 삭제하면") {
             val userId = UUID.randomUUID()
-            val notificationId = UUID.randomUUID()
-            val notification = NotificationOfUser(
-                id = notificationId,
-                userId = userId,
-                topic = Topic.NOTICE,
-                linkIdentifier = null,
-                title = "title",
-                content = "content",
-                createdAt = LocalDateTime.now()
-            )
+            val notification = createNotificationOfUserStub(userId = userId)
 
-            every { queryNotificationOfUserPort.queryNotificationOfUserById(notificationId) } returns notification
-            every { commandNotificationOfUserPort.deleteNotificationOfUserById(notificationId) } just runs
+            every { queryNotificationOfUserPort.queryNotificationOfUserById(notification.id) } returns notification
+            every { commandNotificationOfUserPort.deleteNotificationOfUserById(notification.id) } just runs
 
-            service.deleteNotificationOfUserByUserIdAndId(userId, notificationId)
+            service.deleteNotificationOfUserByUserIdAndId(userId, notification.id)
 
             it("알림을 삭제한다") {
-                verify(exactly = 1) { commandNotificationOfUserPort.deleteNotificationOfUserById(notificationId) }
+                verify(exactly = 1) { commandNotificationOfUserPort.deleteNotificationOfUserById(notification.id) }
             }
         }
 
         context("다른 사용자의 알림을 삭제하려고 하면") {
             val userId = UUID.randomUUID()
-            val otherUserId = UUID.randomUUID()
-            val notificationId = UUID.randomUUID()
-            val notification = NotificationOfUser(
-                id = notificationId,
-                userId = otherUserId,
-                topic = Topic.NOTICE,
-                linkIdentifier = null,
-                title = "title",
-                content = "content",
-                createdAt = LocalDateTime.now()
-            )
+            val notification = createNotificationOfUserStub(userId = UUID.randomUUID())
 
-            every { queryNotificationOfUserPort.queryNotificationOfUserById(notificationId) } returns notification
+            every { queryNotificationOfUserPort.queryNotificationOfUserById(notification.id) } returns notification
 
-            it("NotificationOfUserNotFoundException을 던진다") {
+            it("NotificationOfUserNotFoundException을 던지고 삭제하지 않는다") {
                 shouldThrow<NotificationOfUserNotFoundException> {
-                    service.deleteNotificationOfUserByUserIdAndId(userId, notificationId)
+                    service.deleteNotificationOfUserByUserIdAndId(userId, notification.id)
                 }
+                verify(exactly = 0) { commandNotificationOfUserPort.deleteNotificationOfUserById(notification.id) }
             }
         }
 
@@ -177,15 +148,7 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
     describe("saveNotificationOfUser") {
         context("알림을 저장하면") {
-            val notification = NotificationOfUser(
-                id = UUID.randomUUID(),
-                userId = UUID.randomUUID(),
-                topic = Topic.NOTICE,
-                linkIdentifier = null,
-                title = "title",
-                content = "content",
-                createdAt = LocalDateTime.now()
-            )
+            val notification = createNotificationOfUserStub()
 
             every { commandNotificationOfUserPort.saveNotificationOfUser(notification) } returns notification
 
@@ -199,26 +162,7 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
     describe("saveNotificationsOfUser") {
         context("여러 알림을 저장하면") {
-            val notifications = listOf(
-                NotificationOfUser(
-                    id = UUID.randomUUID(),
-                    userId = UUID.randomUUID(),
-                    topic = Topic.NOTICE,
-                    linkIdentifier = null,
-                    title = "title1",
-                    content = "content1",
-                    createdAt = LocalDateTime.now()
-                ),
-                NotificationOfUser(
-                    id = UUID.randomUUID(),
-                    userId = UUID.randomUUID(),
-                    topic = Topic.POINT,
-                    linkIdentifier = null,
-                    title = "title2",
-                    content = "content2",
-                    createdAt = LocalDateTime.now()
-                )
-            )
+            val notifications = listOf(createNotificationOfUserStub(), createNotificationOfUserStub())
 
             every { commandNotificationOfUserPort.saveNotificationsOfUser(notifications) } just runs
 
