@@ -1,19 +1,24 @@
 package team.aliens.dms.persistence.notification.mapper
 
+import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.persistence.GenericMapper
 import team.aliens.dms.persistence.notification.entity.DeviceTokenJpaEntity
+import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 
 @Component
-class DeviceTokenMapper() : GenericMapper<DeviceToken, DeviceTokenJpaEntity> {
+class DeviceTokenMapper(
+    private val entityManager: EntityManager
+) : GenericMapper<DeviceToken, DeviceTokenJpaEntity> {
 
     override fun toDomain(entity: DeviceTokenJpaEntity?): DeviceToken? {
         return entity?.let {
             DeviceToken(
                 id = it.id!!,
-                userId = it.userId!!,
-                schoolId = it.schoolId!!,
+                userId = it.user!!.id!!,
+                schoolId = it.school!!.id!!,
                 token = it.token
             )
         }
@@ -22,8 +27,8 @@ class DeviceTokenMapper() : GenericMapper<DeviceToken, DeviceTokenJpaEntity> {
     override fun toEntity(domain: DeviceToken): DeviceTokenJpaEntity {
         return DeviceTokenJpaEntity(
             id = domain.id,
-            userId = domain.userId,
-            schoolId = domain.schoolId,
+            user = entityManager.getReference(UserJpaEntity::class.java, domain.userId),
+            school = entityManager.getReference(SchoolJpaEntity::class.java, domain.schoolId),
             token = domain.token
         )
     }
