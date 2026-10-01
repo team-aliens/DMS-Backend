@@ -43,7 +43,7 @@ class DeviceTokenPersistenceAdapter(
     override fun queryDeviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken> =
         queryFactory
             .selectFrom(deviceTokenJpaEntity)
-            .where(deviceTokenJpaEntity.userId.`in`(userIds))
+            .where(deviceTokenJpaEntity.user.id.`in`(userIds))
             .fetch()
             .map { notificationMapper.toDomain(it)!! }
 
@@ -56,7 +56,7 @@ class DeviceTokenPersistenceAdapter(
             .join(topicSubscriptionJpaEntity).on(deviceTokenJpaEntity.id.eq(topicSubscriptionJpaEntity.deviceToken.id))
             .where(
                 topicSubscriptionJpaEntity.id.topic.eq(topic)
-                    .and(deviceTokenJpaEntity.schoolId.eq(schoolId))
+                    .and(deviceTokenJpaEntity.school.id.eq(schoolId))
             )
             .fetch()
             .map {
@@ -65,6 +65,6 @@ class DeviceTokenPersistenceAdapter(
     }
 
     override fun deleteDeviceTokenByUserId(userId: UUID) {
-        deviceTokenRepository.deleteByUserId(userId)
+        deviceTokenRepository.findByUserId(userId)?.let { deviceTokenRepository.delete(it) }
     }
 }
