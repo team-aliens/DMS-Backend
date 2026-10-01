@@ -1,32 +1,16 @@
 package team.aliens.dms.domain.notification.service
 
+import org.springframework.transaction.annotation.Transactional
 import team.aliens.dms.common.annotation.Service
-import team.aliens.dms.contract.model.notification.Topic
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.Notification
 
+// 다른 도메인 서비스와 달리 @Transactional 이 붙어 있다.
+// NotificationEventHandler·DeviceTokenEventHandler 가 @Async + AFTER_COMMIT 으로 호출해 유스케이스 트랜잭션 밖이기 때문이다
 @Service
-interface NotificationService :
-    GetNotificationService,
-    CheckNotificationService,
-    CommandNotificationService {
-
-    fun unsubscribeTopic(token: String, topic: Topic)
-
-    fun subscribeTopic(token: String, topic: Topic)
-
-    fun updateSubscribes(token: String, topicsToSubscribe: List<Pair<Topic, Boolean>>)
-
-    fun sendMessage(
-        deviceToken: DeviceToken,
-        notification: Notification
-    )
-
-    fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification)
-
-    fun sendMessagesByTopic(
-        notification: Notification
-    )
-
-    fun toggleSubscription(token: String, topic: Topic)
-}
+@Transactional
+class NotificationService(
+    getNotificationService: GetNotificationService,
+    checkNotificationService: CheckNotificationService,
+    commandNotificationService: CommandNotificationService
+) : GetNotificationService by getNotificationService,
+    CheckNotificationService by checkNotificationService,
+    CommandNotificationService by commandNotificationService
