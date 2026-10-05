@@ -3,6 +3,7 @@ package team.aliens.dms.domain.point.model
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.domain.point.dto.PointRequestType
 import team.aliens.dms.domain.point.exception.PointHistoryCanNotCancelException
 import team.aliens.dms.domain.point.stub.createPointHistoryStub
@@ -124,6 +125,24 @@ class PointHistoryTest : DescribeSpec({
 
             it("벌점 부과 메시지를 반환한다") {
                 result shouldBe "벌점이 부과되었습니다."
+            }
+        }
+    }
+
+    describe("getPointDetailTopic") {
+        context("포인트 타입이 BONUS라면") {
+            val pointHistory = createPointHistoryStub(pointType = PointType.BONUS)
+
+            it("PointDetailTopic.BONUS로 반환한다") {
+                pointHistory.getPointDetailTopic() shouldBe PointDetailTopic.BONUS
+            }
+        }
+
+        context("포인트 타입이 MINUS라면") {
+            val pointHistory = createPointHistoryStub(pointType = PointType.MINUS)
+
+            it("PointDetailTopic.MINUS로 반환한다") {
+                pointHistory.getPointDetailTopic() shouldBe PointDetailTopic.MINUS
             }
         }
     }

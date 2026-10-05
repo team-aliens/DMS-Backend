@@ -36,7 +36,7 @@ class NotificationOfUserPersistenceAdapter(
     override fun queryNotificationOfUserByUserId(userId: UUID) =
         queryFactory
             .selectFrom(notificationOfUserJpaEntity)
-            .where(notificationOfUserJpaEntity.userId.eq(userId))
+            .where(notificationOfUserJpaEntity.user.id.eq(userId))
             .orderBy(notificationOfUserJpaEntity.createdAt.desc())
             .fetch().map { notificationOfUserMapper.toDomain(it)!! }
 
@@ -49,7 +49,7 @@ class NotificationOfUserPersistenceAdapter(
     }
 
     override fun deleteNotificationOfUserByUserId(userId: UUID) {
-        notificationOfUserRepository.deleteByUserId(userId)
+        notificationOfUserRepository.deleteAll(notificationOfUserRepository.findByUserId(userId))
     }
 
     override fun deleteOldNotificationOfUsers(cutoffDate: LocalDateTime) {

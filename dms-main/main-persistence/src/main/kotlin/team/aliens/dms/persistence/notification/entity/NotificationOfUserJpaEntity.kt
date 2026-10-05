@@ -4,11 +4,15 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.ColumnDefault
 import team.aliens.dms.contract.model.notification.PointDetailTopic
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.persistence.BaseUUIDEntity
+import team.aliens.dms.persistence.user.entity.UserJpaEntity
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -18,8 +22,9 @@ class NotificationOfUserJpaEntity(
 
     id: UUID?,
 
-    @Column(nullable = false)
-    val userId: UUID?,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: UserJpaEntity?,
 
     @Enumerated(EnumType.STRING)
     @Column(length = 30, nullable = false)

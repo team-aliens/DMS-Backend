@@ -7,13 +7,13 @@ import io.mockk.every
 import io.mockk.mockk
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
-import team.aliens.dms.domain.notification.model.DeviceToken
-import team.aliens.dms.domain.notification.model.NotificationOfUser
-import team.aliens.dms.domain.notification.model.TopicSubscription
+import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
-import java.time.LocalDateTime
+import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
+import team.aliens.dms.domain.notification.stub.createNotificationOfUserStub
+import team.aliens.dms.domain.notification.stub.createTopicSubscriptionStub
 import java.util.UUID
 
 class GetNotificationServiceImplTest : DescribeSpec({
@@ -32,24 +32,8 @@ class GetNotificationServiceImplTest : DescribeSpec({
         context("사용자 ID로 알림 목록을 조회하면") {
             val userId = UUID.randomUUID()
             val notifications = listOf(
-                NotificationOfUser(
-                    id = UUID.randomUUID(),
-                    userId = userId,
-                    topic = Topic.NOTICE,
-                    linkIdentifier = null,
-                    title = "title1",
-                    content = "content1",
-                    createdAt = LocalDateTime.now()
-                ),
-                NotificationOfUser(
-                    id = UUID.randomUUID(),
-                    userId = userId,
-                    topic = Topic.POINT,
-                    linkIdentifier = null,
-                    title = "title2",
-                    content = "content2",
-                    createdAt = LocalDateTime.now()
-                )
+                createNotificationOfUserStub(userId = userId, topic = Topic.NOTICE),
+                createNotificationOfUserStub(userId = userId, topic = Topic.POINT)
             )
 
             every { notificationOfUserPort.queryNotificationOfUserByUserId(userId) } returns notifications
@@ -62,24 +46,44 @@ class GetNotificationServiceImplTest : DescribeSpec({
         }
     }
 
+    describe("getNotificationOfUserById") {
+        context("알림 ID로 알림을 조회하면") {
+            val notification = createNotificationOfUserStub()
+
+            every { notificationOfUserPort.queryNotificationOfUserById(notification.id) } returns notification
+
+            val result = service.getNotificationOfUserById(notification.id)
+
+            it("알림을 반환한다") {
+                result shouldBe notification
+            }
+        }
+
+        context("존재하지 않는 알림 ID로 조회하면") {
+            val notificationId = UUID.randomUUID()
+
+            every { notificationOfUserPort.queryNotificationOfUserById(notificationId) } returns null
+
+            it("NotificationOfUserNotFoundException을 던진다") {
+                shouldThrow<NotificationOfUserNotFoundException> {
+                    service.getNotificationOfUserById(notificationId)
+                }
+            }
+        }
+    }
+
     describe("getTopicSubscriptionsByToken") {
         context("토큰으로 주제 구독 목록을 조회하면") {
-            val token = "device-token"
-            val deviceToken = DeviceToken(
-                id = UUID.randomUUID(),
-                userId = UUID.randomUUID(),
-                schoolId = UUID.randomUUID(),
-                token = token
-            )
+            val deviceToken = createDeviceTokenStub(token = "subscriptions-token")
             val subscriptions = listOf(
-                TopicSubscription.subscribe(deviceToken.id, Topic.NOTICE),
-                TopicSubscription.subscribe(deviceToken.id, Topic.POINT)
+                createTopicSubscriptionStub(deviceTokenId = deviceToken.id, topic = Topic.NOTICE),
+                createTopicSubscriptionStub(deviceTokenId = deviceToken.id, topic = Topic.POINT)
             )
 
-            every { deviceTokenPort.queryDeviceTokenByToken(token) } returns deviceToken
+            every { deviceTokenPort.queryDeviceTokenByToken(deviceToken.token) } returns deviceToken
             every { topicSubscriptionPort.queryTopicSubscriptionsByDeviceTokenId(deviceToken.id) } returns subscriptions
 
-            val result = service.getTopicSubscriptionsByToken(token)
+            val result = service.getTopicSubscriptionsByToken(deviceToken.token)
 
             it("주제 구독 목록을 반환한다") {
                 result shouldBe subscriptions
@@ -89,17 +93,11 @@ class GetNotificationServiceImplTest : DescribeSpec({
 
     describe("getDeviceTokenByToken") {
         context("토큰으로 디바이스 토큰을 조회하면") {
-            val token = "device-token"
-            val deviceToken = DeviceToken(
-                id = UUID.randomUUID(),
-                userId = UUID.randomUUID(),
-                schoolId = UUID.randomUUID(),
-                token = token
-            )
+            val deviceToken = createDeviceTokenStub(token = "existing-token")
 
-            every { deviceTokenPort.queryDeviceTokenByToken(token) } returns deviceToken
+            every { deviceTokenPort.queryDeviceTokenByToken(deviceToken.token) } returns deviceToken
 
-            val result = service.getDeviceTokenByToken(token)
+            val result = service.getDeviceTokenByToken(deviceToken.token)
 
             it("디바이스 토큰을 반환한다") {
                 result shouldBe deviceToken
@@ -121,17 +119,11 @@ class GetNotificationServiceImplTest : DescribeSpec({
 
     describe("getDeviceTokenByUserId") {
         context("사용자 ID로 디바이스 토큰을 조회하면") {
-            val userId = UUID.randomUUID()
-            val deviceToken = DeviceToken(
-                id = UUID.randomUUID(),
-                userId = userId,
-                schoolId = UUID.randomUUID(),
-                token = "token"
-            )
+            val deviceToken = createDeviceTokenStub()
 
-            every { deviceTokenPort.queryDeviceTokenByUserId(userId) } returns deviceToken
+            every { deviceTokenPort.queryDeviceTokenByUserId(deviceToken.userId) } returns deviceToken
 
-            val result = service.getDeviceTokenByUserId(userId)
+            val result = service.getDeviceTokenByUserId(deviceToken.userId)
 
             it("디바이스 토큰을 반환한다") {
                 result shouldBe deviceToken
@@ -151,23 +143,10 @@ class GetNotificationServiceImplTest : DescribeSpec({
         }
     }
 
-    describe("getDiviceTokensByUserIds") {
+    describe("getDeviceTokensByUserIds") {
         context("여러 사용자 ID로 디바이스 토큰을 조회하면") {
-            val userIds = listOf(UUID.randomUUID(), UUID.randomUUID())
-            val deviceTokens = listOf(
-                DeviceToken(
-                    id = UUID.randomUUID(),
-                    userId = userIds[0],
-                    schoolId = UUID.randomUUID(),
-                    token = "token1"
-                ),
-                DeviceToken(
-                    id = UUID.randomUUID(),
-                    userId = userIds[1],
-                    schoolId = UUID.randomUUID(),
-                    token = "token2"
-                )
-            )
+            val deviceTokens = listOf(createDeviceTokenStub(token = "token1"), createDeviceTokenStub(token = "token2"))
+            val userIds = deviceTokens.map { it.userId }
 
             every { deviceTokenPort.queryDeviceTokensByUserIds(userIds) } returns deviceTokens
 
