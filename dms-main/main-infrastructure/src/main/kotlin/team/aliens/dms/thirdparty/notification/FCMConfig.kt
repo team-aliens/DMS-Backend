@@ -7,9 +7,12 @@ import com.google.firebase.FirebaseOptions
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import java.io.ByteArrayInputStream
 import java.util.Base64
 
+// dev 는 실제 학생 기기로 알림이 나가지 않도록 Firebase 를 초기화하지 않는다 — NoOpNotificationAdapter 참고
+@Profile("!dev")
 @Configuration
 class FCMConfig(
     @Value("\${fcm.credentials-base64}")
