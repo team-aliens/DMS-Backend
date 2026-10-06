@@ -7,12 +7,14 @@ import com.google.firebase.messaging.FirebaseMessagingException
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.MulticastMessage
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.exception.NotificationSendFailedException
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.spi.NotificationPort
 
+@Profile("!dev")
 @Component
 class FCMAdapter : NotificationPort {
 

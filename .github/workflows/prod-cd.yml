@@ -135,7 +135,7 @@ jobs:
       - name: Prepare SSH key
         env:
           EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-          EC2_HOST_KEY: ${{ secrets.EC2_HOST_KEY }}   # 서버의 고정 호스트 키 (MITM 방지)
+          EC2_HOST_KEY: ${{ secrets.EC2_HOST_KEY }}
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
@@ -153,7 +153,8 @@ jobs:
           set -euo pipefail
           VERSION="${1:-unknown}"
           echo "deploying $VERSION"
-          cd ~
+          # prod compose 프로젝트 디렉터리 (dev는 ~/dev 에 별도 프로젝트로 둔다)
+          cd ~/prod
           # 서버의 ~/.aws 자격증명으로 ECR 로그인
           aws ecr get-login-password --region ap-northeast-2 \
             | docker login --username AWS --password-stdin 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
