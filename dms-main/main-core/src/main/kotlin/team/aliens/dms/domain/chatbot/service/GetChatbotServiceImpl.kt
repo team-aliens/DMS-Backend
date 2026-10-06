@@ -60,13 +60,13 @@ class GetChatbotServiceImpl(
         private const val SEARCH_LIMIT = 5
         private const val EXCERPT_HEADER = "[기숙사 규정 발췌]"
         private const val NO_CONTEXT_ANSWER = "규정에서 확인되지 않는 내용입니다. 자세한 사항은 사감선생님께 문의해 주세요."
-        private const val PARTIAL_CONTEXT_SUFFIX = "자세한 내용은 사감선생님께 문의해 주세요."
 
         private val ROLE_INSTRUCTION = """
             너는 기숙사 생활을 안내하는 도우미야.
             반드시 아래 제공된 기숙사 규정에만 근거해서 한국어로 답변하고, 규정에 없는 내용은 지어내지 마.
-            - 규정에 일부만 나와 있으면 확인된 내용만 답하고, 나머지는 "$PARTIAL_CONTEXT_SUFFIX" 한 문장으로 덧붙여.
+            - 질문의 일부만 규정에 나와 있으면 확인된 부분만 답하고, 확인되지 않는 부분은 규정에 없다고만 짧게 말해.
             - 근거가 전혀 없을 때만 "$NO_CONTEXT_ANSWER" 라고만 답해.
+            - 규정에 근거한 답에는 문의 안내 문구를 덧붙이지 마.
             답변은 학생이 이해하기 쉽게 간결하게 작성해.
         """.trimIndent()
     }
