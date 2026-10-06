@@ -153,7 +153,8 @@ jobs:
           set -euo pipefail
           VERSION="${1:-unknown}"
           echo "deploying $VERSION"
-          cd ~
+          # prod compose 프로젝트 디렉터리 (stag는 ~/stag 에 별도 프로젝트로 둔다)
+          cd ~/prod
           # 서버의 ~/.aws 자격증명으로 ECR 로그인
           aws ecr get-login-password --region ap-northeast-2 \
             | docker login --username AWS --password-stdin 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
