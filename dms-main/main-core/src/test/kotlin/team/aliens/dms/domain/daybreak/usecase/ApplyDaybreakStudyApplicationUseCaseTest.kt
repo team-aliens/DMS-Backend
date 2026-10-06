@@ -13,6 +13,7 @@ import team.aliens.dms.common.service.security.SecurityService
 import team.aliens.dms.domain.daybreak.dto.request.ApplyDaybreakStudyApplicationRequest
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationAlreadyExistsException
 import team.aliens.dms.domain.daybreak.model.DaybreakStudyType
+import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.domain.daybreak.service.DaybreakService
 import team.aliens.dms.domain.student.model.Student
 import team.aliens.dms.domain.student.service.StudentService
@@ -37,12 +38,11 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             val schoolId = UUID.randomUUID()
             val typeId = UUID.randomUUID()
             val monday = LocalDate.of(2025, 6, 2)
-            val thursday = LocalDate.of(2025, 6, 5)
+            val wednesday = LocalDate.of(2025, 6, 4)
 
             val request = ApplyDaybreakStudyApplicationRequest(
                 typeId = typeId,
-                startDate = monday,
-                endDate = thursday,
+                dates = listOf(monday, wednesday),
                 reason = "아침 공부",
                 teacherId = UUID.randomUUID()
             )
@@ -72,7 +72,9 @@ class ApplyDaybreakStudyApplicationUseCaseTest : DescribeSpec({
                         daybreakService.checkDaybreakStudyApplicationExists(studentId)
                     }
                     verify(exactly = 1) {
-                        daybreakService.saveDaybreakStudyApplication(any())
+                        daybreakService.saveDaybreakStudyApplication(
+                            match { it.dates == listOf(monday, wednesday) && it.status == Status.PENDING }
+                        )
                     }
                 } finally {
                     unmockkStatic(LocalDate::class)
