@@ -5,6 +5,5 @@ import java.time.LocalDate
 
 open class DaybreakStudyApplicationStatusVO(
     val status: Status,
-    val startDate: LocalDate,
-    val endDate: LocalDate
+    val dates: List<LocalDate>
 )

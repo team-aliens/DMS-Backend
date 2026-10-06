@@ -3,9 +3,9 @@ package team.aliens.dms.domain.daybreak.model
 import team.aliens.dms.common.annotation.Aggregate
 import team.aliens.dms.common.model.SchoolIdDomain
 import team.aliens.dms.domain.auth.model.Authority
+import team.aliens.dms.domain.daybreak.exception.DaybreakEmptyDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakInvalidDateRangeException
 import team.aliens.dms.domain.daybreak.exception.DaybreakPastDateException
-import team.aliens.dms.domain.daybreak.exception.DaybreakStartDateAfterEndDateException
 import team.aliens.dms.domain.daybreak.exception.DaybreakStudyApplicationCanNotRevertException
 import team.aliens.dms.domain.user.exception.InvalidRoleException
 import java.time.DayOfWeek
@@ -21,9 +21,8 @@ class DaybreakStudyApplication(
 
     val studyTypeId: UUID,
 
-    val startDate: LocalDate,
-
-    val endDate: LocalDate,
+    // 새벽자습을 하는 날짜들. 월·수처럼 중간에 쉬는 날이 있을 수 있어 구간이 아니라 날짜 목록으로 가진다(오름차순)
+    val dates: List<LocalDate>,
 
     val reason: String,
 
@@ -47,6 +46,13 @@ class DaybreakStudyApplication(
     var previousStatus: Status? = previousStatus
         private set
 
+    // 만료·삭제 스케줄러와 조회 응답이 쓰는 첫날·마지막날
+    val startDate: LocalDate
+        get() = dates.first()
+
+    val endDate: LocalDate
+        get() = dates.last()
+
     companion object {
         /**
          * 새벽자습은 월~목만 운영하므로, 신청 대상도 한 주의 월~목 구간으로 제한한다.
@@ -57,11 +63,12 @@ class DaybreakStudyApplication(
          * 검증 순서에 의미가 있다 — 과거 검사가 구간 검사보다 앞이라, 대상 구간 안이지만
          * 이미 지난 요일을 신청하면 DaybreakInvalidDateRangeException이 아니라
          * DaybreakPastDateException이 나간다.
+         *
+         * 중복된 날짜는 하나로 합치고 오름차순으로 정렬해 보관한다.
          */
         fun create(
             studyTypeId: UUID,
-            startDate: LocalDate,
-            endDate: LocalDate,
+            dates: List<LocalDate>,
             reason: String,
             status: Status,
             teacherId: UUID,
@@ -77,15 +84,16 @@ class DaybreakStudyApplication(
                 today.with(DayOfWeek.MONDAY)
             val thursday = monday.plusDays(3)
 
-            // 1) 시작일이 종료일보다 뒤  2) 과거 날짜(오늘은 허용)  3) 대상 주의 월~목 밖
-            if (startDate > endDate) throw DaybreakStartDateAfterEndDateException
-            if (startDate < today || endDate < today) throw DaybreakPastDateException
-            if (startDate < monday || endDate > thursday) throw DaybreakInvalidDateRangeException
+            val sortedDates = dates.distinct().sorted()
+
+            // 1) 날짜 없음  2) 과거 날짜(오늘은 허용)  3) 대상 주의 월~목 밖
+            if (sortedDates.isEmpty()) throw DaybreakEmptyDateException
+            if (sortedDates.any { it < today }) throw DaybreakPastDateException
+            if (sortedDates.any { it < monday || it > thursday }) throw DaybreakInvalidDateRangeException
 
             return DaybreakStudyApplication(
                 studyTypeId = studyTypeId,
-                startDate = startDate,
-                endDate = endDate,
+                dates = sortedDates,
                 reason = reason,
                 status = status,
                 teacherId = teacherId,

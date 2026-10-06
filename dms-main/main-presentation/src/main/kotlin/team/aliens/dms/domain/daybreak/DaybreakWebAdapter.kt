@@ -69,8 +69,7 @@ class DaybreakWebAdapter(
                 teacherId = request.teacherId,
                 typeId = request.typeId,
                 reason = request.reason,
-                startDate = request.startDate,
-                endDate = request.endDate
+                dates = request.dates
             )
         )
     }

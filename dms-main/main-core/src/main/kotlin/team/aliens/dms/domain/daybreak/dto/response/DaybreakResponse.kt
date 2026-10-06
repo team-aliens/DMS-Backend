@@ -20,8 +20,7 @@ data class DaybreakStudyTypesResponse(
 
 data class DaybreakStudyApplicationStatusResponse(
     val status: Status,
-    val startDate: LocalDate,
-    val endDate: LocalDate
+    val dates: List<LocalDate>
 )
 
 data class ExportManagerDaybreakStudyApplicationResponse(

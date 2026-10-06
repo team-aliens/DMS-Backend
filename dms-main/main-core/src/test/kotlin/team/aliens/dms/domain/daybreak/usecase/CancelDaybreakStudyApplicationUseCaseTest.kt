@@ -39,8 +39,7 @@ class CancelDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             val applicationStatus = DaybreakStudyApplicationStatusVO(
                 status = Status.PENDING,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(3),
+                dates = listOf(LocalDate.now(), LocalDate.now().plusDays(3))
             )
 
             it("신청을 삭제한다") {
@@ -57,8 +56,7 @@ class CancelDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             val applicationStatus = DaybreakStudyApplicationStatusVO(
                 status = Status.PENDING,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(3)
+                dates = listOf(LocalDate.now(), LocalDate.now().plusDays(3))
             )
 
             it("예외를 반환한다.") {
@@ -76,8 +74,7 @@ class CancelDaybreakStudyApplicationUseCaseTest : DescribeSpec({
 
             val applicationStatus = DaybreakStudyApplicationStatusVO(
                 Status.FIRST_APPROVED,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusDays(3)
+                dates = listOf(LocalDate.now(), LocalDate.now().plusDays(3))
             )
 
             it("예외를 반환한다.") {

@@ -50,8 +50,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
                     studentJpaEntity.id,
                     studentJpaEntity.name,
@@ -87,8 +86,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
                     studentJpaEntity.id,
                     studentJpaEntity.name,
@@ -124,8 +122,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
                     studentJpaEntity.id,
                     studentJpaEntity.name,
@@ -142,8 +139,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 daybreakStudyApplicationJpaEntity.schoolJpaEntity.id.eq(schoolId),
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 gradeFilter(grade),
-                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
-                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
+                studyOn(LocalDate.now()),
             )
             .orderBy(*gcnOrder())
             .offset(pageData.offset)
@@ -162,8 +158,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
                     Expressions.nullExpression(),
                     studentJpaEntity.name,
@@ -180,8 +175,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                 daybreakStudyApplicationJpaEntity.schoolJpaEntity.id.eq(schoolId),
                 daybreakStudyApplicationJpaEntity.status.eq(status),
                 gradeFilter(grade),
-                daybreakStudyApplicationJpaEntity.startDate.loe(LocalDate.now()),
-                daybreakStudyApplicationJpaEntity.endDate.goe(LocalDate.now()),
+                studyOn(LocalDate.now()),
             )
             .orderBy(*gcnOrder())
             .fetch()
@@ -198,8 +192,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .select(
                 QQueryDaybreakStudyApplicationStatusVO(
                     daybreakStudyApplicationJpaEntity.status,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate
+                    daybreakStudyApplicationJpaEntity.studyDates
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -230,8 +223,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.id,
                     daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.createdAt,
-                    daybreakStudyApplicationJpaEntity.startDate,
-                    daybreakStudyApplicationJpaEntity.endDate,
+                    daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
                     Expressions.nullExpression(),
                     studentJpaEntity.name,
@@ -307,6 +299,10 @@ class DaybreakStudyApplicationPersistenceAdapter(
 
     private fun typeFilter(typeId: UUID?) =
         typeId?.let { daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.id.eq(it) }
+
+    // 구간(startDate~endDate) 안이어도 쉬는 날일 수 있으므로 날짜 목록에 오늘이 들어있는지로 판단한다
+    private fun studyOn(date: LocalDate) =
+        Expressions.booleanTemplate("array_contains({0}, {1})", daybreakStudyApplicationJpaEntity.studyDates, date)
 
     private fun gradeFilter(grade: Int?) =
         grade?.let { daybreakStudyApplicationJpaEntity.studentJpaEntity.grade.eq(it) }
