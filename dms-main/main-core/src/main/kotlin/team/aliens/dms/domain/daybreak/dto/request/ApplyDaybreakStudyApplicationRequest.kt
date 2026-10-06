@@ -7,6 +7,5 @@ data class ApplyDaybreakStudyApplicationRequest(
     val teacherId: UUID,
     val typeId: UUID,
     val reason: String,
-    val startDate: LocalDate,
-    val endDate: LocalDate
+    val dates: List<LocalDate>
 )
