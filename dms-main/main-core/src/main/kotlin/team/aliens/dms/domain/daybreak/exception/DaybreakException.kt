@@ -19,8 +19,8 @@ object DaybreakStudyTypeNotFoundException : DmsException(
     DaybreakErrorCode.NOT_FOUND_DAYBREAK_STUDY_TYPE
 )
 
-object DaybreakStartDateAfterEndDateException : DmsException(
-    DaybreakErrorCode.DAYBREAK_START_DATE_AFTER_END_DATE
+object DaybreakEmptyDateException : DmsException(
+    DaybreakErrorCode.DAYBREAK_EMPTY_DATE
 )
 
 object DaybreakPastDateException : DmsException(
