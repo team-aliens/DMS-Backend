@@ -18,7 +18,10 @@ class QueryDaybreakStudyApplicationStatusUseCase(
 
         return DaybreakStudyApplicationStatusResponse(
             status = statusInfo.status,
-            dates = statusInfo.dates
+            dates = statusInfo.dates,
+            typeName = statusInfo.typeName,
+            reason = statusInfo.reason,
+            teacherName = statusInfo.teacherName
         )
     }
 }
