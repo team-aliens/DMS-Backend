@@ -192,7 +192,10 @@ class DaybreakStudyApplicationPersistenceAdapter(
             .select(
                 QQueryDaybreakStudyApplicationStatusVO(
                     daybreakStudyApplicationJpaEntity.status,
-                    daybreakStudyApplicationJpaEntity.studyDates
+                    daybreakStudyApplicationJpaEntity.studyDates,
+                    daybreakStudyApplicationJpaEntity.daybreakStudyTypeJpaEntity.name,
+                    daybreakStudyApplicationJpaEntity.reason,
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
