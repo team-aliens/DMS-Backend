@@ -11,9 +11,16 @@ open class DaybreakStudyApplicationVO(
     val createdAt: LocalDateTime,
     val dates: List<LocalDate>,
     val reason: String,
-    val studentId: UUID?,
+    val studentId: UUID,
     val studentName: String,
     val studentGcn: String,
-    val teacherName: String? = null,
-    val status: Status? = null
-)
+    val teacherName: String,
+    val status: Status
+) {
+    // 구간으로 표시하는 구버전 클라이언트 호환용(#1138). 구버전이 사라지면 제거한다
+    val startDate: LocalDate
+        get() = dates.first()
+
+    val endDate: LocalDate
+        get() = dates.last()
+}
