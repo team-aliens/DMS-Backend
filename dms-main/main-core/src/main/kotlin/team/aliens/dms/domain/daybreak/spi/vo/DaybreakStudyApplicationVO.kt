@@ -16,4 +16,11 @@ open class DaybreakStudyApplicationVO(
     val studentGcn: String,
     val teacherName: String? = null,
     val status: Status? = null
-)
+) {
+    // 구간으로 표시하는 구버전 클라이언트 호환용(#1138). 구버전이 사라지면 제거한다
+    val startDate: LocalDate
+        get() = dates.first()
+
+    val endDate: LocalDate
+        get() = dates.last()
+}
