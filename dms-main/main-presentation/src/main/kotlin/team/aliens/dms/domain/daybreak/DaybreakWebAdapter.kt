@@ -69,7 +69,7 @@ class DaybreakWebAdapter(
                 teacherId = request.teacherId,
                 typeId = request.typeId,
                 reason = request.reason,
-                dates = request.dates
+                dates = request.resolveDates()
             )
         )
     }
