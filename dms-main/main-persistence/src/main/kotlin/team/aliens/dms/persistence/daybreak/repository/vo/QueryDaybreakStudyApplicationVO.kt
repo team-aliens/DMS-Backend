@@ -14,13 +14,13 @@ class QueryDaybreakStudyApplicationVO @QueryProjection constructor(
     createdAt: LocalDateTime,
     dates: List<LocalDate>,
     reason: String,
-    studentId: UUID?,
+    studentId: UUID,
     studentName: String,
     studentGrade: Int,
     studentClassRoom: Int,
     studentNumber: Int,
-    teacherName: String? = null,
-    status: Status? = null
+    teacherName: String,
+    status: Status
 ) : DaybreakStudyApplicationVO(
     applicationId = applicationId,
     typeName = typeName,

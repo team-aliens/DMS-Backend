@@ -57,7 +57,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
                     studentJpaEntity.number,
-                    Expressions.nullExpression(),
+                    daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
                     daybreakStudyApplicationJpaEntity.status
                 )
             )
@@ -95,7 +95,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     studentJpaEntity.classRoom,
                     studentJpaEntity.number,
                     daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
-                    Expressions.nullExpression()
+                    daybreakStudyApplicationJpaEntity.status
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -132,7 +132,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     studentJpaEntity.classRoom,
                     studentJpaEntity.number,
                     daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
-                    Expressions.nullExpression()
+                    daybreakStudyApplicationJpaEntity.status
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -162,13 +162,13 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.createdAt,
                     daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
-                    Expressions.nullExpression(),
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
                     studentJpaEntity.number,
                     daybreakStudyApplicationJpaEntity.teacherJpaEntity.name,
-                    Expressions.nullExpression()
+                    daybreakStudyApplicationJpaEntity.status
                 )
             )
             .from(daybreakStudyApplicationJpaEntity)
@@ -230,7 +230,7 @@ class DaybreakStudyApplicationPersistenceAdapter(
                     daybreakStudyApplicationJpaEntity.createdAt,
                     daybreakStudyApplicationJpaEntity.studyDates,
                     daybreakStudyApplicationJpaEntity.reason,
-                    Expressions.nullExpression(),
+                    studentJpaEntity.id,
                     studentJpaEntity.name,
                     studentJpaEntity.grade,
                     studentJpaEntity.classRoom,
