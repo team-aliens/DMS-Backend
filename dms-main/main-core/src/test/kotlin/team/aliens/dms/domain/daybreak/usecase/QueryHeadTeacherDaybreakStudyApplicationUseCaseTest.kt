@@ -25,6 +25,7 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
         context("부장 선생님이 새벽 자습 신청 목록을 조회하면") {
 
             val userId = UUID.randomUUID()
+            val schoolId = UUID.randomUUID()
             val typeId = UUID.randomUUID()
             val status = Status.FIRST_APPROVED
             val pageData = PageData(page = 1, size = 10)
@@ -35,8 +36,11 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCaseTest : DescribeSpec({
             }
 
             every { securityService.getCurrentUserId() } returns userId
+            every { securityService.getCurrentSchoolId() } returns schoolId
             every { teacherService.getTeacherById(userId) } returns mockTeacher
-            every { daybreakService.headTeacherGetDaybreakStudyApplications(grade, typeId, status, pageData) } returns mockk()
+            every {
+                daybreakService.headTeacherGetDaybreakStudyApplications(schoolId, grade, typeId, status, pageData)
+            } returns mockk()
 
             it("새벽 자습 신청 목록을 반환한다") {
                 shouldNotThrowAny {
