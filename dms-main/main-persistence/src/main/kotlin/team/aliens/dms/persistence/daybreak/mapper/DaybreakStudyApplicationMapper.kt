@@ -20,8 +20,7 @@ class DaybreakStudyApplicationMapper(
             DaybreakStudyApplication(
                 id = it.id!!,
                 studyTypeId = it.daybreakStudyTypeJpaEntity.id!!,
-                startDate = it.startDate,
-                endDate = it.endDate,
+                dates = it.studyDates,
                 reason = it.reason,
                 status = it.status,
                 previousStatus = it.previousStatus,
@@ -37,6 +36,7 @@ class DaybreakStudyApplicationMapper(
             id = domain.id,
             startDate = domain.startDate,
             endDate = domain.endDate,
+            studyDates = domain.dates,
             reason = domain.reason,
             status = domain.status,
             previousStatus = domain.previousStatus,

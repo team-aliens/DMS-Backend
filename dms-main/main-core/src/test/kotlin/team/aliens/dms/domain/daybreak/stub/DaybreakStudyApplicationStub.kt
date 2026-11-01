@@ -8,8 +8,7 @@ import java.util.UUID
 internal fun createDaybreakStudyApplicationStub(
     id: UUID = UUID.randomUUID(),
     studyTypeId: UUID = UUID.randomUUID(),
-    startDate: LocalDate = LocalDate.now(),
-    endDate: LocalDate = LocalDate.now().plusDays(3),
+    dates: List<LocalDate> = listOf(LocalDate.now(), LocalDate.now().plusDays(3)),
     reason: String = "새벽 자습 신청합니다.",
     status: Status = Status.PENDING,
     previousStatus: Status? = null,
@@ -20,8 +19,7 @@ internal fun createDaybreakStudyApplicationStub(
     return DaybreakStudyApplication(
         id = id,
         studyTypeId = studyTypeId,
-        startDate = startDate,
-        endDate = endDate,
+        dates = dates,
         reason = reason,
         status = status,
         previousStatus = previousStatus,

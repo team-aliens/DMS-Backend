@@ -19,9 +19,10 @@ class QueryHeadTeacherDaybreakStudyApplicationUseCase(
     fun execute(typeId: UUID?, status: Status?, pageData: PageData): DaybreakStudyApplicationResponse {
 
         val teacher = teacherService.getTeacherById(securityService.getCurrentUserId())
+        val schoolId = securityService.getCurrentSchoolId()
 
         return DaybreakStudyApplicationResponse(
-            daybreakService.headTeacherGetDaybreakStudyApplications(teacher.grade!!, typeId, status, pageData)
+            daybreakService.headTeacherGetDaybreakStudyApplications(schoolId, teacher.grade!!, typeId, status, pageData)
         )
     }
 }

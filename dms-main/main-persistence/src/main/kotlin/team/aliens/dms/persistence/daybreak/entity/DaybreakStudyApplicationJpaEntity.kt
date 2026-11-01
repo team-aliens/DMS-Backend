@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes
 import team.aliens.dms.domain.daybreak.model.Status
 import team.aliens.dms.persistence.BaseEntity
 import team.aliens.dms.persistence.school.entity.SchoolJpaEntity
@@ -38,6 +40,11 @@ class DaybreakStudyApplicationJpaEntity(
 
     @Column(nullable = false)
     val endDate: LocalDate,
+
+    // PostgreSQL에 있는 배열 타입으로 선언
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(name = "study_dates", nullable = false)
+    val studyDates: List<LocalDate>,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)

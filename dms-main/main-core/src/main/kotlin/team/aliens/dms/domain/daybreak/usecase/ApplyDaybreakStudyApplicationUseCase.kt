@@ -28,8 +28,7 @@ class ApplyDaybreakStudyApplicationUseCase(
             DaybreakStudyApplication.create(
                 studentId = student.id,
                 studyTypeId = studyType.id,
-                startDate = request.startDate,
-                endDate = request.endDate,
+                dates = request.dates,
                 reason = request.reason,
                 status = Status.PENDING,
                 teacherId = request.teacherId,

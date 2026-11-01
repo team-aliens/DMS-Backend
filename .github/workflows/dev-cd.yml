@@ -1,67 +1,129 @@
-# name: CD for Dev
+name: CD for Dev
 
-# on:
-#   push:
-#     branches:
-#       - main
-#       - develop
+# develop 에 머지되면 dev 서버(~/dev compose 프로젝트)로 배포한다.
+# prod 와 같은 EC2 에 떠 있지만 compose 프로젝트·redis·DB(dev_dms)가 분리돼 있어 prod 컨테이너는 건드리지 않는다.
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
 
-# jobs:
-#   build:
-#     environment: dev
-#     runs-on: ubuntu-latest
+permissions:
+  contents: read
 
-#     steps:
-#       - uses: actions/checkout@v3
+# develop 머지가 연달아 오면 앞선 배포는 의미가 없으므로 취소하고 마지막 것만 배포한다
+concurrency:
+  group: dev-cd
+  cancel-in-progress: true
 
-#       - name: Set up Java
-#         uses: actions/setup-java@v2
-#         with:
-#           java-version: '17'
-#           distribution: 'zulu'
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REGISTRY: 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
+  ECR_REPO: dsm-dms
 
-#       - name: Build Gradle
-#         uses: gradle/gradle-build-action@v2
-#         with:
-#           arguments: |
-#             build
-#             --build-cache
-#             --no-daemon
+jobs:
+  # ── 1) jar 빌드 & ECR 푸시 ───────────────────────
+  #  테스트는 develop 으로 들어오는 PR 의 필수 체크(build · CI)에서 이미 돌았으므로 여기선 jar 만 만든다.
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: 'gradle'
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+      - run: chmod +x gradlew
+      - name: Build jar
+        run: ./gradlew :dms-main:main-infrastructure:bootJar --build-cache --no-daemon
 
-#       - name: Login to ECR
-#         id: ecr
-#         uses: elgohr/ecr-login-action@master
-#         with:
-#           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           region: ${{ secrets.AWS_REGION }}
+      - name: Prepare docker context
+        run: |
+          set -euo pipefail
+          jars=(dms-main/main-infrastructure/build/libs/*-boot.jar)
+          if [ "${#jars[@]}" -ne 1 ] || [ ! -f "${jars[0]}" ]; then
+            echo "boot jar 를 하나로 특정하지 못했다: ${jars[*]}" >&2
+            exit 1
+          fi
+          mkdir -p docker-context
+          cp "${jars[0]}" docker-context/app.jar
 
-#       - name: Publish to Registry
-#         uses: elgohr/Publish-Docker-Github-Action@v5
-#         with:
-#           name: ${{ secrets.ECR_DEV_REPOSITORY }}
-#           username: ${{ steps.ecr.outputs.username }}
-#           password: ${{ steps.ecr.outputs.password }}
-#           registry: ${{ steps.ecr.outputs.registry }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-#       - name: Connect EC2 & Deploy Docker Image
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.EC2_DEV_HOST }}
-#           port: ${{ secrets.EC2_DEV_PORT }}
-#           username: ${{ secrets.EC2_USER }}
-#           key: ${{ secrets.EC2_DEV_KEY }}
-#           script: |
-#             cd dms-dev
-#             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.DOCKER_DEV_IMAGE }}
-#             docker pull ${{ secrets.DOCKER_DEV_IMAGE }}
-#             docker rm -f dms-dev || true
-#             docker run -d --name dms-dev -p ${{ secrets.APPLICATION_PORT }}:8080 --env-file .env ${{ secrets.DOCKER_DEV_IMAGE }}
-#             docker network connect dms_net dms-dev
-#             sleep 20
-#             is_healthy=$(docker inspect --format '{{ .State.Health.Status }}' dms-dev)
-#             echo $is_healthy
-#             if [[ $is_healthy -ne "healthy" ]]; then
-#                 echo $is_healthy
-#                 exit 1
-#             fi
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@d539f0932e70871a027e9d5a9d8fc38589180a64 # v2
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Build & push image
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: docker-context
+          file: dms-main/Dockerfile
+          push: true
+          provenance: false
+          # prod 의 :latest · 릴리스 태그와 섞이지 않도록 dev 서버는 :dev 태그만 쓴다 (서버 ~/dev compose 가 :dev 를 참조)
+          tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:dev
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPO }}:dev-${{ github.sha }}
+
+  # ── 2) EC2 SSH 배포 (~/dev 에서 pull + compose up) ──
+  deploy:
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare SSH key
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST_KEY: ${{ secrets.EC2_HOST_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$EC2_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy on EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          SHA: ${{ github.sha }}
+        run: |
+          ssh -i ~/.ssh/deploy_key "ubuntu@$EC2_HOST" bash -se -- "$SHA" <<'REMOTE'
+          set -euo pipefail
+          SHA="${1:-unknown}"
+          echo "deploying dev $SHA"
+          # dev compose 프로젝트 디렉터리 — prod(~/prod) 는 건드리지 않는다
+          cd ~/dev
+          aws ecr get-login-password --region ap-northeast-2 \
+            | docker login --username AWS --password-stdin 179895363651.dkr.ecr.ap-northeast-2.amazonaws.com
+          docker compose pull dev-app
+          docker compose up -d dev-app
+          cid=$(docker compose ps -q dev-app)
+          if [ -z "$cid" ]; then echo "dev-app container not found"; docker compose logs --tail=80 dev-app; exit 1; fi
+          # healthy 가 될 때까지 최대 120초 대기 (중간에 죽으면 즉시 실패)
+          for i in $(seq 1 24); do
+            s=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$cid")
+            if [ "$s" = healthy ]; then echo "dev-app: $s"; break; fi
+            case "$s" in exited|dead) echo "dev-app terminated: $s"; docker compose logs --tail=80 dev-app; exit 1;; esac
+            if [ "$i" -eq 24 ]; then echo "health timeout: $s"; docker compose logs --tail=80 dev-app; exit 1; fi
+            sleep 5
+          done
+          # 태그가 떨어진 이전 이미지만 정리 (사용 중인 prod 이미지는 지워지지 않는다)
+          docker image prune -f
+          echo "deployed dev $SHA"
+          REMOTE
+
+      - name: Summary
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+        run: |
+          printf '### dev 배포 완료 — `%s`\n' "$DEPLOY_SHA" >> "$GITHUB_STEP_SUMMARY"

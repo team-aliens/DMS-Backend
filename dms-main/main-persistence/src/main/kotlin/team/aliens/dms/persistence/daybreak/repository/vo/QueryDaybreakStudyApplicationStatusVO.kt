@@ -7,10 +7,14 @@ import java.time.LocalDate
 
 class QueryDaybreakStudyApplicationStatusVO @QueryProjection constructor(
     status: Status,
-    startDate: LocalDate,
-    endDate: LocalDate
+    dates: List<LocalDate>,
+    typeName: String,
+    reason: String,
+    teacherName: String
 ) : DaybreakStudyApplicationStatusVO(
     status = status,
-    startDate = startDate,
-    endDate = endDate
+    dates = dates,
+    typeName = typeName,
+    reason = reason,
+    teacherName = teacherName
 )

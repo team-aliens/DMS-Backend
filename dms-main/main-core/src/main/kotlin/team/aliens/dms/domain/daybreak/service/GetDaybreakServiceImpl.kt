@@ -32,6 +32,7 @@ class GetDaybreakServiceImpl(
     )
 
     override fun headTeacherGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int,
         typeId: UUID?,
         status: Status?,
@@ -42,6 +43,7 @@ class GetDaybreakServiceImpl(
         val effectiveStatus = if (status in validHeadTeacherStatuses) status!! else Status.FIRST_APPROVED
 
         return queryDaybreakStudyApplicationPort.headTeacherGetDaybreakStudyApplications(
+            schoolId = schoolId,
             grade = grade,
             typeId = typeId,
             status = effectiveStatus,

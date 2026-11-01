@@ -18,6 +18,7 @@ interface QueryDaybreakStudyApplicationPort {
     ): List<DaybreakStudyApplicationVO>
 
     fun headTeacherGetDaybreakStudyApplications(
+        schoolId: UUID,
         grade: Int,
         typeId: UUID? = null,
         status: Status,
