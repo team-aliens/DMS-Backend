@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.stereotype.Component
 import team.aliens.dms.domain.auth.dto.TokenResponse
+import team.aliens.dms.domain.auth.exception.RefreshTokenNotFoundException
 import team.aliens.dms.domain.auth.model.Authority
 import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.domain.auth.spi.CommandRefreshTokenPort
@@ -18,26 +19,46 @@ import java.util.UUID
 class GenerateJwtAdapter(
     private val securityProperties: SecurityProperties,
     private val commandRefreshTokenPort: CommandRefreshTokenPort,
+    private val jwtParser: JwtParser,
 ) : JwtPort {
 
-    override fun receiveToken(userId: UUID, authority: Authority, schoolId: UUID) = TokenResponse(
-        accessToken = generateAccessToken(userId, authority, schoolId),
-        accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
-        refreshToken = generateRefreshToken(userId, authority, schoolId),
-        refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
-    )
-
-    override fun reissueAccessToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse {
-        // refresh token 값은 유지하고 TTL(만료 시간)만 갱신하여 슬라이딩 세션을 유지한다.
-        commandRefreshTokenPort.save(
-            refreshToken.copy(expirationTime = securityProperties.refreshExp)
+    override fun receiveToken(userId: UUID, authority: Authority, schoolId: UUID): TokenResponse {
+        val refreshToken = commandRefreshTokenPort.save(
+            RefreshToken(
+                token = generateRefreshToken(userId, schoolId),
+                userId = userId,
+                authority = authority,
+                expirationTime = securityProperties.refreshExp
+            )
         )
+
+        return createTokenResponse(refreshToken, schoolId)
+    }
+
+    override fun reissueToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse {
+        val rotatedRefreshToken = commandRefreshTokenPort.rotateRefreshToken(
+            currentToken = refreshToken.token,
+            newRefreshToken = refreshToken.copy(
+                token = generateRefreshToken(refreshToken.userId, schoolId),
+                expirationTime = securityProperties.refreshExp
+            )
+        ) ?: throw RefreshTokenNotFoundException
+
+        return createTokenResponse(rotatedRefreshToken, schoolId)
+    }
+
+    // 위조·만료된 토큰도 없는 토큰과 같은 404로 응답한다
+    override fun getUserIdByRefreshToken(refreshToken: String): UUID =
+        jwtParser.extractRefreshTokenUserId(refreshToken) ?: throw RefreshTokenNotFoundException
+
+    private fun createTokenResponse(refreshToken: RefreshToken, schoolId: UUID): TokenResponse {
+        val now = LocalDateTime.now().withNano(0)
 
         return TokenResponse(
             accessToken = generateAccessToken(refreshToken.userId, refreshToken.authority, schoolId),
-            accessTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.accessExp.toLong()),
+            accessTokenExpiredAt = now.plusSeconds(securityProperties.accessExp.toLong()),
             refreshToken = refreshToken.token,
-            refreshTokenExpiredAt = LocalDateTime.now().withNano(0).plusSeconds(securityProperties.refreshExp.toLong())
+            refreshTokenExpiredAt = now.plusSeconds(refreshToken.expirationTime.toLong())
         )
     }
 
@@ -52,8 +73,8 @@ class GenerateJwtAdapter(
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
-    private fun generateRefreshToken(userId: UUID, authority: Authority, schoolId: UUID): String {
-        val token = Jwts.builder()
+    private fun generateRefreshToken(userId: UUID, schoolId: UUID) =
+        Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.TYPE, JwtProperties.REFRESH)
             .setId(userId.toString())
@@ -61,15 +82,4 @@ class GenerateJwtAdapter(
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()
-
-        val refreshToken = RefreshToken(
-            token = token,
-            userId = userId,
-            authority = authority,
-            expirationTime = securityProperties.refreshExp
-        )
-        commandRefreshTokenPort.save(refreshToken)
-
-        return token
-    }
 }

@@ -8,5 +8,7 @@ import java.util.UUID
 interface JwtPort {
     fun receiveToken(userId: UUID, authority: Authority, schoolId: UUID): TokenResponse
 
-    fun reissueAccessToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse
+    fun reissueToken(refreshToken: RefreshToken, schoolId: UUID): TokenResponse
+
+    fun getUserIdByRefreshToken(refreshToken: String): UUID
 }

@@ -16,11 +16,12 @@ class ReissueTokenUseCase(
 ) {
 
     fun execute(token: String): TokenFeatureResponse {
-        val queryToken = authService.getRefreshTokenByToken(token)
+        val userId = jwtPort.getUserIdByRefreshToken(token)
+        val queryToken = authService.getRefreshTokenByUserIdAndToken(userId, token)
 
         val user = userService.queryUserById(queryToken.userId)
 
-        val tokenResponse = jwtPort.reissueAccessToken(
+        val tokenResponse = jwtPort.reissueToken(
             refreshToken = queryToken, schoolId = user.schoolId
         )
 
