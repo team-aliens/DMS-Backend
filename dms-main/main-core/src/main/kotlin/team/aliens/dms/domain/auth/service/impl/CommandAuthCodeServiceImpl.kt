@@ -7,13 +7,16 @@ import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.service.CommandAuthCodeService
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
+import team.aliens.dms.domain.auth.spi.CommandRefreshTokenPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
+import java.util.UUID
 
 @Service
 class CommandAuthCodeServiceImpl(
     private val commandAuthCodePort: CommandAuthCodePort,
     private val commandAuthCodeLimitPort: CommandAuthCodeLimitPort,
-    private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort
+    private val queryAuthCodeLimitPort: QueryAuthCodeLimitPort,
+    private val commandRefreshTokenPort: CommandRefreshTokenPort
 ) : CommandAuthCodeService {
 
     override fun saveAuthCode(authCode: AuthCode) {
@@ -29,5 +32,9 @@ class CommandAuthCodeServiceImpl(
             ?: AuthCodeLimit(email, type)
 
         commandAuthCodeLimitPort.saveAuthCodeLimit(authCodeLimit.increaseCount())
+    }
+
+    override fun deleteAllRefreshTokensByUserId(userId: UUID) {
+        commandRefreshTokenPort.deleteAllRefreshTokensByUserId(userId)
     }
 }
