@@ -30,5 +30,6 @@ class ResetManagerPasswordUseCase(
         userService.saveUser(
             user.copy(password = securityService.encodePassword(request.newPassword))
         )
+        authService.deleteAllRefreshTokensByUserId(user.id)
     }
 }

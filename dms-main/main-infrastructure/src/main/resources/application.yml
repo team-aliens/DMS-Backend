@@ -96,7 +96,7 @@ spring:
 secret:
   secret-key: ${SECRET_KEY}
   access-exp: ${ACCESS_EXP:3600}
-  refresh-exp: ${REFRESH_EXP:1205600}
+  refresh-exp: ${REFRESH_EXP:1209600}
 
 cors:
   allowed-origins:

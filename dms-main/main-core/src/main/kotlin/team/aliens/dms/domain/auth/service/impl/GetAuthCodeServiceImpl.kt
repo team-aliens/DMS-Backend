@@ -10,6 +10,7 @@ import team.aliens.dms.domain.auth.model.RefreshToken
 import team.aliens.dms.domain.auth.service.GetAuthCodeService
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.QueryRefreshTokenPort
+import java.util.UUID
 
 @Service
 class GetAuthCodeServiceImpl(
@@ -28,8 +29,8 @@ class GetAuthCodeServiceImpl(
         return authCodeLimit
     }
 
-    override fun getRefreshTokenByToken(token: String): RefreshToken {
-        return queryRefreshTokenPort.queryRefreshTokenByToken(token)
+    override fun getRefreshTokenByUserIdAndToken(userId: UUID, token: String): RefreshToken {
+        return queryRefreshTokenPort.queryRefreshTokenByUserIdAndToken(userId, token)
             ?: throw RefreshTokenNotFoundException
     }
 }

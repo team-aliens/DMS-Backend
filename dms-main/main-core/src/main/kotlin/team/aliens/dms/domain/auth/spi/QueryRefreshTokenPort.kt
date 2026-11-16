@@ -1,8 +1,9 @@
 package team.aliens.dms.domain.auth.spi
 
 import team.aliens.dms.domain.auth.model.RefreshToken
+import java.util.UUID
 
 interface QueryRefreshTokenPort {
 
-    fun queryRefreshTokenByToken(token: String): RefreshToken?
+    fun queryRefreshTokenByUserIdAndToken(userId: UUID, token: String): RefreshToken?
 }

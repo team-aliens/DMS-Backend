@@ -36,25 +36,25 @@ class ReissueTokenUseCaseTest : DescribeSpec({
             val queryToken = createRefreshToken(token = token, userId = userId)
             val user = createUserStub(id = userId, schoolId = schoolId)
 
-            // 수정된 동작: 재발급 시 refresh token은 그대로(token) 두고 access token만 새로 발급
             val tokenResponse = TokenResponse(
                 accessToken = "new-access-token",
                 accessTokenExpiredAt = LocalDateTime.now().plusHours(1),
-                refreshToken = token,
+                refreshToken = "rotated-refresh-token",
                 refreshTokenExpiredAt = LocalDateTime.now().plusWeeks(2)
             )
 
-            every { authService.getRefreshTokenByToken(token) } returns queryToken
+            every { jwtPort.getUserIdByRefreshToken(token) } returns userId
+            every { authService.getRefreshTokenByUserIdAndToken(userId, token) } returns queryToken
             every { userService.queryUserById(userId) } returns user
-            every { jwtPort.reissueAccessToken(queryToken, schoolId) } returns tokenResponse
+            every { jwtPort.reissueToken(queryToken, schoolId) } returns tokenResponse
             every { schoolService.getAvailableFeaturesBySchoolId(schoolId) } returns mockk(relaxed = true)
 
-            it("access token만 새로 발급하고 refresh token은 기존 값을 그대로 반환한다") {
+            it("refresh token을 회전시켜 새 access token과 새 refresh token을 반환한다") {
                 val result = reissueTokenUseCase.execute(token)
 
                 result.accessToken shouldBe "new-access-token"
 
-                result.refreshToken shouldBe token
+                result.refreshToken shouldBe "rotated-refresh-token"
             }
         }
     }
