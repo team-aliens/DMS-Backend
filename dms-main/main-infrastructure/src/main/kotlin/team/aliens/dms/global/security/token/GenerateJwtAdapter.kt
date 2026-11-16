@@ -73,12 +73,14 @@ class GenerateJwtAdapter(
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.accessExp * 1000))
             .compact()
 
+    // 토큰 문자열이 Redis 키라서, 같은 초에 발급해도 값이 겹치지 않도록 nonce를 넣는다
     private fun generateRefreshToken(userId: UUID, schoolId: UUID) =
         Jwts.builder()
             .signWith(securityProperties.secretKey, SignatureAlgorithm.HS512)
             .setHeaderParam(Header.TYPE, JwtProperties.REFRESH)
             .setId(userId.toString())
             .claim(JwtProperties.SCHOOL_ID, schoolId.toString())
+            .claim(JwtProperties.NONCE, UUID.randomUUID().toString())
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + securityProperties.refreshExp * 1000))
             .compact()

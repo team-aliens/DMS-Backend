@@ -41,11 +41,18 @@ class RefreshTokenPersistenceAdapter(
         return refreshToken
     }
 
+    // 새 토큰을 먼저 저장하고, 기존에 있는 토큰을 삭제한다.
+    // 그렇지 않으면 기존에 있는 토큰을 삭제하고, 새로운 토큰을 저장할 때 에러가 나면 삭제한 토큰을 롤백할 수 없기 때문임
     override fun rotateRefreshToken(currentToken: String, newRefreshToken: RefreshToken): RefreshToken? {
+        // 새 토큰을 먼저 저장해서, 저장이 실패해도 지금 토큰은 남게 한다
+        save(newRefreshToken)
+
+        // DEL은 원자적이라 같은 토큰으로 동시에 와도 한 요청만 true를 받는다
         if (!redisTemplate.delete(tokenKey(newRefreshToken.userId, currentToken))) {
+            redisTemplate.delete(tokenKey(newRefreshToken.userId, newRefreshToken.token))
             return null
         }
-        return save(newRefreshToken)
+        return newRefreshToken
     }
     // Key 값들을 조회한 다음 해당 key들을 전부 삭제
     override fun deleteAllRefreshTokensByUserId(userId: UUID) {

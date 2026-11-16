@@ -7,4 +7,5 @@ object JwtProperties {
     const val REFRESH = "refresh"
     const val AUTHORITY = "authority"
     const val SCHOOL_ID = "school_id"
+    const val NONCE = "nonce"
 }
