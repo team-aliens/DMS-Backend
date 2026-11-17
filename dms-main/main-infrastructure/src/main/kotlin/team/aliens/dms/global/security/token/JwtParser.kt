@@ -31,6 +31,15 @@ class JwtParser(
         return parseUserInfo(claims.body)
     }
 
+    // 서명·만료·타입이 맞지 않거나 jti가 UUID가 아니면 null
+    fun extractRefreshTokenUserId(token: String): UUID? = runCatching {
+        val claims = getClaims(token)
+        if (claims.header[Header.TYPE] != JwtProperties.REFRESH) {
+            return null
+        }
+        UUID.fromString(claims.body.id)
+    }.getOrNull()
+
     private fun getClaims(token: String): Jws<Claims> {
         return try {
             Jwts.parserBuilder()

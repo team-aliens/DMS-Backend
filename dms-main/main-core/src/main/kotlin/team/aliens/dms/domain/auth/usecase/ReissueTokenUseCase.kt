@@ -16,15 +16,17 @@ class ReissueTokenUseCase(
 ) {
 
     fun execute(token: String): TokenFeatureResponse {
-        val queryToken = authService.getRefreshTokenByToken(token)
+        val userId = jwtPort.getUserIdByRefreshToken(token)
+        val queryToken = authService.getRefreshTokenByUserIdAndToken(userId, token)
 
         val user = userService.queryUserById(queryToken.userId)
 
-        val tokenResponse = jwtPort.reissueAccessToken(
+        // 토큰 회전은 Redis에 바로 반영되고 롤백되지 않으므로, 실패할 수 있는 조회를 먼저 끝낸다
+        val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
+
+        val tokenResponse = jwtPort.reissueToken(
             refreshToken = queryToken, schoolId = user.schoolId
         )
-
-        val availableFeatures = schoolService.getAvailableFeaturesBySchoolId(user.schoolId)
 
         return TokenFeatureResponse.of(tokenResponse, availableFeatures)
     }

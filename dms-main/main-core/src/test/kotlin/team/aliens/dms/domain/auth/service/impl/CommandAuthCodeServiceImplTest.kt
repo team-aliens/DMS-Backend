@@ -11,6 +11,7 @@ import team.aliens.dms.domain.auth.model.AuthCodeLimit
 import team.aliens.dms.domain.auth.model.EmailType
 import team.aliens.dms.domain.auth.spi.CommandAuthCodeLimitPort
 import team.aliens.dms.domain.auth.spi.CommandAuthCodePort
+import team.aliens.dms.domain.auth.spi.CommandRefreshTokenPort
 import team.aliens.dms.domain.auth.spi.QueryAuthCodeLimitPort
 import java.util.UUID
 
@@ -22,7 +23,8 @@ class CommandAuthCodeServiceImplTest : DescribeSpec({
     val commandAuthCodeService = CommandAuthCodeServiceImpl(
         commandAuthCodePort,
         commandAuthCodeLimitPort,
-        queryAuthCodeLimitPort
+        queryAuthCodeLimitPort,
+        mockk<CommandRefreshTokenPort>()
     )
 
     describe("saveIncreasedAuthCodeLimitByEmailAndType") {

@@ -2,13 +2,15 @@ package team.aliens.dms.domain.user.usecase
 
 import team.aliens.dms.common.annotation.UseCase
 import team.aliens.dms.common.service.security.SecurityService
+import team.aliens.dms.domain.auth.service.AuthService
 import team.aliens.dms.domain.user.dto.UpdateUserPasswordRequest
 import team.aliens.dms.domain.user.service.UserService
 
 @UseCase
 class UpdateUserPasswordUseCase(
     private val userService: UserService,
-    private val securityService: SecurityService
+    private val securityService: SecurityService,
+    private val authService: AuthService
 ) {
 
     fun execute(request: UpdateUserPasswordRequest) {
@@ -20,5 +22,6 @@ class UpdateUserPasswordUseCase(
         userService.saveUser(
             user.copy(password = newEncodedPassword)
         )
+        authService.deleteAllRefreshTokensByUserId(user.id)
     }
 }
