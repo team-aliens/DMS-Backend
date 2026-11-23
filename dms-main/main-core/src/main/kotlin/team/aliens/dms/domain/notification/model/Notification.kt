@@ -52,6 +52,8 @@ data class Notification(
                 title = notificationInfo.title,
                 content = notificationInfo.content,
                 threadId = notificationInfo.threadId,
+                // 재시도로 늦게 발송돼도 알림함에는 알림이 생긴 시각이 남도록 넘긴다
+                createdAt = notificationInfo.createdAt,
                 isSaveRequired = notificationInfo.isSaveRequired
             )
         }
