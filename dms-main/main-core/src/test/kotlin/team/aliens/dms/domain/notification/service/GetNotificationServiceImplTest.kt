@@ -10,6 +10,7 @@ import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundExceptio
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.QueryNotificationOutboxPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 import team.aliens.dms.domain.notification.stub.createDeviceTokenStub
 import team.aliens.dms.domain.notification.stub.createNotificationOfUserStub
@@ -21,11 +22,13 @@ class GetNotificationServiceImplTest : DescribeSpec({
     val deviceTokenPort = mockk<QueryDeviceTokenPort>()
     val notificationOfUserPort = mockk<QueryNotificationOfUserPort>()
     val topicSubscriptionPort = mockk<QueryTopicSubscriptionPort>()
+    val notificationOutboxPort = mockk<QueryNotificationOutboxPort>()
 
     val service = GetNotificationServiceImpl(
         deviceTokenPort = deviceTokenPort,
         notificationOfUserPort = notificationOfUserPort,
-        topicSubscriptionPort = topicSubscriptionPort
+        topicSubscriptionPort = topicSubscriptionPort,
+        notificationOutboxPort = notificationOutboxPort
     )
 
     describe("getNotificationOfUsersByUserId") {
