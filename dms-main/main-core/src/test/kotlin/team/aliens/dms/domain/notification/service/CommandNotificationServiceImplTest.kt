@@ -20,6 +20,7 @@ import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundE
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.NotificationOfUser
 import team.aliens.dms.domain.notification.model.NotificationOutbox
+import team.aliens.dms.domain.notification.model.NotificationOutboxStatus
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
@@ -409,6 +410,44 @@ class CommandNotificationServiceImplTest : DescribeSpec({
 
                 verify(exactly = 1) { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) }
                 verify(exactly = 0) { commandNotificationOfUserPort.saveNotificationsOfUser(any()) }
+            }
+        }
+
+        context("일부 토큰만 일시적으로 실패하면") {
+            val succeededToken = createDeviceTokenStub(token = "partial-succeeded-token")
+            val failedToken = createDeviceTokenStub(token = "partial-failed-token")
+            val deviceTokens = listOf(succeededToken, failedToken)
+            val outbox = createOutbox(deviceTokens.map { it.userId }, isSaveRequired = true)
+            val notification = Notification.from(outbox.notificationInfo)
+            val retried = slot<NotificationOutbox>()
+
+            every { notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outbox.id) } returns outbox
+            every { deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds) } returns deviceTokens
+            every { commandNotificationOfUserPort.saveNotificationsOfUser(any()) } just runs
+            every {
+                notificationPort.sendMessages(deviceTokens.map { it.token }, notification)
+            } returns listOf(failedToken.token)
+            every { notificationOutboxPort.saveNotificationOutbox(capture(retried)) } answers { firstArg() }
+
+            val remaining = service.processNotificationOutbox(outbox.id)
+
+            it("실패한 유저만 남기고 재시도 횟수를 올린다") {
+                retried.captured.userIds shouldContainExactly listOf(failedToken.userId)
+                retried.captured.retryCount shouldBe 1
+                retried.captured.status shouldBe NotificationOutboxStatus.PENDING
+            }
+
+            it("다시 보낼 때는 알림함에 저장하지 않는다") {
+                retried.captured.notificationInfo.isSaveRequired shouldBe false
+            }
+
+            it("알림이 생긴 시각을 유지한다") {
+                retried.captured.notificationInfo.createdAt shouldBe outbox.notificationInfo.createdAt
+            }
+
+            it("outbox 를 지우지 않고 남은 outbox 를 돌려준다") {
+                verify(exactly = 0) { notificationOutboxPort.deleteNotificationOutboxById(outbox.id) }
+                remaining shouldBe retried.captured
             }
         }
 
