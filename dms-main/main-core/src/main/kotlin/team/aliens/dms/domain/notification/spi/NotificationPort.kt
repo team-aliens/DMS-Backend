@@ -5,7 +5,8 @@ import team.aliens.dms.domain.notification.model.Notification
 
 interface NotificationPort {
 
-    fun sendMessages(tokens: List<String>, notification: Notification)
+    // 일시적 오류(FCM 과부하·내부 오류 등)로 실패해 다시 보내야하는 토큰을 돌려준다
+    fun sendMessages(tokens: List<String>, notification: Notification): List<String>
 
     fun sendByTopic(
         notification: Notification
