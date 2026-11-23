@@ -13,13 +13,18 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import team.aliens.dms.contract.model.notification.NotificationInfo
 import team.aliens.dms.contract.model.notification.Topic
 import team.aliens.dms.domain.notification.exception.DeviceTokenNotFoundException
 import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundException
+import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.NotificationOfUser
+import team.aliens.dms.domain.notification.model.NotificationOutbox
+import team.aliens.dms.domain.notification.model.NotificationOutboxStatus
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
+import team.aliens.dms.domain.notification.spi.NotificationOutboxPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
@@ -37,13 +42,15 @@ class CommandNotificationServiceImplTest : DescribeSpec({
     val queryNotificationOfUserPort = mockk<QueryNotificationOfUserPort>()
     val commandNotificationOfUserPort = mockk<CommandNotificationOfUserPort>()
     val topicSubscriptionPort = mockk<TopicSubscriptionPort>()
+    val notificationOutboxPort = mockk<NotificationOutboxPort>()
 
     val service = CommandNotificationServiceImpl(
         deviceTokenPort = deviceTokenPort,
         notificationPort = notificationPort,
         queryNotificationOfUserPort = queryNotificationOfUserPort,
         commandNotificationOfUserPort = commandNotificationOfUserPort,
-        topicSubscriptionPort = topicSubscriptionPort
+        topicSubscriptionPort = topicSubscriptionPort,
+        notificationOutboxPort = notificationOutboxPort
     )
 
     every { topicSubscriptionPort.saveTopicSubscription(any()) } answers { firstArg() }
@@ -356,57 +363,23 @@ class CommandNotificationServiceImplTest : DescribeSpec({
         }
     }
 
-    describe("sendMessage") {
-        context("저장이 필요한 알림을 전송하면") {
-            val deviceToken = createDeviceTokenStub(token = "send-save-token")
-            val notification = createNotificationStub(isSaveRequired = true)
-            val saved = slot<NotificationOfUser>()
-
-            every { commandNotificationOfUserPort.saveNotificationOfUser(capture(saved)) } answers { firstArg() }
-            every { notificationPort.sendMessage(deviceToken.token, notification) } just runs
-
-            service.sendMessage(deviceToken, notification)
-
-            it("알림함에 저장한다") {
-                saved.captured.userId shouldBe deviceToken.userId
-                saved.captured.title shouldBe notification.title
-            }
-
-            it("알림을 전송한다") {
-                verify(exactly = 1) { notificationPort.sendMessage(deviceToken.token, notification) }
-            }
-        }
-
-        context("저장이 필요하지 않은 알림을 전송하면") {
-            val deviceToken = createDeviceTokenStub(token = "send-no-save-token")
-            val notification = createNotificationStub(isSaveRequired = false)
-
-            every { notificationPort.sendMessage(deviceToken.token, notification) } just runs
-
-            it("알림함에 저장하지 않고 알림을 전송한다") {
-                clearMocks(notificationPort, commandNotificationOfUserPort, answers = false)
-
-                service.sendMessage(deviceToken, notification)
-
-                verify(exactly = 1) { notificationPort.sendMessage(deviceToken.token, notification) }
-                verify(exactly = 0) { commandNotificationOfUserPort.saveNotificationOfUser(any()) }
-            }
-        }
-    }
-
-    describe("sendMessages") {
-        context("여러 디바이스에 저장이 필요한 알림을 전송하면") {
+    describe("processNotificationOutbox") {
+        context("저장이 필요한 알림의 outbox 를 처리하면") {
             val deviceTokens = listOf(
                 createDeviceTokenStub(token = "sends-save-token1"),
                 createDeviceTokenStub(token = "sends-save-token2")
             )
-            val notification = createNotificationStub(isSaveRequired = true)
+            val outbox = createOutbox(deviceTokens.map { it.userId }, isSaveRequired = true)
+            val notification = Notification.from(outbox.notificationInfo)
             val saved = slot<List<NotificationOfUser>>()
 
+            every { notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outbox.id) } returns outbox
+            every { notificationOutboxPort.deleteNotificationOutboxById(outbox.id) } just runs
+            every { deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds) } returns deviceTokens
             every { commandNotificationOfUserPort.saveNotificationsOfUser(capture(saved)) } just runs
-            every { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) } just runs
+            every { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) } returns emptyList()
 
-            service.sendMessages(deviceTokens, notification)
+            service.processNotificationOutbox(outbox.id)
 
             it("사용자마다 알림함에 저장한다") {
                 saved.captured.map { it.userId } shouldContainExactlyInAnyOrder deviceTokens.map { it.userId }
@@ -417,32 +390,78 @@ class CommandNotificationServiceImplTest : DescribeSpec({
             }
         }
 
-        context("여러 디바이스에 저장이 필요하지 않은 알림을 전송하면") {
+        context("저장이 필요하지 않은 알림의 outbox 를 처리하면") {
             val deviceTokens = listOf(
                 createDeviceTokenStub(token = "sends-no-save-token1"),
                 createDeviceTokenStub(token = "sends-no-save-token2")
             )
-            val notification = createNotificationStub(topic = Topic.DAYBREAK_STUDY_APPLICATION, isSaveRequired = false)
+            val outbox = createOutbox(deviceTokens.map { it.userId }, isSaveRequired = false)
+            val notification = Notification.from(outbox.notificationInfo)
 
-            every { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) } just runs
+            every { notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outbox.id) } returns outbox
+            every { notificationOutboxPort.deleteNotificationOutboxById(outbox.id) } just runs
+            every { deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds) } returns deviceTokens
+            every { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) } returns emptyList()
 
             it("알림함에 저장하지 않고 여러 알림을 전송한다") {
                 clearMocks(notificationPort, commandNotificationOfUserPort, answers = false)
 
-                service.sendMessages(deviceTokens, notification)
+                service.processNotificationOutbox(outbox.id)
 
                 verify(exactly = 1) { notificationPort.sendMessages(deviceTokens.map { it.token }, notification) }
                 verify(exactly = 0) { commandNotificationOfUserPort.saveNotificationsOfUser(any()) }
             }
         }
 
-        context("디바이스 토큰이 하나도 없으면") {
-            val notification = createNotificationStub(isSaveRequired = true)
+        context("일부 토큰만 일시적으로 실패하면") {
+            val succeededToken = createDeviceTokenStub(token = "partial-succeeded-token")
+            val failedToken = createDeviceTokenStub(token = "partial-failed-token")
+            val deviceTokens = listOf(succeededToken, failedToken)
+            val outbox = createOutbox(deviceTokens.map { it.userId }, isSaveRequired = true)
+            val notification = Notification.from(outbox.notificationInfo)
+            val retried = slot<NotificationOutbox>()
+
+            every { notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outbox.id) } returns outbox
+            every { deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds) } returns deviceTokens
+            every { commandNotificationOfUserPort.saveNotificationsOfUser(any()) } just runs
+            every {
+                notificationPort.sendMessages(deviceTokens.map { it.token }, notification)
+            } returns listOf(failedToken.token)
+            every { notificationOutboxPort.saveNotificationOutbox(capture(retried)) } answers { firstArg() }
+
+            val remaining = service.processNotificationOutbox(outbox.id)
+
+            it("실패한 유저만 남기고 재시도 횟수를 올린다") {
+                retried.captured.userIds shouldContainExactly listOf(failedToken.userId)
+                retried.captured.retryCount shouldBe 1
+                retried.captured.status shouldBe NotificationOutboxStatus.PENDING
+            }
+
+            it("다시 보낼 때는 알림함에 저장하지 않는다") {
+                retried.captured.notificationInfo.isSaveRequired shouldBe false
+            }
+
+            it("알림이 생긴 시각을 유지한다") {
+                retried.captured.notificationInfo.createdAt shouldBe outbox.notificationInfo.createdAt
+            }
+
+            it("outbox 를 지우지 않고 남은 outbox 를 돌려준다") {
+                verify(exactly = 0) { notificationOutboxPort.deleteNotificationOutboxById(outbox.id) }
+                remaining shouldBe retried.captured
+            }
+        }
+
+        context("outbox 대상에게 디바이스 토큰이 하나도 없으면") {
+            val outbox = createOutbox(listOf(UUID.randomUUID()), isSaveRequired = true)
+
+            every { notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outbox.id) } returns outbox
+            every { notificationOutboxPort.deleteNotificationOutboxById(outbox.id) } just runs
+            every { deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds) } returns emptyList()
 
             it("알림 전송을 시도하지 않는다") {
                 clearMocks(notificationPort, commandNotificationOfUserPort, answers = false)
 
-                service.sendMessages(emptyList(), notification)
+                service.processNotificationOutbox(outbox.id)
 
                 verify(exactly = 0) { notificationPort.sendMessages(any(), any()) }
                 verify(exactly = 0) { commandNotificationOfUserPort.saveNotificationsOfUser(any()) }
@@ -490,3 +509,17 @@ class CommandNotificationServiceImplTest : DescribeSpec({
         }
     }
 })
+
+private fun createOutbox(userIds: List<UUID>, isSaveRequired: Boolean) = NotificationOutbox(
+    id = UUID.randomUUID(),
+    userIds = userIds,
+    notificationInfo = NotificationInfo(
+        schoolId = UUID.randomUUID(),
+        topic = Topic.NOTICE,
+        linkIdentifier = null,
+        title = "Test Notification Title",
+        content = "Test notification content",
+        threadId = UUID.randomUUID().toString(),
+        isSaveRequired = isSaveRequired
+    )
+)

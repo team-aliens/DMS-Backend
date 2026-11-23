@@ -44,7 +44,7 @@ class CommandNoticeServiceImpl(
                 isSaveRequired = true
             )
 
-            notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
+            notificationEventPort.publishNotification(userIds, notificationInfo)
         }
     }
 
@@ -69,7 +69,7 @@ class CommandNoticeServiceImpl(
                 updatedAt = LocalDateTime.now()
             )
         ).also {
-            notificationEventPort.publishNotificationToApplicant(
+            notificationEventPort.publishNotification(
                 userIds,
                 NotificationInfo(
                     schoolId = schoolId,

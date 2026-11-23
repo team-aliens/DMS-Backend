@@ -18,4 +18,6 @@ interface GetNotificationService {
     fun getDeviceTokenByUserId(userId: UUID): DeviceToken
 
     fun getDeviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken>
+
+    fun getPendingNotificationOutboxIds(limit: Int): List<UUID>
 }

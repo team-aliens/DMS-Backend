@@ -49,7 +49,7 @@ class CommandDaybreakServiceImpl(
                 threadId = firstApplication.id.toString(),
                 isSaveRequired = false
             )
-            notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
+            notificationEventPort.publishNotification(userIds, notificationInfo)
         }
     }
 

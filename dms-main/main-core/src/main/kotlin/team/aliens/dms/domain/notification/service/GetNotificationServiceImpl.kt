@@ -6,6 +6,7 @@ import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundE
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.spi.QueryDeviceTokenPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
+import team.aliens.dms.domain.notification.spi.QueryNotificationOutboxPort
 import team.aliens.dms.domain.notification.spi.QueryTopicSubscriptionPort
 import java.util.UUID
 
@@ -13,7 +14,8 @@ import java.util.UUID
 class GetNotificationServiceImpl(
     private val deviceTokenPort: QueryDeviceTokenPort,
     private val notificationOfUserPort: QueryNotificationOfUserPort,
-    private val topicSubscriptionPort: QueryTopicSubscriptionPort
+    private val topicSubscriptionPort: QueryTopicSubscriptionPort,
+    private val notificationOutboxPort: QueryNotificationOutboxPort
 ) : GetNotificationService {
 
     override fun getNotificationOfUsersByUserId(userId: UUID) =
@@ -36,4 +38,7 @@ class GetNotificationServiceImpl(
     override fun getDeviceTokensByUserIds(userIds: List<UUID>): List<DeviceToken> {
         return deviceTokenPort.queryDeviceTokensByUserIds(userIds)
     }
+
+    override fun getPendingNotificationOutboxIds(limit: Int): List<UUID> =
+        notificationOutboxPort.queryPendingNotificationOutboxIds(limit)
 }
