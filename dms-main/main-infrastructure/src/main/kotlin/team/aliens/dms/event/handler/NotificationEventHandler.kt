@@ -8,8 +8,6 @@ import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.service.NotificationService
 import team.aliens.dms.event.GroupNotificationEvent
 import team.aliens.dms.event.NotificationEvent
-import team.aliens.dms.event.SingleNotificationEvent
-import team.aliens.dms.event.TopicNotificationEvent
 
 @Component
 class NotificationEventHandler(
@@ -20,17 +18,8 @@ class NotificationEventHandler(
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun handleNotification(event: NotificationEvent) {
         when (event) {
-            is SingleNotificationEvent -> notificationService.sendMessage(
-                notificationService.getDeviceTokenByUserId(event.userId),
-                Notification.from(event.notificationInfo)
-            )
-
             is GroupNotificationEvent -> notificationService.sendMessages(
                 notificationService.getDeviceTokensByUserIds(event.userIds),
-                Notification.from(event.notificationInfo)
-            )
-
-            is TopicNotificationEvent -> notificationService.sendMessagesByTopic(
                 Notification.from(event.notificationInfo)
             )
         }

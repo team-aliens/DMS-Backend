@@ -15,10 +15,6 @@ class NoOpNotificationAdapter : NotificationPort {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    override fun sendMessage(token: String, notification: Notification) {
-        log.info("[NoOp] skip sendMessage: topic={}, title={}", notification.topic, notification.title)
-    }
-
     override fun sendMessages(tokens: List<String>, notification: Notification) {
         log.info(
             "[NoOp] skip sendMessages: count={}, topic={}, title={}",

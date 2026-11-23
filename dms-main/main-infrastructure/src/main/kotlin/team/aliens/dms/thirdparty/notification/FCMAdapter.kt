@@ -37,20 +37,6 @@ class FCMAdapter : NotificationPort {
         firebaseInstance.unsubscribeFromTopic(listOf(token), topic.toString())
     }
 
-    override fun sendMessage(
-        token: String,
-        notification: Notification
-    ) {
-        try {
-            getMessageBuilderByNotification(notification)
-                .setToken(token)
-                .build()
-                .also { firebaseInstance.send(it) }
-        } catch (e: FirebaseMessagingException) {
-            log.error("Failed to send notification to token: {}", token, e)
-            throw NotificationSendFailedException
-        }
-    }
     override fun sendByTopic(
         notification: Notification
     ) {

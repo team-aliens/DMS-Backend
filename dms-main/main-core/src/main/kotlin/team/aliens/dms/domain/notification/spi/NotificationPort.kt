@@ -5,11 +5,6 @@ import team.aliens.dms.domain.notification.model.Notification
 
 interface NotificationPort {
 
-    fun sendMessage(
-        token: String,
-        notification: Notification
-    )
-
     fun sendMessages(tokens: List<String>, notification: Notification)
 
     fun sendByTopic(

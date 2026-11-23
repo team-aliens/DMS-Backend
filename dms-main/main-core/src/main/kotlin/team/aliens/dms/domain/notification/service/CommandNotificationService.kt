@@ -30,11 +30,6 @@ interface CommandNotificationService {
 
     fun toggleSubscription(token: String, topic: Topic)
 
-    fun sendMessage(
-        deviceToken: DeviceToken,
-        notification: Notification
-    )
-
     fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification)
 
     fun sendMessagesByTopic(

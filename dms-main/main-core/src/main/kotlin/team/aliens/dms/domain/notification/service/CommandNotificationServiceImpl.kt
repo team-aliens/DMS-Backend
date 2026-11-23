@@ -128,18 +128,6 @@ class CommandNotificationServiceImpl(
         }
     }
 
-    override fun sendMessage(deviceToken: DeviceToken, notification: Notification) {
-        notification.runIfSaveRequired {
-            commandNotificationOfUserPort.saveNotificationOfUser(
-                notification.toNotificationOfUser(deviceToken.userId)
-            )
-        }
-        notificationPort.sendMessage(
-            token = deviceToken.token,
-            notification = notification
-        )
-    }
-
     override fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification) {
         if (deviceTokens.isEmpty()) {
             return

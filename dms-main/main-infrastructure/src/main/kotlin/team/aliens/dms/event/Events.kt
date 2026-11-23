@@ -14,15 +14,6 @@ class GroupNotificationEvent(
     val notificationInfo: NotificationInfo
 ) : NotificationEvent(notificationInfo)
 
-class SingleNotificationEvent(
-    val userId: UUID,
-    val notificationInfo: NotificationInfo
-) : NotificationEvent(notificationInfo)
-
-class TopicNotificationEvent(
-    val notificationInfo: NotificationInfo
-) : NotificationEvent(notificationInfo)
-
 sealed class DeviceTokenEvent(
     source: Any
 ) : ApplicationEvent(source)

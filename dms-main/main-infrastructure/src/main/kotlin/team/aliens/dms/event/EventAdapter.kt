@@ -12,16 +12,7 @@ class EventAdapter(
     private val eventPublisher: ApplicationEventPublisher
 ) : EventPort {
 
-    override fun publishNotification(userId: UUID, notificationInfo: NotificationInfo) {
-        eventPublisher.publishEvent(
-            SingleNotificationEvent(
-                userId = userId,
-                notificationInfo = notificationInfo
-            )
-        )
-    }
-
-    override fun publishNotificationToApplicant(userIds: List<UUID>, notificationInfo: NotificationInfo) {
+    override fun publishNotification(userIds: List<UUID>, notificationInfo: NotificationInfo) {
         eventPublisher.publishEvent(
             GroupNotificationEvent(
                 userIds = userIds,
