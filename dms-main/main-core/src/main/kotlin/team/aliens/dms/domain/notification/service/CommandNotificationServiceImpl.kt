@@ -7,9 +7,11 @@ import team.aliens.dms.domain.notification.exception.NotificationOfUserNotFoundE
 import team.aliens.dms.domain.notification.model.DeviceToken
 import team.aliens.dms.domain.notification.model.Notification
 import team.aliens.dms.domain.notification.model.NotificationOfUser
+import team.aliens.dms.domain.notification.model.NotificationOutbox
 import team.aliens.dms.domain.notification.model.TopicSubscription
 import team.aliens.dms.domain.notification.spi.CommandNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.DeviceTokenPort
+import team.aliens.dms.domain.notification.spi.NotificationOutboxPort
 import team.aliens.dms.domain.notification.spi.NotificationPort
 import team.aliens.dms.domain.notification.spi.QueryNotificationOfUserPort
 import team.aliens.dms.domain.notification.spi.TopicSubscriptionPort
@@ -22,7 +24,8 @@ class CommandNotificationServiceImpl(
     private val notificationPort: NotificationPort,
     private val queryNotificationOfUserPort: QueryNotificationOfUserPort,
     private val commandNotificationOfUserPort: CommandNotificationOfUserPort,
-    private val topicSubscriptionPort: TopicSubscriptionPort
+    private val topicSubscriptionPort: TopicSubscriptionPort,
+    private val notificationOutboxPort: NotificationOutboxPort
 ) : CommandNotificationService {
 
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
@@ -128,33 +131,6 @@ class CommandNotificationServiceImpl(
         }
     }
 
-    override fun sendMessage(deviceToken: DeviceToken, notification: Notification) {
-        notification.runIfSaveRequired {
-            commandNotificationOfUserPort.saveNotificationOfUser(
-                notification.toNotificationOfUser(deviceToken.userId)
-            )
-        }
-        notificationPort.sendMessage(
-            token = deviceToken.token,
-            notification = notification
-        )
-    }
-
-    override fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification) {
-        if (deviceTokens.isEmpty()) {
-            return
-        }
-        notification.runIfSaveRequired {
-            commandNotificationOfUserPort.saveNotificationsOfUser(
-                deviceTokens.map { notification.toNotificationOfUser(it.userId) }
-            )
-        }
-        notificationPort.sendMessages(
-            tokens = deviceTokens.map { it.token },
-            notification = notification
-        )
-    }
-
     override fun sendMessagesByTopic(notification: Notification) {
         notification.runIfSaveRequired {
             val userIds = deviceTokenPort.queryDeviceTokensBySubscriptionTopicAndSchoolId(
@@ -171,6 +147,45 @@ class CommandNotificationServiceImpl(
         notificationPort.sendByTopic(
             notification = notification
         )
+    }
+
+    override fun processNotificationOutbox(outboxId: UUID): NotificationOutbox? {
+        val outbox = notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outboxId) ?: return null
+
+        val failedTokens = sendMessages(
+            deviceTokens = deviceTokenPort.queryDeviceTokensByUserIds(outbox.userIds),
+            notification = Notification.from(outbox.notificationInfo)
+        )
+
+        if (failedTokens.isEmpty()) {
+            notificationOutboxPort.deleteNotificationOutboxById(outbox.id)
+            return null
+        }
+        return notificationOutboxPort.saveNotificationOutbox(
+            outbox.retryFor(failedTokens.map { it.userId }.distinct())
+        )
+    }
+
+    override fun deferNotificationOutbox(outboxId: UUID): NotificationOutbox? {
+        val outbox = notificationOutboxPort.queryPendingNotificationOutboxByIdForUpdate(outboxId) ?: return null
+        return notificationOutboxPort.saveNotificationOutbox(outbox.retryAll())
+    }
+
+    // 다시 보내야 하는 디바이스를 돌려준다
+    private fun sendMessages(deviceTokens: List<DeviceToken>, notification: Notification): List<DeviceToken> {
+        if (deviceTokens.isEmpty()) {
+            return emptyList()
+        }
+        notification.runIfSaveRequired {
+            commandNotificationOfUserPort.saveNotificationsOfUser(
+                deviceTokens.map { notification.toNotificationOfUser(it.userId) }
+            )
+        }
+        val retryableTokens = notificationPort.sendMessages(
+            tokens = deviceTokens.map { it.token },
+            notification = notification
+        ).toSet()
+        return deviceTokens.filter { it.token in retryableTokens }
     }
 
     private fun getDeviceTokenByToken(token: String) =

@@ -6,9 +6,8 @@ import java.util.UUID
 
 interface NotificationEventPort {
 
-    fun publishNotification(userId: UUID, notificationInfo: NotificationInfo)
-
-    fun publishNotificationToApplicant(userIds: List<UUID>, notificationInfo: NotificationInfo)
+    // 한 명에게 보낼 때도 listOf(userId) 로 넘긴다
+    fun publishNotification(userIds: List<UUID>, notificationInfo: NotificationInfo)
 }
 
 interface DeviceTokenEventPort {

@@ -53,7 +53,7 @@ class CommandPointServiceImpl(
             isSaveRequired = true
         )
 
-        notificationEventPort.publishNotificationToApplicant(userIds, notificationInfo)
+        notificationEventPort.publishNotification(userIds, notificationInfo)
 
         return saved
     }

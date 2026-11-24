@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":dms-main:main-core"))
 
     // contract
+    implementation(project(":contracts:model-contracts:notification-model"))
     implementation(project(":contracts:enum-contracts:notification-enum"))
 
     // database

@@ -2,26 +2,12 @@ package team.aliens.dms.event
 
 import org.springframework.context.ApplicationEvent
 import team.aliens.dms.contract.model.notification.DeviceTokenInfo
-import team.aliens.dms.contract.model.notification.NotificationInfo
 import java.util.UUID
 
-sealed class NotificationEvent(
-    source: Any
-) : ApplicationEvent(source)
-
-class GroupNotificationEvent(
-    val userIds: List<UUID>,
-    val notificationInfo: NotificationInfo
-) : NotificationEvent(notificationInfo)
-
-class SingleNotificationEvent(
-    val userId: UUID,
-    val notificationInfo: NotificationInfo
-) : NotificationEvent(notificationInfo)
-
-class TopicNotificationEvent(
-    val notificationInfo: NotificationInfo
-) : NotificationEvent(notificationInfo)
+// 알림 outbox 행이 비즈니스 트랜잭션과 함께 저장됐다는 신호. 발송 내용은 DB 의 행에 있다
+class NotificationOutboxSavedEvent(
+    val outboxId: UUID
+) : ApplicationEvent(outboxId)
 
 sealed class DeviceTokenEvent(
     source: Any
